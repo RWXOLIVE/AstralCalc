@@ -83,7 +83,6 @@ const GSC_ONLY = [
   'Pink Bow',
   'Polkadot Bow',
   'PSN Cure Berry',
-  'Enigma Berry',
 ];
 
 const ADV = GSC.filter(i => !GSC_ONLY.includes(i)).concat([
@@ -258,6 +257,7 @@ const DPP = ADV.concat([
 const BW = DPP.concat([
   'Absorb Bulb',
   'Air Balloon',
+  'Big Nugget',
   'Binding Band',
   'Bug Gem',
   'Burn Drive',
@@ -482,12 +482,15 @@ const SV = SS.concat([
   'Hearthflame Mask',
   'Loaded Dice',
   'Malicious Armor',
+  'Masterpiece Teacup',
   'Metal Alloy',
   'Mirror Herb',
   'Punching Glove',
   'Lustrous Globe',
   'Griseous Core',
   'Strange Ball',
+  'Syrupy Apple',
+  'Unremarkable Teacup',
   'Wellspring Mask',
 ]);
 
