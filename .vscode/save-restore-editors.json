@@ -1,0 +1,30 @@
+{
+  "tabs": [
+    {
+      "name": "edit calc data",
+      "tabGroups": [
+        {
+          "files": [
+            "file:///c%3A/Users/galax/OneDrive/Desktop/EE_Calc/EE_Calc/calc/src/data/species.ts",
+            "file:///c%3A/Users/galax/OneDrive/Desktop/EE_Calc/EE_Calc/calc/src/data/types.ts",
+            "file:///c%3A/Users/galax/OneDrive/Desktop/EE_Calc/EE_Calc/calc/src/data/abilities.ts",
+            "file:///c%3A/Users/galax/OneDrive/Desktop/EE_Calc/EE_Calc/calc/src/data/index.ts",
+            "file:///c%3A/Users/galax/OneDrive/Desktop/EE_Calc/EE_Calc/calc/src/data/interface.ts",
+            "file:///c%3A/Users/galax/OneDrive/Desktop/EE_Calc/EE_Calc/calc/src/data/items.ts",
+            "file:///c%3A/Users/galax/OneDrive/Desktop/EE_Calc/EE_Calc/calc/src/data/moves.ts",
+            "file:///c%3A/Users/galax/OneDrive/Desktop/EE_Calc/EE_Calc/calc/src/data/natures.ts"
+          ],
+          "viewColumn": 1
+        }
+      ],
+      "layout": {
+        "orientation": 0,
+        "groups": [
+          {
+            "size": 1756
+          }
+        ]
+      }
+    }
+  ]
+}
