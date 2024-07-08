@@ -5229,7 +5229,7 @@ var XY_PATCH = {
         abilities: { 0: 'Blaze' }
     },
     Bunnelby: {
-        types: ['Normal'],
+        types: ['Normal', 'Psychic'],
         bs: { hp: 38, at: 36, df: 38, sa: 32, sd: 36, sp: 57 },
         weightkg: 5,
         nfe: true,
