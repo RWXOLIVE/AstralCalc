@@ -511,12 +511,12 @@ var RBY = {
     },
     Nidoqueen: {
         types: ['Poison', 'Ground'],
-        bs: { hp: 90, at: 82, df: 87, sp: 76, sl: 75 },
+        bs: { hp: 90, at: 75, df: 87, sp: 76, sl: 75 },
         weightkg: 60
     },
     'Nidoran-F': {
         types: ['Poison'],
-        bs: { hp: 55, at: 47, df: 52, sp: 41, sl: 40 },
+        bs: { hp: 55, at: 40, df: 52, sp: 41, sl: 40 },
         weightkg: 7,
         nfe: true
     },
@@ -528,7 +528,7 @@ var RBY = {
     },
     Nidorina: {
         types: ['Poison'],
-        bs: { hp: 70, at: 62, df: 67, sp: 56, sl: 55 },
+        bs: { hp: 70, at: 55, df: 67, sp: 56, sl: 55 },
         weightkg: 20,
         nfe: true
     },
@@ -929,10 +929,10 @@ var GSC_PATCH = {
     'Mr. Mime': { bs: { sa: 100, sd: 120 } },
     Muk: { bs: { sa: 65, sd: 100 } },
     Nidoking: { bs: { sa: 85, sd: 75 } },
-    Nidoqueen: { bs: { sa: 75, sd: 85 } },
-    'Nidoran-F': { bs: { sa: 40, sd: 40 } },
+    Nidoqueen: { bs: { sa: 92, sd: 85 } },
+    'Nidoran-F': { bs: { sa: 47, sd: 40 } },
     'Nidoran-M': { bs: { sa: 40, sd: 40 } },
-    Nidorina: { bs: { sa: 55, sd: 55 } },
+    Nidorina: { bs: { sa: 62, sd: 55 } },
     Nidorino: { bs: { sa: 55, sd: 55 } },
     Ninetales: { bs: { sa: 81, sd: 100 } },
     Oddish: { bs: { sa: 75, sd: 65 } },
@@ -976,8 +976,8 @@ var GSC_PATCH = {
     Staryu: { bs: { sa: 70, sd: 55 }, gender: 'N' },
     Tangela: { bs: { sa: 100, sd: 40 } },
     Tauros: { bs: { sa: 40, sd: 70 } },
-    Tentacool: { bs: { sa: 50, sd: 100 } },
-    Tentacruel: { bs: { sa: 80, sd: 120 } },
+    Tentacool: { bs: { sa: 70, sd: 100 } },
+    Tentacruel: { bs: { sa: 100, sd: 120 } },
     Vaporeon: { bs: { sa: 110, sd: 95 } },
     Venomoth: { bs: { sa: 90, sd: 75 } },
     Venonat: { bs: { sa: 40, sd: 55 } },
@@ -1203,7 +1203,7 @@ var GSC_PATCH = {
     },
     Ledian: {
         types: ['Bug', 'Flying'],
-        bs: { hp: 55, at: 35, df: 50, sa: 55, sd: 110, sp: 85 },
+        bs: { hp: 55, at: 55, df: 50, sa: 75, sd: 110, sp: 95 },
         weightkg: 35.6
     },
     Ledyba: {
@@ -5105,7 +5105,7 @@ var XY_PATCH = {
     'Mime Jr.': { types: ['Psychic', 'Fairy'] },
     'Mr. Mime': { types: ['Psychic', 'Fairy'] },
     Nidoking: { bs: { at: 102 } },
-    Nidoqueen: { bs: { at: 92 } },
+    Nidoqueen: { bs: { at: 75 } },
     Pidgeot: { bs: { sp: 101 }, otherFormes: ['Pidgeot-Mega'] },
     Pikachu: {
         bs: { df: 40, sd: 50 },
@@ -5304,7 +5304,7 @@ var XY_PATCH = {
     },
     Diggersby: {
         types: ['Normal', 'Ground'],
-        bs: { hp: 85, at: 56, df: 77, sa: 50, sd: 77, sp: 78 },
+        bs: { hp: 85, at: 60, df: 77, sa: 50, sd: 77, sp: 78 },
         weightkg: 42.4,
         abilities: { 0: 'Pickup' }
     },
@@ -9955,14 +9955,14 @@ var SV_PATCH = {
     },
     Toedscool: {
         types: ['Ground', 'Grass'],
-        bs: { hp: 40, at: 40, df: 35, sa: 50, sd: 100, sp: 70 },
+        bs: { hp: 40, at: 40, df: 35, sa: 70, sd: 100, sp: 70 },
         weightkg: 33,
         abilities: { 0: 'Mycelium Might' },
         nfe: true
     },
     Toedscruel: {
         types: ['Ground', 'Grass'],
-        bs: { hp: 80, at: 70, df: 65, sa: 80, sd: 120, sp: 100 },
+        bs: { hp: 80, at: 70, df: 65, sa: 100, sd: 120, sp: 100 },
         weightkg: 58,
         abilities: { 0: 'Mycelium Might' }
     },
