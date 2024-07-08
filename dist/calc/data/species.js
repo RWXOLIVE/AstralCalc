@@ -5222,7 +5222,7 @@ var XY_PATCH = {
         abilities: { 0: 'Tough Claws' }
     },
     Braixen: {
-        types: ['Fire'],
+        types: ['Fire', 'Psychic'],
         bs: { hp: 59, at: 59, df: 58, sa: 90, sd: 70, sp: 73 },
         weightkg: 14.5,
         nfe: true,
@@ -5392,7 +5392,7 @@ var XY_PATCH = {
         abilities: { 0: 'Torrent' }
     },
     Frogadier: {
-        types: ['Water'],
+        types: ['Water', 'Dark'],
         bs: { hp: 54, at: 63, df: 52, sa: 83, sd: 56, sp: 97 },
         weightkg: 10.9,
         nfe: true,
@@ -6042,7 +6042,7 @@ var XY_PATCH = {
         abilities: { 0: 'Rivalry' }
     },
     Quilladin: {
-        types: ['Grass'],
+        types: ['Grass', 'Fighting'],
         bs: { hp: 61, at: 78, df: 95, sa: 56, sd: 58, sp: 57 },
         weightkg: 29,
         nfe: true,
