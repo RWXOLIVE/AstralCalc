@@ -4901,6 +4901,16 @@ var SV_PATCH = {
         secondaries: true,
         isWind: true,
         target: 'allAdjacentFoes'
+    },
+    'Aqua Punch': {
+        bp: 75,
+        type: 'Water',
+        category: 'Physical',
+        zp: 140,
+        maxPower: 130,
+        isPunch: true,
+        makesContact: true,
+        secondaries: true
     }
 };
 var SV = (0, util_1.extend)(true, {}, SS, SV_PATCH);

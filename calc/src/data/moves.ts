@@ -4913,6 +4913,16 @@ const SV_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     isWind: true,
     target: 'allAdjacentFoes',
   },
+  'Aqua Punch': {
+    bp: 75,
+    type: 'Water',
+    category: 'Physical',
+    zp: 140,
+    maxPower: 130,
+    isPunch: true,
+    makesContact: true,
+    secondaries: true,
+  }
 };
 
 const SV: {[name: string]: MoveData} = extend(true, {}, SS, SV_PATCH);
