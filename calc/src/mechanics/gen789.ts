@@ -502,13 +502,14 @@ export function calculateSMSSSV(
   }
 
   const noWeatherBoost = defender.hasItem('Utility Umbrella');
-  if (!noWeatherBoost &&
+  const noWeatherBoostAtk = attacker.hasItem('Utility Umbrella');
+  if (!noWeatherBoost && !noWeatherBoostAtk &&
     ((field.hasWeather('Sun', 'Harsh Sunshine') && move.hasType('Fire')) ||
     (field.hasWeather('Rain', 'Heavy Rain') && move.hasType('Water')))
   ) {
     baseDamage = pokeRound(OF32(baseDamage * 6144) / 4096);
     desc.weather = field.weather;
-  } else if (!noWeatherBoost &&
+  } else if (!noWeatherBoost && !noWeatherBoostAtk &&
     ((field.hasWeather('Sun') && move.hasType('Water')) ||
     (field.hasWeather('Rain') && move.hasType('Fire')))
   ) {
