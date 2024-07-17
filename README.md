@@ -1,6 +1,6 @@
 # EKalc
 
-This is a fork of the damage calculator that contains all the R&B stat changes, and has every trainer pre imported.
+This is a fork of the damage calculator that contains all the Existential Emerald stat changes, and has every trainer pre imported.
 Additionally some bugs are fixed, weather doesn't auto toggle off, and there are clickable icons for Pokemon to navigate.
 The working version can be seen at ![Calc](https://dekzeh.github.io/calc/)
 
