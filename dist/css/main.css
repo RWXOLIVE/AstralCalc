@@ -447,6 +447,7 @@ table.field {
 /* select2 overrides */
 .select2-container .select2-choice > .select2-chosen {
     width: 100%;
+    margin-right: auto;
 }
 .small-select.select2-container .select2-choice {
     font-size: 0.9em;
