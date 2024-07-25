@@ -1584,7 +1584,7 @@ var SETDEX_SV = {
         "sd": 31,
         "sp": 31
 },
-"moves": ["Spark","Thunder Wave","Rock Tomb", "Headbutt"]
+"moves": ["Spark","Thunder Wave","Rock Tomb", "Headbutt"] // Broxanne Split 
     }
 }
 }
