@@ -9013,13 +9013,6 @@ var SV_PATCH = {
     'Zacian-Crowned': { bs: { at: 150 } },
     Zamazenta: { bs: { at: 120 } },
     'Zamazenta-Crowned': { bs: { at: 120, df: 140, sd: 140 } },
-    Ababo: {
-        types: ['Fairy'],
-        bs: { hp: 42, at: 35, df: 27, sa: 35, sd: 35, sp: 38 },
-        weightkg: 3.5,
-        abilities: { 0: 'Pixilate' },
-        nfe: true
-    },
     Annihilape: {
         types: ['Fighting', 'Ghost'],
         bs: { hp: 110, at: 115, df: 80, sa: 50, sd: 90, sp: 90 },
