@@ -1632,7 +1632,6 @@ var SETDEX_SV = {
         "Gym Leader Brawly | Dewford Gym": {  
             "index": "0000000125",
             "teraType": "Normal",
-            "teraType": "Water",
             "level": 25,
             "ability": "Unnerve",
             "item": "Sitrus Berry", 
