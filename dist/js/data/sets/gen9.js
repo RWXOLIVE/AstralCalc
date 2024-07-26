@@ -110,7 +110,7 @@ var SETDEX_SV = {
    }
 },
     "Metapod": {
-        "Bugcatcher Buggford | Route 102": {  
+        "Bug Catcher Buggford | Route 102": {  
         "index": "0000000007",
         "level": 8,
         "ability": "Shed Skin",
@@ -273,13 +273,13 @@ var SETDEX_SV = {
 "moves": ["Fake Out","Trailblaze", "Clamp","Double Slap"]
     }
 },
-    "Ledian": {
+    "Heracross": {
     "Black Belt James | Route 104": {  
     "index": "0000000016",
     "level": 13,
-    "ability": "Technician",
-    "item": "Silver Powder", 
-    "nature": "Modest",
+    "ability": "Guts",
+    "item": "Coba Berry", 
+    "nature": "Naive",
     "ivs": {
         "hp": 31,
         "at": 31,
@@ -288,15 +288,15 @@ var SETDEX_SV = {
         "sd": 31,
         "sp": 31
 },
-"moves": ["Bide","Mach Punch", "Silver Wind","Counter"]
+"moves": ["Bide","Mach Punch", "Bug Bite","Counter"]
     }
 },
-    "Sneasel-Hisui": {
+    "Timburr": {
     "Black Belt James | Route 104": {  
     "index": "0000000017",
     "level": 13,
-    "ability": "Unburden",
-    "item": "None", 
+    "ability": "Sheer Force",
+    "item": "Punching Glove", 
     "nature": "Adamant",
     "ivs": {
         "hp": 31,
@@ -306,16 +306,16 @@ var SETDEX_SV = {
         "sd": 31,
         "sp": 31
 },
-"moves": ["Fake Out","Ice Shard", "Low Kick","Poison Tail"]
+"moves": ["Fake Out","Rock Throw", "Power-Up Punch","Slam"]
     }
 },
-    "Flamigo": {
+    "Steenee": {
     "Black Belt James | Route 104": {  
     "index": "0000000018",
     "level": 14,
-    "ability": "Scrappy",
+    "ability": "Oblivious",
     "item": "Oran Berry", 
-    "nature": "Quirky",
+    "nature": "Jolly",
     "ivs": {
         "hp": 31,
         "at": 31,
@@ -324,7 +324,7 @@ var SETDEX_SV = {
         "sd": 31,
         "sp": 31
 },
-"moves": ["Peck","Double Kick", "Aqua Jet","Copycat"]
+"moves": ["Baby-Doll Eyes","Razor Leaf", "Low Sweep","Rapid Spin"]
     }
 },
     "Stunfisk": {
@@ -1374,6 +1374,7 @@ var SETDEX_SV = {
     "Perrserker": {
     "Gym Leader Roxanne | Rustboro City Gym": {  
     "index": "0000000077",
+    "teraType": "Normal",
     "level": 18,
     "ability": "Battle Armor",
     "item": "Occa Berry", 
@@ -1392,6 +1393,7 @@ var SETDEX_SV = {
     "Archen": {
     "Gym Leader Roxanne | Rustboro City Gym": {  
     "index": "0000000078",
+    "teraType": "Flying",
     "level": 18,
     "ability": "Defeatist",
     "item": "Focus Sash", 
@@ -1410,6 +1412,7 @@ var SETDEX_SV = {
     "Carkol": {
     "Gym Leader Roxanne | Rustboro City Gym": {  
     "index": "0000000079",
+    "teraType": "Water",
     "level": 18,
     "ability": "Water Compaction",
     "item": "Passho Berry", 
@@ -1428,6 +1431,7 @@ var SETDEX_SV = {
     "Corsola": {
     "Gym Leader Roxanne | Rustboro City Gym": {  
     "index": "0000000080",
+    "teraType": "Grass",
     "level": 18,
     "ability": "Natural Cure",
     "item": "Rindo Berry", 
@@ -1446,6 +1450,7 @@ var SETDEX_SV = {
     "Clodsire": {
     "Gym Leader Roxanne | Rustboro City Gym": {  
     "index": "0000000081",
+    "teraType": "Poison",
     "level": 18,
     "ability": "Poison Point",
     "item": "Black Sludge", 
@@ -1464,6 +1469,7 @@ var SETDEX_SV = {
     "Tyrunt": {
     "Gym Leader Roxanne | Rustboro City Gym": {  
     "index": "0000000082",
+    "teraType": "Fighting",
     "level": 19,
     "ability": "Sturdy",
     "item": "Lum Berry", 
@@ -1482,6 +1488,7 @@ var SETDEX_SV = {
     "Golbat": {
     "Gym Leader Brock | Rustboro City Gym": {  
     "index": "0000000083",
+    "teraType": "Grass",
     "level": 18,
     "ability": "Inncer Focus",
     "item": "Mental Herb", 
@@ -1500,6 +1507,7 @@ var SETDEX_SV = {
     "Croconaw": {
     "Gym Leader Brock | Rustboro City Gym": {  
     "index": "0000000084",
+    "teraType": "Dark",
     "level": 18,
     "ability": "Intimidate",
     "item": "Mystic Water", 
@@ -1518,6 +1526,7 @@ var SETDEX_SV = {
     "Naclstack": {
     "Gym Leader Brock | Rustboro City Gym": {  
     "index": "0000000085",
+    "teraType": "Ghost",
     "level": 18,
     "ability": "Purifying Salt",
     "item": "Mental Herb", 
@@ -1536,6 +1545,7 @@ var SETDEX_SV = {
     "Klawf": {
     "Gym Leader Brock | Rustboro City Gym": {  
     "index": "0000000086",
+    "teraType": "Rock",
     "level": 18,
     "ability": "Shell Armor",
     "item": "Lum Berry", 
@@ -1554,6 +1564,7 @@ var SETDEX_SV = {
     "Graveler": {
     "Gym Leader Brock | Rustboro City Gym": {  
     "index": "0000000087",
+    "teraType": "Fire",
     "level": 19,
     "ability": "Solid Rock",
     "item": "Rock Gem", 
@@ -1572,6 +1583,7 @@ var SETDEX_SV = {
     "Graveler-Alola": {
     "Gym Leader Brock | Rustboro City Gym": {  
     "index": "0000000088",
+    "teraType": "Electric",
     "level": 19,
     "ability": "Sturdy",
     "item": "Air Balloon", 
@@ -1986,7 +1998,7 @@ var SETDEX_SV = {
 },
     "Quaxwell": {
     "Battle Girl Lilith | Dewford Gym": {  
-    "index": "0000000110",
+    "index": "0000000111",
     "level": 22,
     "ability": "Moxie",
     "item": "Lum Berry", 
@@ -2004,7 +2016,7 @@ var SETDEX_SV = {
 }, 
     "Throh": {
     "Black Belt Cristian & Takao | Dewford Gym": {  
-    "index": "0000000110",
+    "index": "0000000112",
     "level": 22,
     "ability": "Guts",
     "item": "Eject Pack", 
@@ -2022,7 +2034,7 @@ var SETDEX_SV = {
 },
     "Passimian": {
     "Black Belt Cristian & Takao | Dewford Gym": {  
-    "index": "0000000111",
+    "index": "0000000113",
     "level": 22,
     "ability": "Receiver",
     "item": "Leftovers", 
@@ -2040,7 +2052,7 @@ var SETDEX_SV = {
 },
     "Riolu": {
     "Black Belt Cristian & Takao | Dewford Gym": {  
-    "index": "0000000112",
+    "index": "0000000114",
     "level": 22,
     "ability": "Prankster",
     "item": "Eviolite", 
@@ -2058,7 +2070,7 @@ var SETDEX_SV = {
 },
     "Lucario": {
     "Black Belt Cristian & Takao | Dewford Gym": {  
-    "index": "0000000113",
+    "index": "0000000115",
     "level": 22,
     "ability": "Justified",
     "item": "Lagging Tail", 
@@ -2074,9 +2086,9 @@ var SETDEX_SV = {
 "moves": ["Drain Punch","Counter","Bullet Punch", "Payback"]
     }
 },
-    "Crogunk": {
-    "Battle Girl Jocelyn & Sailor Brenden | Dewford Gym": {  
-    "index": "0000000114",
+    "Croagunk": {
+    "Jocelyn & Brenden | Dewford Gym": {  
+    "index": "0000000116",
     "level": 22,
     "ability": "Poison Touch",
     "item": "Iapapa Berry", 
@@ -2093,8 +2105,8 @@ var SETDEX_SV = {
     }
 },
     "Mareanie": {
-    "Battle Girl Jocelyn & Sailor Brenden | Dewford Gym": {  
-    "index": "0000000115",
+    "Jocelyn & Brenden | Dewford Gym": {  
+    "index": "0000000117",
     "level": 22,
     "ability": "Merciless",
     "item": "Black Sludge", 
@@ -2111,8 +2123,8 @@ var SETDEX_SV = {
    }
 },
     "Sneasel-Hisui": {
-    "Battle Girl Jocelyn & Sailor Brenden | Dewford Gym": {  
-    "index": "0000000116",
+    "Jocelyn & Brenden | Dewford Gym": {  
+    "index": "0000000118",
     "level": 22,
     "ability": "Pickpocket",
     "item": "Rare Bone", 
@@ -2129,8 +2141,8 @@ var SETDEX_SV = {
     }
 },
     "Tauros-Paldea-Aqua": {
-    "Battle Girl Jocelyn & Sailor Brenden | Dewford Gym": {  
-    "index": "0000000117",
+    "Jocelyn & Brenden | Dewford Gym": {  
+    "index": "0000000119",
     "level": 22,
     "ability": "Intimidate",
     "item": "None", 
@@ -2148,7 +2160,7 @@ var SETDEX_SV = {
 },
     "Silvally-Fighting": {
     "Gym Leader Brawly | Dewford Gym": {  
-    "index": "0000000118",
+    "index": "0000000120",
     "level": 23,
     "ability": "RKS System",
     "item": "Fighting Memory", 
@@ -2166,7 +2178,7 @@ var SETDEX_SV = {
 },
     "Ledian": {
     "Gym Leader Brawly | Dewford Gym": {  
-    "index": "0000000119",
+    "index": "0000000121",
     "level": 24,
     "ability": "Iron Fist",
     "item": "Liechi Berry", 
@@ -2184,7 +2196,7 @@ var SETDEX_SV = {
 },
     "Granbull": {
     "Gym Leader Brawly | Dewford Gym": {  
-    "index": "0000000120",
+    "index": "0000000122",
     "level": 24,
     "ability": "Guard Dog",
     "item": "Red Card", 
@@ -2202,7 +2214,7 @@ var SETDEX_SV = {
 },
     "Grapploct": {
     "Gym Leader Brawly | Dewford Gym": {  
-    "index": "0000000121",
+    "index": "0000000123",
     "level": 24,
     "ability": "Technician",
     "item": "Leftovers", 
@@ -2220,7 +2232,7 @@ var SETDEX_SV = {
 },
     "Simisage": {
     "Gym Leader Brawly | Dewford Gym": {  
-    "index": "0000000122",
+    "index": "0000000124",
     "level": 24,
     "ability": "Unburden",
     "item": "Coba Berry", 
@@ -2238,7 +2250,8 @@ var SETDEX_SV = {
 },
     "Bewear": {
     "Gym Leader Brawly | Dewford Gym": {  
-    "index": "0000000123",
+    "index": "0000000125",
+    "teraType": "Water",
     "level": 25,
     "ability": "Unnerve",
     "item": "Sitrus Berry", 
@@ -2252,6 +2265,6 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Work Up","Headbutt","Payback", "Low Sweep"]
-    }
+}
 }
 }
