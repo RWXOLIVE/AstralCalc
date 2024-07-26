@@ -1584,7 +1584,440 @@ var SETDEX_SV = {
         "sd": 31,
         "sp": 31
 },
-"moves": ["Spark","Thunder Wave","Rock Tomb", "Headbutt"]
+"moves": ["Spark","Thunder Wave","Rock Tomb", "Headbutt"] // Broxanne Split 
+    }
+},
+
+    "Dewott": {
+    "Team Aqua Grunt | Rusturf Tunnel": {  
+    "index": "0000000089",
+    "level": 20,
+    "ability": "Sharpness",
+    "item": "Wacan Berry", 
+    "nature": "Jolly",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Cut","Aqua Cutter","Enore", "Aerial Ace"]
+    }
+},
+    "Arbok": {
+    "Team Aqua Grunt | Rusturf Tunnel": {  
+    "index": "0000000090",
+    "level": 20,
+    "ability": "Intimidate",
+    "item": "Lum Berry", 
+    "nature": "Impish",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Glare","Poison Fang","Thunder Fang", "Sucker Punch"]
+    }
+},
+    "Morgrem": {
+    "Team Aqua Grunt | Rusturf Tunnel": {  
+    "index": "0000000091",
+    "level": 20,
+    "ability": "Prankster",
+    "item": "Sitrus Berry", 
+    "nature": "Docile",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Knock Off","Spirit Break","Snarl", "Torment"]
+    }
+},
+    "Drednaw": {
+    "Team Aqua Grunt | Rusturf Tunnel": {  
+    "index": "0000000092",
+    "level": 20,
+    "ability": "Shell Armor",
+    "item": "Rindo Berry", 
+    "nature": "Careful",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Rock Tomb","Ice Fang","Water Pulse", "Protect"]
+    }
+},
+    "Quagsire": {
+    "Sailor Tony | Dewford Town": {  
+    "index": "0000000093",
+    "level": 20,
+    "ability": "Water Absorb",
+    "item": "Rindo Berry", 
+    "nature": "Brave",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Rain Dance","Ice Punch","Water Pulse", "Stomping Tantrum"]
+    }
+},
+    "Qwilfish-Hisui": {
+    "Sailor Tony | Dewford Town": {  
+    "index": "0000000094",
+    "level": 20,
+    "ability": "Swift Swim",
+    "item": "Sitrus Berry", 
+    "nature": "Relaxed",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Barb Barrage","Reversal","Bite", "Brine"]
+    }
+},
+    "Chinchou": {
+    "Sailor Tony | Dewford Town": {  
+    "index": "0000000095",
+    "level": 20,
+    "ability": "Volt Absorb",
+    "item": "Wise Glasses", 
+    "nature": "Timid",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Soak","Volt Switch","Water Pulse", "Thunder Wave"]
+    }
+}, 
+    "Deerling": {
+    "Tuber Bella | Route 106": {  
+    "index": "0000000096",
+    "level": 20,
+    "ability": "Serene Grace",
+    "item": "Sitrus Berry", 
+    "nature": "Adamant",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Headbutt","Razor Leaf","Facade", "Bulldoze"]
+    }
+}, 
+    "Tentacool": {
+    "Tuber Bella | Route 106": {  
+    "index": "0000000097",
+    "level": 20,
+    "ability": "Clear Body",
+    "item": "Big Root", 
+    "nature": "Naive",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Mega Drain","Venoshock","Hex", "Toxic"]
+    }
+},
+    "Goldeen": {
+    "Tuber Bella | Route 106": {  
+    "index": "0000000098",
+    "level": 20,
+    "ability": "Water Veil",
+    "item": "Flying Gem", 
+    "nature": "Impish",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Pluck","Aqua Tail","Water Pulse", "Agility"]
+    }
+},
+    "Meditite": {
+    "Youngster Theodore | Route 106": {  
+    "index": "0000000099",
+    "level": 20,
+    "ability": "Pure Power",
+    "item": "Salac Berry", 
+    "nature": "Docile",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Fake Out","Ice Punch","Ice Punch", "Psybeam"]
+    }
+},
+    "Lampent": {
+    "Youngster Theodore | Route 106": {  
+    "index": "00000000100",
+    "level": 20,
+    "ability": "Shadow Tag",
+    "item": "Passho Berry", 
+    "nature": "Timid",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Nasty Plot","Will-O-Wisp","Flame Burst", "Ominous Wind"]
+    }
+},
+    "Qwilfish": {
+    "Tuber Leo | Route 106": {  
+    "index": "0000000101",
+    "level": 20,
+    "ability": "Intimidate",
+    "item": "Leftovers", 
+    "nature": "Modest",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Pain Split","Acid Spray","Bubble Beam"]
+    }
+},
+    "Kricketune": {
+    "Tuber Leo | Route 106": {  
+    "index": "0000000102",
+    "level": 20,
+    "ability": "Techician",
+    "item": "Lum Berry", 
+    "nature": "Hardy",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Sing","Bug Bite","Night Slash", "Trailblaze"]
+    }
+},
+    "Eevee": {
+    "Tuber Leo | Route 106": {  
+    "index": "0000000103",
+    "level": 20,
+    "ability": "Adaptability",
+    "item": "Sitrus Berry", 
+    "nature": "Bold",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Quick Attack","Tera Blast","Substitute", "Focus Energy"]
+    }
+},
+    "Oinkologne": {
+    "Lass Janice | Granite Cave B1F": {  
+    "index": "0000000104",
+    "level": 21,
+    "ability": "Lingering Aroma",
+    "item": "Chople Berry", 
+    "nature": "Adamant",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Slack Off","Body Slam","Body Press"]
+    }
+},
+     "Oinkologne-F": {
+    "Lass Janice | Granite Cave B1F": {  
+    "index": "0000000105",
+    "level": 21,
+    "ability": "Gluttony",
+    "item": "Sitrus Berry", 
+    "nature": "Relaxed",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Yawn","Body Slam","Body Press"]
+    }
+},
+    "Carbink": {
+    "Hiker Devan | Granite Cave B1F": {  
+    "index": "0000000106",
+    "level": 21,
+    "ability": "Clear Body",
+    "item": "Barbiri Berry", 
+    "nature": "Quiet",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Power Swap","Ancient Power","Rock Slide","Dazzling Gleam"]
+    }
+}, 
+    "Palpitoad": {
+    "Hiker Devan | Granite Cave B1F": {  
+    "index": "0000000107",
+    "level": 21,
+    "ability": "Liquid Ooze",
+    "item": "Rindo Berry", 
+    "nature": "Timid",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Muddy Water","Mud Bomb","Icy Wind","Bulldoze"]
+    }
+},
+    "Pawmo": {
+    "Battle Girl Laura | Dewford Gym": {  
+    "index": "0000000108",
+    "level": 22,
+    "ability": "Iron Fist",
+    "item": "Expert Belt", 
+    "nature": "Jolly",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Thunder Fang","Power-Up Punch","Fake Out","Trailblaze"]
+    }
+},
+    "Machoke": {
+    "Battle Girl Laura | Dewford Gym": {  
+    "index": "0000000109",
+    "level": 22,
+    "ability": "Guts",
+    "item": "Sitrus Berry", 
+    "nature": "Careful",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Bulk Up","Dynamic Punch","Thunder Punch","Submission"]
+    }
+},
+    "Flamigo": {
+    "Battle Girl Lilith | Dewford Gym": {  
+    "index": "0000000110",
+    "level": 22,
+    "ability": "Tangled Feet",
+    "item": "Expert Belt", 
+    "nature": "Jolly",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Dual Wingbeat","Thief","Low Sweep"]
+    }
+},
+    "Quaxwell": {
+    "Battle Girl Lilith | Dewford Gym": {  
+    "index": "0000000110",
+    "level": 22,
+    "ability": "Moxie",
+    "item": "Lum Berry", 
+    "nature": "Naughty",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Aqua Cutter","Drain Punch","Laser Focus", "Roost"]
+    }
+}, 
+    "Throh": {
+    "Black Belt Cristian & Takao | Dewford Gym": {  
+    "index": "0000000110",
+    "level": 22,
+    "ability": "Guts",
+    "item": "Eject Pack", 
+    "nature": "Adamant",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Superpower","Power-Up Punch","Knock Off"]
     }
 }
 }
