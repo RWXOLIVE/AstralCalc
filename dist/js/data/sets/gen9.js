@@ -16,7 +16,7 @@ var SETDEX_SV = {
         },
         "moves": ["Flame Charge"]
 
-}
+   }
 },
     "Quaxly": {
     "Rival (If Chose Tepig) | Route 103": { 
@@ -35,7 +35,7 @@ var SETDEX_SV = {
         },
         "moves": ["Aqua Jet"]
 
-}
+   }
 },
     "Snivy": {
     "Rival (If Chose Popplio) | Route 103": {  
@@ -53,7 +53,7 @@ var SETDEX_SV = {
             "sp": 31
         },
         "moves": ["Leaf Tornado"]
-}
+   }
 },
     "Bulbasaur": {
     "Youngster Larry | Route 102": {  
@@ -71,7 +71,7 @@ var SETDEX_SV = {
             "sp": 31
         },
         "moves": ["Sleep Powder","Vine Whip","Growl","Leech Seed"]
-}
+   }
 },
     "Ekans": {
     "Youngster Larry | Route 102": {  
@@ -89,7 +89,7 @@ var SETDEX_SV = {
         "sp": 31
     },
     "moves": ["Glare","Bite","Poison Tail","Wrap"]
-}
+   }
 },
     "Kakuna": {
     "Bug Catcher Buggford | Route 102": {  
@@ -107,7 +107,7 @@ var SETDEX_SV = {
         "sp": 31
     },
     "moves": ["Iron Defense","Bug Bite","Poison Sting"]
-}
+   }
 },
     "Metapod": {
         "Bugcatcher Buggford | Route 102": {  
@@ -124,8 +124,8 @@ var SETDEX_SV = {
             "sd": 31,
             "sp": 31
         },
-        "moves": ["Iron Defense","Bug Bite"]
-}
+"moves": ["Iron Defense","Bug Bite"]
+    }
 },
     "Maschiff": {
     "Youngster Allen | Route 102": {  
@@ -143,7 +143,7 @@ var SETDEX_SV = {
         "sp": 31
     },
     "moves": ["Snarl","Thunder Fang", "Bite", "Leer"]  
-}
+    }
 }, 
     "Taillow": {
     "Youngster Allen | Route 102": {  
@@ -164,7 +164,7 @@ var SETDEX_SV = {
     }
 },
     "Snubbull": {
-    "Lass Tiana | Cap Raised To 17 | Route 102": {  
+    "Lass Tiana | Route 102": {  
     "index": "0000000010",
     "level": 9,
     "ability": "Intimidate",
@@ -179,10 +179,10 @@ var SETDEX_SV = {
         "sp": 31
     },
     "moves": ["Covet","Karate Chop", "Lick"]
-}
+    }
 },
     "Staryu": {
-    "Lass Tiana | Cap Raised To 17 | Route 102": {  
+    "Lass Tiana | Route 102": {  
     "index": "0000000011",
     "level": 9,
     "ability": "Analytic",
@@ -197,11 +197,11 @@ var SETDEX_SV = {
         "sp": 31
     },
     "moves": ["Water Gun","Confusion", "Rapid Spin", "Swift"]
-}
+    }
 },
 
     "Pawmi": {
-    "Lass Tiana | Cap Raised To 17 | Route 102": {  
+    "Lass Tiana | Route 102": {  
     "index": "0000000012",
     "level": 10,
     "ability": "Static",
@@ -216,7 +216,7 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Fake Out","Spark", "Mach Punch", "Quick Attack"]
-}
+    }
 },
     
     "Arrokuda": {
@@ -235,7 +235,7 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Dive","Ice Fang", "Bite"]
-}
+    }
 },
     "Bruxish": {
     "Fisherman Patrick | Route 104": {  
@@ -253,7 +253,7 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Bite","Heart Stamp", "Aqua Jet","Psywave"]
-}
+    }
 },
     "Lombre": {
     "Fisherman Patrick | Route 104": {  
@@ -271,7 +271,7 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Fake Out","Trailblaze", "Clamp","Double Slap"]
-}
+    }
 },
     "Ledian": {
     "Black Belt James | Route 104": {  
@@ -289,7 +289,7 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Bide","Mach Punch", "Silver Wind","Counter"]
-}
+    }
 },
     "Sneasel-Hisui": {
     "Black Belt James | Route 104": {  
@@ -307,7 +307,7 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Fake Out","Ice Shard", "Low Kick","Poison Tail"]
-}
+    }
 },
     "Flamigo": {
     "Black Belt James | Route 104": {  
@@ -325,7 +325,7 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Peck","Double Kick", "Aqua Jet","Copycat"]
-}
+    }
 },
     "Stunfisk": {
     "Lady Lauren | Route 104": {  
@@ -343,7 +343,7 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Electroweb"]
-    }
+   }
 },
     "Gligar": {
     "Lady Lauren | Route 104": {  
@@ -361,10 +361,10 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Protect","Bite", "Taunt","Aerial Ace"]
-    }
+     }
 },
     "Charmeleon": {
-    "Youngster Billy | Mini Boss | Route 104": {  
+    "Youngster Billy | Route 104": {  
     "index": "0000000021",
     "level": 15,
     "ability": "Solar Power",
@@ -379,10 +379,10 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Flame Burst","Rock Tomb", "Weather Ball"]
-}
+    }
 },
     "Stunky": {
-    "Youngster Billy | Mini Boss | Route 104": {  
+    "Youngster Billy | Route 104": {  
     "index": "0000000022",
     "level": 15,
     "ability": "Aftermath",
@@ -397,10 +397,10 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Sucker Punch","Snarl", "Dig","Poison Fang"]
-}
+    }
 },
     "Brionne": {
-    "Fisherman Bobby | Mini Boss | Route 104": {  
+    "Fisherman Bobby | Route 104": {  
     "index": "0000000023",
     "level": 15,
     "ability": "Cute Charm",
@@ -415,10 +415,10 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Follow Me","Water Gun", "Icy Wind","Disarming Voice"]
-}
+    }
 },
     "Tirtouga": {
-    "Fisherman Bobby | Mini Boss | Route 104": {  
+    "Fisherman Bobby | Route 104": {  
     "index": "0000000024",
     "level": 15,
     "ability": "Solid Rock",
@@ -433,10 +433,10 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Headbutt","Bubble Beam", "Accelerock","Ice Shard"]
-}
+    }
 },
     "Murkrow": {
-    "Team Aqua Grunt | Cap Raised To 19 | Petalburg Woods": {  
+    "Team Aqua Grunt | Petalburg Woods": {  
     "index": "0000000025",
     "level": 15,
     "ability": "Prankster",
@@ -451,10 +451,10 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Snarl","Parting Shot", "Night Shade","Air Cutter"]
-}
+    }
 },
     "Seviper": {
-    "Team Aqua Grunt | Cap Raised To 19 | Petalburg Woods": {  
+    "Team Aqua Grunt | Petalburg Woods": {  
     "index": "0000000026",
     "level": 15,
     "ability": "Shed Skin",
@@ -469,10 +469,10 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Screech","Acid", "Swift","Bite"]
-}
+    }
 },
     "Luxio": {
-    "Team Aqua Grunt | Cap Raised To 19 | Petalburg Woods": {  
+    "Team Aqua Grunt | Petalburg Woods": {  
     "index": "0000000027",
     "level": 16,
     "ability": "Intimidate",
@@ -487,7 +487,7 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Work Up","Trailblaze", "Thunder Shock","Bite"]
-}
+    }
 },
     "Trapinch": {
     "Bug Catcher John | Petalburg Woods": {  
@@ -505,7 +505,7 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Mud Bomb","Bug Bite", "Rock Tomb","Body Slam"]
-}
+    }
 }, 
     "Yanma": {
     "Bug Catcher John | Petalburg Woods": {  
@@ -523,7 +523,7 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Air Cutter","Supersonic", "Struggle Bug"]
-}
+    }
 },
     "Durant": {
     "Bug Catcher Barry | Petalburg Woods": {  
@@ -541,7 +541,7 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Metal Claw","Rock Tomb"]
-}
+    }
 },
     "Larvesta": {
     "Bug Catcher John | Petalburg Woods": {  
@@ -559,7 +559,7 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Pounce","Flame Charge", "Protect"]
-}
+    }
 },
     "Rabsca": {
     "Bug Catcher John | Petalburg Woods": {  
@@ -577,7 +577,7 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Revival Blessing","Confusion", "Struggle Bug"]
-}
+    }
 },
     "Wartortle": {
     "Rich Boy Winston | Route 104": {  
@@ -595,7 +595,7 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Water Pulse","Body Press", "Protect", "Mud Shot"]
-}
+    }
 },
     "Herdier": {
     "Rich Boy Winston | Route 104": {  
@@ -613,7 +613,7 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Mud Shot","Quick Attack", "Ice Fang", "Covet",]
-}
+    }
 },
     "Axew": {
     "Rich Boy Winston | Route 104": {  
@@ -631,7 +631,7 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Breaking Swipe","Low Kick"]
-}
+    }
 },
     "Stufful": {
     "Twin Gina & Mia | Route 104": {  
@@ -649,7 +649,7 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Helping Hand","Mach Punch", "Headbutt", "Work Up",]
-}
+    }
 },
     "Mudbray": {
     "Twin Gina & Mia | Route 104": {  
@@ -667,7 +667,7 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Smack Down","Stomp", "Sand Tomb", "Counter",]
-}
+    }
 },
     "Omanyte": {
     "Lass Emmie | Route 104": {  
@@ -685,7 +685,7 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Metronome"]
-}
+    }
 },
     "Bayleef": {
     "Lass Emmie | Route 104": {  
@@ -703,7 +703,7 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Metronome"]
-}
+    }
 },
     "Clefairy": {
     "Lass Emmie | Route 104": {  
@@ -721,7 +721,7 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Metronome"]
-}
+    }
 },
     "Dottler": {
     "Bug Catcher Jose | Route 116": {  
@@ -1404,7 +1404,7 @@ var SETDEX_SV = {
         "sd": 31,
         "sp": 31
 },
-"moves": ["Acrobatics","Smack Down","Endeavor", "U-Turn"]
+"moves": ["Acrobatics","Smack Down","Endeavor", "U-turn"]
     }
 },
     "Carkol": {
@@ -1783,7 +1783,7 @@ var SETDEX_SV = {
         "sd": 31,
         "sp": 31
 },
-"moves": ["Fake Out","Ice Punch","Ice Punch", "Psybeam"]
+"moves": ["Fake Out","Ice Punch","Mach Punch", "Psybeam"]
     }
 },
     "Lampent": {
@@ -2018,6 +2018,240 @@ var SETDEX_SV = {
         "sp": 31
 },
 "moves": ["Superpower","Power-Up Punch","Knock Off"]
+    }
+},
+    "Passimian": {
+    "Black Belt Cristian & Takao | Dewford Gym": {  
+    "index": "0000000111",
+    "level": 22,
+    "ability": "Receiver",
+    "item": "Leftovers", 
+    "nature": "Careful",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Coaching","Taunt","Drain Punch", "Brutal Swing"]
+    }
+},
+    "Riolu": {
+    "Black Belt Cristian & Takao | Dewford Gym": {  
+    "index": "0000000112",
+    "level": 22,
+    "ability": "Prankster",
+    "item": "Eviolite", 
+    "nature": "Relaxed",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Follow Me","Screech","Detect","Me First"]
+    }
+},
+    "Lucario": {
+    "Black Belt Cristian & Takao | Dewford Gym": {  
+    "index": "0000000113",
+    "level": 22,
+    "ability": "Justified",
+    "item": "Lagging Tail", 
+    "nature": "Modest",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Drain Punch","Counter","Bullet Punch", "Payback"]
+    }
+},
+    "Crogunk": {
+    "Battle Girl Jocelyn & Sailor Brenden | Dewford Gym": {  
+    "index": "0000000114",
+    "level": 22,
+    "ability": "Poison Touch",
+    "item": "Iapapa Berry", 
+    "nature": "Modest",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Fake Out","Venoshock","Toxic", "Protect"]
+    }
+},
+    "Mareanie": {
+    "Battle Girl Jocelyn & Sailor Brenden | Dewford Gym": {  
+    "index": "0000000115",
+    "level": 22,
+    "ability": "Merciless",
+    "item": "Black Sludge", 
+    "nature": "Bold",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Toxic","Protect","Soak", "Toxic Spikes"]
+   }
+},
+    "Sneasel-Hisui": {
+    "Battle Girl Jocelyn & Sailor Brenden | Dewford Gym": {  
+    "index": "0000000116",
+    "level": 22,
+    "ability": "Pickpocket",
+    "item": "Rare Bone", 
+    "nature": "Calm",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Fake Out","Acid Spray","Poison Jab", "Fling"]
+    }
+},
+    "Tauros-Paldea-Aqua": {
+    "Battle Girl Jocelyn & Sailor Brenden | Dewford Gym": {  
+    "index": "0000000117",
+    "level": 22,
+    "ability": "Intimidate",
+    "item": "None", 
+    "nature": "Adamant",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Aqua Jet","Reversal","Body Slam", "Thief"]
+    }
+},
+    "Silvally-Fighting": {
+    "Gym Leader Brawly | Dewford Gym": {  
+    "index": "0000000118",
+    "level": 23,
+    "ability": "RKS System",
+    "item": "Fighting Memory", 
+    "nature": "Serious",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Parting Shot","U-turn","Pursuit", "Vacuum Wave"]
+    }
+},
+    "Ledian": {
+    "Gym Leader Brawly | Dewford Gym": {  
+    "index": "0000000119",
+    "level": 24,
+    "ability": "Iron Fist",
+    "item": "Liechi Berry", 
+    "nature": "Jolly",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Sucker Punch","Ice Punch","Mach Punch", "Drain Punch"]
+    }
+},
+    "Granbull": {
+    "Gym Leader Brawly | Dewford Gym": {  
+    "index": "0000000120",
+    "level": 24,
+    "ability": "Guard Dog",
+    "item": "Red Card", 
+    "nature": "Adamant",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Bulk Up","Thunder Fang","Play Rough", "Power-Up Punch"]
+    }
+},
+    "Grapploct": {
+    "Gym Leader Brawly | Dewford Gym": {  
+    "index": "0000000121",
+    "level": 24,
+    "ability": "Technician",
+    "item": "Leftovers", 
+    "nature": "Impish",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Revenge","Payback","Octolock", "Drain Punch"]
+    }
+},
+    "Simisage": {
+    "Gym Leader Brawly | Dewford Gym": {  
+    "index": "0000000122",
+    "level": 24,
+    "ability": "Unburden",
+    "item": "Coba Berry", 
+    "nature": "Adamant",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Spiky Shield","Rock Tomb","Giga Drain", "Rock Smash"]
+    }
+},
+    "Bewear": {
+    "Gym Leader Brawly | Dewford Gym": {  
+    "index": "0000000123",
+    "level": 25,
+    "ability": "Unnerve",
+    "item": "Sitrus Berry", 
+    "nature": "Brave",
+    "ivs": {
+        "hp": 31,
+        "at": 31,
+        "df": 31,
+        "sa": 31,
+        "sd": 31,
+        "sp": 31
+},
+"moves": ["Work Up","Headbutt","Payback", "Low Sweep"]
     }
 }
 }
