@@ -1632,15 +1632,534 @@ var SETDEX_SV = {
         "Gym Leader Brawly | Dewford Gym": {  
             "index": "0000000125",
             "teraType": "Normal",
-            "teraType": "Water",
             "level": 25,
             "ability": "Unnerve",
             "item": "Sitrus Berry", 
             "nature": "Brave",
             "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  // Brawly Split
             },
             "moves": ["Work Up","Headbutt","Payback", "Low Sweep"]
+        }
+    },
+    "Masquerain": {
+        "Sailor Huey | Route 109": {  
+            "index": "0000000126",
+            "level": 28,
+            "ability": "Intimidate",
+            "item": "Lum Berry", 
+            "nature": "Mild",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Struggle Bug","Air Cutter","Bubblebeam", "Icy Wind"]
+        }
+    },
+    "Basculin-Blue-Striped": {
+        "Sailor Huey | Route 109": {  
+            "index": "0000000127",
+            "level": 28,
+            "ability": "Strong Jaw",
+            "item": "Mystic Water", 
+            "nature": "Brave",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Crunch","Aqua Jet","Ice Fang", "Take Down"]
+        }
+    },
+    "Pyukumuku": {
+        "Sailor Edmond | Route 109": {  
+            "index": "0000000128",
+            "level": 28,
+            "ability": "Innards Out",
+            "item": "Black Sludge", 
+            "nature": "Serious",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Toxic","Mirror Coat","Counter", "Soak"]
+        }
+    },
+    "Bellibolt": {
+        "Sailor Edmond | Route 109": {  
+            "index": "0000000129",
+            "level": 28,
+            "ability": "Electromorphosis",
+            "item": "Lum Berry", 
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Shock Wave","Muddy Water","Acid Spray", "Electroweb"]
+        }
+    },
+    "Primeape": {
+        "Tuber Grant | Route 109": {  
+            "index": "0000000130",
+            "level": 28,
+            "ability": "Vital Spirit",
+            "item": "Muscle Band", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Bulk Up","Knock Off","Drain Punch", "Headbutt"]
+        }
+    },
+    "Scyther": {
+        "Tuber Grant | Route 109": {  
+            "index": "0000000131",
+            "level": 28,
+            "ability": "Technician",
+            "item": "Focus Sash", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Dual Wingbeat","Bug Bite"]
+        }
+    },
+    "Watchog": {
+        "Tuber Ricky | Route 109": {  
+            "index": "0000000132",
+            "level": 28,
+            "ability": "Analytic",
+            "item": "Assault Vest", 
+            "nature": "Quiet",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Seed Bomb","Hyper Fang","Assurance"]
+        }
+    },
+    "Miltank": {
+        "Tuber Ricky | Route 109": {  
+            "index": "0000000133",
+            "level": 28,
+            "ability": "Scrappy",
+            "item": "Normal Gem", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Retaliate"]
+        }
+    },
+    "Morpeko": {
+        "Tuber Austina | Route 109": {  
+            "index": "0000000134",
+            "level": 29,
+            "ability": "Hunger Switch",
+            "item": "Life Orb", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Fake Out","Nuzzle","Aura Wheel", "Bullet Seed"]
+        }
+    },
+    "Arceus": {
+        "Tuber Austina | Route 109": {  
+            "index": "0000000135",
+            "level": 29,
+            "ability": "Iron Barbs",
+            "item": "Leftovers", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Fake Out","Zing Zap","Smart Strike", "Eerie Impulse"]
+        }
+    },
+    "Luxray": {
+        "Aqua Grunt 1 | Slateport Museum": {  
+            "index": "0000000136",
+            "level": 28,
+            "ability": "Guts",
+            "item": "Flame Orb", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Facade","Zippy Zap","Crunch", "Submission"]
+        }
+    },
+    "Seviper": {
+        "Aqua Grunt 1 | Slateport Museum": {  
+            "index": "0000000137",
+            "level": 28,
+            "ability": "Shed Skin",
+            "item": "Shuca Berry", 
+            "nature": "Hasty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Giga Drain","Flamethrower","Crunch", "Poison Fang"]
+        }
+    },
+    "Honchkrow": {
+        "Aqua Grunt 1 | Slateport Museum": {  
+            "index": "0000000138",
+            "level": 29,
+            "ability": "Super Luck",
+            "item": "Lum Berry", 
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Roost","Dark Pulse","Air Slash", "Heat Wave"]
+        }
+    },
+    "Drednaw": {
+        "Aqua Grunt 2 | Slateport Museum": {  
+            "index": "0000000139",
+            "level": 28,
+            "ability": "Shell Armor",
+            "item": "Rindo Berry", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Razor Shell","Rock Slide","Flip Turn", "Ice Fang"]
+        }
+    },
+    "Arbok": {
+        "Aqua Grunt 2 | Slateport Museum": {  
+            "index": "0000000140",
+            "level": 28,
+            "ability": "Intimidate",
+            "item": "Black Sludge", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Coil","Gunk Shot","Sucker Punch", "Jaw Lock"]
+        }
+    },
+    "Huntail": {
+        "Aqua Grunt 2 | Slateport Museum": {  
+            "index": "0000000141",
+            "level": 29,
+            "ability": "Adaptability",
+            "item": "Quick Claw", 
+            "nature": "Brave",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Assurance","Aqua Cutter","Psychic Fangs", "Revenge"]
+        }
+    },
+    "Greedent": {
+        "Cool Trainer Randall | Petalburg Gym": {  
+            "index": "0000000142",
+            "level": 30,
+            "ability": "Gluttony",
+            "item": "Liechi Berry", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Swords Dance","Slam","Facade", "High Horsepower"]
+        }
+    },
+    "Porygon2": {
+        "Cool Trainer Randall | Petalburg Gym": {  
+            "index": "0000000143",
+            "level": 30,
+            "ability": "Download",
+            "item": "Chople Berry", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Trick Room","Double Edge","Pain Split"]
+        }
+    },
+    "Ditto": {
+        "Cool Trainer Randall | Petalburg Gym": {  
+            "index": "0000000144",
+            "level": 30,
+            "ability": "Imposter",
+            "item": "Room Service", 
+            "nature": "Serious",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Transform"]
+        }
+    },
+    "Drakloak": {
+        "Cool Trainer Randall | Petalburg Gym": {  
+            "index": "0000000145",
+            "level": 30,
+            "ability": "Cursed Body",
+            "item": "Room Service", 
+            "nature": "Docile",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Phantom Force","Dragon Pulse","Sucker Punch","Breaking Swipe"]
+        }
+    },
+    "Honchkrow": {
+        "Cool Trainer Gary | Petalburg Gym": {  
+            "index": "0000000146",
+            "level": 30,
+            "ability": "Prankster",
+            "item": "Eject Pack", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Tailwind","Heat Wave","Night Slash","Acrobatics"]
+        }
+    },
+    "Shiftry": {
+        "Cool Trainer Gary | Petalburg Gym": {  
+            "index": "0000000147",
+            "level": 30,
+            "ability": "Wind Rider",
+            "item": "Choice Band", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Petal Blizzard"]
+        }
+    },
+    "Bouffalant": {
+        "Cool Trainer Gary | Petalburg Gym": {  
+            "index": "0000000148",
+            "level": 30,
+            "ability": "Sap Sipper",
+            "item": "Chople Berry", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Head Smash","Zen Headbutt","Reversal","Brick Break"]
+        }
+    },
+    "Wyrdeer": {
+        "Cool Trainer Gary | Petalburg Gym": {  
+            "index": "0000000149",
+            "level": 30,
+            "ability": "Sap Sipper",
+            "item": "Lum Berry", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Hypnosis","Body Slam","Lunge","Psyshield Bash"]
+        }
+    },
+    "Dubwool": {
+        "Cool Trainer Parker | Petalburg Gym": {  
+            "index": "0000000150",
+            "level": 30,
+            "ability": "Fluffy",
+            "item": "Occa Berry", 
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Cotton Guard","Body Press","Body Slam","Zen Headbutt"]
+        }
+    },
+    "Flapple": {
+        "Cool Trainer Parker | Petalburg Gym": {  
+            "index": "0000000151",
+            "level": 30,
+            "ability": "Hustle",
+            "item": "Wide Lens", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Grav Apple","Trailblaze","Dual Wingbeat","Dragon Claw"]
+        }
+    },
+    "Clawitzer": {
+        "Cool Trainer Parker | Petalburg Gym": {  
+            "index": "0000000152",
+            "level": 30,
+            "ability": "Mega Launcher",
+            "item": "Lum Berry", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Aura Sphere","Water Pulse","Flash Cannon","Dark Pulse"]
+        }
+    },
+    "Morpeko": {
+        "Cool Trainer Parker | Petalburg Gym": {  
+            "index": "0000000153",
+            "level": 30,
+            "ability": "Hunger Switch",
+            "item": "Life Orb", 
+            "nature": "Brave",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Fake Out","Knock Off","Aura Wheel","Volt Switch"]
+        }
+    },
+    "Indeedee-F": {
+        "Cool Trainer Alexia | Petalburg Gym": {  
+            "index": "0000000154",
+            "level": 30,
+            "ability": "Psychic Surge",
+            "item": "Terrain Extender", 
+            "nature": "Bashful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Hyper Voice","Psychic Noise","Light Screen","Reflect"]
+        }
+    },
+    "Gumshoos": {
+        "Cool Trainer Alexia | Petalburg Gym": {  
+            "index": "0000000155",
+            "level": 30,
+            "ability": "Adaptability",
+            "item": "Muscle Band", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Psychic Fangs","Body Slam","Facade"]
+        }
+    },
+    "Mr. Mime": {
+        "Cool Trainer Alexia | Petalburg Gym": {  
+            "index": "0000000156",
+            "level": 30,
+            "ability": "Technician",
+            "item": "Zap Plate", 
+            "nature": "Bashful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Twin Beam","Draining Kiss","Incinerate","Charge Beam"]
+        }
+    },
+    "Tapu Fini": {
+        "Cool Trainer George | Petalburg Gym": {  
+            "index": "0000000157",
+            "level": 30,
+            "ability": "Misty Surge",
+            "item": "Mystic Water", 
+            "nature": "Lax",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Water Pulse","Draining Kiss","Chilling Water","Protect"]
+        }
+    },
+    "Scream Tail": {
+        "Cool Trainer George | Petalburg Gym": {  
+            "index": "0000000158",
+            "level": 30,
+            "ability": "Protosythesis",
+            "item": "Mystic Water", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Thunder Wave","Tearful Look","Play Rough","Sunny Day"]
+        }
+    },
+    "Pyroar": {
+        "Cool Trainer George | Petalburg Gym": {  
+            "index": "0000000159",
+            "level": 30,
+            "ability": "Intimidate",
+            "item": "Sitrus Berry", 
+            "nature": "Naive",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Work Up","Flame Burst","Hyper Voice","Solar Beam"]
+        }
+    },
+    "Banette": {
+        "Cool Trainer Jody | Petalburg Gym": {  
+            "index": "0000000160",
+            "level": 32,
+            "ability": "Prankster",
+            "item": "None", 
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Magic Room","Phantom Force","Pursuit","Knock Off"]
+        }
+    },
+    "Umbreon": {
+        "Cool Trainer Jody | Petalburg Gym": {  
+            "index": "0000000161",
+            "level": 32,
+            "ability": "Synchronize",
+            "item": "None", 
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Wish","Play Rough","Foul Play","Helping Hand"]
+        }
+    },
+    "Spinda": {
+        "Cool Trainer Jody | Petalburg Gym": {  
+            "index": "0000000162",
+            "level": 33,
+            "ability": "Own Tempo",
+            "item": "None", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Teeter Dance","Dizzy Punch","Drain Punch","Tickle"]
+        }
+    },
+    "Oranguru": {
+        "Cool Trainer Jody | Petalburg Gym": {  
+            "index": "0000000163",
+            "level": 33,
+            "ability": "Inner Focus",
+            "item": "None", 
+            "nature": "Calm",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Magic Room","Instruct","Hyper Voice","Psychic"]
+        }
+    },
+    "Sableye": {
+        "Cool Trainer Bereke | Petalburg Gym": {  
+            "index": "0000000164",
+            "level": 33,
+            "ability": "Prankster",
+            "item": "Covert Cloak", 
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Wonder Room","Poltergeist","Power-Up Punch","Knock Off"]
+        }
+    },
+    "Farfetch\u2019d": {
+        "Cool Trainer Bereke | Petalburg Gym": {  
+            "index": "0000000165",
+            "level": 33,
+            "ability": "Defiant",
+            "item": "Leek", 
+            "nature": "Quirky",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["First Impression","Heat Wave","Body Slam","Leaf Blade"]
         }
     }
 }

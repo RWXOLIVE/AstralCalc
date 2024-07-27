@@ -4140,9 +4140,6 @@ const LGPE_MOVES = [
   'Splishy Splash',
   'Veevee Volley',
 ];
-for (const m of LGPE_MOVES) {
-  delete SS[m];
-}
 
 const SV_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Aerial Ace': {isSlicing: true},

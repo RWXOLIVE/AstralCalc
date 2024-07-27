@@ -2385,7 +2385,7 @@ var SM_PATCH = {
     'Black Hole Eclipse': { bp: 1, type: 'Dark', category: 'Physical', isZ: true },
     'Bloom Doom': { bp: 1, type: 'Grass', category: 'Physical', isZ: true },
     'Bouncy Bubble': {
-        bp: 90,
+        bp: 65,
         type: 'Water',
         drain: [1, 2],
         category: 'Special',

@@ -37,7 +37,7 @@ var __values = (this && this.__values) || function(o) {
     };
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
-var e_1, _a, e_2, _b;
+var e_1, _a;
 exports.__esModule = true;
 
 var util_1 = require("../util");
@@ -4122,19 +4122,6 @@ var LGPE_MOVES = [
     'Splishy Splash',
     'Veevee Volley',
 ];
-try {
-    for (var LGPE_MOVES_1 = __values(LGPE_MOVES), LGPE_MOVES_1_1 = LGPE_MOVES_1.next(); !LGPE_MOVES_1_1.done; LGPE_MOVES_1_1 = LGPE_MOVES_1.next()) {
-        var m = LGPE_MOVES_1_1.value;
-        delete SS[m];
-    }
-}
-catch (e_1_1) { e_1 = { error: e_1_1 }; }
-finally {
-    try {
-        if (LGPE_MOVES_1_1 && !LGPE_MOVES_1_1.done && (_a = LGPE_MOVES_1["return"])) _a.call(LGPE_MOVES_1);
-    }
-    finally { if (e_1) throw e_1.error; }
-}
 var SV_PATCH = {
     'Aerial Ace': { isSlicing: true },
     Aeroblast: { isWind: true },
@@ -5009,11 +4996,11 @@ try {
         gen++;
     }
 }
-catch (e_2_1) { e_2 = { error: e_2_1 }; }
+catch (e_1_1) { e_1 = { error: e_1_1 }; }
 finally {
     try {
-        if (MOVES_1_1 && !MOVES_1_1.done && (_b = MOVES_1["return"])) _b.call(MOVES_1);
+        if (MOVES_1_1 && !MOVES_1_1.done && (_a = MOVES_1["return"])) _a.call(MOVES_1);
     }
-    finally { if (e_2) throw e_2.error; }
+    finally { if (e_1) throw e_1.error; }
 }
 //# sourceMappingURL=moves.js.map
