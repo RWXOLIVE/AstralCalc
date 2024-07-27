@@ -1806,7 +1806,7 @@ var SETDEX_SV = {
             "item": "Lum Berry", 
             "nature": "Modest",
             "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31   
             },
             "moves": ["Roost","Dark Pulse","Air Slash", "Heat Wave"]
         }
@@ -1814,7 +1814,7 @@ var SETDEX_SV = {
     "Drednaw": {
         "Aqua Grunt 2 | Slateport Museum": {  
             "index": "0000000139",
-            "level": 28,
+            "level": 28,    //not being read, pressing previous button on the calc doesnt work (ps dream just incase you didnt know, how to check the calc, AstralCalc -> dist -> index )
             "ability": "Shell Armor",
             "item": "Rindo Berry", 
             "nature": "Adamant",
