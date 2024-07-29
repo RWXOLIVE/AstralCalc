@@ -1,295 +1,2343 @@
-var SETDEX_SV = {"Absol":{"Winstrate Vicky | Winstrates":{"index":"0000000193","level":32,"ability":"Pressure","item":"Leftovers","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Will-O-Wisp","Play Rough","Knock Off","Substitute",]}},
-"Aipom":{"Picknicker Diana | Jagged Pass":{"index":"0000000250","level":38,"ability":"Skill Link","item":"King's Rock","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Fake Out","Tail Slap","U-turn","Upper Hand",]}},
-"Araquanid":{"Bug Maniac Marc | Petalburg Woods Gym":{"index":"0000000052","level":13,"ability":"Water Bubble","item":"Shell Bell","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Water Gun","Bug Bite","Icy Wind","No Move",]}},
-"Arbok":{"Collector Angelo | Mauville Gym":{"index":"0000000168","level":25,"ability":"Intimidate","item":"Choice Band","nature":"Careful","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Poison Jab","Leech Life","Crunch","Stomping Tantrum",]}},
-"Arcanine":{"Gym Leader Kiawe | Lavaridge Gym":{"index":"0000000291","level":37,"ability":"Intimidate","item":"White Herb","nature":"Hasty","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Morning Sun","Extreme Speed","Overheat","Play Rough",]}},
-"Arcanine-Hisui":{"Hiker Dusty | Route 111":{"index":"0000000224","level":33,"ability":"Intimidate","item":"Weakness Policy","nature":"Careful","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Stealth Rock","Flame Charge","Bulldoze","Rock Tomb",]}},
-"Archen":{"Hiker Dusty | Route 111":{"index":"0000000227","level":32,"ability":"Defeatist","item":"Choice Scarf","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Head Smash","Dual Wingbeat","Earthquake","U-turn",]}},
-"Ariados":{"Gym Leader Bugsy | Petalburg Woods Gym":{"index":"0000000057","level":14,"ability":"Insomnia","item":"Black Sludge","nature":"Impish","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Pursuit","Leech Life","Toxic Thread","Venoshock",]}},
-"Aromatisse":{"Galactic Commander Mars | Mt. Chimney":{"index":"0000000243","level":34,"ability":"Aroma Veil","item":"Soft Sand","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Dazzling Gleam","Recover","Substitute","Hidden Power Ground",]}},
-"Arrokuda":{"Breeder Isaac | Route 117":{"index":"0000000139","level":29,"ability":"Swift Swim","item":"Mystic Water","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Flip Turn","No Move","No Move","No Move",]}},
-"Beedrill":{"Bugcatcher James | Petalburg Woods":{"index":"0000000031","level":13,"ability":"Swarm","item":"Coba Berry","nature":"Impish","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Twineedle","Poison Sting","No Move","No Move",]}},
-"Bellibolt":{"Winstrate Victor | Winstrates":{"index":"0000000187","level":30,"ability":"Electromorphosis","item":"King's Rock","nature":"Calm","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Parabolic Charge","Muddy Water","Thunder Wave","Soak",]}},
-"Bibarel":{"Lass Janice | Route 116":{"index":"0000000100","level":18,"ability":"Simple","item":"Leftovers","nature":"Brave","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Curse","Aqua Jet","Quick Attack","Bulldoze",]}},
-"Bidoof":{"Youngster Allen | Route 102":{"index":"0000000011","level":7,"ability":"Simple","item":"Berry Juice","nature":"Impish","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Defense Curl","Headbutt","No Move","No Move",]}},
-"Blipbug":{"Bug Catcher Rick | Route 102":{"index":"0000000007","level":6,"ability":"Swarm","item":"Coba Berry","nature":"Calm","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Sticky Web","Struggle Bug","No Move","No Move",]}},
-"Boltund":{"Ace Trainer Cole | Lavaridge Gym":{"index":"0000000271","level":36,"ability":"Competitive","item":"Shuca Berry","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Volt Switch","Thunder Wave","Snarl","Hyper Voice",]}},
-"Bombirdier":{"Camper Beau | Route 111":{"index":"0000000216","level":31,"ability":"Rocky Payload","item":"Safety Goggles","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Dual Wingbeat","Rock Slide","Lash Out","Facade",]}},
-"Braixen":{"Rival 2 | Chespin | Rustboro City":{"index":"0000000063","level":19,"ability":"Blaze","item":"Charcoal","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Incinerate","Psybeam","Hyper Voice","Hypnosis",]}},
-"Brionne":{"Rival 2 | Rattata | Rustboro City":{"index":"0000000077","level":18,"ability":"Torrent","item":"Pixie Plate","nature":"Relaxed","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Water Pulse","Draining Kiss","Hyper Voice","No Move",]}},
-"Bronzong":{"Galactic Grunt #3 | Mt. Chimney":{"index":"0000000233","level":32,"ability":"Levitate","item":"Occa Berry","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Speed Swap","Hypnosis","Dream Eater","Power Swap",]}},
-"Bunnelby":{"Rich Boy Winston | Route 104":{"index":"0000000033","level":12,"ability":"Huge Power","item":"Salac Berry","nature":"Brave","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Quick Attack","Bulldoze","Secret Power","No Move",]}},
-"Butterfree":{"Bugcatcher James | Petalburg Woods":{"index":"0000000030","level":13,"ability":"Compound Eyes","item":"Focus Sash","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Sleep Powder","Confusion","Gust","Mega Drain",]}},
-"Cacturne":{"Camper Branden | Route 111":{"index":"0000000206","level":30,"ability":"Sand Veil","item":"Leftovers","nature":"Calm","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Leech Seed","Giga Drain","Dark Pulse","Spiky Shield",]}},
-"Calyrex":{"Wally 1 | Verdanturf Town":{"index":"0000000122","level":20,"ability":"Unnerve","item":"Expert Belt","nature":"Sassy","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Hidden Power Dark","Leech Seed","Psybeam","Grass Knot",]}},
-"Camerupt":{"Kindler Jeff | Lavaridge Gym":{"index":"0000000264","level":36,"ability":"Solid Rock","item":"Assault Vest","nature":"Sassy","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Overheat","Stone Edge","Earthquake","Trailblaze",]}},
-"Carkol":{"Hiker Mike | Rusturf Tunnel":{"index":"0000000112","level":19,"ability":"Steam Engine","item":"Passho Berry","nature":"Docile","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Burn Up","Body Press","Stone Edge","Iron Defense",]},
-"Kindler Hayden | Route 111":{"index":"0000000184","level":30,"ability":"Steam Engine","item":"Power Herb","nature":"Careful","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Meteor Beam","Overheat","Scald","Scorching Sands",]}},
-"Carnivine":{"Hiker Mike | Rusturf Tunnel":{"index":"0000000110","level":19,"ability":"Levitate","item":"Leftovers","nature":"Impish","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Stockpile","Synthesis","Seed Bomb","Knock Off",]}},
-"Centiskorch":{"Bug Maniac Marc | Petalburg Woods Gym":{"index":"0000000051","level":13,"ability":"Flame Body","item":"Metronome","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Ember","Rollout","Struggle Bug","No Move",]},
-"Kindler Gerald | Lavaridge Gym":{"index":"0000000276","level":36,"ability":"Flame Body","item":"Charti Berry","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Leech Life","Fire Lash","Coil","Knock Off",]}},
-"Ceruledge":{"Expert Keegan | Lavaridge Gym":{"index":"0000000286","level":35,"ability":"Weak Armor","item":"Assault Vest","nature":"Careful","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Bitter Blade","Shadow Sneak","Poltergeist","Brick Break",]}},
-"Charcadet":{"Breeder Isaac | Route 117":{"index":"0000000140","level":29,"ability":"Flame Body","item":"Focus Sash","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Night Shade","Overheat","Confuse Ray","Fire Spin",]}},
-"Charizard":{"Gym Leader Kiawe | Lavaridge Gym":{"index":"0000000294","level":37,"ability":"Solar Power","item":"Firium Z","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Mystical Fire","Scorching Sands","Air Slash","Hidden Power Grass",]}},
-"Charjabug":{"Gym Leader Bugsy | Petalburg Woods Gym":{"index":"0000000055","level":15,"ability":"Swarm","item":"Eviolite","nature":"Sassy","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Bug Bite","Rising Voltage","Substitute","Bite",]}},
-"Charmeleon":{"Rival 2 | Froakie | Rustboro City":{"index":"0000000071","level":18,"ability":"Blaze","item":"Expert Belt","nature":"Naive","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Fire Fang","Dragon Breath","Shadow Claw","No Move",]}},
-"Cherrim":{"Cool Trainers Celina & Tyron | Route 111":{"index":"0000000180","level":29,"ability":"Flower Gift","item":"Salac Berry","nature":"Careful","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Morning Sun","Solar Blade","Play Rough","Heal Pulse",]}},
-"Chespin":{"Rival 1 | Froakie | Route 103":{"index":"0000000001","level":5,"ability":"Overgrow","item":"None","nature":"Quirky","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Tackle","Growl","Vine Whip","No Move",]}},
-"Chimecho":{"Hiker Bryan | Route 111":{"index":"0000000221","level":32,"ability":"Levitate","item":"Tanga Berry","nature":"Quiet","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Trick Room","Psychic","Shadow Ball","Draining Kiss",]}},
-"Clodsire":{"Picknicker Celia | Route 111":{"index":"0000000218","level":32,"ability":"Water Absorb","item":"Black Sludge","nature":"Impish","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Toxic Spikes","Recover","Bulldoze","Chilling Water",]}},
-"Combusken":{"Rival 2 | Fennekin | Rustboro City":{"index":"0000000067","level":18,"ability":"Blaze","item":"Black Belt","nature":"Naive","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Incinerate","Double Kick","Quick Attack","No Move",]}},
-"Comfey":{"Winstrate Victoria | Winstrates":{"index":"0000000188","level":31,"ability":"Triage","item":"Shell Bell","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Attract","Giga Drain","Draining Kiss","Hidden Power Fire",]}},
-"Corsola":{"Hiker Mike | Rusturf Tunnel":{"index":"0000000111","level":20,"ability":"Regenerator","item":"Rindo Berry","nature":"Calm","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Scald","Frost Breath","Power Gem","Earth Power",]}},
-"Cramorant":{"Ruin Maniac Eric & Collector Julio | Jagged Pass":{"index":"0000000257","level":36,"ability":"Gulp Missle","item":"Leftovers","nature":"Careful","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Dive","Brave Bird","Substitute","Steel Wing",]}},
-"Crobat":{"Galactic Grunt #3 | Mt. Chimney":{"index":"0000000234","level":32,"ability":"Inner Focus","item":"Sitrus Berry","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Leech Life","Poison Fang","Acrobatics","Super Fang",]}},
-"Crocalor":{"Camper Ethan | Jagged Pass":{"index":"0000000263","level":38,"ability":"Unaware","item":"Eviolite","nature":"Sassy","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Will-O-Wisp","Slack Off","Fire Spin","Mud-Slap",]}},
-"Cubchoo":{"Lass Haley | Route 104":{"index":"0000000037","level":12,"ability":"Slush Rush","item":"Oran Berry","nature":"Careful","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Power-Up Punch","Icicle Spear","Thief","Brine",]}},
-"Cutiefly":{"Gym Leader Bugsy | Petalburg Woods Gym":{"index":"0000000053","level":14,"ability":"Shield Dust","item":"Wise Glasses","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Sticky Web","Moonblast","Bug Buzz","Energy Ball",]}},
-"Darmanitan":{"Battle Girl Daniella | Lavaridge Gym":{"index":"0000000280","level":36,"ability":"Sheer Force","item":"Charcoal","nature":"Hasty","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Fire Fang","Brick Break","Rock Slide","Guard Swap",]}},
-"Dartrix":{"Rival 2 | Rattata | Rustboro City":{"index":"0000000075","level":18,"ability":"Overgrow","item":"Expert Belt","nature":"Brave","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Seed Bomb","Dual Wingbeat","Ominous Wind","No Move",]}},
-"Dedenne":{"Rival 2 | Fennekin | Rustboro City":{"index":"0000000065","level":18,"ability":"Cheek Pouch","item":"Sitrus Berry","nature":"Docile","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Dazzling Gleam","Parabolic Charge","Super Fang","No Move",]}},
-"Delcatty":{"Triathlete Dylan | Route 117":{"index":"0000000123","level":24,"ability":"Normalize","item":"Silk Scarf","nature":"Impish","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Rock Smash","Zen Headbutt","Double Team","Sucker Punch",]}},
-"Delphox":{"Pokemaniac Axle | Lavaridge Gym":{"index":"0000000281","level":36,"ability":"Magician","item":"Room Service","nature":"Quiet","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Trick Room","Fire Blast","Focus Blast","Psychic",]}},
-"Diggersby":{"Galactic Grunt #1 | Route 112":{"index":"0000000230","level":33,"ability":"Huge Power","item":"Sitrus Berry","nature":"Impish","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Swords Dance","Quick Attack","Bulldoze","Thunder Punch",]}},
-"Dodrio":{"Camper Ethan | Jagged Pass":{"index":"0000000262","level":34,"ability":"Tangled Feet","item":"Berserk Gene","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Brave Bird","Double-Edge","Drill Run","Jump Kick",]}},
-"Dolliv":{"Beauty Sarah | Route 116":{"index":"0000000098","level":18,"ability":"Harvest","item":"Starf Berry","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Strength Sap","Weather Ball","Swift","Giga Drain",]}},
-"Dottler":{"School Kid Josh | Petalburg Woods Gym":{"index":"0000000046","level":14,"ability":"Swarm","item":"Eviolite","nature":"Impish","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Recover","Infestation","Stored Power","Calm Mind",]}},
-"Doublade":{"Galactic Boss Cyrus | Mt. Chimney":{"index":"0000000244","level":34,"ability":"No Guard","item":"Eviolite","nature":"Careful","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Toxic","Rock Slide","Close Combat","Pursuit",]}},
-"Dracozolt":{"Camper Beau | Route 111":{"index":"0000000214","level":31,"ability":"Sand Rush","item":"Air Balloon","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Bolt Beak","Low Kick","Substitute","Breaking Swipe",]}},
-"Drilbur":{"Rich Boy Dawson | Route 116":{"index":"0000000081","level":20,"ability":"Sand Rush","item":"Shell Bell","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Drill Run","X-Scissor","Rock Tomb","Iron Head",]}},
-"Dudunsparce":{"Winstrate Victor | Winstrates":{"index":"0000000186","level":30,"ability":"Serene Grace","item":"Rocky Helmet","nature":"Impish","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Glare","Headbutt","Zen Headbutt","Rock Slide",]}},
-"Dugtrio":{"Winstrate Victoria | Winstrates":{"index":"0000000189","level":30,"ability":"Arena Trap","item":"Lum Berry","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Attract","Dig","Headbutt","Rock Slide",]}},
-"Dunsparce":{"Hiker Devan | Route 116":{"index":"0000000115","level":20,"ability":"Serene Grace","item":"Quick Claw","nature":"Relaxed","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Glare","Headbutt","Ancient Power","Zen Headbutt",]}},
-"Dustox":{"Bugcatcher Jose | Route 116":{"index":"0000000086","level":18,"ability":"Shield Dust","item":"Assault Vest","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Silver Wind","Electroweb","Energy Ball","Sludge Bomb",]}},
-"Ekans":{"Breeder Isaac | Route 117":{"index":"0000000143","level":29,"ability":"Intimidate","item":"Air Balloon","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Glare","Poison Jab","Leech Life","Sucker Punch",]}},
-"Eldegoss":{"Picknicker Bianca | Route 111":{"index":"0000000198","level":32,"ability":"Effect Spore","item":"Leftovers","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Leech Seed","Substitute","Giga Drain","Weather Ball",]}},
-"Electrode":{"Camper Ethan | Jagged Pass":{"index":"0000000261","level":36,"ability":"Aftermath","item":"Light Clay","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Light Screen","Reflect","Thunderbolt","Hidden Power Ice",]}},
-"Emboar":{"Kindler Gerald | Lavaridge Gym":{"index":"0000000275","level":36,"ability":"Reckless","item":"Assault Vest","nature":"Careful","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Flare Blitz","Drain Punch","Wild Charge","Knock Off",]}},
-"Emolga":{"Rich Boy Dawson | Route 116":{"index":"0000000083","level":20,"ability":"Static","item":"Safety Goggles","nature":"Lax","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Dual Wingbeat","Rising Voltage","U-turn","Knock Off",]}},
-"Espeon":{"Galactic Commander Mars | Mt. Chimney":{"index":"0000000241","level":33,"ability":"Magic Bounce","item":"Iapapa Berry","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Fake Tears","Psychic","Shadow Ball","Signal Beam",]}},
-"Farfetch’d":{"Kindler Gerald | Lavaridge Gym":{"index":"0000000274","level":38,"ability":"Defiant","item":"Stick","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["First Impression","U-turn","Brave Bird","Solar Blade",]}},
-"Fearow":{"Triathlete Maria | Route 117":{"index":"0000000138","level":24,"ability":"Sniper","item":"Lansat Berry","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Drill Peck","Facade","Steel Wing","Quick Attack",]}},
-"Fennekin":{"Rival 1 | Chespin | Route 103":{"index":"0000000002","level":5,"ability":"Blaze","item":"None","nature":"Quirky","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Scratch","Tail Whip","Ember","No Move",]}},
-"Ferroseed":{"Hiker Clark | Route 116":{"index":"0000000105","level":20,"ability":"Iron Barbs","item":"Eviolite","nature":"Impish","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Leech Seed","Spikes","Gyro Ball","Thunder Wave",]}},
-"Finizen":{"Fisherman Ivan | Route 104":{"index":"0000000038","level":13,"ability":"Water Veil","item":"Mystic Water","nature":"Lonely","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Chilling Water","Aqua Jet","Double Hit","No Move",]}},
-"Flaaffy":{"Beauty Sarah | Route 116":{"index":"0000000096","level":18,"ability":"Static","item":"Shuca Berry","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Sunny Day","Fire Punch","Ice Punch","Thunder Punch",]}},
-"Flareon":{"Ace Trainer Cole | Lavaridge Gym":{"index":"0000000270","level":36,"ability":"Guts","item":"Toxic Orb","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Flame Charge","Facade","Trailblaze","Double Kick",]}},
-"Fletchinder":{"Wally 1 | Verdanturf Town":{"index":"0000000119","level":21,"ability":"Flame Body","item":"Charti Berry","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Will-O-Wisp","U-turn","Dual Wingbeat","Overheat",]}},
-"Fomantis":{"Breeder Isaac | Route 117":{"index":"0000000141","level":29,"ability":"Contrary","item":"Bright Powder","nature":"Relaxed","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Leaf Storm","Superpower","No Move","No Move",]}},
-"Fraxure":{"Schoolkid Jerry | Route 116":{"index":"0000000093","level":17,"ability":"Mold Breaker","item":"Lum Berry","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Breaking Swipe","X-Scissor","Trailblaze","Stomping Tantrum",]}},
-"Frillish":{"Schoolkid Karen | Route 116":{"index":"0000000092","level":19,"ability":"Water Absorb","item":"Maranga Berry","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Dazzling Gleam","Scald","Hex","Strength Sap",]}},
-"Froakie":{"Rival 1 | Fennekin | Route 103":{"index":"0000000003","level":5,"ability":"Torrent","item":"None","nature":"Quirky","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Pound","Growl","Bubble","No Move",]}},
-"Frogadier":{"Rival 2 | Fennekin | Rustboro City":{"index":"0000000068","level":19,"ability":"Torrent","item":"Mystic Water","nature":"Lonely","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Water Pulse","Aerial Ace","Night Slash","Retaliate",]}},
-"Gabite":{"Camper Branden | Route 111":{"index":"0000000207","level":30,"ability":"Sand Veil","item":"Choice Band","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Stomping Tantrum","Dragon Claw","Fire Fang","Rock Slide",]}},
-"Gallade":{"Wally 1 | Verdanturf Town":{"index":"0000000121","level":22,"ability":"Sharpness","item":"Rocky Helmet","nature":"Lax","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Psybeam","Will-O-Wisp","Aura Sphere","Pain Split",]},
-"Galactic Boss Cyrus | Mt. Chimney":{"index":"0000000249","level":33,"ability":"Steadfast","item":"Fist Plate","nature":"Impish","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Drain Punch","Earthquake","Stone Edge","Knock Off",]}},
-"Garbodor":{"Collector Angelo | Mauville Gym":{"index":"0000000170","level":25,"ability":"Stench","item":"Figy Berry","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Rock Blast","Seed Bomb","Pain Split","Cross Poison",]}},
-"Gardevoir":{"Galactic Boss Cyrus | Mt. Chimney":{"index":"0000000248","level":33,"ability":"Trace","item":"Life Orb","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Moonblast","Vacuum Wave","Psychic","Hidden Power Water",]}},
-"Gastrodon":{"Picnicker Becky | Route 111":{"index":"0000000209","level":31,"ability":"Sand Force","item":"Hard Stone","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Earth Power","Scald","Ancient Power","Recover",]}},
-"Gengar":{"Winstrate Vivi | Winstrates":{"index":"0000000190","level":30,"ability":"Levitate","item":"Lum Berry","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Toxic","Hex","Acid Spray","Mega Drain",]}},
-"Gigalith":{"Camper Beau | Route 111":{"index":"0000000215","level":30,"ability":"Sand Force","item":"Quick Claw","nature":"Relaxed","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Sand Tomb","Body Press","Stone Edge","Self-Destruct",]}},
-"Girafarig":{"Picknicker Celia | Route 111":{"index":"0000000217","level":31,"ability":"Sap Sipper","item":"Berserk Gene","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Body Slam","Psychic Fangs","Low Kick","Sucker Punch",]}},
-"Gligar":{"Hiker Mike | Rusturf Tunnel":{"index":"0000000113","level":19,"ability":"Hyper Cutter","item":"Flying Gem","nature":"Careful","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Acrobatics","Stomping Tantrum","X-Scissor","Knock Off",]},
-"Galactic Grunt #4 | Mt. Chimney":{"index":"0000000236","level":33,"ability":"Immunity","item":"Toxic Orb","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Fling","Poison Jab","Earthquake","Acrobatics",]}},
-"Glimmet":{"Lass Janice | Route 116":{"index":"0000000099","level":18,"ability":"Toxic Debris","item":"Air Balloon","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Rain Dance","Acid Spray","Ancient Power","Venoshock",]}},
-"Golbat":{"Cool Trainers Vivian and Ben | Mauville Gym":{"index":"0000000159","level":25,"ability":"Inner Focus","item":"Aguav Berry","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Tailwind","Poison Fang","Leech Life","Dual Wingbeat",]}},
-"Gossifleur":{"Breeder Lydia | Route 117":{"index":"0000000155","level":29,"ability":"Cotton Down","item":"Berry Juice","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Giga Drain","Leech Seed","Sleep Powder","Hyper Voice",]}},
-"Gothorita":{"Triathlete Melina | Route 117":{"index":"0000000130","level":24,"ability":"Shadow Tag","item":"Eviolite","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Trick Room","Psychic","Light Screen","Reflect",]}},
-"Graveler-Alola":{"Hiker Devan | Route 116":{"index":"0000000114","level":20,"ability":"Galvanize","item":"Air Balloon","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Double-Edge","Rock Slide","Fire Punch","Bulldoze",]}},
-"Greedent":{"Hiker Bryan | Route 111":{"index":"0000000222","level":32,"ability":"Cheek Pouch","item":"Sitrus Berry","nature":"Sassy","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Recycle","Fire Fang","Seed Bomb","Return",]}},
-"Grimer":{"Schoolkid Jerry | Route 116":{"index":"0000000094","level":18,"ability":"Poison Touch","item":"Quick Claw","nature":"Sassy","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Shadow Sneak","Poison Jab","Drain Punch","Giga Drain",]}},
-"Grovyle":{"Rival 2 | Chespin | Rustboro City":{"index":"0000000062","level":18,"ability":"Overgrow","item":"Dragon Fang","nature":"Lonely","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Giga Drain","Dragon Breath","Brick Break","No Move",]}},
-"Growlithe-Hisui":{"Schoolkid Karen | Route 116":{"index":"0000000091","level":18,"ability":"Intimidate","item":"Focus Sash","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Rock Tomb","Temper Flare","Will-O-Wisp","Protect",]}},
-"Grubbin":{"Lass Tiana | Route 102":{"index":"0000000014","level":7,"ability":"Swarm","item":"Silver Powder","nature":"Brave","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Bug Bite","Vise Grip","String Shot","No Move",]}},
-"Gumshoos":{"Picknicker Bianca | Route 111":{"index":"0000000199","level":31,"ability":"Adaptability","item":"Normal Gem","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Retaliate","Return","Ice Punch","Psychic Fangs",]}},
-"Hakamo-o":{"Hiker Dusty | Route 111":{"index":"0000000225","level":33,"ability":"Bulletproof","item":"Roseli Berry","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Dragon Dance","Drain Punch","Earthquake","Dragon Claw",]}},
-"Happiny":{"Breeder Lydia | Route 117":{"index":"0000000157","level":32,"ability":"Serene Grace","item":"Eviolite","nature":"Careful","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Thunder Wave","Headbutt","Minimize","Sweet Kiss",]}},
-"Heatmor":{"Kindler Jeff | Lavaridge Gym":{"index":"0000000266","level":36,"ability":"Gluttony","item":"Figy Berry","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Fire Lash","Sucker Punch","Thunder Punch","Bug Bite",]}},
-"Herdier":{"Rich Boy Dawson | Route 116":{"index":"0000000082","level":20,"ability":"Sand Rush","item":"Silk Scarf","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Ice Fang","Retaliate","Crunch","Fire Fang",]}},
-"Honchkrow":{"Galactic Boss Cyrus | Mt. Chimney":{"index":"0000000245","level":34,"ability":"Super Luck","item":"Scope Lens","nature":"Hasty","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Night Slash","Air Cutter","Ominous Wind","Hidden Power Ground",]}},
-"Houndoom":{"Picknicker Celia | Route 111":{"index":"0000000219","level":31,"ability":"Flash Fire","item":"Sitrus Berry","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Flamethrower","Dark Pulse","Hidden Power Ice","Fire Spin",]},
-"Expert Keegan | Lavaridge Gym":{"index":"0000000285","level":35,"ability":"Unnerve","item":"Rocky Helmet","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Will-O-Wisp","Dark Pulse","Sludge Bomb","Flamethrower",]}},
-"Houndstone":{"Picknicker Heidi | Route 111":{"index":"0000000213","level":30,"ability":"Sand Rush","item":"Lum Berry","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Phantom Force","Play Rough","Crunch","Shadow Sneak",]}},
-"Illumise":{"School Kid Josh | Petalburg Woods Gym":{"index":"0000000045","level":13,"ability":"Prankster","item":"Charti Berry","nature":"Impish","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Swagger","Psych Up","Bug Bite","Natural Gift",]}},
-"Indeedee-F":{"Wally 1 | Verdanturf Town":{"index":"0000000118","level":20,"ability":"Psychic Surge","item":"Leftovers","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Psychic Noise","Draining Kiss","Charm","Round",]}},
-"Infernape":{"Battle Girl Daniella | Lavaridge Gym":{"index":"0000000277","level":36,"ability":"Iron Fist","item":"Bug Gem","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["U-turn","Fake Out","Fire Punch","Mach Punch",]}},
-"Ivysaur":{"Rival 2 | Fennekin | Rustboro City":{"index":"0000000066","level":18,"ability":"Overgrow","item":"Expert Belt","nature":"Mild","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Giga Drain","Sludge","Body Slam","No Move",]}},
-"Joltik":{"Bugcatcher Lyle | Petalburg Woods":{"index":"0000000026","level":8,"ability":"Unnerve","item":"Oran Berry","nature":"Naive","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Charge Beam","Fury Cutter","No Move","No Move",]}},
-"Jumpluff":{"Picknicker Diana | Jagged Pass":{"index":"0000000251","level":35,"ability":"Infiltrator","item":"Eject Button","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["U-turn","Strength Sap","Leech Seed","Acrobatics",]}},
-"Kabuto":{"Gym Leader Bugsy | Petalburg Woods Gym":{"index":"0000000056","level":15,"ability":"Battle Armor","item":"Muscle Band","nature":"Hasty","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Leech Life","Rock Blast","Razor Shell","Stealth Rock",]}},
-"Karrablast":{"Bugcatcher Lyle | Petalburg Woods":{"index":"0000000027","level":8,"ability":"Swarm","item":"Starf Berry","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Fury Cutter","No Move","No Move","No Move",]}},
-"Kecleon":{"Cool Trainers Vivian and Ben | Mauville Gym":{"index":"0000000160","level":25,"ability":"Protean","item":"Expert Belt","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Skill Swap","Toxic","Knock Off","Ice Punch",]}},
-"Klang":{"Hiker Dusty | Route 111":{"index":"0000000226","level":32,"ability":"Clear Body","item":"Leftovers","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Autotomize","Gear Grind","Wild Charge","Substitute",]}},
-"Klawf":{"Hiker Clark | Route 116":{"index":"0000000106","level":19,"ability":"Anger Shell","item":"Assault Vest","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Rock Tomb","Temper Flare","Trailblaze","Crabhammer",]}},
-"Kricketune":{"Bugcatcher Jose | Route 116":{"index":"0000000085","level":18,"ability":"Technician","item":"Expert Belt","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Fell Stinger","Power-Up Punch","Aerial Ace","Trailblaze",]}},
-"Lampent":{"Hiker Clark | Route 116":{"index":"0000000107","level":19,"ability":"Flame Body","item":"Focus Sash","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Will-O-Wisp","Hex","Incinerate","Double Team",]}},
-"Leafeon":{"Gym Leader Kiawe | Lavaridge Gym":{"index":"0000000295","level":37,"ability":"Chlorophyll","item":"Focus Sash","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Solar Blade","Swords Dance","Knock Off","Quick Attack",]}},
-"Ledian":{"Galactic Grunt #1 | Route 112":{"index":"0000000229","level":33,"ability":"Swarm","item":"Life Orb","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Silver Wind","Ominous Wind","Air Slash","Focus Blast",]}},
-"Ledyba":{"Bugcatcher Lyle | Petalburg Woods":{"index":"0000000025","level":9,"ability":"Swarm","item":"Quick Claw","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Silver Wind","Air Cutter","No Move","No Move",]}},
-"Liepard":{"Plasma Grunt | Rusturf Tunnel":{"index":"0000000108","level":20,"ability":"Prankster","item":"Leftovers","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Assist","Nasty Plot","Snarl","Substitute",]}},
-"Lilligant":{"Galactic Commander Mars | Mt. Chimney":{"index":"0000000240","level":33,"ability":"Own Tempo","item":"Weakness Policy","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Quiver Dance","Giga Drain","Alluring Voice","Hidden Power Rock",]}},
-"Linoone":{"Youngster Johnson | Route 116":{"index":"0000000089","level":19,"ability":"Gluttony","item":"Iapapa Berry","nature":"Naive","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Surf","Headbutt","Zen Headbutt","Throat Chop",]}},
-"Linoone-Galar":{"Triathlete Maria | Route 117":{"index":"0000000137","level":25,"ability":"Quick Feet","item":"Toxic Orb","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Facade","Lash Out","Parting Shot","Switcheroo",]}},
-"Litten":{"Lass Tiana | Route 102":{"index":"0000000016","level":8,"ability":"Blaze","item":"Oran Berry","nature":"Hasty","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Flame Charge","Lick","Growl","No Move",]}},
-"Lokix":{"Galactic Grunt #3 | Mt. Chimney":{"index":"0000000235","level":31,"ability":"Tinted Lens","item":"Bright Powder","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["First Impression","Axe Kick","U-turn","Lash Out",]}},
-"Lucario":{"Rival 2 | Rattata | Rustboro City":{"index":"0000000078","level":19,"ability":"Inner Focus","item":"Silk Scarf","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Karate Chop","Metal Claw","Quick Attack","Vacuum Wave",]}},
-"Lumineon":{"Picknicker Diana | Jagged Pass":{"index":"0000000252","level":36,"ability":"Storm Drain","item":"Wacan Berry","nature":"Hasty","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["U-turn","Flip Turn","Ice Beam","Encore",]}},
-"Lunatone":{"Picnicker Becky | Route 111":{"index":"0000000210","level":30,"ability":"Levitate","item":"Assault Vest","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Grass Knot","Power Gem","Psychic","Ice Beam",]}},
-"Luxio":{"Twins Gina and Mia | Route 104":{"index":"0000000044","level":13,"ability":"Guts","item":"Flame Orb","nature":"Brave","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Spark","Fire Fang","Ice Fang","Headbutt",]}},
-"Luxray":{"Galactic Commander Mars | Mt. Chimney":{"index":"0000000242","level":33,"ability":"Intimidate","item":"Assault Vest","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Fire Fang","Ice Fang","Thunder Fang","Throat Chop",]}},
-"Mabosstiff":{"Ruin Maniac Eric & Collector Julio | Jagged Pass":{"index":"0000000256","level":35,"ability":"Intimidate","item":"Assault Vest","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Wild Charge","Play Rough","Jaw Lock","Ice Fang",]}},
-"Machoke":{"Youngster Joey | Route 116":{"index":"0000000104","level":19,"ability":"No Guard","item":"Scope Lens","nature":"Careful","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Cross Chop","Bullet Punch","Thunder Punch","Dual Chop",]}},
-"Magcargo":{"Pokemaniac Axle | Lavaridge Gym":{"index":"0000000282","level":37,"ability":"Flame Body","item":"Chesto Berry","nature":"Quiet","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Ancient Power","Earth Power","Flamethrower","Rest",]}},
-"Magikarp":{"Fisherman Darian | Route 104":{"index":"0000000017","level":14,"ability":"Swift Swim","item":"Rindo Berry","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Take Down","Splash","No Move","No Move",]}},
-"Magmar":{"Kindler Hayden | Route 111":{"index":"0000000183","level":30,"ability":"Flame Body","item":"Leftovers","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Flame Charge","Thunder Punch","Power-Up Punch","Fire Punch",]},
-"Kindler Gerald | Lavaridge Gym":{"index":"0000000273","level":37,"ability":"Flame Body","item":"Grass Gem","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Will-O-Wisp","Scorching Sands","Flamethrower","Hidden Power Grass",]}},
-"Magneton":{"Galactic Boss Cyrus | Mt. Chimney":{"index":"0000000247","level":34,"ability":"Sturdy","item":"Custap Berry","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Rising Voltage","Hidden Power Ice","Flash Cannon","Explosion",]}},
-"Makuhita":{"Youngster Calvin | Route 102":{"index":"0000000006","level":6,"ability":"Thick Fat","item":"Oran Berry","nature":"Impish","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Focus Energy","Arm Thrust","No Move","No Move",]}},
-"Maractus":{"Kindler Hayden | Route 111":{"index":"0000000185","level":30,"ability":"Water Absorb","item":"Occa Berry","nature":"Quiet","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Leech Seed","Sucker Punch","Giga Drain","Hidden Power Ice",]},
-"Pokemaniac Axle | Lavaridge Gym":{"index":"0000000284","level":37,"ability":"Storm Drain","item":"Leftovers","nature":"Sassy","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Giga Drain","Weather Ball","Spiky Shield","Growth",]}},
-"Mareep":{"Rich Boy Winston | Route 104":{"index":"0000000034","level":12,"ability":"Static","item":"Oran Berry","nature":"Calm","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Charge Beam","Swift","Body Slam","No Move",]}},
-"Marowak-Alola":{"Gym Leader Kiawe | Lavaridge Gym":{"index":"0000000292","level":38,"ability":"Cursed Body","item":"Thick Club","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Shadow Bone","Flame Charge","Thunder Punch","Earthquake",]}},
-"Marshtomp":{"Rival 2 | Froakie | Rustboro City":{"index":"0000000072","level":18,"ability":"Torrent","item":"Rindo Berry","nature":"Relaxed","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Water Pulse","Bulldoze","Rock Slide","No Move",]}},
-"Masquerain":{"Picknicker Irene & Camper Travis | Route 111":{"index":"0000000195","level":31,"ability":"Intimidate","item":"Life Orb","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Energy Ball","Bug Buzz","Air Slash","Weather Ball",]}},
-"Medicham":{"Battle Girl Daniella | Lavaridge Gym":{"index":"0000000279","level":36,"ability":"Pure Power","item":"Black Belt","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Zen Headbutt","Fire Punch","Drain Punch","Thunder Punch",]}},
-"Meowstic":{"Beauty Autumn | Jagged Pass":{"index":"0000000258","level":36,"ability":"Competitive","item":"Red Card","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Psychic","Energy Ball","Alluring Voice","Dark Pulse",]}},
-"Meowth-Alola":{"Plasma Grunt | Petalburg Woods":{"index":"0000000029","level":10,"ability":"Technician","item":"Oran Berry","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Fake Out","Snarl","No Move","No Move",]}},
-"Metapod":{"Youngster Billy | Route 104":{"index":"0000000020","level":8,"ability":"Shed Skin","item":"Berry Juice","nature":"Relaxed","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Electroweb","Tackle","No Move","No Move",]}},
-"Mightyena":{"Youngster Johnson | Route 116":{"index":"0000000088","level":19,"ability":"Intimidate","item":"Rocky Helmet","nature":"Careful","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Lash Out","Fire Fang","Ice Fang","Howl",]}},
-"Minun":{"Sr. and Jr. Anna and Meg | Route 117":{"index":"0000000146","level":24,"ability":"Minus","item":"Rocky Helmet","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Helping Hand","Electroweb","Hidden Power Ice","Light Screen",]}},
-"Misdreavus":{"Battle Girl Aisha | Route 117":{"index":"0000000133","level":24,"ability":"Levitate","item":"Sitrus Berry","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Perish Song","Will-O-Wisp","Shadow Ball","Mean Look",]}},
-"Monferno":{"Youngster Johnson | Route 116":{"index":"0000000087","level":19,"ability":"Blaze","item":"Muscle Band","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Fire Punch","Brick Break","Will-O-Wisp","Mach Punch",]}},
-"Morpeko":{"Rival 2 | Chespin | Rustboro City":{"index":"0000000060","level":18,"ability":"Hunger Switch","item":"Sitrus Berry","nature":"Bashful","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Thunder Fang","Bite","Stomping Tantrum","No Move",]}},
-"Mothim":{"Bug Maniac Derek | Route 117":{"index":"0000000129","level":25,"ability":"Tinted Lens","item":"Life Orb","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Ominous Wind","Silver Wind","Air Cutter","Roost",]}},
-"Mr. Mime-Galar":{"Psychic Brandi | Route 117":{"index":"0000000149","level":26,"ability":"Ice Body","item":"Light Clay","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Snowscape","Aurora Veil","Freeze-Dry","Future Sight",]}},
-"Muk-Alola":{"Gym Leader Roxie | Mauville Gym":{"index":"0000000171","level":26,"ability":"Power of Alchemy","item":"Lum Berry","nature":"Relaxed","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Protect","Poison Gas","Snarl","Drain Punch",]}},
-"Munchlax":{"Youngster Joey | Route 116":{"index":"0000000103","level":20,"ability":"Gluttony","item":"Aguav Berry","nature":"Brave","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Belly Drum","Body Slam","Rock Slide","Throat Chop",]}},
-"Murkrow":{"Cool Trainers Celina & Tyron | Route 111":{"index":"0000000177","level":30,"ability":"Prankster","item":"Focus Sash","nature":"Impish","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Sunny Day","Foul Play","Taunt","Tailwind",]}},
-"Oranguru":{"Picknicker Irene & Camper Travis | Route 111":{"index":"0000000194","level":32,"ability":"Telepathy","item":"Mental Herb","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Instruct","Trick Room","Follow Me","No Move",]}},
-"Oricorio":{"Beauty Sarah | Route 116":{"index":"0000000097","level":17,"ability":"Dancer","item":"Covert Cloak","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Revelation Dance","Air Slash","Agility","Baton Pass",]},
-"Camper Drew | Route 111":{"index":"0000000204","level":31,"ability":"Dancer","item":"Safety Goggles","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Quiver Dance","Revelation Dance","Air Slash","Alluring Voice",]}},
-"Pachirisu":{"Rival 2 | Rattata | Rustboro City":{"index":"0000000074","level":18,"ability":"Static","item":"Leftovers","nature":"Impish","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Nuzzle","Super Fang","Thunder Fang","No Move",]}},
-"Palpitoad":{"Cool Trainers Celina & Tyron | Route 111":{"index":"0000000182","level":30,"ability":"Water Absorb","item":"Utility Umbrella","nature":"Calm","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Muddy Water","Earth Power","Toxic ","Protect",]}},
-"Parasect":{"Bug Maniac Marc | Petalburg Woods Gym":{"index":"0000000050","level":14,"ability":"Effect Spore","item":"Quick Claw","nature":"Impish","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Spore","Leech Life","Seed Bomb","Cross Poison",]}},
-"Patrat":{"Youngster Calvin | Route 102":{"index":"0000000005","level":6,"ability":"Analytic","item":"Oran Berry","nature":"Serious","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Hyper Fang","Leer","Bite","No Move",]}},
-"Pawmo":{"Battle Girl Aisha | Route 117":{"index":"0000000134","level":24,"ability":"Iron Fist","item":"Punching Glove","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Thunder Punch","Nuzzle","Drain Punch","Mach Punch",]}},
-"Perrserker":{"Galactic Grunt #2 | Route 112":{"index":"0000000232","level":33,"ability":"Steely Spirit","item":"Choice Band","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Iron Head","No Move","No Move","No Move",]}},
-"Pidgey":{"Plasma Grunt | Petalburg Woods":{"index":"0000000028","level":8,"ability":"Tangled Feet","item":"Berserk Gene","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Aerial Ace","Headbutt","No Move","No Move",]}},
-"Pinsir":{"Bugcatcher Tommy | Petalburg Woods Gym":{"index":"0000000048","level":13,"ability":"Hyper Cutter","item":"Rocky Helmet","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Rock Tomb","Bug Bite","No Move","No Move",]}},
-"Plusle":{"Sr. and Jr. Anna and Meg | Route 117":{"index":"0000000145","level":24,"ability":"Plus","item":"Life Orb","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Thunderbolt","Grass Knot","Hidden Power Fire","Signal Beam",]}},
-"Poltchageist":{"Twins Gina and Mia | Route 104":{"index":"0000000043","level":14,"ability":"Hospitality","item":"Rocky Helmet","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Life Dew","Giga Drain","Substitute","Hex",]}},
-"Probopass":{"Picknicker Heidi | Route 111":{"index":"0000000212","level":31,"ability":"Sand Force","item":"Power Herb","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Earth Power","Meteor Beam","Flash Cannon","Thunderbolt",]}},
-"Purugly":{"Sr. and Jr. Anna and Meg | Route 117":{"index":"0000000147","level":23,"ability":"Defiant","item":"Chople Berry","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Body Slam","Knock Off","Play Rough","Fake Tears",]},
-"Galactic Commander Mars | Mt. Chimney":{"index":"0000000239","level":34,"ability":"Defiant","item":"Chople Berry","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["U-turn","Parting Shot","Fake Out","Body Slam",]}},
-"Pyroar":{"Ace Trainer Cole | Lavaridge Gym":{"index":"0000000268","level":36,"ability":"Unnerve","item":"Silk Scarf","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Yawn","Hyper Voice","Snarl","Heat Wave",]}},
-"Pyukumuku":{"Galactic Grunt #1 | Route 112":{"index":"0000000228","level":35,"ability":"Innards Out","item":"Mental Herb","nature":"Sassy","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Block","Double Team","Toxic","Recover",]}},
-"Quilladin":{"Rival 2 | Froakie | Rustboro City":{"index":"0000000073","level":19,"ability":"Overgrow","item":"Miracle Seed","nature":"Brave","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Needle Arm","Low Sweep","Take Down","Leech Seed",]}},
-"Qwilfish":{"Cool Trainers Vivian and Ben | Mauville Gym":{"index":"0000000161","level":25,"ability":"Intimidate","item":"Wacan Berry","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Barb Barrage","Toxic Spikes","Waterfall","Aqua Jet",]}},
-"Raboot":{"Triathlete Dylan | Route 117":{"index":"0000000124","level":24,"ability":"Libero","item":"Scope Lens","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Blaze Kick","Focus Energy","Low Sweep","Acrobatics",]}},
-"Rabsca":{"Psychic Brandi | Route 117":{"index":"0000000151","level":26,"ability":"Synchronize","item":"Weakness Policy","nature":"Sassy","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Revival Blessing","Weather Ball","Earth Power","Bug Buzz",]}},
-"Raticate-Alola":{"Youngster Joey | Route 116":{"index":"0000000102","level":19,"ability":"Gluttony","item":"Salac Berry","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Crunch","Play Rough","Stomping Tantrum","Me First",]}},
-"Rattata":{"Youngster Billy | Route 104":{"index":"0000000021","level":8,"ability":"Guts","item":"Silk Scarf","nature":"Careful","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Focus Energy","Quick Attack","Bite","Tackle",]}},
-"Remoraid":{"Fisherman Ivan | Route 104":{"index":"0000000040","level":13,"ability":"Hustle","item":"Loaded Dice","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Rock Blast","Bullet Seed","Octazooka","No Move",]}},
-"Rhydon":{"Picknicker Celia | Route 111":{"index":"0000000220","level":32,"ability":"Lightningrod","item":"Eviolite","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Power-Up Punch","Pursuit","Rock Slide","Drill Run",]}},
-"Ribombee":{"Beauty Autumn | Jagged Pass":{"index":"0000000259","level":36,"ability":"Shield Dust","item":"Water Gem","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Quiver Dance","Bug Buzz","Moonblast","Hidden Power Water",]}},
-"Riolu":{"Rival 1 | Rattata | Route 103":{"index":"0000000004","level":5,"ability":"Prankster","item":"None","nature":"Quirky","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Vacuum Wave","Quick Attack","No Move","No Move",]},
-"Twins Gina and Mia | Route 104":{"index":"0000000042","level":14,"ability":"Prankster","item":"Berry Juice","nature":"Impish","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Coaching","Psych Up","Swagger","Power-Up Punch",]}},
-"Rotom-Heat":{"Gym Leader Kiawe | Lavaridge Gym":{"index":"0000000290","level":37,"ability":"Levitate","item":"Charti Berry","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Will-O-Wisp","Volt Switch","Overheat","Foul Play",]}},
-"Rufflet":{"Rival 2 | Froakie | Rustboro City":{"index":"0000000069","level":18,"ability":"Sheer Force","item":"White Herb","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Body Slam","Dual Wingbeat","Rock Smash","No Move",]}},
-"Salazzle":{"Gym Leader Roxie | Mauville Gym":{"index":"0000000174","level":26,"ability":"Corrosion","item":"Shuca Berry","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Toxic","Venoshock","Flame Burst","Dragon Pulse",]}},
-"Sandaconda":{"Picknicker Irene & Camper Travis | Route 111":{"index":"0000000196","level":32,"ability":"Shed Skin","item":"Covert Cloak","nature":"Brave","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Earthquake","Fire Fang","Rock Slide","Body Press",]}},
-"Sandshrew-Alola":{"Lass Haley | Route 104":{"index":"0000000036","level":12,"ability":"Slush Rush","item":"Occa Berry","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Ice Ball","Rollout","No Move","No Move",]}},
-"Sandslash":{"Camper Drew | Route 111":{"index":"0000000203","level":31,"ability":"Sand Rush","item":"Passho Berry","nature":"Careful","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Swords Dance","Drill Run","Leech Life","Knock Off",]}},
-"Sandygast":{"Rich Boy Dawson | Route 116":{"index":"0000000080","level":20,"ability":"Sand Veil","item":"Big Root","nature":"Calm","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Hex","Mega Drain","Confuse Ray","Sand Tomb",]}},
-"Sawsbuck":{"Beauty Autumn | Jagged Pass":{"index":"0000000260","level":36,"ability":"Serene Grace","item":"Clear Amulet","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Body Slam","Zen Headbutt","Horn Leech","Agility",]}},
-"Scatterbug":{"Bug Catcher Rick | Route 102":{"index":"0000000010","level":6,"ability":"Compound Eyes","item":"Occa Berry","nature":"Impish","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Stun Spore","Bug Bite","Tackle","No Move",]}},
-"Scolipede":{"Gym Leader Roxie | Mauville Gym":{"index":"0000000176","level":27,"ability":"Speed Boost","item":"Assault Vest","nature":"Hardy","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Throat Chop","Steamroller","Poison Jab","Stomping Tantrum",]},
-"Galactic Grunt #2 | Route 112":{"index":"0000000231","level":35,"ability":"Speed Boost","item":"Black Sludge","nature":"Careful","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Swords Dance","Protect","Baton Pass","Spikes",]}},
-"Scovillain":{"Cool Trainers Celina & Tyron | Route 111":{"index":"0000000179","level":29,"ability":"Chlorophyll","item":"Miracle Seed","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Seed Bomb","Fire Fang","Crunch","Flamethrower",]},
-"Expert Keegan | Lavaridge Gym":{"index":"0000000288","level":36,"ability":"Chlorophyll","item":"Leftovers","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Giga Drain","Flamethrower","Leech Seed","Substitute",]}},
-"Scyther":{"Gym Leader Bugsy | Petalburg Woods Gym":{"index":"0000000058","level":16,"ability":"Technician","item":"Sitrus Berry","nature":"Brave","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Razor Wind","Bug Bite","Leafage","Quick Attack",]}},
-"Seadra":{"Picknicker Bianca | Route 111":{"index":"0000000200","level":32,"ability":"Sniper","item":"Focus Sash","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Scald","Ice Beam","Weather Ball","Dragon Pulse",]}},
-"Sealeo":{"Triathlete Dylan | Route 117":{"index":"0000000125","level":24,"ability":"Thick Fat","item":"Leftovers","nature":"Calm","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Double-Edge","Frost Breath","Signal Beam","Surf",]}},
-"Seviper":{"Collector Angelo | Mauville Gym":{"index":"0000000169","level":25,"ability":"Shed Skin","item":"Adrenaline Orb","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Mega Drain","Poison Fang","Ice Fang","Sucker Punch",]}},
-"Shedinja":{"Camper Drew | Route 111":{"index":"0000000201","level":100,"ability":"Wonder Guard","item":"Focus Sash","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Memento","No Move","No Move","No Move",]}},
-"Shiftry":{"Galactic Grunt #4 | Mt. Chimney":{"index":"0000000238","level":32,"ability":"Wind Rider","item":"Salac Berry","nature":"Careful","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Low Sweep","Sucker Punch","Rock Slide","Leaf Blade",]}},
-"Sigilyph":{"Psychic Brandi | Route 117":{"index":"0000000150","level":26,"ability":"Magic Guard","item":"Clear Amulet","nature":"Calm","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Cosmic Power","Stored Power","Roost","Ancient Power",]}},
-"Silicobra":{"Rich Boy Dawson | Route 116":{"index":"0000000079","level":20,"ability":"Sand Spit","item":"Berry Juice","nature":"Impish","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Glare","Drill Run","Skitter Smack","Stealth Rock",]}},
-"Simisear":{"Ace Trainer Cole | Lavaridge Gym":{"index":"0000000269","level":36,"ability":"Blaze","item":"Focus Sash","nature":"Mild","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Searing Shot","Grass Knot","Acrobatics","Brick Break",]}},
-"Skorupi":{"Gym Leader Bugsy | Petalburg Woods Gym":{"index":"0000000054","level":15,"ability":"Sniper","item":"Scope Lens","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Cross Poison","X-Scissor","Night Slash","Pursuit",]}},
-"Sliggoo-Hisui":{"Lass Janice | Route 116":{"index":"0000000101","level":18,"ability":"Shell Armor","item":"Leftovers","nature":"Relaxed","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Muddy Water","Dragon Breath","Iron Head","Swagger",]}},
-"Smeargle":{"Plasma Grunt | Rusturf Tunnel":{"index":"0000000109","level":22,"ability":"Moody","item":"Focus Sash","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Counter","Destiny Bond","Spore","Mirror Coat",]}},
-"Smoochum":{"Breeder Lydia | Route 117":{"index":"0000000158","level":29,"ability":"Own Tempo","item":"Wise Glasses","nature":"Quirky","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Draining Kiss","Aurora Beam","Psybeam","Attract",]}},
-"Sneasel":{"Psychic Brandi | Route 117":{"index":"0000000152","level":26,"ability":"Inner Focus","item":"Expert Belt","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Ice Punch","Pursuit","Fake Out","Brick Break",]}},
-"Sneasel-Hisui":{"Collector Angelo | Mauville Gym":{"index":"0000000167","level":25,"ability":"Inner Focus","item":"Poison Barb","nature":"Impish","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Coaching","Fake Out","Brick Break","Poison Jab",]}},
-"Snubbull":{"Rich Boy Winston | Route 104":{"index":"0000000032","level":12,"ability":"Intimidate","item":"Muscle Band","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Crunch","Covet","No Move","No Move",]}},
-"Solrock":{"Cool Trainers Celina & Tyron | Route 111":{"index":"0000000181","level":29,"ability":"Levitate","item":"Mago Berry","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Rock Slide","Flare Blitz","Zen Headbutt","Ally Switch",]}},
-"Spidops":{"Bugcatcher Tommy | Petalburg Woods Gym":{"index":"0000000049","level":14,"ability":"Stakeout","item":"Red Card","nature":"Relaxed","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Knock Off","Silk Trap","Electroweb","Lunge",]}},
-"Spinda":{"Triathlete Melina | Route 117":{"index":"0000000132","level":24,"ability":"Tangled Feet","item":"Berserk Gene","nature":"Brave","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Dizzy Punch","Brick Break","Thunder Punch","Stomping Tantrum",]}},
-"Squirtle":{"Youngster Billy | Route 104":{"index":"0000000022","level":8,"ability":"Torrent","item":"Oran Berry","nature":"Docile","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Rapid Spin","Water Gun","Withdraw","Icy Wind",]}},
-"Staravia":{"Rival 2 | Fennekin | Rustboro City":{"index":"0000000064","level":18,"ability":"Reckless","item":"White Herb","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Take Down","Dual Wingbeat","Rock Smash","No Move",]}},
-"Starly":{"Youngster Allen | Route 102":{"index":"0000000012","level":7,"ability":"Keen Eye","item":"Oran Berry","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Wing Attack","Quick Attack","Growl","No Move",]}},
-"Stonjourner":{"Ruin Maniac Eric & Collector Julio | Jagged Pass":{"index":"0000000254","level":36,"ability":"Power Spot","item":"Focus Sash","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Body Press","Stone Edge","Heat Crash","Wonder Room",]}},
-"Stoutland":{"Picnicker Becky | Route 111":{"index":"0000000208","level":30,"ability":"Sand Rush","item":"Rocky Helmet","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Parting Shot","Body Slam","Play Rough","Ice Fang",]}},
-"Stunfisk":{"Ruin Maniac Eric & Collector Julio | Jagged Pass":{"index":"0000000255","level":35,"ability":"Static","item":"Life Orb","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Thunderbolt","Earth Power","Sludge Bomb","Thunder Wave",]}},
-"Sudowoodo":{"Triathlete Maria | Route 117":{"index":"0000000136","level":24,"ability":"Sturdy","item":"Zoom Lens","nature":"Relaxed","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Trailblaze","High Horsepower","Body Press","Stone Edge",]},
-"Kindler Jeff | Lavaridge Gym":{"index":"0000000267","level":36,"ability":"Rock Head","item":"Muscle Band","nature":"Sassy","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Head Smash","Wood Hammer","Fire Punch","Sucker Punch",]}},
-"Sunflora":{"Cool Trainers Celina & Tyron | Route 111":{"index":"0000000178","level":30,"ability":"Solar Power","item":"Life Orb","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Giga Drain","Sludge Bomb","Earth Power","Weather Ball",]}},
-"Swalot":{"Cool Trainers Vivian and Ben | Mauville Gym":{"index":"0000000162","level":25,"ability":"Sticky Hold","item":"Ganlon Berry","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Giga Drain","Body Press","Sludge Bomb","Stuff Cheeks",]}},
-"Swoobat":{"Hiker Devan | Route 116":{"index":"0000000116","level":20,"ability":"Simple","item":"Clear Amulet","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Calm Mind","Air Cutter","Stored Power","Giga Drain",]}},
-"Tangela":{"Schoolkid Karen | Route 116":{"index":"0000000090","level":17,"ability":"Leaf Guard","item":"Occa Berry","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Leech Seed","Ancient Power","Shock Wave","Giga Drain",]}},
-"Tatsugiri":{"Camper Drew | Route 111":{"index":"0000000202","level":31,"ability":"Storm Drain","item":"Never-Melt Ice","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Nasty Plot","Surf","Dragon Pulse","Icy Wind",]}},
-"Tauros-Paldea-Blaze":{"Picknicker Heidi | Route 111":{"index":"0000000211","level":31,"ability":"Cud Chew","item":"Sitrus Berry","nature":"Impish","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Will-O-Wisp","Raging Bull","Wild Charge","Body Press",]},
-"Battle Girl Daniella | Lavaridge Gym":{"index":"0000000278","level":36,"ability":"Cud Chew","item":"Salac Berry","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Raging Bull","Close Combat","Earthquake","Substitute",]}},
-"Tentacool":{"Fisherman Ivan | Route 104":{"index":"0000000039","level":13,"ability":"Clear Body","item":"Nevermelt Ice","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Acid","Water Pulse","Aurora Beam","No Move",]}},
-"Tentacruel":{"Guitarists Kirk and Shawn | Mauville Gym":{"index":"0000000166","level":25,"ability":"Clear Body","item":"Lum Berry","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Scald","Sludge Bomb","Giga Drain","Ice Beam",]}},
-"Thievul":{"Sr. and Jr. Anna and Meg | Route 117":{"index":"0000000148","level":23,"ability":"Stakeout","item":"Red Card","nature":"Quiet","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Dark Pulse","Quick Guard","Mud Shot","Burning Jealousy",]}},
-"Timburr":{"Kindler Jeff | Lavaridge Gym":{"index":"0000000265","level":42,"ability":"Iron Fist","item":"Eviolite","nature":"Careful","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Drain Punch","Fire Punch","Ice Punch","Thunder Punch",]}},
-"Tinkatuff":{"Wally 1 | Verdanturf Town":{"index":"0000000120","level":21,"ability":"Mold Breaker","item":"Life Orb","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Play Rough","Knock Off","Ice Hammer","Submission",]}},
-"Togedemaru":{"Rival 2 | Froakie | Rustboro City":{"index":"0000000070","level":18,"ability":"Sturdy","item":"Sitrus Berry","nature":"Quirky","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Spark","Smart Strike","Pin Missile","No Move",]},
-"Picknicker Irene & Camper Travis | Route 111":{"index":"0000000197","level":32,"ability":"Sturdy","item":"Liechi Berry","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Fake Out","Nuzzle","Zing Zap","Iron Head",]}},
-"Togepi":{"Lady Cindy | Route 104":{"index":"0000000023","level":8,"ability":"Serene Grace","item":"Berry Juice","nature":"Relaxed","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Metronome","No Move","No Move","No Move",]}},
-"Torkoal":{"Pokemaniac Axle | Lavaridge Gym":{"index":"0000000283","level":36,"ability":"Drought","item":"Quick Claw","nature":"Quiet","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Eruption","Solar Beam","Earth Power","Body Press",]}},
-"Torracat":{"Rival 2 | Rattata | Rustboro City":{"index":"0000000076","level":18,"ability":"Intimidate","item":"Charcoal","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Fire Fang","Shadow Claw","Bite","No Move",]},
-"Picknicker Diana | Jagged Pass":{"index":"0000000253","level":38,"ability":"Intimidate","item":"Eviolite","nature":"Hasty","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Parting Shot","U-turn","Overheat","Crunch",]}},
-"Toxapex":{"Gym Leader Roxie | Mauville Gym":{"index":"0000000175","level":26,"ability":"Merciless","item":"Black Sludge","nature":"Lonely","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Baneful Bunker","Toxic","Liquidation","Poison Jab",]}},
-"Toxel":{"Breeder Lydia | Route 117":{"index":"0000000154","level":29,"ability":"Static","item":"Sitrus Berry","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Nuzzle","Belch","No Move","No Move",]}},
-"Toxtricity":{"Guitarists Kirk and Shawn | Mauville Gym":{"index":"0000000163","level":24,"ability":"Plus","item":"Silk Scarf","nature":"Hasty","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Boomburst","Protect","Thunderbolt","Psychic Noise",]}},
-"Toxtricity-Low-Key":{"Guitarists Kirk and Shawn | Mauville Gym":{"index":"0000000165","level":24,"ability":"Minus","item":"Air Balloon","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Boomburst","Protect","Sludge Bomb","Hidden Power Ice",]}},
-"Tranquill":{"Rival 2 | Chespin | Rustboro City":{"index":"0000000059","level":18,"ability":"Super Luck","item":"Scope Lens","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Slash","Dual Wingbeat","Rock Smash","No Move",]}},
-"Trevenant":{"Gym Leader Roxie | Mauville Gym":{"index":"0000000173","level":26,"ability":"Harvest","item":"Iapapa Berry","nature":"Relaxed","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Poison Jab","Horn Leech","Hex","Forest's Curse",]}},
-"Turtonator":{"Winstrate Vicky | Winstrates":{"index":"0000000192","level":31,"ability":"Shell Armor","item":"Lum Berry","nature":"Calm","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Will-O-Wisp","Shell Trap","Dragon Pulse","Fire Spin",]},
-"Expert Keegan | Lavaridge Gym":{"index":"0000000289","level":36,"ability":"Shell Armor","item":"Mirror Herb","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Swagger","Dragon Claw","Flame Charge","Bulldoze",]}},
-"Turtwig":{"Youngster Allen | Route 102":{"index":"0000000013","level":8,"ability":"Overgrow","item":"Miracle Seed","nature":"Quiet","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Headbutt","Leafage","Curse","No Move",]}},
-"Typhlosion":{"Ace Trainer Cole | Lavaridge Gym":{"index":"0000000272","level":36,"ability":"Blaze","item":"Choice Scarf","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Eruption","No Move","No Move","No Move",]}},
-"Tyrunt":{"Battle Girl Aisha | Route 117":{"index":"0000000135","level":25,"ability":"Sturdy","item":"Razor Fang","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Scale Shot","Rock Climb","Fire Fang","Zen Headbutt",]}},
-"Veluza":{"Expert Keegan | Lavaridge Gym":{"index":"0000000287","level":36,"ability":"Sharpness","item":"Utility Umbrella","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Aqua Cutter","Fillet Away","Psycho Cut","Night Slash",]}},
-"Venomoth":{"School Kid Josh | Petalburg Woods Gym":{"index":"0000000047","level":13,"ability":"Shield Dust","item":"Petaya Berry","nature":"Rash","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Leech Life","Poison Fang","Sleep Powder","Confusion",]},
-"Galactic Grunt #4 | Mt. Chimney":{"index":"0000000237","level":32,"ability":"Wonder Skin","item":"Life Orb","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Venoshock","Bug Buzz","Psychic","Hidden Power Electric",]}},
-"Vespiquen":{"Winstrate Vivi | Winstrates":{"index":"0000000191","level":31,"ability":"Unnerve","item":"Charti Berry","nature":"Brave","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Venoshock","Attack Order","Heal Order","Air Slash",]}},
-"Vileplume":{"Guitarists Kirk and Shawn | Mauville Gym":{"index":"0000000164","level":25,"ability":"Effect Spore","item":"Black Sludge","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Sleep Powder","Energy Ball","Hidden Power Ground","Moonblast",]}},
-"Vivillon":{"Twins Gina and Mia | Route 104":{"index":"0000000041","level":13,"ability":"Friend Guard","item":"Weakness Policy","nature":"Calm","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Acrobatics","Bug Bite","Iron Defense","Tailwind",]}},
-"Volcarona":{"Gym Leader Kiawe | Lavaridge Gym":{"index":"0000000293","level":36,"ability":"Flame Body","item":"Sitrus Berry","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Quiver Dance","Bug Buzz","Fire Pledge","Giga Drain",]}},
-"Voltorb-Hisui":{"Schoolkid Jerry | Route 116":{"index":"0000000095","level":18,"ability":"Aftermath","item":"Liechi Berry","nature":"Gentle","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Discharge","Energy Ball","Hidden Power Dark","Self-Destruct",]}},
-"Vulpix":{"Breeder Lydia | Route 117":{"index":"0000000156","level":29,"ability":"Flash Fire","item":"Ghost Gem","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Will-O-Wisp","Flamethrower","Nasty Plot","Hex",]}},
-"Vulpix-Alola":{"Lass Haley | Route 104":{"index":"0000000035","level":13,"ability":"Snow Warning","item":"Wise Glasses","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Icy Wind","Mist","Draining Kiss","No Move",]}},
-"Wartortle":{"Rival 2 | Chespin | Rustboro City":{"index":"0000000061","level":18,"ability":"Torrent","item":"Expert Belt","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Razor Shell","Body Slam","Bite","No Move",]}},
-"Wattrel":{"Breeder Isaac | Route 117":{"index":"0000000142","level":29,"ability":"Volt Absorb","item":"Wiki Berry","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Eerie Impulse","Volt Switch","Air Slash","Feather Dance",]}},
-"Weavile":{"Galactic Boss Cyrus | Mt. Chimney":{"index":"0000000246","level":35,"ability":"Pressure","item":"Muscle Band","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Fake Out","Aqua Punch","Knock Off","Ice Spinner",]}},
-"Weedle":{"Bug Catcher Rick | Route 102":{"index":"0000000009","level":6,"ability":"Shield Dust","item":"Oran Berry","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Poison Sting","Bug Bite","No Move","No Move",]}},
-"Weepinbell":{"Triathlete Melina | Route 117":{"index":"0000000131","level":24,"ability":"Gluttony","item":"Liechi Berry","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Leech Life","Strength Sap","Seed Bomb","Poison Jab",]}},
-"Weezing":{"Gym Leader Roxie | Mauville Gym":{"index":"0000000172","level":26,"ability":"Levitate","item":"Covert Cloak","nature":"Careful","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Explosion","No Move","No Move","No Move",]}},
-"Whiscash":{"Hiker Bryan | Route 111":{"index":"0000000223","level":32,"ability":"Oblivious","item":"Assault Vest","nature":"Brave","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Earth Power","Ice Beam","Liquidation","Rock Slide",]}},
-"Wiglett":{"Fisherman Darian | Route 104":{"index":"0000000018","level":8,"ability":"Gooey","item":"Oran Berry","nature":"Relaxed","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Water Pulse","Mud-Slap","Wrap","No Move",]}},
-"Wimpod":{"Breeder Lydia | Route 117":{"index":"0000000153","level":29,"ability":"Wimp Out","item":"Focus Sash","nature":"Hasty","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Leech Life","Scald","Spikes","Aqua Jet",]}},
-"Wishiwashi":{"Fisherman Darian | Route 104":{"index":"0000000019","level":10,"ability":"Schooling","item":"Oran Berry","nature":"Impish","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Muddy Water","Tearful Look","No Move","No Move",]}},
-"Wooloo":{"Lady Cindy | Route 104":{"index":"0000000024","level":9,"ability":"Fluffy","item":"Berry Juice","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Stomp","Double Kick","No Move","No Move",]},
-"Breeder Isaac | Route 117":{"index":"0000000144","level":32,"ability":"Fluffy","item":"Leftovers","nature":"Careful","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Thunder Wave","Headbutt","Rest","Sleep Talk",]}},
-"Wormadam":{"Bug Maniac Derek | Route 117":{"index":"0000000127","level":24,"ability":"Overcoat","item":"White Herb","nature":"Bold","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Leaf Storm","Substitute","Bug Buzz","Shadow Ball",]}},
-"Wormadam-Sandy":{"Bug Maniac Derek | Route 117":{"index":"0000000126","level":23,"ability":"Overcoat","item":"Rocky Helmet","nature":"Modest","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Stealth Rock","Earthquake","Bug Buzz","Sticky Web",]}},
-"Wormadam-Trash":{"Bug Maniac Derek | Route 117":{"index":"0000000128","level":24,"ability":"Overcoat","item":"Assault Vest","nature":"Quiet","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Flash Cannon","Gunk Shot","Bug Buzz","Hidden Power Water",]}},
-"Wugtrio":{"Hiker Devan | Route 116":{"index":"0000000117","level":20,"ability":"Gooey","item":"Mystic Water","nature":"Careful","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Triple Dive","Sucker Punch","Aqua Jet","Stomping Tantrum",]},
-"Camper Branden | Route 111":{"index":"0000000205","level":30,"ability":"Sand Veil","item":"Scope Lens","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Stomping Tantrum","Triple Dive","Aqua Jet","Focus Energy",]}},
-"Wurmple":{"Bug Catcher Rick | Route 102":{"index":"0000000008","level":6,"ability":"Shield Dust","item":"Oran Berry","nature":"Adamant","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Poison Sting","Bug Bite","No Move","No Move",]}},
-"Yanma":{"Bugcatcher Jose | Route 116":{"index":"0000000084","level":17,"ability":"Compound Eyes","item":"Bright Powder","nature":"Timid","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Hypnosis","Giga Drain","Silver Wind","Air Slash",]}},
-"Yungoos":{"Lass Tiana | Route 102":{"index":"0000000015","level":7,"ability":"Adaptability","item":"Clear Amulet","nature":"Jolly","ivs":{"hp":31,"at":31,"df":31,"sa":31,"sd":31,"sp":31},"moves":["Take Down","Payback","Work Up","No Move",]}}};
+var SETDEX_SV = { 
+    "Litten": {
+        "Rival (If Chose Grookey) | Route 103": {
+            "index": "0000000001",
+            "level": 7,
+            "ability": "Intimidate",
+            "item": "Oran Berry", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Flame Charge"]
+        }
+    },
+    "Quaxly": {
+        "Rival (If Chose Tepig) | Route 103": { 
+            "index": "0000000002",
+            "level": 7,
+            "ability": "Moxie",
+            "item": "Oran Berry", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Aqua Jet"]
+        }
+    },
+    "Snivy": {
+        "Rival (If Chose Popplio) | Route 103": {  
+            "index": "0000000003",
+            "level": 7,
+            "ability": "Sheer Force",
+            "item": "Oran Berry", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Leaf Tornado"]
+        }
+    },
+    "Bulbasaur": {
+        "Youngster Larry | Route 102": {  
+            "index": "0000000004",
+            "level": 8,
+            "ability": "Thick Fat",
+            "item": "Miracle Seed", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sleep Powder","Vine Whip","Growl","Leech Seed"]
+        }
+    },
+    "Ekans": {
+        "Youngster Larry | Route 102": {  
+            "index": "0000000005",
+            "level": 8,
+            "ability": "Intimidate",
+            "item": "None", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Glare","Bite","Poison Tail","Wrap"]
+        }
+    },
+    "Kakuna": {
+        "Bug Catcher Buggford | Route 102": {  
+            "index": "0000000006",
+            "level": 8,
+            "ability": "Poison Point",
+            "item": "Poison Barb", 
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Iron Defense","Bug Bite","Poison Sting"]
+        }
+    },
+    "Metapod": {
+        "Bug Catcher Buggford | Route 102": {  
+            "index": "0000000007",
+            "level": 8,
+            "ability": "Shed Skin",
+            "item": "Oran Berry", 
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Iron Defense","Bug Bite"]
+        }
+    },
+    "Maschiff": {
+        "Youngster Allen | Route 102": {  
+            "index": "0000000008",
+            "level": 8,
+            "ability": "Intimidate",
+            "item": "Black Glasses", 
+            "nature": "Hasty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Snarl","Thunder Fang", "Bite", "Leer"]
+        }
+    }, 
+    "Taillow": {
+        "Youngster Allen | Route 102": {  
+            "index": "0000000009",
+            "level": 8,
+            "ability": "Guts",
+            "item": "Flame Orb", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Protect","Quick Attack", "Aerial Ace"]
+        }
+    },
+    "Snubbull": {
+        "Lass Tiana | Route 102": {  
+            "index": "0000000010",
+            "level": 9,
+            "ability": "Intimidate",
+            "item": "Black Belt", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Covet","Karate Chop", "Lick"]
+        }
+    },
+    "Staryu": {
+        "Lass Tiana | Route 102": {  
+            "index": "0000000011",
+            "level": 9,
+            "ability": "Analytic",
+            "item": "Oran Berry", 
+            "nature": "Quiet",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Water Gun","Confusion", "Rapid Spin", "Swift"]
+        }
+    },
+    "Pawmi": {
+        "Lass Tiana | Route 102": {  
+            "index": "0000000012",
+            "level": 10,
+            "ability": "Static",
+            "item": "Normal Gem", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fake Out","Spark", "Mach Punch", "Quick Attack"]
+        }
+    },
+    "Arrokuda": {
+        "Fisherman Patrick | Route 104": {  
+            "index": "0000000013",
+            "level": 14,
+            "ability": "Strong Jaw",
+            "item": "Assault Vest", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Dive","Ice Fang", "Bite"]
+        }
+    },
+    "Bruxish": {
+        "Fisherman Patrick | Route 104": {  
+            "index": "0000000014",
+            "level": 13,
+            "ability": "Strong Jaw",
+            "item": "Assault Vest", 
+            "nature": "Hasty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bite","Heart Stamp", "Aqua Jet","Psywave"]
+        }
+    },
+    "Lombre": {
+        "Fisherman Patrick | Route 104": {  
+            "index": "0000000015",
+            "level": 14,
+            "ability": "Strong Jaw",
+            "item": "Assault Vest", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fake Out","Trailblaze", "Clamp","Double Slap"]
+        }
+    },
+    "Heracross": {
+        "Black Belt James | Route 104": {  
+            "index": "0000000016",
+            "level": 13,
+            "ability": "Guts",
+            "item": "Coba Berry", 
+            "nature": "Naive",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bide","Mach Punch", "Bug Bite","Counter"]
+        }
+    },
+    "Timburr": {
+        "Black Belt James | Route 104": {  
+            "index": "0000000017",
+            "level": 13,
+            "ability": "Sheer Force",
+            "item": "Punching Glove", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fake Out","Rock Throw", "Power-Up Punch","Slam"]
+        }
+    },
+    "Steenee": {
+        "Black Belt James | Route 104": {  
+            "index": "0000000018",
+            "level": 14,
+            "ability": "Oblivious",
+            "item": "Oran Berry", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Baby-Doll Eyes","Razor Leaf", "Low Sweep","Rapid Spin"]
+        }
+    },
+    "Stunfisk": {
+        "Lady Lauren | Route 104": {  
+            "index": "0000000019",
+            "level": 13,
+            "ability": "Water Absorb",
+            "item": "Magnet", 
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Electroweb"]
+        }
+    },
+    "Gligar": {
+        "Lady Lauren | Route 104": {  
+            "index": "0000000020",
+            "level": 14,
+            "ability": "Poison Heal",
+            "item": "Toxic Orb", 
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Protect","Bite", "Taunt","Aerial Ace"]
+        }
+    },
+    "Charmeleon": {
+        "Youngster Billy | Route 104": {  
+            "index": "0000000021",
+            "level": 15,
+            "ability": "Solar Power",
+            "item": "Charcoal", 
+            "nature": "Rash",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Flame Burst","Rock Tomb", "Weather Ball"]
+        }
+    },
+    "Stunky": {
+        "Youngster Billy | Route 104": {  
+            "index": "0000000022",
+            "level": 15,
+            "ability": "Aftermath",
+            "item": "Assault Vest", 
+            "nature": "Hasty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sucker Punch","Snarl", "Dig","Poison Fang"]
+        }
+    },
+    "Brionne": {
+        "Fisherman Bobby | Route 104": {  
+            "index": "0000000023",
+            "level": 15,
+            "ability": "Cute Charm",
+            "item": "Leftovers", 
+            "nature": "Calm",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Follow Me","Water Gun", "Icy Wind","Disarming Voice"]
+        }
+    },
+    "Tirtouga": {
+        "Fisherman Bobby | Route 104": {  
+            "index": "0000000024",
+            "level": 15,
+            "ability": "Solid Rock",
+            "item": "Mystic Water", 
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Headbutt","Bubble Beam", "Accelerock","Ice Shard"]
+        }
+    },
+    "Murkrow": {
+        "Team Aqua Grunt | Petalburg Woods": {  
+            "index": "0000000025",
+            "level": 15,
+            "ability": "Prankster",
+            "item": "None", 
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Snarl","Parting Shot", "Night Shade","Air Cutter"]
+        }
+    },
+    "Seviper": {
+        "Team Aqua Grunt | Petalburg Woods": {  
+            "index": "0000000026",
+            "level": 15,
+            "ability": "Shed Skin",
+            "item": "Bright Powder", 
+            "nature": "Bashful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Screech","Acid", "Swift","Bite"]
+        }
+    },
+    "Luxio": {
+        "Team Aqua Grunt | Petalburg Woods": {  
+            "index": "0000000027",
+            "level": 16,
+            "ability": "Intimidate",
+            "item": "Zap Plate", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Work Up","Trailblaze", "Thunder Shock","Bite"]
+        }
+    },
+    "Trapinch": {
+        "Bug Catcher John | Petalburg Woods": {  
+            "index": "0000000028",
+            "level": 15,
+            "ability": "Sheer Force",
+            "item": "Sitrus Berry", 
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Mud Bomb","Bug Bite", "Rock Tomb","Body Slam"]
+        }
+    }, 
+    "Yanma": {
+        "Bug Catcher John | Petalburg Woods": {  
+            "index": "0000000029",
+            "level": 15,
+            "ability": "Speed Boost",
+            "item": "Sitrus Berry", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Air Cutter","Supersonic", "Struggle Bug"]
+        }
+    },
+    "Durant": {
+        "Bug Catcher Barry | Petalburg Woods": {  
+            "index": "0000000030",
+            "level": 16,
+            "ability": "Truant",
+            "item": "Iron Ball", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Metal Claw","Rock Tomb"]
+        }
+    },
+    "Larvesta": {
+        "Bug Catcher Barry | Petalburg Woods": {  
+            "index": "0000000031",
+            "level": 15,
+            "ability": "Flame Body",
+            "item": "None", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Pounce","Flame Charge", "Protect"]
+        }
+    },
+    "Rabsca": {
+        "Bug Catcher Barry | Petalburg Woods": {  
+            "index": "0000000032",
+            "level": 15,
+            "ability": "Synchronize",
+            "item": "Sitrus Berry", 
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Revival Blessing","Confusion", "Struggle Bug"]
+        }
+    },
+    "Wartortle": {
+        "Rich Boy Winston | Route 104": {  
+            "index": "0000000033",
+            "level": 15,
+            "ability": "Rain Dish",
+            "item": "Wise Glasses", 
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Water Pulse","Body Press", "Protect", "Mud Shot"]
+        }
+    },
+    "Herdier": {
+        "Rich Boy Winston | Route 104": {  
+            "index": "0000000034",
+            "level": 16,
+            "ability": "Intimidate",
+            "item": "Muscle Band", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Mud Shot","Quick Attack", "Ice Fang", "Covet"]
+        }
+    },
+    "Axew": {
+        "Rich Boy Winston | Route 104": {  
+            "index": "0000000035",
+            "level": 15,
+            "ability": "Unnerve",
+            "item": "None", 
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Breaking Swipe","Low Kick"]
+        }
+    },
+    "Stufful": {
+        "Twin Gina & Mia | Route 104": {  
+            "index": "0000000036",
+            "level": 16,
+            "ability": "Friend Guard",
+            "item": "Electric Seed", 
+            "nature": "Brave",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Helping Hand","Mach Punch", "Headbutt", "Work Up"]
+        }
+    },
+    "Mudbray": {
+        "Twin Gina & Mia | Route 104": {  
+            "index": "0000000037",
+            "level": 16,
+            "ability": "Friend Guard",
+            "item": "Electric Seed", 
+            "nature": "Brave",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Smack Down","Stomp", "Sand Tomb", "Counter"]
+        }
+    },
+    "Omanyte": {
+        "Lass Emmie | Route 104": {  
+            "index": "0000000038",
+            "level": 16,
+            "ability": "Shell Armor",
+            "item": "Rindo Berry", 
+            "nature": "Quiet",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Metronome"]
+        }
+    },
+    "Bayleef": {
+        "Lass Emmie | Route 104": {  
+            "index": "0000000039",
+            "level": 16,
+            "ability": "Cute Charm",
+            "item": "Kebia Berry", 
+            "nature": "Sassy",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Metronome"]
+        }
+    },
+    "Clefairy": {
+        "Lass Emmie | Route 104": {  
+            "index": "0000000040",
+            "level": 16,
+            "ability": "Cute Charm",
+            "item": "Sitrus Berry", 
+            "nature": "Hardy",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Metronome"]
+        }
+    },
+    "Dottler": {
+        "Bug Catcher Jose | Route 116": {  
+            "index": "0000000041",
+            "level": 15,
+            "ability": "Swarm",
+            "item": "Light Clay", 
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Reflect","Magic Powder", "Light Screen", "Struggle Bug"]
+        }
+    },
+    "Charjabug": {
+        "Bug Catcher Jose | Route 116": {  
+            "index": "0000000042",
+            "level": 15,
+            "ability": "Battery",
+            "item": "Eviolite", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Spark","Skitter Smack", "Electroweb"]
+        }
+    },
+    "Vivillon": {
+        "Bug Catcher Jose | Route 116": {  
+            "index": "0000000043",
+            "level": 16,
+            "ability": "Shield Dust",
+            "item": "Lum Berry", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sleep Powder","Air Cutter", "Struggle Bug", "Roost"]
+        }
+    },
+    "Trumbeak": {
+        "Youngster Joey | Route 116": {  
+            "index": "0000000044",
+            "level": 16,
+            "ability": "Skill Link",
+            "item": "Scope Lens", 
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bullet Seed","Aerial Ace", "Quick Attack", "Take Down"]
+        }
+    },
+    "Raticate-Alola": {
+        "Youngster Joey | Route 116": {  
+            "index": "0000000045",
+            "level": 15,
+            "ability": "Hustle",
+            "item": "Silk Scarf", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Super Fang","Quick Attack", "Pursuit"]
+        }
+    },
+    "Loudred": {
+        "Youngster Joey | Route 116": {  
+            "index": "0000000046",
+            "level": 15,
+            "ability": "Punk Rock",
+            "item": "Throat Spray", 
+            "nature": "Bashful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Rest","Snore", "Echoed Voice", "Agility"]
+        }
+    },
+    "Gloom": {
+        "School Kid Karen | Route 116": {  
+            "index": "0000000047",
+            "level": 16,
+            "ability": "Quick Feet",
+            "item": "Big Root", 
+            "nature": "Quiet",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sleep Powder","Strength Sap", "Sludge", "Mega Drain"]
+        }
+    },
+    "Riolu": {
+        "School Kid Karen | Route 116": {  
+            "index": "0000000048",
+            "level": 15,
+            "ability": "Inner Focus",
+            "item": "Black Belt", 
+            "nature": "Naughty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fake Out","Vaccuum Wave", "Mach Punch", "Sucker Punch"]
+        }
+    },
+    "Fletchinder": {
+        "School Kid Karen | Route 116": {  
+            "index": "0000000049",
+            "level": 16,
+            "ability": "Flame Body",
+            "item": "Leftovers", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Steel Wing","Wing Attack", "Flame Charge"]
+        }
+    },
+    "Varoom": {
+        "Rich Boy Dawson | Route 116": {  
+            "index": "0000000050",
+            "level": 16,
+            "ability": "Overcoat",
+            "item": "Air Balloon", 
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Toxic","Bulldoze", "Protect", "Gyro Ball"]
+        }
+    },
+    "Drowzee": {
+        "Rich Boy Dawson | Route 116": {  
+            "index": "0000000051",
+            "level": 15,
+            "ability": "Insomnia",
+            "item": "None", 
+            "nature": "Mild",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Hynosis","Dream Eater"]
+        }
+    },
+    "Rotom": {
+        "Rich Boy Dawson | Route 116": {  
+            "index": "0000000052",
+            "level": 15,
+            "ability": "Levitate",
+            "item": "Expert Belt", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Electro Ball","Hex", "Thunder Wave", "Shock Wave"]
+        }
+    },
+    "Kirlia": {
+        "School Kid Jerry | Route 116": {  
+            "index": "0000000053",
+            "level": 15,
+            "ability": "Sychronize",
+            "item": "Wise Glasses", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Magical Leaf","Draining Kiss", "Psybeam", "Encore"]
+        }
+    },
+    "Natu": {
+        "School Kid Jerry | Route 116": {  
+            "index": "0000000054",
+            "level": 15,
+            "ability": "Magic Bounce",
+            "item": "Eviolite", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Air Slash","Psybeam", "Feather Dance"]
+        }
+    },
+    "Inkay": {
+        "School Kid Jerry | Route 116": {  
+            "index": "0000000055",
+            "level": 15,
+            "ability": "Contrary",
+            "item": "Sitrus Berry", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Destiny Bond","Curse", "Night Shade", "Psybeam"]
+        }
+    },
+    "Panpour": {
+        "Lady Sarah | Route 116": {  
+            "index": "0000000056",
+            "level": 16,
+            "ability": "Torrent",
+            "item": "Mystic Water", 
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Swift","Bubble Beam", "Icy Wind", "Yawn"]
+        }
+    },
+    "Pansage": {
+        "Lady Sarah | Route 116": {  
+            "index": "0000000057",
+            "level": 16,
+            "ability": "Rattled",
+            "item": "Miracle Seed", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Razor Leaf","Headbutt", "Rock Tomb", "Leech Seed"]
+        }
+    },
+    "Pansear": {
+        "Lady Sarah | Route 116": {  
+            "index": "0000000058",
+            "level": 16,
+            "ability": "Blaze",
+            "item": "Charcoal", 
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Incinerate","Swift", "Snarl", "Will-O-Wisp"]
+        }
+    },
+    "Onix": {
+        "Hiker Clark | Route 116": {  
+            "index": "0000000059",
+            "level": 16,
+            "ability": "Rock Head",
+            "item": "Hard Stone", 
+            "nature": "Brave",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Curse","Gyro Ball", "Rock Blast"]
+        }
+    },
+    "Diggersby": {
+        "Hiker Clark | Route 116": {  
+            "index": "0000000060",
+            "level": 16,
+            "ability": "Cheek Pouch",
+            "item": "Oran Berry", 
+            "nature": "Calm",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Dig","Quick Attack"]
+        }
+    },
+    "Rhyhorn": {
+        "Hiker Clark | Route 116": {  
+            "index": "0000000061",
+            "level": 16,
+            "ability": "Rock Head",
+            "item": "Focus Sash", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Reversal","Bulldoze", "Rock Tomb"]
+        }
+    },
+    "Monferno": {
+        "Youngster Robert | Route 116": {  
+            "index": "0000000062",
+            "level": 16,
+            "ability": "Iron Fist",
+            "item": "Expert Belt", 
+            "nature": "Naughty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fake Out","Mach Punch","Flame Wheel", "Sucker Punch"]
+        }
+    },
+    "Thievul": {
+        "Youngster Robert | Route 116": {  
+            "index": "0000000063",
+            "level": 16,
+            "ability": "Stakeout",
+            "item": "Black Glasses", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Pursuit","Snarl","Roar", "Crunch"]
+        }
+    },
+    "Skorupi": {
+        "Youngster Robert | Route 116": {  
+            "index": "0000000064",
+            "level": 16,
+            "ability": "Sniper",
+            "item": "Scope Lens", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Poison Tail","Bug Bite","Struggle Bug"]
+        }
+    },
+    "Geodude": {
+        "Youngster Pebble | Rustboro City Gym": {  
+            "index": "0000000065",
+            "level": 17,
+            "ability": "Solid Rock",
+            "item": "Hard Stone", 
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Accelerock","Rock Tomb","Thunder Punch", "Gyro Ball"]
+        }
+    },
+    "Doduo": {
+        "Youngster Pebble | Rustboro City Gym": {  
+            "index": "0000000066",
+            "level": 17,
+            "ability": "Rock Head",
+            "item": "Sitrus Berry", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Mud Bomb","Swift","Pluck"]
+        }
+    },
+    "Nosepass": {
+        "Youngster Stone | Rustboro City Gym": {  
+            "index": "0000000067",
+            "level": 17,
+            "ability": "Sturdy",
+            "item": "Red Card", 
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Thunder Wave","Shock Wave","Ancient Power", "Rollout"]
+        }
+    },
+    "Diglett-Alola": {
+        "Youngster Stone | Rustboro City Gym": {  
+            "index": "0000000068",
+            "level": 17,
+            "ability": "Steelworker",
+            "item": "Muscle Band", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sucker Punch","Metal Claw","Dig"]
+        }
+    },
+    "Drilbur": {
+        "Youngster Stone | Rustboro City Gym": {  
+            "index": "0000000069",
+            "level": 17,
+            "ability": "Sand Rush",
+            "item": "Expert Belt", 
+            "nature": "Brave",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bulldoze","X-Scissor","Sand Tomb", "Swagger"]
+        }
+    }, 
+    "Mawile": {
+        "Cool Trainer Ruby | Rustboro City Gym": {  
+            "index": "0000000070",
+            "level": 17,
+            "ability": "Intimidate",
+            "item": "Shuca Berry", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Metal Burst","Bite","Rock Tomb", "Covet"]
+        }
+    },
+    "Solrock": {
+        "Cool Trainer Ruby | Rustboro City Gym": {  
+            "index": "0000000071",
+            "level": 17,
+            "ability": "Levitate",
+            "item": "None", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Will-O-Wisp","Solar Beam","Flame Charge", "Rock Tomb"]
+        }
+    },
+    "Lunatone": {
+        "Cool Trainer Sapphire | Rustboro City Gym": {  
+            "index": "0000000072",
+            "level": 17,
+            "ability": "Levitate",
+            "item": "None", 
+            "nature": "Naughty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Thunder Wave","Confusion","Shock Wave", "Rock Throw"]
+        }
+    }, 
+    "Marshtomp": {
+        "Cool Trainer Sapphire | Rustboro City Gym": {  
+            "index": "0000000073",
+            "level": 17,
+            "ability": "Swift Swim",
+            "item": "Rindo Berry", 
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fake Out","Mud Shot","Water Pulse", "Aerial Ace"]
+        }
+    },
+    "Magneton": {
+        "Collector Hector | Rustboro City Gym": {  
+            "index": "0000000074",
+            "level": 17,
+            "ability": "Analytic",
+            "item": "Wise Glasses", 
+            "nature": "Quiet",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Gyro Ball","Tri Attack","Thunder Shock"]
+        }
+    }, 
+    "Sudowoodo": {
+        "Collector Hector | Rustboro City Gym": {  
+            "index": "0000000075",
+            "level": 17,
+            "ability": "Rattled",
+            "item": "Salac Berry", 
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Protect","Stomping Tantrum","Rollout", "Trailblaze"]
+        }
+    },
+    "Numel": {
+        "Collector Hector | Rustboro City Gym": {  
+            "index": "0000000076",
+            "level": 17,
+            "ability": "Analytic",
+            "item": "Passho Berry", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Curse","Temper Flare","Bulldoze"]
+        }
+    }, 
+    "Perrserker": {
+        "Gym Leader Roxanne | Rustboro City Gym": {  
+            "index": "0000000077",
+            "teraType": "Normal",
+            "level": 18,
+            "ability": "Battle Armor",
+            "item": "Occa Berry", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fake Out","Aerial Ace","Metal Claw", "Rock Tomb"]
+        }
+    },
+    "Archen": {
+        "Gym Leader Roxanne | Rustboro City Gym": {  
+            "index": "0000000078",
+            "teraType": "Flying",
+            "level": 18,
+            "ability": "Defeatist",
+            "item": "Focus Sash", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Acrobatics","Smack Down","Endeavor", "U-turn"]
+        }
+    },
+    "Carkol": {
+        "Gym Leader Roxanne | Rustboro City Gym": {  
+            "index": "0000000079",
+            "teraType": "Water",
+            "level": 18,
+            "ability": "Water Compaction",
+            "item": "Passho Berry", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Tar Shot","Incinerate","Scald", "Ancient Power"]
+        }
+    },
+    "Corsola": {
+        "Gym Leader Roxanne | Rustboro City Gym": {  
+            "index": "0000000080",
+            "teraType": "Grass",
+            "level": 18,
+            "ability": "Natural Cure",
+            "item": "Rindo Berry", 
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Rock Polish","Brine","Ancient Power", "Recover"]
+        }
+    },
+    "Clodsire": {
+        "Gym Leader Roxanne | Rustboro City Gym": {  
+            "index": "0000000081",
+            "teraType": "Poison",
+            "level": 18,
+            "ability": "Poison Point",
+            "item": "Black Sludge", 
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Venom Drench","Acid Spray","Mud Shot", "Toxic"]
+        }
+    },
+    "Tyrunt": {
+        "Gym Leader Roxanne | Rustboro City Gym": {  
+            "index": "0000000082",
+            "teraType": "Fighting",
+            "level": 19,
+            "ability": "Sturdy",
+            "item": "Lum Berry", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Breaking Swipe","Ice Fang","Rock Smash", "Rock Tomb"]
+        }
+    },
+    "Golbat": {
+        "Gym Leader Brock | Rustboro City Gym": {  
+            "index": "0000000083",
+            "teraType": "Grass",
+            "level": 18,
+            "ability": "Inncer Focus",
+            "item": "Mental Herb", 
+            "nature": "Quiet",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Hypnosis","Mega Drain","Poison Fang", "Air Cutter"]
+        }
+    }, 
+    "Croconaw": {
+        "Gym Leader Brock | Rustboro City Gym": {  
+            "index": "0000000084",
+            "teraType": "Dark",
+            "level": 18,
+            "ability": "Intimidate",
+            "item": "Mystic Water", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Water Pulse","Aqua Jet","Bite", "Ice Fang"]
+        }
+    },
+    "Naclstack": {
+        "Gym Leader Brock | Rustboro City Gym": {  
+            "index": "0000000085",
+            "teraType": "Ghost",
+            "level": 18,
+            "ability": "Purifying Salt",
+            "item": "Mental Herb", 
+            "nature": "Brave",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Salt Cure","Bulldoze","Recover", "Body Slam"]
+        }
+    },
+    "Klawf": {
+        "Gym Leader Brock | Rustboro City Gym": {  
+            "index": "0000000086",
+            "teraType": "Rock",
+            "level": 18,
+            "ability": "Shell Armor",
+            "item": "Lum Berry", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Work Up","Trailblaze","Smack Down"]
+        }
+    }, 
+    "Graveler": {
+        "Gym Leader Brock | Rustboro City Gym": {  
+            "index": "0000000087",
+            "teraType": "Fire",
+            "level": 19,
+            "ability": "Solid Rock",
+            "item": "Rock Gem", 
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bulldoze","Rock Smash","Rollout", "Defence Curl"]
+        }
+    },
+    "Graveler-Alola": {
+        "Gym Leader Brock | Rustboro City Gym": {  
+            "index": "0000000088",
+            "teraType": "Electric",
+            "level": 19,
+            "ability": "Sturdy",
+            "item": "Air Balloon", 
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Spark","Thunder Wave","Rock Tomb", "Headbutt"] // Broxanne Split 
+        }
+    },
+
+    "Dewott": {
+        "Team Aqua Grunt | Rusturf Tunnel": {  
+            "index": "0000000089",
+            "level": 20,
+            "ability": "Sharpness",
+            "item": "Wacan Berry", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Cut","Aqua Cutter","Enore", "Aerial Ace"]
+        }
+    },
+    "Arbok": {
+        "Team Aqua Grunt | Rusturf Tunnel": {  
+            "index": "0000000090",
+            "level": 20,
+            "ability": "Intimidate",
+            "item": "Lum Berry", 
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Glare","Poison Fang","Thunder Fang", "Sucker Punch"]
+        },
+        "Aqua Grunt 2 | Slateport Museum": {  
+            "index": "0000000140",
+            "level": 28,
+            "ability": "Intimidate",
+            "item": "Black Sludge", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Coil","Gunk Shot","Sucker Punch", "Jaw Lock"]
+        }
+    },
+    "Morgrem": {
+        "Team Aqua Grunt | Rusturf Tunnel": {  
+            "index": "0000000091",
+            "level": 20,
+            "ability": "Prankster",
+            "item": "Sitrus Berry", 
+            "nature": "Docile",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Knock Off","Spirit Break","Snarl", "Torment"]
+        }
+    },
+    "Drednaw": {
+        "Team Aqua Grunt | Rusturf Tunnel": {  
+            "index": "0000000092",
+            "level": 20,
+            "ability": "Shell Armor",
+            "item": "Rindo Berry", 
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Rock Tomb","Ice Fang","Water Pulse", "Protect"]
+        },
+        "Aqua Grunt 2 | Slateport Museum": {  
+            "index": "0000000139",
+            "level": 28,   
+            "ability": "Shell Armor",
+            "item": "Rindo Berry", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Razor Shell","Rock Slide","Flip Turn", "Ice Fang"]
+        }
+    },
+    "Quagsire": {
+        "Sailor Tony | Dewford Town": {  
+            "index": "0000000093",
+            "level": 20,
+            "ability": "Water Absorb",
+            "item": "Rindo Berry", 
+            "nature": "Brave",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Rain Dance","Ice Punch","Water Pulse", "Stomping Tantrum"]
+        }
+    },
+    "Qwilfish-Hisui": {
+        "Sailor Tony | Dewford Town": {  
+            "index": "0000000094",
+            "level": 20,
+            "ability": "Swift Swim",
+            "item": "Sitrus Berry", 
+            "nature": "Relaxed",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Barb Barrage","Reversal","Bite", "Brine"]
+        }
+    },
+    "Chinchou": {
+        "Sailor Tony | Dewford Town": {  
+            "index": "0000000095",
+            "level": 20,
+            "ability": "Volt Absorb",
+            "item": "Wise Glasses", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Soak","Volt Switch","Water Pulse", "Thunder Wave"]
+        }
+    }, 
+    "Deerling": {
+        "Tuber Bella | Route 106": {  
+            "index": "0000000096",
+            "level": 20,
+            "ability": "Serene Grace",
+            "item": "Sitrus Berry", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Headbutt","Razor Leaf","Facade", "Bulldoze"]
+        }
+    }, 
+    "Tentacool": {
+        "Tuber Bella | Route 106": {  
+            "index": "0000000097",
+            "level": 20,
+            "ability": "Clear Body",
+            "item": "Big Root", 
+            "nature": "Naive",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Mega Drain","Venoshock","Hex", "Toxic"]
+        }
+    },
+    "Goldeen": {
+        "Tuber Bella | Route 106": {  
+            "index": "0000000098",
+            "level": 20,
+            "ability": "Water Veil",
+            "item": "Flying Gem", 
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Pluck","Aqua Tail","Water Pulse", "Agility"]
+        }
+    },
+    "Meditite": {
+        "Youngster Theodore | Route 106": {  
+            "index": "0000000099",
+            "level": 20,
+            "ability": "Pure Power",
+            "item": "Salac Berry", 
+            "nature": "Docile",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fake Out","Ice Punch","Mach Punch", "Psybeam"]
+        }
+    },
+    "Lampent": {
+        "Youngster Theodore | Route 106": {  
+            "index": "0000000100",
+            "level": 20,
+            "ability": "Shadow Tag",
+            "item": "Passho Berry", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Nasty Plot","Will-O-Wisp","Flame Burst", "Ominous Wind"]
+        }
+    },
+    "Qwilfish": {
+        "Tuber Leo | Route 106": {  
+            "index": "0000000101",
+            "level": 20,
+            "ability": "Intimidate",
+            "item": "Leftovers", 
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Pain Split","Acid Spray","Bubble Beam"]
+        }
+    },
+    "Kricketune": {
+        "Tuber Leo | Route 106": {  
+            "index": "0000000102",
+            "level": 20,
+            "ability": "Techician",
+            "item": "Lum Berry", 
+            "nature": "Hardy",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sing","Bug Bite","Night Slash", "Trailblaze"]
+        }
+    },
+    "Eevee": {
+        "Tuber Leo | Route 106": {  
+            "index": "0000000103",
+            "level": 20,
+            "ability": "Adaptability",
+            "item": "Sitrus Berry", 
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Quick Attack","Tera Blast","Substitute", "Focus Energy"]
+        }
+    },
+    "Oinkologne": {
+        "Lass Janice | Granite Cave B1F": {  
+            "index": "0000000104",
+            "level": 21,
+            "ability": "Lingering Aroma",
+            "item": "Chople Berry", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Slack Off","Body Slam","Body Press"]
+        }
+    },
+    "Oinkologne-F": {
+        "Lass Janice | Granite Cave B1F": {  
+            "index": "0000000105",
+            "level": 21,
+            "ability": "Gluttony",
+            "item": "Sitrus Berry", 
+            "nature": "Relaxed",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Yawn","Body Slam","Body Press"]
+        }
+    },
+    "Carbink": {
+        "Hiker Devan | Granite Cave B1F": {  
+            "index": "0000000106",
+            "level": 21,
+            "ability": "Clear Body",
+            "item": "Barbiri Berry", 
+            "nature": "Quiet",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Power Swap","Ancient Power","Rock Slide","Dazzling Gleam"]
+        }
+    }, 
+    "Palpitoad": {
+        "Hiker Devan | Granite Cave B1F": {  
+            "index": "0000000107",
+            "level": 21,
+            "ability": "Liquid Ooze",
+            "item": "Rindo Berry", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Muddy Water","Mud Bomb","Icy Wind","Bulldoze"]
+        }
+    },
+    "Pawmo": {
+        "Battle Girl Laura | Dewford Gym": {  
+            "index": "0000000108",
+            "level": 22,
+            "ability": "Iron Fist",
+            "item": "Expert Belt", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Thunder Fang","Power-Up Punch","Fake Out","Trailblaze"]
+        }
+    },
+    "Machoke": {
+        "Battle Girl Laura | Dewford Gym": {  
+            "index": "0000000109",
+            "level": 22,
+            "ability": "Guts",
+            "item": "Sitrus Berry", 
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bulk Up","Dynamic Punch","Thunder Punch","Submission"]
+        }
+    },
+    "Flamigo": {
+        "Battle Girl Lilith | Dewford Gym": {  
+            "index": "0000000110",
+            "level": 22,
+            "ability": "Tangled Feet",
+            "item": "Expert Belt", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Dual Wingbeat","Thief","Low Sweep"]
+        }
+    },
+    "Quaxwell": {
+        "Battle Girl Lilith | Dewford Gym": {  
+            "index": "0000000111",
+            "level": 22,
+            "ability": "Moxie",
+            "item": "Lum Berry", 
+            "nature": "Naughty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Aqua Cutter","Drain Punch","Laser Focus", "Roost"]
+        }
+    }, 
+    "Throh": {
+        "Black Belt Cristian & Takao | Dewford Gym": {  
+            "index": "0000000112",
+            "level": 22,
+            "ability": "Guts",
+            "item": "Eject Pack", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Superpower","Power-Up Punch","Knock Off"]
+        }
+    },
+    "Passimian": {
+        "Black Belt Cristian & Takao | Dewford Gym": {  
+            "index": "0000000113",
+            "level": 22,
+            "ability": "Receiver",
+            "item": "Leftovers", 
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Coaching","Taunt","Drain Punch", "Brutal Swing"]
+        }
+    },
+    "Riolu": {
+        "Black Belt Cristian & Takao | Dewford Gym": {  
+            "index": "0000000114",
+            "level": 22,
+            "ability": "Prankster",
+            "item": "Eviolite", 
+            "nature": "Relaxed",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Follow Me","Screech","Detect","Me First"]
+        }
+    },
+    "Lucario": {
+        "Black Belt Cristian & Takao | Dewford Gym": {  
+            "index": "0000000115",
+            "level": 22,
+            "ability": "Justified",
+            "item": "Lagging Tail", 
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Drain Punch","Counter","Bullet Punch", "Payback"]
+        }
+    },
+    "Croagunk": {
+        "Jocelyn & Brenden | Dewford Gym": {  
+            "index": "0000000116",
+            "level": 22,
+            "ability": "Poison Touch",
+            "item": "Iapapa Berry", 
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fake Out","Venoshock","Toxic", "Protect"]
+        }
+    },
+    "Mareanie": {
+        "Jocelyn & Brenden | Dewford Gym": {  
+            "index": "0000000117",
+            "level": 22,
+            "ability": "Merciless",
+            "item": "Black Sludge", 
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Toxic","Protect","Soak", "Toxic Spikes"]
+        }
+    },
+    "Sneasel-Hisui": {
+        "Jocelyn & Brenden | Dewford Gym": {  
+            "index": "0000000118",
+            "level": 22,
+            "ability": "Pickpocket",
+            "item": "Rare Bone", 
+            "nature": "Calm",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fake Out","Acid Spray","Poison Jab", "Fling"]
+        }
+    },
+    "Tauros-Paldea-Aqua": {
+        "Jocelyn & Brenden | Dewford Gym": {  
+            "index": "0000000119",
+            "level": 22,
+            "ability": "Intimidate",
+            "item": "None", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Aqua Jet","Reversal","Body Slam", "Thief"]
+        }
+    },
+    "Silvally-Fighting": {
+        "Gym Leader Brawly | Dewford Gym": {  
+            "index": "0000000120",
+            "level": 23,
+            "ability": "RKS System",
+            "item": "Fighting Memory", 
+            "nature": "Serious",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Parting Shot","U-turn","Pursuit", "Vacuum Wave"]
+        }
+    },
+    "Ledian": {
+        "Gym Leader Brawly | Dewford Gym": {  
+            "index": "0000000121",
+            "teraType": "Ice",
+            "level": 24,
+            "ability": "Iron Fist",
+            "item": "Liechi Berry", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sucker Punch","Ice Punch","Mach Punch", "Drain Punch"]
+        }
+    },
+    "Granbull": {
+        "Gym Leader Brawly | Dewford Gym": {  
+            "index": "0000000122",
+            "teraType": "Fighting",
+            "level": 24,
+            "ability": "Guard Dog",
+            "item": "Red Card", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bulk Up","Thunder Fang","Play Rough", "Power-Up Punch"]
+        }
+    },
+    "Grapploct": {
+        "Gym Leader Brawly | Dewford Gym": {  
+            "index": "0000000123",
+            "teraType": "Dark",
+            "level": 24,
+            "ability": "Technician",
+            "item": "Leftovers", 
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Revenge","Payback","Octolock", "Drain Punch"]
+        }
+    },
+    "Simisage": {
+        "Gym Leader Brawly | Dewford Gym": {  
+            "index": "0000000124",
+            "teraType": "Rock",
+            "level": 24,
+            "ability": "Unburden",
+            "item": "Coba Berry", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Spiky Shield","Rock Tomb","Giga Drain", "Rock Smash"]
+        }
+    },
+    "Bewear": {
+        "Gym Leader Brawly | Dewford Gym": {  
+            "index": "0000000125",
+            "teraType": "Normal",
+            "level": 25,
+            "ability": "Unnerve",
+            "item": "Sitrus Berry", 
+            "nature": "Brave",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  // Brawly Split
+            },
+            "moves": ["Work Up","Headbutt","Payback", "Low Sweep"]
+        }
+    },
+    "Masquerain": {
+        "Sailor Huey | Route 109": {  
+            "index": "0000000126",
+            "level": 28,
+            "ability": "Intimidate",
+            "item": "Lum Berry", 
+            "nature": "Mild",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Struggle Bug","Air Cutter","Bubblebeam", "Icy Wind"]
+        }
+    },
+    "Basculin-Blue-Striped": {
+        "Sailor Huey | Route 109": {  
+            "index": "0000000127",
+            "level": 28,
+            "ability": "Strong Jaw",
+            "item": "Mystic Water", 
+            "nature": "Brave",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Crunch","Aqua Jet","Ice Fang", "Take Down"]
+        }
+    },
+    "Pyukumuku": {
+        "Sailor Edmond | Route 109": {  
+            "index": "0000000128",
+            "level": 28,
+            "ability": "Innards Out",
+            "item": "Black Sludge", 
+            "nature": "Serious",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Toxic","Mirror Coat","Counter", "Soak"]
+        }
+    },
+    "Bellibolt": {
+        "Sailor Edmond | Route 109": {  
+            "index": "0000000129",
+            "level": 28,
+            "ability": "Electromorphosis",
+            "item": "Lum Berry", 
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Shock Wave","Muddy Water","Acid Spray", "Electroweb"]
+        }
+    },
+    "Primeape": {
+        "Tuber Grant | Route 109": {  
+            "index": "0000000130",
+            "level": 28,
+            "ability": "Vital Spirit",
+            "item": "Muscle Band", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Bulk Up","Knock Off","Drain Punch", "Headbutt"]
+        }
+    },
+    "Scyther": {
+        "Tuber Grant | Route 109": {  
+            "index": "0000000131",
+            "level": 28,
+            "ability": "Technician",
+            "item": "Focus Sash", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Dual Wingbeat","Bug Bite"]
+        }
+    },
+    "Watchog": {
+        "Tuber Ricky | Route 109": {  
+            "index": "0000000132",
+            "level": 28,
+            "ability": "Analytic",
+            "item": "Assault Vest", 
+            "nature": "Quiet",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Seed Bomb","Hyper Fang","Assurance"]
+        }
+    },
+    "Miltank": {
+        "Tuber Ricky | Route 109": {  
+            "index": "0000000133",
+            "level": 28,
+            "ability": "Scrappy",
+            "item": "Normal Gem", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Retaliate"]
+        }
+    },
+    "Morpeko": {
+        "Tuber Austina | Route 109": {  
+            "index": "0000000134",
+            "level": 29,
+            "ability": "Hunger Switch",
+            "item": "Life Orb", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Fake Out","Nuzzle","Aura Wheel", "Bullet Seed"]
+        },
+        "Cool Trainer Parker | Petalburg Gym": {  
+            "index": "0000000153",
+            "level": 30,
+            "ability": "Hunger Switch",
+            "item": "Life Orb", 
+            "nature": "Brave",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Fake Out","Knock Off","Aura Wheel","Volt Switch"]
+        }
+    },
+    "Togedemaru": {
+        "Tuber Austina | Route 109": {  
+            "index": "0000000135",
+            "level": 29,
+            "ability": "Iron Barbs",
+            "item": "Leftovers", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Fake Out","Zing Zap","Smart Strike", "Eerie Impulse"]
+        }
+    },
+    "Luxray": {
+        "Aqua Grunt 1 | Slateport Museum": {  
+            "index": "0000000136",
+            "level": 28,
+            "ability": "Guts",
+            "item": "Flame Orb", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Facade","Zippy Zap","Crunch", "Submission"]
+        }
+    },
+    "Seviper": {
+        "Aqua Grunt 1 | Slateport Museum": {  
+            "index": "0000000137",
+            "level": 28,
+            "ability": "Shed Skin",
+            "item": "Shuca Berry", 
+            "nature": "Hasty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Giga Drain","Flamethrower","Crunch", "Poison Fang"]
+        }
+    },
+    "Honchkrow": {
+        "Aqua Grunt 1 | Slateport Museum": {  
+            "index": "0000000138",
+            "level": 29,
+            "ability": "Super Luck",
+            "item": "Lum Berry", 
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31   
+            },
+            "moves": ["Roost","Dark Pulse","Air Slash", "Heat Wave"]
+        },
+        "Cool Trainer Gary | Petalburg Gym": {  
+            "index": "0000000146",
+            "level": 30,
+            "ability": "Prankster",
+            "item": "Eject Pack", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Tailwind","Heat Wave","Night Slash","Acrobatics"]
+        }
+    },
+    "Huntail": {
+        "Aqua Grunt 2 | Slateport Museum": {  
+            "index": "0000000141",
+            "level": 29,
+            "ability": "Adaptability",
+            "item": "Quick Claw", 
+            "nature": "Brave",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Assurance","Aqua Cutter","Psychic Fangs", "Revenge"]
+        }
+    },
+    "Greedent": {
+        "Cool Trainer Randall | Petalburg Gym": {  
+            "index": "0000000142",
+            "level": 30,
+            "ability": "Gluttony",
+            "item": "Liechi Berry", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Swords Dance","Slam","Facade", "High Horsepower"]
+        }
+    },
+    "Porygon2": {
+        "Cool Trainer Randall | Petalburg Gym": { 
+            "index": "0000000143",
+            "level": 30,
+            "ability": "Download",
+            "item": "Chople Berry", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Trick Room","Double-Edge","Pain Split"]
+        },
+        "Gym Leader Norman | Petalburg Gym": {  
+            "index": "0000000170",
+            "teraType": "Ghost",
+            "level": 37,
+            "ability": "Analytic",
+            "item": "Eviolite", 
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Helping Hand","Life Dew","Psychic Noise","Tri Attack"]
+        }
+    },
+    "Ditto": {
+        "Cool Trainer Randall | Petalburg Gym": {  
+            "index": "0000000144",
+            "level": 30,
+            "ability": "Imposter",
+            "item": "Room Service", 
+            "nature": "Serious",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Transform"]
+        }
+    },
+    "Drakloak": {
+        "Cool Trainer Randall | Petalburg Gym": {  
+            "index": "0000000145",
+            "level": 30,
+            "ability": "Cursed Body",
+            "item": "Room Service", 
+            "nature": "Docile",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Phantom Force","Dragon Pulse","Sucker Punch","Breaking Swipe"]
+        }
+    },
+    "Shiftry": {
+        "Cool Trainer Gary | Petalburg Gym": {  
+            "index": "0000000147",
+            "level": 30,
+            "ability": "Wind Rider",
+            "item": "Choice Band", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Petal Blizzard"]
+        }
+    },
+    "Bouffalant": {
+        "Cool Trainer Gary | Petalburg Gym": {  
+            "index": "0000000148",
+            "level": 30,
+            "ability": "Sap Sipper",
+            "item": "Chople Berry", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Head Smash","Zen Headbutt","Reversal","Brick Break"]
+        }
+    },
+    "Wyrdeer": {
+        "Cool Trainer Gary | Petalburg Gym": {  
+            "index": "0000000149",
+            "level": 30,
+            "ability": "Sap Sipper",
+            "item": "Lum Berry", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Hypnosis","Body Slam","Lunge","Psyshield Bash"]
+        }
+    },
+    "Dubwool": {
+        "Cool Trainer Parker | Petalburg Gym": {  
+            "index": "0000000150",
+            "level": 30,
+            "ability": "Fluffy",
+            "item": "Occa Berry", 
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Cotton Guard","Body Press","Body Slam","Zen Headbutt"]
+        }
+    },
+    "Flapple": {
+        "Cool Trainer Parker | Petalburg Gym": {  
+            "index": "0000000151",
+            "level": 30,
+            "ability": "Hustle",
+            "item": "Wide Lens", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Grav Apple","Trailblaze","Dual Wingbeat","Dragon Claw"]
+        }
+    },
+    "Clawitzer": {
+        "Cool Trainer Parker | Petalburg Gym": {  
+            "index": "0000000152",
+            "level": 30,
+            "ability": "Mega Launcher",
+            "item": "Lum Berry", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Aura Sphere","Water Pulse","Flash Cannon","Dark Pulse"]
+        }
+    },
+    "Indeedee-F": {
+        "Cool Trainer Alexia | Petalburg Gym": {  
+            "index": "0000000154",
+            "level": 30,
+            "ability": "Psychic Surge",
+            "item": "Terrain Extender", 
+            "nature": "Bashful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Hyper Voice","Psychic Noise","Light Screen","Reflect"]
+        }
+    },
+    "Gumshoos": {
+        "Cool Trainer Alexia | Petalburg Gym": {  
+            "index": "0000000155",
+            "level": 30,
+            "ability": "Adaptability",
+            "item": "Muscle Band", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Psychic Fangs","Body Slam","Facade"]
+        }
+    },
+    "Swoobat": { 
+        "Cool Trainer Alexia | Petalburg Gym": {  
+            "index": "0000000156",
+            "level": 30,
+            "ability": "Simple",
+            "item": "Focus Sash", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Calm Mind","Stored Power","Tailwind","Air Slash"]
+        }
+    },
+    "Mr. Mime": {
+        "Cool Trainer Alexia | Petalburg Gym": {  
+            "index": "0000000157",
+            "level": 30,
+            "ability": "Technician",
+            "item": "Zap Plate", 
+            "nature": "Bashful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Twin Beam","Draining Kiss","Incinerate","Charge Beam"]
+        }
+    },
+    "Tapu Fini": {
+        "Cool Trainer George | Petalburg Gym": {  
+            "index": "0000000158",
+            "level": 30,
+            "ability": "Misty Surge",
+            "item": "Mystic Water", 
+            "nature": "Lax",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Water Pulse","Draining Kiss","Chilling Water","Protect"]
+        }
+    },
+    "Scream Tail": {
+        "Cool Trainer George | Petalburg Gym": {  
+            "index": "0000000159",
+            "level": 30,
+            "ability": "Protosythesis",
+            "item": "Mystic Water", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Thunder Wave","Tearful Look","Play Rough","Sunny Day"]
+        }
+    },
+    "Pyroar": {
+        "Cool Trainer George | Petalburg Gym": {  
+            "index": "0000000160",
+            "level": 30,
+            "ability": "Intimidate",
+            "item": "Sitrus Berry", 
+            "nature": "Naive",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Work Up","Flame Burst","Hyper Voice","Solar Beam"]
+        }
+    },
+    "Banette": {
+        "Cool Trainer Jody | Petalburg Gym": {  
+            "index": "0000000161",
+            "level": 32,
+            "ability": "Prankster",
+            "item": "None", 
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Magic Room","Phantom Force","Pursuit","Knock Off"]
+        }
+    },
+    "Umbreon": {
+        "Cool Trainer Jody | Petalburg Gym": {  
+            "index": "0000000162",
+            "level": 32,
+            "ability": "Synchronize",
+            "item": "None", 
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Wish","Play Rough","Foul Play","Helping Hand"]
+        }
+    },
+    "Spinda": {
+        "Cool Trainer Jody | Petalburg Gym": {  
+            "index": "0000000163",
+            "level": 33,
+            "ability": "Own Tempo",
+            "item": "None", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Teeter Dance","Dizzy Punch","Drain Punch","Tickle"]
+        }
+    },
+    "Oranguru": {
+        "Cool Trainer Jody | Petalburg Gym": {  
+            "index": "0000000164",
+            "level": 33,
+            "ability": "Inner Focus",
+            "item": "None", 
+            "nature": "Calm",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Magic Room","Instruct","Hyper Voice","Psychic"]
+        }
+    },
+    "Sableye": {
+        "Cool Trainer Bereke | Petalburg Gym": {  
+            "index": "0000000165",
+            "level": 33,
+            "ability": "Prankster",
+            "item": "Covert Cloak", 
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Wonder Room","Poltergeist","Power-Up Punch","Knock Off"]
+        }
+    },
+    "Farfetch\u2019d": {
+        "Cool Trainer Bereke | Petalburg Gym": {  
+            "index": "0000000166",
+            "level": 33,
+            "ability": "Defiant",
+            "item": "Leek", 
+            "nature": "Quirky",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["First Impression","Heat Wave","Body Slam","Drill Peck"]
+        }
+    },
+    "Klefki": {
+        "Cool Trainer Bereke | Petalburg Gym": {  
+            "index": "0000000167",
+            "level": 34,
+            "ability": "Prankster",
+            "item": "Occa Berry", 
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Wonder Room","Dazzling Gleam","Flash Cannon","Reflect"]
+        }
+    },
+    "Audino": {
+        "Cool Trainer Bereke | Petalburg Gym": {  
+            "index": "0000000168",
+            "level": 34,
+            "ability": "Healer",
+            "item": "Leftovers", 
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Hyper Voice","Dazzling Gleam","Life Dew","Captivate"]
+        }
+    },
+    "Kangaskhan": {
+        "Gym Leader Norman | Petalburg Gym": {  
+            "index": "0000000169",
+            "teraType": "Fighting",
+            "level": 36,
+            "ability": "Early Bird",
+            "item": "Punching Glove", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Fake Out","Dizzy Punch","Fire Punch","Power-Up Punch"]
+        }
+    },
+    "Braviary-Hisui": {
+        "Gym Leader Norman | Petalburg Gym": {  
+            "index": "0000000171",
+            "teraType": "Flying",
+            "level": 36,
+            "ability": "Tinted Lens",
+            "item": "Life Orb", 
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Air Cutter","Esper Wing","U-turn","Heat Wave"]
+        }
+    },
+    "Obstagoon": {
+        "Gym Leader Norman | Petalburg Gym": {  
+            "index": "0000000172",
+            "teraType": "Fairy",
+            "level": 36,
+            "ability": "Guts",
+            "item": "Flame Orb", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Facade","Lash Out","Protect","Seed Bomb"]
+        }
+    },
+    "Bibarel": {
+        "Gym Leader Norman | Petalburg Gym": {  
+            "index": "0000000173",
+            "teraType": "Normal",
+            "level": 36,
+            "ability": "Simple",
+            "item": "Custap Berry", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Curse","Aqua Tail","Retaliate","Seed Bomb"]
+        }
+    },
+    "Annihilape": {
+        "Gym Leader Norman | Petalburg Gym": {  
+            "index": "0000000174",
+            "teraType": "Normal",
+            "level": 37,
+            "ability": "Vital Spirit",
+            "item": "Salac Berry", 
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  //Norman Split
+            },
+            "moves": ["Bulk Up","Drain Punch","Rage Fist","Facade"]
+        }
+    },
+    "Goodra-Hisui": {
+        "Battle Tycoon Carlita | Route 103": {  
+            "index": "0000000175",
+            "level": 42,
+            "ability": "Gooey",
+            "item": "Clear Amulet", 
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Shelter","Body Press","Heavy Slam","Dragon Claw"]
+        }
+    },
+    "Farigiraf": {
+        "Battle Tycoon Carlita | Route 103": {  
+            "index": "0000000176",
+            "level": 42,
+            "ability": "Armor Tail",
+            "item": "Covert Cloak", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Calm Mind","Twin Beam","Hyper Voice","Energy Ball"]
+        }
+    },
+    "Leavanny": {
+        "Battle Tycoon Carlita | Route 103": {  
+            "index": "0000000177",
+            "level": 42,
+            "ability": "Skill Link",
+            "item": "Focus Sash", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Victory Dance","Bullet Seed","Pin Missile","Axe Kick"]
+        }
+    },
+    "Seismitoad": {
+        "Battle Tycoon Carlita | Route 103": {  
+            "index": "0000000178",
+            "level": 42,
+            "ability": "Water Absorb",
+            "item": "Rindo Berry", 
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Endeavor","Power Whip","Earth Power","Scald"]
+        }
+    },
+    "Cinderace": {
+        "Battle Tycoon Carlita | Route 103": {  
+            "index": "0000000179",
+            "level": 42,
+            "ability": "Reckless",
+            "item": "Air Balloon", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Flare Blitz","U-turn","Wild Charge","High Jump Kick"]
+        }
+    }
+}
