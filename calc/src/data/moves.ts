@@ -55,29 +55,29 @@ const RBY: {[name: string]: MoveData} = {
   Bite: {bp: 60, type: 'Normal'},
   Blizzard: {bp: 120, type: 'Ice'},
   Bonemerang: {bp: 50, type: 'Ground', multihit: 2},
-  Bubble: {bp: 20, type: 'Water'},
+  Bubble: {bp: 40, type: 'Water'}, //changed
   'Bubble Beam': {bp: 65, type: 'Water'},
   Clamp: {bp: 40, type: 'Water'},
-  'Comet Punch': {bp: 18, type: 'Normal', multihit: [2, 5]},
+  'Comet Punch': {bp: 20, type: 'Normal', multihit: [2, 5]}, //changed
   Constrict: {bp: 10, type: 'Normal'},
   Conversion: {bp: 0, category: 'Status', type: 'Normal'},
   Counter: {bp: 1, type: 'Fighting'},
-  Crabhammer: {bp: 90, type: 'Water'},
+  Crabhammer: {bp: 100, type: 'Water'}, //changed
   'Defense Curl': {bp: 0, category: 'Status', type: 'Normal'},
-  Dig: {bp: 100, type: 'Ground'},
+  Dig: {bp: 80, type: 'Ground'}, //changed
   Disable: {bp: 0, category: 'Status', type: 'Normal'},
   'Dizzy Punch': {bp: 70, type: 'Normal'},
-  'Double-Edge': {bp: 100, type: 'Normal', recoil: [25, 100]},
+  'Double-Edge': {bp: 100, type: 'Normal', recoil: [25, 100]}, //changed
   'Double Kick': {bp: 30, type: 'Fighting', multihit: 2},
   'Double Slap': {bp: 15, type: 'Normal', multihit: [2, 5]},
   'Dragon Rage': {bp: 1, type: 'Dragon'},
   'Dream Eater': {bp: 100, type: 'Psychic', drain: [1, 2]},
   Earthquake: {bp: 100, type: 'Ground'},
-  Explosion: {bp: 170, type: 'Normal'},
-  'Fire Blast': {bp: 120, type: 'Fire'},
-  'Fire Spin': {bp: 15, type: 'Fire'},
+  Explosion: {bp: 250, type: 'Normal'}, //changed
+  'Fire Blast': {bp: 110, type: 'Fire'}, //changed
+  'Fire Spin': {bp: 45, type: 'Fire'}, //changed
   Fissure: {bp: 0, type: 'Ground'},
-  Fly: {bp: 70, type: 'Flying'},
+  Fly: {bp: 95, type: 'Flying'}, //changed
   'Focus Energy': {bp: 0, category: 'Status', type: 'Normal'},
   'Fury Attack': {bp: 15, type: 'Normal', multihit: [2, 5]},
   'Fury Swipes': {bp: 18, type: 'Normal', multihit: [2, 5]},
@@ -86,10 +86,10 @@ const RBY: {[name: string]: MoveData} = {
   Guillotine: {bp: 0, type: 'Normal'},
   Gust: {bp: 40, type: 'Normal'},
   Haze: {bp: 0, category: 'Status', type: 'Ice'},
-  'High Jump Kick': {bp: 85, type: 'Fighting', hasCrashDamage: true},
+  'High Jump Kick': {bp: 130, type: 'Fighting', hasCrashDamage: true}, //changed
   'Horn Drill': {bp: 0, type: 'Normal'},
-  'Hyper Beam': {bp: 150, type: 'Normal'},
-  'Jump Kick': {bp: 70, type: 'Fighting', hasCrashDamage: true},
+  'Hyper Beam': {bp: 140, type: 'Normal'}, //changed
+  'Jump Kick': {bp: 100, type: 'Fighting', hasCrashDamage: true}, //changed
   'Karate Chop': {bp: 50, type: 'Normal'},
   'Leech Seed': {bp: 0, category: 'Status', type: 'Grass'},
   'Light Screen': {bp: 0, category: 'Status', type: 'Psychic'},
@@ -99,14 +99,14 @@ const RBY: {[name: string]: MoveData} = {
   'Mirror Move': {bp: 0, category: 'Status', type: 'Flying'},
   Mist: {bp: 0, category: 'Status', type: 'Ice'},
   'Night Shade': {bp: 1, type: 'Ghost'},
-  'Petal Dance': {bp: 70, type: 'Grass'},
-  'Pin Missile': {bp: 14, type: 'Bug', multihit: [2, 5]},
-  'Poison Sting': {bp: 45, type: 'Poison'},
+  'Petal Dance': {bp: 120, type: 'Grass'}, //changed
+  'Pin Missile': {bp: 25, type: 'Bug', multihit: [2, 5]}, //changed
+  'Poison Sting': {bp: 30, type: 'Poison'}, //changed
   Psychic: {bp: 90, type: 'Psychic'},
   Psywave: {bp: 1, type: 'Psychic'},
   Rage: {bp: 20, type: 'Normal'},
-  'Razor Leaf': {bp: 55, type: 'Grass'},
-  'Razor Wind': {bp: 65, type: 'Flying'},
+  'Razor Leaf': {bp: 65, type: 'Grass'}, //changed
+  'Razor Wind': {bp: 80, type: 'Normal'}, //changed
   Recover: {bp: 0, category: 'Status', type: 'Normal'},
   Reflect: {bp: 0, category: 'Status', type: 'Psychic'},
   Rest: {bp: 0, category: 'Status', type: 'Psychic'},
@@ -115,14 +115,14 @@ const RBY: {[name: string]: MoveData} = {
   'Rock Throw': {bp: 50, type: 'Rock'},
   'Sand Attack': {bp: 0, category: 'Status', type: 'Normal'},
   'Seismic Toss': {bp: 1, type: 'Fighting'},
-  'Self-Destruct': {bp: 130, type: 'Normal'},
+  'Self-Destruct': {bp: 200, type: 'Normal'}, //changed
   'Skull Bash': {bp: 100, type: 'Normal'},
   Slash: {bp: 70, type: 'Normal'},
   Sludge: {bp: 65, type: 'Poison'},
   'Soft-Boiled': {bp: 0, category: 'Status', type: 'Normal'},
   'Solar Beam': {bp: 120, type: 'Grass'},
   'Sonic Boom': {bp: 1, type: 'Normal'},
-  'Spike Cannon': {bp: 25, type: 'Water', multihit: [2, 5]},
+  'Spike Cannon': {bp: 25, type: 'Poison', multihit: [2, 5]}, //changed
   Stomp: {bp: 65, type: 'Normal'},
   Struggle: {bp: 50, type: 'Normal', recoil: [1, 2]},
   'Stun Spore': {bp: 0, category: 'Status', type: 'Grass'},
@@ -131,50 +131,50 @@ const RBY: {[name: string]: MoveData} = {
   'Super Fang': {bp: 1, type: 'Normal'},
   Swift: {bp: 60, type: 'Normal'},
   'Take Down': {bp: 90, type: 'Normal', recoil: [1, 4]},
-  Thrash: {bp: 90, type: 'Normal'},
+  Thrash: {bp: 120, type: 'Normal'}, //changed
   Thunder: {bp: 120, type: 'Electric'},
   'Thunder Wave': {bp: 0, category: 'Status', type: 'Electric'},
   Transform: {bp: 0, category: 'Status', type: 'Normal'},
   'Tri Attack': {bp: 80, type: 'Normal'},
   Twineedle: {bp: 25, type: 'Bug', multihit: 2},
   Whirlwind: {bp: 0, category: 'Status', type: 'Normal'},
-  'Wing Attack': {bp: 35, type: 'Flying'},
-  Wrap: {bp: 50, type: 'Normal'},
+  'Wing Attack': {bp: 60, type: 'Flying'}, //changed
+  Wrap: {bp: 50, type: 'Normal'}, 
   Growl: {bp: 0, category: 'Status', type: 'Normal'},
   Leer: {bp: 0, category: 'Status', type: 'Normal'},
-  'Low Kick': {bp: 50, type: 'Fighting'},
+  'Low Kick': {bp: 0, type: 'Fighting'}, //changed
   'Poison Gas': {bp: 0, category: 'Status', type: 'Poison'},
   'Poison Powder': {bp: 0, category: 'Status', type: 'Poison'},
-  'Sky Attack': {bp: 140, type: 'Flying', hasCrashDamage: true},
+  'Sky Attack': {bp: 140, type: 'Flying'},
   'String Shot': {bp: 0, category: 'Status', type: 'Bug'},
-  Surf: {bp: 95, type: 'Water'},
+  Surf: {bp: 90, type: 'Water'}, //changed
   'Tail Whip': {bp: 0, category: 'Status', type: 'Normal'},
   Toxic: {bp: 0, category: 'Status', type: 'Poison'},
-  Flash: {bp: 0, category: 'Status', type: 'Normal'},
+  Flash: {bp: 0, category: 'Status', type: 'Electric'},
   Hypnosis: {bp: 0, category: 'Status', type: 'Psychic'},
-  'Leech Life': {bp: 20, type: 'Bug', drain: [1, 2]},
-  'Mega Drain': {bp: 60, type: 'Grass', drain: [1, 2]},
-  'Vine Whip': {bp: 35, type: 'Grass'},
+  'Leech Life': {bp: 80, type: 'Bug', drain: [1, 2]}, //changed
+  'Mega Drain': {bp: 60, type: 'Grass', drain: [1, 2]}, //changed
+  'Vine Whip': {bp: 45, type: 'Grass'}, //changed
   Waterfall: {bp: 80, type: 'Water'},
-  Tackle: {bp: 50, type: 'Normal'},
+  Tackle: {bp: 40, type: 'Normal'}, //changed
   'Acid Armor': {bp: 0, category: 'Status', type: 'Poison'},
   Barrier: {bp: 0, category: 'Status', type: 'Psychic'},
   'Body Slam': {bp: 85, type: 'Normal'},
-  Flamethrower: {bp: 95, type: 'Fire'},
-  'Hydro Pump': {bp: 120, type: 'Water'},
-  'Ice Beam': {bp: 95, type: 'Ice'},
-  Lick: {bp: 20, type: 'Ghost'},
+  Flamethrower: {bp: 90, type: 'Fire'}, //changed
+  'Hydro Pump': {bp: 110, type: 'Water'}, //changed
+  'Ice Beam': {bp: 90, type: 'Ice'}, //changed
+  Lick: {bp: 30, type: 'Ghost'}, //changed
   Screech: {bp: 0, category: 'Status', type: 'Normal'},
   Sing: {bp: 0, category: 'Status', type: 'Normal'},
   'Sleep Powder': {bp: 0, category: 'Status', type: 'Grass'},
-  Smog: {bp: 20, type: 'Poison'},
+  Smog: {bp: 30, type: 'Poison'}, //changed
   Spore: {bp: 0, category: 'Status', type: 'Grass'},
   Supersonic: {bp: 0, category: 'Status', type: 'Normal'},
   'Swords Dance': {bp: 0, category: 'Status', type: 'Normal'},
-  Thunderbolt: {bp: 95, type: 'Electric'},
+  Thunderbolt: {bp: 90, type: 'Electric'},  //changed
   'Bone Club': {bp: 65, type: 'Ground'},
   'Egg Bomb': {bp: 100, type: 'Normal'},
-  'Hyper Fang': {bp: 100, type: 'Normal'},
+  'Hyper Fang': {bp: 80, type: 'Normal'}, //changed
   Kinesis: {bp: 0, category: 'Status', type: 'Psychic'},
   'Lovely Kiss': {bp: 0, category: 'Status', type: 'Normal'},
   Meditate: {bp: 0, category: 'Status', type: 'Psychic'},
@@ -184,7 +184,7 @@ const RBY: {[name: string]: MoveData} = {
   Agility: {bp: 0, category: 'Status', type: 'Psychic'},
   'Confuse Ray': {bp: 0, category: 'Status', type: 'Ghost'},
   Confusion: {bp: 50, type: 'Psychic'},
-  Cut: {bp: 50, type: 'Steel'},
+  Cut: {bp: 60, type: 'Grass'}, //changed
   'Double Team': {bp: 0, category: 'Status', type: 'Normal'},
   'Drill Peck': {bp: 80, type: 'Flying'},
   Ember: {bp: 40, type: 'Fire'},
@@ -195,18 +195,16 @@ const RBY: {[name: string]: MoveData} = {
   'Ice Punch': {bp: 75, type: 'Ice'},
   'Mega Kick': {bp: 120, type: 'Normal'},
   'Mega Punch': {bp: 80, type: 'Normal'},
-  'Paleo Wave': {bp: 85, type: 'Rock'},
   'Pay Day': {bp: 40, type: 'Normal'},
-  Peck: {bp: 35, type: 'Flying'},
+  Peck: {bp: 40, type: 'Flying'}, //changed
   Pound: {bp: 40, type: 'Normal'},
   Psybeam: {bp: 65, type: 'Psychic'},
   'Quick Attack': {bp: 40, type: 'Normal', priority: 1},
   Scratch: {bp: 40, type: 'Normal'},
-  'Shadow Strike': {bp: 80, type: 'Ghost'},
-  Slam: {bp: 80, type: 'Normal'},
+  Slam: {bp: 75, type: 'Normal'}, //changed
   Smokescreen: {bp: 0, category: 'Status', type: 'Normal'},
   Splash: {bp: 0, category: 'Status', type: 'Normal'},
-  Strength: {bp: 80, type: 'Normal'},
+  Strength: {bp: 80, type: 'Fighting'}, //changed
   'Thunder Punch': {bp: 75, type: 'Electric'},
   'Thunder Shock': {bp: 40, type: 'Electric'},
   'Vise Grip': {bp: 55, type: 'Normal'},
@@ -217,8 +215,8 @@ const RBY: {[name: string]: MoveData} = {
 const GSC_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   Bide: {type: 'Normal'},
   Counter: {bp: 0},
-  Dig: {bp: 60},
-  'Double-Edge': {bp: 120},
+  Dig: {bp: 80}, //changed
+  'Double-Edge': {bp: 120}, //changed
   Explosion: {bp: 250},
   Gust: {type: 'Flying'},
   'Karate Chop': {type: 'Fighting'},
@@ -246,16 +244,16 @@ const GSC_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   Endure: {bp: 0, category: 'Status', type: 'Normal', priority: 2},
   Flail: {bp: 0, type: 'Normal'},
   Foresight: {bp: 0, category: 'Status', type: 'Normal'},
-  'Future Sight': {bp: 80, type: 'Psychic'},
+  'Future Sight': {bp: 120, type: 'Psychic'}, //changed
   'Heal Bell': {bp: 0, category: 'Status', type: 'Normal'},
   'Icy Wind': {bp: 55, type: 'Ice'},
   'Lock-On': {bp: 0, category: 'Status', type: 'Normal'},
   'Mind Reader': {bp: 0, category: 'Status', type: 'Normal'},
   'Mirror Coat': {bp: 0, type: 'Psychic'},
-  Moonlight: {bp: 0, category: 'Status', type: 'Normal'},
-  'Morning Sun': {bp: 0, category: 'Status', type: 'Normal'},
+  Moonlight: {bp: 0, category: 'Status', type: 'Fairy'}, //changed
+  'Morning Sun': {bp: 0, category: 'Status', type: 'Fire'}, //changed
   Nightmare: {bp: 0, category: 'Status', type: 'Ghost'},
-  Outrage: {bp: 90, type: 'Dragon'},
+  Outrage: {bp: 120, type: 'Dragon'}, //changed
   'Powder Snow': {bp: 40, type: 'Ice'},
   Present: {bp: 0, type: 'Normal'},
   Protect: {bp: 0, category: 'Status', type: 'Normal', priority: 2},
@@ -274,27 +272,27 @@ const GSC_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Sweet Scent': {bp: 0, category: 'Status', type: 'Normal'},
   Synthesis: {bp: 0, category: 'Status', type: 'Grass'},
   Thief: {bp: 40, type: 'Dark'},
-  'Triple Kick': {bp: 15, type: 'Fighting', multihit: [1, 3]},
-  Twister: {bp: 70, type: 'Dragon'},
+  'Triple Kick': {bp: 10, type: 'Fighting', multihit: [1, 3]}, //changed
+  Twister: {bp: 40, type: 'Dragon'},//changed
   'Ancient Power': {bp: 60, type: 'Rock'},
   'Bone Rush': {bp: 25, type: 'Ground', multihit: [2, 5]},
   Crunch: {bp: 80, type: 'Dark'},
   'Feint Attack': {bp: 60, type: 'Dark'},
-  'Giga Drain': {bp: 60, type: 'Grass', drain: [1, 2]},
+  'Giga Drain': {bp: 75, type: 'Grass', drain: [1, 2]}, //changed
   'Hidden Power': {bp: 0, type: 'Normal'},
   'Mean Look': {bp: 0, category: 'Status', type: 'Normal'},
-  'Rapid Spin': {bp: 20, type: 'Normal'},
-  'Rock Smash': {bp: 20, type: 'Fighting'},
+  'Rapid Spin': {bp: 50, type: 'Normal'}, //changed
+  'Rock Smash': {bp: 65, type: 'Fighting'}, //changed
   'Spider Web': {bp: 0, category: 'Status', type: 'Bug'},
-  Whirlpool: {bp: 15, type: 'Water'},
-  'Zap Cannon': {bp: 100, type: 'Electric'},
+  Whirlpool: {bp: 35, type: 'Water'}, //changed
+  'Zap Cannon': {bp: 120, type: 'Electric'},//changed
   'Cotton Spore': {bp: 0, category: 'Status', type: 'Grass'},
   'Extreme Speed': {bp: 80, type: 'Normal', priority: 1},
-  'Fury Cutter': {bp: 10, type: 'Bug'},
+  'Fury Cutter': {bp: 40, type: 'Bug'}, //changed
   Magnitude: {bp: 0, type: 'Ground'},
   'Milk Drink': {bp: 0, category: 'Status', type: 'Normal'},
   'Scary Face': {bp: 0, category: 'Status', type: 'Normal'},
-  Charm: {bp: 0, category: 'Status', type: 'Normal'},
+  Charm: {bp: 0, category: 'Status', type: 'Fairy'}, //changed
   'Hidden Power Bug': {bp: 70, type: 'Bug'},
   'Hidden Power Dark': {bp: 70, type: 'Dark'},
   'Hidden Power Dragon': {bp: 70, type: 'Dragon'},
@@ -312,7 +310,7 @@ const GSC_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Hidden Power Steel': {bp: 70, type: 'Steel'},
   'Hidden Power Water': {bp: 70, type: 'Water'},
   'Perish Song': {bp: 0, category: 'Status', type: 'Normal'},
-  Snore: {bp: 40, type: 'Normal'},
+  Snore: {bp: 50, type: 'Normal'}, //changed
   'Sweet Kiss': {bp: 0, category: 'Status', type: 'Normal'},
   Rollout: {bp: 30, type: 'Rock'},
   Frustration: {bp: 0, type: 'Normal'},
@@ -322,12 +320,12 @@ const GSC_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Dragon Breath': {bp: 60, type: 'Dragon'},
   'Dynamic Punch': {bp: 100, type: 'Fighting'},
   'False Swipe': {bp: 40, type: 'Normal'},
-  'Flame Wheel': {bp: 60, type: 'Fire'},
+  'Flame Wheel': {bp: 50, type: 'Fire'},
   'Iron Tail': {bp: 100, type: 'Steel'},
   'Mach Punch': {bp: 40, type: 'Fighting', priority: 1},
   Megahorn: {bp: 120, type: 'Bug'},
-  'Metal Claw': {bp: 60, type: 'Steel'},
-  'Mud-Slap': {bp: 20, type: 'Ground'},
+  'Metal Claw': {bp: 55, type: 'Steel'}, //changed
+  'Mud-Slap': {bp: 35, type: 'Ground'}, //changed
   Octazooka: {bp: 80, type: 'Water'},
   'Pain Split': {bp: 0, category: 'Status', type: 'Normal'},
   'Shadow Ball': {bp: 80, type: 'Ghost'},
@@ -443,7 +441,6 @@ const ADV_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Rock Slide': {target: 'allAdjacentFoes'},
   Scratch: {makesContact: true},
   'Seismic Toss': {makesContact: true},
-  'Shadow Strike': {makesContact: true},
   Slam: {makesContact: true},
   Slash: {makesContact: true},
   Spark: {makesContact: true},
@@ -469,29 +466,29 @@ const ADV_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Bullet Seed': {bp: 10, type: 'Grass', multihit: [2, 5]},
   Camouflage: {bp: 0, category: 'Status', type: 'Normal'},
   Charge: {bp: 0, category: 'Status', type: 'Electric'},
-  Covet: {bp: 40, type: 'Fairy'},
-  Dive: {bp: 60, type: 'Water', makesContact: true},
-  'Doom Desire': {bp: 120, type: 'Steel'},
+  Covet: {bp: 60, type: 'Fairy'}, //changed
+  Dive: {bp: 80, type: 'Water', makesContact: true}, //changed
+  'Doom Desire': {bp: 140, type: 'Steel'}, //changed
   Extrasensory: {bp: 80, type: 'Psychic'},
   'Fake Out': {bp: 40, type: 'Normal', priority: 1},
   'Follow Me': {bp: 0, category: 'Status', type: 'Normal', priority: 3},
   Hail: {bp: 0, category: 'Status', type: 'Ice'},
-  'Icicle Spear': {bp: 10, type: 'Ice', multihit: [2, 5]},
+  'Icicle Spear': {bp: 25, type: 'Ice', multihit: [2, 5]}, //changed
   Ingrain: {bp: 0, category: 'Status', type: 'Grass'},
-  'Knock Off': {bp: 20, type: 'Dark', makesContact: true},
-  'Leaf Blade': {bp: 70, type: 'Grass', makesContact: true},
+  'Knock Off': {bp: 65, type: 'Dark', makesContact: true}, //changed
+  'Leaf Blade': {bp: 90, type: 'Grass', makesContact: true},
   'Magic Coat': {bp: 0, category: 'Status', type: 'Psychic', priority: 4},
   Memento: {bp: 0, category: 'Status', type: 'Dark'},
   'Nature Power': {bp: 0, category: 'Status', type: 'Normal'},
-  'Needle Arm': {bp: 60, type: 'Grass', makesContact: true},
+  'Needle Arm': {bp: 70, type: 'Grass', makesContact: true}, //changed
   'Odor Sleuth': {bp: 0, category: 'Status', type: 'Normal'},
-  Overheat: {bp: 140, type: 'Fire', self: {boosts: {spa: -2}}, makesContact: true},
+  Overheat: {bp: 130, type: 'Fire', self: {boosts: {spa: -2}}, makesContact: true}, //changed
   Revenge: {bp: 60, type: 'Fighting', makesContact: true},
   'Rock Blast': {bp: 25, type: 'Rock', multihit: [2, 5]},
   'Role Play': {bp: 0, category: 'Status', type: 'Psychic'},
-  'Sand Tomb': {bp: 15, type: 'Ground'},
+  'Sand Tomb': {bp: 40, type: 'Ground'}, //changed
   'Skill Swap': {bp: 0, category: 'Status', type: 'Psychic'},
-  'Smelling Salts': {bp: 60, type: 'Normal', makesContact: true},
+  'Smelling Salts': {bp: 70, type: 'Normal', makesContact: true}, //changed
   'Spit Up': {bp: 0, type: 'Normal'},
   Stockpile: {bp: 0, category: 'Status', type: 'Normal'},
   Swallow: {bp: 0, category: 'Status', type: 'Normal'},
@@ -499,7 +496,7 @@ const ADV_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Teeter Dance': {bp: 0, category: 'Status', type: 'Normal', target: 'allAdjacent'},
   Tickle: {bp: 0, category: 'Status', type: 'Normal'},
   Trick: {bp: 0, category: 'Status', type: 'Psychic'},
-  Uproar: {bp: 50, type: 'Normal', isSound: true},
+  Uproar: {bp: 95, type: 'Normal', isSound: true}, //changed
   'Volt Tackle': {bp: 120, type: 'Electric', recoil: [1, 3], makesContact: true},
   'Weather Ball': {bp: 50, type: 'Normal'},
   Aromatherapy: {bp: 0, category: 'Status', type: 'Grass'},
@@ -517,22 +514,22 @@ const ADV_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   Torment: {bp: 0, category: 'Status', type: 'Dark'},
   'Water Sport': {bp: 0, category: 'Status', type: 'Water'},
   Wish: {bp: 0, category: 'Status', type: 'Normal'},
-  'Air Cutter': {bp: 55, type: 'Flying', target: 'allAdjacentFoes'},
+  'Air Cutter': {bp: 60, type: 'Flying', target: 'allAdjacentFoes'}, //changed
   Facade: {bp: 70, type: 'Normal', makesContact: true},
   'Grass Whistle': {bp: 0, category: 'Status', type: 'Grass', isSound: true},
   'Heat Wave': {bp: 100, type: 'Fire', target: 'allAdjacentFoes'},
   'Hyper Voice': {bp: 90, type: 'Normal', isSound: true, target: 'allAdjacentFoes'},
   'Metal Sound': {bp: 0, category: 'Status', type: 'Steel', isSound: true},
-  'Meteor Mash': {bp: 100, type: 'Steel', makesContact: true},
-  'Muddy Water': {bp: 95, type: 'Water', target: 'allAdjacentFoes'},
-  'Poison Fang': {bp: 75, type: 'Poison', makesContact: true},
-  'Rock Tomb': {bp: 50, type: 'Rock'},
+  'Meteor Mash': {bp: 90, type: 'Steel', makesContact: true}, //changed
+  'Muddy Water': {bp: 90, type: 'Water', target: 'allAdjacentFoes'}, //changed
+  'Poison Fang': {bp: 65, type: 'Poison', makesContact: true}, //changed
+  'Rock Tomb': {bp: 60, type: 'Rock'}, //changed
   'Will-O-Wisp': {bp: 0, category: 'Status', type: 'Fire'},
   'Ice Ball': {bp: 30, type: 'Ice', makesContact: true},
   'Sheer Cold': {bp: 0, type: 'Ice'},
   Howl: {bp: 0, category: 'Status', type: 'Normal'},
-  'Luster Purge': {bp: 70, type: 'Psychic'},
-  'Mist Ball': {bp: 70, type: 'Psychic'},
+  'Luster Purge': {bp: 95, type: 'Psychic'},
+  'Mist Ball': {bp: 95, type: 'Psychic'}, //changed
   'Psycho Boost': {bp: 140, type: 'Psychic', self: {boosts: {spa: -2}}},
   Refresh: {bp: 0, category: 'Status', type: 'Normal'},
   'Signal Beam': {bp: 75, type: 'Bug'},
@@ -543,7 +540,7 @@ const ADV_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Bulk Up': {bp: 0, category: 'Status', type: 'Fighting'},
   'Calm Mind': {bp: 0, category: 'Status', type: 'Psychic'},
   'Cosmic Power': {bp: 0, category: 'Status', type: 'Psychic'},
-  'Crush Claw': {bp: 100, type: 'Normal', makesContact: true},
+  'Crush Claw': {bp: 75, type: 'Normal', makesContact: true},
   'Dragon Claw': {bp: 80, type: 'Dragon', makesContact: true},
   'Dragon Dance': {bp: 0, category: 'Status', type: 'Dragon'},
   Eruption: {bp: 150, type: 'Fire', target: 'allAdjacentFoes'},
@@ -557,11 +554,11 @@ const ADV_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Iron Defense': {bp: 0, category: 'Status', type: 'Steel'},
   'Magical Leaf': {bp: 60, type: 'Grass'},
   'Mud Shot': {bp: 55, type: 'Ground'},
-  'Poison Tail': {bp: 100, type: 'Poison', makesContact: true},
+  'Poison Tail': {bp: 50, type: 'Poison', makesContact: true},
   'Shadow Punch': {bp: 60, type: 'Ghost', makesContact: true},
   'Shock Wave': {bp: 60, type: 'Electric'},
   Superpower: {bp: 120, type: 'Fighting', self: {boosts: {atk: -1, def: -1}}, makesContact: true},
-  'Water Pulse': {bp: 60, type: 'Water'},
+  'Water Pulse': {bp: 65, type: 'Water'},
   'Water Spout': {bp: 150, type: 'Water', target: 'allAdjacentFoes'},
   Yawn: {bp: 0, category: 'Status', type: 'Normal'},
 };
@@ -599,7 +596,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Fake Out': {makesContact: true, category: 'Physical'},
   'Fire Spin': {category: 'Special'},
   Flail: {category: 'Physical'},
-  Fly: {bp: 90, category: 'Physical'},
+  Fly: {bp: 95, category: 'Physical'}, //changed
   'Focus Punch': {isPunch: true, category: 'Physical'},
   'Fury Attack': {category: 'Physical'},
   'Fury Cutter': {category: 'Physical'},
@@ -607,16 +604,16 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Future Sight': {category: 'Special'},
   'Giga Drain': {category: 'Special'},
   Gust: {category: 'Special'},
-  'High Jump Kick': {bp: 100, category: 'Physical'},
+  'High Jump Kick': {bp: 130, category: 'Physical'},
   'Icicle Spear': {category: 'Physical'},
-  'Jump Kick': {bp: 85, category: 'Physical'},
+  'Jump Kick': {bp: 100, category: 'Physical'},
   'Knock Off': {category: 'Physical'},
   'Leech Life': {category: 'Physical'},
   Magnitude: {category: 'Physical'},
   'Mega Drain': {category: 'Special'},
   'Mirror Coat': {category: 'Special'},
   Outrage: {bp: 120, category: 'Physical'},
-  'Petal Dance': {bp: 90, category: 'Special'},
+  'Petal Dance': {bp: 120, category: 'Special'},
   'Pin Missile': {category: 'Physical'},
   Psywave: {category: 'Special'},
   Pursuit: {category: 'Physical'},
@@ -645,7 +642,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Triple Kick': {category: 'Physical'},
   Twineedle: {category: 'Physical'},
   Twister: {category: 'Special'},
-  Uproar: {category: 'Special'},
+  Uproar: {category: 'Physical'},
   'Volt Tackle': {category: 'Physical'},
   Whirlpool: {category: 'Special'},
   Wrap: {category: 'Physical'},
@@ -760,7 +757,6 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Mud-Slap': {category: 'Special'},
   'Night Shade': {category: 'Special'},
   Octazooka: {category: 'Special'},
-  'Paleo Wave': {category: 'Special'},
   'Pay Day': {category: 'Physical'},
   Peck: {category: 'Physical'},
   'Poison Sting': {category: 'Physical'},
@@ -773,13 +769,12 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Quick Attack': {category: 'Physical'},
   'Razor Leaf': {category: 'Physical'},
   'Rock Slide': {category: 'Physical'},
-  'Rock Smash': {bp: 40, category: 'Physical'},
+  'Rock Smash': {bp: 65, category: 'Physical'},
   'Rock Throw': {category: 'Physical'},
   Scratch: {category: 'Physical'},
   'Seismic Toss': {category: 'Physical'},
   'Shadow Ball': {category: 'Special'},
   'Shadow Punch': {isPunch: true, category: 'Physical'},
-  'Shadow Strike': {category: 'Physical'},
   'Shock Wave': {category: 'Special'},
   'Sky Attack': {category: 'Physical'},
   Slam: {category: 'Physical'},
@@ -806,7 +801,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   Acupressure: {bp: 0, type: 'Normal'},
   'Aqua Ring': {bp: 0, type: 'Water'},
   Assurance: {
-    bp: 50,
+    bp: 60,
     type: 'Dark',
     makesContact: true,
     category: 'Physical',
@@ -825,7 +820,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     category: 'Physical',
   },
   'Bug Bite': {
-    bp: 65,
+    bp: 60,
     type: 'Bug',
     makesContact: true,
     category: 'Physical',
@@ -840,14 +835,14 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   },
   Defog: {bp: 0, type: 'Flying'},
   'Double Hit': {
-    bp: 40,
+    bp: 35,
     type: 'Normal',
     multihit: 2,
     makesContact: true,
     category: 'Physical',
   },
   'Drain Punch': {
-    bp: 60,
+    bp: 75,
     type: 'Fighting',
     drain: [1, 2],
     makesContact: true,
@@ -863,7 +858,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     category: 'Physical',
   },
   'Fire Fang': {
-    bp: 75,
+    bp: 65,
     type: 'Fire',
     makesContact: true,
     isBite: true,
@@ -889,14 +884,14 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Healing Wish': {bp: 0, type: 'Psychic'},
   'Heal Order': {bp: 0, type: 'Bug'},
   'Last Resort': {
-    bp: 130,
+    bp: 140,
     type: 'Normal',
     makesContact: true,
     category: 'Physical',
   },
   'Lucky Chant': {bp: 0, type: 'Normal'},
   'Lunar Dance': {bp: 0, type: 'Psychic'},
-  'Magma Storm': {bp: 120, type: 'Fire', category: 'Special'},
+  'Magma Storm': {bp: 100, type: 'Fire', category: 'Special'},
   'Magnet Rise': {bp: 0, type: 'Electric'},
   'Me First': {bp: 0, type: 'Normal'},
   'Metal Burst': {bp: 0, type: 'Steel', category: 'Physical'},
@@ -918,7 +913,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   Roost: {bp: 0, type: 'Flying'},
   'Stealth Rock': {bp: 0, type: 'Rock'},
   'Sucker Punch': {
-    bp: 80,
+    bp: 75,
     type: 'Dark',
     priority: 1,
     makesContact: true,
@@ -935,7 +930,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     category: 'Physical',
   },
   'Wake-Up Slap': {
-    bp: 60,
+    bp: 70,
     type: 'Fighting',
     makesContact: true,
     category: 'Physical',
@@ -955,17 +950,18 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     category: 'Special',
   },
   'Air Slash': {bp: 75, type: 'Flying', category: 'Special'},
-  'Aura Sphere': {bp: 90, type: 'Fighting', category: 'Special'},
+  'Aura Sphere': {bp: 80, type: 'Fighting', category: 'Special'},
   'Bug Buzz': {bp: 90, type: 'Bug', isSound: true, category: 'Special'},
-  'Draco Meteor': {bp: 140, type: 'Dragon', self: {boosts: {spa: -2}}, category: 'Special'},
-  'Dragon Pulse': {bp: 90, type: 'Dragon', category: 'Special'},
+  'Draco Meteor': {bp: 130, type: 'Dragon', self: {boosts: {spa: -2}}, category: 'Special'},
+  'Dragon Pulse': {bp: 85, type: 'Dragon', category: 'Special'},
   'Dragon Rush': {
     bp: 100,
     type: 'Dragon',
     makesContact: true,
+    hasCrashDamage: true,
     category: 'Physical',
   },
-  'Energy Ball': {bp: 80, type: 'Grass', category: 'Special'},
+  'Energy Ball': {bp: 90, type: 'Grass', category: 'Special'},
   'Gunk Shot': {bp: 120, type: 'Poison', category: 'Physical'},
   'Gyro Ball': {
     bp: 0,
@@ -973,8 +969,8 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     makesContact: true,
     category: 'Physical',
   },
-  'Leaf Storm': {bp: 140, type: 'Grass', self: {boosts: {spa: -2}}, category: 'Special'},
-  'Power Gem': {bp: 70, type: 'Rock', category: 'Special'},
+  'Leaf Storm': {bp: 130, type: 'Grass', self: {boosts: {spa: -2}}, category: 'Special'},
+  'Power Gem': {bp: 80, type: 'Rock', category: 'Special'},
   'Psycho Shift': {bp: 0, type: 'Psychic'},
   'Shadow Force': {
     bp: 120,
@@ -1006,7 +1002,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   },
   'Roar of Time': {bp: 150, type: 'Dragon', category: 'Special'},
   'Rock Climb': {
-    bp: 85,
+    bp: 90,
     type: 'Rock',
     makesContact: true,
     category: 'Physical',
@@ -1064,7 +1060,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     category: 'Special',
   },
   'Earth Power': {bp: 90, type: 'Ground', category: 'Special'},
-  'Flash Cannon': {bp: 80, type: 'Steel', category: 'Special'},
+  'Flash Cannon': {bp: 80, type: 'Steel', isPulse: true, category: 'Special'},
   'Focus Blast': {bp: 120, type: 'Fighting', category: 'Special'},
   'Force Palm': {
     bp: 60,
@@ -1073,7 +1069,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     category: 'Physical',
   },
   'Giga Impact': {
-    bp: 150,
+    bp: 140, 
     type: 'Normal',
     makesContact: true,
     category: 'Physical',
@@ -1087,7 +1083,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     category: 'Physical',
   },
   'Ice Fang': {
-    bp: 75,
+    bp: 65,
     type: 'Ice',
     makesContact: true,
     isBite: true,
@@ -1128,7 +1124,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   },
   'Psycho Cut': {bp: 70, type: 'Psychic', category: 'Physical'},
   'Rock Polish': {bp: 0, type: 'Rock'},
-  'Rock Wrecker': {bp: 150, type: 'Rock', category: 'Physical'},
+  'Rock Wrecker': {bp: 140, type: 'Rock', category: 'Physical'},
   'Seed Bomb': {bp: 80, type: 'Grass', category: 'Physical'},
   'Shadow Claw': {
     bp: 70,
@@ -1145,7 +1141,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   },
   'Stone Edge': {bp: 100, type: 'Rock', category: 'Physical'},
   'Thunder Fang': {
-    bp: 75,
+    bp: 65,
     type: 'Electric',
     makesContact: true,
     isBite: true,
@@ -1183,7 +1179,7 @@ const BW_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Bug Buzz': {secondaries: true},
   Chatter: {secondaries: true},
   Covet: {bp: 60},
-  'Dragon Rush': {secondaries: true},
+  'Dragon Rush': {secondaries: true, hasCrashDamage: true},
   'Drain Punch': {bp: 75},
   'Energy Ball': {secondaries: true},
   Extrasensory: {secondaries: true},
@@ -1192,9 +1188,9 @@ const BW_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Double-Edge': {recoil: [33, 100]},
   Protect: {priority: 4},
   'Fire Blast': {secondaries: true},
-  'Fire Spin': {bp: 50},
+  'Fire Spin': {bp: 45},
   Flamethrower: {secondaries: true},
-  'Fury Cutter': {bp: 20},
+  'Fury Cutter': {bp: 40},
   'Future Sight': {bp: 100, type: 'Psychic'},
   'Giga Drain': {bp: 75},
   'Gunk Shot': {secondaries: true},
@@ -1207,17 +1203,17 @@ const BW_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Poison Fang': {secondaries: true},
   'Poison Gas': {target: 'allAdjacentFoes'},
   'Rock Tomb': {secondaries: true},
-  'Sand Tomb': {bp: 35},
+  'Sand Tomb': {bp: 40},
   'Secret Power': {secondaries: true},
   Smog: {secondaries: true},
   Snore: {secondaries: true},
   Stomp: {secondaries: true},
   Thunder: {secondaries: true},
   Thunderbolt: {secondaries: true},
-  Uproar: {bp: 90},
-  Whirlpool: {bp: 50},
+  Uproar: {bp: 95},
+  Whirlpool: {bp: 35},
   'Petal Dance': {bp: 120},
-  Tackle: {bp: 50},
+  Tackle: {bp: 40},
   Thrash: {bp: 120},
   'Bone Club': {secondaries: true},
   Constrict: {secondaries: true},
@@ -1282,7 +1278,6 @@ const BW_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Mud Shot': {secondaries: true},
   'Mud-Slap': {secondaries: true},
   Octazooka: {secondaries: true},
-  'Paleo Wave': {secondaries: true},
   'Poison Jab': {secondaries: true},
   'Poison Sting': {secondaries: true},
   'Poison Tail': {secondaries: true},
@@ -1292,7 +1287,6 @@ const BW_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Rock Slide': {secondaries: true},
   'Rock Smash': {secondaries: true},
   'Shadow Ball': {secondaries: true},
-  'Shadow Strike': {secondaries: true},
   'Sky Attack': {secondaries: false},
   Sludge: {secondaries: true},
   'Sludge Bomb': {secondaries: true},
@@ -1339,7 +1333,7 @@ const BW_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     category: 'Physical',
   },
   Hurricane: {
-    bp: 120,
+    bp: 110,
     type: 'Flying',
     category: 'Special',
     secondaries: true,
@@ -1401,14 +1395,14 @@ const BW_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     secondaries: true,
   },
   'Storm Throw': {
-    bp: 40,
+    bp: 60,
     type: 'Fighting',
     willCrit: true,
     makesContact: true,
     category: 'Physical',
   },
   'Struggle Bug': {
-    bp: 30,
+    bp: 55,
     type: 'Bug',
     target: 'allAdjacentFoes',
     category: 'Special',
@@ -1513,7 +1507,7 @@ const BW_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   Coil: {bp: 0, type: 'Poison'},
   'Cotton Guard': {bp: 0, type: 'Grass'},
   'Dragon Tail': {
-    bp: 70,
+    bp: 60,
     type: 'Dragon',
     makesContact: true,
     category: 'Physical',
@@ -1539,7 +1533,7 @@ const BW_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     secondaries: true,
   },
   'Flame Charge': {
-    bp: 50,
+    bp: 60,
     type: 'Fire',
     makesContact: true,
     category: 'Physical',
@@ -1568,7 +1562,7 @@ const BW_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     category: 'Physical',
   },
   Glaciate: {
-    bp: 65,
+    bp: 70,
     type: 'Ice',
     target: 'allAdjacentFoes',
     category: 'Special',
@@ -1766,7 +1760,7 @@ const XY_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   Smog: {bp: 30},
   Snore: {bp: 50},
   'Storm Throw': {bp: 60},
-  'Struggle Bug': {bp: 50},
+  'Struggle Bug': {bp: 55},
   Surf: {bp: 90},
   'Sweet Kiss': {type: 'Fairy'},
   Thunderbolt: {bp: 90},
@@ -1900,7 +1894,7 @@ const XY_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     category: 'Special',
   },
   'Draining Kiss': {
-    bp: 50,
+    bp: 55,
     type: 'Fairy',
     drain: [3, 4],
     makesContact: true,
@@ -2270,7 +2264,6 @@ const SM_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   Octazooka: {zp: 120},
   Outrage: {zp: 190},
   Overheat: {zp: 195},
-  'Paleo Wave': {zp: 160},
   'Parabolic Charge': {bp: 65, zp: 120},
   Payback: {zp: 100},
   'Pay Day': {zp: 100},
@@ -2322,7 +2315,6 @@ const SM_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Shadow Claw': {zp: 140},
   'Shadow Punch': {zp: 120},
   'Shadow Sneak': {zp: 100},
-  'Shadow Strike': {zp: 160},
   'Sheer Cold': {zp: 180},
   'Shock Wave': {zp: 120},
   'Skull Bash': {zp: 195},
@@ -2403,7 +2395,7 @@ const SM_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Black Hole Eclipse': {bp: 1, type: 'Dark', category: 'Physical', isZ: true},
   'Bloom Doom': {bp: 1, type: 'Grass', category: 'Physical', isZ: true},
   'Bouncy Bubble': {
-    bp: 90,
+    bp: 65,
     type: 'Water',
     drain: [1, 2],
     category: 'Special',
@@ -2582,7 +2574,7 @@ const SM_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   },
   'Sparkly Swirl': {bp: 90, type: 'Fairy', category: 'Special', zp: 175},
   'Splintered Stormshards': {bp: 190, type: 'Rock', category: 'Physical', isZ: true},
-  Spotlight: {bp: 0, type: 'Normal', priority: 3},
+  Spotlight: {bp: 0, type: 'Electric', priority: 3},
   'Stoked Sparksurfer': {
     bp: 175,
     type: 'Electric',
@@ -2686,7 +2678,7 @@ const SM_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     category: 'Physical',
     zp: 175,
   },
-  'Laser Focus': {bp: 0, type: 'Normal'},
+  'Laser Focus': {bp: 0, type: 'Fighting'},
   Leafage: {bp: 40, type: 'Grass', category: 'Physical', zp: 100},
   Liquidation: {
     bp: 85,
@@ -2851,7 +2843,7 @@ const SS_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     maxPower: 140,
   },
   'Aura Wheel': {
-    bp: 110,
+    bp: 90,
     type: 'Electric',
     category: 'Physical',
     secondaries: true,
@@ -2952,6 +2944,7 @@ const SS_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     bp: 80,
     type: 'Grass',
     category: 'Physical',
+    isSound: true,
     secondaries: true,
     zp: 160,
     maxPower: 130,
@@ -3022,7 +3015,7 @@ const SS_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     maxPower: 130,
   },
   'Flip Turn': {
-    bp: 60,
+    bp: 70,
     type: 'Water',
     category: 'Physical',
     makesContact: true,
@@ -3277,7 +3270,7 @@ const SS_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     maxPower: 1,
   },
   'Grassy Glide': {
-    bp: 70,
+    bp: 60,
     type: 'Grass',
     category: 'Physical',
     makesContact: true,
@@ -3527,12 +3520,14 @@ const SS_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Snipe Shot': {
     bp: 80,
     type: 'Water',
+    isBullet: true,
+    isPulse: true,
     category: 'Special',
     zp: 160,
     maxPower: 130,
   },
   'Scorching Sands': {
-    bp: 70,
+    bp: 75,
     type: 'Ground',
     category: 'Special',
     secondaries: true,
@@ -3941,7 +3936,6 @@ const SS_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Origin Pulse': {maxPower: 140},
   Outrage: {maxPower: 140},
   Overheat: {maxPower: 140},
-  'Paleo Wave': {maxPower: 130},
   'Parabolic Charge': {maxPower: 120},
   Payback: {maxPower: 100},
   'Pay Day': {maxPower: 90},
@@ -4022,7 +4016,6 @@ const SS_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Shadow Force': {maxPower: 140},
   'Shadow Punch': {maxPower: 110},
   'Shadow Sneak': {maxPower: 90},
-  'Shadow Strike': {maxPower: 130},
   'Shattered Psyche': {maxPower: 1},
   'Sheer Cold': {maxPower: 130},
   'Shell Trap': {maxPower: 150},
@@ -4147,9 +4140,6 @@ const LGPE_MOVES = [
   'Splishy Splash',
   'Veevee Volley',
 ];
-for (const m of LGPE_MOVES) {
-  delete SS[m];
-}
 
 const SV_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Aerial Ace': {isSlicing: true},
@@ -4216,6 +4206,7 @@ const SV_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Armor Cannon': {
     bp: 120,
     type: 'Fire',
+    isPulse: true,
     category: 'Special',
     zp: 190,
     maxPower: 140,
@@ -4231,7 +4222,7 @@ const SV_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     makesContact: true,
   },
   'Barb Barrage': {
-    bp: 60,
+    bp: 65,
     type: 'Poison',
     category: 'Physical',
     zp: 120,
@@ -4249,7 +4240,7 @@ const SV_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     drain: [1, 2],
   },
   'Bitter Malice': {
-    bp: 75,
+    bp: 85,
     type: 'Ghost',
     category: 'Special',
     zp: 140,
@@ -4602,7 +4593,7 @@ const SV_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     // Sheer Force boost implemented in gen789.ts
   },
   'Psychic Noise': {
-    bp: 75,
+    bp: 80,
     type: 'Psychic',
     category: 'Special',
     zp: 140,
@@ -4867,6 +4858,7 @@ const SV_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     bp: 40,
     type: 'Psychic',
     category: 'Special',
+    secondaries: true,
     zp: 100,
     maxPower: 90,
     multihit: 2,
