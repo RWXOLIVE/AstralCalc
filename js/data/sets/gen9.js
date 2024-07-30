@@ -483,7 +483,7 @@ var SETDEX_SV = {
             "index": "0000000037",
             "level": 16,
             "ability": "Friend Guard",
-            "item": "Electric Seed", 
+            "item": "None", 
             "nature": "Brave",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -495,7 +495,7 @@ var SETDEX_SV = {
         "Lass Emmie | Route 104": {  
             "index": "0000000038",
             "level": 16,
-            "ability": "Shell Armor",
+            "ability": "Swift Swim",
             "item": "Rindo Berry", 
             "nature": "Quiet",
             "ivs": {
@@ -632,6 +632,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Fake Out","Vaccuum Wave", "Mach Punch", "Sucker Punch"]
+        },
+        "Black Belt Cristian & Takao | Dewford Gym": {  
+            "index": "0000000114",
+            "level": 22,
+            "ability": "Prankster",
+            "item": "Eviolite", 
+            "nature": "Relaxed",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Follow Me","Screech","Detect","Me First"]
         }
     },
     "Fletchinder": {
@@ -989,7 +1000,7 @@ var SETDEX_SV = {
         "Collector Hector | Rustboro City Gym": {  
             "index": "0000000076",
             "level": 17,
-            "ability": "Analytic",
+            "ability": "Simple",
             "item": "Passho Berry", 
             "nature": "Adamant",
             "ivs": {
@@ -1149,7 +1160,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Bulldoze","Rock Smash","Rollout", "Defence Curl"]
+            "moves": ["Bulldoze","Rock Smash","Rollout", "Defense Curl"]
         }
     },
     "Graveler-Alola": {
@@ -1472,7 +1483,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Dual Wingbeat","Thief","Low Sweep"]
+            "moves": ["Dual Wingbeat","Throat Chop","Low Sweep"]
         }
     },
     "Quaxwell": {
@@ -1512,19 +1523,6 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Coaching","Taunt","Drain Punch", "Brutal Swing"]
-        }
-    },
-    "Riolu": {
-        "Black Belt Cristian & Takao | Dewford Gym": {  
-            "index": "0000000114",
-            "level": 22,
-            "ability": "Prankster",
-            "item": "Eviolite", 
-            "nature": "Relaxed",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Follow Me","Screech","Detect","Me First"]
         }
     },
     "Lucario": {
