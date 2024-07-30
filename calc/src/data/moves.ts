@@ -1742,7 +1742,7 @@ const XY_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Ice Beam': {bp: 90},
   Incinerate: {bp: 60},
   'Leaf Storm': {bp: 130},
-  Lick: {bp: 45},
+  Lick: {bp: 30},
   'Low Sweep': {bp: 65},
   'Meteor Mash': {bp: 90},
   'Muddy Water': {bp: 90},
