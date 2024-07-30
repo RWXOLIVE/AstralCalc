@@ -185,8 +185,8 @@ var SETDEX_SV = {
         "Fisherman Patrick | Route 104": {  
             "index": "0000000015",
             "level": 14,
-            "ability": "Strong Jaw",
-            "item": "Rain Dish", 
+            "ability": "Rain Dish",
+            "item": "Leftovers", 
             "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -335,6 +335,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Screech","Acid", "Swift","Bite"]
+        },
+        "Aqua Grunt 1 | Slateport Museum": {  
+            "index": "0000000137",
+            "level": 28,
+            "ability": "Shed Skin",
+            "item": "Shuca Berry", 
+            "nature": "Hasty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Giga Drain","Flamethrower","Crunch", "Poison Fang"]
         }
     },
     "Luxio": {
@@ -609,20 +620,7 @@ var SETDEX_SV = {
             },
             "moves": ["Sleep Powder","Strength Sap", "Sludge", "Mega Drain"]
         }
-    },
-    "Riolu": {
-        "School Kid Karen | Route 116": {  
-            "index": "0000000048",
-            "level": 15,
-            "ability": "Inner Focus",
-            "item": "Black Belt", 
-            "nature": "Naughty",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Fake Out","Vaccuum Wave", "Mach Punch", "Sucker Punch"]
-        }
-    },
+    },        
     "Fletchinder": {
         "School Kid Karen | Route 116": {  
             "index": "0000000049",
@@ -1514,6 +1512,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Follow Me","Screech","Detect","Me First"]
+        },
+        "School Kid Karen | Route 116": {  
+            "index": "0000000048",
+            "level": 15,
+            "ability": "Inner Focus",
+            "item": "Black Belt", 
+            "nature": "Naughty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fake Out","Vaccuum Wave", "Mach Punch", "Sucker Punch"]
         }
     },
     "Lucario": {
@@ -1816,19 +1825,6 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
             "moves": ["Facade","Zippy Zap","Crunch", "Submission"]
-        }
-    },
-    "Seviper": {
-        "Aqua Grunt 1 | Slateport Museum": {  
-            "index": "0000000137",
-            "level": 28,
-            "ability": "Shed Skin",
-            "item": "Shuca Berry", 
-            "nature": "Hasty",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Giga Drain","Flamethrower","Crunch", "Poison Fang"]
         }
     },
     "Honchkrow": {
