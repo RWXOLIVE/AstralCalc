@@ -1683,7 +1683,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Struggle Bug","Air Cutter","Bubblebeam", "Icy Wind"]
+            "moves": ["Struggle Bug","Air Cutter","Bubble Beam", "Icy Wind"]
         }
     },
     "Basculin-Blue-Striped": {
