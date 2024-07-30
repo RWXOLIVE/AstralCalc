@@ -173,7 +173,7 @@ var SETDEX_SV = {
             "index": "0000000014",
             "level": 13,
             "ability": "Strong Jaw",
-            "item": "Assault Vest", 
+            "item": "None", 
             "nature": "Hasty",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -186,7 +186,7 @@ var SETDEX_SV = {
             "index": "0000000015",
             "level": 14,
             "ability": "Strong Jaw",
-            "item": "Assault Vest", 
+            "item": "Leftovers", 
             "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
