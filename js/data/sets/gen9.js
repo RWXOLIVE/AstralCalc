@@ -2063,12 +2063,12 @@ var SETDEX_SV = {
             "index": "0000000158",
             "level": 30,
             "ability": "Misty Surge",
-            "item": "Mystic Water", 
+            "item": "Utility Umbrella", 
             "nature": "Lax",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Water Pulse","Draining Kiss","Chilling Water","Protect"]
+            "moves": ["Scald","Draining Kiss","Chilling Water","Protect"]
         }
     },
     "Scream Tail": {
@@ -2076,7 +2076,7 @@ var SETDEX_SV = {
             "index": "0000000159",
             "level": 30,
             "ability": "Protosythesis",
-            "item": "Mystic Water", 
+            "item": "Fairy Feather", 
             "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
