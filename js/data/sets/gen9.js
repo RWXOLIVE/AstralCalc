@@ -173,7 +173,7 @@ var SETDEX_SV = {
             "index": "0000000014",
             "level": 13,
             "ability": "Strong Jaw",
-            "item": "None", 
+            "item": "Assault Vest", 
             "nature": "Hasty",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -186,7 +186,7 @@ var SETDEX_SV = {
             "index": "0000000015",
             "level": 14,
             "ability": "Strong Jaw",
-            "item": "Leftovers", 
+            "item": "Rain Dish", 
             "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -335,17 +335,6 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Screech","Acid", "Swift","Bite"]
-        },
-        "Aqua Grunt 1 | Slateport Museum": {  
-            "index": "0000000137",
-            "level": 28,
-            "ability": "Shed Skin",
-            "item": "Shuca Berry", 
-            "nature": "Hasty",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Giga Drain","Flamethrower","Crunch", "Poison Fang"]
         }
     },
     "Luxio": {
@@ -632,17 +621,6 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Fake Out","Vaccuum Wave", "Mach Punch", "Sucker Punch"]
-        },
-        "Black Belt Cristian & Takao | Dewford Gym": {  
-            "index": "0000000114",
-            "level": 22,
-            "ability": "Prankster",
-            "item": "Eviolite", 
-            "nature": "Relaxed",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Follow Me","Screech","Detect","Me First"]
         }
     },
     "Fletchinder": {
@@ -1000,7 +978,7 @@ var SETDEX_SV = {
         "Collector Hector | Rustboro City Gym": {  
             "index": "0000000076",
             "level": 17,
-            "ability": "Simple",
+            "ability": "Analytic",
             "item": "Passho Berry", 
             "nature": "Adamant",
             "ivs": {
@@ -1525,6 +1503,19 @@ var SETDEX_SV = {
             "moves": ["Coaching","Taunt","Drain Punch", "Brutal Swing"]
         }
     },
+    "Riolu": {
+        "Black Belt Cristian & Takao | Dewford Gym": {  
+            "index": "0000000114",
+            "level": 22,
+            "ability": "Prankster",
+            "item": "Eviolite", 
+            "nature": "Relaxed",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Follow Me","Screech","Detect","Me First"]
+        }
+    },
     "Lucario": {
         "Black Belt Cristian & Takao | Dewford Gym": {  
             "index": "0000000115",
@@ -1825,6 +1816,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
             "moves": ["Facade","Zippy Zap","Crunch", "Submission"]
+        }
+    },
+    "Seviper": {
+        "Aqua Grunt 1 | Slateport Museum": {  
+            "index": "0000000137",
+            "level": 28,
+            "ability": "Shed Skin",
+            "item": "Shuca Berry", 
+            "nature": "Hasty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Giga Drain","Flamethrower","Crunch", "Poison Fang"]
         }
     },
     "Honchkrow": {
