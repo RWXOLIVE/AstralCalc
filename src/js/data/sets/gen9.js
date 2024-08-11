@@ -2568,7 +2568,7 @@ var SETDEX_SV = {
         "moves": ["Hyper Voice", "Psychic Noise", "Flamethrower", "Protect"]
     }
 },
-"Rillaboom": {
+    "Rillaboom": {
     "Marco & Rhett | Route 103": {
         "index": "0000000195",
         "level": 40,
@@ -2581,7 +2581,7 @@ var SETDEX_SV = {
         "moves": ["Fake Out", "Uproar", "Drum Beating", "Hammer Arm"]
     }
 },
-"Beartic": {
+    "Beartic": {
     "Marco & Rhett | Route 103": {
         "index": "0000000196",
         "level": 40,
@@ -2592,6 +2592,58 @@ var SETDEX_SV = {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
         },
         "moves": ["Swords Dance", "Icicle Crash", "Brick Break", "Aqua Jet"]
+    }
+},
+    "Manectric": {
+    "Kaleb & Isabel | Route 110": {
+        "index": "0000000197",
+        "level": 41,
+        "ability": "Lightning Rod",
+        "item": "Sitrus Berry",
+        "nature": "Timid",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Electroweb", "Flamethrower", "Thunderbolt", "Energy Ball"]
+    }
+},
+    "Seaking": {
+    "Kaleb & Isabel | Route 110": {
+        "index": "0000000198",
+        "level": 41,
+        "ability": "Lightning Rod",
+        "item": "Water Gem",
+        "nature": "Modest",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Muddy Water", "Hydro Pump", "Ice Beam"]
+    }
+},
+    "Raichu": {
+    "Kaleb & Isabel | Route 110": {
+        "index": "0000000199",
+        "level": 41,
+        "ability": "Static",
+        "item": "Electric Gem",
+        "nature": "Timid",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Discharge"]
+    }
+},
+    "Toxtricity-Amped": {
+    "Kaleb & Isabel | Route 110": {
+        "index": "0000000200",
+        "level": 41,
+        "ability": "Punk Rock",
+        "item": "Choice Specs",
+        "nature": "Timid",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Overdrive"]
     }
 }
 }
