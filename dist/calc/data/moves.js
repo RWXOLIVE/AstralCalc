@@ -2582,7 +2582,7 @@ var SM_PATCH = {
     'Toxic Thread': { bp: 0, type: 'Poison' },
     'Twinkle Tackle': { bp: 1, type: 'Fairy', category: 'Physical', isZ: true },
     'Zippy Zap': {
-        bp: 50,
+        bp: 80,
         type: 'Electric',
         willCrit: true,
         priority: 2,

@@ -1536,7 +1536,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Drain Punch","Counter","Bullet Punch", "Payback"]
-        }
+        },
+        "Marco & Rhett | Route 103": {
+        "index": "0000000197",
+        "level": 40,
+        "ability": "Steadfast",
+        "item": "Punching Glove",
+        "nature": "Adamant",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+           },
+        "moves": ["Ice Punch", "Fire Punch", "Drain Punch", "Meteor Mash"]
+       }
     },
     "Croagunk": {
         "Jocelyn & Brenden | Dewford Gym": {  
@@ -2335,5 +2346,252 @@ var SETDEX_SV = {
             },
             "moves": ["Flare Blitz","U-turn","Wild Charge","High Jump Kick"]
         }
+    },
+    "Ribombee": {
+        "Bug Manic Andrew | Route 103": {  
+            "index": "0000000180",
+            "level": 40,
+            "ability": "Cute Charm",
+            "item": "Rocky Helmet", 
+            "nature": "Sassy",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Sticky Web","Quiver Dance","Moonblast","Reflect"]
+        }
+    },
+    "Scizor": {
+        "Bug Manic Andrew | Route 103": {  
+            "index": "0000000181",
+            "level": 40,
+            "ability": "Technician",
+            "item": "Occa Berry", 
+            "nature": "Brave",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Bullet Punch","Lunge","Dual Wingbeat","Knock Off"]
+        }
+    },
+    "Kleavor": {
+        "Bug Manic Andrew | Route 103": {  
+            "index": "0000000182",
+            "level": 40,
+            "ability": "Sharpness",
+            "item": "Choice Band", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Stone Axe","X-Scissor",]
+        }
+    },
+    "Venomoth": {
+        "Bug Manic Andrew | Route 103": {  
+            "index": "0000000183",
+            "level": 40,
+            "ability": "Wonder Skin",
+            "item": "Black Sludge", 
+            "nature": "Naughty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Morning Sun","Bug Buzz","Giga Drain","Acid Spray"]
+        }
+    },
+    "Pikachu-PhD": {
+        "Pokefan Miguel | Route 103": {  
+            "index": "0000000184",
+            "level": 41,
+            "ability": "Static",
+            "item": "Light Ball", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Fake Out","Psyshock","Electric Terrain","Thunderbolt"]
+        }
+    },
+    "Pikachu-Belle": {
+        "Pokefan Miguel | Route 103": {  
+            "index": "0000000185",
+            "level": 41,
+            "ability": "Static",
+            "item": "Light Ball", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Fake Out","Freeze-Dry","Lovely Kiss","Thunderbolt"]
+        }
+    },
+    "Pikachu-Libre": {
+        "Pokefan Miguel | Route 103": {  
+            "index": "0000000186",
+            "level": 41,
+            "ability": "Static",
+            "item": "Light Ball", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Fake Out","Flying Press","Wild Charge","Laser Focus"]
+        }
+    },
+    "Pikachu-Rock-Star": {
+        "Pokefan Miguel | Route 103": {  
+            "index": "0000000185",
+            "level": 41,
+            "ability": "Static",
+            "item": "Light Ball", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Fake Out","Meteor Mash","Overdrive","Ion Deluge"]
+        }
+    },
+    "Roserade": {
+        "Twins Amy & Liv | Route 103": {  
+            "index": "0000000186",
+            "level": 40,
+            "ability": "Corrosion",
+            "item": "Focus Sash", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Toxic","Energy Ball","Sludge Bomb","Venom Drench"]
+        }
+    },
+    "Xatu": {
+        "Twins Amy & Liv | Route 103": {  
+            "index": "0000000187",
+            "level": 40,
+            "ability": "Magic Bounce",
+            "item": "Ability Shield", 
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Future Sight","Thunder Wave","Air Slash","Shadow Ball"]
+        }
+    },
+    "Gastrodon": {
+        "Twins Amy & Liv | Route 103": {  
+            "index": "0000000188",
+            "level": 40,
+            "ability": "Storm Drain",
+            "item": "Rindo Berry", 
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Toxic","Muddy Water","Earth Power","Helping Hand"]
+        }
+    },
+    "Oricorio": {
+        "Twins Amy & Liv | Route 103": {  
+            "index": "0000000189",
+            "level": 40,
+            "ability": "Dancer",
+            "item": "Weakness Policy", 
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Roost","Revelation Dance","Hurricane","Quiver Dance"]
+        }
+    },
+    "Florges": {
+        "Lady Daisy | Route 103": {  
+            "index": "0000000190",
+            "level": 40,
+            "ability": "Sweet Veil",
+            "item": "Terrain Extender", 
+            "nature": "Calm",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Grassy Terrain","Calm Mind","Baton Pass","Sunny Day"]
+        }
+    },
+    "Lilligant": {
+        "Lady Daisy | Route 103": {  
+            "index": "0000000191",
+            "level": 40,
+            "ability": "Chlorophyll",
+            "item": "Eject Pack", 
+            "nature": "Naive",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Leaf Storm","Draining Kiss","Synthesis","Grassy Terrain"]
+        }
+    },
+    "Comfey": {
+        "Lady Daisy | Route 103": {  
+            "index": "0000000192",
+            "level": 40,
+            "ability": "Triage",
+            "item": "Big Root", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Floral Healing","Draining Kiss","Giga Drain","Sunny Day"]
+        }
+    },
+    "Tsareena": {
+        "Lady Daisy | Route 103": {  
+            "index": "0000000193",
+            "level": 40,
+            "ability": "Sheer Force",
+            "item": "Grassy Seed", 
+            "nature": "",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Acrobatics","Trailblaze","Jump Kick","Triple Axel"]
+        }
+    },
+    "Exploud": {
+    "Marco & Rhett | Route 103": {
+        "index": "0000000194",
+        "level": 40,
+        "ability": "Punk Rock",
+        "item": "Throat Spray",
+        "nature": "Modest",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Hyper Voice", "Psychic Noise", "Flamethrower", "Protect"]
     }
+},
+"Rillaboom": {
+    "Marco & Rhett | Route 103": {
+        "index": "0000000195",
+        "level": 40,
+        "ability": "Punk Rock",
+        "item": "Silk Scarf",
+        "nature": "Brave",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Fake Out", "Uproar", "Drum Beating", "Hammer Arm"]
+    }
+},
+"Beartic": {
+    "Marco & Rhett | Route 103": {
+        "index": "0000000196",
+        "level": 40,
+        "ability": "Thick Fat",
+        "item": "Never-Melt Ice",
+        "nature": "Jolly",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Swords Dance", "Icicle Crash", "Brick Break", "Aqua Jet"]
+    }
+}
 }
