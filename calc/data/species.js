@@ -96,7 +96,7 @@ var RBY = {
     },
     Beedrill: {
         types: ['Bug', 'Poison'],
-        bs: { hp: 80, at: 95, df: 95, sp: 95, sl: 20 },
+        bs: { hp: 65, at: 90, df: 70, sp: 85, sl: 20 },
         weightkg: 29.5
     },
     Bellsprout: {
@@ -118,7 +118,7 @@ var RBY = {
     },
     Butterfree: {
         types: ['Bug', 'Psychic'],
-        bs: { hp: 80, at: 20, df: 50, sp: 95, sl: 95 },
+        bs: { hp: 70, at: 20, df: 55, sp: 95, sl: 95 },
         weightkg: 32
     },
     Caterpie: {
@@ -848,11 +848,11 @@ var GSC_PATCH = {
     Arbok: { bs: { sa: 50, sd: 79 } },
     Arcanine: { bs: { sa: 100, sd: 80 } },
     Articuno: { bs: { sa: 95, sd: 125 }, gender: 'N' },
-    Beedrill: { bs: { sa: 20, sd: 50 } },
+    Beedrill: { bs: { sa: 20, sd: 80 } },
     Bellsprout: { bs: { sa: 70, sd: 30 } },
     Blastoise: { bs: { sa: 100, sd: 105 } },
     Bulbasaur: { bs: { sa: 65, sd: 65 } },
-    Butterfree: { bs: { sa: 95, sd: 95 } },
+    Butterfree: { bs: { sa: 95, sd: 85 } },
     Caterpie: { bs: { sa: 20, sd: 20 } },
     Chansey: { bs: { sa: 35, sd: 105 }, nfe: true },
     Charizard: { bs: { sa: 100, sd: 81 } },
@@ -5668,35 +5668,35 @@ var XY_PATCH = {
         baseSpecies: 'Pikachu'
     },
     'Pikachu-Rock-Star': {
-        types: ['Electric'],
+        types: ['Electric', 'Steel'],
         bs: { hp: 35, at: 55, df: 40, sa: 50, sd: 50, sp: 90 },
         weightkg: 6,
         abilities: { 0: 'Lightning Rod' },
         baseSpecies: 'Pikachu'
     },
     'Pikachu-Belle': {
-        types: ['Electric'],
+        types: ['Electric', 'Ice'],
         bs: { hp: 35, at: 55, df: 40, sa: 50, sd: 50, sp: 90 },
         weightkg: 6,
         abilities: { 0: 'Lightning Rod' },
         baseSpecies: 'Pikachu'
     },
     'Pikachu-PhD': {
-        types: ['Electric'],
+        types: ['Electric', 'Psychic'],
         bs: { hp: 35, at: 55, df: 40, sa: 50, sd: 50, sp: 90 },
         weightkg: 6,
         abilities: { 0: 'Lightning Rod' },
         baseSpecies: 'Pikachu'
     },
     'Pikachu-Pop-Star': {
-        types: ['Electric'],
+        types: ['Electric', 'Fairy'],
         bs: { hp: 35, at: 55, df: 40, sa: 50, sd: 50, sp: 90 },
         weightkg: 6,
         abilities: { 0: 'Lightning Rod' },
         baseSpecies: 'Pikachu'
     },
     'Pikachu-Libre': {
-        types: ['Electric'],
+        types: ['Electric', 'Fighting'],
         bs: { hp: 35, at: 55, df: 40, sa: 50, sd: 50, sp: 90 },
         weightkg: 6,
         abilities: { 0: 'Lightning Rod' },
@@ -7181,12 +7181,12 @@ var SM_PATCH = {
     }
 };
 var SM = (0, util_1.extend)(true, {}, XY, SM_PATCH);
-delete SM['Pikachu-Cosplay'];
-delete SM['Pikachu-Rock-Star'];
-delete SM['Pikachu-Belle'];
-delete SM['Pikachu-PhD'];
-delete SM['Pikachu-Pop-Star'];
-delete SM['Pikachu-Libre'];
+SM['Pikachu-Cosplay'];
+SM['Pikachu-Rock-Star'];
+SM['Pikachu-Belle'];
+SM['Pikachu-PhD'];
+SM['Pikachu-Pop-Star'];
+SM['Pikachu-Libre'];
 var SS_PATCH = {
     'Aegislash-Blade': { bs: { at: 140, sa: 140 } },
     'Aegislash-Both': { bs: { at: 140, df: 140, sa: 140, sd: 140 } },
@@ -7224,6 +7224,12 @@ var SS_PATCH = {
             'Pikachu-Sinnoh',
             'Pikachu-Unova',
             'Pikachu-World',
+            'Pikachu-Belle',
+            'Pikachu-Cosplay',
+            'Pikachu-Libre',
+            'Pikachu-PhD',
+            'Pikachu-Pop-Star',
+            'Pikachu-Rock-Star',
         ]
     },
     Ponyta: { otherFormes: ['Ponyta-Galar'] },
