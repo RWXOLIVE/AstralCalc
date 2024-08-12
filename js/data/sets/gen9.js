@@ -260,7 +260,7 @@ var SETDEX_SV = {
         }
     },
     "Charmeleon": {
-        "Youngster Billy | Route 104": {  
+        "Youngster Billy & Bobby | Route 104": {  
             "index": "0000000021",
             "level": 15,
             "ability": "Solar Power",
@@ -273,7 +273,7 @@ var SETDEX_SV = {
         }
     },
     "Stunky": {
-        "Youngster Billy | Route 104": {  
+        "Youngster Billy & Bobby | Route 104": {  
             "index": "0000000022",
             "level": 15,
             "ability": "Aftermath",
@@ -286,7 +286,7 @@ var SETDEX_SV = {
         }
     },
     "Brionne": {
-        "Fisherman Bobby | Route 104": {  
+        "Youngster Billy & Bobby | Route 104": {  
             "index": "0000000023",
             "level": 15,
             "ability": "Cute Charm",
@@ -299,7 +299,7 @@ var SETDEX_SV = {
         }
     },
     "Tirtouga": {
-        "Fisherman Bobby | Route 104": {  
+        "Youngster Billy & Bobby | Route 104": {  
             "index": "0000000024",
             "level": 15,
             "ability": "Solid Rock",
@@ -2750,8 +2750,8 @@ var SETDEX_SV = {
             "moves": ["Taunt", "Knock Off", "Temper Flare", "Protect"]
         }
     },
-    "Guitarist Joseph | Route 110": {
-        "Route 110": {
+    "Golem-Alola": {
+        "Guitarist Joseph | Route 110": {
             "index": "0000000206",
             "level": 40,
             "ability": "Galvanize",
@@ -2789,7 +2789,7 @@ var SETDEX_SV = {
             "moves": ["Belch","Sludge Bomb", "Heat Wave"]
         }
     },
-    "Muks-A": {
+    "Muk-Alola": {
         "Triathlete Alyssa | Route 110": {
             "index": "0000000209",
             "level": 41,
@@ -2803,7 +2803,7 @@ var SETDEX_SV = {
         }
     },
     "Gallade": {
-        "Psychic Edward| Route 110": {
+        "Psychic Edward | Route 110": {
             "index": "0000000210",
             "level": 41,
             "ability": "Sharpness",
@@ -2816,7 +2816,7 @@ var SETDEX_SV = {
         }
     },
     "Veluza": {
-        "Psychic Edward| Route 110": {
+        "Psychic Edward | Route 110": {
             "index": "0000000211",
             "level": 41,
             "ability": "Sharpness",
@@ -2829,7 +2829,7 @@ var SETDEX_SV = {
         }
     },
     "Gardevoir": {
-        "Psychic Edward| Route 110": {
+        "Psychic Edward | Route 110": {
             "index": "0000000212",
             "level": 41,
             "ability": "Trace",
