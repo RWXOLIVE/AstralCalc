@@ -26,7 +26,7 @@ var SETDEX_SV = {
         }
     },
     "Snivy": {
-        "Rival (If Chose Popplio) | Route 103": {  
+        "Rival (If Chose Popplio) | Route 103": {
             "index": "0000000003",
             "level": 7,
             "ability": "Sheer Force",
@@ -260,11 +260,11 @@ var SETDEX_SV = {
         }
     },
     "Charmeleon": {
-        "Youngster Billy | Route 104": {  
+        "Youngster Billy | Route 104": {
             "index": "0000000021",
             "level": 15,
             "ability": "Solar Power",
-            "item": "Charcoal", 
+            "item": "Charcoal",
             "nature": "Rash",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -1760,7 +1760,7 @@ var SETDEX_SV = {
         }
     },
     "Togedemaru": {
-        "Tuber Austina | Route 109": {  
+        "Tuber Austina | Route 109": {
             "index": "0000000135",
             "level": 29,
             "ability": "Iron Barbs",
@@ -1780,26 +1780,26 @@ var SETDEX_SV = {
             "item": "Flame Orb", 
             "nature": "Jolly",
             "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Facade","Zippy Zap","Crunch", "Submission"]
         }
     },
     "Seviper": {
-        "Aqua Grunt 1 | Slateport Museum": {  
+        "Aqua Grunt 1 | Slateport Museum": {
             "index": "0000000137",
             "level": 28,
             "ability": "Shed Skin",
             "item": "Shuca Berry", 
             "nature": "Hasty",
             "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Giga Drain","Flamethrower","Crunch", "Poison Fang"]
         }
     },
     "Honchkrow": {
-        "Aqua Grunt 1 | Slateport Museum": {  
+        "Aqua Grunt 1 | Slateport Museum": {
             "index": "0000000138",
             "level": 29,
             "ability": "Super Luck",
@@ -1812,20 +1812,20 @@ var SETDEX_SV = {
         }
     },
     "Drednaw": {
-        "Aqua Grunt 2 | Slateport Museum": {  
+        "Aqua Grunt 2 | Slateport Museum": {
             "index": "0000000139",
             "level": 28,    //not being read, pressing previous button on the calc doesnt work (ps dream just incase you didnt know, how to check the calc, AstralCalc -> dist -> index )
             "ability": "Shell Armor",
             "item": "Rindo Berry", 
             "nature": "Adamant",
             "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Razor Shell","Rock Slide","Flip Turn", "Ice Fang"]
         }
     },
     "Arbok": {
-        "Aqua Grunt 2 | Slateport Museum": {  
+        "Aqua Grunt 2 | Slateport Museum": {
             "index": "0000000140",
             "level": 28,
             "ability": "Intimidate",
@@ -1838,7 +1838,7 @@ var SETDEX_SV = {
         }
     },
     "Huntail": {
-        "Aqua Grunt 2 | Slateport Museum": {  
+        "Aqua Grunt 2 | Slateport Museum": {
             "index": "0000000141",
             "level": 29,
             "ability": "Adaptability",
@@ -1851,7 +1851,7 @@ var SETDEX_SV = {
         }
     },
     "Greedent": {
-        "Cool Trainer Randall | Petalburg Gym": {  
+        "Cool Trainer Randall | Petalburg Gym": {
             "index": "0000000142",
             "level": 30,
             "ability": "Gluttony",
@@ -1864,7 +1864,7 @@ var SETDEX_SV = {
         }
     },
     "Porygon2": {
-        "Cool Trainer Randall | Petalburg Gym": {  
+        "Cool Trainer Randall | Petalburg Gym": {
             "index": "0000000143",
             "level": 30,
             "ability": "Download",
@@ -1877,7 +1877,7 @@ var SETDEX_SV = {
         }
     },
     "Ditto": {
-        "Cool Trainer Randall | Petalburg Gym": {  
+        "Cool Trainer Randall | Petalburg Gym": {
             "index": "0000000144",
             "level": 30,
             "ability": "Imposter",
@@ -1890,7 +1890,7 @@ var SETDEX_SV = {
         }
     },
     "Drakloak": {
-        "Cool Trainer Randall | Petalburg Gym": {  
+        "Cool Trainer Randall | Petalburg Gym": {
             "index": "0000000145",
             "level": 30,
             "ability": "Cursed Body",
@@ -1903,7 +1903,7 @@ var SETDEX_SV = {
         }
     },
     "Honchkrow": {
-        "Cool Trainer Gary | Petalburg Gym": {  
+        "Cool Trainer Gary | Petalburg Gym": {
             "index": "0000000146",
             "level": 30,
             "ability": "Prankster",
@@ -1916,7 +1916,7 @@ var SETDEX_SV = {
         }
     },
     "Shiftry": {
-        "Cool Trainer Gary | Petalburg Gym": {  
+        "Cool Trainer Gary | Petalburg Gym": {
             "index": "0000000147",
             "level": 30,
             "ability": "Wind Rider",
@@ -1929,7 +1929,7 @@ var SETDEX_SV = {
         }
     },
     "Bouffalant": {
-        "Cool Trainer Gary | Petalburg Gym": {  
+        "Cool Trainer Gary | Petalburg Gym": {
             "index": "0000000148",
             "level": 30,
             "ability": "Sap Sipper",
@@ -1942,7 +1942,7 @@ var SETDEX_SV = {
         }
     },
     "Wyrdeer": {
-        "Cool Trainer Gary | Petalburg Gym": {  
+        "Cool Trainer Gary | Petalburg Gym": {
             "index": "0000000149",
             "level": 30,
             "ability": "Sap Sipper",
@@ -1955,7 +1955,7 @@ var SETDEX_SV = {
         }
     },
     "Dubwool": {
-        "Cool Trainer Parker | Petalburg Gym": {  
+        "Cool Trainer Parker | Petalburg Gym": {
             "index": "0000000150",
             "level": 30,
             "ability": "Fluffy",
@@ -1968,7 +1968,7 @@ var SETDEX_SV = {
         }
     },
     "Flapple": {
-        "Cool Trainer Parker | Petalburg Gym": {  
+        "Cool Trainer Parker | Petalburg Gym": {
             "index": "0000000151",
             "level": 30,
             "ability": "Hustle",
@@ -1981,7 +1981,7 @@ var SETDEX_SV = {
         }
     },
     "Clawitzer": {
-        "Cool Trainer Parker | Petalburg Gym": {  
+        "Cool Trainer Parker | Petalburg Gym": {
             "index": "0000000152",
             "level": 30,
             "ability": "Mega Launcher",
@@ -1994,7 +1994,7 @@ var SETDEX_SV = {
         }
     },
     "Morpeko": {
-        "Cool Trainer Parker | Petalburg Gym": {  
+        "Cool Trainer Parker | Petalburg Gym": {
             "index": "0000000153",
             "level": 30,
             "ability": "Hunger Switch",
@@ -2007,7 +2007,7 @@ var SETDEX_SV = {
         }
     },
     "Indeedee-F": {
-        "Cool Trainer Alexia | Petalburg Gym": {  
+        "Cool Trainer Alexia | Petalburg Gym": {
             "index": "0000000154",
             "level": 30,
             "ability": "Psychic Surge",
@@ -2020,7 +2020,7 @@ var SETDEX_SV = {
         }
     },
     "Gumshoos": {
-        "Cool Trainer Alexia | Petalburg Gym": {  
+        "Cool Trainer Alexia | Petalburg Gym": {
             "index": "0000000155",
             "level": 30,
             "ability": "Adaptability",
@@ -2033,7 +2033,7 @@ var SETDEX_SV = {
         }
     },
     "Mr. Mime": {
-        "Cool Trainer Alexia | Petalburg Gym": {  
+        "Cool Trainer Alexia | Petalburg Gym": {
             "index": "0000000156",
             "level": 30,
             "ability": "Technician",
@@ -2046,7 +2046,7 @@ var SETDEX_SV = {
         }
     },
     "Tapu Fini": {
-        "Cool Trainer George | Petalburg Gym": {  
+        "Cool Trainer George | Petalburg Gym": {
             "index": "0000000157",
             "level": 30,
             "ability": "Misty Surge",
@@ -2059,7 +2059,7 @@ var SETDEX_SV = {
         }
     },
     "Scream Tail": {
-        "Cool Trainer George | Petalburg Gym": {  
+        "Cool Trainer George | Petalburg Gym": {
             "index": "0000000158",
             "level": 30,
             "ability": "Protosythesis",
@@ -2072,7 +2072,7 @@ var SETDEX_SV = {
         }
     },
     "Pyroar": {
-        "Cool Trainer George | Petalburg Gym": {  
+        "Cool Trainer George | Petalburg Gym": {
             "index": "0000000159",
             "level": 30,
             "ability": "Intimidate",

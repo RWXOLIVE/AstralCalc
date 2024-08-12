@@ -2444,7 +2444,7 @@ var ADV_PATCH = {
         abilities: { 0: 'Chlorophyll' }
     },
     Seviper: {
-        types: ['Normal', 'Poison'],
+        types: ['Dark', 'Poison'],
         bs: { hp: 73, at: 100, df: 60, sa: 100, sd: 60, sp: 65 },
         weightkg: 52.5,
         abilities: { 0: 'Shed Skin' }
