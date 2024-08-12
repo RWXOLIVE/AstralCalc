@@ -2548,7 +2548,7 @@ var SETDEX_SV = {
             "level": 40,
             "ability": "Sheer Force",
             "item": "Grassy Seed", 
-            "nature": "",
+            "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
             },
@@ -2760,7 +2760,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Self Destruct"]
+            "moves": ["Self-Destruct"]
         }
     },
     "Diggersby": {
