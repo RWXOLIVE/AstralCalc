@@ -775,6 +775,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Dig","Quick Attack"]
+        },
+        "Triathlete Alyssa | Route 110": {
+            "index": "0000000207",
+            "level": 40,
+            "ability": "Huge Power",
+            "item": "Sitrus Berry",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Super Fang", "Earthquake", "Bulldoze", "Mega Punch"]
         }
     },
     "Rhyhorn": {
@@ -2761,19 +2772,6 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Self-Destruct"]
-        }
-    },
-    "Diggersby": {
-        "Triathlete Alyssa | Route 110": {
-            "index": "0000000207",
-            "level": 40,
-            "ability": "Huge Power",
-            "item": "Sitrus Berry",
-            "nature": "Jolly",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Super Fang", "Earthquake", "Bulldoze", "Mega Punch"]
         }
     },
     "Weezing": {
