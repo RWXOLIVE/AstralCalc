@@ -334,7 +334,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Screech","Acid", "Swift","Bite"]
+            "moves": ["Swagger","Acid", "Swift","Bite"]
         },
         "Aqua Grunt 1 | Slateport Museum": {  
             "index": "0000000137",
