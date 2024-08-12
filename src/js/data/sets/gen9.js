@@ -260,7 +260,7 @@ var SETDEX_SV = {
         }
     },
     "Charmeleon": {
-        "Youngster Billy | Route 104": {  
+        "Youngster Billy & Bobby | Route 104": {  
             "index": "0000000021",
             "level": 15,
             "ability": "Solar Power",
@@ -273,7 +273,7 @@ var SETDEX_SV = {
         }
     },
     "Stunky": {
-        "Youngster Billy | Route 104": {  
+        "Youngster Billy & Bobby | Route 104": {  
             "index": "0000000022",
             "level": 15,
             "ability": "Aftermath",
@@ -286,7 +286,7 @@ var SETDEX_SV = {
         }
     },
     "Brionne": {
-        "Fisherman Bobby | Route 104": {  
+        "Youngster Billy & Bobby | Route 104": {  
             "index": "0000000023",
             "level": 15,
             "ability": "Cute Charm",
@@ -299,7 +299,7 @@ var SETDEX_SV = {
         }
     },
     "Tirtouga": {
-        "Fisherman Bobby | Route 104": {  
+        "Youngster Billy & Bobby | Route 104": {  
             "index": "0000000024",
             "level": 15,
             "ability": "Solid Rock",
@@ -334,7 +334,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Screech","Acid", "Swift","Bite"]
+            "moves": ["Swagger","Acid", "Swift","Bite"]
         },
         "Aqua Grunt 1 | Slateport Museum": {  
             "index": "0000000137",
@@ -2548,7 +2548,7 @@ var SETDEX_SV = {
             "level": 40,
             "ability": "Sheer Force",
             "item": "Grassy Seed", 
-            "nature": "",
+            "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
             },
@@ -2686,7 +2686,7 @@ var SETDEX_SV = {
     }
 },
     "Crobat": {
-        "Route 109": {
+        "Triathlete Edwin | Route 110": {
             "index": "0000000201",
             "level": 41,
             "ability": "Inner Focus",
@@ -2699,7 +2699,7 @@ var SETDEX_SV = {
         }
     },
     "Dodrio": {
-        "Route 109": {
+        "Triathlete Edwin | Route 110": {
             "index": "0000000202",
             "level": 41,
             "ability": "Rattled",
@@ -2712,7 +2712,7 @@ var SETDEX_SV = {
         }
     },
     "Zebstrika": {
-        "Route 109": {
+        "Triathlete Edwin | Route 110": {
             "index": "0000000203",
             "level": 41,
             "ability": "Galvanize",
@@ -2725,7 +2725,7 @@ var SETDEX_SV = {
         }
     },
     "Jolteon": {
-        "Route 110": {
+        "Guitarist Joseph | Route 110": {
             "index": "0000000204",
             "level": 40,
             "ability": "Electric Surge",
@@ -2738,7 +2738,7 @@ var SETDEX_SV = {
         }
     },
     "Simisear": {
-        "Route 110": {
+        "Guitarist Joseph | Route 110": {
             "index": "0000000205",
             "level": 40,
             "ability": "Unburden",
@@ -2751,7 +2751,7 @@ var SETDEX_SV = {
         }
     },
     "Golem-Alola": {
-        "Route 110": {
+        "Guitarist Joseph | Route 110": {
             "index": "0000000206",
             "level": 40,
             "ability": "Galvanize",
@@ -2760,11 +2760,11 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Self Destruct"]
+            "moves": ["Self-Destruct"]
         }
     },
     "Diggersby": {
-        "Route 110": {
+        "Triathlete Alyssa | Route 110": {
             "index": "0000000207",
             "level": 40,
             "ability": "Huge Power",
@@ -2777,7 +2777,7 @@ var SETDEX_SV = {
         }
     },
     "Weezing": {
-        "Route 110": {
+        "Triathlete Alyssa | Route 110": {
             "index": "0000000208",
             "level": 40,
             "ability": "Levitate",
@@ -2789,8 +2789,8 @@ var SETDEX_SV = {
             "moves": ["Belch","Sludge Bomb", "Heat Wave"]
         }
     },
-    "Muks-A": {
-        "Route 110": {
+    "Muk-Alola": {
+        "Triathlete Alyssa | Route 110": {
             "index": "0000000209",
             "level": 41,
             "ability": "Power of Alchemy",
@@ -2803,7 +2803,7 @@ var SETDEX_SV = {
         }
     },
     "Gallade": {
-        "Route 110": {
+        "Psychic Edward | Route 110": {
             "index": "0000000210",
             "level": 41,
             "ability": "Sharpness",
@@ -2816,7 +2816,7 @@ var SETDEX_SV = {
         }
     },
     "Veluza": {
-        "Route 110": {
+        "Psychic Edward | Route 110": {
             "index": "0000000211",
             "level": 41,
             "ability": "Sharpness",
@@ -2829,7 +2829,7 @@ var SETDEX_SV = {
         }
     },
     "Gardevoir": {
-        "Route 110": {
+        "Psychic Edward | Route 110": {
             "index": "0000000212",
             "level": 41,
             "ability": "Trace",
