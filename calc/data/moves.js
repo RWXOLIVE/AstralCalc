@@ -1719,7 +1719,7 @@ var XY_PATCH = {
     Flamethrower: { bp: 90 },
     'Focus Blast': { isBullet: true },
     'Frost Breath': { bp: 60 },
-    'Fury Cutter': { bp: 25 },
+    'Fury Cutter': { bp: 40 },
     'Future Sight': { bp: 120 },
     'Grass Pledge': { bp: 80 },
     'Gyro Ball': { isBullet: true },
