@@ -1553,7 +1553,7 @@ var BW_PATCH = {
         category: 'Physical'
     },
     Glaciate: {
-        bp: 65,
+        bp: 70,
         type: 'Ice',
         target: 'allAdjacentFoes',
         category: 'Special',
@@ -1730,7 +1730,7 @@ var XY_PATCH = {
     'Ice Beam': { bp: 90 },
     Incinerate: { bp: 60 },
     'Leaf Storm': { bp: 130 },
-    Lick: { bp: 45 },
+    Lick: { bp: 30 },
     'Low Sweep': { bp: 65 },
     'Meteor Mash': { bp: 90 },
     'Muddy Water': { bp: 90 },
@@ -2582,7 +2582,7 @@ var SM_PATCH = {
     'Toxic Thread': { bp: 0, type: 'Poison' },
     'Twinkle Tackle': { bp: 1, type: 'Fairy', category: 'Physical', isZ: true },
     'Zippy Zap': {
-        bp: 50,
+        bp: 80,
         type: 'Electric',
         willCrit: true,
         priority: 2,
@@ -4837,6 +4837,7 @@ var SV_PATCH = {
         bp: 40,
         type: 'Psychic',
         category: 'Special',
+        secondaries: true,
         zp: 100,
         maxPower: 90,
         multihit: 2
