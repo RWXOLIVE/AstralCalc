@@ -4,7 +4,7 @@ var SETDEX_SV = {
             "index": "0000000001",
             "level": 7,
             "ability": "Intimidate",
-            "item": "Oran Berry", 
+            "item": "None", 
             "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -17,7 +17,7 @@ var SETDEX_SV = {
             "index": "0000000002",
             "level": 7,
             "ability": "Moxie",
-            "item": "Oran Berry", 
+            "item": "None",
             "nature": "Jolly",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -30,7 +30,7 @@ var SETDEX_SV = {
             "index": "0000000003",
             "level": 7,
             "ability": "Sheer Force",
-            "item": "Oran Berry", 
+            "item": "None",
             "nature": "Timid",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -48,7 +48,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Sleep Powder","Vine Whip","Growl","Leech Seed"]
+            "moves": ["Poison Powder","Vine Whip","Growl","Leech Seed"]
         }
     },
     "Ekans": {
@@ -168,17 +168,17 @@ var SETDEX_SV = {
             "moves": ["Dive","Ice Fang", "Bite"]
         }
     },
-    "Bruxish": {
+    "Kabuto": {
         "Fisherman Patrick | Route 104": {  
             "index": "0000000014",
-            "level": 13,
-            "ability": "Strong Jaw",
-            "item": "Assault Vest", 
-            "nature": "Hasty",
+            "level": 14,
+            "ability": "Weak Armor",
+            "item": "Oran Berry", 
+            "nature": "Naive",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Bite","Heart Stamp", "Aqua Jet","Psywave"]
+            "moves": ["Rock Tomb","Aqua Jet", "Ancient Power","Rock Smash"]
         }
     },
     "Lombre": {
@@ -260,7 +260,7 @@ var SETDEX_SV = {
         }
     },
     "Charmeleon": {
-        "Youngster Billy | Route 104": {  
+        "Youngster Billy & Bobby | Route 104": {  
             "index": "0000000021",
             "level": 15,
             "ability": "Solar Power",
@@ -269,15 +269,15 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Flame Burst","Rock Tomb", "Weather Ball"]
+            "moves": ["Flame Burst","Rock Tomb", "Fire Spin", "Slash"]
         }
     },
     "Stunky": {
-        "Youngster Billy | Route 104": {  
+        "Youngster Billy & Bobby | Route 104": {  
             "index": "0000000022",
             "level": 15,
             "ability": "Aftermath",
-            "item": "Assault Vest", 
+            "item": "Oran Berry", 
             "nature": "Hasty",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -286,7 +286,7 @@ var SETDEX_SV = {
         }
     },
     "Brionne": {
-        "Fisherman Bobby | Route 104": {  
+        "Youngster Billy & Bobby | Route 104": {  
             "index": "0000000023",
             "level": 15,
             "ability": "Cute Charm",
@@ -299,7 +299,7 @@ var SETDEX_SV = {
         }
     },
     "Tirtouga": {
-        "Fisherman Bobby | Route 104": {  
+        "Youngster Billy & Bobby | Route 104": {  
             "index": "0000000024",
             "level": 15,
             "ability": "Solid Rock",
@@ -308,7 +308,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Headbutt","Bubble Beam", "Accelerock","Ice Shard"]
+            "moves": ["Mud Shot","Brine", "Ancient Power","Aqua Jet"]
         }
     },
     "Murkrow": {
@@ -334,7 +334,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Screech","Acid", "Swift","Bite"]
+            "moves": ["Swagger","Acid", "Swift","Bite"]
         },
         "Aqua Grunt 1 | Slateport Museum": {  
             "index": "0000000137",
@@ -775,6 +775,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Dig","Quick Attack"]
+        },
+        "Triathlete Alyssa | Route 110": {
+            "index": "0000000207",
+            "level": 40,
+            "ability": "Huge Power",
+            "item": "Sitrus Berry",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Super Fang", "Earthquake", "Bulldoze", "Mega Punch"]
         }
     },
     "Rhyhorn": {
@@ -1962,7 +1973,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Head Smash","Zen Headbutt","Reversal","Brick Break"]
+            "moves": ["Body Slam","Zen Headbutt","Reversal","Brick Break"]
         }
     },
     "Wyrdeer": {
@@ -2548,7 +2559,7 @@ var SETDEX_SV = {
             "level": 40,
             "ability": "Sheer Force",
             "item": "Grassy Seed", 
-            "nature": "",
+            "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
             },
@@ -2568,7 +2579,7 @@ var SETDEX_SV = {
         "moves": ["Hyper Voice", "Psychic Noise", "Flamethrower", "Protect"]
     }
 },
-"Rillaboom": {
+    "Rillaboom": {
     "Marco & Rhett | Route 103": {
         "index": "0000000195",
         "level": 40,
@@ -2581,7 +2592,7 @@ var SETDEX_SV = {
         "moves": ["Fake Out", "Uproar", "Drum Beating", "Hammer Arm"]
     }
 },
-"Beartic": {
+    "Beartic": {
     "Marco & Rhett | Route 103": {
         "index": "0000000196",
         "level": 40,
@@ -2593,5 +2604,240 @@ var SETDEX_SV = {
         },
         "moves": ["Swords Dance", "Icicle Crash", "Brick Break", "Aqua Jet"]
     }
-}
+},
+    "Manectric": {
+    "Kaleb & Isabel | Route 110": {
+        "index": "0000000197",
+        "level": 41,
+        "ability": "Lightning Rod",
+        "item": "Sitrus Berry",
+        "nature": "Timid",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Electroweb", "Flamethrower", "Thunderbolt", "Energy Ball"]
+    }
+},
+    "Seaking": {
+    "Kaleb & Isabel | Route 110": {
+        "index": "0000000198",
+        "level": 41,
+        "ability": "Lightning Rod",
+        "item": "Water Gem",
+        "nature": "Modest",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Muddy Water", "Hydro Pump", "Ice Beam"]
+    }
+},
+    "Raichu": {
+    "Kaleb & Isabel | Route 110": {
+        "index": "0000000199",
+        "level": 41,
+        "ability": "Static",
+        "item": "Electric Gem",
+        "nature": "Timid",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Discharge"]
+    }
+},
+    "Toxtricity": {
+    "Kaleb & Isabel | Route 110": {
+        "index": "0000000200",
+        "level": 41,
+        "ability": "Punk Rock",
+        "item": "Choice Specs",
+        "nature": "Timid",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Overdrive"]
+    }
+},
+    "Ivysaur": {
+    "Youngster Timmy | Route 110": {
+        "index": "0000000200",
+        "level": 42,
+        "ability": "Thick Fat",
+        "item": "Eviolite",
+        "nature": "Calm",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Toxic", "Strength Sap", "Venoshock", "Giga Drain"]
+    }
+},
+    "Crocalor": {
+    "Youngster Timmy | Route 110": {
+        "index": "0000000200",
+        "level": 42,
+        "ability": "Unaware",
+        "item": "Eviolite",
+        "nature": "Modest",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Torch Song", "Sing", "Destiny Bond", "Fire Blast"]
+    }
+},
+    "Drizzile": {
+    "Youngster Timmy | Route 110": {
+        "index": "0000000200",
+        "level": 42,
+        "ability": "Adaptability",
+        "item": "Choice Scarf",
+        "nature": "Calm",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Hydro Pump", "Blizzard"]
+    }
+},
+    "Crobat": {
+        "Triathlete Edwin | Route 110": {
+            "index": "0000000201",
+            "level": 41,
+            "ability": "Inner Focus",
+            "item": "Life Orb",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["U-Turn", "Cross Poison", "Dual Wingbeat", "Tailwind"]
+        }
+    },
+    "Dodrio": {
+        "Triathlete Edwin | Route 110": {
+            "index": "0000000202",
+            "level": 41,
+            "ability": "Rattled",
+            "item": "Scope Lens",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Drill Run", "Drill Peck", "Double Edge", "Acupressure"]
+        }
+    },
+    "Zebstrika": {
+        "Triathlete Edwin | Route 110": {
+            "index": "0000000203",
+            "level": 41,
+            "ability": "Galvanize",
+            "item": "Lum Berry",
+            "nature": "Docile",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Quick Attack", "Thunderbolt", "Electro Ball", "Ion Deluge"]
+        }
+    },
+    "Jolteon": {
+        "Guitarist Joseph | Route 110": {
+            "index": "0000000204",
+            "level": 40,
+            "ability": "Electric Surge",
+            "item": "Sitrus Berry",
+            "nature": "Naive",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Magnet Rise", "Baton Pass", "Thunderbolt", "Grass Knot"]
+        }
+    },
+    "Simisear": {
+        "Guitarist Joseph | Route 110": {
+            "index": "0000000205",
+            "level": 40,
+            "ability": "Unburden",
+            "item": "Electric Seed",
+            "nature": "Brave",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Taunt", "Knock Off", "Temper Flare", "Protect"]
+        }
+    },
+    "Golem-Alola": {
+        "Guitarist Joseph | Route 110": {
+            "index": "0000000206",
+            "level": 40,
+            "ability": "Galvanize",
+            "item": "Focus Band",
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Self-Destruct"]
+        }
+    },
+    "Weezing": {
+        "Triathlete Alyssa | Route 110": {
+            "index": "0000000208",
+            "level": 40,
+            "ability": "Levitate",
+            "item": "Payapa Berry",
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Belch","Sludge Bomb", "Heat Wave"]
+        }
+    },
+    "Muk-Alola": {
+        "Triathlete Alyssa | Route 110": {
+            "index": "0000000209",
+            "level": 41,
+            "ability": "Power of Alchemy",
+            "item": "Air Balloon",
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Gunk Shot", "Foul Play", "Gunk Shot", "Ice Punch"]
+        }
+    },
+    "Gallade": {
+        "Psychic Edward | Route 110": {
+            "index": "0000000210",
+            "level": 41,
+            "ability": "Sharpness",
+            "item": "Scope Lens",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Swords Dance", "Leaf Blade", "Drain Punch", "Psycho Cut"]
+        }
+    },
+    "Veluza": {
+        "Psychic Edward | Route 110": {
+            "index": "0000000211",
+            "level": 41,
+            "ability": "Sharpness",
+            "item": "Life Orb",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fillet Away","Psyblade", "Aqua Cutter", "Close Combat"]
+        }
+    },
+    "Gardevoir": {
+        "Psychic Edward | Route 110": {
+            "index": "0000000212",
+            "level": 41,
+            "ability": "Trace",
+            "teraType": "Ground",
+            "item": "Absorb Bulb",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Hypnosis", "Moonblast", "Mystical Fire", "Tera Blast"]
+        }
+    }
 }
