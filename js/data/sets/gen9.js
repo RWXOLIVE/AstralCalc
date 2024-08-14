@@ -2567,7 +2567,7 @@ var SETDEX_SV = {
         }
     },
     "Exploud": {
-    "Marco & Rhett | Route 103": {
+        "Marco & Rhett | Route 103": {
         "index": "0000000194",
         "level": 40,
         "ability": "Punk Rock",
@@ -2580,7 +2580,7 @@ var SETDEX_SV = {
     }
 },
     "Rillaboom": {
-    "Marco & Rhett | Route 103": {
+        "Marco & Rhett | Route 103": {
         "index": "0000000195",
         "level": 40,
         "ability": "Punk Rock",
@@ -2659,7 +2659,7 @@ var SETDEX_SV = {
 },
     "Ivysaur": {
     "Youngster Timmy | Route 110": {
-        "index": "0000000200",
+        "index": "0000000201",
         "level": 42,
         "ability": "Thick Fat",
         "item": "Eviolite",
@@ -2672,7 +2672,7 @@ var SETDEX_SV = {
 },
     "Crocalor": {
     "Youngster Timmy | Route 110": {
-        "index": "0000000200",
+        "index": "0000000202",
         "level": 42,
         "ability": "Unaware",
         "item": "Eviolite",
@@ -2685,7 +2685,7 @@ var SETDEX_SV = {
 },
     "Drizzile": {
     "Youngster Timmy | Route 110": {
-        "index": "0000000200",
+        "index": "0000000203",
         "level": 42,
         "ability": "Adaptability",
         "item": "Choice Scarf",
@@ -2698,7 +2698,7 @@ var SETDEX_SV = {
 },
     "Crobat": {
         "Triathlete Edwin | Route 110": {
-            "index": "0000000201",
+            "index": "0000000204",
             "level": 41,
             "ability": "Inner Focus",
             "item": "Life Orb",
@@ -2711,7 +2711,7 @@ var SETDEX_SV = {
     },
     "Dodrio": {
         "Triathlete Edwin | Route 110": {
-            "index": "0000000202",
+            "index": "0000000205",
             "level": 41,
             "ability": "Rattled",
             "item": "Scope Lens",
@@ -2724,7 +2724,7 @@ var SETDEX_SV = {
     },
     "Zebstrika": {
         "Triathlete Edwin | Route 110": {
-            "index": "0000000203",
+            "index": "0000000206",
             "level": 41,
             "ability": "Galvanize",
             "item": "Lum Berry",
@@ -2737,7 +2737,7 @@ var SETDEX_SV = {
     },
     "Jolteon": {
         "Guitarist Joseph | Route 110": {
-            "index": "0000000204",
+            "index": "0000000207",
             "level": 40,
             "ability": "Electric Surge",
             "item": "Sitrus Berry",
@@ -2750,7 +2750,7 @@ var SETDEX_SV = {
     },
     "Simisear": {
         "Guitarist Joseph | Route 110": {
-            "index": "0000000205",
+            "index": "0000000208",
             "level": 40,
             "ability": "Unburden",
             "item": "Electric Seed",
@@ -2763,7 +2763,7 @@ var SETDEX_SV = {
     },
     "Golem-Alola": {
         "Guitarist Joseph | Route 110": {
-            "index": "0000000206",
+            "index": "0000000209",
             "level": 40,
             "ability": "Galvanize",
             "item": "Focus Band",
@@ -2776,7 +2776,7 @@ var SETDEX_SV = {
     },
     "Weezing": {
         "Triathlete Alyssa | Route 110": {
-            "index": "0000000208",
+            "index": "0000000210",
             "level": 40,
             "ability": "Levitate",
             "item": "Payapa Berry",
@@ -2789,7 +2789,7 @@ var SETDEX_SV = {
     },
     "Muk-Alola": {
         "Triathlete Alyssa | Route 110": {
-            "index": "0000000209",
+            "index": "0000000211",
             "level": 41,
             "ability": "Power of Alchemy",
             "item": "Air Balloon",
@@ -2802,7 +2802,7 @@ var SETDEX_SV = {
     },
     "Gallade": {
         "Psychic Edward | Route 110": {
-            "index": "0000000210",
+            "index": "0000000212",
             "level": 41,
             "ability": "Sharpness",
             "item": "Scope Lens",
@@ -2815,7 +2815,7 @@ var SETDEX_SV = {
     },
     "Veluza": {
         "Psychic Edward | Route 110": {
-            "index": "0000000211",
+            "index": "0000000213",
             "level": 41,
             "ability": "Sharpness",
             "item": "Life Orb",
@@ -2828,7 +2828,7 @@ var SETDEX_SV = {
     },
     "Gardevoir": {
         "Psychic Edward | Route 110": {
-            "index": "0000000212",
+            "index": "0000000214",
             "level": 41,
             "ability": "Trace",
             "teraType": "Ground",
