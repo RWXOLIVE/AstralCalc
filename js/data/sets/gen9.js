@@ -1114,7 +1114,7 @@ var SETDEX_SV = {
             "teraType": "Ghost",
             "level": 18,
             "ability": "Purifying Salt",
-            "item": "Mental Herb", 
+            "item": "Rocky Helmet", 
             "nature": "Brave",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31

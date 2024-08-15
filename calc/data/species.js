@@ -3941,7 +3941,7 @@ var BW_PATCH = {
     },
     Emboar: {
         types: ['Fire', 'Fighting'],
-        bs: { hp: 110, at: 123, df: 110, sa: 67, sd: 65, sp: 65 },
+        bs: { hp: 110, at: 123, df: 80, sa: 100, sd: 67, sp: 50 },
         weightkg: 150,
         abilities: { 0: 'Blaze' }
     },
