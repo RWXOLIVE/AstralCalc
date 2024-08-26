@@ -392,7 +392,7 @@ var SETDEX_SV = {
             "index": "0000000030",
             "level": 16,
             "ability": "Truant",
-            "item": "Iron Ball", 
+            "item": "Occa Berry", 
             "nature": "Jolly",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
