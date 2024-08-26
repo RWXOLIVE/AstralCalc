@@ -1077,7 +1077,7 @@ var GSC_PATCH = {
         weightkg: 16
     },
     Donphan: {
-        types: ['Ground', 'Steel'],
+        types: ['Ground'],
         bs: { hp: 90, at: 120, df: 120, sa: 55, sd: 60, sp: 55 },
         weightkg: 120
     },
@@ -3588,7 +3588,7 @@ var DPP_PATCH = {
     },
     Tangrowth: {
         types: ['Grass'],
-        bs: { hp: 100, at: 100, df: 125, sa: 100, sd: 60, sp: 50 },
+        bs: { hp: 100, at: 100, df: 125, sa: 100, sd: 50, sp: 50 },
         weightkg: 128.6,
         abilities: { 0: 'Chlorophyll' }
     },

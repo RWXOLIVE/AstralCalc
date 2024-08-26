@@ -269,7 +269,7 @@ var GSC_PATCH = {
     'Sweet Scent': { bp: 0, category: 'Status', type: 'Normal' },
     Synthesis: { bp: 0, category: 'Status', type: 'Grass' },
     Thief: { bp: 40, type: 'Dark' },
-    'Triple Kick': { bp: 10, type: 'Fighting', multihit: [1, 3] },
+    'Triple Kick': { bp: 15, type: 'Fighting', multihit: [1, 3] },
     Twister: { bp: 40, type: 'Dragon' },
     'Ancient Power': { bp: 60, type: 'Rock' },
     'Bone Rush': { bp: 25, type: 'Ground', multihit: [2, 5] },
@@ -310,8 +310,8 @@ var GSC_PATCH = {
     Snore: { bp: 50, type: 'Normal' },
     'Sweet Kiss': { bp: 0, category: 'Status', type: 'Normal' },
     Rollout: { bp: 30, type: 'Rock' },
-    Frustration: { bp: 0, type: 'Normal' },
-    Return: { bp: 0, type: 'Normal' },
+    Frustration: { bp: 102, type: 'Normal' },
+    Return: { bp: 102, type: 'Normal' },
     'Sacred Fire': { bp: 100, type: 'Fire' },
     'Baton Pass': { bp: 0, category: 'Status', type: 'Normal' },
     'Dragon Breath': { bp: 60, type: 'Dragon' },
@@ -4624,7 +4624,7 @@ var SV_PATCH = {
         secondaries: true
     },
     'Rage Fist': {
-        bp: 100,
+        bp: 50,
         type: 'Ghost',
         category: 'Physical',
         zp: 100,
