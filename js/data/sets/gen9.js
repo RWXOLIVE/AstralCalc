@@ -987,7 +987,7 @@ var SETDEX_SV = {
         "Collector Hector | Rustboro City Gym": {  
             "index": "0000000076",
             "level": 17,
-            "ability": "Analytic",
+            "ability": "Simple",
             "item": "Passho Berry", 
             "nature": "Adamant",
             "ivs": {
