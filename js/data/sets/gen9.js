@@ -308,7 +308,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Mud Shot","Brine", "Ancient Power","Aqua Jet"]
+            "moves": ["Mud Shot","Brine", "Chilling Water","Aqua Jet"]
         }
     },
     "Murkrow": {
