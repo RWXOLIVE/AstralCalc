@@ -619,7 +619,7 @@ var RBY = {
         weightkg: 54
     },
     Ponyta: {
-        types: ['Normal', 'Fire'],
+        types: ['Fire'],
         bs: { hp: 50, at: 85, df: 55, sp: 90, sl: 65 },
         weightkg: 30,
         nfe: true
@@ -645,7 +645,7 @@ var RBY = {
         bs: { hp: 60, at: 90, df: 55, sp: 100, sl: 90 },
         weightkg: 30
     },
-    Rapidash: { types: ['Normal', 'Fire'], bs: { hp: 65, at: 100, df: 70, sp: 105, sl: 80 }, weightkg: 95 },
+    Rapidash: { types: ['Fire'], bs: { hp: 65, at: 100, df: 70, sp: 105, sl: 80 }, weightkg: 95 },
     Raticate: {
         types: ['Normal'],
         bs: { hp: 55, at: 81, df: 60, sp: 97, sl: 50 },
@@ -688,7 +688,7 @@ var RBY = {
     Seaking: { types: ['Water'], bs: { hp: 80, at: 92, df: 65, sp: 68, sl: 80 }, weightkg: 39 },
     Seel: {
         types: ['Water'],
-        bs: { hp: 65, at: 45, df: 55, sp: 45, sl: 70 },
+        bs: { hp: 65, at: 55, df: 55, sp: 55, sl: 70 },
         weightkg: 90,
         nfe: true
     },
@@ -965,7 +965,7 @@ var GSC_PATCH = {
     Scyther: { bs: { sa: 55, sd: 80 }, nfe: true },
     Seadra: { bs: { sa: 95, sd: 55 }, nfe: true },
     Seaking: { bs: { sa: 65, sd: 80 } },
-    Seel: { bs: { sa: 45, sd: 70 } },
+    Seel: { bs: { sa: 55, sd: 70 } },
     Shellder: { bs: { sa: 45, sd: 25 } },
     Slowbro: { bs: { sa: 100, sd: 80 } },
     Slowpoke: { bs: { sa: 40, sd: 40 } },
@@ -1182,7 +1182,7 @@ var GSC_PATCH = {
     },
     Jumpluff: {
         types: ['Grass', 'Flying'],
-        bs: { hp: 75, at: 55, df: 70, sa: 55, sd: 85, sp: 110 },
+        bs: { hp: 75, at: 95, df: 70, sa: 85, sd: 85, sp: 110 },
         weightkg: 3
     },
     Kingdra: {
@@ -1373,7 +1373,7 @@ var GSC_PATCH = {
     },
     Skiploom: {
         types: ['Grass', 'Flying'],
-        bs: { hp: 55, at: 45, df: 50, sa: 45, sd: 65, sp: 80 },
+        bs: { hp: 55, at: 55, df: 50, sa: 55, sd: 65, sp: 90 },
         weightkg: 1,
         nfe: true
     },
@@ -4653,7 +4653,7 @@ var BW_PATCH = {
     },
     Tranquill: {
         types: ['Normal', 'Flying'],
-        bs: { hp: 62, at: 77, df: 62, sa: 50, sd: 42, sp: 65 },
+        bs: { hp: 62, at: 79, df: 67, sa: 50, sd: 50, sp: 70 },
         weightkg: 15,
         nfe: true,
         abilities: { 0: 'Big Pecks' }
@@ -4681,7 +4681,7 @@ var BW_PATCH = {
     },
     Unfezant: {
         types: ['Normal', 'Flying'],
-        bs: { hp: 80, at: 105, df: 80, sa: 65, sd: 55, sp: 93 },
+        bs: { hp: 80, at: 115, df: 82, sa: 65, sd: 90, sp: 93 },
         weightkg: 29,
         abilities: { 0: 'Big Pecks' }
     },
@@ -5133,7 +5133,7 @@ var XY_PATCH = {
         abilities: { 0: 'Torrent' }
     },
     Frogadier: {
-        types: ['Water', 'Dark'],
+        types: ['Water'],
         bs: { hp: 54, at: 63, df: 52, sa: 83, sd: 56, sp: 97 },
         weightkg: 10.9,
         nfe: true,
@@ -7062,7 +7062,7 @@ var SM_PATCH = {
     },
     Toucannon: {
         types: ['Normal', 'Flying'],
-        bs: { hp: 80, at: 120, df: 75, sa: 75, sd: 75, sp: 60 },
+        bs: { hp: 80, at: 120, df: 80, sa: 80, sd: 80, sp: 75 },
         weightkg: 26,
         abilities: { 0: 'Keen Eye' }
     },
@@ -7074,7 +7074,7 @@ var SM_PATCH = {
     },
     Trumbeak: {
         types: ['Normal', 'Flying'],
-        bs: { hp: 55, at: 85, df: 50, sa: 40, sd: 50, sp: 75 },
+        bs: { hp: 55, at: 85, df: 55, sa: 40, sd: 55, sp: 75 },
         weightkg: 14.8,
         nfe: true,
         abilities: { 0: 'Keen Eye' }

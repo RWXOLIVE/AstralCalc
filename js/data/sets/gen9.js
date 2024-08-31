@@ -185,7 +185,7 @@ var SETDEX_SV = {
         "Fisherman Patrick | Route 104": {  
             "index": "0000000015",
             "level": 14,
-            "ability": "Rain Dish",
+            "ability": "Own Tempo",
             "item": "Leftovers", 
             "nature": "Adamant",
             "ivs": {
@@ -282,7 +282,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Mega Drain","Venoshock", "Round","Life Dew"]
+            "moves": ["Absorb","Venoshock", "Round","Life Dew"]
         }
     },
     "Frogadier": {
@@ -308,7 +308,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Mud Shot","Brine", "Chilling Water","Aqua Jet"]
+            "moves": ["Mud Shot","Brine","Aqua Jet"]
         }
     },
     "Murkrow": {
@@ -327,14 +327,14 @@ var SETDEX_SV = {
     "Seviper": {
         "Team Aqua Grunt | Petalburg Woods": {  
             "index": "0000000026",
-            "level": 15,
+            "level": 14,
             "ability": "Shed Skin",
             "item": "None", 
             "nature": "Bashful",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Swagger","Acid", "Swift","Bite"]
+            "moves": ["Acid", "Swift","Bite"]
         },
         "Aqua Grunt 1 | Slateport Museum": {  
             "index": "0000000137",
@@ -430,7 +430,7 @@ var SETDEX_SV = {
         "Rich Boy Winston | Route 104": {  
             "index": "0000000033",
             "level": 15,
-            "ability": "Rain Dish",
+            "ability": "Shell Armor",
             "item": "Wise Glasses", 
             "nature": "Bold",
             "ivs": {
@@ -462,7 +462,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Breaking Swipe","Low Kick"]
+            "moves": ["Breaking Swipe","Low Kick", "Dragon Rage"]
         }
     },
     "Stufful": {
@@ -470,7 +470,7 @@ var SETDEX_SV = {
             "index": "0000000036",
             "level": 16,
             "ability": "Friend Guard",
-            "item": "Electric Seed", 
+            "item": "Oran Berry", 
             "nature": "Brave",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -482,8 +482,8 @@ var SETDEX_SV = {
         "Twin Gina & Mia | Route 104": {  
             "index": "0000000037",
             "level": 16,
-            "ability": "Friend Guard",
-            "item": "None", 
+            "ability": "Inner Focus",
+            "item": "Oran Berry",
             "nature": "Brave",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -495,7 +495,7 @@ var SETDEX_SV = {
         "Lass Emmie | Route 104": {  
             "index": "0000000038",
             "level": 16,
-            "ability": "Swift Swim",
+            "ability": "Weak Armor",
             "item": "Rindo Berry", 
             "nature": "Quiet",
             "ivs": {
@@ -651,7 +651,7 @@ var SETDEX_SV = {
         "Rich Boy Dawson | Route 116": {  
             "index": "0000000051",
             "level": 15,
-            "ability": "Insomnia",
+            "ability": "Bad Dreams",
             "item": "None", 
             "nature": "Mild",
             "ivs": {
@@ -1610,89 +1610,98 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Aqua Jet","Reversal","Body Slam", "Thief"]
+        },
+        "Gym Leader Brawly | Dewford Gym": {  
+            "index": "0000000122",
+            "teraType": "Water",
+            "level": 24,
+            "ability": "Intimidate",
+            "item": "Mystic Water", 
+            "nature": "Brave",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Aqua Jet","Facade","Double Kick", "Rock Tomb"]
         }
     },
     "Silvally-Fighting": {
         "Gym Leader Brawly | Dewford Gym": {  
             "index": "0000000120",
-            "level": 23,
+            "level": 22,
             "ability": "RKS System",
             "item": "Fighting Memory", 
             "nature": "Serious",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Parting Shot","U-turn","Pursuit", "Vacuum Wave"]
+            "moves": ["Aura Sphere","U-turn","Crush Claw", "Pursuit"]
         }
     },
-    "Ledian": {
+    "Falinks": {
         "Gym Leader Brawly | Dewford Gym": {  
             "index": "0000000121",
-            "teraType": "Ice",
-            "level": 24,
-            "ability": "Iron Fist",
-            "item": "Liechi Berry", 
+            "teraType": "Steel",
+            "level": 23,
+            "ability": "Battle Armor",
+            "item": "Focus Sash", 
             "nature": "Jolly",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Sucker Punch","Ice Punch","Mach Punch", "Drain Punch"]
+            "moves": ["Detect","Reversal","Iron Head", "First Impression"]
         }
     },
-    "Granbull": {
-        "Gym Leader Brawly | Dewford Gym": {  
-            "index": "0000000122",
-            "teraType": "Fighting",
-            "level": 24,
-            "ability": "Guard Dog",
-            "item": "Red Card", 
-            "nature": "Adamant",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Bulk Up","Thunder Fang","Play Rough", "Power-Up Punch"]
-        }
-    },
-    "Grapploct": {
+    "Darmanitan": {
         "Gym Leader Brawly | Dewford Gym": {  
             "index": "0000000123",
-            "teraType": "Dark",
-            "level": 24,
-            "ability": "Technician",
-            "item": "Leftovers", 
-            "nature": "Impish",
+            "teraType": "Fire",
+            "level": 22,
+            "ability": "Zen Mode",
+            "item": "Shell Bell", 
+            "nature": "Serious",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Revenge","Payback","Octolock", "Drain Punch"]
+            "moves": ["Headbutt","Drain Punch","Flame Charge", "Psybeam"]
         }
     },
-    "Simisage": {
+    "Pawmot": {
         "Gym Leader Brawly | Dewford Gym": {  
             "index": "0000000124",
-            "teraType": "Rock",
+            "teraType": "Electric",
             "level": 24,
-            "ability": "Unburden",
-            "item": "Coba Berry", 
-            "nature": "Adamant",
+            "ability": "Static",
+            "item": "Leftovers", 
+            "nature": "Naughty",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Spiky Shield","Rock Tomb","Giga Drain", "Rock Smash"]
+            "moves": ["Fake Out","Ice Punch","Drain Punch", "Thunder Punch"]
         }
     },
-    "Bewear": {
+    "Primeape": {
         "Gym Leader Brawly | Dewford Gym": {  
             "index": "0000000125",
-            "teraType": "Normal",
+            "teraType": "Fighting",
             "level": 25,
-            "ability": "Unnerve",
-            "item": "Sitrus Berry", 
-            "nature": "Brave",
+            "ability": "Defiant",
+            "item": "Eviolite", 
+            "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  // Brawly Split
             },
-            "moves": ["Work Up","Headbutt","Payback", "Low Sweep"]
+            "moves": ["Whirlwind","Seismic Toss","Rage Fist", "Rock Smash"]
+        },
+        "Tuber Grant | Route 109": {  
+            "index": "0000000130",
+            "level": 28,
+            "ability": "Vital Spirit",
+            "item": "Muscle Band", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Bulk Up","Knock Off","Drain Punch", "Headbutt"]
         }
     },
     "Masquerain": {
@@ -1745,19 +1754,6 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
             "moves": ["Shock Wave","Muddy Water","Acid Spray", "Electroweb"]
-        }
-    },
-    "Primeape": {
-        "Tuber Grant | Route 109": {  
-            "index": "0000000130",
-            "level": 28,
-            "ability": "Vital Spirit",
-            "item": "Muscle Band", 
-            "nature": "Adamant",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Bulk Up","Knock Off","Drain Punch", "Headbutt"]
         }
     },
     "Scyther": {

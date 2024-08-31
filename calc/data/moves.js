@@ -1524,7 +1524,7 @@ var BW_PATCH = {
         secondaries: true
     },
     'Flame Charge': {
-        bp: 60,
+        bp: 50,
         type: 'Fire',
         makesContact: true,
         category: 'Physical',
