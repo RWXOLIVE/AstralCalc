@@ -137,7 +137,7 @@ var RBY = {
     Twineedle: { bp: 25, type: 'Bug', multihit: 2 },
     Whirlwind: { bp: 0, category: 'Status', type: 'Normal' },
     'Wing Attack': { bp: 60, type: 'Flying' },
-    Wrap: { bp: 50, type: 'Normal' },
+    Wrap: { bp: 40, type: 'Normal' },
     Growl: { bp: 0, category: 'Status', type: 'Normal' },
     Leer: { bp: 0, category: 'Status', type: 'Normal' },
     'Low Kick': { bp: 0, type: 'Fighting' },
