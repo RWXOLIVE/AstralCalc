@@ -378,7 +378,7 @@ var SETDEX_SV = {
         "Bug Catcher John | Petalburg Woods": {  
             "index": "0000000029",
             "level": 15,
-            "ability": "Speed Boost",
+            "ability": "Unnerve",
             "item": "Sitrus Berry", 
             "nature": "Jolly",
             "ivs": {
