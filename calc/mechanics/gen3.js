@@ -180,8 +180,7 @@ function calculateADV(gen, attacker, defender, move, field) {
     else if (attacker.curHP() <= attacker.maxHP() / 3 &&
         ((attacker.hasAbility('Overgrow') && move.hasType('Grass')) ||
             (attacker.hasAbility('Blaze') && move.hasType('Fire')) ||
-            (attacker.hasAbility('Torrent') && move.hasType('Water')) ||
-            (attacker.hasAbility('Swarm') && move.hasType('Bug')))) {
+            (attacker.hasAbility('Torrent') && move.hasType('Water')))) {
         bp = Math.floor(bp * 1.5);
         desc.attackerAbility = attacker.ability;
     }
