@@ -141,6 +141,7 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
     var isAerilate = false;
     var isPixilate = false;
     var isRefrigerate = false;
+    var isSwarm = false;
     var isGalvanize = false;
     var isLiquidVoice = false;
     var isNormalize = false;
@@ -162,10 +163,13 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
         else if ((isRefrigerate = attacker.hasAbility('Refrigerate') && normal)) {
             type = 'Ice';
         }
+        else if ((isSwarm = attacker.hasAbility('Swarm') && normal)) {
+            type = 'Bug';
+        }
         else if ((isNormalize = attacker.hasAbility('Normalize'))) {
             type = 'Normal';
         }
-        if (isGalvanize || isPixilate || isRefrigerate || isAerilate || isNormalize) {
+        if (isGalvanize || isPixilate || isRefrigerate || isSwarm || isAerilate || isNormalize) {
             desc.attackerAbility = attacker.ability;
             hasAteAbilityTypeChange = true;
         }
@@ -943,8 +947,7 @@ function calculateAtModsSMSSSV(gen, attacker, defender, move, field, desc) {
         (attacker.curHP() <= attacker.maxHP() / 3 &&
             ((attacker.hasAbility('Overgrow') && move.hasType('Grass')) ||
                 (attacker.hasAbility('Blaze') && move.hasType('Fire')) ||
-                (attacker.hasAbility('Torrent') && move.hasType('Water')) ||
-                (attacker.hasAbility('Swarm') && move.hasType('Bug')))) ||
+                (attacker.hasAbility('Torrent') && move.hasType('Water')))) ||
         (move.category === 'Special' && attacker.abilityOn && attacker.hasAbility('Plus', 'Minus'))) {
         atMods.push(6144);
         desc.attackerAbility = attacker.ability;
