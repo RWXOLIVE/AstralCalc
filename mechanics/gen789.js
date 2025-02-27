@@ -124,6 +124,7 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
     }
     var hasAteAbilityTypeChange = false;
     var isAerilate = false;
+    var isSwarm = false;
     var isPixilate = false;
     var isRefrigerate = false;
     var isGalvanize = false;
@@ -144,13 +145,16 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
         else if ((isPixilate = attacker.hasAbility('Pixilate') && normal)) {
             type = 'Fairy';
         }
+        else if ((isSwarm = attacker.hasAbility('Swarm') && normal)) {
+            type = 'Bug';
+        }
         else if ((isRefrigerate = attacker.hasAbility('Refrigerate') && normal)) {
             type = 'Ice';
         }
         else if ((isNormalize = attacker.hasAbility('Normalize'))) {
             type = 'Normal';
         }
-        if (isGalvanize || isPixilate || isRefrigerate || isAerilate || isNormalize) {
+        if (isGalvanize || isPixilate || isRefrigerate || isAerilate || isSwarm || isNormalize) {
             desc.attackerAbility = attacker.ability;
             hasAteAbilityTypeChange = true;
         }
@@ -879,8 +883,7 @@ function calculateAtModsSMSSSV(gen, attacker, defender, move, field, desc) {
         (attacker.curHP() <= attacker.maxHP() / 3 &&
             ((attacker.hasAbility('Overgrow') && move.hasType('Grass')) ||
                 (attacker.hasAbility('Blaze') && move.hasType('Fire')) ||
-                (attacker.hasAbility('Torrent') && move.hasType('Water')) ||
-                (attacker.hasAbility('Swarm') && move.hasType('Bug')))) ||
+                (attacker.hasAbility('Torrent') && move.hasType('Water')))) ||
         (move.category === 'Special' && attacker.abilityOn && attacker.hasAbility('Plus', 'Minus'))) {
         atMods.push(6144);
         desc.attackerAbility = attacker.ability;
@@ -892,6 +895,7 @@ function calculateAtModsSMSSSV(gen, attacker, defender, move, field, desc) {
     else if ((attacker.hasAbility('Steelworker') && move.hasType('Steel')) ||
         (attacker.hasAbility('Dragon\'s Maw') && move.hasType('Dragon')) ||
         (attacker.hasAbility('Transistor') && move.hasType('Electric')) ||
+        (attacker.hasAbility('Floral Payload') && move.hasType('Grass')) ||
         (attacker.hasAbility('Rocky Payload') && move.hasType('Rock'))) {
         atMods.push(6144);
         desc.attackerAbility = attacker.ability;

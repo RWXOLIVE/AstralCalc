@@ -69,7 +69,6 @@ const ADV = [
   'Sticky Hold',
   'Sturdy',
   'Suction Cups',
-  'Swarm',
   'Swift Swim',
   'Synchronize',
   'Thick Fat',
@@ -201,6 +200,7 @@ const XY = BW.concat([
   'Mega Launcher',
   'Parental Bond',
   'Pixilate',
+  'Swarm',
   'Primordial Sea',
   'Protean',
   'Refrigerate',
@@ -337,6 +337,7 @@ const SV = SS.concat([
   'Wind Power',
   'Wind Rider',
   'Zero to Hero',
+  'Floral Payload',
 ]);
 
 export const ABILITIES = [[], RBY, GSC, ADV, DPP, BW, XY, SM, SS, SV];

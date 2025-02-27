@@ -208,6 +208,7 @@ export function calculateSMSSSV(
   let isAerilate = false;
   let isPixilate = false;
   let isRefrigerate = false;
+  let isSwarm = false;
   let isGalvanize = false;
   let isLiquidVoice = false;
   let isNormalize = false;
@@ -234,10 +235,12 @@ export function calculateSMSSSV(
       type = 'Fairy';
     } else if ((isRefrigerate = attacker.hasAbility('Refrigerate') && normal)) {
       type = 'Ice';
+    } else if ((isSwarm = attacker.hasAbility('Swarm') && normal)) {
+      type = 'Bug';
     } else if ((isNormalize = attacker.hasAbility('Normalize'))) { // Boosts any type
       type = 'Normal';
     }
-    if (isGalvanize || isPixilate || isRefrigerate || isAerilate || isNormalize) {
+    if (isGalvanize || isPixilate || isRefrigerate || isSwarm || isAerilate || isNormalize) {
       desc.attackerAbility = attacker.ability;
       hasAteAbilityTypeChange = true;
     } else if (isLiquidVoice) {
@@ -1241,8 +1244,7 @@ export function calculateAtModsSMSSSV(
     (attacker.curHP() <= attacker.maxHP() / 3 &&
       ((attacker.hasAbility('Overgrow') && move.hasType('Grass')) ||
        (attacker.hasAbility('Blaze') && move.hasType('Fire')) ||
-       (attacker.hasAbility('Torrent') && move.hasType('Water')) ||
-       (attacker.hasAbility('Swarm') && move.hasType('Bug')))) ||
+       (attacker.hasAbility('Torrent') && move.hasType('Water')))) ||
     (move.category === 'Special' && attacker.abilityOn && attacker.hasAbility('Plus', 'Minus'))
   ) {
     atMods.push(6144);
@@ -1254,7 +1256,8 @@ export function calculateAtModsSMSSSV(
     (attacker.hasAbility('Steelworker') && move.hasType('Steel')) ||
     (attacker.hasAbility('Dragon\'s Maw') && move.hasType('Dragon')) ||
     (attacker.hasAbility('Transistor') && move.hasType('Electric')) ||
-    (attacker.hasAbility('Rocky Payload') && move.hasType('Rock'))
+    (attacker.hasAbility('Rocky Payload') && move.hasType('Rock')) ||
+    (attacker.hasAbility('Floral Payload') && move.hasType('Grass'))
   ) {
     atMods.push(6144);
     desc.attackerAbility = attacker.ability;

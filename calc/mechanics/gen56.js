@@ -81,8 +81,8 @@ function calculateBWXY(gen, attacker, defender, move, field) {
         }
     }
     var isAerilate = false;
-    var isPixilate = false;
     var isSwarm = false;
+    var isPixilate = false;
     var isRefrigerate = false;
     var isNormalize = false;
     var noTypeChange = move.named('Judgment', 'Nature Power', 'Techo Blast', 'Natural Gift', 'Weather Ball');
@@ -103,7 +103,7 @@ function calculateBWXY(gen, attacker, defender, move, field) {
         else if ((isNormalize = attacker.hasAbility('Normalize'))) {
             move.type = 'Normal';
         }
-        if (isPixilate || isRefrigerate || isAerilate || isSwarm ||isNormalize) {
+        if (isPixilate || isRefrigerate || isAerilate || isSwarm || isNormalize) {
             desc.attackerAbility = attacker.ability;
         }
     }
@@ -430,7 +430,7 @@ function calculateBWXY(gen, attacker, defender, move, field) {
         bpMods.push(6144);
         desc.isHelpingHand = true;
     }
-    if (isAerilate || isPixilate || isRefrigerate || isSwarm || isNormalize) {
+    if (isAerilate || isPixilate || isRefrigerate || isSwarm ||isNormalize) {
         bpMods.push(5325);
         desc.attackerAbility = attacker.ability;
     }
@@ -514,7 +514,6 @@ function calculateBWXY(gen, attacker, defender, move, field) {
             ((attacker.hasAbility('Overgrow') && move.hasType('Grass')) ||
                 (attacker.hasAbility('Blaze') && move.hasType('Fire')) ||
                 (attacker.hasAbility('Torrent') && move.hasType('Water')))) ||
-                //(attacker.hasAbility('Swarm' && move.hasType('Bug')))) ||
         (move.category === 'Special' && attacker.abilityOn && attacker.hasAbility('Plus', 'Minus'))) {
         atMods.push(6144);
         desc.attackerAbility = attacker.ability;

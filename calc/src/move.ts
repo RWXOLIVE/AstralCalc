@@ -254,6 +254,7 @@ export function getMaxMoveName(
     if (pokemonSpecies === 'Snorlax-Gmax') return 'G-Max Replenish';
     if (pokemonAbility === 'Pixilate') return 'Max Starfall';
     if (pokemonAbility === 'Aerilate') return 'Max Airstream';
+    if (pokemonAbility === 'Swarm') return 'Max Flutterby';
     if (pokemonAbility === 'Refrigerate') return 'Max Hailstorm';
     if (pokemonAbility === 'Galvanize') return 'Max Lightning';
   }

@@ -107,7 +107,6 @@ var ADV = [
     'Sticky Hold',
     'Sturdy',
     'Suction Cups',
-    'Swarm',
     'Swift Swim',
     'Synchronize',
     'Thick Fat',
@@ -241,6 +240,7 @@ var XY = BW.concat([
     'Refrigerate',
     'Stance Change',
     'Strong Jaw',
+    'Swarm',
     'Sweet Veil',
     'Symbiosis',
     'Tough Claws',
@@ -357,6 +357,7 @@ var SV = SS.concat([
     'Wind Power',
     'Wind Rider',
     'Zero to Hero',
+    'Floral Payload',
 ]);
 exports.ABILITIES = [[], RBY, GSC, ADV, DPP, BW, XY, SM, SS, SV];
 var Abilities = (function () {

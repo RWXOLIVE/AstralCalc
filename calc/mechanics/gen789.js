@@ -141,7 +141,6 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
     var isAerilate = false;
     var isPixilate = false;
     var isRefrigerate = false;
-    var isSwarm = false;
     var isGalvanize = false;
     var isLiquidVoice = false;
     var isNormalize = false;
@@ -169,7 +168,7 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
         else if ((isNormalize = attacker.hasAbility('Normalize'))) {
             type = 'Normal';
         }
-        if (isGalvanize || isPixilate || isRefrigerate || isSwarm || isAerilate || isNormalize) {
+        if (isGalvanize || isPixilate || isRefrigerate || isAerilate || isSwarm || isNormalize) {
             desc.attackerAbility = attacker.ability;
             hasAteAbilityTypeChange = true;
         }
@@ -787,7 +786,7 @@ function calculateBPModsSMSSSV(gen, attacker, defender, move, field, desc, baseP
         }
     }
     if ((attacker.hasAbility('Sheer Force') &&
-        (move.secondaries || move.named('Happy Hour', 'Celebrate')) && !move.isMax) ||
+        (move.secondaries || move.named('Jet Punch', 'Order Up')) && !move.isMax) ||
         (attacker.hasAbility('Sand Force') &&
             field.hasWeather('Sand') && move.hasType('Rock', 'Ground', 'Steel')) ||
         (attacker.hasAbility('Analytic') &&
@@ -959,8 +958,7 @@ function calculateAtModsSMSSSV(gen, attacker, defender, move, field, desc) {
     else if ((attacker.hasAbility('Steelworker') && move.hasType('Steel')) ||
         (attacker.hasAbility('Dragon\'s Maw') && move.hasType('Dragon')) ||
         (attacker.hasAbility('Transistor') && move.hasType('Electric')) ||
-        (attacker.hasAbility('Rocky Payload') && move.hasType('Rock')) ||
-        (attacker.hasAbility('Floral Payload') && move.hasType('Grass'))) {
+        (attacker.hasAbility('Rocky Payload') && move.hasType('Rock'))) {
         atMods.push(6144);
         desc.attackerAbility = attacker.ability;
     }

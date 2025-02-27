@@ -128,6 +128,7 @@ export function calculateBWXY(
   }
 
   let isAerilate = false;
+  let isSwarm = false;
   let isPixilate = false;
   let isRefrigerate = false;
   let isNormalize = false;
@@ -142,10 +143,12 @@ export function calculateBWXY(
       move.type = 'Fairy';
     } else if ((isRefrigerate = attacker.hasAbility('Refrigerate') && normal)) {
       move.type = 'Ice';
+    } else if ((isSwarm = attacker.hasAbility('Swarm') && normal)) {
+      move.type = 'Bug';
     } else if ((isNormalize = attacker.hasAbility('Normalize'))) {
       move.type = 'Normal';
     }
-    if (isPixilate || isRefrigerate || isAerilate || isNormalize) {
+    if (isPixilate || isRefrigerate || isAerilate || isSwarm || isNormalize) {
       desc.attackerAbility = attacker.ability;
     }
   }
@@ -507,7 +510,7 @@ export function calculateBWXY(
     desc.isHelpingHand = true;
   }
 
-  if (isAerilate || isPixilate || isRefrigerate || isNormalize) {
+  if (isAerilate || isSwarm || isPixilate || isRefrigerate || isNormalize) {
     bpMods.push(5325);
     desc.attackerAbility = attacker.ability;
   } else if (
@@ -601,8 +604,7 @@ export function calculateBWXY(
       (attacker.curHP() <= attacker.maxHP() / 3 &&
         ((attacker.hasAbility('Overgrow') && move.hasType('Grass')) ||
          (attacker.hasAbility('Blaze') && move.hasType('Fire')) ||
-         (attacker.hasAbility('Torrent') && move.hasType('Water')) ||
-         (attacker.hasAbility('Swarm') && move.hasType('Bug')))) ||
+         (attacker.hasAbility('Torrent') && move.hasType('Water')))) ||
       (move.category === 'Special' && attacker.abilityOn && attacker.hasAbility('Plus', 'Minus'))
   ) {
     atMods.push(6144);

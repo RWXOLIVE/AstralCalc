@@ -6442,10 +6442,10 @@ var SM_PATCH = {
     },
     'Eevee-Starter': {
         types: ['Normal'],
-        bs: { hp: 65, at: 75, df: 70, sa: 65, sd: 85, sp: 75 },
+        bs: { hp: 95, at: 90, df: 65, sa: 15, sd: 65, sp: 100 },
         weightkg: 6.5,
-        abilities: { 0: 'Run Away' },
-        baseSpecies: 'Eevee'
+        abilities: {0: 'Adaptability'},
+        baseSpecies: 'Eevee',
     },
     Electrelk: {
         types: ['Grass', 'Electric'],
@@ -8992,7 +8992,7 @@ var PLA_PATCH = {
 };
 var SS = (0, util_1.extend)(true, {}, SM, SS_PATCH, PLA_PATCH);
 delete SS['Pikachu-Starter'];
-delete SS['Eevee-Starter'];
+//delete SS['Eevee-Starter'];
 var SV_PATCH = {
     Bisharp: { nfe: true },
     Cresselia: { bs: { df: 110, sd: 120 } },
