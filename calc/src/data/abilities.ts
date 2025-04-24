@@ -338,6 +338,7 @@ const SV = SS.concat([
   'Wind Rider',
   'Zero to Hero',
   'Floral Payload',
+  'Heart Boost',
 ]);
 
 export const ABILITIES = [[], RBY, GSC, ADV, DPP, BW, XY, SM, SS, SV];

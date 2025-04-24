@@ -944,6 +944,7 @@ function calculateAtModsSMSSSV(gen, attacker, defender, move, field, desc) {
         desc.isFlowerGiftAttacker = true;
     }
     else if ((attacker.hasAbility('Guts') && attacker.status && move.category === 'Physical') ||
+        (attacker.hasAbility('Heart Boost') && attacker.status && move.category === 'Special') ||
         (attacker.curHP() <= attacker.maxHP() / 3 &&
             ((attacker.hasAbility('Overgrow') && move.hasType('Grass')) ||
                 (attacker.hasAbility('Blaze') && move.hasType('Fire')) ||

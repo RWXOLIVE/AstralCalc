@@ -93,7 +93,7 @@ export function calculateBWXY(
   }
 
   const isCritical =
-    move.isCrit && !defender.hasAbility('Battle Armor', 'Shell Armor') && move.timesUsed === 1;
+    move.isCrit && !defender.hasAbility('Battle Armor', 'Shell Armor', 'Magma Armor') && move.timesUsed === 1;
 
   if (move.named('Weather Ball')) {
     move.type =

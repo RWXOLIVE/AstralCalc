@@ -88,7 +88,7 @@ const RBY: {[name: string]: MoveData} = {
   Haze: {bp: 0, category: 'Status', type: 'Ice'},
   'High Jump Kick': {bp: 130, type: 'Fighting', hasCrashDamage: true}, 
   'Horn Drill': {bp: 0, type: 'Normal'},
-  'Hyper Beam': {bp: 140, type: 'Normal'}, 
+  'Hyper Beam': {bp: 140, type: 'Normal', mindBlownRecoil: true}, 
   'Jump Kick': {bp: 100, type: 'Fighting', hasCrashDamage: true}, 
   'Karate Chop': {bp: 50, type: 'Normal'},
   'Leech Seed': {bp: 0, category: 'Status', type: 'Grass'},
@@ -527,6 +527,7 @@ const ADV_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Rock Tomb': {bp: 60, type: 'Rock'}, 
   'Will-O-Wisp': {bp: 0, category: 'Status', type: 'Fire'},
   'Frost-Wisp': {bp: 0, category: 'Status', type: 'Ice'},
+  'Aqua Fangs': {bp: 85, category: 'Status', type: 'Water'},
   'Ice Ball': {bp: 30, type: 'Ice', makesContact: true},
   'Sheer Cold': {bp: 110, type: 'Ice'},
   Howl: {bp: 0, category: 'Status', type: 'Normal'},
@@ -1072,8 +1073,9 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     category: 'Physical',
   },
   'Giga Impact': {
-    bp: 130, 
+    bp: 140, 
     type: 'Normal',
+    mindBlownRecoil: true,
     makesContact: true,
     category: 'Physical',
   },
@@ -1127,7 +1129,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   },
   'Psycho Cut': {bp: 70, type: 'Psychic', category: 'Physical'},
   'Rock Polish': {bp: 0, type: 'Rock'},
-  'Rock Wrecker': {bp: 130, type: 'Rock', category: 'Physical'},
+  'Rock Wrecker': {bp: 140, type: 'Rock', category: 'Physical', mindBlownRecoil: true},
   'Seed Bomb': {bp: 80, type: 'Grass', category: 'Physical'},
   'Shadow Claw': {
     bp: 70,
@@ -1647,7 +1649,7 @@ const BW_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     category: 'Special',
     secondaries: true,
   },
-  'Smack Down': {bp: 50, type: 'Rock', category: 'Physical'},
+  'Smack Down': {bp: 60, type: 'Rock', category: 'Physical'},
   'Stored Power': {bp: 20, type: 'Psychic', category: 'Special'},
   'Tail Slap': {
     bp: 25,
@@ -2388,7 +2390,7 @@ const SM_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   '10,000,000 Volt Thunderbolt': {bp: 195, type: 'Electric', category: 'Special', isZ: true},
   'Acid Downpour': {bp: 1, type: 'Poison', category: 'Physical', isZ: true},
   'All-Out Pummeling': {bp: 1, type: 'Fighting', category: 'Physical', isZ: true},
-  'Baddy Bad': {bp: 50, type: 'Dark', category: 'Special', zp: 175},
+  'Baddy Bad': {bp: 80, type: 'Dark', category: 'Special', zp: 175},
   'Baneful Bunker': {bp: 0, type: 'Poison', priority: 4},
   'Beak Blast': {
     bp: 100,
@@ -2408,7 +2410,7 @@ const SM_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   },
   'Breakneck Blitz': {bp: 1, type: 'Normal', category: 'Physical', isZ: true},
   'Buzzy Buzz': {
-    bp: 20,
+    bp: 30,
     type: 'Electric',
     category: 'Special',
     secondaries: true,
@@ -2466,7 +2468,7 @@ const SM_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     zp: 195,
   },
   'Floral Healing': {bp: 0, type: 'Fairy'},
-  'Freezy Frost': {bp: 90, type: 'Ice', category: 'Special', zp: 175},
+  'Freezy Frost': {bp: 100, type: 'Ice', category: 'Special', zp: 175},
   'Genesis Supernova': {
     bp: 185,
     type: 'Psychic',
@@ -2475,7 +2477,7 @@ const SM_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     isZ: true,
   },
   'Gigavolt Havoc': {bp: 1, type: 'Electric', category: 'Physical', isZ: true},
-  'Glitzy Glow': {bp: 50, type: 'Psychic', category: 'Special', zp: 175},
+  'Glitzy Glow': {bp: 80, type: 'Psychic', category: 'Special', zp: 175},
   'Guardian of Alola': {bp: 0, type: 'Fairy', category: 'Special', isZ: true},
   'Hydro Vortex': {bp: 1, type: 'Water', category: 'Physical', isZ: true},
   'Ice Hammer': {
@@ -2536,7 +2538,7 @@ const SM_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     isZ: true,
   },
   'Revelation Dance': {bp: 90, type: 'Normal', category: 'Special', zp: 175},
-  'Sappy Seed': {bp: 40, type: 'Grass', category: 'Physical', zp: 175},
+  'Sappy Seed': {bp: 50, type: 'Grass', category: 'Physical', zp: 175},
   'Savage Spin-Out': {bp: 1, type: 'Bug', category: 'Physical', isZ: true},
   'Searing Sunraze Smash': {
     bp: 200,
@@ -2556,7 +2558,7 @@ const SM_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   'Shore Up': {bp: 0, type: 'Ground'},
   'Sinister Arrow Raid': {bp: 180, type: 'Ghost', category: 'Physical', isZ: true},
   'Sizzly Slide': {
-    bp: 20,
+    bp: 30,
     type: 'Fire',
     makesContact: true,
     category: 'Physical',
@@ -2577,7 +2579,7 @@ const SM_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     category: 'Physical',
     isZ: true,
   },
-  'Sparkly Swirl': {bp: 90, type: 'Fairy', category: 'Special', zp: 175},
+  'Sparkly Swirl': {bp: 110, type: 'Fairy', category: 'Special', zp: 175},
   'Splintered Stormshards': {bp: 190, type: 'Rock', category: 'Physical', isZ: true},
   Spotlight: {bp: 0, type: 'Electric', priority: 3},
   'Stoked Sparksurfer': {
@@ -4760,7 +4762,7 @@ const SV_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     secondaries: true,
   },
   'Supercell Slam': {
-    bp: 130,
+    bp: 100,
     type: 'Electric',
     category: 'Physical',
     zp: 180,
