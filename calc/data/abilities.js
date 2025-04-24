@@ -369,6 +369,8 @@ var SV = SS.concat([
     'Wind Power',
     'Wind Rider',
     'Zero to Hero',
+    'Floral Payload',
+    'Heart Boost',
 ]);
 exports.ABILITIES = [[], RBY, GSC, ADV, DPP, BW, XY, SM, SS, SV];
 var Abilities = (function () {
