@@ -24,7 +24,7 @@ export declare function checkMultihitBoost(gen: Generation, attacker: Pokemon, d
 export declare function chainMods(mods: number[], lowerBound: number, upperBound: number): number;
 export declare function getBaseDamage(level: number, basePower: number, attack: number, defense: number): number;
 export declare function getMostProficientStat(pokemon: Pokemon, gen?: Generation): StatID;
-export declare function getFinalDamage(baseAmount: number, i: number, effectiveness: number, isBurned: boolean, stabMod: number, finalMod: number, protect?: boolean): number;
+export declare function getFinalDamage(baseAmount: number, i: number, effectiveness: number, isBurned: boolean, isFrostbite: boolean, stabMod: number, finalMod: number, protect?: boolean): number;
 export declare function getShellSideArmCategory(source: Pokemon, target: Pokemon): MoveCategory;
 export declare function getWeightFactor(pokemon: Pokemon): 1 | 2 | 0.5;
 export declare function countBoosts(gen: Generation, boosts: StatsTable): number;

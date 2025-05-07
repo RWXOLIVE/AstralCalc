@@ -43,7 +43,8 @@ var CALC_STATUS = {
 	'Badly Poisoned': 'tox',
 	'Burned': 'brn',
 	'Asleep': 'slp',
-	'Frozen': 'frz'
+	'Frozen': 'frz',
+	'Frostbite': 'frb'
 };
 
 function legacyStatToStat(st) {

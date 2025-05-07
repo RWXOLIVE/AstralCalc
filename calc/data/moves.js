@@ -518,7 +518,7 @@ var ADV_PATCH = {
     'Metal Sound': { bp: 0, category: 'Status', type: 'Steel', isSound: true },
     'Meteor Mash': { bp: 90, type: 'Steel', makesContact: true },
     'Muddy Water': { bp: 90, type: 'Water', target: 'allAdjacentFoes' },
-    'Poison Fang': { bp: 65, type: 'Poison', makesContact: true },
+    'Poison Fang': { bp: 55, type: 'Poison', makesContact: true },
     'Rock Tomb': { bp: 60, type: 'Rock' },
     'Will-O-Wisp': { bp: 0, category: 'Status', type: 'Fire' },
     'Frost-Wisp': { bp: 0, category: 'Status', type: 'Ice' },
@@ -822,7 +822,7 @@ var DPP_PATCH = {
         makesContact: true,
         category: 'Physical'
     },
-    Chatter: { bp: 60, type: 'Flying', isSound: true, category: 'Special' },
+    Chatter: { bp: 75, type: 'Flying', isSound: true, category: 'Special' },
     Copycat: { bp: 0, type: 'Normal' },
     'Crush Grip': {
         bp: 0,
@@ -1650,7 +1650,7 @@ var BW_PATCH = {
         category: 'Physical'
     },
     'V-create': {
-        bp: 160,
+        bp: 180,
         type: 'Fire',
         makesContact: true,
         category: 'Physical'
@@ -1753,7 +1753,7 @@ var XY_PATCH = {
     'Skull Bash': { bp: 130 },
     'Sludge Bomb': { isBullet: true },
     Smog: { bp: 30 },
-    Snore: { bp: 50 },
+    Snore: { bp: 75 },
     'Storm Throw': { bp: 60 },
     'Struggle Bug': { bp: 55 },
     Surf: { bp: 90 },

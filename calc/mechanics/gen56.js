@@ -81,7 +81,7 @@ function calculateBWXY(gen, attacker, defender, move, field) {
         }
     }
     var isAerilate = false;
-    var isSwarm = false;
+    var isSwarmLash = false;
     var isPixilate = false;
     var isRefrigerate = false;
     var isNormalize = false;
@@ -97,13 +97,13 @@ function calculateBWXY(gen, attacker, defender, move, field) {
         else if ((isRefrigerate = attacker.hasAbility('Refrigerate') && normal)) {
             move.type = 'Ice';
         }
-        else if ((isSwarm = attacker.hasAbility('Swarm') && normal)) {
+        else if ((isSwarmLash = attacker.hasAbility('Swarm Lash') && normal)) {
             move.type = 'Bug';
         }
         else if ((isNormalize = attacker.hasAbility('Normalize'))) {
             move.type = 'Normal';
         }
-        if (isPixilate || isRefrigerate || isAerilate || isSwarm || isNormalize) {
+        if (isPixilate || isRefrigerate || isAerilate || isSwarmLash || isNormalize) {
             desc.attackerAbility = attacker.ability;
         }
     }
@@ -430,7 +430,7 @@ function calculateBWXY(gen, attacker, defender, move, field) {
         bpMods.push(6144);
         desc.isHelpingHand = true;
     }
-    if (isAerilate || isSwarm || isPixilate || isRefrigerate || isNormalize) {
+    if (isAerilate || isSwarmLash || isPixilate || isRefrigerate || isNormalize) {
         bpMods.push(5325);
         desc.attackerAbility = attacker.ability;
     }
@@ -513,6 +513,7 @@ function calculateBWXY(gen, attacker, defender, move, field) {
         (attacker.curHP() <= attacker.maxHP() / 3 &&
             ((attacker.hasAbility('Overgrow') && move.hasType('Grass')) ||
                 (attacker.hasAbility('Blaze') && move.hasType('Fire')) ||
+                (attacker.hasAbility('Swarm') && move.hasType('Bug')) ||
                 (attacker.hasAbility('Torrent') && move.hasType('Water')))) ||
         (move.category === 'Special' && attacker.abilityOn && attacker.hasAbility('Plus', 'Minus'))) {
         atMods.push(6144);
@@ -672,6 +673,11 @@ function calculateBWXY(gen, attacker, defender, move, field) {
         !attacker.hasAbility('Guts') &&
         !(move.named('Facade') && gen.num === 6);
     desc.isBurned = applyBurn;
+    var applyFrostbite = attacker.hasStatus('frb') &&
+        move.category === 'Special' &&
+        !attacker.hasAbility('Guts') &&
+        !(move.named('Facade') && gen.num === 6);
+    desc.isFrostbite = applyFrostbite;
     var finalMods = [];
     if (field.defenderSide.isReflect && move.category === 'Physical' && !isCritical) {
         finalMods.push(field.gameType !== 'Singles' ? (gen.num > 5 ? 2732 : 2703) : 2048);
@@ -743,7 +749,7 @@ function calculateBWXY(gen, attacker, defender, move, field) {
     var damage = [];
     for (var i = 0; i < 16; i++) {
         damage[i] =
-            (0, util_2.getFinalDamage)(baseDamage, i, typeEffectiveness, applyBurn, stabMod, finalMod);
+            (0, util_2.getFinalDamage)(baseDamage, i, typeEffectiveness, applyBurn, applyFrostbite, stabMod, finalMod);
     }
     if (move.dropsStats && (move.timesUsed || 0) > 1) {
         var simpleMultiplier = attacker.hasAbility('Simple') ? 2 : 1;
@@ -757,7 +763,7 @@ function calculateBWXY(gen, attacker, defender, move, field) {
             damage = damage.map(function (affectedAmount) {
                 if (times) {
                     var newBaseDamage = (0, util_2.getBaseDamage)(attacker.level, basePower, newAttack, defense);
-                    var newFinalDamage = (0, util_2.getFinalDamage)(newBaseDamage, damageMultiplier, typeEffectiveness, applyBurn, stabMod, finalMod);
+                    var newFinalDamage = (0, util_2.getFinalDamage)(newBaseDamage, damageMultiplier, typeEffectiveness, applyBurn, applyFrostbite, stabMod, finalMod);
                     damageMultiplier++;
                     return affectedAmount + newFinalDamage;
                 }

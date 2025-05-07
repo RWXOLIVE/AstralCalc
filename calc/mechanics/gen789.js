@@ -141,7 +141,7 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
     var isAerilate = false;
     var isPixilate = false;
     var isRefrigerate = false;
-    var isSwarm = false;
+    var isSwarmLash = false;
     var isGalvanize = false;
     var isLiquidVoice = false;
     var isNormalize = false;
@@ -163,13 +163,13 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
         else if ((isRefrigerate = attacker.hasAbility('Refrigerate') && normal)) {
             type = 'Ice';
         }
-        else if ((isSwarm = attacker.hasAbility('Swarm') && normal)) {
+        else if ((isSwarmLash = attacker.hasAbility('Swarm Lash') && normal)) {
             type = 'Bug';
         }
         else if ((isNormalize = attacker.hasAbility('Normalize'))) {
             type = 'Normal';
         }
-        if (isGalvanize || isPixilate || isRefrigerate || isSwarm || isAerilate || isNormalize) {
+        if (isGalvanize || isPixilate || isRefrigerate || isSwarmLash || isAerilate || isNormalize) {
             desc.attackerAbility = attacker.ability;
             hasAteAbilityTypeChange = true;
         }
@@ -409,6 +409,11 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
         !attacker.hasAbility('Guts') &&
         !move.named('Facade');
     desc.isBurned = applyBurn;
+    var applyFrostbite = attacker.hasStatus('frb') &&
+        move.category === 'Special' &&
+        !attacker.hasAbility('Guts') &&
+        !move.named('Facade');
+    desc.isFrostbite = applyFrostbite;
     var finalMods = calculateFinalModsSMSSSV(gen, attacker, defender, move, field, desc, isCritical, typeEffectiveness);
     var protect = false;
     if (field.defenderSide.isProtected &&
@@ -428,7 +433,7 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
     var damage = [];
     for (var i = 0; i < 16; i++) {
         damage[i] =
-            (0, util_2.getFinalDamage)(baseDamage, i, typeEffectiveness, applyBurn, stabMod, finalMod, protect);
+            (0, util_2.getFinalDamage)(baseDamage, i, typeEffectiveness, applyBurn, applyFrostbite, stabMod, finalMod, protect);
     }
     if (move.dropsStats && move.timesUsed > 1) {
         var simpleMultiplier = attacker.hasAbility('Simple') ? 2 : 1;
@@ -442,7 +447,7 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
             damage = damage.map(function (affectedAmount) {
                 if (times) {
                     var newBaseDamage = (0, util_2.getBaseDamage)(attacker.level, basePower, newAttack, defense);
-                    var newFinalDamage = (0, util_2.getFinalDamage)(newBaseDamage, damageMultiplier, typeEffectiveness, applyBurn, stabMod, finalMod, protect);
+                    var newFinalDamage = (0, util_2.getFinalDamage)(newBaseDamage, damageMultiplier, typeEffectiveness, applyBurn, applyFrostbite, stabMod, finalMod, protect);
                     damageMultiplier++;
                     return affectedAmount + newFinalDamage;
                 }
@@ -948,6 +953,7 @@ function calculateAtModsSMSSSV(gen, attacker, defender, move, field, desc) {
         (attacker.curHP() <= attacker.maxHP() / 3 &&
             ((attacker.hasAbility('Overgrow') && move.hasType('Grass')) ||
                 (attacker.hasAbility('Blaze') && move.hasType('Fire')) ||
+                (attacker.hasAbility('Swarm') && move.hasType('Bug')) ||
                 (attacker.hasAbility('Torrent') && move.hasType('Water')))) ||
         (move.category === 'Special' && attacker.abilityOn && attacker.hasAbility('Plus', 'Minus'))) {
         atMods.push(6144);
@@ -964,6 +970,13 @@ function calculateAtModsSMSSSV(gen, attacker, defender, move, field, desc) {
         (attacker.hasAbility('Floral Payload') && move.hasType('Grass'))) {
         atMods.push(6144);
         desc.attackerAbility = attacker.ability;
+    }
+    else if (attacker.hasAbility('Lunar Veil') &&
+        (move.hasType('Dark') || move.hasType('Ghost')) ||
+        attacker.hasAbility('Solar Veil') &&
+            (move.hasType('Fire') || move.hasType('Ground'))) {
+        atMods.push(4915);
+        desc.attackerAbility = 'Lunar Veil';
     }
     else if (attacker.hasAbility('Stakeout') && attacker.abilityOn) {
         atMods.push(8192);

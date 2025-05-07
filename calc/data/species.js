@@ -83,7 +83,7 @@ var RBY = {
         bs: { hp: 55, at: 50, df: 45, sp: 120, sl: 135 },
         weightkg: 48
     },
-    Arbok: { types: ['Poison', 'Dark'], bs: { hp: 75, at: 95, df: 69, sp: 85, sl: 50 }, weightkg: 65 },
+    Arbok: { types: ['Poison', 'Dragon'], bs: { hp: 78, at: 109, df: 74, sp: 100, sl: 50 }, weightkg: 65 },
     Arcanine: {
         types: ['Fire'],
         bs: { hp: 90, at: 110, df: 80, sp: 95, sl: 80 },
@@ -215,7 +215,7 @@ var RBY = {
     },
     Dugtrio: {
         types: ['Ground'],
-        bs: { hp: 35, at: 80, df: 50, sp: 120, sl: 70 },
+        bs: { hp: 40, at: 110, df: 50, sp: 120, sl: 70 },
         weightkg: 33.3
     },
     Eevee: {
@@ -237,7 +237,7 @@ var RBY = {
     },
     Electrode: {
         types: ['Electric'],
-        bs: { hp: 60, at: 95, df: 70, sp: 145, sl: 50 },
+        bs: { hp: 60, at: 80, df: 70, sp: 150, sl: 50 },
         weightkg: 66.6
     },
     Exeggcute: {
@@ -584,7 +584,7 @@ var RBY = {
     },
     Pidgeotto: {
         types: ['Flying'],
-        bs: { hp: 63, at: 60, df: 55, sp: 71, sl: 50 },
+        bs: { hp: 80, at: 60, df: 55, sp: 73, sl: 50 },
         weightkg: 30,
         nfe: true
     },
@@ -1203,7 +1203,7 @@ var GSC_PATCH = {
     },
     Ledian: {
         types: ['Bug', 'Fighting'],
-        bs: { hp: 50, at: 60, df: 60, sa: 75, sd: 95, sp: 70 },
+        bs: { hp: 50, at: 60, df: 60, sa: 75, sd: 110, sp: 70 },
         weightkg: 35.6
     },
     Ledyba: {
@@ -1485,7 +1485,7 @@ var GSC_PATCH = {
     },
     Tyrogue: {
         types: ['Fighting'],
-        bs: { hp: 35, at: 35, df: 35, sa: 35, sd: 35, sp: 35 },
+        bs: { hp: 40, at: 55, df: 55, sa: 55, sd: 60, sp: 55 },
         weightkg: 21,
         nfe: true
     },
@@ -1789,8 +1789,8 @@ var ADV_PATCH = {
         abilities: { 0: 'Sturdy' }
     },
     Altaria: {
-        types: ['Dragon', 'Fairy'],
-        bs: { hp: 75, at: 80, df: 100, sa: 85, sd: 105, sp: 80 },
+        types: ['Dragon', 'Flying'],
+        bs: { hp: 75, at: 70, df: 90, sa: 75, sd: 105, sp: 80 },
         weightkg: 20.6,
         abilities: { 0: 'Natural Cure' }
     },
@@ -2216,7 +2216,7 @@ var ADV_PATCH = {
     },
     Lunatone: {
         types: ['Rock', 'Psychic'],
-        bs: { hp: 70, at: 55, df: 65, sa: 95, sd: 85, sp: 70 },
+        bs: { hp: 90, at: 55, df: 70, sa: 109, sd: 105, sp: 70 },
         weightkg: 168,
         abilities: { 0: 'Levitate' },
         gender: 'N'
@@ -2236,7 +2236,7 @@ var ADV_PATCH = {
     },
     Manectric: {
         types: ['Electric'],
-        bs: { hp: 70, at: 75, df: 60, sa: 105, sd: 60, sp: 105 },
+        bs: { hp: 70, at: 80, df: 60, sa: 105, sd: 60, sp: 120 },
         weightkg: 40.2,
         abilities: { 0: 'Static' }
     },
@@ -2401,7 +2401,7 @@ var ADV_PATCH = {
     },
     Relicanth: {
         types: ['Water', 'Rock'],
-        bs: { hp: 100, at: 90, df: 130, sa: 45, sd: 65, sp: 55 },
+        bs: { hp: 100, at: 100, df: 130, sa: 45, sd: 75, sp: 55 },
         weightkg: 23.4,
         abilities: { 0: 'Swift Swim' }
     },
@@ -2457,21 +2457,21 @@ var ADV_PATCH = {
     },
     Shedinja: {
         types: ['Bug', 'Ghost'],
-        bs: { hp: 1, at: 105, df: 1, sa: 110, sd: 1, sp: 80 },
+        bs: { hp: 1, at: 105, df: 1, sa: 110, sd: 1, sp: 85 },
         weightkg: 1.2,
         abilities: { 0: 'Wonder Guard' },
         gender: 'N'
     },
     Shelgon: {
         types: ['Dragon'],
-        bs: { hp: 65, at: 95, df: 100, sa: 60, sd: 50, sp: 50 },
+        bs: { hp: 65, at: 95, df: 105, sa: 60, sd: 65, sp: 50 },
         weightkg: 110.5,
         nfe: true,
         abilities: { 0: 'Rock Head' }
     },
     Shiftry: {
         types: ['Grass', 'Dark'],
-        bs: { hp: 90, at: 100, df: 70, sa: 95, sd: 60, sp: 85 },
+        bs: { hp: 90, at: 120, df: 70, sa: 110, sd: 70, sp: 100 },
         weightkg: 59.6,
         abilities: { 0: 'Chlorophyll' }
     },
@@ -2525,7 +2525,7 @@ var ADV_PATCH = {
     },
     Solrock: {
         types: ['Rock', 'Psychic'],
-        bs: { hp: 70, at: 95, df: 85, sa: 55, sd: 65, sp: 70 },
+        bs: { hp: 90, at: 109, df: 105, sa: 55, sd: 70, sp: 70 },
         weightkg: 154,
         abilities: { 0: 'Levitate' },
         gender: 'N'
@@ -2566,7 +2566,7 @@ var ADV_PATCH = {
     },
     Swalot: {
         types: ['Poison'],
-        bs: { hp: 100, at: 73, df: 83, sa: 73, sd: 83, sp: 55 },
+        bs: { hp: 110, at: 77, df: 90, sa: 77, sd: 90, sp: 55 },
         weightkg: 80,
         abilities: { 0: 'Liquid Ooze' }
     },
@@ -3136,7 +3136,7 @@ var DPP_PATCH = {
     },
     Gastrodon: {
         types: ['Water', 'Ground'],
-        bs: { hp: 111, at: 83, df: 68, sa: 92, sd: 82, sp: 39 },
+        bs: { hp: 120, at: 89, df: 78, sa: 105, sd: 87, sp: 40 },
         weightkg: 29.9,
         abilities: { 0: 'Sticky Hold' }
     },
@@ -3345,7 +3345,7 @@ var DPP_PATCH = {
     },
     Mothim: {
         types: ['Bug', 'Flying'],
-        bs: { hp: 70, at: 94, df: 50, sa: 94, sd: 50, sp: 66 },
+        bs: { hp: 70, at: 94, df: 50, sa: 94, sd: 50, sp: 120 },
         weightkg: 23.3,
         abilities: { 0: 'Swarm' }
     },
@@ -4741,7 +4741,7 @@ var BW_PATCH = {
     },
     Watchog: {
         types: ['Normal'],
-        bs: { hp: 60, at: 85, df: 69, sa: 60, sd: 69, sp: 77 },
+        bs: { hp: 70, at: 115, df: 79, sa: 90, sd: 79, sp: 77 },
         weightkg: 27,
         abilities: { 0: 'Illuminate' }
     },
@@ -5343,7 +5343,7 @@ var XY_PATCH = {
         baseSpecies: 'Beedrill'
     },
     'Blastoise-Mega': {
-        types: ['Water'],
+        types: ['Water', 'Steel'],
         bs: { hp: 79, at: 103, df: 120, sa: 135, sd: 115, sp: 78 },
         weightkg: 101.1,
         abilities: { 0: 'Mega Launcher' },
@@ -5394,7 +5394,7 @@ var XY_PATCH = {
     },
     'Garchomp-Mega': {
         types: ['Dragon', 'Ground'],
-        bs: { hp: 100, at: 170, df: 115, sa: 120, sd: 85, sp: 110 },
+        bs: { hp: 108, at: 160, df: 102, sa: 120, sd: 65, sp: 105 },
         weightkg: 95,
         abilities: { 0: 'Sand Force' },
         baseSpecies: 'Garchomp'
@@ -5478,7 +5478,7 @@ var XY_PATCH = {
     },
     'Manectric-Mega': {
         types: ['Electric'],
-        bs: { hp: 70, at: 75, df: 80, sa: 135, sd: 80, sp: 135 },
+        bs: { hp: 70, at: 80, df: 80, sa: 150, sd: 80, sp: 135 },
         weightkg: 44,
         abilities: { 0: 'Intimidate' },
         baseSpecies: 'Manectric'
@@ -5904,7 +5904,7 @@ XY['Arceus'].otherFormes.push('Arceus-Fairy');
 XY['Arceus'].otherFormes.sort();
 var SM_PATCH = {
     'Alakazam-Mega': { bs: { sd: 105 } },
-    Arbok: { bs: { at: 95 } },
+    Arbok: { bs: { at: 109 } },
     Ariados: { bs: { sd: 70 } },
     Beartic: { bs: { at: 130 } },
     Chimecho: { bs: { hp: 75, df: 80, sd: 90 } },
@@ -5914,9 +5914,9 @@ var SM_PATCH = {
     Delcatty: { bs: { sp: 90 } },
     Diglett: { otherFormes: ['Diglett-Alola'] },
     Dodrio: { bs: { sp: 114 } },
-    Dugtrio: { bs: { at: 100 }, otherFormes: ['Dugtrio-Alola'] },
+    Dugtrio: { bs: { at: 110 }, otherFormes: ['Dugtrio-Alola'] },
     Eevee: { otherFormes: ['Eevee-Starter'] },
-    Electrode: { bs: { sp: 145 } },
+    Electrode: { bs: { sp: 150 } },
     Exeggutor: { bs: { sd: 75 }, otherFormes: ['Exeggutor-Alola'] },
     'Farfetch\u2019d': { bs: { at: 90 } },
     Gengar: { abilities: { 0: 'Cursed Body' } },
@@ -5964,7 +5964,7 @@ var SM_PATCH = {
     Zygarde: { otherFormes: ['Zygarde-10%', 'Zygarde-Complete'] },
     Araquanid: {
         types: ['Water', 'Bug'],
-        bs: { hp: 68, at: 70, df: 92, sa: 50, sd: 132, sp: 42 },
+        bs: { hp: 68, at: 75, df: 92, sa: 60, sd: 132, sp: 42 },
         abilities: { 0: 'Water Bubble' },
         weightkg: 82,
         otherFormes: ['Araquanid-Totem']
@@ -6128,7 +6128,7 @@ var SM_PATCH = {
     },
     'Dugtrio-Alola': {
         types: ['Ground', 'Steel'],
-        bs: { hp: 35, at: 100, df: 60, sa: 50, sd: 70, sp: 110 },
+        bs: { hp: 40, at: 110, df: 60, sa: 50, sd: 70, sp: 115 },
         weightkg: 66.6,
         baseSpecies: 'Dugtrio',
         abilities: { 0: 'Sand Veil' }
@@ -8143,7 +8143,7 @@ var SS_PATCH = {
     },
     'Sirfetch\u2019d': {
         types: ['Fighting'],
-        bs: { hp: 62, at: 135, df: 95, sa: 68, sd: 82, sp: 65 },
+        bs: { hp: 62, at: 135, df: 95, sa: 68, sd: 82, sp: 70 },
         weightkg: 117,
         abilities: { 0: 'Steadfast' }
     },
@@ -8507,7 +8507,7 @@ var PLA_PATCH = {
     },
     'Electrode-Hisui': {
         types: ['Electric', 'Grass'],
-        bs: { hp: 60, at: 95, df: 75, sa: 95, sd: 80, sp: 145 },
+        bs: { hp: 60, at: 80, df: 75, sa: 95, sd: 80, sp: 150 },
         weightkg: 71,
         gender: 'N',
         abilities: { 0: 'Soundproof' },
