@@ -314,7 +314,7 @@ var SETDEX_SV = {
     "Mothim": {
         "Bug Catcher John | Petalburg Woods": {  
             "index": "0000000025",
-            "level": 15,
+            "level": 14,
             "ability": "Swarm Lash",
             "item": "Wide Lens", 
             "nature": "Naive",
@@ -377,7 +377,7 @@ var SETDEX_SV = {
     "Illumise": {
         "Bug Catcher Barry | Petalburg Woods": {  
             "index": "0000000029",
-            "level": 15,
+            "level": 14,
             "ability": "Prankster",
             "item": "Bug Gem", 
             "nature": "Modest",
@@ -455,7 +455,7 @@ var SETDEX_SV = {
     "Stufful": {
         "Lass Emmie | Route 104": {  
             "index": "0000000035",
-            "level": 17,
+            "level": 16,
             "ability": "Fluffy",
             "item": "Berry Juice", 
             "nature": "Serious",
@@ -468,7 +468,7 @@ var SETDEX_SV = {
     "Delcatty": {
         "Lass Emmie | Route 104": {  
             "index": "0000000036",
-            "level": 17,
+            "level": 16,
             "ability": "Cute Charm",
             "item": "Berry Juice", 
             "nature": "Hardy",
@@ -481,7 +481,7 @@ var SETDEX_SV = {
     "Clefairy": {
         "Lass Emmie | Route 104": {  
             "index": "0000000037",
-            "level": 17,
+            "level": 16,
             "ability": "Cute Charm",
             "item": "Berry Juice", 
             "nature": "Hardy",
@@ -627,7 +627,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Acid Spray","Giga Drain", "Dazzling Gleam", "Mystical Fire"]
+            "moves": ["Acid","Giga Drain", "Dazzling Gleam", "Mystical Fire"]
         },
         "Lady Sophie | Route 113": {  
             "index": "0000000362",
@@ -744,7 +744,7 @@ var SETDEX_SV = {
     "Simipour": {
         "Lady Sarah | Route 116": {  
             "index": "0000000053",
-            "level": 18,
+            "level": 16,
             "ability": "Torrent",
             "item": "Mystic Water", 
             "nature": "Gentle",
@@ -768,7 +768,7 @@ var SETDEX_SV = {
     "Simisear": {
         "Lady Sarah | Route 116": {  
             "index": "0000000054",
-            "level": 18,
+            "level": 17,
             "ability": "Blaze",
             "item": "Charcoal", 
             "nature": "Modest",
@@ -970,7 +970,7 @@ var SETDEX_SV = {
     "Solrock": {
         "Cool Trainer Ruby & Saph | Rustboro City Gym": {  
             "index": "0000000067",
-            "level": 14,
+            "level": 13,
             "ability": "Telepathy",
             "item": "Lum Berry", 
             "nature": "Naive",
@@ -1029,7 +1029,7 @@ var SETDEX_SV = {
     "Lunatone": {
         "Cool Trainer Ruby & Saph | Rustboro City Gym": {  
             "index": "0000000069",
-            "level": 14,
+            "level": 13,
             "ability": "Telepathy",
             "item": "Lum Berry",  
             "nature": "Hasty",
@@ -1060,7 +1060,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Confuse Ray","Zen Headbutt","Smart Strike", "Bulldoze"]
+            "moves": ["Supersonic","Zen Headbutt","Smart Strike", "Bulldoze"]
         }
     },
     "Amaura": {
@@ -1103,16 +1103,16 @@ var SETDEX_SV = {
     "Whiscash": {
         "Collector Hector | Rustboro City Gym": {  
             "index": "0000000073",
-            "level": 17,
+            "level": 15,
             "ability": "Mold Breaker",
-            "item": "Lansat Berry", 
+            "item": "Oran Berry", 
             "nature": "Hasty",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Focus Energy","Aurora Beam","Bulldoze", "Bounce"]
         },
-        "Fisherman Kai | Route 113": {  
+        "Fisherman Kai | Route 114": {  
             "index": "0000000393",
             "level": 45,
             "ability": "Oblivious",
@@ -1500,7 +1500,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Knock Off","Psycho Cut","Brick Break", "Smart Strike"]
-        }
+        },
+        "Eric & Julio | Jagged Pass": {  
+            "index": "0000000445",
+            "level": 50,
+            "ability": "Inner Focus",
+            "item": "Focus Sash", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Sucker Punch","Low Kick", "Knock Off","Iron Head"]
+        },
     },
     "Octillery": {
         "Tuber Leo | Route 106": {  
@@ -1666,7 +1677,7 @@ var SETDEX_SV = {
             },
             "moves": ["Aqua Jet","Bulldoze","Rock Smash"]
         },
-        "Fisherman Dale | Route 113": {  
+        "Fisherman Clause | Route 114": {  
             "index": "0000000406",
             "level": 46,
             "ability": "Intimidate",
@@ -1754,7 +1765,7 @@ var SETDEX_SV = {
             },
             "moves": ["Dragon Dance","Tera Blast", "Waterfall", "Power Whip"]
         },
-        "Fisherman Dale | Route 113": {  
+        "Fisherman Clause | Route 114": {  
             "index": "0000000404",
             "level": 44,
             "teraType": "Flying",
@@ -2276,7 +2287,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Electro Ball","Psychic", "Thunder","Fake Out"]
+            "moves": ["Electro Ball","Psychic", "Surf","Fake Out"]
         },
     }, //ELEC TERRAIN TEAM END
     "Kadabra": { //PSYCHIC TERRAIN TEAM
@@ -2561,7 +2572,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
             "moves": ["Solar Beam","Air Slash", "Flamethrower", "Roost"]
-        }
+        },
+        "Eric & Julio | Jagged Pass": {  
+            "index": "0000000447",
+            "level": 51,
+            "ability": "Flame Body",
+            "item": "Flying Gem", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Flare Blitz","Acrobatics", "Roost","Will-O-Wisp"]
+        },
     },
     "Gengar": {
         "PKMN Trainer Leaf | Petalburg Gym": {  
@@ -2575,7 +2597,7 @@ var SETDEX_SV = {
             },
             "moves": ["Substitute","Sludge Bomb", "Dark Pulse", "Focus Blast"]
         },
-        "Hex Maniac Nancy | Route 113": {  
+        "Hex Maniac Nancy | Route 114": {  
             "index": "0000000401",
             "level": 44,
             "ability": "Cursed Body",
@@ -3053,6 +3075,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
             "moves": ["Fake Out","Knock Off", "Drum Beating", "Boomburst"]
+        },
+        "Picnicker Diana | Jagged Pass": {  
+            "index": "0000000451",
+            "level": 50,
+            "ability": "Grassy Surge",
+            "item": "Grassy Seed", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Knock Off","High Horsepower", "Grassy Glide","Wood Hammer"]
         }
     },
     "Kommo-o": {
@@ -3179,7 +3212,7 @@ var SETDEX_SV = {
             },
             "moves": ["Protect","Whirlpool", "Alluring Voice", "Freeze-Dry"]
         },
-        "Fisherman Dale | Route 113": {  
+        "Fisherman Clause | Route 114": {  
             "index": "0000000407",
             "level": 44,
             "ability": "Storm Drain",
@@ -3203,7 +3236,7 @@ var SETDEX_SV = {
             },
             "moves": ["Fake Out","Razor Shell", "Earthquake", "Zen Headbutt"]
         },
-        "Fisherman Dale | Route 113": {  
+        "Fisherman Clause | Route 114": {  
             "index": "0000000405",
             "level": 45,
             "ability": "Shell Armor",
@@ -5288,7 +5321,7 @@ var SETDEX_SV = {
     //392 Braviary-Hisui
     //393 Whiscash
     "Golisopod": {
-        "Fisherman Kai | Route 113": {  
+        "Fisherman Kai | Route 114": {  
             "index": "0000000394",
             "level": 44,
             "ability": "Emergency Exist",
@@ -5301,7 +5334,7 @@ var SETDEX_SV = {
         }
     },
     "Dewgong": {
-        "Fisherman Kai | Route 113": {  
+        "Fisherman Kai | Route 114": {  
             "index": "0000000395",
             "level": 46,
             "ability": "Technician",
@@ -5314,7 +5347,7 @@ var SETDEX_SV = {
         }
     },
     "Floatzel": {
-        "Fisherman Kai | Route 113": {  
+        "Fisherman Kai | Route 114": {  
             "index": "0000000396",
             "level": 46,
             "ability": "Swift Swim",
@@ -5327,7 +5360,7 @@ var SETDEX_SV = {
         }
     },
     "Beedrill": {
-        "Bug Catcher Charlotte | Route 113": {  
+        "Bug Catcher Charlotte | Route 114": {  
             "index": "0000000397",
             "level": 46,
             "ability": "Sniper",
@@ -5340,7 +5373,7 @@ var SETDEX_SV = {
         }
     },
     "Drapion": {
-        "Bug Catcher Charlotte | Route 113": {  
+        "Bug Catcher Charlotte | Route 114": {  
             "index": "0000000398",
             "level": 45,
             "ability": "Sniper",
@@ -5353,7 +5386,7 @@ var SETDEX_SV = {
         }
     },
     "Butterfree": {
-        "Bug Catcher Charlotte | Route 113": {  
+        "Bug Catcher Charlotte | Route 114": {  
             "index": "0000000399",
             "level": 44,
             "ability": "Compound Eyes",
@@ -5366,7 +5399,7 @@ var SETDEX_SV = {
         }
     },
     "Araquanid": {
-        "Bug Catcher Charlotte | Route 113": {  
+        "Bug Catcher Charlotte | Route 114": {  
             "index": "0000000400",
             "level": 43,
             "teraType": "Water",
@@ -5381,7 +5414,7 @@ var SETDEX_SV = {
     },
     //401 Gengar
     "Runerigus": {
-        "Hex Maniac Nancy | Route 113": {  
+        "Hex Maniac Nancy | Route 114": {  
             "index": "0000000402",
             "level": 43,
             "ability": "Wandering Spirit",
@@ -5405,7 +5438,7 @@ var SETDEX_SV = {
         },
     },
     "Houndstone": {
-        "Hex Maniac Nancy | Route 113": {  
+        "Hex Maniac Nancy | Route 114": {  
             "index": "0000000403",
             "level": 43,
             "ability": "Fluffy",
@@ -5709,6 +5742,74 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
             "moves": ["Eruption","Earth Power", "Power Gem","Flamethrower"]
+        }
+    },
+    //445 Bisharp
+    "Gholdengo": {
+    "Eric & Julio | Jagged Pass": {  
+            "index": "0000000446",
+            "level": 51,
+            "ability": "Good As Gold",
+            "item": "Leftovers", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Nasty Plot","Make It Rain", "Thunderbolt","Shadow Ball"]
+        }
+    },
+    //447 Talonflame
+    "Manectric": {
+    "Eric & Julio | Jagged Pass": {  
+            "index": "0000000448",
+            "level": 50,
+            "ability": "Lightning Rod",
+            "item": "Life Orb", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Magnet Rise","Thunderbolt", "Hidden Power Ice","Snarl"]
+        }
+    },
+    "Meowscarada": {
+    "Eric & Julio | Jagged Pass": {  
+            "index": "0000000449",
+            "level": 51,
+            "ability": "Protean",
+            "item": "None", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Flower Trick","U-turn", "Acrobatics","Play Rough"]
+        }
+    },
+    "Indeedee": {
+    "Picnicker Diana | Jagged Pass": {  
+            "index": "0000000450",
+            "level": 53,
+            "ability": "Psychic Surge",
+            "item": "Psychic Seed", 
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Expanding Force","Dazzling Gleam"]
+        }
+    },
+    //451 Rillaboom
+    "Pincurchin": {
+        "Picnicker Diana | Jagged Pass": {  
+            "index": "0000000452",
+            "level": 51,
+            "ability": "Electric Surge",
+            "item": "Electric Seed", 
+            "nature": "Quiet",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Rising Voltage","Scald", "Reversal","Poison Jab"]
         }
     }
 }

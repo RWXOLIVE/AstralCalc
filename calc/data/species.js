@@ -2999,7 +2999,7 @@ var DPP_PATCH = {
     },
     Cherubi: {
         types: ['Grass'],
-        bs: { hp: 45, at: 35, df: 45, sa: 62, sd: 53, sp: 35 },
+        bs: { hp: 62, at: 20, df: 57, sa: 62, sd: 61, sp: 41 },
         weightkg: 3.3,
         abilities: { 0: 'Chlorophyll' },
         nfe: true
@@ -4572,7 +4572,7 @@ var BW_PATCH = {
     },
     Swadloon: {
         types: ['Bug', 'Grass'],
-        bs: { hp: 55, at: 63, df: 90, sa: 50, sd: 80, sp: 42 },
+        bs: { hp: 55, at: 63, df: 100, sa: 50, sd: 90, sp: 42 },
         weightkg: 7.3,
         nfe: true,
         abilities: { 0: 'Leaf Guard' }
