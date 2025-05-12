@@ -358,7 +358,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Bulldoze","Rock Tomb", "Signal Beam", "Work Up"]
+            "moves": ["Bulldoze","Rock Tomb", "Cut", "Work Up"]
         }
     },
     "Surskit": {
@@ -694,7 +694,7 @@ var SETDEX_SV = {
     "Magmar": {
         "School Kid Jerry | Route 116": {  
             "index": "0000000050",
-            "level": 18,
+            "level": 17,
             "ability": "Flame Body",
             "item": "Lum Berry", 
             "nature": "Naive",
@@ -731,7 +731,7 @@ var SETDEX_SV = {
     "Jynx": {
         "School Kid Jerry | Route 116": {  
             "index": "0000000052",
-            "level": 18,
+            "level": 16,
             "ability": "Dry Skin",
             "item": "Covert Cloak", 
             "nature": "Timid",
