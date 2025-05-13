@@ -583,14 +583,14 @@ var SETDEX_SV = {
     "Wigglytuff": {
         "School Kid Karen | Route 116": {  
             "index": "0000000044",
-            "level": 14,
-            "ability": "Competitive",
-            "item": "Big Root", 
-            "nature": "Bold",
+            "level": 13,
+            "ability": "Pastel Veil",
+            "item": "Oran Berry", 
+            "nature": "Serious",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Sweet Kiss","Draining Kiss", "Hyper Voice", "Refresh"]
+            "moves": ["Sing","Draining Kiss", "Magical Leaf", "Double Slap"]
         },
         "Guitarist Kirk | Mauville Gym": {  
             "index": "0000000241",
@@ -608,26 +608,26 @@ var SETDEX_SV = {
     "School Kid Karen | Route 116": {  
             "index": "0000000045",
             "level": 14,
-            "ability": "Gooey",
-            "item": "Muscle Band", 
-            "nature": "Impish",
+            "ability": "Unburden",
+            "item": "None", 
+            "nature": "Serious",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Safeguard","Drain Punch", "Play Rough", "Sucker Punch"]
+            "moves": ["Safeguard","Drain Punch", "Disarming Voice", "Thief"]
         }
     },        
     "Aromatisse": {
         "School Kid Karen | Route 116": {  
             "index": "0000000046",
-            "level": 15,
+            "level": 13,
             "ability": "Poison Touch",
             "item": "Wise Glasses", 
             "nature": "Quiet",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Acid","Giga Drain", "Dazzling Gleam", "Mystical Fire"]
+            "moves": ["Acid","Psybeam", "Flail", "Mystical Fire"]
         },
         "Lady Sophie | Route 113": {  
             "index": "0000000362",
@@ -644,7 +644,7 @@ var SETDEX_SV = {
     "Komala": {
         "Rich Boy Dawson | Route 116": {  
             "index": "0000000047",
-            "level": 13,
+            "level": 12,
             "ability": "Comatose",
             "item": "Chople Berry", 
             "nature": "Jolly",
@@ -657,7 +657,7 @@ var SETDEX_SV = {
     "Swanna": {
         "Rich Boy Dawson | Route 116": {  
             "index": "0000000048",
-            "level": 14,
+            "level": 13,
             "ability": "Big Pecks",
             "item": "Focus Sash", 
             "nature": "Adamant",
@@ -694,7 +694,7 @@ var SETDEX_SV = {
     "Magmar": {
         "School Kid Jerry | Route 116": {  
             "index": "0000000050",
-            "level": 17,
+            "level": 16,
             "ability": "Flame Body",
             "item": "Lum Berry", 
             "nature": "Naive",
@@ -718,7 +718,7 @@ var SETDEX_SV = {
     "Electabuzz": {
         "School Kid Jerry | Route 116": {  
             "index": "0000000051",
-            "level": 18,
+            "level": 15,
             "ability": "Static",
             "item": "Expert Belt", 
             "nature": "Hasty",
@@ -731,7 +731,7 @@ var SETDEX_SV = {
     "Jynx": {
         "School Kid Jerry | Route 116": {  
             "index": "0000000052",
-            "level": 16,
+            "level": 14,
             "ability": "Dry Skin",
             "item": "Covert Cloak", 
             "nature": "Timid",
@@ -744,7 +744,7 @@ var SETDEX_SV = {
     "Simipour": {
         "Lady Sarah | Route 116": {  
             "index": "0000000053",
-            "level": 16,
+            "level": 14,
             "ability": "Torrent",
             "item": "Mystic Water", 
             "nature": "Gentle",
@@ -768,7 +768,7 @@ var SETDEX_SV = {
     "Simisear": {
         "Lady Sarah | Route 116": {  
             "index": "0000000054",
-            "level": 17,
+            "level": 14,
             "ability": "Blaze",
             "item": "Charcoal", 
             "nature": "Modest",
@@ -781,7 +781,7 @@ var SETDEX_SV = {
     "Simisage": {
         "Lady Sarah | Route 116": {  
             "index": "0000000055",
-            "level": 18,
+            "level": 15,
             "ability": "Overgrow",
             "item": "Miracle Seed", 
             "nature": "Hasty",
@@ -794,7 +794,7 @@ var SETDEX_SV = {
     "Tinkatuff": {
         "Hiker Clark | Route 116": {  
             "index": "0000000056",
-            "level": 18,
+            "level": 14,
             "ability": "Mold Breaker",
             "item": "Lum Berry", 
             "nature": "Adamant",
@@ -807,7 +807,7 @@ var SETDEX_SV = {
     "Diggersby": {
         "Hiker Clark | Route 116": {  
             "index": "0000000057",
-            "level": 18,
+            "level": 17,
             "ability": "Cheek Pouch",
             "item": "Oran Berry", 
             "nature": "Jolly",
@@ -831,7 +831,7 @@ var SETDEX_SV = {
     "Rhyhorn": {
         "Hiker Clark | Route 116": {  
             "index": "0000000058",
-            "level": 18,
+            "level": 15,
             "ability": "Rock Head",
             "item": "Focus Sash", 
             "nature": "Jolly",
@@ -844,7 +844,7 @@ var SETDEX_SV = {
     "Monferno": {
         "Youngster Robert | Route 116": {  
             "index": "0000000059",
-            "level": 18,
+            "level": 16,
             "ability": "Iron Fist",
             "item": "Expert Belt", 
             "nature": "Hasty",
@@ -857,7 +857,7 @@ var SETDEX_SV = {
     "Dragonair": {
         "Youngster Robert | Route 116": {  
             "index": "0000000060",
-            "level": 18,
+            "level": 17,
             "ability": "Shed Skin",
             "item": "Dragon Fang", 
             "nature": "Impish",
@@ -2822,6 +2822,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
             "moves": ["Bulldoze","Icicle Crash", "Knock Off", "Superpower"]
+        },
+        "Picnicker Autumn | Jagged Pass": {  
+            "index": "0000000457",
+            "level": 52,
+            "ability": "Thick Fat",
+            "item": "Ground Gem", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Ice Shard","Icicle Crash", "Bulldoze","Knock Off"]
         }
     },
     "Hydreigon": {
@@ -5811,5 +5822,58 @@ var SETDEX_SV = {
             },
             "moves": ["Rising Voltage","Scald", "Reversal","Poison Jab"]
         }
+    },
+    "Sceptile": {
+        "Camper Ethan | Jagged Pass": {  
+            "index": "0000000453",
+            "level": 52,
+            "ability": "Technician",
+            "item": "Yache Berry", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Dual Chop","Bullet Seed", "U-turn","Pursuit"]
+        }
+    },
+    "Swampert": {
+        "Camper Ethan | Jagged Pass": {  
+            "index": "0000000454",
+            "level": 53,
+            "ability": "Defiant",
+            "item": "Rindo Berry", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Avalanche","Poison Jab", "Aqua Tail","Aqua Jet"]
+        }
+    },
+    "Blaziken": {
+        "Camper Ethan | Jagged Pass": {  
+            "index": "0000000455",
+            "level": 54,
+            "ability": "Sheer Force",
+            "item": "Focus Sash", 
+            "nature": "Naive",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Overheat","Close Combat", "Rock Slide","Blaze Kick"]
+        }
+    },
+    "Carnivine": {
+        "Picnicker Autumn | Jagged Pass": {  
+            "index": "0000000456",
+            "level": 51,
+            "ability": "Arena Trap",
+            "item": "Leftovers", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Substitute","Leaf Blade", "Leech Life","Stone Edge"]
+        }
     }
+    //457 Mamoswine
 }

@@ -3843,6 +3843,7 @@ var SS_PATCH = {
     Hurricane: { maxPower: 140 },
     'Hydro Cannon': { maxPower: 150 },
     'Hydro Pump': { maxPower: 140 },
+    'Hydro Steam': { maxPower: 120 },
     'Hydro Vortex': { maxPower: 1 },
     'Hyper Beam': { maxPower: 150 },
     'Hyper Fang': { maxPower: 130 },

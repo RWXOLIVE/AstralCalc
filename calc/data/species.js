@@ -2445,7 +2445,7 @@ var ADV_PATCH = {
     },
     Seviper: {
         types: ['Dark', 'Poison'],
-        bs: { hp: 73, at: 100, df: 60, sa: 100, sd: 60, sp: 65 },
+        bs: { hp: 80, at: 110, df: 60, sa: 105, sd: 60, sp: 85 },
         weightkg: 52.5,
         abilities: { 0: 'Shed Skin' }
     },
@@ -2552,7 +2552,7 @@ var ADV_PATCH = {
     },
     Surskit: {
         types: ['Bug', 'Water'],
-        bs: { hp: 40, at: 30, df: 32, sa: 50, sd: 52, sp: 65 },
+        bs: { hp: 40, at: 30, df: 32, sa: 70, sd: 52, sp: 70 },
         weightkg: 1.7,
         nfe: true,
         abilities: { 0: 'Swift Swim' }
@@ -2604,7 +2604,7 @@ var ADV_PATCH = {
     },
     Trapinch: {
         types: ['Bug', 'Ground'],
-        bs: { hp: 45, at: 100, df: 45, sa: 45, sd: 45, sp: 10 },
+        bs: { hp: 45, at: 100, df: 70, sa: 45, sd: 45, sp: 10 },
         weightkg: 15,
         nfe: true,
         abilities: { 0: 'Hyper Cutter' }
@@ -2973,7 +2973,7 @@ var DPP_PATCH = {
     },
     Carnivine: {
         types: ['Grass'],
-        bs: { hp: 74, at: 100, df: 72, sa: 90, sd: 72, sp: 46 },
+        bs: { hp: 80, at: 125, df: 93, sa: 112, sd: 81, sp: 30 },
         weightkg: 27,
         abilities: { 0: 'Levitate' }
     },
@@ -4464,7 +4464,7 @@ var BW_PATCH = {
     },
     Sawsbuck: {
         types: ['Normal', 'Grass'],
-        bs: { hp: 80, at: 100, df: 70, sa: 60, sd: 70, sp: 95 },
+        bs: { hp: 80, at: 100, df: 70, sa: 60, sd: 70, sp: 115 },
         weightkg: 92.5,
         abilities: { 0: 'Chlorophyll' }
     },
@@ -4585,7 +4585,7 @@ var BW_PATCH = {
     },
     Swoobat: {
         types: ['Psychic', 'Flying'],
-        bs: { hp: 67, at: 57, df: 55, sa: 100, sd: 55, sp: 114 },
+        bs: { hp: 99, at: 57, df: 55, sa: 100, sd: 55, sp: 114 },
         weightkg: 10.5,
         abilities: { 0: 'Unaware' }
     },
@@ -6235,7 +6235,7 @@ var SM_PATCH = {
     },
     Gumshoos: {
         types: ['Normal'],
-        bs: { hp: 88, at: 110, df: 60, sa: 55, sd: 60, sp: 45 },
+        bs: { hp: 88, at: 110, df: 75, sa: 55, sd: 75, sp: 45 },
         weightkg: 14.2,
         otherFormes: ['Gumshoos-Totem'],
         abilities: { 0: 'Stakeout' }
