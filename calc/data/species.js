@@ -500,7 +500,7 @@ var RBY = {
     },
     'Mr. Mime': {
         types: ['Psychic'],
-        bs: { hp: 40, at: 45, df: 65, sp: 90, sl: 100 },
+        bs: { hp: 40, at: 60, df: 70, sp: 90, sl: 100 },
         weightkg: 54.5
     },
     Muk: { types: ['Poison'], bs: { hp: 105, at: 105, df: 75, sp: 50, sl: 65 }, weightkg: 30 },
@@ -926,7 +926,7 @@ var GSC_PATCH = {
     Mew: { bs: { sa: 100, sd: 100 }, gender: 'N' },
     Mewtwo: { bs: { sa: 154, sd: 90 }, gender: 'N' },
     Moltres: { bs: { sa: 125, sd: 85 }, gender: 'N' },
-    'Mr. Mime': { bs: { sa: 100, sd: 120 } },
+    'Mr. Mime': { bs: { sa: 120, sd: 120 } },
     Muk: { bs: { sa: 65, sd: 100 } },
     Nidoking: { bs: { sa: 82, sd: 85 } },
     Nidoqueen: { bs: { sa: 100, sd: 87 } },
