@@ -868,6 +868,13 @@ var DPP_PATCH = {
         makesContact: true,
         category: 'Physical'
     },
+    'Tectonic Rage': {
+        bp: 120,
+        type: 'Ground',
+        recoil: [1, 3],
+        makesContact: true,
+        category: 'Physical'
+    },
     Fling: { bp: 0, type: 'Dark', category: 'Physical' },
     Gravity: { bp: 0, type: 'Psychic' },
     'Head Smash': {
@@ -2577,7 +2584,6 @@ var SM_PATCH = {
     },
     'Subzero Slammer': { bp: 1, type: 'Ice', category: 'Physical', isZ: true },
     'Supersonic Skystrike': { bp: 1, type: 'Flying', category: 'Physical', isZ: true },
-    'Tectonic Rage': { bp: 120, type: 'Ground', category: 'Physical' },
     'Throat Chop': {
         bp: 80,
         type: 'Dark',
@@ -2936,6 +2942,7 @@ var SS_PATCH = {
         type: 'Grass',
         category: 'Physical',
         isSound: true,
+        target: 'allAdjacentFoes',
         secondaries: true,
         zp: 160,
         maxPower: 130
@@ -3261,7 +3268,7 @@ var SS_PATCH = {
         maxPower: 1
     },
     'Grassy Glide': {
-        bp: 55,
+        bp: 65,
         type: 'Grass',
         category: 'Physical',
         makesContact: true,
@@ -4400,7 +4407,7 @@ var SV_PATCH = {
         makesContact: true
     },
     'Hard Press': {
-        bp: 0,
+        bp: 150,
         type: 'Steel',
         category: 'Physical',
         zp: 100,
@@ -4650,7 +4657,7 @@ var SV_PATCH = {
         makesContact: true
     },
     'Raging Fury': {
-        bp: 120,
+        bp: 130,
         type: 'Fire',
         category: 'Physical',
         zp: 190,

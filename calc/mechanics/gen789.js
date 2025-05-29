@@ -476,6 +476,9 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
     desc.attackBoost =
         move.named('Foul Play') ? defender.boosts[attackStat] : attacker.boosts[attackStat];
     result.damage = childDamage ? [damage, childDamage] : damage;
+    desc.attackBoost =
+        move.named('Fairful Play') ? defender.boosts[attackStat] : attacker.boosts[attackStat];
+    result.damage = childDamage ? [damage, childDamage] : damage;
     return result;
 }
 exports.calculateSMSSSV = calculateSMSSSV;
@@ -581,6 +584,7 @@ function calculateBasePowerSMSSSV(gen, attacker, defender, move, field, hasAteAb
             break;
         case 'Dragon Energy':
         case 'Eruption':
+        case 'Hard Press':
         case 'Water Spout':
             basePower = Math.max(1, Math.floor((150 * attacker.curHP()) / attacker.maxHP()));
             desc.moveBP = basePower;
@@ -645,11 +649,6 @@ function calculateBasePowerSMSSSV(gen, attacker, defender, move, field, hasAteAb
             basePower = Math.floor(Math.floor((120 * basePower + 2048 - 1) / 4096) / 100) || 1;
             desc.moveBP = basePower;
             break;
-        case 'Hard Press':
-            basePower = 100 * Math.floor((defender.curHP() * 4096) / defender.maxHP());
-            basePower = Math.floor(Math.floor((100 * basePower + 2048 - 1) / 4096) / 100) || 1;
-            desc.moveBP = basePower;
-            break;
         case 'Tera Blast':
             basePower = attacker.teraType === 'Stellar' ? 100 : 80;
             desc.moveBP = basePower;
@@ -667,7 +666,7 @@ function calculateBasePowerSMSSSV(gen, attacker, defender, move, field, hasAteAb
     basePower = (0, util_2.OF16)(Math.max(1, (0, util_2.pokeRound)((basePower * (0, util_2.chainMods)(bpMods, 41, 2097152)) / 4096)));
     if (attacker.teraType && move.type === attacker.teraType &&
         attacker.hasType(attacker.teraType) && move.hits === 1 &&
-        move.priority <= 0 && move.bp > 0 && !move.named('Dragon Energy', 'Eruption', 'Water Spout') &&
+        move.priority <= 0 && move.bp > 0 && !move.named('Dragon Energy', 'Eruption', 'Hard Press', 'Water Spout') &&
         basePower < 60 && gen.num >= 9) {
         basePower = 60;
         desc.moveBP = 60;

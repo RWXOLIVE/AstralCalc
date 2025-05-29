@@ -374,6 +374,7 @@ var SV = SS.concat([
     'Swarm Lash',
     'Lunar Veil',
     'Solar Veil',
+    'Blazing Soul',
 ]);
 exports.ABILITIES = [[], RBY, GSC, ADV, DPP, BW, XY, SM, SS, SV];
 var Abilities = (function () {

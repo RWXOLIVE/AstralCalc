@@ -1,3 +1,14 @@
+const originalIncludes = String.prototype.includes;
+
+String.prototype.includes = function(searchString, position) {
+  // If 'this' is null or undefined, treat it as an empty string
+  if (this === null || this === undefined) {
+    return ''.includes(searchString, position);
+  } 
+  // Otherwise use the original method
+  return originalIncludes.call(this, searchString, position);
+};
+
 if (!Array.prototype.indexOf) {
 	Array.prototype.indexOf = function (searchElement, fromIndex) { // eslint-disable-line no-extend-native
 		var k;

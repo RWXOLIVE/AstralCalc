@@ -107,7 +107,7 @@ var RBY = {
     },
     Blastoise: {
         types: ['Water'],
-        bs: { hp: 79, at: 84, df: 108, sp: 59, sl: 100 },
+        bs: { hp: 79, at: 84, df: 100, sp: 67, sl: 100 },
         weightkg: 85.5
     },
     Bulbasaur: {
@@ -253,7 +253,7 @@ var RBY = {
     },
     'Farfetch\u2019d': {
         types: ['Normal', 'Flying'],
-        bs: { hp: 52, at: 65, df: 55, sp: 60, sl: 58 },
+        bs: { hp: 64, at: 112, df: 80, sp: 109, sl: 58 },
         weightkg: 15
     },
     Fearow: {
@@ -850,7 +850,7 @@ var GSC_PATCH = {
     Articuno: { bs: { sa: 95, sd: 125 }, gender: 'N' },
     Beedrill: { bs: { sa: 30, sd: 80 } },
     Bellsprout: { bs: { sa: 70, sd: 30 } },
-    Blastoise: { bs: { sa: 100, sd: 105 } },
+    Blastoise: { bs: { sa: 95, sd: 105 } },
     Bulbasaur: { bs: { sa: 65, sd: 65 } },
     Butterfree: { bs: { sa: 95, sd: 85 } },
     Caterpie: { bs: { sa: 20, sd: 20 } },
@@ -878,14 +878,14 @@ var GSC_PATCH = {
     Electrode: { bs: { sa: 95, sd: 80 }, gender: 'N' },
     Exeggcute: { bs: { sa: 60, sd: 45 } },
     Exeggutor: { bs: { sa: 125, sd: 65 } },
-    'Farfetch\u2019d': { bs: { sa: 58, sd: 62 } },
+    'Farfetch\u2019d': { bs: { sa: 58, sd: 76 } },
     Fearow: { bs: { sa: 67, sd: 61 } },
     Flareon: { bs: { sa: 95, sd: 110 } },
     Gastly: { bs: { sa: 100, sd: 35 } },
     Gengar: { bs: { sa: 130, sd: 75 } },
     Geodude: { bs: { sa: 30, sd: 30 } },
     Gloom: { bs: { sa: 85, sd: 80 } },
-    Golbat: { bs: { sa: 65, sd: 75 }, nfe: true },
+    Golbat: { bs: { sa: 75, sd: 75 }, nfe: true },
     Goldeen: { bs: { sa: 35, sd: 50 } },
     Golduck: { bs: { sa: 95, sd: 80 } },
     Golem: { bs: { sa: 55, sd: 65 } },
@@ -1116,7 +1116,7 @@ var GSC_PATCH = {
     },
     Forretress: {
         types: ['Bug', 'Steel'],
-        bs: { hp: 75, at: 90, df: 140, sa: 60, sd: 60, sp: 40 },
+        bs: { hp: 75, at: 90, df: 140, sa: 85, sd: 75, sp: 40 },
         weightkg: 125.8
     },
     Furret: { types: ['Normal'], bs: { hp: 85, at: 76, df: 64, sa: 45, sd: 55, sp: 90 }, weightkg: 32.5 },
@@ -1203,7 +1203,7 @@ var GSC_PATCH = {
     },
     Ledian: {
         types: ['Bug', 'Fighting'],
-        bs: { hp: 50, at: 60, df: 60, sa: 75, sd: 110, sp: 70 },
+        bs: { hp: 58, at: 77, df: 85, sa: 80, sd: 110, sp: 85 },
         weightkg: 35.6
     },
     Ledyba: {
@@ -2099,7 +2099,7 @@ var ADV_PATCH = {
     },
     Grumpig: {
         types: ['Psychic'],
-        bs: { hp: 80, at: 45, df: 65, sa: 90, sd: 110, sp: 80 },
+        bs: { hp: 110, at: 45, df: 65, sa: 90, sd: 110, sp: 80 },
         weightkg: 71.5,
         abilities: { 0: 'Thick Fat' }
     },
@@ -2618,7 +2618,7 @@ var ADV_PATCH = {
     },
     Tropius: {
         types: ['Grass', 'Flying'],
-        bs: { hp: 99, at: 68, df: 83, sa: 72, sd: 87, sp: 56 },
+        bs: { hp: 135, at: 80, df: 95, sa: 95, sd: 87, sp: 65 },
         weightkg: 100,
         abilities: { 0: 'Chlorophyll' }
     },
@@ -2979,7 +2979,7 @@ var DPP_PATCH = {
     },
     Chatot: {
         types: ['Normal', 'Flying'],
-        bs: { hp: 76, at: 65, df: 45, sa: 92, sd: 42, sp: 91 },
+        bs: { hp: 76, at: 65, df: 60, sa: 104, sd: 75, sp: 103 },
         weightkg: 1.9,
         abilities: { 0: 'Keen Eye' }
     },
@@ -3265,7 +3265,7 @@ var DPP_PATCH = {
         abilities: { 0: 'Steadfast' }
     },
     Lumineon: {
-        types: ['Water', 'Fairy'],
+        types: ['Water', 'Flying'],
         bs: { hp: 69, at: 49, df: 81, sa: 99, sd: 83, sp: 91 },
         weightkg: 24,
         abilities: { 0: 'Swift Swim' }
@@ -3638,21 +3638,21 @@ var DPP_PATCH = {
     },
     Wormadam: {
         types: ['Bug', 'Grass'],
-        bs: { hp: 60, at: 59, df: 85, sa: 79, sd: 105, sp: 36 },
+        bs: { hp: 70, at: 59, df: 177, sa: 79, sd: 117, sp: 36 },
         weightkg: 6.5,
         abilities: { 0: 'Anticipation' },
         otherFormes: ['Wormadam-Sandy', 'Wormadam-Trash']
     },
     'Wormadam-Sandy': {
         types: ['Bug', 'Ground'],
-        bs: { hp: 60, at: 79, df: 105, sa: 59, sd: 85, sp: 36 },
+        bs: { hp: 70, at: 89, df: 105, sa: 89, sd: 89, sp: 36 },
         weightkg: 6.5,
         abilities: { 0: 'Anticipation' },
         baseSpecies: 'Wormadam'
     },
     'Wormadam-Trash': {
         types: ['Bug', 'Steel'],
-        bs: { hp: 60, at: 69, df: 95, sa: 69, sd: 95, sp: 36 },
+        bs: { hp: 70, at: 81, df: 104, sa: 81, sd: 105, sp: 36 },
         weightkg: 6.5,
         abilities: { 0: 'Anticipation' },
         baseSpecies: 'Wormadam'
@@ -4005,7 +4005,7 @@ var BW_PATCH = {
     },
     Garbodor: {
         types: ['Poison', 'Steel'],
-        bs: { hp: 80, at: 95, df: 82, sa: 60, sd: 82, sp: 75 },
+        bs: { hp: 100, at: 105, df: 95, sa: 75, sd: 82, sp: 55 },
         weightkg: 107.3,
         abilities: { 0: 'Stench' }
     },
@@ -5255,7 +5255,7 @@ var XY_PATCH = {
     },
     Klefki: {
         types: ['Steel', 'Fairy'],
-        bs: { hp: 57, at: 80, df: 91, sa: 80, sd: 87, sp: 75 },
+        bs: { hp: 57, at: 90, df: 91, sa: 90, sd: 87, sp: 75 },
         weightkg: 3,
         abilities: { 0: 'Prankster' }
     },
@@ -5918,7 +5918,7 @@ var SM_PATCH = {
     Eevee: { otherFormes: ['Eevee-Starter'] },
     Electrode: { bs: { sp: 150 } },
     Exeggutor: { bs: { sd: 75 }, otherFormes: ['Exeggutor-Alola'] },
-    'Farfetch\u2019d': { bs: { at: 90 } },
+    'Farfetch\u2019d': { bs: { at: 112 } },
     Gengar: { abilities: { 0: 'Cursed Body' } },
     Geodude: { otherFormes: ['Geodude-Alola'] },
     Golem: { otherFormes: ['Golem-Alola'] },
@@ -7193,7 +7193,7 @@ var SS_PATCH = {
     'Aegislash-Shield': { bs: { df: 140, sd: 140 } },
     Articuno: { otherFormes: ['Articuno-Galar'] },
     Blastoise: { otherFormes: ['Blastoise-Gmax', 'Blastoise-Mega'] },
-    Butterfree: { otherFormes: ['Butterfree-Gmax'] },
+    Butterfree: { otherFormes: ['Butterfree-Mega'] },
     Charizard: { otherFormes: ['Charizard-Gmax', 'Charizard-Mega-X', 'Charizard-Mega-Y'] },
     Corsola: { otherFormes: ['Corsola-Galar'] },
     Darmanitan: {
@@ -7203,12 +7203,12 @@ var SS_PATCH = {
     Eevee: { otherFormes: ['Eevee-Gmax', 'Eevee-Starter'] },
     Equilibra: { bs: { sa: 133 } },
     'Farfetch\u2019d': { otherFormes: ['Farfetch\u2019d-Galar'] },
-    Garbodor: { otherFormes: ['Garbodor-Gmax'] },
+    Garbodor: { otherFormes: ['Garbodor-Mega'] },
     Gengar: { otherFormes: ['Gengar-Gmax', 'Gengar-Mega'] },
-    Kingler: { otherFormes: ['Kingler-Gmax'] },
-    Lapras: { otherFormes: ['Lapras-Gmax'] },
+    Kingler: { otherFormes: ['Kingler-Mega'] },
+    Lapras: { otherFormes: ['Lapras-Mega'] },
     Linoone: { otherFormes: ['Linoone-Galar'] },
-    Machamp: { otherFormes: ['Machamp-Gmax'] },
+    Machamp: { otherFormes: ['Machamp-Mega'] },
     Melmetal: { otherFormes: ['Melmetal-Gmax'] },
     Meowth: { otherFormes: ['Meowth-Alola', 'Meowth-Galar', 'Meowth-Gmax'] },
     Moltres: { otherFormes: ['Moltres-Galar'] },
@@ -7237,7 +7237,7 @@ var SS_PATCH = {
     Slowbro: { otherFormes: ['Slowbro-Galar', 'Slowbro-Mega'] },
     Slowking: { otherFormes: ['Slowking-Galar'] },
     Slowpoke: { otherFormes: ['Slowpoke-Galar'] },
-    Snorlax: { otherFormes: ['Snorlax-Gmax'] },
+    Snorlax: { otherFormes: ['Snorlax-Mega'] },
     Stunfisk: { otherFormes: ['Stunfisk-Galar'] },
     Venusaur: { otherFormes: ['Venusaur-Gmax', 'Venusaur-Mega'] },
     Voodoom: { bs: { sa: 130 } },
@@ -7341,10 +7341,10 @@ var SS_PATCH = {
         weightkg: 34,
         abilities: { 0: 'Strong Jaw' }
     },
-    'Butterfree-Gmax': {
-        types: ['Bug', 'Flying'],
-        bs: { hp: 60, at: 45, df: 50, sa: 90, sd: 80, sp: 70 },
-        weightkg: 0,
+    'Butterfree-Mega': {
+        types: ['Bug', 'Psychic'],
+        bs: { hp: 70, at: 20, df: 60, sa: 130, sd: 80, sp: 140 },
+        weightkg: 64,
         abilities: { 0: 'Compound Eyes' },
         baseSpecies: 'Butterfree'
     },
@@ -7457,7 +7457,7 @@ var SS_PATCH = {
         baseSpecies: 'Copperajah'
     },
     'Corsola-Galar': {
-        types: ['Ghost'],
+        types: ['Ghost', 'Rock'],
         bs: { hp: 60, at: 55, df: 100, sa: 65, sd: 100, sp: 30 },
         weightkg: 0.5,
         abilities: { 0: 'Weak Armor' },
@@ -7514,7 +7514,7 @@ var SS_PATCH = {
         nfe: true
     },
     Cursola: {
-        types: ['Ghost'],
+        types: ['Ghost', 'Rock'],
         bs: { hp: 60, at: 95, df: 50, sa: 145, sd: 130, sp: 30 },
         weightkg: 0.4,
         abilities: { 0: 'Weak Armor' }
@@ -7701,10 +7701,10 @@ var SS_PATCH = {
         weightkg: 42,
         abilities: { 0: 'Shield Dust' }
     },
-    'Garbodor-Gmax': {
-        types: ['Poison'],
-        bs: { hp: 80, at: 95, df: 82, sa: 60, sd: 82, sp: 75 },
-        weightkg: 0,
+    'Garbodor-Mega': {
+        types: ['Poison', 'Steel'],
+        bs: { hp: 100, at: 130, df: 120, sa: 80, sd: 107, sp: 47 },
+        weightkg: 214,
         abilities: { 0: 'Stench' },
         baseSpecies: 'Garbodor'
     },
@@ -7825,10 +7825,10 @@ var SS_PATCH = {
         abilities: { 0: 'Torrent' },
         baseSpecies: 'Inteleon'
     },
-    'Kingler-Gmax': {
-        types: ['Water'],
-        bs: { hp: 55, at: 130, df: 115, sa: 50, sd: 50, sp: 75 },
-        weightkg: 0,
+    'Kingler-Mega': {
+        types: ['Water', 'Steel'],
+        bs: { hp: 55, at: 155, df: 130, sa: 50, sd: 60, sp: 90 },
+        weightkg: 1200,
         abilities: { 0: 'Hyper Cutter' },
         baseSpecies: 'Kingler'
     },
@@ -7839,10 +7839,10 @@ var SS_PATCH = {
         nfe: true,
         abilities: { 0: 'Inner Focus' }
     },
-    'Lapras-Gmax': {
+    'Lapras-Mega': {
         types: ['Water', 'Ice'],
-        bs: { hp: 130, at: 85, df: 80, sa: 85, sd: 95, sp: 60 },
-        weightkg: 0,
+        bs: { hp: 130, at: 100, df: 90, sa: 120, sd: 110, sp: 70 },
+        weightkg: 440,
         abilities: { 0: 'Water Absorb' },
         baseSpecies: 'Lapras'
     },
@@ -7863,10 +7863,10 @@ var SS_PATCH = {
         gender: 'N',
         abilities: { 0: 'Soul-Heart' }
     },
-    'Machamp-Gmax': {
+    'Machamp-Mega': {
         types: ['Fighting'],
-        bs: { hp: 90, at: 130, df: 80, sa: 65, sd: 85, sp: 55 },
-        weightkg: 0,
+        bs: { hp: 90, at: 160, df: 120, sa: 65, sd: 100, sp: 65 },
+        weightkg: 2600,
         abilities: { 0: 'Guts' },
         baseSpecies: 'Machamp'
     },
@@ -8197,10 +8197,10 @@ var SS_PATCH = {
         abilities: { 0: 'Shield Dust' },
         nfe: true
     },
-    'Snorlax-Gmax': {
-        types: ['Normal'],
-        bs: { hp: 160, at: 110, df: 65, sa: 65, sd: 110, sp: 30 },
-        weightkg: 0,
+    'Snorlax-Mega': {
+        types: ['Normal', 'Grass'],
+        bs: { hp: 160, at: 165, df: 75, sa: 75, sd: 115, sp: 4 },
+        weightkg: 9200,
         abilities: { 0: 'Immunity' },
         baseSpecies: 'Snorlax'
     },
@@ -8226,7 +8226,7 @@ var SS_PATCH = {
     },
     'Stunfisk-Galar': {
         types: ['Ground', 'Steel'],
-        bs: { hp: 109, at: 81, df: 99, sa: 66, sd: 84, sp: 32 },
+        bs: { hp: 115, at: 93, df: 99, sa: 80, sd: 102, sp: 34 },
         weightkg: 20.5,
         abilities: { 0: 'Mimicry' },
         baseSpecies: 'Stunfisk'
