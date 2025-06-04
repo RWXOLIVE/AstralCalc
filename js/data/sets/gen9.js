@@ -1156,7 +1156,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Rock Slide","Scale Shot","Accelerock", "Thunder Fang"]
+            "moves": ["Rock Slide","Scale Shot","Stomping Tantrum", "Thunder Fang"]
         }
     },
     "Donphan": {
@@ -1226,7 +1226,7 @@ var SETDEX_SV = {
             "level": 18,
             "ability": "Serene Berry",
             "item": "Chople Berry", 
-            "nature": "Jolly",
+            "nature": "Timid",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -1412,19 +1412,8 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Iron Tail","Discharge","Fly","Pursuit"]
-        },
-        "Youngster Ben | Mauville Gym": {  
-            "index": "0000000250",
-            "level": 41,
-            "ability": "Motor Drive",
-            "item": "Focus Sash", 
-            "nature": "Timid", 
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Discharge","Helping Hand"]
         }
-    },   
+    }, 
     "Abra": {
         "Cool Trainer Tony | Dewford Town": {  
             "index": "0000000092",
@@ -2335,6 +2324,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
             "moves": ["Psyshock","Volt Switch","Draining Kiss","Surf"]
+        },
+        "Youngster Ben | Mauville Gym": {  
+            "index": "0000000248",
+            "level": 41,
+            "ability": "Surge Surfer",
+            "item": "Wise Glasses", 
+            "nature": "Timid", 
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Electro Ball","Psychic","Grass Knot","Signal Beam"]
         },
         "Youngster Jaylen | Route 113": {  
             "index": "0000000347",
@@ -3905,44 +3905,55 @@ var SETDEX_SV = {
             "moves": ["Hammer Arm","Ice Shard","Crabhammer","Thunder Punch"]
         }
     },
-    "Kilowattrel": {
-        "Youngster Ben | Mauville Gym": {  
-            "index": "0000000248",
-            "level": 41,
-            "ability": "Volt Absorb",
-            "item": "Zap Plate", 
-            "nature": "Modest", 
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Discharge"]
-        }
-    },
-    "Lanturn": {
+    //248 raichu-alola
+    "Pincurchin": {
         "Youngster Ben | Mauville Gym": {  
             "index": "0000000249",
             "level": 41,
-            "ability": "Volt Absorb",
-            "item": "Lum Berry", 
-            "nature": "Timid", 
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Brine","Icy Wind","Discharge","Signal Beam"]
-        }
-    },
-    //250 Emolga
-    "Marowak": {
-    "Youngster Ben | Mauville Gym": {  
-            "index": "0000000251",
-            "level": 41,
-            "ability": "Lightning Rod",
-            "item": "Wise Glasses", 
+            "ability": "Electric Surge",
+            "item": "Terrain Extender", 
             "nature": "Sassy", 
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Ancient Power","Scorching Sands","Flamethrower","Ice Beam"]
+            "moves": ["Scald","Zing Zap","Poison Jab","Thunder"]
+        },
+        "Picnicker Diana | Jagged Pass": {  
+            "index": "0000000453",
+            "level": 51,
+            "ability": "Electric Surge",
+            "item": "Electric Seed", 
+            "nature": "Quiet",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Rising Voltage","Scald", "Reversal","Poison Jab"]
+        }
+    },
+    "Kilowattrel": {
+    "Youngster Ben | Mauville Gym": {  
+            "index": "0000000250",
+            "level": 41,
+            "ability": "Wind Power",
+            "item": "Scope Lens", 
+            "nature": "Timid", 
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Tailwind","Electro Ball","Roost","Air Cutter"]
+        }
+    },  
+    "Raichu": {
+    "Youngster Ben | Mauville Gym": {  
+            "index": "0000000251",
+            "level": 41,
+            "ability": "Static",
+            "item": "Shuca Berry", 
+            "nature": "Timid", 
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Agility","Fake Out","Agility","Electro Ball"]
         }
     },
     //252 Klefki
@@ -5979,19 +5990,7 @@ var SETDEX_SV = {
         }
     },
     //452 Rillaboom
-    "Pincurchin": {
-        "Picnicker Diana | Jagged Pass": {  
-            "index": "0000000453",
-            "level": 51,
-            "ability": "Electric Surge",
-            "item": "Electric Seed", 
-            "nature": "Quiet",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Rising Voltage","Scald", "Reversal","Poison Jab"]
-        }
-    },
+    //453 pincurchin    
     "Sceptile": {
         "Camper Ethan | Jagged Pass": {  
             "index": "0000000454",

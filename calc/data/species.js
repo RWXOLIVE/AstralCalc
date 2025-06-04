@@ -209,7 +209,7 @@ var RBY = {
     },
     Drowzee: {
         types: ['Psychic'],
-        bs: { hp: 60, at: 48, df: 45, sp: 42, sl: 90 },
+        bs: { hp: 80, at: 54, df: 100, sp: 47, sl: 60 },
         weightkg: 32.4,
         nfe: true
     },
@@ -870,7 +870,7 @@ var GSC_PATCH = {
     Dragonair: { bs: { sa: 90, sd: 70 } },
     Dragonite: { bs: { sa: 100, sd: 100 } },
     Dratini: { bs: { sa: 50, sd: 50 } },
-    Drowzee: { bs: { sa: 43, sd: 90 } },
+    Drowzee: { bs: { sa: 60, sd: 110 } },
     Dugtrio: { bs: { sa: 50, sd: 70 } },
     Eevee: { bs: { sa: 45, sd: 65 } },
     Ekans: { bs: { sa: 40, sd: 54 } },
@@ -1006,7 +1006,7 @@ var GSC_PATCH = {
     },
     Azumarill: {
         types: ['Water'],
-        bs: { hp: 100, at: 100, df: 80, sa: 60, sd: 80, sp: 50 },
+        bs: { hp: 100, at: 70, df: 80, sa: 60, sd: 80, sp: 50 },
         weightkg: 28.5
     },
     Bayleef: {
@@ -1051,7 +1051,7 @@ var GSC_PATCH = {
     },
     Corsola: {
         types: ['Water', 'Rock'],
-        bs: { hp: 65, at: 75, df: 95, sa: 75, sd: 95, sp: 40 },
+        bs: { hp: 75, at: 75, df: 100, sa: 80, sd: 100, sp: 42 },
         weightkg: 5
     },
     Crobat: {
@@ -1110,7 +1110,7 @@ var GSC_PATCH = {
     },
     Flaaffy: {
         types: ['Electric'],
-        bs: { hp: 70, at: 55, df: 60, sa: 80, sd: 65, sp: 50 },
+        bs: { hp: 70, at: 60, df: 65, sa: 80, sd: 65, sp: 50 },
         weightkg: 13.3,
         nfe: true
     },
@@ -2249,7 +2249,7 @@ var ADV_PATCH = {
     },
     Masquerain: {
         types: ['Bug', 'Water'],
-        bs: { hp: 70, at: 60, df: 62, sa: 100, sd: 82, sp: 100 },
+        bs: { hp: 70, at: 60, df: 62, sa: 100, sd: 82, sp: 80 },
         weightkg: 3.6,
         abilities: { 0: 'Intimidate' }
     },
@@ -2444,7 +2444,7 @@ var ADV_PATCH = {
         abilities: { 0: 'Chlorophyll' }
     },
     Seviper: {
-        types: ['Dark', 'Poison'],
+        types: ['Poison', 'Dark'],
         bs: { hp: 80, at: 110, df: 60, sa: 105, sd: 60, sp: 85 },
         weightkg: 52.5,
         abilities: { 0: 'Shed Skin' }
@@ -5052,7 +5052,7 @@ var XY_PATCH = {
     },
     Diggersby: {
         types: ['Normal', 'Ground'],
-        bs: { hp: 85, at: 112, df: 77, sa: 50, sd: 77, sp: 78 },
+        bs: { hp: 85, at: 81, df: 77, sa: 50, sd: 77, sp: 78 },
         weightkg: 42.4,
         abilities: { 0: 'Pickup' }
     },
@@ -5908,7 +5908,7 @@ var SM_PATCH = {
     Ariados: { bs: { sd: 70 } },
     Beartic: { bs: { at: 130 } },
     Chimecho: { bs: { hp: 75, df: 80, sd: 90 } },
-    Corsola: { bs: { hp: 65, df: 95, sd: 95 } },
+    Corsola: { bs: { hp: 75, df: 100, sd: 100 } },
     Crustle: { bs: { at: 105 } },
     Cryogonal: { bs: { hp: 80, df: 50 } },
     Delcatty: { bs: { sp: 90 } },
@@ -5930,7 +5930,7 @@ var SM_PATCH = {
     Magcargo: { bs: { hp: 65, sa: 95 } },
     Mantine: { bs: { hp: 85 } },
     Marowak: { otherFormes: ['Marowak-Alola', 'Marowak-Alola-Totem'] },
-    Masquerain: { bs: { sa: 100, sp: 100 } },
+    Masquerain: { bs: { sa: 100, sp: 80 } },
     Meowth: { otherFormes: ['Meowth-Alola'] },
     Muk: { otherFormes: ['Muk-Alola'] },
     Necturna: { bs: { sp: 58 } },
@@ -8787,7 +8787,7 @@ var SV_PATCH = {
     },
     Clodsire: {
         types: ['Poison', 'Ground'],
-        bs: { hp: 130, at: 75, df: 60, sa: 45, sd: 100, sp: 20 },
+        bs: { hp: 150, at: 80, df: 65, sa: 75, sd: 100, sp: 20 },
         weightkg: 223,
         abilities: { 0: 'Poison Point' }
     },
