@@ -359,6 +359,28 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Bulldoze","Rock Tomb", "Cut", "Work Up"]
+        },
+        "Gym Leader Roxanne | Rustboro City Gym": {  
+            "index": "0000000078",
+            "level": 18,
+            "ability": "Battle Armor",
+            "item": "Grass Gem", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bug Bite","Rock Tomb","Cut", "Aqua Jet"]
+        },
+        "Tuber Bella | Route 106": {  
+            "index": "0000000094",
+            "level": 21,
+            "ability": "Swift Swim",
+            "item": "Passho Berry", 
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Cross Poison","Leech Life","Rock Tomb", "Aqua Jet"]
         }
     },
     "Surskit": {
@@ -737,124 +759,91 @@ var SETDEX_SV = {
             "moves": ["Shadow Sneak","Knock Off", "Sludge Bomb", "Play Rough"]
         },   
     },
-    "Tinkatuff": {
-        "Hiker Clark | Route 116": {  
+    "Vanillish": {
+        "Hiker Brice | Route 116": {  
             "index": "0000000056",
             "level": 17,
-            "ability": "Mold Breaker",
+            "ability": "Snow Warning",
             "item": "Lum Berry", 
+            "nature": "Naive",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Water Pulse","Icicle Spear", "Mirror Shot", "Hypnosis"]
+        }
+    },
+    "Sealeo": {
+        "Hiker Brice | Route 116": {  
+            "index": "0000000057",
+            "level": 18,
+            "ability": "Ice Body",
+            "item": "Lum Berry", 
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Whirlpool","Aurora Beam", "Protect", "Super Fang"]
+        }
+    },
+    "Cubchoo": {
+        "Hiker Brice | Route 116": {  
+            "index": "0000000058",
+            "level": 19,
+            "ability": "Slush Rush",
+            "item": "Never-Melt Ice", 
             "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Swords Dance","Play Rough", "Bulldoze", "Metal Claw"]
-        }
-    },
-    "Diggersby": {
-        "Hiker Clark | Route 116": {  
-            "index": "0000000057",
-            "level": 18,
-            "ability": "Cheek Pouch",
-            "item": "Oran Berry", 
-            "nature": "Jolly",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Stomping Tantrum","Quick Attack", "Thunder Punch", "Body Slam"]
-        },
-        "Hiker Finn | Fiery Path": {  
-            "index": "0000000318",
-            "level": 44,
-            "ability": "Mold Breaker",
-            "item": "Leftovers", 
-            "nature": "Jolly",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Protect","Fire Punch", "Earthquake","Hyper Fang"]
-        }
-    }, 
-    "Rhyhorn": {
-        "Hiker Clark | Route 116": {  
-            "index": "0000000058",
-            "level": 19,
-            "ability": "Rock Head",
-            "item": "Focus Sash", 
-            "nature": "Jolly",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Reversal"]
+            "moves": ["Ice Punch","Headbutt", "Low Kick", "Howl"]
         }
     },
     "Monferno": {
         "Youngster Robert | Route 116": {  
             "index": "0000000059",
-            "level": 19,
-            "ability": "Iron Fist",
-            "item": "Expert Belt", 
-            "nature": "Hasty",
+            "level": 18,
+            "ability": "Scrappy",
+            "item": "Charcoal", 
+            "nature": "Naughty",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Grass Knot","Vacuum Wave","Fire Punch", "Sucker Punch"]
         }
     },
-    "Dragonair": {
+    "Grovyle": {
         "Youngster Robert | Route 116": {  
             "index": "0000000060",
-            "level": 18,
-            "ability": "Shed Skin",
-            "item": "Dragon Fang", 
-            "nature": "Impish",
+            "level": 17,
+            "ability": "Technician",
+            "item": "Miracle Seed", 
+            "nature": "Mild",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Dragon Breath","Breaking Swipe","Iron Tail", "Aqua Tail"]
-        },
-        "PKMN Trainer Red | Petalburg Gym": {  
-            "index": "0000000162",
-            "level": 34,
-            "ability": "Shed Skin",
-            "item": "Eviolite", 
-            "nature": "Impish",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Dragon Rush","Dual Wingbeat", "Waterfall", "Thunder Wave"]
+            "moves": ["Dragon Breath","Mega Drain","Pursuit", "Quick Attack"]
         }
     },
-    "Delibird": {
+    "Croconaw": {
         "Youngster Robert | Route 116": {  
             "index": "0000000061",
-            "level": 17,
-            "ability": "Vital Spirit",
-            "item": "Charti Berry", 
-            "nature": "Bold",
+            "level": 19,
+            "ability": "Intimidate",
+            "item": "Mystic Water", 
+            "nature": "Jolly",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Fake Out","Air Slash","Aurora Beam", "Roost"]
+            "moves": ["Aqua Jet","Crunch","Aqua Cutter", "Aerial Ace"]
         },
-        "Triathlete Alyssa | Route 110": {  
-            "index": "0000000214",
-            "level": 41,
-            "ability": "Super Luck",
-            "item": "Scope Lens", 
-            "nature": "Jolly", 
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Fake Out","Drill Run", "Drill Peck", "Icicle Crash"]
-        }
     },
     "Glimmet": {
         "Youngster Pebble | Rustboro City Gym": {  
             "index": "0000000062",
-            "level": 17,
+            "level": 18,
             "ability": "Corrosion",
             "item": "Light Clay", 
-            "nature": "Impish",
+            "nature": "Timid",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -867,7 +856,7 @@ var SETDEX_SV = {
             "level": 17,
             "ability": "Heavy Metal",
             "item": "Eviolite", 
-            "nature": "Brave",
+            "nature": "Jolly",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -885,12 +874,23 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Thunder Wave","Shock Wave","Ancient Power"]
+        },
+        "Gym Leader Roxanne | Rustboro City Gym": {  
+            "index": "0000000074",
+            "level": 18,
+            "ability": "Sturdy",
+            "item": "Weakness Policy", 
+            "nature": "Hasty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fire Punch","Rock Slide","Body Press", "Earth Power"]
         }
     },
     "Pupitar": {
         "Youngster Stone | Rustboro City Gym": {  
             "index": "0000000065",
-            "level": 17,
+            "level": 18,
             "ability": "Shed Skin",
             "item": "Muscle Band", 
             "nature": "Jolly",
@@ -906,24 +906,24 @@ var SETDEX_SV = {
             "level": 17,
             "ability": "Shell Armor",
             "item": "Berry Juice", 
-            "nature": "Brave",
+            "nature": "Jolly",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Swords Dance","Knock Off","Fury Cutter", "Sand Attack"]
+            "moves": ["Swords Dance","Knock Off","Fury Cutter", "Rock Tomb"]
         }
     }, 
     "Solrock": {
         "Cool Trainer Ruby & Saph | Rustboro City Gym": {  
             "index": "0000000067",
-            "level": 13,
-            "ability": "Telepathy",
-            "item": "Lum Berry", 
-            "nature": "Naive",
+            "level": 18,
+            "ability": "Solar Veil",
+            "item": "Muscle Band", 
+            "nature": "Jolly",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Morning Sun","Energy Ball","Power Gem", "Psyshock"]
+            "moves": ["Stomping Tantrum","Flame Wheel","Heart Stamp", "Rock Tomb"]
         },
         "Psychic Marlene | Route 114": {  
             "index": "0000000429",
@@ -958,7 +958,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Smart Strike","Covet","Ice Fang", "Bulldoze"]
+            "moves": ["Smart Strike","Brick Break","Ice Punch", "Confide"]
         },
         "Ruin Maniac Angelo | Mauville Gym": {  
             "index": "0000000257",
@@ -986,14 +986,14 @@ var SETDEX_SV = {
     "Lunatone": {
         "Cool Trainer Ruby & Saph | Rustboro City Gym": {  
             "index": "0000000069",
-            "level": 13,
-            "ability": "Telepathy",
-            "item": "Lum Berry",  
+            "level": 18,
+            "ability": "Lunar Veil",
+            "item": "Wide Lens",  
             "nature": "Hasty",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Moonlight","Psycho Cut","Icy Wind", "Rock Slide"]
+            "moves": ["Hypnosis","Hex","Snarl", "Stone Edge"]
         },
         "Psychic Marlene | Route 114": {  
             "index": "0000000428",
@@ -1010,277 +1010,186 @@ var SETDEX_SV = {
     "Sableye": {
         "Cool Trainer Ruby & Saph | Rustboro City Gym": {  
             "index": "0000000070",
-            "level": 16,
+            "level": 19,
             "ability": "Prankster",
-            "item": "Berry Juice", 
-            "nature": "Naughty",
+            "item": "Wise Glasses", 
+            "nature": "Quiet",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Supersonic","Zen Headbutt","Smart Strike", "Bulldoze"]
+            "moves": ["Shadow Ball","Dark Pulse","Power Gem", "Helping Hand"]
         }
     },
-    "Amaura": {
-        "Collector Hector | Rustboro City Gym": {  
+    "Numel": {
+        "Collector Emerald | Rustboro City Gym": {  
             "index": "0000000071",
-            "level": 17,
-            "ability": "Armor Tail",
-            "item": "Focus Sash", 
-            "nature": "Timid",
+            "level": 18,
+            "ability": "Simple",
+            "item": "Passho Berry", 
+            "nature": "Modest",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Thunder Wave","Extrasensory","Aurora Beam", "Mist"]
+            "moves": ["Rock Tomb","Ancient Power","Lava Plume", "Mud Bomb"]
         }
     }, 
-    "Lairon": {
-        "Collector Hector | Rustboro City Gym": {  
+    "Nuzleaf": {
+        "Collector Emerald | Rustboro City Gym": {  
             "index": "0000000072",
             "level": 17,
-            "ability": "Rock Head",
-            "item": "Salac Berry", 
-            "nature": "Careful",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Take Down","Submission","Metal Claw", "Rock Slide"]
-        },
-        "Hiker Devan | Granite Cave B1F": {  
-            "index": "0000000104",
-            "level": 22,
-            "ability": "Heavy Metal",
-            "item": "Iapapa Berry", 
-            "nature": "Impish",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Heavy Slam","Heat Crash"]
-        }
-    },
-    "Whiscash": {
-        "Collector Hector | Rustboro City Gym": {  
-            "index": "0000000073",
-            "level": 15,
-            "ability": "Mold Breaker",
-            "item": "Oran Berry", 
+            "ability": "Wind Rider",
+            "item": "Black Glasses", 
             "nature": "Hasty",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Focus Energy","Aurora Beam","Bulldoze", "Bounce"]
-        },
-        "Fisherman Kai | Route 114": {  
-            "index": "0000000394",
-            "level": 45,
-            "ability": "Oblivious",
-            "item": "Rindo Berry", 
-            "nature": "Jolly",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Dragon Dance","Wave Crash", "Earthquake","Bounce"]
-        },
-    }, 
-    "Wormadam-Sandy": {
-        "Gym Leader Roxanne | Rustboro City Gym": {  
-            "index": "0000000074",
+            "moves": ["Nature Power","Seed Bomb","Snarl", "Self-Destruct"]
+        }
+    },
+    "Skarmory": {
+        "Collector Emerald | Rustboro City Gym": {  
+            "index": "0000000073",
             "level": 18,
-            "ability": "Overcoat",
-            "item": "Rocky Helmet", 
-            "nature": "Timid",
+            "ability": "Heatproof",
+            "item": "Lum Berry", 
+            "nature": "Sassy",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Quiver Dance","Psybeam","Mud Bomb", "Giga Drain"]
-        }
+            "moves": ["Air Slash","Steel Wing"]
+        },
     },
-    "Seviper": {
+    //74 Nosepass
+    "Graveler-Alola": {
         "Gym Leader Roxanne | Rustboro City Gym": {  
             "index": "0000000075",
             "level": 17,
-            "ability": "Shed Skin",
-            "item": "Leftovers", 
-            "nature": "Hasty",
+            "ability": "Solid Rock",
+            "item": "Berry Juice", 
+            "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Rest","Pursuit","Poison Fang", "Hidden Power Ice"]
+            "moves": ["Bulldoze","Smack Down","Ice Punch", "Spark"]
         }
     },
-    "Perrserker": {
+    "Gurdurr": {
         "Gym Leader Roxanne | Rustboro City Gym": {  
             "index": "0000000076",
             "level": 18,
-            "ability": "Battle Armor",
-            "item": "Chople Berry", 
+            "ability": "Iron Fist",
+            "item": "Eviolite", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Mega Punch","Rock Tomb","Drain Punch", "Mach Punch"]
+        }
+    },
+    "Magcargo": {
+        "Gym Leader Roxanne | Rustboro City Gym": {  
+            "index": "0000000077",
+            "level": 19,
+            "ability": "Solid Rock",
+            "item": "Passho Berry", 
+            "nature": "Quiet",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Incinerate","Rock Slide","Accelerock", "Hidden Power Grass"]
+        },
+        "Picnicker Becky | Route 111": {  
+            "index": "0000000340",
+            "level": 47,
+            "teraType": "Dark",
+            "ability": "Magma Armor",
+            "item": "Red Card", 
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Shell Smash","Nature Power","Fire Blast","Earth Power"]
+        }
+    },
+    //78 Anorith
+    "Quagsire": {
+        "Gym Leader Roxanne | Rustboro City Gym": {  
+            "index": "0000000079",
+            "level": 19,
+            "ability": "Water Absorb",
+            "item": "Rindo Berry", 
             "nature": "Jolly",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Fake Out","Close Combat","Iron Head", "Bullet Punch"]
+            "moves": ["Rock Slide","Icy Wind","Waterfall", "Stomping Tantrum"]
         }
     },
-    "Corsola": {
-        "Gym Leader Roxanne | Rustboro City Gym": {  
-            "index": "0000000077",
+    "Carbink": {
+        "Gym Leader Brock | Rustboro City Gym": {  
+            "index": "0000000080",
             "level": 18,
-            "ability": "Regenerator",
-            "item": "Rindo Berry", 
-            "nature": "Relaxed",
+            "ability": "Sturdy",
+            "item": "Weakness Policy", 
+            "nature": "Naive",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Scald","Ancient Power","Rock Polish", "Recover"]
+            "moves": ["Play Rough","Rock Slide","Body Press", "Stomping Tantrum"]
+        }
+    }, 
+    "Sudowoodo": {
+        "Gym Leader Brock | Rustboro City Gym": {  
+            "index": "0000000081",
+            "level": 17,
+            "ability": "Sturdy",
+            "item": "Punching Glove", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Rock Tomb","Bulldoze","Fire Punch","Dizzy Punch"]
+        }
+    }, 
+    "Clodsire": {
+        "Gym Leader Brock | Rustboro City Gym": {  
+            "index": "0000000082",
+            "level": 18,
+            "ability": "Poison Point",
+            "item": "Lum Berry", 
+            "nature": "Brave",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bulldoze","Rock Slide","Venoshock", "Waterfall"]
         }
     },
     "Archen": {
-        "Gym Leader Roxanne | Rustboro City Gym": {  
-            "index": "0000000078",
+        "Gym Leader Brock | Rustboro City Gym": {  
+            "index": "0000000083",
             "level": 18,
-            "ability": "Defeatist",
+            "ability": "Deafeatist",
             "item": "Focus Sash", 
             "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Acrobatics","Smack Down","Endeavor", "U-turn"]
-        }
-    },
-    "Tyrunt": {
-        "Gym Leader Roxanne | Rustboro City Gym": {  
-            "index": "0000000079",
-            "level": 19,
-            "ability": "Sturdy",
-            "item": "Liechi Berry", 
-            "nature": "Jolly",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Rock Slide","Scale Shot","Stomping Tantrum", "Thunder Fang"]
-        }
-    },
-    "Donphan": {
-        "Gym Leader Brock | Rustboro City Gym": {  
-            "index": "0000000080",
-            "level": 18,
-            "ability": "Technician",
-            "item": "Rocky Helmet", 
-            "nature": "Careful",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Fire Fang","Thunder Fang","Bone Club", "Ice Shard"]
+            "moves": ["Endeavor","Smack Down","Accelerock","Acrobatics"]
         }
     }, 
-    "Golbat": {
-        "Gym Leader Brock | Rustboro City Gym": {  
-            "index": "0000000081",
-            "level": 18,
-            "ability": "Inner Focus",
-            "item": "Lum Berry", 
-            "nature": "Modest",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Hypnosis","Mega Drain","Venom Drain", "Air Cutter"]
-        }
-    }, 
-    "Rhydon": {
-        "Gym Leader Brock | Rustboro City Gym": {  
-            "index": "0000000082",
-            "level": 18,
-            "ability": "Battle Armor",
-            "item": "Passho Berry", 
-            "nature": "Careful",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Scary Face","Rock Blast","Stomping Tantrum"]
-        },
-        "Pokemaniac Derek | Route 117": {  
-            "index": "0000000233",
-            "level": 41,
-            "ability": "Rock Head",
-            "item": "Assault Vest", 
-            "nature": "Careful", 
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Rock Slide","Drill Run","Counter","Megahorn"]
-        },
-        "Lady Bianca | Route 113": {  
-            "index": "0000000365",
-            "level": 45,
-            "ability": "Rock Head",
-            "item": "Eviolite", 
-            "nature": "Careful",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Drill Run","Megahorn", "Stone Edge","Stealth Rock"]
-        },
-    },
-    "Chansey": {
-        "Gym Leader Brock | Rustboro City Gym": {  
-            "index": "0000000083",
-            "level": 18,
-            "ability": "Serene Berry",
-            "item": "Chople Berry", 
-            "nature": "Timid",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Counter","Psychic","Hyper Voice","Flamethrower"]
-        }
-    }, 
-    "Sudowoodo": {
+    "Dewott": {
         "Gym Leader Brock | Rustboro City Gym": {  
             "index": "0000000084",
             "level": 19,
-            "ability": "Rock Head",
-            "item": "Passho Berry", 
+            "ability": "Sheer Force",
+            "item": "Eviolite", 
             "nature": "Jolly",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Submission","Trailblaze","Rock Slide","Sucker Punch"]
+            "moves": ["Liquidation","Mighty Cleave","Ice Fang","Aqua Jet"]
         }
-    }, 
-    "Aerodactyl": {
-        "Gym Leader Brock | Rustboro City Gym": {  
-            "index": "0000000085",
-            "level": 19,
-            "ability": "Unnerve",
-            "item": "Berry Juice", 
-            "nature": "Impish",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Aerial Ace","Rock Tomb","Take Down", "Crunch"] // Broxanne Split 
-        },
-        "Camper Drew | Route 111 Desert": {  
-            "index": "0000000366",
-            "level": 44,
-            "ability": "Unnerve",
-            "item": "Dark Gem", 
-            "nature": "Jolly",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Fly","Aqua Tail", "Stone Edge","Pursuit"]
-        },
-        "Hiker Lucas | Route 114": {  
-            "index": "0000000420",
-            "level": 44,
-            "ability": "Unnerve",
-            "item": "Leftovers", 
-            "nature": "Jolly",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Substitute","Swagger", "Stone Edge","Dual Wingbeat"]
-        },
-    },
+    },  
     "Sharpedo": {
         "Team Aqua Grunt | Rusturf Tunnel": {  
             "index": "0000000086",
@@ -1440,19 +1349,7 @@ var SETDEX_SV = {
             "moves": ["Rain Dance","Belch","Mud Bomb", "Bubble Beam"]
         }
     },
-    "Anorith": {
-        "Tuber Bella | Route 106": {  
-            "index": "0000000094",
-            "level": 21,
-            "ability": "Swift Swim",
-            "item": "Passho Berry", 
-            "nature": "Careful",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Cross Poison","Leech Life","Rock Tomb", "Aqua Jet"]
-        }
-    },
+    //94 anorith
     "Qwilfish": {
         "Tuber Bella | Route 106": {
             "index": "0000000095",
@@ -1613,7 +1510,20 @@ var SETDEX_SV = {
             },
             "moves": ["Trailblaze","Rock Slide","X-Scissor","Crabhammer"]
         }
-    }, //104 Lairon
+    }, 
+    "Lairon": {
+    "Hiker Devan | Granite Cave B1F": {  
+            "index": "0000000104",
+            "level": 22,
+            "ability": "Heavy Metal",
+            "item": "Iapapa Berry", 
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Heavy Slam","Heat Crash"]
+        }
+    },
     "Hitmonchan": {
         "Battle Girl Laura | Dewford Gym": {  
             "index": "0000000105",
@@ -2189,20 +2099,9 @@ var SETDEX_SV = {
             "moves": ["Draining Kiss","Ice Beam","Thunderbolt","Mystical Fire"]
         },
     },
-    "Dewott": {
-        "Cool Trainer Randall | Petalburg Gym": {  
-            "index": "0000000142",
-            "level": 32,
-            "ability": "Infiltrator",
-            "item": "Room Service", 
-            "nature": "Brave",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0  
-            },
-            "moves": ["Razor Shell","X-Scissor","Revenge","Razor Wind"]
-        }, //TRICK ROOM TEAM END
-    },// 143 is mothim    
-    "Boltund": { //TAILWIND TEAM 
+    //142 Dewott
+    // 143 is mothim    
+    "Boltund": {
         "PKMN Trainer GaryGoesSky | Petalburg Gym": {  
             "index": "0000000144",
             "level": 32,
@@ -2579,7 +2478,19 @@ var SETDEX_SV = {
             "moves": ["U-turn","Knock Off", "Iron Head","Dual Wingbeat"]
         },
     },
-    //162 dragonair
+    "Dragonair": {
+    "PKMN Trainer Red | Petalburg Gym": {  
+            "index": "0000000162",
+            "level": 34,
+            "ability": "Shed Skin",
+            "item": "Eviolite", 
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Dragon Rush","Dual Wingbeat", "Waterfall", "Thunder Wave"]
+        }
+    },
     "Meganium": {
         "PKMN Trainer Red | Petalburg Gym": {  
             "index": "0000000163",
@@ -3482,7 +3393,19 @@ var SETDEX_SV = {
             "moves": ["Psychic Noise","Sludge Bomb", "Scald","Toxic"]
         },
     },
-    //214 Delibird
+    "Delibird": {
+    "Triathlete Alyssa | Route 110": {  
+            "index": "0000000214",
+            "level": 41,
+            "ability": "Super Luck",
+            "item": "Scope Lens", 
+            "nature": "Jolly", 
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Fake Out","Drill Run", "Drill Peck", "Icicle Crash"]
+        }
+    },
     "Noivern": {
         "Triathlete Alyssa | Route 110": {  
             "index": "0000000215",
@@ -3723,7 +3646,19 @@ var SETDEX_SV = {
             "moves": ["Trick Room","Hyper Voice","Psyshock","Foul Play"]
         }
     },
-    //233 rhydon
+    "Rhydon": {
+    "Pokemaniac Derek | Route 117": {  
+            "index": "0000000233",
+            "level": 41,
+            "ability": "Rock Head",
+            "item": "Assault Vest", 
+            "nature": "Careful", 
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Rock Slide","Drill Run","Counter","Megahorn"]
+        }
+    },
     "Magmar": {
     "Breeder Lydia & Aisha | Route 117": {  
             "index": "0000000234",
@@ -4789,7 +4724,19 @@ var SETDEX_SV = {
             "moves": ["Stealth Rock","Spikes", "Explosion","Mortal Spin"]
         },
     },
-    //318 Diggersby
+    "Diggersby": {
+    "Hiker Finn | Fiery Path": {  
+            "index": "0000000318",
+            "level": 44,
+            "ability": "Mold Breaker",
+            "item": "Leftovers", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Protect","Fire Punch", "Earthquake","Hyper Fang"]
+        }
+    }, 
     "Barraskewda": {
      "Hiker Finn | Fiery Path": {  
             "index": "0000000319",
@@ -4932,6 +4879,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
             "moves": ["Brave Bird","Knock Off", "Stone Edge", "Parting Shot"]
+        },
+        "Gym Leader Brock | Rustboro City Gym": {  
+            "index": "0000000085",
+            "level": 19,
+            "ability": "Rocky Payload",
+            "item": "Berry Juice", 
+            "nature": "Naive",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Smack Down","Pluck","Pursuit", "Heat Wave"] // Broxanne Split 
         }
     },
     "Tyrantrum": {
@@ -5015,20 +4973,7 @@ var SETDEX_SV = {
             "moves": ["Stored Power","Alluring Voice","Acid Armor","Recover"]
         }
     },
-    "Magcargo": {
-        "Picnicker Becky | Route 111": {  
-            "index": "0000000340",
-            "level": 47,
-            "teraType": "Dark",
-            "ability": "Magma Armor",
-            "item": "Red Card", 
-            "nature": "Timid",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Shell Smash","Nature Power","Fire Blast","Earth Power"]
-        }
-    },
+    //340 Magcargo
     //341 Poliwrath
     "Ursaring": {
         "Lawrence & Wyatt | Route 113": {  
@@ -5256,8 +5201,32 @@ var SETDEX_SV = {
             "moves": ["Knock Off","Psycho Boost", "Steel Beam","Grass Knot"]
         }
     },
-   //365 Rhydon
-   //366 aerodactyl
+    "Rhydon": {
+   "Lady Bianca | Route 113": {  
+            "index": "0000000365",
+            "level": 45,
+            "ability": "Rock Head",
+            "item": "Eviolite", 
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Drill Run","Megahorn", "Stone Edge","Stealth Rock"]
+        }
+    },
+    "Aerodactyl": {
+   "Camper Drew | Route 111 Desert": {  
+            "index": "0000000366",
+            "level": 44,
+            "ability": "Unnerve",
+            "item": "Dark Gem", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Fly","Aqua Tail", "Stone Edge","Pursuit"]
+        }
+    },
     //367 Toedscruel
     //368 Dracozolt
     //369 Dugtrio
@@ -5487,7 +5456,19 @@ var SETDEX_SV = {
         }
     },
     //393 Braviary-Hisui
-    //393 Whiscash
+    "Tangrowth": {
+    "Fisherman Kai | Route 114": {  
+            "index": "0000000394",
+            "level": 45,
+            "ability": "Oblivious",
+            "item": "Rindo Berry", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Dragon Dance","Wave Crash", "Earthquake","Bounce"]
+        },
+    }, 
     "Golisopod": {
         "Fisherman Kai | Route 114": {  
             "index": "0000000395",
@@ -5728,7 +5709,19 @@ var SETDEX_SV = {
             "moves": ["Burn Up","Roost", "Aura Sphere","Air Slash"]
         }
     },
-    //420 Aerodactyl
+    "Aerodactyl": {
+    "Hiker Lucas | Route 114": {  
+            "index": "0000000420",
+            "level": 44,
+            "ability": "Unnerve",
+            "item": "Leftovers", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Substitute","Swagger", "Stone Edge","Dual Wingbeat"]
+        },
+    },
     "Relicanth": {
         "Hiker Lucas | Route 114": {  
             "index": "0000000421",

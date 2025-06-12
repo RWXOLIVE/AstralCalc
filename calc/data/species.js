@@ -1132,7 +1132,7 @@ var GSC_PATCH = {
     },
     Granbull: {
         types: ['Fairy', 'Fighting'],
-        bs: { hp: 90, at: 125, df: 85, sa: 50, sd: 75, sp: 58 },
+        bs: { hp: 90, at: 125, df: 75, sa: 60, sd: 70, sp: 58 },
         weightkg: 48.7
     },
     Heracross: {
@@ -1202,12 +1202,12 @@ var GSC_PATCH = {
         nfe: true
     },
     Ledian: {
-        types: ['Bug', 'Fighting'],
-        bs: { hp: 58, at: 77, df: 85, sa: 80, sd: 110, sp: 85 },
+        types: ['Bug', 'Flying'],
+        bs: { hp: 58, at: 105, df: 70, sa: 10, sd: 110, sp: 105 },
         weightkg: 35.6
     },
     Ledyba: {
-        types: ['Bug', 'Fighting'],
+        types: ['Bug', 'Flying'],
         bs: { hp: 45, at: 60, df: 55, sa: 65, sd: 55, sp: 65 },
         weightkg: 10.8,
         nfe: true
@@ -1368,7 +1368,7 @@ var GSC_PATCH = {
     },
     Skarmory: {
         types: ['Steel', 'Flying'],
-        bs: { hp: 65, at: 80, df: 140, sa: 40, sd: 70, sp: 70 },
+        bs: { hp: 65, at: 80, df: 140, sa: 80, sd: 70, sp: 70 },
         weightkg: 50.5
     },
     Skiploom: {
@@ -1388,7 +1388,7 @@ var GSC_PATCH = {
         weightkg: 35,
         nfe: true
     },
-    Smeargle: { types: ['Normal'], bs: { hp: 55, at: 20, df: 35, sa: 20, sd: 45, sp: 75 }, weightkg: 58 },
+    Smeargle: { types: ['Normal'], bs: { hp: 55, at: 50, df: 55, sa: 50, sd: 55, sp: 75 }, weightkg: 58 },
     Smoochum: {
         types: ['Ice', 'Psychic'],
         bs: { hp: 45, at: 30, df: 10, sa: 90, sd: 70, sp: 75 },
@@ -2048,7 +2048,7 @@ var ADV_PATCH = {
     },
     Exploud: {
         types: ['Normal'],
-        bs: { hp: 104, at: 100, df: 67, sa: 110, sd: 77, sp: 68 },
+        bs: { hp: 114, at: 100, df: 69, sa: 112, sd: 77, sp: 68 },
         weightkg: 84,
         abilities: { 0: 'Soundproof' }
     },
@@ -2061,7 +2061,7 @@ var ADV_PATCH = {
     },
     Flygon: {
         types: ['Bug', 'Dragon'],
-        bs: { hp: 85, at: 90, df: 85, sa: 120, sd: 95, sp: 115 },
+        bs: { hp: 86, at: 104, df: 85, sa: 120, sd: 90, sp: 115 },
         weightkg: 82,
         abilities: { 0: 'Levitate' }
     },
@@ -2340,7 +2340,7 @@ var ADV_PATCH = {
     },
     Nuzleaf: {
         types: ['Grass', 'Dark'],
-        bs: { hp: 70, at: 70, df: 40, sa: 60, sd: 40, sp: 60 },
+        bs: { hp: 75, at: 70, df: 40, sa: 60, sd: 40, sp: 81 },
         weightkg: 28,
         nfe: true,
         abilities: { 0: 'Chlorophyll' }
@@ -2413,7 +2413,7 @@ var ADV_PATCH = {
     },
     Sableye: {
         types: ['Dark', 'Ghost'],
-        bs: { hp: 50, at: 75, df: 80, sa: 65, sd: 80, sp: 50 },
+        bs: { hp: 55, at: 90, df: 130, sa: 65, sd: 130, sp: 30 },
         weightkg: 11,
         abilities: { 0: 'Keen Eye' }
     },
@@ -5545,7 +5545,7 @@ var XY_PATCH = {
     },
     'Sableye-Mega': {
         types: ['Dark', 'Ghost'],
-        bs: { hp: 50, at: 85, df: 125, sa: 85, sd: 115, sp: 20 },
+        bs: { hp: 55, at: 95, df: 145, sa: 70, sd: 45, sp: 25 },
         weightkg: 161,
         abilities: { 0: 'Magic Bounce' },
         baseSpecies: 'Sableye'
