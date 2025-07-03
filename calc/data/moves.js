@@ -97,7 +97,7 @@ var RBY = {
     'Mirror Move': { bp: 0, category: 'Status', type: 'Flying' },
     Mist: { bp: 0, category: 'Status', type: 'Ice' },
     'Night Shade': { bp: 1, type: 'Ghost' },
-    'Petal Dance': { bp: 120, type: 'Grass' },
+    'Petal Dance': { bp: 90, type: 'Grass' },
     'Pin Missile': { bp: 25, type: 'Bug', multihit: [2, 5] },
     'Poison Sting': { bp: 30, type: 'Poison' },
     Psychic: { bp: 90, type: 'Psychic' },
@@ -610,7 +610,7 @@ var DPP_PATCH = {
     'Mega Drain': { category: 'Special' },
     'Mirror Coat': { category: 'Special' },
     Outrage: { bp: 120, category: 'Physical' },
-    'Petal Dance': { bp: 120, category: 'Special' },
+    'Petal Dance': { bp: 90, category: 'Special' },
     'Pin Missile': { category: 'Physical' },
     Psywave: { category: 'Special' },
     Pursuit: { category: 'Physical' },
@@ -1064,7 +1064,7 @@ var DPP_PATCH = {
         category: 'Special'
     },
     'Earth Power': { bp: 90, type: 'Ground', category: 'Special' },
-    'Flash Cannon': { bp: 80, type: 'Steel', isPulse: true, category: 'Special' },
+    'Flash Cannon': { bp: 90, type: 'Steel', category: 'Special' },
     'Focus Blast': { bp: 120, type: 'Fighting', category: 'Special' },
     'Force Palm': {
         bp: 60,
@@ -1216,7 +1216,7 @@ var BW_PATCH = {
     Thunderbolt: { secondaries: true },
     Uproar: { bp: 80 },
     Whirlpool: { bp: 35 },
-    'Petal Dance': { bp: 120 },
+    'Petal Dance': { bp: 90 },
     Tackle: { bp: 40 },
     Thrash: { bp: 120 },
     'Bone Club': { secondaries: true },
@@ -3519,7 +3519,6 @@ var SS_PATCH = {
         bp: 80,
         type: 'Water',
         isBullet: true,
-        isPulse: true,
         category: 'Special',
         zp: 160,
         maxPower: 130
@@ -4202,7 +4201,6 @@ var SV_PATCH = {
     'Armor Cannon': {
         bp: 120,
         type: 'Fire',
-        isPulse: true,
         category: 'Special',
         zp: 190,
         maxPower: 140

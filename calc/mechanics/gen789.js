@@ -952,6 +952,9 @@ function calculateAtModsSMSSSV(gen, attacker, defender, move, field, desc) {
         (attacker.curHP() <= attacker.maxHP() / 3 &&
             ((attacker.hasAbility('Overgrow') && move.hasType('Grass')) ||
                 (attacker.hasAbility('Blaze') && move.hasType('Fire')) ||
+                (attacker.hasAbility('Shroud') && move.hasType('Dark')) ||
+                (attacker.hasAbility('Lucid') && move.hasType('Psychic')) ||
+                (attacker.hasAbility('Grit') && move.hasType('Fighting')) ||
                 (attacker.hasAbility('Swarm') && move.hasType('Bug')) ||
                 (attacker.hasAbility('Torrent') && move.hasType('Water')))) ||
         (move.category === 'Special' && attacker.abilityOn && attacker.hasAbility('Plus', 'Minus'))) {

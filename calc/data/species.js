@@ -685,7 +685,7 @@ var RBY = {
         weightkg: 56
     },
     Seadra: { types: ['Water'], bs: { hp: 55, at: 65, df: 95, sp: 85, sl: 95 }, weightkg: 25 },
-    Seaking: { types: ['Water'], bs: { hp: 80, at: 92, df: 65, sp: 68, sl: 80 }, weightkg: 39 },
+    Seaking: { types: ['Water'], bs: { hp: 80, at: 92, df: 75, sp: 98, sl: 85 }, weightkg: 39 },
     Seel: {
         types: ['Water'],
         bs: { hp: 65, at: 55, df: 55, sp: 45, sl: 70 },
@@ -964,7 +964,7 @@ var GSC_PATCH = {
     Sandslash: { bs: { sa: 45, sd: 55 } },
     Scyther: { bs: { sa: 55, sd: 80 }, nfe: true },
     Seadra: { bs: { sa: 95, sd: 55 }, nfe: true },
-    Seaking: { bs: { sa: 65, sd: 80 } },
+    Seaking: { bs: { sa: 85, sd: 80 } },
     Seel: { bs: { sa: 55, sd: 70 } },
     Shellder: { bs: { sa: 45, sd: 25 } },
     Slowbro: { bs: { sa: 100, sd: 80 } },
@@ -1419,7 +1419,7 @@ var GSC_PATCH = {
     },
     Steelix: {
         types: ['Steel', 'Ground'],
-        bs: { hp: 75, at: 90, df: 200, sa: 50, sd: 70, sp: 25 },
+        bs: { hp: 75, at: 90, df: 200, sa: 25, sd: 70, sp: 50 },
         weightkg: 400
     },
     Sudowoodo: {
@@ -2210,7 +2210,7 @@ var ADV_PATCH = {
     },
     Ludicolo: {
         types: ['Water', 'Grass'],
-        bs: { hp: 80, at: 70, df: 70, sa: 90, sd: 100, sp: 70 },
+        bs: { hp: 80, at: 75, df: 70, sa: 95, sd: 105, sp: 70 },
         weightkg: 55,
         abilities: { 0: 'Swift Swim' }
     },
@@ -2696,7 +2696,7 @@ var ADV_PATCH = {
         abilities: { 0: 'Shadow Tag' }
     },
     Zangoose: {
-        types: ['Normal', 'Fighting'],
+        types: ['Normal'],
         bs: { hp: 70, at: 115, df: 60, sa: 55, sd: 60, sp: 98 },
         weightkg: 40.3,
         abilities: { 0: 'Immunity' }
@@ -5323,7 +5323,7 @@ var XY_PATCH = {
     },
     'Audino-Mega': {
         types: ['Normal', 'Fairy'],
-        bs: { hp: 103, at: 60, df: 126, sa: 90, sd: 126, sp: 50 },
+        bs: { hp: 103, at: 60, df: 126, sa: 80, sd: 126, sp: 50 },
         weightkg: 32,
         abilities: { 0: 'Healer' },
         baseSpecies: 'Audino'
@@ -5414,10 +5414,10 @@ var XY_PATCH = {
         baseSpecies: 'Gengar'
     },
     'Glalie-Mega': {
-        types: ['Ice'],
+        types: ['Ice', 'Rock'],
         bs: { hp: 80, at: 120, df: 80, sa: 120, sd: 80, sp: 100 },
         weightkg: 350.2,
-        abilities: { 0: 'Refrigerate' },
+        abilities: { 0: 'Rocky Payload' },
         baseSpecies: 'Glalie'
     },
     'Gyarados-Mega': {
@@ -7343,7 +7343,7 @@ var SS_PATCH = {
     },
     'Butterfree-Mega': {
         types: ['Bug', 'Psychic'],
-        bs: { hp: 70, at: 20, df: 60, sa: 130, sd: 80, sp: 140 },
+        bs: { hp: 70, at: 40, df: 60, sa: 130, sd: 80, sp: 140 },
         weightkg: 64,
         abilities: { 0: 'Compound Eyes' },
         baseSpecies: 'Butterfree'
@@ -7703,9 +7703,9 @@ var SS_PATCH = {
     },
     'Garbodor-Mega': {
         types: ['Poison', 'Steel'],
-        bs: { hp: 100, at: 130, df: 120, sa: 80, sd: 107, sp: 47 },
+        bs: { hp: 100, at: 155, df: 123, sa: 75, sd: 94, sp: 45 },
         weightkg: 214,
-        abilities: { 0: 'Stench' },
+        abilities: { 0: 'Corrosion' },
         baseSpecies: 'Garbodor'
     },
     'Gengar-Gmax': {
@@ -7829,7 +7829,7 @@ var SS_PATCH = {
         types: ['Water', 'Steel'],
         bs: { hp: 55, at: 155, df: 130, sa: 50, sd: 60, sp: 90 },
         weightkg: 1200,
-        abilities: { 0: 'Hyper Cutter' },
+        abilities: { 0: 'Tough Claws' },
         baseSpecies: 'Kingler'
     },
     'Kubfu': {
@@ -7841,9 +7841,9 @@ var SS_PATCH = {
     },
     'Lapras-Mega': {
         types: ['Water', 'Ice'],
-        bs: { hp: 130, at: 100, df: 90, sa: 120, sd: 110, sp: 70 },
+        bs: { hp: 130, at: 110, df: 90, sa: 120, sd: 110, sp: 75 },
         weightkg: 440,
-        abilities: { 0: 'Water Absorb' },
+        abilities: { 0: 'Liquid Voice' },
         baseSpecies: 'Lapras'
     },
     'Linoone-Galar': {
@@ -8199,9 +8199,9 @@ var SS_PATCH = {
     },
     'Snorlax-Mega': {
         types: ['Normal', 'Grass'],
-        bs: { hp: 160, at: 165, df: 75, sa: 75, sd: 115, sp: 4 },
+        bs: { hp: 160, at: 160, df: 75, sa: 75, sd: 140, sp: 30 },
         weightkg: 9200,
-        abilities: { 0: 'Immunity' },
+        abilities: { 0: 'Thick Fat' },
         baseSpecies: 'Snorlax'
     },
     Sobble: {

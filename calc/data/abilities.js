@@ -375,6 +375,9 @@ var SV = SS.concat([
     'Lunar Veil',
     'Solar Veil',
     'Blazing Soul',
+    'Grit',
+    'Shroud',
+    'Lucid',
 ]);
 exports.ABILITIES = [[], RBY, GSC, ADV, DPP, BW, XY, SM, SS, SV];
 var Abilities = (function () {
