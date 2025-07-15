@@ -84,10 +84,10 @@ var RBY = {
     Guillotine: { bp: 0, type: 'Steel' },
     Gust: { bp: 40, type: 'Normal' },
     Haze: { bp: 0, category: 'Status', type: 'Ice' },
-    'High Jump Kick': { bp: 130, type: 'Fighting', hasCrashDamage: true },
+    'High Jump Kick': { bp: 130, type: 'Fighting', hasCrashDamage: true, isKick: true },
     'Horn Drill': { bp: 0, type: 'Normal' },
     'Hyper Beam': { bp: 140, type: 'Normal', mindBlownRecoil: true },
-    'Jump Kick': { bp: 100, type: 'Fighting', hasCrashDamage: true },
+    'Jump Kick': { bp: 100, type: 'Fighting', hasCrashDamage: true, isKick: true },
     'Karate Chop': { bp: 50, type: 'Normal' },
     'Leech Seed': { bp: 0, category: 'Status', type: 'Grass' },
     'Light Screen': { bp: 0, category: 'Status', type: 'Psychic' },
@@ -140,7 +140,7 @@ var RBY = {
     Wrap: { bp: 20, type: 'Normal' },
     Growl: { bp: 0, category: 'Status', type: 'Normal' },
     Leer: { bp: 0, category: 'Status', type: 'Normal' },
-    'Low Kick': { bp: 0, type: 'Fighting' },
+    'Low Kick': { bp: 0, type: 'Fighting', isKick: true },
     'Poison Gas': { bp: 0, category: 'Status', type: 'Poison' },
     'Poison Powder': { bp: 0, category: 'Status', type: 'Poison' },
     'Sky Attack': { bp: 140, type: 'Flying' },
@@ -176,7 +176,7 @@ var RBY = {
     Kinesis: { bp: 0, category: 'Status', type: 'Psychic' },
     'Lovely Kiss': { bp: 0, category: 'Status', type: 'Normal' },
     Meditate: { bp: 0, category: 'Status', type: 'Psychic' },
-    'Rolling Kick': { bp: 60, type: 'Fighting' },
+    'Rolling Kick': { bp: 60, type: 'Fighting', isKick: true },
     Sharpen: { bp: 0, category: 'Status', type: 'Normal' },
     Teleport: { bp: 0, category: 'Status', type: 'Psychic' },
     Agility: { bp: 0, category: 'Status', type: 'Psychic' },
@@ -191,7 +191,7 @@ var RBY = {
     Headbutt: { bp: 70, type: 'Normal' },
     'Horn Attack': { bp: 65, type: 'Normal' },
     'Ice Punch': { bp: 75, type: 'Ice' },
-    'Mega Kick': { bp: 120, type: 'Normal', hasCrashDamage: true },
+    'Mega Kick': { bp: 120, type: 'Normal', hasCrashDamage: true, isKick: true },
     'Mega Punch': { bp: 80, type: 'Normal' },
     'Pay Day': { bp: 40, type: 'Normal' },
     Peck: { bp: 40, type: 'Flying' },
@@ -269,7 +269,7 @@ var GSC_PATCH = {
     'Sweet Scent': { bp: 0, category: 'Status', type: 'Normal' },
     Synthesis: { bp: 0, category: 'Status', type: 'Grass' },
     Thief: { bp: 40, type: 'Dark' },
-    'Triple Kick': { bp: 15, type: 'Fighting', multihit: [1, 3] },
+    'Triple Kick': { bp: 15, type: 'Fighting', multihit: [1, 3], isKick: true },
     Twister: { bp: 40, type: 'Dragon' },
     'Ancient Power': { bp: 60, type: 'Rock' },
     'Bone Rush': { bp: 25, type: 'Ground', multihit: [2, 5] },
@@ -364,7 +364,7 @@ var ADV_PATCH = {
     'Rapid Spin': { makesContact: true },
     'Razor Wind': { makesContact: true },
     Reversal: { makesContact: true },
-    'Rock Smash': { makesContact: true },
+    'Rock Smash': { isPunch: true, makesContact: true },
     'Self-Destruct': { target: 'allAdjacent' },
     'Skull Bash': { makesContact: true },
     Stomp: { makesContact: true },
@@ -534,7 +534,7 @@ var ADV_PATCH = {
     'Silver Wind': { bp: 60, type: 'Bug' },
     'Aerial Ace': { bp: 70, type: 'Flying', makesContact: true },
     'Blast Burn': { bp: 150, type: 'Fire' },
-    'Blaze Kick': { bp: 85, type: 'Fire', makesContact: true },
+    'Blaze Kick': { bp: 85, type: 'Fire', makesContact: true, isKick: true },
     'Bulk Up': { bp: 0, category: 'Status', type: 'Fighting' },
     'Calm Mind': { bp: 0, category: 'Status', type: 'Psychic' },
     'Cosmic Power': { bp: 0, category: 'Status', type: 'Psychic' },
@@ -582,7 +582,7 @@ var DPP_PATCH = {
     Dive: { bp: 80, category: 'Physical' },
     'Doom Desire': { category: 'Special' },
     'Double-Edge': { category: 'Physical' },
-    'Double Kick': { category: 'Physical' },
+    'Double Kick': { isKick: true, category: 'Physical' },
     'Double Slap': { category: 'Physical' },
     'Dream Eater': { category: 'Special' },
     Earthquake: { category: 'Physical' },
@@ -1117,6 +1117,7 @@ var DPP_PATCH = {
     'Poison Jab': {
         bp: 80,
         type: 'Poison',
+        isPunch: true,
         makesContact: true,
         category: 'Physical'
     },
@@ -2801,6 +2802,7 @@ var SM_PATCH = {
         bp: 70,
         type: 'Grass',
         makesContact: true,
+        isKick: true,
         category: 'Physical',
         secondaries: true,
         zp: 140
@@ -3480,6 +3482,7 @@ var SS_PATCH = {
         type: 'Fire',
         category: 'Physical',
         secondaries: true,
+        isKick: true,
         isBullet: true,
         zp: 190,
         maxPower: 140
@@ -3626,6 +3629,7 @@ var SS_PATCH = {
         bp: 90,
         type: 'Fighting',
         category: 'Physical',
+        isKick: true,
         secondaries: true,
         makesContact: true,
         zp: 175,
@@ -4212,6 +4216,7 @@ var SV_PATCH = {
         zp: 190,
         maxPower: 95,
         secondaries: true,
+        isKick: true,
         hasCrashDamage: true,
         makesContact: true
     },
@@ -4958,6 +4963,8 @@ var Move = (function () {
             this.flags.contact = 1;
         if (data.isPunch)
             this.flags.punch = 1;
+        if (data.isKick)
+            this.flags.kick = 1;
         if (data.isBite)
             this.flags.bite = 1;
         if (data.isBullet)
@@ -4985,6 +4992,7 @@ var Move = (function () {
         'bp',
         'makesContact',
         'isPunch',
+        'isKick',
         'isBite',
         'isBullet',
         'isSound',

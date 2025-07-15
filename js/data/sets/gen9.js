@@ -351,7 +351,7 @@ var SETDEX_SV = {
     "Anorith": {
         "Bug Catcher Barry | Petalburg Woods": {  
             "index": "0000000027",
-            "level": 15,
+            "level": 14,
             "ability": "Battle Armor",
             "item": "Berry Juice", 
             "nature": "Adamant",
@@ -399,7 +399,7 @@ var SETDEX_SV = {
     "Illumise": {
         "Bug Catcher Barry | Petalburg Woods": {  
             "index": "0000000029",
-            "level": 14,
+            "level": 15,
             "ability": "Prankster",
             "item": "Bug Gem", 
             "nature": "Modest",
@@ -586,7 +586,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Hyper Fang","Acrobatics", "Endeavor", "Quick Attack"]
+            "moves": ["Super Fang","Acrobatics", "Endeavor", "Quick Attack"]
         }
     },
     "Girafarig": {
@@ -605,7 +605,7 @@ var SETDEX_SV = {
     "Cubone": {
         "School Kid Karen | Route 116": {  
             "index": "0000000044",
-            "level": 13,
+            "level": 15,
             "ability": "Battle Armor",
             "item": "Assault Vest", 
             "nature": "Careful",
@@ -1215,7 +1215,7 @@ var SETDEX_SV = {
         },
         "Team Aqua Grunt 2 | Slateport Museum": {  
             "index": "0000000138",
-            "level": 29,
+            "level": 30,
             "ability": "Speed Boost",
             "item": "Expert Belt", 
             "nature": "Adamant",
@@ -1250,7 +1250,7 @@ var SETDEX_SV = {
         },
         "Team Aqua Grunt 2 | Slateport Museum": {  
             "index": "0000000137",
-            "level": 28,
+            "level": 30,
             "ability": "Heatproof",
             "item": "Mystic Water", 
             "nature": "Bold",
@@ -1285,7 +1285,7 @@ var SETDEX_SV = {
         },
         "Team Aqua Grunt 2 | Slateport Museum": {  
             "index": "0000000136",
-            "level": 28,   
+            "level": 31,   
             "ability": "Guts",
             "item": "Flame Orb", 
             "nature": "Jolly",
@@ -1350,7 +1350,7 @@ var SETDEX_SV = {
     "Palpitoad": {
         "Tuber Bella | Route 106": {  
             "index": "0000000093",
-            "level": 21,
+            "level": 22,
             "ability": "Swift Swim",
             "item": "Rindo Berry", 
             "nature": "Modest",
@@ -1849,7 +1849,7 @@ var SETDEX_SV = {
         },
         "Tuber Grant | Route 109": {  
             "index": "0000000127",
-            "level": 29,
+            "level": 30,
             "ability": "Defiant",
             "item": "Weakness Policy", 
             "nature": "Adamant",
@@ -1862,7 +1862,7 @@ var SETDEX_SV = {
     "Kingler": {
         "Sailor Huey & Edmond | Route 109": {  
             "index": "0000000123",
-            "level": 24,
+            "level": 23,
             "ability": "Shell Armor",
             "item": "Expert Belt", 
             "nature": "Adamant",
@@ -1923,7 +1923,7 @@ var SETDEX_SV = {
     "Palossand": {
         "Sailor Huey & Edmond | Route 109": {  
             "index": "0000000126",
-            "level": 24,
+            "level": 23,
             "ability": "Water Compaction",
             "item": "Wise Glasses", 
             "nature": "Modest",
@@ -1936,7 +1936,7 @@ var SETDEX_SV = {
     "Scyther": {
         "Tuber Grant | Route 109": {  
             "index": "0000000128",
-            "level": 28,
+            "level": 29,
             "ability": "Technician",
             "item": "Focus Sash", 
             "nature": "Jolly",
@@ -1961,7 +1961,7 @@ var SETDEX_SV = {
         "Camper Drew | Route 111 Desert": {  
             "index": "0000000367",
             "level": 45,
-            "ability": "Effect Spore",
+            "ability": "Regenerator",
             "item": "Lum Berry", 
             "nature": "Hasty",
             "ivs": {
@@ -1997,7 +1997,7 @@ var SETDEX_SV = {
     "Morpeko": {
         "Tuber Austina | Route 109": {  
             "index": "0000000131",
-            "level": 29,
+            "level": 30,
             "ability": "Hunger Switch",
             "item": "Chople Berry", 
             "nature": "Jolly",
@@ -2021,7 +2021,7 @@ var SETDEX_SV = {
     "Togedemaru": {
         "Tuber Austina | Route 109": {  
             "index": "0000000132",
-            "level": 29,
+            "level": 30,
             "ability": "Iron Barbs",
             "item": "Air Balloon", 
             "nature": "Impish",
@@ -2034,7 +2034,7 @@ var SETDEX_SV = {
     "Overqwil": {
         "Aqua Grunt 1 | Slateport Museum": {  
             "index": "0000000133",
-            "level": 28,
+            "level": 30,
             "ability": "Intimidate",
             "item": "Loaded Dice", 
             "nature": "Jolly",
@@ -2047,7 +2047,7 @@ var SETDEX_SV = {
     "Gliscor": {
     "Aqua Grunt 1 | Slateport Museum": {  
             "index": "0000000134",
-            "level": 28,
+            "level": 30,
             "ability": "Hyper Cutter",
             "item": "Yache Berry", 
             "nature": "Relaxed",
@@ -2060,7 +2060,7 @@ var SETDEX_SV = {
     "Victreebel": {
         "Aqua Grunt 1 | Slateport Museum": {  
             "index": "0000000135",
-            "level": 28,
+            "level": 31,
             "ability": "Gluttony",
             "item": "Sitrus Berry", 
             "nature": "Naive",
@@ -2311,7 +2311,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Thunderbolt","Expanding Force","Reflect","Dazzling Gleam"]
+            "moves": ["Thunderbolt","Psyshock","Reflect","Dazzling Gleam"]
         }
     },
     "Skuntank": {
@@ -3244,7 +3244,7 @@ var SETDEX_SV = {
         "Pokefan Isabel & Kaleb | Route 110": {  
             "index": "0000000205",
             "level": 40,
-            "ability": "Impish",
+            "ability": "Striker",
             "item": "Shuca Berry", 
             "nature": "Naive", 
             "ivs": {
@@ -3768,30 +3768,30 @@ var SETDEX_SV = {
             "moves": ["Trailblaze","Drain Punch","Rock Tomb","Needle Arm"]
         }
     },
-    "Chi-Yu": {
+    "Simisear": {
         "Breeder Lydia & Aisha | Route 117": {  
             "index": "0000000236",
             "level": 41,
-            "ability": "Beads Of Ruin",
+            "ability": "Shroud",
             "item": "Wise Glasses", 
-            "nature": "Impish", 
+            "nature": "Modest", 
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Incinerate","Snarl"]
+            "moves": ["Fiery Wrath","Yawn", "Overheat","Mystical Fire"]
         }
     },
-    "Terrakion": {
+    "Sandaconda": {
         "Hiker Mike | Rusturf Tunnel": {  
             "index": "0000000237",
             "level": 41,
-            "ability": "Justified",
-            "item": "Silk Scarf", 
-            "nature": "Naughty", 
+            "ability": "Sand Spit",
+            "item": "Lum Berry", 
+            "nature": "Careful", 
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Sandstorm","Rock Slide","Sacred Sword","Quick Attack"]
+            "moves": ["Glare","Fire Fang","Earthquake","Stone Edge"]
         }
     },
     "Scolipede": {
@@ -5425,18 +5425,17 @@ var SETDEX_SV = {
         }
     },
     //385 Dugtrio
-    "Virizion": {
+    "Kleavor": {
     "Battle Girl Cyndy | Route 111 Desert": {  
             "index": "0000000386",
-            "teraType": "Flying",
             "level": 45,
             "ability": "Sharpness",
-            "item": "Safety Goggles", 
-            "nature": "Hasty",
+            "item": "Passho Berry", 
+            "nature": "Jolly",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Bulk Up","Sacred Sword", "Leaf Blade","Air Slash"]
+            "moves": ["Bulk Up","X-Scissor", "Stone Axe","Razor Wind"]
         }
     },
     //387 Bewear

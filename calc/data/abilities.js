@@ -378,6 +378,7 @@ var SV = SS.concat([
     'Grit',
     'Shroud',
     'Lucid',
+    'Striker',
 ]);
 exports.ABILITIES = [[], RBY, GSC, ADV, DPP, BW, XY, SM, SS, SV];
 var Abilities = (function () {

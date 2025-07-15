@@ -178,7 +178,7 @@ var RBY = {
         weightkg: 0.8,
         nfe: true
     },
-    Ditto: { types: ['Normal'], bs: { hp: 48, at: 48, df: 48, sp: 48, sl: 48 }, weightkg: 4 },
+    Ditto: { types: ['Normal'], bs: { hp: 100, at: 100, df: 100, sp: 100, sl: 100 }, weightkg: 4 },
     Dodrio: {
         types: ['Ground', 'Flying'],
         bs: { hp: 60, at: 115, df: 70, sp: 100, sl: 60 },
@@ -578,7 +578,7 @@ var RBY = {
     },
     Persian: { types: ['Normal'], bs: { hp: 65, at: 90, df: 60, sp: 115, sl: 90 }, weightkg: 32 },
     Pidgeot: {
-        types: ['Flying'],
+        types: ['Flying', 'Normal'],
         bs: { hp: 83, at: 80, df: 73, sp: 115, sl: 70 },
         weightkg: 39.5
     },
@@ -864,7 +864,7 @@ var GSC_PATCH = {
     Cubone: { bs: { sa: 40, sd: 50 } },
     Dewgong: { bs: { sa: 80, sd: 95 } },
     Diglett: { bs: { sa: 35, sd: 45 } },
-    Ditto: { bs: { sa: 48, sd: 48 }, gender: 'N' },
+    Ditto: { bs: { sa: 100, sd: 100 }, gender: 'N' },
     Dodrio: { bs: { sa: 81, sd: 60 } },
     Doduo: { bs: { sa: 35, sd: 35 } },
     Dragonair: { bs: { sa: 90, sd: 70 } },
@@ -2236,7 +2236,7 @@ var ADV_PATCH = {
     },
     Manectric: {
         types: ['Electric'],
-        bs: { hp: 70, at: 80, df: 60, sa: 105, sd: 60, sp: 120 },
+        bs: { hp: 70, at: 85, df: 60, sa: 105, sd: 60, sp: 120 },
         weightkg: 40.2,
         abilities: { 0: 'Static' }
     },
@@ -2261,9 +2261,9 @@ var ADV_PATCH = {
     },
     Medicham: {
         types: ['Fighting', 'Psychic'],
-        bs: { hp: 60, at: 120, df: 75, sa: 79, sd: 75, sp: 80 },
+        bs: { hp: 60, at: 90, df: 75, sa: 70, sd: 75, sp: 80 },
         weightkg: 31.5,
-        abilities: { 0: 'Pure Power' }
+        abilities: { 0: 'Telepathy' }
     },
     Meditite: {
         types: ['Fighting', 'Psychic'],
@@ -3941,7 +3941,7 @@ var BW_PATCH = {
     },
     Emboar: {
         types: ['Fire', 'Fighting'],
-        bs: { hp: 100, at: 123, df: 80, sa: 100, sd: 67, sp: 60 },
+        bs: { hp: 110, at: 123, df: 80, sa: 90, sd: 72, sp: 60 },
         weightkg: 150,
         abilities: { 0: 'Blaze' }
     },
@@ -4130,7 +4130,7 @@ var BW_PATCH = {
     },
     Joltik: {
         types: ['Bug', 'Electric'],
-        bs: { hp: 55, at: 47, df: 52, sa: 71, sd: 52, sp: 68 },
+        bs: { hp: 55, at: 47, df: 52, sa: 71, sd: 55, sp: 68 },
         weightkg: 0.6,
         nfe: true,
         abilities: { 0: 'Compound Eyes' }
@@ -4932,7 +4932,7 @@ var XY_PATCH = {
     },
     Amaura: {
         types: ['Rock', 'Ice'],
-        bs: { hp: 77, at: 59, df: 50, sa: 67, sd: 63, sp: 46 },
+        bs: { hp: 81, at: 59, df: 69, sa: 67, sd: 63, sp: 46 },
         weightkg: 25.2,
         nfe: true,
         abilities: { 0: 'Refrigerate' }
@@ -5492,9 +5492,9 @@ var XY_PATCH = {
     },
     'Medicham-Mega': {
         types: ['Fighting', 'Psychic'],
-        bs: { hp: 65, at: 100, df: 85, sa: 100, sd: 85, sp: 100 },
+        bs: { hp: 60, at: 130, df: 65, sa: 130, sd: 65, sp: 100 },
         weightkg: 31.5,
-        abilities: { 0: 'Pure Power' },
+        abilities: { 0: 'Mind\'s Eye' },
         baseSpecies: 'Medicham'
     },
     'Metagross-Mega': {
@@ -5649,7 +5649,7 @@ var XY_PATCH = {
     },
     Pangoro: {
         types: ['Fighting', 'Dark'],
-        bs: { hp: 95, at: 124, df: 78, sa: 69, sd: 71, sp: 58 },
+        bs: { hp: 95, at: 124, df: 78, sa: 69, sd: 71, sp: 61 },
         weightkg: 136,
         abilities: { 0: 'Iron Fist' }
     },
@@ -5844,7 +5844,7 @@ var XY_PATCH = {
     },
     Tyrunt: {
         types: ['Rock', 'Dragon'],
-        bs: { hp: 60, at: 90, df: 79, sa: 45, sd: 45, sp: 50 },
+        bs: { hp: 60, at: 90, df: 80, sa: 50, sd: 50, sp: 55 },
         weightkg: 26,
         nfe: true,
         abilities: { 0: 'Strong Jaw' }
@@ -6698,7 +6698,7 @@ var SM_PATCH = {
     },
     Primarina: {
         types: ['Water', 'Fairy'],
-        bs: { hp: 80, at: 74, df: 74, sa: 126, sd: 116, sp: 60 },
+        bs: { hp: 80, at: 76, df: 74, sa: 126, sd: 116, sp: 63 },
         weightkg: 44,
         abilities: { 0: 'Torrent' }
     },
@@ -8050,7 +8050,7 @@ var SS_PATCH = {
     },
     Rillaboom: {
         types: ['Grass', 'Normal'],
-        bs: { hp: 100, at: 125, df: 90, sa: 60, sd: 70, sp: 85 },
+        bs: { hp: 100, at: 125, df: 90, sa: 65, sd: 70, sp: 85 },
         weightkg: 90,
         abilities: { 0: 'Overgrow' },
         otherFormes: ['Rillaboom-Gmax']
@@ -8096,14 +8096,14 @@ var SS_PATCH = {
         nfe: true
     },
     Sandaconda: {
-        types: ['Ground', 'Dark'],
+        types: ['Ground'],
         bs: { hp: 72, at: 107, df: 125, sa: 65, sd: 70, sp: 71 },
         weightkg: 65.5,
         abilities: { 0: 'Sand Spit' },
         otherFormes: ['Sandaconda-Gmax']
     },
     'Sandaconda-Gmax': {
-        types: ['Ground', 'Dark'],
+        types: ['Ground'],
         bs: { hp: 72, at: 107, df: 125, sa: 65, sd: 70, sp: 71 },
         weightkg: 0,
         abilities: { 0: 'Sand Spit' },
@@ -8507,7 +8507,7 @@ var PLA_PATCH = {
     },
     'Electrode-Hisui': {
         types: ['Electric', 'Grass'],
-        bs: { hp: 60, at: 80, df: 75, sa: 95, sd: 80, sp: 150 },
+        bs: { hp: 60, at: 80, df: 70, sa: 95, sd: 80, sp: 150 },
         weightkg: 71,
         gender: 'N',
         abilities: { 0: 'Soundproof' },
@@ -9605,7 +9605,7 @@ var SV_PATCH = {
     },
     Toedscruel: {
         types: ['Ground', 'Grass'],
-        bs: { hp: 80, at: 70, df: 65, sa: 100, sd: 120, sp: 100 },
+        bs: { hp: 80, at: 70, df: 65, sa: 80, sd: 120, sp: 100 },
         weightkg: 58,
         abilities: { 0: 'Mycelium Might' }
     },
