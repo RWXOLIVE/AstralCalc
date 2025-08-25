@@ -351,6 +351,7 @@ var BW = DPP.concat([
     'Shock Drive',
     'Steel Gem',
     'Water Gem',
+    'Butterfrite',
 ]);
 exports.MEGA_STONES = {
     Absolite: 'Absol',

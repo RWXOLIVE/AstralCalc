@@ -503,6 +503,12 @@ $(".set-selector").change(function () {
 			if (pok_name == "Mime Jr.") {
 				pok_name = "Mime%20Jr"
 			}
+			if (pok_name == "Kingler-Mega") {
+				pok_name = "Kingler"
+			}
+			if (pok_name === "Butterfree-Mega") {
+    pok_name = "Butterfree"; // use base form sprite
+}
 			//this ruined my day
 			var pok = `<img class="trainer-pok right-side" src="http://raw.githubusercontent.com/May8th1995/sprites/master/${pok_name}.png" data-id="${CURRENT_TRAINER_POKS[i].split("]")[1]}" title="${next_poks[i]}, ${next_poks[i]} BP">`
 			trpok_html += pok
@@ -1439,6 +1445,33 @@ function loadCustomList(id) {
 	});
 }
 
+function infoTrainer() {
+    alert(
+"This is the trainer's info!\n\n" +
+"In the box where the trainer's name is, you'll see signs to help with calcs:\n\n" +
+"• 'DB*' = Double Battle (will not show up on obvious doubles. i.e Couple Mel & Paul\n" +
+"• 'CDB*' = Choice Double Battle\n" +
+"• 'TW*' = Perma Tailwind\n" +
+"• 'TR*' = Perma Trick Room\n" +
+"• 'S*' = Perma Sun\n" +
+"• 'R*' = Perma Rain\n" +
+"• 'SS*' = Perma Sand\n" +
+"• 'SW*' = Perma Snow\n" +
+"• 'ET*' = Perma Electric Terrain\n" +
+"• 'GT*' = Perma Grassy Terrain\n" +
+"• 'MT*' = Perma Misty Terrain\n" +
+"• 'PT*' = Perma Psychic Terrain\n" +
+"• 'G*' = Gauntlet (no healing). When 'G*' disappears, the gauntlet is over\n" +
+"• 'PP*' = Pre-Poison\n" +
+"• 'PB*' = Pre-Burn\n" +
+"• 'PZ*' = Pre-Paralyzed\n" +
+"• 'PS*' = Pre-Sleep\n" +
+"• 'PF*' = Pre-Frozen\n" +
+"• 'PFB*' = Pre-Frostbite\n\n" +
+"These help you remember battle conditions without needing documentation."
+);
+}
+
 function get_trainer_names() {
 	var all_poks = SETDEX_SV
 	var trainer_names = []
@@ -1474,6 +1507,30 @@ function getSrcImgPokemon(poke) {
 	}
 	if (poke.name == "Aegislash-Shield") {
 		return `https://raw.githubusercontent.com/May8th1995/sprites/master/Aegislash.png`
+	} else {
+		return `https://raw.githubusercontent.com/May8th1995/sprites/master/${poke.name}.png`
+	}
+}
+
+function getSrcImgPokemon(poke) {
+	//edge case
+	if (!poke) {
+		return
+	}
+	if (poke.name == "Butterfree-Mega") {
+		return `https://raw.githubusercontent.com/May8th1995/sprites/master/Butterfree.png`
+	} else {
+		return `https://raw.githubusercontent.com/May8th1995/sprites/master/${poke.name}.png`
+	}
+}
+
+function getSrcImgPokemon(poke) {
+	//edge case
+	if (!poke) {
+		return
+	}
+	if (poke.name == "Kingler-Mega") {
+		return `https://raw.githubusercontent.com/May8th1995/sprites/master/Kingler.png`
 	} else {
 		return `https://raw.githubusercontent.com/May8th1995/sprites/master/${poke.name}.png`
 	}
@@ -1555,7 +1612,7 @@ function previousTrainer() {
 }
 
 function resetTrainer() {
-	if (confirm(`Are you sure you want to reset? This will clear all imported sets and change your current trainer back to Younger Calvin. This cannot be undone.`)){
+	if (confirm(`Are you sure you want to reset? This will clear all imported sets and change your current trainer back to Younger Larry. This cannot be undone.`)){
 		selectTrainer(1);
 		localStorage.removeItem("customsets");
 		$(allPokemon("#importedSetsOptions")).hide();
@@ -1842,6 +1899,7 @@ $(document).ready(function () {
 	$("#previous-trainer").click(previousTrainer);
 	$("#next-trainer").click(nextTrainer);
 	$("#reset-trainer").click(resetTrainer);
+	$("#info-trainer").click(infoTrainer);
 	$('#show-cc').click(showColorCodes);
 	$('#hide-cc').click(hideColorCodes);
 	$('#refr-cc').click(refreshColorCode);

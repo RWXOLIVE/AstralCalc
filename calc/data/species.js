@@ -1434,8 +1434,8 @@ var GSC_PATCH = {
         gender: 'N'
     },
     Sunflora: {
-        types: ['Grass', 'Fire'],
-        bs: { hp: 75, at: 65, df: 55, sa: 110, sd: 85, sp: 40 },
+        types: ['Grass'],
+        bs: { hp: 75, at: 75, df: 55, sa: 110, sd: 85, sp: 40 },
         weightkg: 8.5
     },
     Sunkern: {
@@ -1783,7 +1783,7 @@ var ADV_PATCH = {
         abilities: { 0: 'Pressure' }
     },
     Aggron: {
-        types: ['Steel'],
+        types: ['Steel', "Rock"],
         bs: { hp: 70, at: 110, df: 180, sa: 60, sd: 60, sp: 50 },
         weightkg: 360,
         abilities: { 0: 'Sturdy' }
@@ -1919,7 +1919,7 @@ var ADV_PATCH = {
         types: ['Water'],
         bs: { hp: 75, at: 55, df: 90, sa: 90, sd: 95, sp: 105 },
         weightkg: 0.8,
-        abilities: { 0: 'Forecast' },
+        abilities: { 0: 'Water Bubble' },
         baseSpecies: 'Castform'
     },
     'Castform-Snowy': {
@@ -2413,7 +2413,7 @@ var ADV_PATCH = {
     },
     Sableye: {
         types: ['Dark', 'Ghost'],
-        bs: { hp: 55, at: 90, df: 130, sa: 65, sd: 130, sp: 30 },
+        bs: { hp: 55, at: 90, df: 130, sa: 35, sd: 130, sp: 30 },
         weightkg: 11,
         abilities: { 0: 'Keen Eye' }
     },
@@ -5752,7 +5752,7 @@ var XY_PATCH = {
     },
     Pyroar: {
         types: ['Fire', 'Normal'],
-        bs: { hp: 86, at: 68, df: 72, sa: 109, sd: 66, sp: 106 },
+        bs: { hp: 91, at: 68, df: 72, sa: 109, sd: 66, sp: 106 },
         weightkg: 81.5,
         abilities: { 0: 'Rivalry' }
     },
@@ -7345,7 +7345,7 @@ var SS_PATCH = {
         types: ['Bug', 'Psychic'],
         bs: { hp: 70, at: 40, df: 60, sa: 130, sd: 80, sp: 140 },
         weightkg: 64,
-        abilities: { 0: 'Compound Eyes' },
+        abilities: { 0: 'Tinted Lens' },
         baseSpecies: 'Butterfree'
     },
     Calyrex: {
