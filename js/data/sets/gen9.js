@@ -334,7 +334,7 @@ var SETDEX_SV = {
             },
             "moves": ["Hypnosis","Air Slash", "Giga Drain","Swift"]
         },
-    "PKMN Trainer GaryGoesSky TW*| Petalburg Gym": {  
+    "PKMN Trainer Terry TW*| Petalburg Gym": {  
             "index": "0000000143",
             "level": 32,
             "ability": "Swarm Lash",
@@ -1089,7 +1089,7 @@ var SETDEX_SV = {
             "index": "0000000076",
             "level": 18,
             "ability": "Iron Fist",
-            "item": "Eviolite", 
+            "item": "Leftovers", 
             "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -1211,7 +1211,31 @@ var SETDEX_SV = {
             },
             "moves": ["Razor Shell","X-Scissor","Revenge","Razor Wind"]
         }
-    },  
+    },
+    "Bombirdier": {
+        "Gym Leader Brock | Rustboro City Gym": {  
+            "index": "0000000085",
+            "level": 19,
+            "ability": "Rocky Payload",
+            "item": "Berry Juice", 
+            "nature": "Naive",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Smack Down","Wing Attack","Pursuit", "Heat Wave"] // Broxanne Split 
+        },
+        "Cool Trainer Brooke G*| Route 111": {  
+            "index": "0000000330",
+            "level": 44,
+            "ability": "Rocky Payload",
+            "item": "Muscle Band", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Brave Bird","Knock Off", "Stone Edge", "Parting Shot"]
+        },
+    },
     "Sharpedo": {
         "Team Aqua Grunt | Rusturf Tunnel": {  
             "index": "0000000086",
@@ -1883,7 +1907,7 @@ var SETDEX_SV = {
             "level": 24,
             "ability": "Inner Focus",
             "item": "Shell Bell", 
-            "nature": "Impish",
+            "nature": "Mild",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -1894,9 +1918,9 @@ var SETDEX_SV = {
         "Gym Leader Brawly | Dewford Gym": {  
             "index": "0000000122",
             "level": 25,
-            "ability": "Defiant",
+            "ability": "Vital Spirit",
             "item": "Eviolite", 
-            "nature": "Adamant",
+            "nature": "Quiet",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  // Brawly Split
             },
@@ -2200,7 +2224,7 @@ var SETDEX_SV = {
     //142 Dewott
     //143 Mothim    
     "Boltund": {
-    "PKMN Trainer GaryGoesSky TW*| Petalburg Gym": {  
+    "PKMN Trainer Terry TW*| Petalburg Gym": {  
             "index": "0000000144",
             "level": 32,
             "ability": "Strong Jaw",
@@ -2213,7 +2237,7 @@ var SETDEX_SV = {
         }
     },
     "Arctibax": {
-    "PKMN Trainer GaryGoesSky TW*| Petalburg Gym": {  
+    "PKMN Trainer Terry TW*| Petalburg Gym": {  
             "index": "0000000145",
             "level": 31,
             "ability": "Thermal Exchange",
@@ -2226,7 +2250,7 @@ var SETDEX_SV = {
         }
     },
     "Tauros": {
-    "PKMN Trainer GaryGoesSky TW*| Petalburg Gym": {  
+    "PKMN Trainer Terry TW*| Petalburg Gym": {  
             "index": "0000000146",
             "level": 32,
             "ability": "Sheer Force",
@@ -2423,7 +2447,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Flamethrower","Knock Off","Sludge Wave","Sucker Punch"]
+            "moves": ["Flamethrower","Knock Off","Sludge Wave","Explosion"]
         }
     },
     "Golem": {
@@ -2431,7 +2455,7 @@ var SETDEX_SV = {
             "index": "0000000153",
             "level": 32,
             "ability": "Solid Rock",
-            "item": "Bright Powder", 
+            "item": "Psychic Seed", 
             "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
@@ -2791,7 +2815,7 @@ var SETDEX_SV = {
         },
         "Aqua Grunt #1 R*| Route 119": {  
             "index": "0000000557",
-            "level": 58,
+            "level": 60,
             "ability": "Rain Dish",
             "item": "Leftovers", 
             "nature": "Calm",
@@ -2894,7 +2918,7 @@ var SETDEX_SV = {
             "item": "Throat Spray", 
             "nature": "Modest",
             "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0  
             },
             "moves": ["Agility","Hyper Voice", "Psychic Noise", "Flamethrower"]
         }
@@ -2903,20 +2927,19 @@ var SETDEX_SV = {
         "Gym Leader Norman | Petalburg Gym": {  
             "index": "0000000176",
             "level": 37,
-            "teraType": "Normal",
             "ability": "Technician",
-            "item": "Punching Glove", 
-            "nature": "Adamant",
+            "item": "Lum Berry", 
+            "nature": "Jolly",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Force Palm","Mega Punch", "Shadow Punch", "Mach Punch"]
+            "moves": ["Facade","Shadow Sneak", "Close Combat", "Mach Punch"]
         }
     },
     "Kingdra": {
         "PKMN Trainer Carlita | Route 103": {  
             "index": "0000000177",
-            "level": 41,
+            "level": 39,
             "ability": "Sniper",
             "item": "Scope Lens", 
             "nature": "Lonely",
@@ -2951,7 +2974,7 @@ var SETDEX_SV = {
     "Tinkaton": {
         "PKMN Trainer Carlita | Route 103": {  
             "index": "0000000178",
-            "level": 41,
+            "level": 40,
             "ability": "Mold Breaker",
             "item": "Metal Coat", 
             "nature": "Impish",
@@ -2986,7 +3009,7 @@ var SETDEX_SV = {
     "Charizard": {
     "PKMN Trainer Carlita | Route 103": {  
             "index": "0000000179",
-            "level": 42,
+            "level": 40,
             "ability": "Blaze",
             "item": "Charti Berry", 
             "nature": "Timid", 
@@ -3010,7 +3033,7 @@ var SETDEX_SV = {
     "Farigiraf": {
         "PKMN Trainer Carlita | Route 103": {  
             "index": "0000000180",
-            "level": 42,
+            "level": 41,
             "ability": "Armor Tail",
             "item": "Weakness Policy", 
             "nature": "Bold", 
@@ -3034,7 +3057,7 @@ var SETDEX_SV = {
     "Mamoswine": {
         "PKMN Trainer Carlita | Route 103": {  
             "index": "0000000181",
-            "level": 43,
+            "level": 40,
             "ability": "Thick Fat",
             "item": "Fighting Gem", 
             "nature": "Adamant", 
@@ -3058,7 +3081,7 @@ var SETDEX_SV = {
     "Hydreigon": {
         "PKMN Trainer Carlita | Route 103": {  
             "index": "0000000182",
-            "level": 43,
+            "level": 42,
             "ability": "Levitate",
             "item": "White Herb", 
             "nature": "Timid", 
@@ -5298,30 +5321,7 @@ var SETDEX_SV = {
         }
     },
     //329 Golem-Alola
-     "Bombirdier": {
-     "Cool Trainer Brooke G*| Route 111": {  
-            "index": "0000000330",
-            "level": 44,
-            "ability": "Rocky Payload",
-            "item": "Muscle Band", 
-            "nature": "Jolly",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Brave Bird","Knock Off", "Stone Edge", "Parting Shot"]
-        },
-        "Gym Leader Brock | Rustboro City Gym": {  
-            "index": "0000000085",
-            "level": 19,
-            "ability": "Rocky Payload",
-            "item": "Berry Juice", 
-            "nature": "Naive",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Smack Down","Pluck","Pursuit", "Heat Wave"] // Broxanne Split 
-        }
-    },
+    //330 Bombirdier
     "Tyrantrum": {
      "Cool Trainer Brooke G*| Route 111": {  
             "index": "0000000331",
@@ -5478,7 +5478,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
             "moves": ["Stealth Rock","Dragon Tail","Heavy Slam","Body Press"]
-        }
+        },
+        "Aqua Admin Shelly | Weather Institute": {
+            "index": "0000000591",
+            "level": 60,
+            "ability": "Clear Amulet",
+            "item": "Eviolite",
+            "nature": "Relaxed",
+            "ivs": {
+                "hp": 31, "at": 0, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Flash Cannon", "Stealth Rock", "Body Press", "Draco Meteor"],
+        },
     },
     //347 Raichu-Alola
     //348 Claydol 
@@ -7534,7 +7545,7 @@ var SETDEX_SV = {
             "level": 60,
             "ability": "Stakeout",
             "item": "Roseli Berry", 
-            "nature": "Careful",
+            "nature": "Relaxed",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
             },
@@ -7593,6 +7604,73 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
             },
             "moves": ["Bolt Beak","Blizzard","Rock Blast","Icicle Spear"]
-        },
+        }
+    },
+    //591 Duraludon
+    "Iron Bundle": {
+    "Aqua Admin Shelly | Weather Institute": {
+            "index": "0000000592",
+            "level": 61,
+            "ability": "Quark Drive",
+            "item": "Life Orb",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Encore", "Freeze-Dry", "Hydro Pump", "Substitute"],
+        }
+    },
+    "Rotom-Fan": {
+    "Aqua Admin Shelly | Weather Institute": {
+            "index": "0000000593",
+            "level": 60,
+            "ability": "Lightning Rod",
+            "item": "Leftovers",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 0, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Will-O-Wisp", "Hidden Power Grass", "Discharge", "Air Slash"],
+        }
+    },
+    "Ludicolo": {
+    "Aqua Admin Shelly | Weather Institute": {
+            "index": "0000000594",
+            "level": 60,
+            "ability": "Swift Swim",
+            "item": "King's Rock",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Rain Dance", "Hydro Pump", "Blizzard", "Energy Ball"],
+        }
+    },
+    "Manaphy": {
+    "Aqua Admin Shelly | Weather Institute": {
+            "index": "0000000595",
+            "level": 60,
+            "ability": "Multiscale",
+            "item": "Leftovers",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Tail Glow", "Energy Ball", "Scald", "Ice Beam"],
+        }
+    },
+    "Kabutops": {
+    "Aqua Admin Shelly | Weather Institute": {
+            "index": "0000000596",
+            "teraType": "Water",
+            "level": 61,
+            "ability": "Swift Swim",
+            "item": "Focus Band",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Rock Wrecker", "Liquidation", "X-Scissor", "Aqua Jet"],
+        }
     }
 }

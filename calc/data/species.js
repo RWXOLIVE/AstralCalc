@@ -399,7 +399,7 @@ var RBY = {
     },
     Kangaskhan: {
         types: ['Normal'],
-        bs: { hp: 105, at: 115, df: 85, sp: 100, sl: 40 },
+        bs: { hp: 105, at: 95, df: 80, sp: 90, sl: 40 },
         weightkg: 80
     },
     Kingler: { types: ['Water', 'Steel'], bs: { hp: 55, at: 130, df: 115, sp: 75, sl: 50 }, weightkg: 60 },
@@ -455,7 +455,7 @@ var RBY = {
     },
     Magnemite: {
         types: ['Electric'],
-        bs: { hp: 25, at: 35, df: 70, sp: 45, sl: 95 },
+        bs: { hp: 45, at: 40, df: 80, sp: 45, sl: 95 },
         weightkg: 6,
         nfe: true
     },
@@ -527,13 +527,13 @@ var RBY = {
         nfe: true
     },
     Nidorina: {
-        types: ['Poison'],
+        types: ['Poison', 'Ground'],
         bs: { hp: 70, at: 55, df: 67, sp: 56, sl: 62 },
         weightkg: 20,
         nfe: true
     },
     Nidorino: {
-        types: ['Poison'],
+        types: ['Poison', 'Ground'],
         bs: { hp: 61, at: 72, df: 57, sp: 65, sl: 55 },
         weightkg: 19.5,
         nfe: true
@@ -906,7 +906,7 @@ var GSC_PATCH = {
     Kabutops: { bs: { sa: 65, sd: 70 } },
     Kadabra: { bs: { sa: 120, sd: 70 } },
     Kakuna: { bs: { sa: 25, sd: 25 } },
-    Kangaskhan: { bs: { sa: 40, sd: 85 } },
+    Kangaskhan: { bs: { sa: 40, sd: 80 } },
     Kingler: { bs: { sa: 50, sd: 50 } },
     Koffing: { bs: { sa: 60, sd: 45 } },
     Krabby: { bs: { sa: 25, sd: 25 } },
@@ -917,7 +917,7 @@ var GSC_PATCH = {
     Machop: { bs: { sa: 35, sd: 35 } },
     Magikarp: { bs: { sa: 15, sd: 20 } },
     Magmar: { bs: { sa: 100, sd: 85 } },
-    Magnemite: { types: ['Electric', 'Steel'], bs: { sa: 95, sd: 55 }, gender: 'N' },
+    Magnemite: { types: ['Electric', 'Steel'], bs: { sa: 95, sd: 60 }, gender: 'N' },
     Magneton: { types: ['Electric', 'Steel'], bs: { sa: 120, sd: 70 }, gender: 'N' },
     Mankey: { bs: { sa: 35, sd: 45 } },
     Marowak: { bs: { sa: 50, sd: 80 } },
@@ -1917,21 +1917,21 @@ var ADV_PATCH = {
     },
     'Castform-Rainy': {
         types: ['Water'],
-        bs: { hp: 75, at: 55, df: 90, sa: 90, sd: 95, sp: 105 },
+        bs: { hp: 75, at: 75, df: 75, sa: 95, sd: 75, sp: 75 },
         weightkg: 0.8,
         abilities: { 0: 'Water Bubble' },
         baseSpecies: 'Castform'
     },
     'Castform-Snowy': {
         types: ['Ice'],
-        bs: { hp: 75, at: 50, df: 70, sa: 115, sd: 85, sp: 115 },
+        bs: { hp: 75, at: 75, df: 75, sa: 95, sd: 75, sp: 75 },
         weightkg: 0.8,
         abilities: { 0: 'Ice Scales' },
         baseSpecies: 'Castform'
     },
     'Castform-Sunny': {
         types: ['Fire'],
-        bs: { hp: 75, at: 65, df: 75, sa: 120, sd: 75, sp: 100 },
+        bs: { hp: 75, at: 75, df: 75, sa: 95, sd: 75, sp: 75 },
         weightkg: 0.8,
         abilities: { 0: 'Solar Power' },
         baseSpecies: 'Castform'
@@ -4183,7 +4183,7 @@ var BW_PATCH = {
     },
     Krokorok: {
         types: ['Ground', 'Dark'],
-        bs: { hp: 60, at: 82, df: 45, sa: 45, sd: 45, sp: 74 },
+        bs: { hp: 60, at: 82, df: 55, sa: 45, sd: 55, sp: 74 },
         weightkg: 33.4,
         nfe: true,
         abilities: { 0: 'Intimidate' }
@@ -4932,7 +4932,7 @@ var XY_PATCH = {
     },
     Amaura: {
         types: ['Rock', 'Ice'],
-        bs: { hp: 81, at: 59, df: 69, sa: 67, sd: 63, sp: 46 },
+        bs: { hp: 91, at: 59, df: 69, sa: 72, sd: 73, sp: 46 },
         weightkg: 25.2,
         nfe: true,
         abilities: { 0: 'Refrigerate' }
@@ -5844,7 +5844,7 @@ var XY_PATCH = {
     },
     Tyrunt: {
         types: ['Rock', 'Dragon'],
-        bs: { hp: 60, at: 90, df: 80, sa: 50, sd: 50, sp: 55 },
+        bs: { hp: 60, at: 90, df: 83, sa: 50, sd: 57, sp: 75 },
         weightkg: 26,
         nfe: true,
         abilities: { 0: 'Strong Jaw' }
