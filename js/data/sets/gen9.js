@@ -1,4 +1,28 @@
 var SETDEX_SV = { 
+    "Abomasnow": {
+        "So weather doesnt auto select": {  
+            "index": "0000000000",
+            "level": 1,
+            "ability": "Soundproof",
+            "item": "None", 
+            "nature": "Docile",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Growl"]
+        },
+        "Aqua Grunt #5 | Weather Institute": {  
+            "index": "0000000587",
+            "level": 60,
+            "ability": "Snow Warning",
+            "item": "Bright Powder", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Swords Dance","Earthquake","Sheer Cold","Wood Hammer"]
+        },
+    },
     "Zigzagoon": {
         "Youngster Larry | Route 102": {  
             "index": "0000000001",
@@ -179,6 +203,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Fake Out","Rock Throw", "Power-Up Punch","Slam"]
+        },
+        "Gym Leader Roxanne | Rustboro City Gym": {  
+            "index": "0000000076",
+            "level": 18,
+            "ability": "Guts",
+            "item": "Leftovers", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Mega Punch","Rock Slide","Drain Punch", "Mach Punch"]
         }
     },
     "Steenee": {
@@ -277,8 +312,8 @@ var SETDEX_SV = {
             "index": "0000000022",
             "level": 12,
             "ability": "Poison Point",
-            "item": "Berry Juice", 
-            "nature": "Naughty",
+            "item": "Oran Berry", 
+            "nature": "Timid",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -312,14 +347,14 @@ var SETDEX_SV = {
     "Weepinbell": {
         "Team Aqua Grunt | Petalburg Woods": {  
             "index": "0000000024",
-            "level": 15,
+            "level": 14,
             "ability": "Gluttony",
             "item": "Starf Berry", 
-            "nature": "Timid",
+            "nature": "Relaxed",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Strength Sap", "Acid Spray","Giga Drain", "Growth"]
+            "moves": ["Sleep Powder", "Acid Spray","Giga Drain", "Growth"]
         }
     },
     "Mothim": {
@@ -1084,19 +1119,7 @@ var SETDEX_SV = {
             "moves": ["Bulldoze","Smack Down","Ice Punch", "Spark"]
         }
     },
-    "Gurdurr": {
-        "Gym Leader Roxanne | Rustboro City Gym": {  
-            "index": "0000000076",
-            "level": 18,
-            "ability": "Iron Fist",
-            "item": "Leftovers", 
-            "nature": "Adamant",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Mega Punch","Rock Tomb","Drain Punch", "Mach Punch"]
-        }
-    },
+    //76 Timburr
     "Magcargo": {
         "Gym Leader Roxanne | Rustboro City Gym": {  
             "index": "0000000077",
@@ -1198,7 +1221,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Liquidation","Mighty Cleave","Ice Fang","Aqua Jet"]
+            "moves": ["Razor Shell","Rock Slide","Ice Fang","Aqua Jet"]
         },
         "Cool Trainer Randall TR*| Petalburg Gym": {  
             "index": "0000000142",
@@ -1529,67 +1552,76 @@ var SETDEX_SV = {
             "moves": ["Drill Peck","Waterfall","Ice Spinner", "Swagger"]
         }
     },
-    "Cinccino": {
+    "Audino": {
         "Lass Janice | Granite Cave B1F": {  
             "index": "0000000101",
-            "level": 22,
-            "ability": "Skill Link",
-            "item": "Chople Berry", 
-            "nature": "Adamant",
+            "level": 23,
+            "ability": "Healer",
+            "item": "Fairy Feather", 
+            "nature": "Quiet",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Sing","Tail Slap","Bullet Seed","Rock Blast"]
+            "moves": ["Sing","Dazzling Gleam","Drain Punch","Body Slam"]
         },
-        "Cool Trainer Carolina | Route 107": {  
-            "index": "0000000511",
-            "level": 60,
-            "ability": "Technician",
-            "item": "Loaded Dice", 
-            "nature": "Jolly",
+        "Lady Sophie | Route 113": {  
+            "index": "0000000361",
+            "level": 44,
+            "ability": "Healer",
+            "item": "Light Clay", 
+            "nature": "Bold",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Bullet Seed","Rock Blast", "Tail Slap","Triple Axel"]
+            "moves": ["Fake Tears","Dazzling Gleam", "Hyper Voice","Reflect"]
         }
     },
-    "Morgrem": {
+    "Vivillon": {
         "Lass Janice | Granite Cave B1F": {  
             "index": "0000000102",
-            "level": 22,
-            "ability": "Prankster",
-            "item": "Lum Berry", 
-            "nature": "Relaxed",
+            "level": 23,
+            "ability": "Friend Guard",
+            "item": "Charti Berry", 
+            "nature": "Timid",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Fake Tears","Dark Pulse","Dazzling Gleam", "Thunder Wave"]
+            "moves": ["Quiver Dance","Helping Hand","Signal Beam", "Air Cutter"]
+        },
+        "Bug Catcher Andrew DB*| Route 103": {  
+            "index": "0000000188",
+            "level": 40,
+            "ability": "Compound Eyes",
+            "item": "Charti Berry", 
+            "nature": "Timid", 
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Sleep Powder","Bug Buzz", "Air Slash", "Powder"]
         }
     },
-    "Klawf": {
-        "Hiker Devan | Granite Cave B1F": {  
-            "index": "0000000103",
-            "level": 22,
-            "ability": "Anger Shell",
-            "item": "Covert Cloak", 
-            "nature": "Adamant",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Trailblaze","Rock Slide","X-Scissor","Crabhammer"]
-        }
-    }, 
     "Lairon": {
     "Hiker Devan | Granite Cave B1F": {  
-            "index": "0000000104",
-            "level": 22,
-            "ability": "Heavy Metal",
-            "item": "Iapapa Berry", 
+            "index": "0000000103",
+            "level": 23,
+            "ability": "Sturdy",
+            "item": "Chesto Berry", 
             "nature": "Impish",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Heavy Slam","Heat Crash"]
+            "moves": ["Heavy Slam","Heat Crash", "Rock Blast","Rest"]
+        },
+        " Hiker Devan | Granite Cave B1F": {  
+            "index": "0000000104",
+            "level": 23,
+            "ability": "Heavy Metal",
+            "item": "Eviolite", 
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Heavy Slam","Body Press", "Rock Slide","Facade"]
         }
     },
     "Hitmonchan": {
@@ -3131,19 +3163,7 @@ var SETDEX_SV = {
     //185 Pawmot
     //186 Morpeko
     //187 Ledian
-    "Vivillon": {
-        "Bug Catcher Andrew DB*| Route 103": {  
-            "index": "0000000188",
-            "level": 40,
-            "ability": "Compound Eyes",
-            "item": "Charti Berry", 
-            "nature": "Timid", 
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Sleep Powder","Bug Buzz", "Air Slash", "Powder"]
-        }
-    },
+    //188 Vivillon
     "Armaldo": {
         "Bug Catcher Andrew DB*| Route 103": {  
             "index": "0000000189",
@@ -5601,19 +5621,7 @@ var SETDEX_SV = {
             "moves": ["Liquidation","Earthquake", "Ice Fang","Bounce"]
         }
     },
-    "Audino": {
-    "Lady Sophie | Route 113": {  
-            "index": "0000000361",
-            "level": 44,
-            "ability": "Healer",
-            "item": "Light Clay", 
-            "nature": "Bold",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Fake Tears","Dazzling Gleam", "Hyper Voice","Reflect"]
-        }
-    },
+    //361 Audino
     //362 sinistcha
     "Aromatisse": {
     "Lady Sophie | Route 113": {  
@@ -7020,7 +7028,19 @@ var SETDEX_SV = {
             "moves": ["Shell Smash","Stone Edge", "Crabhammer","Cross Chop"]
         }
     },
-    //511 Cinccino
+    "Cinccino": {
+    "Cool Trainer Carolina | Route 107": {  
+            "index": "0000000511",
+            "level": 60,
+            "ability": "Technician",
+            "item": "Loaded Dice", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Bullet Seed","Rock Blast", "Tail Slap","Triple Axel"]
+        }
+    },
     "Butterfree-Mega": {
     "Cool Trainer Carolina | Route 107": {  
             "index": "0000000512",
@@ -7565,19 +7585,7 @@ var SETDEX_SV = {
             "moves": ["Giga Impact"]
         }
     },
-    "Abomasnow": {
-    "Aqua Grunt #5 | Weather Institute": {  
-            "index": "0000000587",
-            "level": 60,
-            "ability": "Snow Warning",
-            "item": "Bright Powder", 
-            "nature": "Adamant",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
-            },
-            "moves": ["Swords Dance","Earthquake","Sheer Cold","Wood Hammer"]
-        }
-    },
+    //587 abomasnow
     //588 Zoroark-Hisui
     "Mr. Rime": {
     "Aqua Grunt #5 | Weather Institute": {  

@@ -181,12 +181,12 @@ var RBY = {
     Ditto: { types: ['Normal'], bs: { hp: 100, at: 100, df: 100, sp: 100, sl: 100 }, weightkg: 4 },
     Dodrio: {
         types: ['Ground', 'Flying'],
-        bs: { hp: 60, at: 115, df: 70, sp: 100, sl: 60 },
+        bs: { hp: 60, at: 115, df: 73, sp: 118, sl: 60 },
         weightkg: 85.2
     },
     Doduo: {
         types: ['Ground', 'Flying'],
-        bs: { hp: 40, at: 89, df: 45, sp: 75, sl: 35 },
+        bs: { hp: 45, at: 94, df: 55, sp: 75, sl: 25 },
         weightkg: 39.2,
         nfe: true
     },
@@ -866,7 +866,7 @@ var GSC_PATCH = {
     Diglett: { bs: { sa: 35, sd: 45 } },
     Ditto: { bs: { sa: 100, sd: 100 }, gender: 'N' },
     Dodrio: { bs: { sa: 81, sd: 60 } },
-    Doduo: { bs: { sa: 35, sd: 35 } },
+    Doduo: { bs: { sa: 25, sd: 35 } },
     Dragonair: { bs: { sa: 90, sd: 70 } },
     Dragonite: { bs: { sa: 100, sd: 100 } },
     Dratini: { bs: { sa: 50, sd: 50 } },
@@ -1182,7 +1182,7 @@ var GSC_PATCH = {
     },
     Jumpluff: {
         types: ['Grass', 'Flying'],
-        bs: { hp: 55, at: 85, df: 70, sa: 85, sd: 95, sp: 110 },
+        bs: { hp: 60, at: 85, df: 70, sa: 85, sd: 95, sp: 110 },
         weightkg: 3
     },
     Kingdra: {
@@ -1373,7 +1373,7 @@ var GSC_PATCH = {
     },
     Skiploom: {
         types: ['Grass', 'Flying'],
-        bs: { hp: 55, at: 55, df: 50, sa: 55, sd: 65, sp: 90 },
+        bs: { hp: 65, at: 65, df: 65, sa: 65, sd: 65, sp: 90 },
         weightkg: 1,
         nfe: true
     },
@@ -1965,7 +1965,7 @@ var ADV_PATCH = {
     },
     Corphish: {
         types: ['Water'],
-        bs: { hp: 43, at: 80, df: 65, sa: 50, sd: 35, sp: 35 },
+        bs: { hp: 43, at: 80, df: 75, sa: 55, sd: 35, sp: 35 },
         weightkg: 11.5,
         nfe: true,
         abilities: { 0: 'Hyper Cutter' }
@@ -3873,7 +3873,7 @@ var BW_PATCH = {
         nfe: true
     },
     Dewott: {
-        types: ['Water'],
+        types: ['Water', 'Rock'],
         bs: { hp: 75, at: 75, df: 60, sa: 83, sd: 60, sp: 60 },
         weightkg: 24.5,
         nfe: true,
@@ -4978,7 +4978,7 @@ var XY_PATCH = {
     },
     Binacle: {
         types: ['Rock', 'Water'],
-        bs: { hp: 42, at: 52, df: 67, sa: 39, sd: 56, sp: 50 },
+        bs: { hp: 52, at: 64, df: 74, sa: 39, sd: 71, sp: 50 },
         weightkg: 31,
         nfe: true,
         abilities: { 0: 'Tough Claws' }
@@ -6992,7 +6992,7 @@ var SM_PATCH = {
     },
     Steenee: {
         types: ['Grass', 'Fighting'],
-        bs: { hp: 60, at: 70, df: 58, sa: 40, sd: 48, sp: 67 },
+        bs: { hp: 60, at: 80, df: 65, sa: 40, sd: 54, sp: 67 },
         weightkg: 8.2,
         nfe: true,
         abilities: { 0: 'Leaf Guard' }
