@@ -1384,7 +1384,7 @@ var GSC_PATCH = {
     },
     Slugma: {
         types: ['Fire'],
-        bs: { hp: 40, at: 40, df: 40, sa: 70, sd: 40, sp: 20 },
+        bs: { hp: 55, at: 50, df: 60, sa: 70, sd: 40, sp: 20 },
         weightkg: 35,
         nfe: true
     },
