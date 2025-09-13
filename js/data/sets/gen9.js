@@ -929,7 +929,7 @@ var SETDEX_SV = {
         "Youngster Robert | Route 116": {  
             "index": "0000000061",
             "level": 19,
-            "ability": "Intimidate",
+            "ability": "Torrent",
             "item": "Mystic Water", 
             "nature": "Jolly",
             "ivs": {
@@ -1125,7 +1125,7 @@ var SETDEX_SV = {
             "index": "0000000077",
             "level": 19,
             "ability": "Solid Rock",
-            "item": "Passho Berry", 
+            "item": "Lum Berry", 
             "nature": "Quiet",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -1292,6 +1292,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
             "moves": ["Dark Pulse","Hydro Pump", "Reversal", "Poison Jab"]
+        },
+        "Rival 6 - (If Chosen Popplio) | Route 119": {  
+        "index": "0000000613",
+            "level": 63,
+            "ability": "Strong Jaw",
+            "item": "Focus Sash", 
+            "nature": "Hasty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Ancient Power", "Aqua Fangs", "Crunch", "Poison Fang"],
         }
     },
     "Sinistcha": {
@@ -1944,6 +1955,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Bulk Up","Drain Punch","Psycho Cut", "X-Scissor"]
+        },
+        "Rival 6 - (If Chosen Popplio) | Route 119": {  
+        "index": "0000000610",
+            "level": 63,
+            "ability": "Sharpness",
+            "item": "Expert Belt",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Aqua Cutter", "Sacred Sword", "Psycho Cut", "Night Slash"],
         }
     },
     "Primeape": {
@@ -2164,6 +2186,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
             "moves": ["Foul Play","Spike Cannon","Toxic Spikes", "Bubble Beam"]
+        },
+        "Rival 5 - (If Chosen Tepig) | Route 119": {  
+        "index": "0000000603",
+            "level": 63,
+            "ability": "Swift Swim",
+            "item": "Life Orb",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Swords Dance", "Gunk Shot", "Crunch", "Waterfall"],
         }
     },
     "Gliscor": {
@@ -2303,6 +2336,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
             "moves": ["Zen Headbutt","Thrash", "Earthquake"]
+        },
+        "Rival 5 - (If Chosen Tepig) | Route 119": {  
+        "index": "0000000605",
+            "level": 63,
+            "ability": "Intimidate",
+            "item": "Assault Vest",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Megahorn", "Double-Edge", "Earthquake", "Close Combat"],
         }
     },
     "Heliolisk": {
@@ -2917,6 +2961,17 @@ var SETDEX_SV = {
             },
             "moves": ["Hurricane","Psychic Noise", "Air Slash","Focus Blast"]
         },
+        "Rival 5 - (If Chosen Tepig) | Route 119": {  
+        "index": "0000000604",
+            "level": 63,
+            "ability": "Tinted Lens",
+            "item": "Colbur Berry",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Hurricane", "Esper Wing", "Dazzing Gleam", "Tailwind"],
+        }
     },
     "Zoroark-Hisui": {
         "Gym Leader Norman | Petalburg Gym": {  
@@ -3491,6 +3546,17 @@ var SETDEX_SV = {
             },
             "moves": ["Fake Out","Roar","Throat Chop","Blaze Kick"]
         },
+        "Rival 4 - (If Chosen Grookey) | Route 119": {  
+            "index": "0000000600",
+            "level": 65,
+            "ability": "Intimidate",
+            "item": "Assault Vest", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Fake Out","Low Kick","U-turn","Thunder Punch"]
+        },
     },
     "Cinderace": {
         "Pokefan Isabel & Kaleb | Route 110": {  
@@ -3632,6 +3698,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
             "moves": ["Rain Dance","Thunder","Flash Cannon","Future Sight"]
+        },
+        "Rival 4 - (If Chosen Grookey) | Route 119": {  
+            "index": "0000000598",
+            "level": 63,
+            "ability": "Levitate",
+            "item": "Clear Amulet",
+            "nature": "Relaxed",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Iron Defense", "Body Press", "Heavy Slam", "Psychic Noise"],
         }
     },
     "Lucario": {
@@ -5023,6 +5100,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
             "moves": ["Ice Spinner","Close Combat", "Aqua Step","Facade"]
+        },
+        "Rival 5 - (If Chosen Tepig) | Route 119": {  
+        "index": "0000000606",
+            "level": 65,
+            "ability": "Moxie",
+            "item": "Flying Gem",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Aqua Step", "Triple Axel", "Low Kick", "Acrobatics"],
         }
     },
     "Magmortar": {
@@ -5135,22 +5223,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
             "moves": ["Leaf Storm","Dragon Pulse", "Earth Power","Glare"]
+        },
+        "Rival 6 - (If Chosen Popplio) | Route 119": {  
+        "index": "0000000612",
+            "level": 65,
+            "ability": "Sheer Force",
+            "item": "Life Orb", 
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Coil", "Dragon Hammer", "Leaf Blade", "Aqua Tail"],
         }
     },
     //316 Dracozolt
-    "Serperior": {
-        "Rival 3 - (If Chosen Popplio) | Route 112": {  
-            "index": "0000000316",
-            "level": 48,
-            "ability": "Contrary",
-            "item": "Leftovers", 
-            "nature": "Timid",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Leaf Storm","Dragon Pulse", "Protect","Aromatherapy"]
-        }
-    },
     "Glimmora": {
         "Hiker Finn S*| Fiery Path": {  
             "index": "0000000317",
@@ -5199,7 +5285,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
             "moves": ["Aqua Fangs","Substitute", "Close Combat","Laser Focus"]
-        }
+        },
+        "Rival 4 - (If Chosen Grookey) | Route 119": {  
+            "index": "0000000599",
+            "level": 43,
+            "ability": "Swift Swim",
+            "item": "Choice Band", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Waterfall","Crunch", "Waterfall","Flip Turn"]
+        },
     },
     "Slowking": {
         "Hiker Finn S*| Fiery Path": {  
@@ -5817,6 +5914,17 @@ var SETDEX_SV = {
             },
             "moves": ["U-turn","Knock Off", "Iron Head","Dual Wingbeat"]
         },
+        "Rival 6 - (If Chosen Popplio) | Route 119": {  
+        "index": "0000000611",
+            "level": 63,
+            "ability": "Technician",
+            "item": "Occa Berry", 
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Swords Dance", "Bug Bite", "Bullet Punch", "Trailblaze"],
+        }
     },
     //382 Arcanine-Hisui
     //383 Annihilape
@@ -6038,6 +6146,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0  
             },
             "moves": ["Sludge Bomb","Focus Blast", "Hypnosis","Dream Eater"]
+        },
+        "Rival 4 - (If Chosen Grookey) | Route 119": {  
+        "index": "0000000597",
+            "level": 63,
+            "ability": "Levitate",
+            "item": "Life Orb",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Ominous Wind", "Sludge Bomb", "Dark Pulse", "Aura Sphere"],
         }
     },
     "Runerigus": {
@@ -7680,5 +7799,93 @@ var SETDEX_SV = {
             },
             "moves": ["Rock Wrecker", "Liquidation", "X-Scissor", "Aqua Jet"],
         }
+    },
+    //597 Gengar
+    //598 Bronzong
+    //599 Barraskewda
+    //600 Incineroar
+    "Maractus": {
+    "Rival 4 - (If Chosen Grookey) | Route 119": {  
+        "index": "0000000601",
+            "level": 63,
+            "ability": "Storm Drain",
+            "item": "Leftovers",
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Spiky Shield", "Energy Ball", "HP Psychic", "Weather Ball"],
+        }
+    },
+    "Ampharos-Mega": {
+    "Rival 4 - (If Chosen Grookey) | Route 119": {  
+        "index": "0000000602",
+            "level": 64,
+            "ability": "Mold Breaker",
+            "item": "None",
+            "nature": "Quiet",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Thunder", "Dragon Pulse", "Flash Cannon", "Power Gem"],
+        },
+        "Rival 5 - (If Chosen Tepig) | Route 119": {  
+        "index": "0000000608",
+            "level": 64,
+            "ability": "Mold Breaker",
+            "item": "None",
+            "nature": "Quiet",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Thunder", "Dragon Pulse", "Flash Cannon", "Power Gem"],
+        },
+        "Rival 6 - (If Chosen Popplio) | Route 119": {  
+        "index": "0000000614",
+            "level": 64,
+            "ability": "Mold Breaker",
+            "item": "None",
+            "nature": "Quiet",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Thunder", "Dragon Pulse", "Flash Cannon", "Power Gem"],
+        }
+    },
+    //603 Overqwil
+    //604 Braviary-Hisui
+    //605 Tauros
+    //606 Quaquaval
+    "Florges": {
+    "Rival 5 - (If Chosen Tepig) | Route 119": {  
+        "index": "0000000607",
+            "level": 63,
+            "ability": "Floral Payload",
+            "item": "Leftovers",
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Calm Mind", "Draining Kiss", "Giga Drain", "Weather Ball"],
+        }
+    },
+    //608 Ampharos-Mega
+    "Weezing-Galar": {
+    "Rival 6 - (If Chosen Popplio) | Route 119": {  
+        "index": "0000000609",
+            "level": 63,
+            "ability": "Levitate",
+            "item": "Black Sludge",
+            "nature": "Calm",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Will-O-Wisp", "Strange Steam", "Sludge Wave", "Dark Pulse"],
+        }
     }
+    //610 Gallade
+    //611 Scizor
+    //612 Serperior
+    //613 Sharpedo
+    //614 Ampharos-Mega
 }

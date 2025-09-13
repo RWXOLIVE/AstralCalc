@@ -1808,7 +1808,7 @@ var ADV_PATCH = {
         abilities: { 0: 'Battle Armor' }
     },
     Aron: {
-        types: ['Steel'],
+        types: ['Steel', 'Rock'],
         bs: { hp: 50, at: 70, df: 100, sa: 40, sd: 40, sp: 30 },
         weightkg: 60,
         nfe: true,
@@ -2156,7 +2156,7 @@ var ADV_PATCH = {
         gender: 'N'
     },
     Lairon: {
-        types: ['Steel'],
+        types: ['Steel', 'Rock'],
         bs: { hp: 60, at: 90, df: 140, sa: 50, sd: 50, sp: 40 },
         weightkg: 120,
         nfe: true,
@@ -5084,7 +5084,7 @@ var XY_PATCH = {
         abilities: { 0: 'Blaze' }
     },
     Flabébé: {
-        types: ['Grass', 'Fairy'],
+        types: ['Fairy'],
         bs: { hp: 44, at: 38, df: 39, sa: 61, sd: 79, sp: 42 },
         weightkg: 0.1,
         nfe: true,
@@ -5105,7 +5105,7 @@ var XY_PATCH = {
         abilities: { 0: 'Big Pecks' }
     },
     Floette: {
-        types: ['Grass', 'Fairy'],
+        types: ['Fairy'],
         bs: { hp: 54, at: 45, df: 47, sa: 75, sd: 98, sp: 52 },
         weightkg: 0.9,
         nfe: true,
@@ -5120,10 +5120,10 @@ var XY_PATCH = {
         baseSpecies: 'Floette'
     },
     Florges: {
-        types: ['Grass', 'Fairy'],
+        types: ['Fairy'],
         bs: { hp: 78, at: 65, df: 68, sa: 112, sd: 154, sp: 75 },
         weightkg: 10,
-        abilities: { 0: 'Flower Veil' }
+        abilities: { 0: 'Floral Payload' }
     },
     Froakie: {
         types: ['Water'],
