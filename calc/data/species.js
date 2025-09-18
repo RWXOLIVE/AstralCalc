@@ -242,7 +242,7 @@ var RBY = {
     },
     Exeggcute: {
         types: ['Grass', 'Psychic'],
-        bs: { hp: 60, at: 40, df: 80, sp: 40, sl: 60 },
+        bs: { hp: 60, at: 50, df: 80, sp: 40, sl: 60 },
         weightkg: 2.5,
         nfe: true
     },
@@ -776,7 +776,7 @@ var RBY = {
     },
     Venusaur: {
         types: ['Grass', 'Poison'],
-        bs: { hp: 85, at: 80, df: 83, sp: 70, sl: 102 },
+        bs: { hp: 85, at: 75, df: 83, sp: 70, sl: 102 },
         weightkg: 100
     },
     Victreebel: {
@@ -1978,7 +1978,7 @@ var ADV_PATCH = {
     },
     Crawdaunt: {
         types: ['Water', 'Dark'],
-        bs: { hp: 63, at: 120, df: 85, sa: 90, sd: 55, sp: 55 },
+        bs: { hp: 63, at: 120, df: 85, sa: 90, sd: 70, sp: 55 },
         weightkg: 32.8,
         abilities: { 0: 'Hyper Cutter' }
     },
@@ -5649,7 +5649,7 @@ var XY_PATCH = {
     },
     Pangoro: {
         types: ['Fighting', 'Dark'],
-        bs: { hp: 95, at: 124, df: 78, sa: 69, sd: 71, sp: 61 },
+        bs: { hp: 95, at: 124, df: 82, sa: 69, sd: 79, sp: 61 },
         weightkg: 136,
         abilities: { 0: 'Iron Fist' }
     },
@@ -7074,7 +7074,7 @@ var SM_PATCH = {
     },
     Trumbeak: {
         types: ['Normal', 'Flying'],
-        bs: { hp: 55, at: 85, df: 55, sa: 40, sd: 55, sp: 75 },
+        bs: { hp: 59, at: 85, df: 62, sa: 40, sd: 55, sp: 75 },
         weightkg: 14.8,
         nfe: true,
         abilities: { 0: 'Keen Eye' }

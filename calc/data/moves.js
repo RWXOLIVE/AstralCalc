@@ -340,7 +340,7 @@ var GSC_PATCH = {
     'Iron Tail': { bp: 100, type: 'Steel' },
     'Mach Punch': { bp: 40, type: 'Fighting', priority: 1 },
     Megahorn: { bp: 120, type: 'Bug' },
-    'Metal Claw': { bp: 50, type: 'Steel' },
+    'Metal Claw': { bp: 55, type: 'Steel' },
     'Mud-Slap': { bp: 20, type: 'Ground' },
     Octazooka: { bp: 80, type: 'Water' },
     'Pain Split': { bp: 0, category: 'Status', type: 'Normal' },

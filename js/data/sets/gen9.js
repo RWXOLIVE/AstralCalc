@@ -1092,17 +1092,17 @@ var SETDEX_SV = {
             "moves": ["Nature Power","Seed Bomb","Snarl", "Self-Destruct"]
         }
     },
-    "Skarmory": {
+    "Metang": {
         "Collector Emerald | Rustboro City Gym": {  
             "index": "0000000073",
             "level": 18,
-            "ability": "Heatproof",
+            "ability": "Clear Body",
             "item": "Lum Berry", 
             "nature": "Sassy",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Air Slash","Steel Wing"]
+            "moves": ["Bullet Punch","Psybeam", "Pursuit", "Take Down"]
         },
     },
     //74 Nosepass
@@ -1195,7 +1195,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Bulldoze","Rock Slide","Venoshock", "Waterfall"]
+            "moves": ["Rock Slide","Venoshock", "Waterfall"]
         }
     },
     "Archen": {
@@ -1649,7 +1649,7 @@ var SETDEX_SV = {
         },
         "Battle Girl Vivian | Mauville Gym": {  
             "index": "0000000246",
-            "level": 41,
+            "level": 42,
             "ability": "Guts",
             "item": "Flame Orb", 
             "nature": "Impish", 
@@ -2468,7 +2468,7 @@ var SETDEX_SV = {
         },
         "Youngster Ben DB*| Mauville Gym": {  
             "index": "0000000248",
-            "level": 41,
+            "level": 42,
             "ability": "Surge Surfer",
             "item": "Wise Glasses", 
             "nature": "Timid", 
@@ -2505,7 +2505,7 @@ var SETDEX_SV = {
             "index": "0000000151",
             "level": 32,
             "ability": "Magic Guard",
-            "item": "Focus Sash", 
+            "item": "Leftovers", 
             "nature": "Modest",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
@@ -2911,7 +2911,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Return","Drain Punch", "Sucker Punch", "Counter"]
+            "moves": ["Return","Play Rough", "Sucker Punch", "Counter"]
         },
         "Aqua Grunt #3 & #4 DB*| Weather Institute": {  
             "index": "0000000583",
@@ -2941,14 +2941,14 @@ var SETDEX_SV = {
     "Braviary-Hisui": {
     "Gym Leader Norman | Petalburg Gym": {  
             "index": "0000000173",
-            "level": 37,
+            "level": 36,
             "ability": "Tinted Lens",
             "item": "Lum Berry", 
             "nature": "Timid",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Esper Wing","Heat Wave", "Hurricane", "Roost"]
+            "moves": ["Esper Wing","Heat Wave", "Air Slash", "Roost"]
         },
         "Camper Aoto | Route 111 Desert": {  
             "index": "0000000393",
@@ -2976,7 +2976,7 @@ var SETDEX_SV = {
     "Zoroark-Hisui": {
         "Gym Leader Norman | Petalburg Gym": {  
             "index": "0000000174",
-            "level": 36,
+            "level": 35,
             "ability": "Illusion",
             "item": "Colbur Berry", 
             "nature": "Modest",
@@ -3003,7 +3003,7 @@ var SETDEX_SV = {
             "level": 36,
             "ability": "Soundproof",
             "item": "Throat Spray", 
-            "nature": "Modest",
+            "nature": "Quiet",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0  
             },
@@ -3622,7 +3622,7 @@ var SETDEX_SV = {
         },
         "Guitarist Shawn | Mauville Gym": {  
             "index": "0000000252",
-            "level": 41,
+            "level": 42,
             "ability": "Prankster",
             "item": "Lum Berry", 
             "nature": "Adamant", 
@@ -4198,7 +4198,7 @@ var SETDEX_SV = {
     "Zebstrika": {
         "Guitarist Kirk | Mauville Gym": {  
             "index": "0000000240",
-            "level": 41,
+            "level": 42,
             "ability": "Galvanize",
             "item": "Air Balloon", 
             "nature": "Adamant", 
@@ -4211,7 +4211,7 @@ var SETDEX_SV = {
     "Orthworm": {
         "Guitarist Kirk | Mauville Gym": {  
             "index": "0000000241",
-            "level": 41,
+            "level": 42,
             "teraType": "Electric",
             "ability": "Earth Eater",
             "item": "Leftovers", 
@@ -4225,7 +4225,7 @@ var SETDEX_SV = {
     "Chatot": {
         "Guitarist Kirk | Mauville Gym": {  
             "index": "0000000242",
-            "level": 41,
+            "level": 43,
             "ability": "Punk Rock",
             "item": "Choice Scarf", 
             "nature": "Modest", 
@@ -4238,7 +4238,7 @@ var SETDEX_SV = {
     "Wigglytuff": {
     "Guitarist Kirk | Mauville Gym": {  
             "index": "0000000243",
-            "level": 41,
+            "level": 42,
             "ability": "Fluffy",
             "item": "Mind Plate", 
             "nature": "Bold", 
@@ -4251,7 +4251,7 @@ var SETDEX_SV = {
     "Electivire": {
         "Battle Girl Vivian | Mauville Gym": {  
             "index": "0000000244",
-            "level": 41,
+            "level": 42,
             "ability": "Iron Fist",
             "item": "Clear Amulet", 
             "nature": "Naive", 
@@ -4264,7 +4264,7 @@ var SETDEX_SV = {
     "Hitmontop": {
         "Battle Girl Vivian | Mauville Gym": {  
             "index": "0000000245",
-            "level": 41,
+            "level": 42,
             "ability": "Technician",
             "item": "Life Orb", 
             "nature": "Jolly", 
@@ -4289,7 +4289,7 @@ var SETDEX_SV = {
     "Crabominable": {
         "Battle Girl Vivian | Mauville Gym": {  
             "index": "0000000247",
-            "level": 41,
+            "level": 43,
             "ability": "Slush Rush",
             "item": "Expert Belt", 
             "nature": "Adamant", 
@@ -4303,7 +4303,7 @@ var SETDEX_SV = {
     "Pincurchin": {
         "Youngster Ben DB*| Mauville Gym": {  
             "index": "0000000249",
-            "level": 41,
+            "level": 42,
             "ability": "Electric Surge",
             "item": "Terrain Extender", 
             "nature": "Sassy", 
@@ -4327,7 +4327,7 @@ var SETDEX_SV = {
     "Kilowattrel": {
         "Youngster Ben DB*| Mauville Gym": {  
             "index": "0000000250",
-            "level": 41,
+            "level": 43,
             "ability": "Wind Power",
             "item": "Scope Lens", 
             "nature": "Timid", 
@@ -4351,7 +4351,7 @@ var SETDEX_SV = {
     "Raichu": {
         "Youngster Ben DB*| Mauville Gym": {  
             "index": "0000000251",
-            "level": 41,
+            "level": 42,
             "ability": "Static",
             "item": "Shuca Berry", 
             "nature": "Timid", 
@@ -4376,7 +4376,7 @@ var SETDEX_SV = {
     "Skeledirge": {
         "Guitarist Shawn | Mauville Gym": {  
             "index": "0000000253",
-            "level": 41,
+            "level": 42,
             "teraType": "Normal",
             "ability": "Blaze",
             "item": "Throat Spray", 
@@ -4390,7 +4390,7 @@ var SETDEX_SV = {
     "Dugtrio": {
         "Guitarist Shawn | Mauville Gym": {  
             "index": "0000000254",
-            "level": 42,
+            "level": 43,
             "ability": "Arena Trap",
             "item": "Soft Sand", 
             "nature": "Jolly", 
@@ -4436,7 +4436,7 @@ var SETDEX_SV = {
     "Rotom-Mow": {
         "Guitarist Shawn | Mauville Gym": {  
             "index": "0000000255",
-            "level": 41,
+            "level": 42,
             "ability": "Levitate",
             "item": "White Herb", 
             "nature": "Timid", 
@@ -4449,7 +4449,7 @@ var SETDEX_SV = {
     "Vikavolt": {
         "Ruin Maniac Angelo | Mauville Gym": {  
             "index": "0000000256",
-            "level": 42,
+            "level": 43,
             "ability": "Levitate",
             "item": "Salac Berry", 
             "nature": "Timid", 
@@ -4486,7 +4486,7 @@ var SETDEX_SV = {
     "Revavroom": {
         "Ruin Maniac Angelo | Mauville Gym": {  
             "index": "0000000258",
-            "level": 41,
+            "level": 42,
             "ability": "Fitler",
             "item": "Shuca Berry", 
             "nature": "Adamant", 
