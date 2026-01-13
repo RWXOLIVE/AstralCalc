@@ -481,36 +481,118 @@ $(".set-selector").change(function () {
 			if (next_poks[i][0].includes($('input.opposing').val())) {
 				continue
 			}
-			var pok_name = next_poks[i].split("]")[1].split(" (")[0]
+			var pok_name = next_poks[i].split("]")[1].split(" (")[0];
 			if (pok_name == "Zygarde-10%") {
-				pok_name = "Zygarde-10%25"
+				pok_name = "Zygarde-10%25";
 			}
 			if (pok_name == "Tauros-Paldea-Water") {
-				pok_name = "Tauros-Paldea-Aqua"
+				pok_name = "Tauros-Paldea-Aqua";
 			}
 			if (pok_name == "Tauros-Paldea-Fire") {
-				pok_name = "Tauros-Paldea-Blaze"
+				pok_name = "Tauros-Paldea-Blaze";
 			}
 			if (pok_name == "Tauros-Paldea") {
-				pok_name = "Tauros-Paldea-Combat"
+				pok_name = "Tauros-Paldea-Combat";
 			}
 			if (pok_name == "Wooper-Paldea") {
-				pok_name = "WooperPaldea"
+				pok_name = "WooperPaldea";
 			}
 			if (pok_name == "Pumpkaboo-Super") {
-				pok_name = "Pumpkaboo"
+				pok_name = "Pumpkaboo";
 			}
 			if (pok_name == "Mime Jr.") {
-				pok_name = "Mime%20Jr"
+				pok_name = "Mime%20Jr";
 			}
 			if (pok_name == "Kingler-Mega") {
-				pok_name = "Kingler"
+				pok_name = "Kingler-Mega";
 			}
 			if (pok_name === "Butterfree-Mega") {
-    pok_name = "Butterfree"; // use base form sprite
-}
+				pok_name = "Butterfree-Mega"; // use base form sprite
+			}
+			if (pok_name === "Starmie-Mega") {
+				pok_name = "Starmie-Mega";
+			}
+			if (pok_name === "Clefable-Mega") {
+				pok_name = "Clefable-Mega";
+			}
+			if (pok_name === "Victreebel-Mega") {
+				pok_name = "Victreebel-Mega";
+			}
+			if (pok_name === "Dragonite-Mega") {
+				pok_name = "Dragonite-Mega";
+			}
+			if (pok_name === "Feraligatr-Mega") {
+				pok_name = "Feraligatr-Mega";
+			}
+			if (pok_name === "Meganium-Mega") {
+				pok_name = "Meganium-Mega";
+			}
+			if (pok_name === "Skarmory-Mega") {
+				pok_name = "Skarmory-Mega";
+			}
+			if (pok_name === "Froslass-Mega") {
+				pok_name = "Froslass-Mega";
+			}
+			if (pok_name === "Emboar-Mega") {
+				pok_name = "Emboar-Mega";
+			}
+			if (pok_name === "Excadrill-Mega") {
+				pok_name = "Excadrill-Mega";
+			}
+			if (pok_name === "Scolipede-Mega") {
+				pok_name = "Scolipede-Mega";
+			}
+			if (pok_name === "Eelektross-Mega") {
+				pok_name = "Eelektross-Mega";
+			}
+			if (pok_name === "Chandelure-Mega") {
+				pok_name = "Chandelure-Mega";
+			}
+			if (pok_name === "Chesnaught-Mega") {
+				pok_name = "Chesnaught-Mega";
+			}
+			if (pok_name === "Delphox-Mega") {
+				pok_name = "Delphox-Mega";
+			}
+			if (pok_name === "Greninja-Mega") {
+				pok_name = "Greninja-Mega";
+			}
+			if (pok_name === "Pyroar-Mega") {
+				pok_name = "Pyroar-Mega";
+			}
+			if (pok_name === "Floette-Eternal-Mega") {
+				pok_name = "Floette-Eternal";
+			}
+			if (pok_name === "Malamar-Mega") {
+				pok_name = "Malamar-Mega";
+			}
+			if (pok_name === "Barbaracle-Mega") {
+				pok_name = "Barbaracle-Mega";
+			}
+			if (pok_name === "Dragalge-Mega") {
+				pok_name = "Dragalge-Mega";
+			}
+			if (pok_name === "Zygarde-Mega") {
+				pok_name = "Zygarde-Mega";
+			}
+			if (pok_name === "Drampa-Mega") {
+				pok_name = "Drampa-Mega";
+			}
+			if (pok_name === "Falinks-Mega") {
+				pok_name = "Falinks-Mega";
+			}
+			if (pok_name === "Lapras-Mega") {
+				pok_name = "Lapras-Mega";
+			}
+			if (pok_name === "Machamp-Mega") {
+				pok_name = "Machamp-Mega";
+			}
+			if (pok_name === "Snorlax-Mega") {
+				pok_name = "Snorlax-Mega";
+			}
+
 			//this ruined my day
-			var pok = `<img class="trainer-pok right-side" src="http://raw.githubusercontent.com/May8th1995/sprites/master/${pok_name}.png" data-id="${CURRENT_TRAINER_POKS[i].split("]")[1]}" title="${next_poks[i]}, ${next_poks[i]} BP">`
+			var pok = `<img class="trainer-pok right-side" src="http://raw.githubusercontent.com/RWXOLIVE/sprites/master/${pok_name}.png" data-id="${CURRENT_TRAINER_POKS[i].split("]")[1]}" title="${next_poks[i]}, ${next_poks[i]} BP">`
 			trpok_html += pok
 		}
 	} else {
@@ -586,6 +668,7 @@ $(".set-selector").change(function () {
 			pokeObj.find(".hp .evs").val((set.evs && set.evs.hp !== undefined) ? set.evs.hp : 0);
 			pokeObj.find(".hp .ivs").val((set.ivs && set.ivs.hp !== undefined) ? set.ivs.hp : 31);
 			pokeObj.find(".hp .dvs").val((set.dvs && set.dvs.hp !== undefined) ? set.dvs.hp : 15);
+			pokeObj.find(".status").val(set.status);
 			for (i = 0; i < LEGACY_STATS[gen].length; i++) {
 				pokeObj.find("." + LEGACY_STATS[gen][i] + " .evs").val(
 					(set.evs && set.evs[LEGACY_STATS[gen][i]] !== undefined) ?
@@ -1462,12 +1545,6 @@ function infoTrainer() {
 "• 'MT*' = Perma Misty Terrain\n" +
 "• 'PT*' = Perma Psychic Terrain\n" +
 "• 'G*' = Gauntlet (no healing). When 'G*' disappears, the gauntlet is over\n" +
-"• 'PP*' = Pre-Poison\n" +
-"• 'PB*' = Pre-Burn\n" +
-"• 'PZ*' = Pre-Paralyzed\n" +
-"• 'PS*' = Pre-Sleep\n" +
-"• 'PF*' = Pre-Frozen\n" +
-"• 'PFB*' = Pre-Frostbite\n\n" +
 "These help you remember battle conditions without needing documentation."
 );
 }
@@ -1506,35 +1583,54 @@ function getSrcImgPokemon(poke) {
 		return
 	}
 	if (poke.name == "Aegislash-Shield") {
-		return `https://raw.githubusercontent.com/May8th1995/sprites/master/Aegislash.png`
+		return `https://raw.githubusercontent.com/RWXOLIVE/sprites/master/Aegislash.png`
 	} else {
-		return `https://raw.githubusercontent.com/May8th1995/sprites/master/${poke.name}.png`
+		return `https://raw.githubusercontent.com/RWXOLIVE/sprites/master/${poke.name}.png`
 	}
 }
 
 function getSrcImgPokemon(poke) {
-	//edge case
-	if (!poke) {
-		return
+	if (!poke || !poke.name) return;
+
+	// list of special cases that should reuse a different sprite
+	const manualSprites = {
+		"Starmie-Mega": "Starmie-Mega",
+		"Clefable-Mega": "Clefable-Mega",
+		"Kingler-Mega": "Kingler-Mega",
+		"Butterfree-Mega": "Butterfree-Mega",
+		"Victreebel-Mega": "Victreebel-Mega",
+		"Dragonite-Mega": "Dragonite-Mega",
+		"Feraligatr-Mega": "Feraligatr-Mega",
+		"Meganium-Mega": "Meganium-Mega",
+		"Skarmory-Mega": "Skarmory-Mega",
+		"Delphox-Mega": "Delphox-Mega",
+		"Chesnaught-Mega": "Chesnaught-Mega",
+		"Greninja-Mega": "Greninja-Mega",
+		"Froslass-Mega": "Froslass-Mega",
+		"Emboar-Mega": "Emboar-Mega",
+		"Excadrill-Mega": "Excadrill-Mega",
+		"Scolipede-Mega": "Scolipede-Mega",
+		"Eelektross-Mega": "Eelektross-Mega",
+		"Chandelure-Mega": "Chandelure-Mega",
+		"Pyroar-Mega": "Pyroar-Mega",
+		"Malamar-Mega": "Malamar-Mega",
+		"Barbaracle-Mega": "Barbaracle-Mega",
+		"Dragalge-Mega": "Dragalge-Mega",
+		"Zygarde-Mega": "Zygarde-Complete-Mega",
+		"Drampa-Mega": "Drampa-Mega",
+		"Falinks-Mega": "Falinks-Mega",
+		"Scrafty-Mega": "Scrafty-Mega"
+	};
+
+	// if this Pokémon is in the list, use its mapped sprite
+	if (manualSprites[poke.name]) {
+		return `https://raw.githubusercontent.com/RWXOLIVE/sprites/master/${manualSprites[poke.name]}.png`;
 	}
-	if (poke.name == "Butterfree-Mega") {
-		return `https://raw.githubusercontent.com/May8th1995/sprites/master/Butterfree.png`
-	} else {
-		return `https://raw.githubusercontent.com/May8th1995/sprites/master/${poke.name}.png`
-	}
+
+	// default behavior for normal Pokémon
+	return `https://raw.githubusercontent.com/RWXOLIVE/sprites/master/${poke.name}.png`;
 }
 
-function getSrcImgPokemon(poke) {
-	//edge case
-	if (!poke) {
-		return
-	}
-	if (poke.name == "Kingler-Mega") {
-		return `https://raw.githubusercontent.com/May8th1995/sprites/master/Kingler.png`
-	} else {
-		return `https://raw.githubusercontent.com/May8th1995/sprites/master/${poke.name}.png`
-	}
-}
 
 function get_trainer_poks(trainer_name) {
 	var true_name = trainer_name.split("(")[1].split("\n")[0].trim()
@@ -1876,6 +1972,53 @@ function switchIconDouble(){
 	document.getElementById("monDouble").toggleAttribute("hidden")
 }
 
+// set crit checkboxes to align their values
+	/* Crits on the top of the screen */
+	$(".top-crit").change(function() {
+		const idSuffix = this.id.substr(this.id.length - 2);
+		if ($(`#crit${idSuffix}`).is(":checked") != this.checked) {
+			$(`#crit${idSuffix}`).click();
+		}
+
+		// click result
+		$(`#resultMove${idSuffix}`).click();
+	});
+
+	// Filters mons in player sections based on the search input
+	$(document).on('input keyup change', '#search', function () {
+    const q = ($(this).val() || '').trim().toLowerCase();
+
+    // Target the Pokémon CONTAINERS, not imgs
+    const $targets = $(
+        '#team-poke-list .trainer-pok,' +
+        '#box-poke-list .trainer-pok,' +
+        '#box-poke-list2 .trainer-pok,' +
+        '#trash-box .trainer-pok'
+    );
+
+    if (!$targets.length) return;
+
+    $targets.each(function () {
+        // Pull name from whatever exists
+        let name =
+            this.dataset?.id ||
+            this.dataset?.species ||
+            $(this).attr('title') ||
+            $(this).text() ||
+            '';
+
+        name = name.toLowerCase();
+
+        // Show / hide
+        if (!q || name.includes(q)) {
+            this.style.display = '';
+        } else {
+            this.style.display = 'none';
+        }
+    });
+});
+
+
 $(document).ready(function () {
 	var params = new URLSearchParams(window.location.search);
 	var g = GENERATION[params.get('gen')] || 9;
@@ -1898,8 +2041,8 @@ $(document).ready(function () {
 	$(".terrain-trigger").bind("change keyup", getTerrainEffects);
 	$("#previous-trainer").click(previousTrainer);
 	$("#next-trainer").click(nextTrainer);
-	$("#reset-trainer").click(resetTrainer);
 	$("#info-trainer").click(infoTrainer);
+	$("#reset-trainer").click(resetTrainer);
 	$('#show-cc').click(showColorCodes);
 	$('#hide-cc').click(hideColorCodes);
 	$('#refr-cc').click(refreshColorCode);

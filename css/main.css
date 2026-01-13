@@ -1,3 +1,4 @@
+/* main file*/
 /* header */
 a img {
     border: 0;
@@ -662,4 +663,50 @@ table.field {
 .info-paragraph > b:hover{
     background: var(--fieldset-color);
     color: unset;
+}
+
+nav .header-inner {
+    display: flex;
+    justify-content: center;   /* center nav horizontally */
+}
+
+nav .nav {
+    display: flex;
+    align-items: center;
+    gap: 0px;
+}
+
+.team-legend {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: left;
+    width: 100%;
+}
+
+#team-box-legend {
+    min-width: 6em;
+    padding: 2px 6px;
+    flex-shrink: 0;
+    text-align: left;
+}
+
+#search-inline {
+    margin-left: 8em;
+    flex-shrink: 0;
+}
+
+#search {
+    min-width: 14em;
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid #AAAAAA;
+}
+
+.pokemon-icon {
+  width: 40px;       /* width of one icon */
+  height: 30px;      /* height of one icon */
+  display: inline-block;
+  background-image: url('https://play.pokemonshowdown.com/sprites/pokemonicons-sheet.png');
+  background-repeat: no-repeat;
 }

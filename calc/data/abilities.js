@@ -380,6 +380,8 @@ var SV = SS.concat([
     'Lucid',
     'Striker',
     'Heated Rush',
+    'Luchador\'s Pride',
+    'Echoing Alloy',
 ]);
 exports.ABILITIES = [[], RBY, GSC, ADV, DPP, BW, XY, SM, SS, SV];
 var Abilities = (function () {

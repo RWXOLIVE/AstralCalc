@@ -52,11 +52,11 @@ var RBY = {
     Bind: { bp: 20, type: 'Steel' },
     Bite: { bp: 60, type: 'Normal' },
     Blizzard: { bp: 120, type: 'Ice' },
-    Bonemerang: { bp: 50, type: 'Ground', multihit: 2 },
+    Bonemerang: { bp: 60, type: 'Ground', multihit: 2 },
     Bubble: { bp: 40, type: 'Water' },
     'Bubble Beam': { bp: 70, type: 'Water' },
     Clamp: { bp: 20, type: 'Water' },
-    'Comet Punch': { bp: 20, type: 'Normal', multihit: 3 },
+    'Comet Punch': { bp: 40, type: 'Normal', multihit: 2 },
     Constrict: { bp: 10, type: 'Normal' },
     Conversion: { bp: 0, category: 'Status', type: 'Normal' },
     Counter: { bp: 1, type: 'Fighting' },
@@ -951,9 +951,10 @@ var DPP_PATCH = {
     Roost: { bp: 0, type: 'Flying' },
     'Stealth Rock': { bp: 0, type: 'Rock' },
     'Sucker Punch': {
-        bp: 75,
+        bp: 70,
         type: 'Dark',
         priority: 1,
+        isPunch: true,
         makesContact: true,
         category: 'Physical'
     },
@@ -1683,7 +1684,7 @@ var BW_PATCH = {
         category: 'Special',
         secondaries: true
     },
-    'Smack Down': { bp: 60, type: 'Rock', category: 'Physical' },
+    'Smack Down': { bp: 50, type: 'Rock', category: 'Physical' },
     'Stored Power': { bp: 20, type: 'Psychic', category: 'Special' },
     'Tail Slap': {
         bp: 25,
@@ -3536,6 +3537,12 @@ var SS_PATCH = {
         multihit: [2, 5],
         zp: 140,
         maxPower: 130
+    },
+    'Scale Chomp': {
+        bp: 75,
+        type: 'Dragon',
+        category: 'Physical',
+        secondaries: true
     },
     'Shell Side Arm': {
         bp: 90,

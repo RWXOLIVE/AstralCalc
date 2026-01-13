@@ -144,6 +144,7 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
     var isSwarmLash = false;
     var isGalvanize = false;
     var isLiquidVoice = false;
+    var isEchoingAlloy = false;
     var isNormalize = false;
     var noTypeChange = move.named('Revelation Dance', 'Judgment', 'Nature Power', 'Techno Blast', 'Multi Attack', 'Natural Gift', 'Weather Ball', 'Terrain Pulse') || (move.named('Tera Blast') && attacker.teraType);
     if (!move.isZ && !noTypeChange) {
@@ -156,6 +157,9 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
         }
         else if ((isLiquidVoice = attacker.hasAbility('Liquid Voice') && !!move.flags.sound)) {
             type = 'Water';
+        }
+        else if ((isEchoingAlloy = attacker.hasAbility('Echoing Alloy') && !!move.flags.sound)) {
+            type = 'Steel';
         }
         else if ((isPixilate = attacker.hasAbility('Pixilate') && normal)) {
             type = 'Fairy';
@@ -176,6 +180,9 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
         else if (isLiquidVoice) {
             desc.attackerAbility = attacker.ability;
         }
+    }
+    else if (isEchoingAlloy) {
+        desc.attackerAbility = attacker.ability;
     }
     if (move.named('Tera Blast') && attacker.teraType) {
         type = attacker.teraType;
@@ -829,7 +836,7 @@ function calculateBPModsSMSSSV(gen, attacker, defender, move, field, desc, baseP
         desc.attackerAbility = attacker.ability;
     }
     if (attacker.hasAbility('Striker') && move.flags.kick) {
-        bpMods.push(4506);
+        bpMods.push(4915);
         desc.attackerAbility = attacker.ability;
     }
     if (attacker.hasItem('Punching Glove') && move.flags.punch) {
