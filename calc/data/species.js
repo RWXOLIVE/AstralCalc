@@ -811,7 +811,7 @@ var RBY = {
     },
     Venusaur: {
         types: ['Grass', 'Poison'],
-        bs: { hp: 85, at: 75, df: 83, sp: 70, sl: 102 },
+        bs: { hp: 85, at: 75, df: 83, sp: 75, sl: 102 },
         weightkg: 100
     },
     Victreebel: {
@@ -1019,7 +1019,7 @@ var GSC_PATCH = {
     Tangela: { bs: { sa: 100, sd: 40 } },
     Tauros: { bs: { sa: 40, sd: 70 } },
     Tentacool: { bs: { sa: 70, sd: 100 } },
-    Tentacruel: { bs: { sa: 100, sd: 120 } },
+    Tentacruel: { bs: { sa: 80, sd: 120 } },
     Vaporeon: { bs: { sa: 110, sd: 95 } },
     Venomoth: { bs: { sa: 90, sd: 75 } },
     Venonat: { bs: { sa: 40, sd: 55 } },
@@ -2695,7 +2695,7 @@ var ADV_PATCH = {
     },
     Vibrava: {
         types: ['Bug', 'Dragon'],
-        bs: { hp: 55, at: 55, df: 70, sa: 80, sd: 70, sp: 70 },
+        bs: { hp: 55, at: 80, df: 70, sa: 80, sd: 70, sp: 70 },
         weightkg: 15.3,
         abilities: { 0: 'Levitate' },
         nfe: true

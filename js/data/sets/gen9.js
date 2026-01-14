@@ -300,7 +300,7 @@ var SETDEX_SV = {
     "Qwilfish-Hisui": {
         "Team Aqua Grunt | Petalburg Woods": {  
             "index": "0000000022",
-            "level": 16,
+            "level": 13,
             "ability": "Poison Point",
             "item": "Oran Berry", 
             "nature": "Timid",
@@ -324,7 +324,7 @@ var SETDEX_SV = {
     "Gligar": {
         "Team Aqua Grunt | Petalburg Woods": {  
             "index": "0000000023",
-            "level": 17,
+            "level": 13,
             "ability": "Hyper Cutter",
             "item": "Lum Berry", 
             "nature": "Careful",
@@ -337,7 +337,7 @@ var SETDEX_SV = {
     "Weepinbell": {
         "Team Aqua Grunt | Petalburg Woods": {  
             "index": "0000000024",
-            "level": 18,
+            "level": 14,
             "ability": "Gluttony",
             "item": "Starf Berry", 
             "nature": "Relaxed",
@@ -1052,17 +1052,6 @@ var SETDEX_SV = {
             },
             "moves": ["HP Grass","Flame Charge", "Ancient Power","Scorching Sands"]
         },
-        "Camper Aoto | Route 111 Desert": {  
-            "index": "0000000375",
-            "level": 44,
-            "ability": "Drought",
-            "item": "Rocky Helmet", 
-            "nature": "Calm",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Stealth Rock","Explosion", "Flamethrower","Earth Power"]
-        },
         "Kindler Cole | Lavaridge Gym": {  
             "index": "0000000454",
             "level": 53,
@@ -1177,7 +1166,7 @@ var SETDEX_SV = {
             "level": 45,
             "ability": "Hospitality",
             "item": "Grass Gem", 
-            "nature": "Relexed",
+            "nature": "Relaxed",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0 
             },
@@ -2046,14 +2035,14 @@ var SETDEX_SV = {
         },
         "Camper Aoto | Route 111 Desert": {  
             "index": "0000000376",
-            "level": 44,
+            "level": 45,
             "ability": "Clear Body",
-            "item": "Utility Umbrella", 
-            "nature": "Relaxed",
+            "item": "Black Sludge", 
+            "nature": "Timid",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Knock Off","Sludge Wave", "Hydro Pump","Giga Drain"]
+            "moves": ["Toxic Spike","Sludge Wave", "Hydro Pump","Giga Drain"]
         },
     },
     "Morpeko": {
@@ -2936,7 +2925,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Hurricane","Psychic Noise", "Air Slash","Focus Blast"]
+            "moves": ["Hurricane","Psychic", "Agility","Focus Blast"]
         },
         "Rival 5 - (If Chosen Tepig) R*| Route 119": {  
         "index": "0000000605",
@@ -3188,14 +3177,14 @@ var SETDEX_SV = {
         },
         "Camper Aoto | Route 111 Desert": {  
             "index": "0000000378",
-            "level": 48,
+            "level": 46,
             "ability": "Chlorophyll",
             "item": "Assault Vest", 
             "nature": "Sassy",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Leaf Storm","Knock Off", "Weather Ball","Sleep Powder"]
+            "moves": ["Leaf Storm","Knock Off", "Weather Ball","Power Whip"]
         }
     },
     "Chimecho-Mega": {
@@ -3804,7 +3793,7 @@ var SETDEX_SV = {
         "PKMN Trainer DLOW | Route 111 Desert": {  
             "index": "0000000361",
             "level": 45,
-            "ability": "Justified",
+            "ability": "Adaptability",
             "item": "Sitrus Berry", 
             "nature": "Naive",
             "ivs": {
@@ -4211,14 +4200,14 @@ var SETDEX_SV = {
         },
     "Camper Drew | Route 111 Desert": {  
             "index": "0000000354",
-            "level": 44,
+            "level": 46,
             "ability": "Sand Rush",
             "item": "Lum Berry", 
             "nature": "Naughty",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Iron Tail","Aqua Tail", "Wild Charge","Dragon Pulse"]
+            "moves": ["Iron Tail","Aqua Tail", "Bolt Beak","Dragon Pulse"]
         }
     },    
     "Dracovish": {
@@ -4266,7 +4255,7 @@ var SETDEX_SV = {
             "item": "Choice Band", 
             "nature": "Brave",
             "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0  
             },
             "moves": ["Head Smash","Tectonic Rage"]
         },
@@ -5612,7 +5601,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
             "moves": ["Flamethrower","Power Gem", "Scorching Sands","Tar Shot"]
-        }
+        },
+        "Camper Aoto | Route 111 Desert": {  
+            "index": "0000000375",
+            "level": 45,
+            "ability": "Steam Engine",
+            "item": "Weakness Policy", 
+            "nature": "Relaxed",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Stealth Rock","Explosion", "Flamethrower","Meteor Beam"]
+        },
     },
     "Tatsugiri": {
     "Sailor Dillon DB*| Route 113": {  
@@ -5699,11 +5699,11 @@ var SETDEX_SV = {
             "level": 45,
             "ability": "Regenerator",
             "item": "Lum Berry", 
-            "nature": "Hasty",
+            "nature": "Timid",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Stun Spore","Earth Power", "Knock Off","Leech Seed"]
+            "moves": ["Spore","Meteor Beam", "Leaf Storm","Earth Power"]
         },
     },     
     //354 Dracozolt
@@ -5727,7 +5727,7 @@ var SETDEX_SV = {
             "level": 46,
             "ability": "Magic Guard",
             "item": "Focus Sash", 
-            "nature": "Bold",
+            "nature": "Modest",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
@@ -5739,7 +5739,7 @@ var SETDEX_SV = {
             "index": "0000000358",
             "level": 45,
             "ability": "Weak Armor",
-            "item": "Lum Berry", 
+            "item": "White", 
             "nature": "Careful",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
@@ -5755,12 +5755,12 @@ var SETDEX_SV = {
             "index": "0000000362",
             "level": 46,
             "ability": "Inner Focus",
-            "item": "Scope Lens", 
+            "item": "Life Orb", 
             "nature": "Naive",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Venom Drain","Heat Wave", "Brave Bird","Roost"]
+            "moves": ["Sludge Bomb","Heat Wave", "Brave Bird","Roost"]
         },
         "Magma Leader Maxie | Mt. Chimney": {  
             "index": "0000000429",
@@ -5777,7 +5777,7 @@ var SETDEX_SV = {
     "Copperajah": {
     "Picnicker Celia | Route 111 Desert": {  
             "index": "0000000363",
-            "level": 44,
+            "level": 45,
             "ability": "Heavy Metal",
             "item": "Choice Band", 
             "nature": "Adamant",
@@ -5798,7 +5798,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Solar Beam","Eruption", "Scorching Sands","Focus Blast"]
+            "moves": ["Solar Beam","Eruption", "Scorching Sands","Flamethrower"]
         },
         "Swimmer Luis | Route 105": {  
             "index": "0000000501",
@@ -5959,7 +5959,7 @@ var SETDEX_SV = {
             "moves": ["Meteor Assault","Brave Bird", "Poison Jab","First Impression"]
         }
     },
-    //375 torkoal
+    //375 Coalossal
     //376 Tentacruel
     "Krookodile": {
         "Camper Aoto | Route 111 Desert": {  
