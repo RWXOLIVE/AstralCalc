@@ -47,7 +47,7 @@ var RBY = {
     Acid: { bp: 40, type: 'Poison' },
     Amnesia: { bp: 0, category: 'Status', type: 'Psychic' },
     'Aurora Beam': { bp: 65, type: 'Ice' },
-    Barrage: { bp: 90, type: 'Psychic' },
+    Barrage: { bp: 20, type: 'Psychic', multihit: [2, 5] },
     Bide: { bp: 0, type: '???' },
     Bind: { bp: 20, type: 'Steel' },
     Bite: { bp: 60, type: 'Normal' },

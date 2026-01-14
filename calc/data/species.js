@@ -1561,7 +1561,7 @@ var GSC_PATCH = {
         gender: 'N'
     },
     Ursaring: {
-        types: ['Normal', 'Ground'],
+        types: ['Normal'],
         bs: { hp: 90, at: 130, df: 75, sa: 75, sd: 75, sp: 55 },
         weightkg: 125.8
     },
@@ -7539,8 +7539,8 @@ var SS_PATCH = {
     },
     Appletun: {
         types: ['Grass', 'Dragon'],
-        bs: { hp: 120, at: 90, df: 85, sa: 100, sd: 85, sp: 30 },
-        weightkg: 13,
+        bs: { hp: 110, at: 85, df: 85, sa: 100, sd: 80, sp: 30 },
+        weightkg: 240,
         abilities: { 0: 'Ripen' },
         otherFormes: ['Appletun-Gmax']
     },
@@ -7969,7 +7969,7 @@ var SS_PATCH = {
     },
     Flapple: {
         types: ['Grass', 'Dragon'],
-        bs: { hp: 70, at: 120, df: 80, sa: 95, sd: 60, sp: 85 },
+        bs: { hp: 70, at: 110, df: 80, sa: 85, sd: 60, sp: 85 },
         weightkg: 1,
         abilities: { 0: 'Ripen' },
         otherFormes: ['Flapple-Gmax']
