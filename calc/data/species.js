@@ -2149,7 +2149,7 @@ var ADV_PATCH = {
         abilities: { 0: 'Inner Focus' }
     },
     Gorebyss: {
-        types: ['Water', 'Psychic'],
+        types: ['Water'],
         bs: { hp: 60, at: 66, df: 75, sa: 114, sd: 107, sp: 63 },
         weightkg: 22.6,
         abilities: { 0: 'Swift Swim' }
@@ -2188,7 +2188,7 @@ var ADV_PATCH = {
         abilities: { 0: 'Thick Fat' }
     },
     Huntail: {
-        types: ['Water', 'Dark'],
+        types: ['Water'],
         bs: { hp: 60, at: 103, df: 107, sa: 67, sd: 75, sp: 73 },
         weightkg: 27,
         abilities: { 0: 'Swift Swim' }
