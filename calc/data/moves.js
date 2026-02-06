@@ -127,7 +127,7 @@ var RBY = {
     'Stun Spore': { bp: 0, category: 'Status', type: 'Grass' },
     Submission: { bp: 80, type: 'Fighting', recoil: [1, 4] },
     Substitute: { bp: 0, category: 'Status', type: 'Normal' },
-    'Super Fang': { bp: 1, type: 'Normal' },
+    'Super Fang': { bp: 1, type: 'Dark' },
     Swift: { bp: 60, type: 'Normal' },
     'Take Down': { bp: 90, type: 'Normal', recoil: [1, 4] },
     Thrash: { bp: 120, type: 'Normal' },
@@ -468,7 +468,7 @@ var ADV_PATCH = {
     'Vital Throw': { makesContact: true },
     'Wing Attack': { makesContact: true },
     'Arm Thrust': {
-        bp: 15,
+        bp: 20,
         type: 'Fighting',
         multihit: [2, 5],
         makesContact: true
@@ -1328,6 +1328,7 @@ var BW_PATCH = {
     Psychic: { secondaries: true },
     'Rock Slide': { secondaries: true },
     'Rock Smash': { secondaries: true },
+    'Strength': { secondaries: true },
     'Shadow Ball': { secondaries: true },
     'Sky Attack': { secondaries: false },
     Sludge: { secondaries: true },
@@ -2980,7 +2981,6 @@ var SS_PATCH = {
         type: 'Grass',
         category: 'Physical',
         isSound: true,
-        target: 'allAdjacentFoes',
         secondaries: true,
         zp: 160,
         maxPower: 130
@@ -4653,7 +4653,7 @@ var SV_PATCH = {
         multiaccuracy: true
     },
     Pounce: {
-        bp: 65,
+        bp: 50,
         type: 'Bug',
         category: 'Physical',
         zp: 100,

@@ -521,6 +521,9 @@ $(".set-selector").change(function () {
 			if (pok_name === "Dragonite-Mega") {
 				pok_name = "Dragonite-Mega";
 			}
+			if (pok_name === "Chimecho-Mega") {
+				pok_name = "Chimecho";
+			}
 			if (pok_name === "Feraligatr-Mega") {
 				pok_name = "Feraligatr-Mega";
 			}
@@ -1619,6 +1622,7 @@ function getSrcImgPokemon(poke) {
 		"Zygarde-Mega": "Zygarde-Complete-Mega",
 		"Drampa-Mega": "Drampa-Mega",
 		"Falinks-Mega": "Falinks-Mega",
+		"Chimecho-Mega": "Chimecho",
 		"Scrafty-Mega": "Scrafty-Mega"
 	};
 

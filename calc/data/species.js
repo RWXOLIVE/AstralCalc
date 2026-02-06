@@ -7017,7 +7017,7 @@ var SM_PATCH = {
     },
     Rockruff: {
         types: ['Rock'],
-        bs: { hp: 45, at: 65, df: 40, sa: 30, sd: 40, sp: 60 },
+        bs: { hp: 55, at: 78, df: 70, sa: 30, sd: 65, sp: 85 },
         weightkg: 9.2,
         nfe: true,
         abilities: { 0: 'Keen Eye' }
@@ -8042,7 +8042,7 @@ var SS_PATCH = {
         baseSpecies: 'Grimmsnarl'
     },
     Grookey: {
-        types: ['Grass', 'Normal'],
+        types: ['Grass'],
         bs: { hp: 50, at: 65, df: 50, sa: 40, sd: 40, sp: 65 },
         weightkg: 5,
         abilities: { 0: 'Overgrow' },
@@ -8524,7 +8524,7 @@ var SS_PATCH = {
         abilities: { 0: 'Run Away' }
     },
     Thwackey: {
-        types: ['Grass', 'Normal'],
+        types: ['Grass'],
         bs: { hp: 70, at: 85, df: 70, sa: 55, sd: 60, sp: 80 },
         weightkg: 14,
         abilities: { 0: 'Overgrow' },

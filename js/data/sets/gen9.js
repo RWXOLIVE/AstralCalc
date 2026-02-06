@@ -945,7 +945,7 @@ var SETDEX_SV = {
         "Gym Leader Roxanne | Rustboro City Gym": {  
             "index": "0000000063",
             "level": 17,
-            "ability": "Solid Rock",
+            "ability": "Galvanize",
             "item": "Oran Berry", 
             "nature": "Adamant",
             "ivs": {
@@ -1188,7 +1188,7 @@ var SETDEX_SV = {
         "Team Aqua Grunt | Rusturf Tunnel": {  
             "index": "0000000075",
             "level": 23,
-            "ability": "Strong Jaw",
+            "ability": "Speed Boost",
             "item": "Focus Sash", 
             "nature": "Mild",
             "ivs": {
@@ -1247,7 +1247,7 @@ var SETDEX_SV = {
             "level": 34,   
             "ability": "Guts",
             "status": "Poisoned",
-            "item": "Quick Claw", 
+            "item": "", 
             "nature": "Jolly",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
@@ -1640,7 +1640,7 @@ var SETDEX_SV = {
             },
             "moves": ["Aqua Jet","Bulldoze","Rock Smash"]
         },
-        "Fisherman Clause | Route 114": {  
+        "Fisherman Claude | Route 114": {  
             "index": "0000000393",
             "level": 46,
             "ability": "Intimidate",
@@ -1738,16 +1738,16 @@ var SETDEX_SV = {
             },
             "moves": ["Dragon Dance","Earthquake", "Waterfall", "Power Whip"]
         },
-        "Fisherman Clause | Route 114": {  
+        "Fisherman Claude | Route 114": {  
             "index": "0000000391",
-            "level": 44,
+            "level": 45,
             "ability": "Moxie",
             "item": "Leftovers", 
             "nature": "Careful",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Dragon Dance","Earthquake", "Earthquake","Power Whip"]
+            "moves": ["Dragon Dance","Earthquake", "Lash Out","Power Whip"]
         },
         "Leader Winona | Fortree Gym": {  
         "index": "0000000656",
@@ -1847,7 +1847,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Bulk Up","Drain Punch","Psycho Cut", "X-Scissor"]
+            "moves": ["Bulk Up","Low Sweep","Psycho Cut", "X-Scissor"]
         },
         "Rival 6 - (If Chosen Totodile) R*| Route 119": {  
         "index": "0000000611",
@@ -1913,8 +1913,8 @@ var SETDEX_SV = {
         "Sailor Huey & Edmond | Route 109": {  
             "index": "0000000111",
             "level": 24,
-            "ability": "Swift Swim",
-            "item": "Mystic Water", 
+            "ability": "Rattled",
+            "item": "Oran Berry", 
             "nature": "Brave",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
@@ -2042,7 +2042,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Toxic Spike","Sludge Wave", "Hydro Pump","Giga Drain"]
+            "moves": ["Toxic Spikes","Sludge Wave", "Hydro Pump","Giga Drain"]
         },
     },
     "Morpeko": {
@@ -2101,7 +2101,7 @@ var SETDEX_SV = {
             "level": 34,
             "ability": "Poison Heal",
             "status": "Poisoned",
-            "item": "Normal Gem", 
+            "item": "", 
             "nature": "Careful",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
@@ -2360,6 +2360,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
             "moves": ["Stone Edge","Close Combat", "Acrobatics","Dual Wingbeat"]
+        },
+        "Ranger Charlotte | Route 114": {  
+            "index": "0000000386",
+            "level": 45,
+            "ability": "Unburden",
+            "item": "Power Herb", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Sky Attack","Acrobatics", "Close Combat","Poison Jab"]
         },
         "Aqua Grunt #2 PFB & PZ*| Weather Institute": {  
             "index": "0000000591",
@@ -2752,7 +2763,7 @@ var SETDEX_SV = {
         },
         "Hex Maniac Nancy | Route 114": {  
             "index": "0000000390",
-            "level": 43,
+            "level": 45,
             "ability": "Fluffy",
             "item": "Sitrus Berry", 
             "nature": "Adamant",
@@ -2833,7 +2844,7 @@ var SETDEX_SV = {
             },
             "moves": ["Fake Out","Surf", "Flash Cannon", "Ice Beam"]
         },
-        "Fisherman Clause | Route 114": {  
+        "Fisherman Claude | Route 114": {  
             "index": "0000000392",
             "level": 45,
             "ability": "Shell Armor",
@@ -2867,29 +2878,29 @@ var SETDEX_SV = {
             "moves": ["Body Press","Wave Crash","Skull Bash","Terrain Pulse"],
         },
     },
-    "Kangaskhan": {
+    "Porygon2": {
         "Gym Leader Norman | Petalburg Gym": {  
             "index": "0000000157",
             "level": 36,
-            "ability": "Scrappy",
-            "item": "Silk Scarf", 
-            "nature": "Adamant",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Return","Play Rough", "Sucker Punch", "Counter"]
-        },
-        "Aqua Grunt #3 & #4 DB*| Weather Institute": {  
-            "index": "0000000593",
-            "level": 60,
-            "ability": "Scrappy",
-            "item": "Assault Vest", 
-            "nature": "Careful",
+            "ability": "Download",
+            "item": "Eviolite", 
+            "nature": "Modest",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
             },
-            "moves": ["Comet Punch","Sucker Punch","Circle Throw","Aerial Ace"]
+            "moves": ["Recover","Tri Attack", "Psychic Noise", "Volt Switch"]
         },
+        "Lady Sophie & Bianca | Route 113": {  
+            "index": "0000000347",
+            "level": 46,
+            "ability": "Download",
+            "item": "Eviolite", 
+            "nature": "Quiet",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0  
+            },
+            "moves": ["Trick Room","Tri Attack", "Psychic Noise","Volt Switch"]
+        }
     },
     "Maushold": {
         "Gym Leader Norman | Petalburg Gym": {  
@@ -2909,7 +2920,7 @@ var SETDEX_SV = {
             "index": "0000000159",
             "level": 36,
             "ability": "Tinted Lens",
-            "item": "Lum Berry", 
+            "item": "Sitrus Berry", 
             "nature": "Timid",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
@@ -2942,14 +2953,14 @@ var SETDEX_SV = {
     "Zoroark-Hisui": {
         "Gym Leader Norman | Petalburg Gym": {  
             "index": "0000000160",
-            "level": 36,
+            "level": 37,
             "ability": "Illusion",
             "item": "Colbur Berry", 
             "nature": "Lonely",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Hyper Voice","Shadow Claw", "Flamethrower", "Sludge Bomb"]
+            "moves": ["Hyper Voice","Shadow Claw", "Flamethrower", "Extrasensory"]
         },
         "Aqua Grunt #5 | Weather Institute": {  
             "index": "0000000598",
@@ -2963,41 +2974,41 @@ var SETDEX_SV = {
             "moves": ["Bitter Malice","Flamethrower","Hyper Beam","Focus Blast"]
         },
     },
-    "Porygon2": {
+    "Kangaskhan": {
         "Gym Leader Norman | Petalburg Gym": {  
             "index": "0000000161",
-            "level": 36,
-            "ability": "Download",
-            "item": "Eviolite", 
-            "nature": "Modest",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
-            },
-            "moves": ["Recover","Tri Attack", "Psychic Noise", "Volt Switch"]
-        },
-        "Lady Sophie & Bianca | Route 113": {  
-            "index": "0000000347",
-            "level": 46,
-            "ability": "Download",
-            "item": "Eviolite", 
-            "nature": "Quiet",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0  
-            },
-            "moves": ["Trick Room","Tri Attack", "Psychic Noise","Volt Switch"]
-        }
-    },
-    "Marshadow": {
-        "Gym Leader Norman | Petalburg Gym": {  
-            "index": "0000000162",
             "level": 37,
-            "ability": "Technician",
-            "item": "Berry Juice", 
-            "nature": "Brave",
+            "ability": "Scrappy",
+            "item": "Muscle Band", 
+            "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Facade","Shadow Sneak", "Close Combat", "Mach Punch"]
+            "moves": ["Body Slam","Brick Break", "Sucker Punch", "Earthquake"]
+        },
+        "Aqua Grunt #3 & #4 DB*| Weather Institute": {  
+            "index": "0000000593",
+            "level": 60,
+            "ability": "Scrappy",
+            "item": "Assault Vest", 
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31 
+            },
+            "moves": ["Comet Punch","Sucker Punch","Circle Throw","Aerial Ace"]
+        },
+    },
+    "Terapagos-Terastal": {
+        "Gym Leader Norman | Petalburg Gym": {  
+            "index": "0000000162",
+            "level": 38,
+            "ability": "Tera Shell",
+            "item": "Leftovers", 
+            "nature": "Serious",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Hyper Voice","Rapid Spin", "Scorching Sands", "Thunderbolt"]
         }
     },
     "Jolteon": {
@@ -3085,14 +3096,14 @@ var SETDEX_SV = {
     },
         "Hex Maniac Nancy | Route 114": {  
             "index": "0000000388",
-            "level": 44,
+            "level": 45,
             "ability": "Cursed Body",
             "item": "Fighting Gem", 
             "nature": "Timid",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Shadow Ball","Aura Sphere", "Sludge Bomb","Hypnosis"]
+            "moves": ["Shadow Ball","Focus Blast", "Sludge Bomb","Hypnosis"]
         },
         "Couple Mel & Paul | Route 109": {  
             "index": "0000000529",
@@ -3663,6 +3674,17 @@ var SETDEX_SV = {
             },
             "moves": ["Aqua Jet","Razor Shell", "Knock Off", "Close Combat"]
         },
+        "Fisherman Kai | Route 114": {  
+            "index": "0000000383",
+            "level": 46,
+            "ability": "Adaptability",
+            "item": "Muscle Band", 
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
+            },
+            "moves": ["Dragon Dance","Night Slash", "Aqua Cutter","Superpower"]
+        },
         "Hiker Eli | Lavaridge Gym": {  
             "index": "0000000448",
             "level": 51,
@@ -3949,7 +3971,7 @@ var SETDEX_SV = {
             "index": "0000000202",
             "level": 42,
             "ability": "Sturdy",
-            "item": "Custap", 
+            "item": "Custap Berry", 
             "nature": "Adamant", 
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
@@ -4930,9 +4952,9 @@ var SETDEX_SV = {
             },
             "moves": ["Liquidation","Leech Life", "Poison Jab","Infestation"]
         },
-        "Bug Catcher Charlotte | Route 114": {  
+        "Ranger Charlotte | Route 114": {  
             "index": "0000000387",
-            "level": 43,
+            "level": 45,
             "ability": "Water Bubble",
             "item": "Mystic Water", 
             "nature": "Impish",
@@ -5397,7 +5419,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Belly Drum","Jet Punch","Ice Punch","Drain Punch"]
+            "moves": ["Belly Drum","Waterfall","Ice Punch","Drain Punch"]
         },
         "Riley & Callie ET*R*| Route 120": {  
         "index": "0000000665",
@@ -5992,7 +6014,7 @@ var SETDEX_SV = {
     "Golisopod": {
         "Fisherman Kai | Route 114": {  
             "index": "0000000381",
-            "level": 44,
+            "level": 45,
             "ability": "Emergency Exist",
             "item": "Assault Vest", 
             "nature": "Jolly",
@@ -6010,61 +6032,38 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
             },
-            "moves": ["First Impression", "Liquidation", "X-Scissor", "Trick Room"],
+            "moves": ["First Impression", "Liquidation", "X-Scissor", "Rock Slide"],
         },
     },
-    "Dewgong": {
+    "Walrein": {
         "Fisherman Kai | Route 114": {  
             "index": "0000000382",
             "level": 46,
-            "ability": "Technician",
-            "item": "Wide Lens", 
-            "nature": "Jolly",
+            "ability": "Oblivious",
+            "item": "Quick Claw", 
+            "nature": "Relaxed",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["Hydro Pump","Sheer Cold", "Ice Shard","Fake Out"]
+            "moves": ["Super Fang","Body Press","Surf","Icicle Crash"]
         }
     },
-    "Floatzel": {
-        "Fisherman Kai | Route 114": {  
-            "index": "0000000383",
-            "level": 46,
-            "ability": "Swift Swim",
-            "item": "Life Orb", 
-            "nature": "Naive",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Ice Beam","Knock Off", "Aqua Tail","Razor Wind"]
-        }
-    },
-    "Beedrill": {
-        "Bug Catcher Charlotte | Route 114": {  
+    //383 Crawdaunt
+    "Dragalge": {
+        "Ranger Charlotte | Route 114": {  
             "index": "0000000384",
             "level": 46,
-            "ability": "Sniper",
-            "item": "Choice Band", 
-            "nature": "Jolly",
+            "ability": "Sticky Hold",
+            "item": "Quick Claw", 
+            "nature": "Sassy",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
             },
-            "moves": ["U-turn"]
-        },
-        "Bug Catcher Buggford | Fortree Gym": {  
-        "index": "0000000650",
-            "level": 71,
-            "ability": "Sniper",
-            "item": "Scope Lens",
-            "nature": "Jolly",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Cross Poison","X-Scissor","Drill Run","Pursuit"],
+            "moves": ["Toxic Spikes","Muddy Water","Ice Beam","Sludge Bomb"],
         },
     },
     "Drapion": {
-        "Bug Catcher Charlotte | Route 114": {  
+        "Ranger Charlotte | Route 114": {  
             "index": "0000000385",
             "level": 45,
             "ability": "Sniper",
@@ -6087,36 +6086,13 @@ var SETDEX_SV = {
             "moves": ["Cross Poison","Night Slash", "Ice Fang","Swords Dance"]
         }
     },
-    "Butterfree": {
-        "Bug Catcher Charlotte | Route 114": {  
-            "index": "0000000386",
-            "level": 44,
-            "ability": "Compound Eyes",
-            "item": "Focus Sash", 
-            "nature": "Timid",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31  
-            },
-            "moves": ["Reflect","Glitzy Glow", "Signal Beam","Sleep Powder"]
-        },
-        "Bug Catcher Buggford | Fortree Gym": {  
-        "index": "0000000654",
-            "level": 72,
-            "ability": "Compound Eyes",
-            "item": "Grass Gem",
-            "nature": "Timid",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Sleep Powder","Stun Spore","Energy Ball","Psyshock"],
-        },
-    },
+    //386 Hawlucha
     //387 Araquanid
     //388 Gengar
     "Runerigus": {
         "Hex Maniac Nancy | Route 114": {  
             "index": "0000000389",
-            "level": 43,
+            "level": 45,
             "ability": "Wandering Spirit",
             "item": "Leftovers", 
             "nature": "Relaxed",
@@ -6142,9 +6118,9 @@ var SETDEX_SV = {
     //392 Blastoise
     //393 Tauros-Paldea-Aqua
     "Lumineon": {
-        "Fisherman Clause | Route 114": {  
+        "Fisherman Claude | Route 114": {  
             "index": "0000000394",
-            "level": 44,
+            "level": 47,
             "ability": "Storm Drain",
             "item": "Wise Glasses", 
             "nature": "Timid",
@@ -8201,7 +8177,19 @@ var SETDEX_SV = {
         },
     },
     //649 Kleavor
-    //650 Beedrill
+    "Beedrill": {
+        "Bug Catcher Buggford | Fortree Gym": {  
+        "index": "0000000650",
+            "level": 71,
+            "ability": "Sniper",
+            "item": "Scope Lens",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Cross Poison","X-Scissor","Drill Run","Pursuit"],
+        },
+    },
     //651 Ledian
     //652 Yanmega
     "Volcarona": {
@@ -8217,7 +8205,19 @@ var SETDEX_SV = {
             "moves": ["Will-O-Wisp","Fiery Dance","Hurricane","Quiver Dance"],
         },
     },
-    //654 Butterfree
+    "Butterfree": {
+        "Bug Catcher Buggford | Fortree Gym": {  
+        "index": "0000000654",
+            "level": 72,
+            "ability": "Compound Eyes",
+            "item": "Grass Gem",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sleep Powder","Stun Spore","Energy Ball","Psyshock"],
+        },
+    },
     "Togekiss": {
     "Leader Winona | Fortree Gym": {  
         "index": "0000000655",
