@@ -1134,9 +1134,6 @@ function calculateDfModsSMSSSV(gen, attacker, defender, move, field, desc, isCri
         }
         dfMods.push(3072);
     }
-    if (move.named('Explosion', 'Self-Destruct', 'Misty Explosion')) {
-        dfMods.push(2048);
-    }
     if ((defender.hasAbility('Protosynthesis') &&
         (field.hasWeather('Sun') || attacker.hasItem('Booster Energy'))) ||
         (defender.hasAbility('Quark Drive') &&
