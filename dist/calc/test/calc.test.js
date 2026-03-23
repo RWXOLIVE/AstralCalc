@@ -10,17 +10,6 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var __values = (this && this.__values) || function(o) {
-    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
-    if (m) return m.call(o);
-    if (o && typeof o.length === "number") return {
-        next: function () {
-            if (o && i >= o.length) o = void 0;
-            return { value: o && o[i++], done: !o };
-        }
-    };
-    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
-};
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -36,6 +25,17 @@ var __read = (this && this.__read) || function (o, n) {
         finally { if (e) throw e.error; }
     }
     return ar;
+};
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
 exports.__esModule = true;
 var helper_1 = require("./helper");
@@ -54,6 +54,34 @@ describe('calc', function () {
                 var result = calculate(Pokemon('Arceus', { item: 'Meadow Plate' }), Pokemon('Blastoise'), Move('Judgment'));
                 expect(result.range()).toEqual([194, 230]);
                 expect(result.desc()).toBe('0 SpA Meadow Plate Arceus Judgment vs. 0 HP / 0 SpD Blastoise: 194-230 (64.8 - 76.9%) -- guaranteed 2HKO');
+            });
+        });
+        (0, helper_1.inGens)(4, 9, function (_a) {
+            var gen = _a.gen, calculate = _a.calculate, Pokemon = _a.Pokemon, Move = _a.Move;
+            test("Big Root boosts draining move damage (gen ".concat(gen, ")"), function () {
+                var defender = function () { return Pokemon('Blastoise', {
+                    nature: 'Calm',
+                    evs: { hp: 252, spd: 252 }
+                }); };
+                var plain = calculate(Pokemon('Venusaur', { nature: 'Modest', evs: { spa: 252 } }), defender(), Move('Giga Drain'));
+                var boosted = calculate(Pokemon('Venusaur', { item: 'Big Root', nature: 'Modest', evs: { spa: 252 } }), defender(), Move('Giga Drain'));
+                var _a = __read(plain.range(), 2), plainMin = _a[0], plainMax = _a[1];
+                var _b = __read(boosted.range(), 2), boostedMin = _b[0], boostedMax = _b[1];
+                expect(boostedMin).toBeGreaterThan(plainMin);
+                expect(boostedMax).toBeGreaterThan(plainMax);
+                expect(boostedMin / plainMin).toBeGreaterThan(1.25);
+                expect(boostedMin / plainMin).toBeLessThan(1.35);
+                expect(boostedMax / plainMax).toBeGreaterThan(1.25);
+                expect(boostedMax / plainMax).toBeLessThan(1.35);
+                expect(boosted.desc()).toContain('Big Root');
+            });
+        });
+        (0, helper_1.inGens)(4, 9, function (_a) {
+            var gen = _a.gen, calculate = _a.calculate, Pokemon = _a.Pokemon, Move = _a.Move, Field = _a.Field;
+            test("Trick Room reverses move order checks (gen ".concat(gen, ")"), function () {
+                var normal = calculate(Pokemon('Mew', { nature: 'Jolly', evs: { atk: 252, spe: 252 } }), Pokemon('Snorlax', { nature: 'Brave', ivs: { spe: 0 }, evs: { hp: 252 } }), Move('Payback'));
+                var trickRoom = calculate(Pokemon('Mew', { nature: 'Jolly', evs: { atk: 252, spe: 252 } }), Pokemon('Snorlax', { nature: 'Brave', ivs: { spe: 0 }, evs: { hp: 252 } }), Move('Payback'), Field({ isTrickRoom: true }));
+                expect(trickRoom.range()[0]).toBeGreaterThan(normal.range()[1]);
             });
         });
         (0, helper_1.inGens)(1, 9, function (_a) {
@@ -235,6 +263,29 @@ describe('calc', function () {
                     }
                     finally { if (e_2) throw e_2.error; }
                 }
+            });
+            test("Fog should boost Weather Ball without changing its type (gen ".concat(gen, ")"), function () {
+                var clear = calculate(Pokemon('Castform'), Pokemon('Bulbasaur'), Move('Weather Ball'));
+                var fog = calculate(Pokemon('Castform'), Pokemon('Bulbasaur'), Move('Weather Ball'), Field({ weather: 'Fog' }));
+                var _a = __read(clear.range(), 2), clearMin = _a[0], clearMax = _a[1];
+                var _b = __read(fog.range(), 2), fogMin = _b[0], fogMax = _b[1];
+                expect(fogMin).toBeGreaterThan(clearMin);
+                expect(fogMax).toBeGreaterThan(clearMax);
+                expect(fog.desc()).toContain('100 BP Normal');
+                expect(fog.desc()).toContain('in Fog');
+            });
+            test("Fog should halve Solar Beam damage (gen ".concat(gen, ")"), function () {
+                var clear = calculate(Pokemon('Venusaur'), Pokemon('Blastoise'), Move('Solar Beam'));
+                var fog = calculate(Pokemon('Venusaur'), Pokemon('Blastoise'), Move('Solar Beam'), Field({ weather: 'Fog' }));
+                var _a = __read(clear.range(), 2), clearMin = _a[0], clearMax = _a[1];
+                var _b = __read(fog.range(), 2), fogMin = _b[0], fogMax = _b[1];
+                expect(fogMin).toBeLessThan(clearMin);
+                expect(fogMax).toBeLessThan(clearMax);
+                expect(fogMin / clearMin).toBeGreaterThan(0.45);
+                expect(fogMin / clearMin).toBeLessThan(0.55);
+                expect(fogMax / clearMax).toBeGreaterThan(0.45);
+                expect(fogMax / clearMax).toBeLessThan(0.55);
+                expect(fog.desc()).toContain('in Fog');
             });
         });
         (0, helper_1.inGens)(6, 9, function (_a) {

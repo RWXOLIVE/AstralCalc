@@ -216,7 +216,7 @@ function getMaxMoveName(moveType, pokemonSpecies, isStatus, pokemonAbility) {
             return 'Max Starfall';
         if (pokemonAbility === 'Aerilate')
             return 'Max Airstream';
-        if (pokemonAbility === 'Swarm')
+        if (pokemonAbility === 'Swarm Lash')
             return 'Max Flutterby';
         if (pokemonAbility === 'Refrigerate')
             return 'Max Hailstorm';

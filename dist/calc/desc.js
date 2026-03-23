@@ -684,6 +684,9 @@ function buildDescription(description, attacker, defender) {
     if (description.isBurned) {
         output += 'burned ';
     }
+    if (description.isFrostbite) {
+        output += 'frostbite ';
+    }
     if (description.alliesFainted) {
         output += Math.min(5, description.alliesFainted) +
             " ".concat(description.alliesFainted === 1 ? 'ally' : 'allies', " fainted ");

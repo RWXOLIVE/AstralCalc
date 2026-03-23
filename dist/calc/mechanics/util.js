@@ -137,6 +137,7 @@ function getFinalSpeed(gen, pokemon, field, side) {
         speedMods.push(8192);
     if ((pokemon.hasAbility('Unburden') && pokemon.abilityOn) ||
         (pokemon.hasAbility('Chlorophyll') && weather.includes('Sun')) ||
+        (pokemon.hasAbility('Heated Rush') && weather.includes('Sun')) ||
         (pokemon.hasAbility('Sand Rush') && weather === 'Sand') ||
         (pokemon.hasAbility('Swift Swim') && weather.includes('Rain')) ||
         (pokemon.hasAbility('Slush Rush') && ['Hail', 'Snow'].includes(weather)) ||
@@ -173,11 +174,24 @@ function getFinalSpeed(gen, pokemon, field, side) {
     return Math.max(0, speed);
 }
 exports.getFinalSpeed = getFinalSpeed;
-function getMoveEffectiveness(gen, move, type, isGhostRevealed, isGravity, isRingTarget) {
+function getTurnOrder(attacker, defender, field) {
+    if (attacker.stats.spe === defender.stats.spe) {
+        return 'last';
+    }
+    var attackerMovesFirst = field.isTrickRoom
+        ? attacker.stats.spe < defender.stats.spe
+        : attacker.stats.spe > defender.stats.spe;
+    return attackerMovesFirst ? 'first' : 'last';
+}
+exports.getTurnOrder = getTurnOrder;
+function getMoveEffectiveness(gen, move, type, isGhostRevealed, isPoisonRevealed, isGravity, isRingTarget) {
     if ((isRingTarget || isGhostRevealed) && type === 'Ghost' && move.hasType('Normal', 'Fighting')) {
         return 1;
     }
     else if ((isRingTarget || isGravity) && type === 'Flying' && move.hasType('Ground')) {
+        return 1;
+    }
+    else if ((isRingTarget || isPoisonRevealed) && type === 'Steel' && move.hasType('Poison')) {
         return 1;
     }
     else if (move.named('Freeze-Dry') && type === 'Water') {
@@ -256,6 +270,23 @@ function checkIntimidate(gen, source, target) {
         }
         if (target.hasAbility('Competitive')) {
             target.boosts.spa = Math.min(6, target.boosts.spa + 2);
+        }
+    }
+    if (source.hasAbility('Illuminate') && source.abilityOn && !blocked) {
+        if (target.hasAbility('Contrary')) {
+            target.boosts.spa = Math.min(6, target.boosts.spa + 1);
+        }
+        else if (target.hasAbility('Simple')) {
+            target.boosts.spa = Math.max(-6, target.boosts.spa - 2);
+        }
+        else {
+            target.boosts.spa = Math.max(-6, target.boosts.spa - 1);
+        }
+        if (target.hasAbility('Competitive')) {
+            target.boosts.spa = Math.min(6, target.boosts.spa + 2);
+        }
+        else if (target.hasAbility('Defiant')) {
+            target.boosts.atk = Math.min(6, target.boosts.atk + 2);
         }
     }
 }
@@ -456,12 +487,14 @@ function getMostProficientStat(pokemon, gen) {
     return bestStat;
 }
 exports.getMostProficientStat = getMostProficientStat;
-function getFinalDamage(baseAmount, i, effectiveness, isBurned, stabMod, finalMod, protect) {
+function getFinalDamage(baseAmount, i, effectiveness, isBurned, isFrostbite, stabMod, finalMod, protect) {
     var damageAmount = Math.floor(OF32(baseAmount * (85 + i)) / 100);
     if (stabMod !== 4096)
         damageAmount = OF32(damageAmount * stabMod) / 4096;
     damageAmount = Math.floor(OF32(pokeRound(damageAmount) * effectiveness));
     if (isBurned)
+        damageAmount = Math.floor(damageAmount / 2);
+    if (isFrostbite)
         damageAmount = Math.floor(damageAmount / 2);
     if (protect)
         damageAmount = pokeRound(OF32(damageAmount * 1024) / 4096);

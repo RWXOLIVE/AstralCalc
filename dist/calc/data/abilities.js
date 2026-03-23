@@ -371,6 +371,17 @@ var SV = SS.concat([
     'Zero to Hero',
     'Floral Payload',
     'Heart Boost',
+    'Swarm Lash',
+    'Lunar Veil',
+    'Solar Veil',
+    'Blazing Soul',
+    'Grit',
+    'Shroud',
+    'Lucid',
+    'Striker',
+    'Heated Rush',
+    'Luchador\'s Pride',
+    'Echoing Alloy',
 ]);
 exports.ABILITIES = [[], RBY, GSC, ADV, DPP, BW, XY, SM, SS, SV];
 var Abilities = (function () {

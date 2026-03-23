@@ -26,6 +26,54 @@ describe('calc', () => {
       });
     });
 
+    inGens(4, 9, ({gen, calculate, Pokemon, Move}) => {
+      test(`Big Root boosts draining move damage (gen ${gen})`, () => {
+        const defender = () => Pokemon('Blastoise', {
+          nature: 'Calm',
+          evs: {hp: 252, spd: 252},
+        });
+        const plain = calculate(
+          Pokemon('Venusaur', {nature: 'Modest', evs: {spa: 252}}),
+          defender(),
+          Move('Giga Drain')
+        );
+        const boosted = calculate(
+          Pokemon('Venusaur', {item: 'Big Root', nature: 'Modest', evs: {spa: 252}}),
+          defender(),
+          Move('Giga Drain')
+        );
+
+        const [plainMin, plainMax] = plain.range();
+        const [boostedMin, boostedMax] = boosted.range();
+
+        expect(boostedMin).toBeGreaterThan(plainMin);
+        expect(boostedMax).toBeGreaterThan(plainMax);
+        expect(boostedMin / plainMin).toBeGreaterThan(1.25);
+        expect(boostedMin / plainMin).toBeLessThan(1.35);
+        expect(boostedMax / plainMax).toBeGreaterThan(1.25);
+        expect(boostedMax / plainMax).toBeLessThan(1.35);
+        expect(boosted.desc()).toContain('Big Root');
+      });
+    });
+
+    inGens(4, 9, ({gen, calculate, Pokemon, Move, Field}) => {
+      test(`Trick Room reverses move order checks (gen ${gen})`, () => {
+        const normal = calculate(
+          Pokemon('Mew', {nature: 'Jolly', evs: {atk: 252, spe: 252}}),
+          Pokemon('Snorlax', {nature: 'Brave', ivs: {spe: 0}, evs: {hp: 252}}),
+          Move('Payback')
+        );
+        const trickRoom = calculate(
+          Pokemon('Mew', {nature: 'Jolly', evs: {atk: 252, spe: 252}}),
+          Pokemon('Snorlax', {nature: 'Brave', ivs: {spe: 0}, evs: {hp: 252}}),
+          Move('Payback'),
+          Field({isTrickRoom: true})
+        );
+
+        expect(trickRoom.range()[0]).toBeGreaterThan(normal.range()[1]);
+      });
+    });
+
     inGens(1, 9, ({gen, calculate, Pokemon, Move}) => {
       test(`Night Shade / Seismic Toss (gen ${gen})`, () => {
         const mew = Pokemon('Mew', {level: 50});
@@ -195,6 +243,45 @@ describe('calc', () => {
             `0 ${atk} Castform Weather Ball (100 BP ${type}) vs. 0 HP / 0 ${def} Bulbasaur in ${weather}: ${dmg.range[0]}-${dmg.range[1]} ${dmg.desc}`
           );
         }
+      });
+
+      test(`Fog should boost Weather Ball without changing its type (gen ${gen})`, () => {
+        const clear = calculate(Pokemon('Castform'), Pokemon('Bulbasaur'), Move('Weather Ball'));
+        const fog = calculate(
+          Pokemon('Castform'),
+          Pokemon('Bulbasaur'),
+          Move('Weather Ball'),
+          Field({weather: 'Fog' as Weather})
+        );
+
+        const [clearMin, clearMax] = clear.range();
+        const [fogMin, fogMax] = fog.range();
+
+        expect(fogMin).toBeGreaterThan(clearMin);
+        expect(fogMax).toBeGreaterThan(clearMax);
+        expect(fog.desc()).toContain('100 BP Normal');
+        expect(fog.desc()).toContain('in Fog');
+      });
+
+      test(`Fog should halve Solar Beam damage (gen ${gen})`, () => {
+        const clear = calculate(Pokemon('Venusaur'), Pokemon('Blastoise'), Move('Solar Beam'));
+        const fog = calculate(
+          Pokemon('Venusaur'),
+          Pokemon('Blastoise'),
+          Move('Solar Beam'),
+          Field({weather: 'Fog' as Weather})
+        );
+
+        const [clearMin, clearMax] = clear.range();
+        const [fogMin, fogMax] = fog.range();
+
+        expect(fogMin).toBeLessThan(clearMin);
+        expect(fogMax).toBeLessThan(clearMax);
+        expect(fogMin / clearMin).toBeGreaterThan(0.45);
+        expect(fogMin / clearMin).toBeLessThan(0.55);
+        expect(fogMax / clearMax).toBeGreaterThan(0.45);
+        expect(fogMax / clearMax).toBeLessThan(0.55);
+        expect(fog.desc()).toContain('in Fog');
       });
     });
 

@@ -351,6 +351,7 @@ var BW = DPP.concat([
     'Shock Drive',
     'Steel Gem',
     'Water Gem',
+    'Butterfrite',
 ]);
 exports.MEGA_STONES = {
     Absolite: 'Absol',
@@ -399,7 +400,7 @@ exports.MEGA_STONES = {
     Slowbronite: 'Slowbro',
     Steelixite: 'Steelix',
     Swampertite: 'Swampert',
-    Tyranitarite: 'Tyranitar',
+    Butterfrite: 'Butterfree',
     Venusaurite: 'Venusaur'
 };
 var XY = BW.concat(__spreadArray(__spreadArray([], __read(Object.keys(exports.MEGA_STONES)), false), [

@@ -11,12 +11,13 @@ export type ItemName = string & As<'ItemName'>;
 export type MoveName = string & As<'MoveName'>;
 export type SpeciesName = string & As<'SpeciesName'>;
 
-export type StatusName = 'slp' | 'psn' | 'brn' | 'frz' | 'par' | 'tox';
+export type StatusName = 'slp' | 'psn' | 'brn' | 'frz' | 'par' | 'tox' | 'frb';
 
 export type GameType = 'Singles' | 'Doubles';
 export type Terrain = 'Electric' | 'Grassy' | 'Psychic' | 'Misty';
 export type Weather =
-  | 'Sand' | 'Sun' | 'Rain' | 'Hail' | 'Snow' | 'Harsh Sunshine' | 'Heavy Rain' | 'Strong Winds';
+  | 'Sand' | 'Sun' | 'Rain' | 'Hail' | 'Snow' | 'Fog' |
+    'Harsh Sunshine' | 'Heavy Rain' | 'Strong Winds';
 
 export type NatureName =
   'Adamant' | 'Bashful' | 'Bold' | 'Brave' | 'Calm' |
@@ -91,6 +92,7 @@ export interface MoveFlags {
   sound?: 1 | 0;
   // TODO: heal?: 1 | 0;
   punch?: 1 | 0;
+  kick?: 1 | 0;
   bullet?: 1 | 0;
   pulse?: 1 | 0;
   slicing?: 1 | 0;

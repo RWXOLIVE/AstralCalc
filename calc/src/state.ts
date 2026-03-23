@@ -38,6 +38,7 @@ export namespace State {
     gameType: I.GameType;
     weather?: I.Weather;
     terrain?: I.Terrain;
+    isTrickRoom?: boolean;
     isMagicRoom?: boolean;
     isWonderRoom?: boolean;
     isGravity?: boolean;

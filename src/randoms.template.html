@@ -156,7 +156,9 @@
                 </div>
                 <div>
                     <label for="levelL1">Level</label>
-                    <input class="level calc-trigger" id="levelL1" value="100" />
+                    <input class="level calc-trigger" id="levelL1" type="number" step="1" value="100" />
+                    <span class="level-cap-text">Cap</span>
+                    <input class="level-cap calc-trigger" type="number" min="0" max="100" step="1" value="100" />
                 </div>
                 <div class="hide">
                     <label for="weightL1">Weight (kg)</label>
@@ -488,6 +490,7 @@
                         <option value="Paralyzed">Paralyzed</option>
                         <option value="Asleep">Asleep</option>
                         <option value="Frozen">Frozen</option>
+                        <option value="Frostbite">Frostbite</option>
                     </select>
                     <select aria-label="Toxic counter" class="toxic-counter calc-trigger hide">
                         <option value="1">1/16</option>
@@ -720,7 +723,9 @@
                         <input class="visually-hidden calc-trigger" type="radio" name="weather" value="Sand" id="sand" />
                         <label class="btn btn-small btn-mid" for="sand">Sand</label>
                         <input class="visually-hidden calc-trigger" type="radio" name="weather" value="Hail" id="hail" />
-                        <label class="btn btn-small btn-right" for="hail">Hail</label>
+                        <label class="btn btn-small btn-mid" for="hail">Hail</label>
+                        <input class="visually-hidden calc-trigger" type="radio" name="weather" value="Fog" id="fog" />
+                        <label class="btn btn-small btn-right" for="fog">Fog</label>
                     </div>
                     <div  class="gen-specific g9" style="width: 22.2em; margin: 5px auto;" title="Select the current weather condition.">
                         <input class="visually-hidden calc-trigger" type="radio" name="weather" value="" id="clear" checked="checked" />
@@ -732,7 +737,9 @@
                         <input class="visually-hidden calc-trigger" type="radio" name="weather" value="Sand" id="sand" />
                         <label class="btn btn-small btn-mid" for="sand">Sand</label>
                         <input class="visually-hidden calc-trigger" type="radio" name="weather" value="Snow" id="snow" />
-                        <label class="btn btn-small btn-right" for="snow">Snow</label>
+                        <label class="btn btn-small btn-mid" for="snow">Snow</label>
+                        <input class="visually-hidden calc-trigger" type="radio" name="weather" value="Fog" id="fog" />
+                        <label class="btn btn-small btn-right" for="fog">Fog</label>
                     </div>
                     <div class="gen-specific g6 g7 hide" title="Select the current weather condition.">
                         <input class="visually-hidden calc-trigger" type="radio" name="weather" value="Harsh Sunshine" id="harsh-sunshine" />
@@ -978,6 +985,14 @@
                                 <label class="btn btn-xxwide" for="switchingR">Switching Out</label>
                             </div></td>
                         </tr>
+                        <tr class="gen-specific g4 g5 g6 g7 g8 g9">
+                            <td></td>
+                            <td><div class="right" title="Is Trick Room active on the field?">
+                                <div hidden id="selectTrickRoomInstruction">Is Trick Room active on the field?</div>
+                                <input aria-describedby="selectTrickRoomInstruction" class="visually-hidden calc-trigger" type="checkbox" id="trickRoomR" />
+                                <label class="btn btn-xxwide" for="trickRoomR">Trick Room</label>
+                            </div></td>
+                        </tr>
                     </tbody>
                 </table>
             </fieldset>
@@ -1008,7 +1023,7 @@
                 </div>
                 <div>
                     <label for="levelR1">Level</label>
-                    <input class="level calc-trigger" id="levelR1" value="100" />
+                    <input class="level calc-trigger" id="levelR1" type="number" step="1" value="100" />
                 </div>
                 <div class="hide">
                     <label for="weightR1">Weight (kg)</label>
@@ -1340,6 +1355,7 @@
                         <option value="Paralyzed">Paralyzed</option>
                         <option value="Asleep">Asleep</option>
                         <option value="Frozen">Frozen</option>
+                        <option value="Frostbite">Frostbite</option>
                     </select>
                     <select aria-label="Toxic counter" class="toxic-counter calc-trigger hide">
                         <option value="1">1/16</option>
@@ -1568,6 +1584,7 @@
     <script type="text/javascript" src="./calc/result.js?"></script>
     <script type="text/javascript" src="./calc/adaptable.js?"></script>
     <script type="text/javascript" src="./calc/index.js?"></script>
+    <script type="text/javascript" src="./js/spritedata.js?"></script>
     <script type="text/javascript" src="./js/shared_controls.js?"></script>
     <script type="text/javascript" src="./js/index_randoms_controls.js?"></script>
     <script type="text/javascript" src="./js/moveset_import.js?"></script>

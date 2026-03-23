@@ -5,6 +5,7 @@ export class Field implements State.Field {
   gameType: GameType;
   weather?: Weather;
   terrain?: Terrain;
+  isTrickRoom: boolean;
   isMagicRoom: boolean;
   isWonderRoom: boolean;
   isGravity: boolean;
@@ -23,6 +24,7 @@ export class Field implements State.Field {
     this.gameType = field.gameType || 'Singles';
     this.terrain = field.terrain;
     this.weather = field.weather;
+    this.isTrickRoom = !!field.isTrickRoom;
     this.isMagicRoom = !!field.isMagicRoom;
     this.isWonderRoom = !!field.isWonderRoom;
     this.isGravity = !!field.isGravity;
@@ -57,6 +59,7 @@ export class Field implements State.Field {
       gameType: this.gameType,
       weather: this.weather,
       terrain: this.terrain,
+      isTrickRoom: this.isTrickRoom,
       isMagicRoom: this.isMagicRoom,
       isWonderRoom: this.isWonderRoom,
       isGravity: this.isGravity,

@@ -27,6 +27,7 @@ export interface MoveData {
     readonly maxPower?: number;
     readonly makesContact?: boolean;
     readonly isPunch?: boolean;
+    readonly isKick?: boolean;
     readonly isBite?: boolean;
     readonly isBullet?: boolean;
     readonly isSound?: boolean;

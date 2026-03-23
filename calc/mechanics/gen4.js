@@ -80,6 +80,8 @@ function calculateDPP(gen, attacker, defender, move, field) {
         }
         else {
             move.type = 'Normal';
+            if (field.weather)
+                basePower *= 2;
         }
         desc.weather = field.weather;
         desc.moveType = move.type;
@@ -138,7 +140,7 @@ function calculateDPP(gen, attacker, defender, move, field) {
     if (move.hits > 1) {
         desc.hits = move.hits;
     }
-    var turnOrder = attacker.stats.spe > defender.stats.spe ? 'first' : 'last';
+    var turnOrder = (0, util_1.getTurnOrder)(attacker, defender, field);
     switch (move.name) {
         case 'Brine':
             if (defender.curHP() <= defender.maxHP() / 2) {
@@ -394,7 +396,7 @@ function calculateDPP(gen, attacker, defender, move, field) {
     }
     else if ((field.hasWeather('Sun') && move.hasType('Water')) ||
         (field.hasWeather('Rain') && move.hasType('Fire')) ||
-        (move.named('Solar Beam') && field.hasWeather('Rain', 'Sand', 'Hail'))) {
+        (move.named('Solar Beam') && field.hasWeather('Rain', 'Sand', 'Hail', 'Fog'))) {
         baseDamage = Math.floor(baseDamage * 0.5);
         desc.weather = field.weather;
     }

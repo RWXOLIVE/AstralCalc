@@ -81,7 +81,7 @@ function calculateBWXY(gen, attacker, defender, move, field) {
         }
     }
     var isAerilate = false;
-    var isSwarm = false;
+    var isSwarmLash = false;
     var isPixilate = false;
     var isRefrigerate = false;
     var isNormalize = false;
@@ -94,7 +94,7 @@ function calculateBWXY(gen, attacker, defender, move, field) {
         else if ((isPixilate = attacker.hasAbility('Pixilate') && normal)) {
             move.type = 'Fairy';
         }
-        else if ((isSwarm = attacker.hasAbility('Swarm') && normal)) {
+        else if ((isSwarmLash = attacker.hasAbility('Swarm Lash') && normal)) {
             move.type = 'Bug';
         }
         else if ((isRefrigerate = attacker.hasAbility('Refrigerate') && normal)) {
@@ -103,7 +103,7 @@ function calculateBWXY(gen, attacker, defender, move, field) {
         else if ((isNormalize = attacker.hasAbility('Normalize'))) {
             move.type = 'Normal';
         }
-        if (isPixilate || isRefrigerate || isAerilate || isSwarm || isNormalize) {
+        if (isPixilate || isRefrigerate || isAerilate || isSwarmLash || isNormalize) {
             desc.attackerAbility = attacker.ability;
         }
     }
@@ -205,7 +205,7 @@ function calculateBWXY(gen, attacker, defender, move, field) {
     if (move.hits > 1) {
         desc.hits = move.hits;
     }
-    var turnOrder = attacker.stats.spe > defender.stats.spe ? 'first' : 'last';
+    var turnOrder = (0, util_2.getTurnOrder)(attacker, defender, field);
     var basePower;
     switch (move.name) {
         case 'Payback':
@@ -421,7 +421,7 @@ function calculateBWXY(gen, attacker, defender, move, field) {
         bpMods.push(6144);
         desc.moveBP = basePower * 1.5;
     }
-    else if (move.named('Solar Beam') && field.hasWeather('Rain', 'Heavy Rain', 'Sand', 'Hail')) {
+    else if (move.named('Solar Beam') && field.hasWeather('Rain', 'Heavy Rain', 'Sand', 'Hail', 'Fog')) {
         bpMods.push(2048);
         desc.moveBP = basePower / 2;
         desc.weather = field.weather;
@@ -430,7 +430,7 @@ function calculateBWXY(gen, attacker, defender, move, field) {
         bpMods.push(6144);
         desc.isHelpingHand = true;
     }
-    if (isAerilate || isPixilate || isRefrigerate || isSwarm ||isNormalize) {
+    if (isAerilate || isPixilate || isRefrigerate || isSwarmLash ||isNormalize) {
         bpMods.push(5325);
         desc.attackerAbility = attacker.ability;
     }
@@ -513,6 +513,7 @@ function calculateBWXY(gen, attacker, defender, move, field) {
         (attacker.curHP() <= attacker.maxHP() / 3 &&
             ((attacker.hasAbility('Overgrow') && move.hasType('Grass')) ||
                 (attacker.hasAbility('Blaze') && move.hasType('Fire')) ||
+                (attacker.hasAbility('Swarm') && move.hasType('Bug')) ||
                 (attacker.hasAbility('Torrent') && move.hasType('Water')))) ||
         (move.category === 'Special' && attacker.abilityOn && attacker.hasAbility('Plus', 'Minus'))) {
         atMods.push(6144);

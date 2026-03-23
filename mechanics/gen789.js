@@ -43,6 +43,11 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
     }
     var breaksProtect = move.breaksProtect || move.isZ || attacker.isDynamaxed ||
         (attacker.hasAbility('Unseen Fist') && move.flags.contact);
+        if (!attacker.name) {
+            attacker.name = ""
+        } else if (!defender.name) {
+            defender.name = ""
+        }
     if (field.defenderSide.isProtected && !breaksProtect) {
         desc.isProtected = true;
         return result;
@@ -322,7 +327,11 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
         baseDamage = (0, util_2.pokeRound)((0, util_2.OF32)(baseDamage * 1024) / 4096);
     }
     var noWeatherBoost = defender.hasItem('Utility Umbrella');
-    if (!noWeatherBoost &&
+    if (field.hasWeather('Sun') && move.named('Hydro Steam') && !attacker.hasItem('Utility Umbrella')) {
+        baseDamage = pokeRound(OF32(baseDamage * 6144) / 4096);
+        desc.weather = field.weather;
+    }
+    else if (!noWeatherBoost &&
         ((field.hasWeather('Sun', 'Harsh Sunshine') && move.hasType('Fire')) ||
             (field.hasWeather('Rain', 'Heavy Rain') && move.hasType('Water')))) {
         baseDamage = (0, util_2.pokeRound)((0, util_2.OF32)(baseDamage * 6144) / 4096);
@@ -365,6 +374,11 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
         !attacker.hasAbility('Guts') &&
         !move.named('Facade');
     desc.isBurned = applyBurn;
+    var applyFrostbite = attacker.hasStatus('frb') &&
+        move.category === 'Special' &&
+        !attacker.hasAbility('Guts') &&
+        !move.named('Facade');
+    desc.isFrostbite = applyFrostbite;
     var finalMods = calculateFinalModsSMSSSV(gen, attacker, defender, move, field, desc, isCritical, typeEffectiveness);
     var protect = false;
     if (field.defenderSide.isProtected &&

@@ -1689,7 +1689,7 @@ var XY_PATCH = {
     'Hidden Power Ground': { bp: 60 },
     'Hidden Power Ice': { bp: 60 },
     'Hidden Power Poison': { bp: 60 },
-    'Hidden Power Psychic': { bp: 60 },
+    'Hidden Power Psychic': { bp: 70 },
     'Hidden Power Rock': { bp: 60 },
     'Hidden Power Steel': { bp: 60 },
     'Hidden Power Water': { bp: 60 },
@@ -4786,6 +4786,8 @@ var Move = (function () {
             this.flags.contact = 1;
         if (data.isPunch)
             this.flags.punch = 1;
+        if (data.isKick)
+            this.flags.kick = 1;
         if (data.isBite)
             this.flags.bite = 1;
         if (data.isBullet)

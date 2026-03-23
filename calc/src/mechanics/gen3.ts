@@ -258,7 +258,7 @@ export function calculateADV(
   } else if (
     (field.hasWeather('Sun') && move.hasType('Water')) ||
     (field.hasWeather('Rain') && move.hasType('Fire')) ||
-    (move.named('Solar Beam') && field.hasWeather('Rain', 'Sand', 'Hail'))
+    (move.named('Solar Beam') && field.hasWeather('Rain', 'Sand', 'Hail', 'Fog'))
   ) {
     baseDamage = Math.floor(baseDamage / 2);
     desc.weather = field.weather;

@@ -9,6 +9,7 @@ import {
   getModifiedStat,
   getEVDescriptionText,
   getFinalSpeed,
+  getTurnOrder,
   getMoveEffectiveness,
   checkAirLock,
   checkForecast,
@@ -81,6 +82,7 @@ export function calculateDPP(
       basePower *= 2;
     } else {
       move.type = 'Normal';
+      if (field.weather) basePower *= 2;
     }
 
     desc.weather = field.weather;
@@ -149,7 +151,7 @@ export function calculateDPP(
   if (move.hits > 1) {
     desc.hits = move.hits;
   }
-  const turnOrder = attacker.stats.spe > defender.stats.spe ? 'first' : 'last';
+  const turnOrder = getTurnOrder(attacker, defender, field);
 
   // #endregion
   // #region Base Power
@@ -237,6 +239,9 @@ export function calculateDPP(
   if ((attacker.hasItem('Muscle Band') && isPhysical) ||
       (attacker.hasItem('Wise Glasses') && !isPhysical)) {
     basePower = Math.floor(basePower * 1.1);
+    desc.attackerItem = attacker.item;
+  } else if (attacker.hasItem('Big Root') && move.drain) {
+    basePower = Math.floor(basePower * 1.3);
     desc.attackerItem = attacker.item;
   } else if (move.hasType(getItemBoostType(attacker.item)) ||
     (attacker.hasItem('Adamant Orb') &&
@@ -430,7 +435,7 @@ export function calculateDPP(
   } else if (
     (field.hasWeather('Sun') && move.hasType('Water')) ||
     (field.hasWeather('Rain') && move.hasType('Fire')) ||
-    (move.named('Solar Beam') && field.hasWeather('Rain', 'Sand', 'Hail'))
+    (move.named('Solar Beam') && field.hasWeather('Rain', 'Sand', 'Hail', 'Fog'))
   ) {
     baseDamage = Math.floor(baseDamage * 0.5);
     desc.weather = field.weather;

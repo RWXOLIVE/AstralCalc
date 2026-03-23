@@ -23,6 +23,108 @@ for (var i = 0; i < 4; i++) {
 }
 
 var damageResults;
+var DAMAGE_ROLL_HIGHLIGHT_INDEX = 8;
+
+function getFastestSide(p1, p2, field) {
+	if (p1.stats.spe === p2.stats.spe) {
+		return "tie";
+	}
+	if (field.isTrickRoom) {
+		return p1.stats.spe < p2.stats.spe ? 0 : 1;
+	}
+	return p1.stats.spe > p2.stats.spe ? 0 : 1;
+}
+
+function getSpeedState(p1s, p2s, field) {
+	if (p1s === p2s) {
+		return "T";
+	}
+	if (field.isTrickRoom) {
+		return p1s < p2s ? "F" : "S";
+	}
+	return p1s > p2s ? "F" : "S";
+}
+
+function updateSpeedClasses(p1info, p2info, p1, p2, field) {
+	var p1Speed = p1info.find(".sp .totalMod");
+	var p2Speed = p2info.find(".sp .totalMod");
+	var speedClasses = "speed-faster speed-slower speed-tie";
+	p1Speed.removeClass(speedClasses);
+	p2Speed.removeClass(speedClasses);
+
+	var fastestSide = getFastestSide(p1, p2, field);
+	if (fastestSide === "tie") {
+		p1Speed.addClass("speed-tie");
+		p2Speed.addClass("speed-tie");
+		return;
+	}
+	if (fastestSide === 0) {
+		p1Speed.addClass("speed-faster");
+		p2Speed.addClass("speed-slower");
+		return;
+	}
+	p1Speed.addClass("speed-slower");
+	p2Speed.addClass("speed-faster");
+}
+
+function normalizeMoveTypeKey(rawType) {
+	return String(rawType || "")
+		.trim()
+		.toLowerCase()
+		.replace(/[()]/g, "")
+		.replace(/\s+/g, "");
+}
+
+function getMoveTypeColor(typeName) {
+	var key = normalizeMoveTypeKey(typeName);
+	return TYPE_COLOR_MAP && TYPE_COLOR_MAP[key] ? TYPE_COLOR_MAP[key] : "";
+}
+
+function getMoveLabelTextColor(backgroundHex) {
+	return "#101622";
+}
+
+function applyMoveResultLabelColor(labelNode, typeName, enabled) {
+	if (!labelNode || !labelNode.length) return;
+	if (!enabled) {
+		labelNode.removeClass("move-colour-btn");
+		labelNode.css({
+			backgroundColor: "",
+			borderColor: "",
+			color: ""
+		});
+		return;
+	}
+	var typeColor = getMoveTypeColor(typeName);
+	if (!typeColor) {
+		labelNode.removeClass("move-colour-btn");
+		labelNode.css({
+			backgroundColor: "",
+			borderColor: "",
+			color: ""
+		});
+		return;
+	}
+	labelNode.addClass("move-colour-btn");
+	labelNode.css({
+		backgroundColor: typeColor,
+		borderColor: typeColor,
+		color: getMoveLabelTextColor(typeColor)
+	});
+}
+
+function applyMoveResultColors(p1, p2) {
+	var enabled = typeof getAppSettings === "function" ? !!getAppSettings().moveColors : false;
+	for (var i = 0; i < 4; i++) {
+		var leftLabel = $(resultLocations[0][i].move + " + label");
+		var rightLabel = $(resultLocations[1][i].move + " + label");
+		var leftType = p1 && p1.moves && p1.moves[i] ? p1.moves[i].type : "";
+		var rightType = p2 && p2.moves && p2.moves[i] ? p2.moves[i].type : "";
+		applyMoveResultLabelColor(leftLabel, leftType, enabled);
+		applyMoveResultLabelColor(rightLabel, rightType, enabled);
+	}
+}
+
 function performCalculations() {
 	var p1info = $("#p1");
 	var p2info = $("#p2");
@@ -31,7 +133,18 @@ function performCalculations() {
 	var p1field = createField();
 	var p2field = p1field.clone().swap();
 
-	damageResults = calculateAllMoves(gen, p1, p1field, p2, p2field);
+	// Keep speed indicators in sync even if damage calc fails.
+	p1info.find(".sp .totalMod").text(p1.stats.spe);
+	p2info.find(".sp .totalMod").text(p2.stats.spe);
+	updateSpeedClasses(p1info, p2info, p1, p2, p1field);
+
+	try {
+		damageResults = calculateAllMoves(gen, p1, p1field, p2, p2field);
+	} catch (err) {
+		console.error("Damage calculation failed while updating results.", err);
+		applyMoveResultColors(p1, p2);
+		return;
+	}
 	p1 = damageResults[0][0].attacker;
 	p2 = damageResults[1][0].attacker;
 	var battling = [p1, p2];
@@ -39,7 +152,8 @@ function performCalculations() {
 	p2.maxDamages = [];
 	p1info.find(".sp .totalMod").text(p1.stats.spe);
 	p2info.find(".sp .totalMod").text(p2.stats.spe);
-	var fastestSide = p1.stats.spe > p2.stats.spe ? 0 : p1.stats.spe === p2.stats.spe ? "tie" : 1;
+	updateSpeedClasses(p1info, p2info, p1, p2, p1field);
+	var fastestSide = getFastestSide(p1, p2, p1field);
 
 	var result, maxDamage;
 	var bestResult;
@@ -86,6 +200,7 @@ function performCalculations() {
 			bestResult = $(resultLocations[fastestSide][bestMove].move);
 		}
 	}
+	applyMoveResultColors(p1, p2);
 	if ($('.locked-move').length) {
 		bestResult = $('.locked-move');
 	} else {
@@ -115,7 +230,7 @@ function calculationsColors(p1info, p2) {
 	var p1s = p1.stats.spe;
 	var p2s = p2.stats.spe;
 	//Faster Tied Slower
-	var fastest = p1s > p2s ? "F" : p1s < p2s ? "S" : p1s === p2s ? "T" : undefined;
+	var fastest = getSpeedState(p1s, p2s, p1field);
 	var result, highestRoll, lowestRoll, damage = 0;
 	//goes from the most optimist to the least optimist
 	var p1KO = 0, p2KO = 0;
@@ -190,22 +305,51 @@ $(".result-move").change(function () {
 			var desc = result.fullDesc(notation, false);
 			if (desc.indexOf('--') === -1) desc += ' -- possibly the worst move ever';
 			$("#mainResult").text(desc);
-			$("#damageValues").text("Possible damage amounts: (" + displayDamageHits(result.damage) + ")");
+			$("#damageValues").html("Possible damage amounts: (" + displayDamageHits(result.damage) + ")");
 		}
 	}
 });
 
 function displayDamageHits(damage) {
 	// Fixed Damage
-	if (typeof damage === 'number') return damage;
+	if (typeof damage === 'number') return escapeDamageRoll(damage);
 	// Standard Damage
-	if (damage.length > 2) return damage.join(', ');
+	if (damage.length > 2) return formatDamageRolls(damage);
 	// Fixed Parental Bond Damage
 	if (typeof damage[0] === 'number' && typeof damage[1] === 'number') {
-		return '1st Hit: ' + damage[0] + '; 2nd Hit: ' + damage[1];
+		return '1st Hit: ' + escapeDamageRoll(damage[0]) + '; 2nd Hit: ' + escapeDamageRoll(damage[1]);
 	}
 	// Parental Bond Damage
-	return '1st Hit: ' + damage[0].join(', ') + '; 2nd Hit: ' + damage[1].join(', ');
+	return '1st Hit: ' + formatPlainDamageRolls(damage[0]) + '; 2nd Hit: ' + formatPlainDamageRolls(damage[1]);
+}
+
+function formatDamageRolls(damage) {
+	var rolls = [];
+	for (var i = 0; i < damage.length; i++) {
+		rolls.push(formatDamageRoll(damage[i], i));
+	}
+	return rolls.join(', ');
+}
+
+function formatPlainDamageRolls(damage) {
+	var rolls = [];
+	for (var i = 0; i < damage.length; i++) {
+		rolls.push(escapeDamageRoll(damage[i]));
+	}
+	return rolls.join(', ');
+}
+
+function formatDamageRoll(damageRoll, index) {
+	var escapedRoll = escapeDamageRoll(damageRoll);
+	if (index !== DAMAGE_ROLL_HIGHLIGHT_INDEX) return escapedRoll;
+	return '<span class="damage-roll-highlight">' + escapedRoll + '</span>';
+}
+
+function escapeDamageRoll(damageRoll) {
+	return String(damageRoll)
+		.replace(/&/g, '&amp;')
+		.replace(/</g, '&lt;')
+		.replace(/>/g, '&gt;');
 }
 
 function findDamageResult(resultMoveObj) {
@@ -287,7 +431,8 @@ $(document).ready(function () {
 		if (window.NO_CALC) {
 			return;
 		}
-		if (document.getElementById("cc-auto-refr").checked) {
+		var autoRefreshColorCodes = document.getElementById("cc-auto-refr");
+		if (autoRefreshColorCodes && autoRefreshColorCodes.checked && typeof window.refreshColorCode === "function") {
 			window.refreshColorCode();
 		}
 		performCalculations();

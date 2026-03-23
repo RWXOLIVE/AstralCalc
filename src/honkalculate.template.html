@@ -117,7 +117,7 @@
                         </div>
                         <div>
                             <label>Level</label>
-                            <input class="level" value="100" />
+                            <input class="level" type="number" step="1" value="100" />
                         </div>
                         <div class="hide">
                             <label>Weight (kg)</label>
@@ -427,6 +427,7 @@
                                 <option value="Paralyzed">Paralyzed</option>
                                 <option value="Asleep">Asleep</option>
                                 <option value="Frozen">Frozen</option>
+                                <option value="Frostbite">Frostbite</option>
                             </select>
                             <select class="toxic-counter hide">
                                 <option value="1">1/16</option>
@@ -637,7 +638,9 @@
                         <input class="visually-hidden" type="radio" name="weather" value="Sand" id="sand" />
                         <label class="btn btn-small btn-mid" for="sand">Sand</label>
                         <input class="visually-hidden" type="radio" name="weather" value="Hail" id="hail" />
-                        <label class="btn btn-small btn-right" for="hail">Hail</label>
+                        <label class="btn btn-small btn-mid" for="hail">Hail</label>
+                        <input class="visually-hidden" type="radio" name="weather" value="Fog" id="fog" />
+                        <label class="btn btn-small btn-right" for="fog">Fog</label>
                     </div>
                     <div class="gen-specific g6 g7 g8 g9" title="Select the current weather condition.">
                         <input class="visually-hidden" type="radio" name="weather" value="Harsh Sunshine" id="harsh-sunshine" />
@@ -837,6 +840,12 @@
                                 <input class="visually-hidden" type="checkbox" id="switchingR" />
                                 <label class="btn btn-xxwide" for="switchingR">Switching out</label>
                             </div>
+                        </div>
+                        <div class="btn-group gen-specific g4 g5 g6 g7 g8 g9">
+                            <div class="right" title="Is Trick Room active on the field?">
+                                <input class="visually-hidden" type="checkbox" id="trickRoomR" />
+                                <label class="btn btn-xxwide" for="trickRoomR">Trick Room</label>
+                            </div>
                     </div>
                 </div>
             </div>
@@ -913,6 +922,7 @@
     <script type="text/javascript" src="./calc/result.js?"></script>
     <script type="text/javascript" src="./calc/adaptable.js?"></script>
     <script type="text/javascript" src="./calc/index.js?"></script>
+    <script type="text/javascript" src="./js/spritedata.js?"></script>
     <script type="text/javascript" src="./js/shared_controls.js?"></script>
     <script type="text/javascript" src="./js/honkalculate_controls.js?"></script>
 

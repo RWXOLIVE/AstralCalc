@@ -371,6 +371,7 @@ var SV = SS.concat([
     'Zero to Hero',
     'Floral Payload',
     'Heart Boost',
+    'Swarm Lash'
 ]);
 exports.ABILITIES = [[], RBY, GSC, ADV, DPP, BW, XY, SM, SS, SV];
 var Abilities = (function () {

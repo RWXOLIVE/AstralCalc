@@ -28,6 +28,7 @@ import {
   getBaseDamage,
   getEVDescriptionText,
   getFinalDamage,
+  getTurnOrder,
   getModifiedStat,
   getMoveEffectiveness,
   getWeightFactor,
@@ -128,7 +129,7 @@ export function calculateBWXY(
   }
 
   let isAerilate = false;
-  let isSwarm = false;
+  let isSwarmLash = false;
   let isPixilate = false;
   let isRefrigerate = false;
   let isNormalize = false;
@@ -143,12 +144,12 @@ export function calculateBWXY(
       move.type = 'Fairy';
     } else if ((isRefrigerate = attacker.hasAbility('Refrigerate') && normal)) {
       move.type = 'Ice';
-    } else if ((isSwarm = attacker.hasAbility('Swarm') && normal)) {
+    } else if ((isSwarmLash = attacker.hasAbility('Swarm Lash') && normal)) {
       move.type = 'Bug';
     } else if ((isNormalize = attacker.hasAbility('Normalize'))) {
       move.type = 'Normal';
     }
-    if (isPixilate || isRefrigerate || isAerilate || isSwarm || isNormalize) {
+    if (isPixilate || isRefrigerate || isAerilate || isSwarmLash || isNormalize) {
       desc.attackerAbility = attacker.ability;
     }
   }
@@ -271,7 +272,7 @@ export function calculateBWXY(
     desc.hits = move.hits;
   }
 
-  const turnOrder = attacker.stats.spe > defender.stats.spe ? 'first' : 'last';
+  const turnOrder = getTurnOrder(attacker, defender, field);
 
   // #endregion
   // #region Base Power
@@ -464,7 +465,10 @@ export function calculateBWXY(
     desc.attackerAbility = attacker.ability;
   }
 
-  if (attacker.item && getItemBoostType(attacker.item) === move.type) {
+  if (attacker.hasItem('Big Root') && move.drain) {
+    bpMods.push(5325);
+    desc.attackerItem = attacker.item;
+  } else if (attacker.item && getItemBoostType(attacker.item) === move.type) {
     bpMods.push(4915);
     desc.attackerItem = attacker.item;
   } else if (
@@ -499,7 +503,7 @@ export function calculateBWXY(
   } else if (gen.num > 5 && move.named('Knock Off') && !resistedKnockOffDamage) {
     bpMods.push(6144);
     desc.moveBP = basePower * 1.5;
-  } else if (move.named('Solar Beam') && field.hasWeather('Rain', 'Heavy Rain', 'Sand', 'Hail')) {
+  } else if (move.named('Solar Beam') && field.hasWeather('Rain', 'Heavy Rain', 'Sand', 'Hail', 'Fog')) {
     bpMods.push(2048);
     desc.moveBP = basePower / 2;
     desc.weather = field.weather;
@@ -510,7 +514,7 @@ export function calculateBWXY(
     desc.isHelpingHand = true;
   }
 
-  if (isAerilate || isSwarm || isPixilate || isRefrigerate || isNormalize) {
+  if (isAerilate || isSwarmLash || isPixilate || isRefrigerate || isNormalize) {
     bpMods.push(5325);
     desc.attackerAbility = attacker.ability;
   } else if (
@@ -604,6 +608,7 @@ export function calculateBWXY(
       (attacker.curHP() <= attacker.maxHP() / 3 &&
         ((attacker.hasAbility('Overgrow') && move.hasType('Grass')) ||
          (attacker.hasAbility('Blaze') && move.hasType('Fire')) ||
+         (attacker.hasAbility('Swarm') && move.hasType('Bug')) ||
          (attacker.hasAbility('Torrent') && move.hasType('Water')))) ||
       (move.category === 'Special' && attacker.abilityOn && attacker.hasAbility('Plus', 'Minus'))
   ) {
@@ -792,6 +797,13 @@ export function calculateBWXY(
     !(move.named('Facade') && gen.num === 6);
   desc.isBurned = applyBurn;
 
+  const applyFrostbite =
+  attacker.hasStatus('frb') &&
+  move.category === 'Special' &&
+  !attacker.hasAbility('Guts') &&
+  !(move.named('Facade') && gen.num === 6);
+desc.isFrostbite = applyFrostbite;
+
   const finalMods = [];
 
   if (field.defenderSide.isReflect && move.category === 'Physical' && !isCritical) {
@@ -873,7 +885,7 @@ export function calculateBWXY(
   let damage: number[] = [];
   for (let i = 0; i < 16; i++) {
     damage[i] =
-      getFinalDamage(baseDamage, i, typeEffectiveness, applyBurn, stabMod, finalMod);
+      getFinalDamage(baseDamage, i, typeEffectiveness, applyBurn, applyFrostbite, stabMod, finalMod);
   }
 
   if (move.dropsStats && (move.timesUsed || 0) > 1) {
@@ -894,6 +906,7 @@ export function calculateBWXY(
             damageMultiplier,
             typeEffectiveness,
             applyBurn,
+            applyFrostbite,
             stabMod,
             finalMod
           );
