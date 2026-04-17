@@ -8,7 +8,7 @@
     <link type="text/css" rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css" />
     <link type="text/css" rel="stylesheet" href="https://cdn.datatables.net/colvis/1.1.1/css/dataTables.colVis.css" />
     <link type="text/css" rel="stylesheet" href="./js/vendor/select2/select2.css" />
-    <link type="text/css" rel="stylesheet" href="./css/main.css?5e83db7b" />
+    <link type="text/css" rel="stylesheet" href="./css/main.css?21a25007" />
     <link type="text/css" rel="stylesheet" href="./css/dark-theme.css" id="dark-theme-styles">
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-26211653-3"></script>
@@ -403,6 +403,15 @@
                         <div class="gen-specific g3 g4 g5 g6 g7 g8 g9">
                             <label>Ability</label>
                             <select class="ability terrain-trigger"></select>
+                            <select aria-label="Protosynthesis/Quark Drive state" class="proto-quark-state calc-trigger hide">
+                                <option value="auto" selected="selected">Auto-Select</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="atk">Attack</option>
+                                <option value="def">Defense</option>
+                                <option value="spa">Special Attack</option>
+                                <option value="spd">Special Defense</option>
+                                <option value="spe">Speed</option>
+                            </select>
                             <input hidden type="checkbox" title= "Is this ability active?" class="abilityToggle">
 									 <select hidden aria-label="Allies fainted" class="alliesFainted calc-trigger">
 										  <option value="0">Zero allies fainted</option>
@@ -468,7 +477,7 @@
                         <input class="move-crit visually-hidden" type="checkbox" id="critL1" />
                         <label class="btn crit-btn" for="critL1" title="Force this attack to be a critical hit?">Crit</label>
                         <input class="move-z visually-hidden" type="checkbox" id="zL1"/>
-                        <label class="btn z-btn gen-specific g7" for="zL1" title="Make this attack a Z-move?">Z</label>
+                        <span class="move-meta" title="Move PP and accuracy">PP -- | ACC --</span>
                         <select class="move-hits hide">
                             <option value="2">2 hits</option>
                             <option value="3">3 hits</option>
@@ -502,7 +511,7 @@
                         <input class="move-crit visually-hidden" type="checkbox" id="critL2" />
                         <label class="btn crit-btn" for="critL2" title="Force this attack to be a critical hit?">Crit</label>
                         <input class="move-z visually-hidden" type="checkbox" id="zL2"/>
-                        <label class="btn z-btn gen-specific g7" for="zL2" title="Make this attack a Z-move?">Z</label>
+                        <span class="move-meta" title="Move PP and accuracy">PP -- | ACC --</span>
                         <select class="move-hits hide">
                             <option value="2">2 hits</option>
                             <option value="3">3 hits</option>
@@ -536,7 +545,7 @@
                         <input class="move-crit visually-hidden" type="checkbox" id="critL3" />
                         <label class="btn crit-btn" for="critL3" title="Force this attack to be a critical hit?">Crit</label>
                         <input class="move-z visually-hidden" type="checkbox" id="zL3"/>
-                        <label class="btn z-btn gen-specific g7" for="zL3" title="Make this attack a Z-move?">Z</label>
+                        <span class="move-meta" title="Move PP and accuracy">PP -- | ACC --</span>
                         <select class="move-hits hide">
                             <option value="2">2 hits</option>
                             <option value="3">3 hits</option>
@@ -570,7 +579,7 @@
                         <input class="move-crit visually-hidden" type="checkbox" id="critL4" />
                         <label class="btn crit-btn" for="critL4" title="Force this attack to be a critical hit?">Crit</label>
                         <input class="move-z visually-hidden" type="checkbox" id="zL4"/>
-                        <label class="btn z-btn gen-specific g7" for="zL4" title="Make this attack a Z-move?">Z</label>
+                        <span class="move-meta" title="Move PP and accuracy">PP -- | ACC --</span>
                         <select class="move-hits hide">
                             <option value="2">2 hits</option>
                             <option value="3">3 hits</option>
@@ -638,7 +647,9 @@
                         <input class="visually-hidden" type="radio" name="weather" value="Sand" id="sand" />
                         <label class="btn btn-small btn-mid" for="sand">Sand</label>
                         <input class="visually-hidden" type="radio" name="weather" value="Hail" id="hail" />
-                        <label class="btn btn-small btn-right" for="hail">Hail</label>
+                        <label class="btn btn-small btn-mid" for="hail">Hail</label>
+                        <input class="visually-hidden" type="radio" name="weather" value="Fog" id="fog" />
+                        <label class="btn btn-small btn-right" for="fog">Fog</label>
                     </div>
                     <div class="gen-specific g6 g7 g8 g9" title="Select the current weather condition.">
                         <input class="visually-hidden" type="radio" name="weather" value="Harsh Sunshine" id="harsh-sunshine" />
@@ -838,6 +849,12 @@
                                 <input class="visually-hidden" type="checkbox" id="switchingR" />
                                 <label class="btn btn-xxwide" for="switchingR">Switching out</label>
                             </div>
+                        </div>
+                        <div class="btn-group gen-specific g4 g5 g6 g7 g8 g9">
+                            <div class="right" title="Is Trick Room active on the field?">
+                                <input class="visually-hidden" type="checkbox" id="trickRoomR" />
+                                <label class="btn btn-xxwide" for="trickRoomR">Trick Room</label>
+                            </div>
                     </div>
                 </div>
             </div>
@@ -883,8 +900,8 @@
     </script>
     <script type="text/javascript" src="./calc/util.js?51463f0d"></script>
     <script type="text/javascript" src="./calc/stats.js?a9e37d1a"></script>
-    <script type="text/javascript" src="./calc/data/species.js?4cc0a163"></script>
-    <script type="text/javascript" src="./js/data/sets/gen9.js?f030fe28"></script>
+    <script type="text/javascript" src="./calc/data/species.js?fb61b02a"></script>
+    <script type="text/javascript" src="./js/data/sets/gen9.js?0a81a391"></script>
     <script type="text/javascript" src="./js/data/sets/gen8.js?ecf43658"></script>
     <script type="text/javascript" src="./js/data/sets/gen7.js?78168bde"></script>
     <script type="text/javascript" src="./js/data/sets/gen6.js?2219279f"></script>
@@ -895,26 +912,28 @@
     <script type="text/javascript" src="./js/data/sets/gen1.js?428f44e9"></script>
     <script type="text/javascript" src="./calc/data/types.js?a641e10b"></script>
     <script type="text/javascript" src="./calc/data/natures.js?28612810"></script>
-    <script type="text/javascript" src="./calc/data/abilities.js?1d853979"></script>
-    <script type="text/javascript" src="./calc/data/moves.js?4901d333"></script>
+    <script type="text/javascript" src="./calc/data/abilities.js?76822ede"></script>
+    <script type="text/javascript" src="./calc/data/moves.js?38f01d59"></script>
     <script type="text/javascript" src="./calc/data/items.js?9ab2e2be"></script>
     <script type="text/javascript" src="./calc/data/index.js?abecbd82"></script>
     <script type="text/javascript" src="./calc/move.js?82ace03e"></script>
-    <script type="text/javascript" src="./calc/pokemon.js?1cd9f7fb"></script>
-    <script type="text/javascript" src="./calc/field.js?e9c33a97"></script>
+    <script type="text/javascript" src="./calc/pokemon.js?a155eb0e"></script>
+    <script type="text/javascript" src="./calc/field.js?c56d8bcb"></script>
     <script type="text/javascript" src="./calc/items.js?067e42a4"></script>
-    <script type="text/javascript" src="./calc/mechanics/util.js?cab396d7"></script>
-    <script type="text/javascript" src="./calc/mechanics/gen789.js?57db87ab"></script>
-    <script type="text/javascript" src="./calc/mechanics/gen56.js?9134d7ac"></script>
-    <script type="text/javascript" src="./calc/mechanics/gen4.js?d66ba24c"></script>
-    <script type="text/javascript" src="./calc/mechanics/gen3.js?0b8ebb34"></script>
+    <script type="text/javascript" src="./calc/mechanics/util.js?ebb1717f"></script>
+    <script type="text/javascript" src="./calc/mechanics/gen789.js?c9f1e7c0"></script>
+    <script type="text/javascript" src="./calc/mechanics/gen56.js?1c832052"></script>
+    <script type="text/javascript" src="./calc/mechanics/gen4.js?6f7a6d16"></script>
+    <script type="text/javascript" src="./calc/mechanics/gen3.js?411402bf"></script>
     <script type="text/javascript" src="./calc/mechanics/gen12.js?199f8ca6"></script>
     <script type="text/javascript" src="./calc/calc.js?40a2d9b1"></script>
     <script type="text/javascript" src="./calc/desc.js?51da43a1"></script>
     <script type="text/javascript" src="./calc/result.js?9f8881b5"></script>
     <script type="text/javascript" src="./calc/adaptable.js?92e49194"></script>
     <script type="text/javascript" src="./calc/index.js?0b1745b9"></script>
-    <script type="text/javascript" src="./js/shared_controls.js?d4a37c0c"></script>
+    <script type="text/javascript" src="./js/spritedata.js?e6979aa2"></script>
+    <script type="text/javascript" src="./js/data/move_info_lookup.js?9f911b07"></script>
+    <script type="text/javascript" src="./js/shared_controls.js?d72c3068"></script>
     <script type="text/javascript" src="./js/honkalculate_controls.js?23c996e5"></script>
 
     <div style="clear:both;padding:20px;text-align:left">Created by Honko, maintained by Austin and Kris
@@ -922,7 +941,7 @@
             <li><a href="https://www.smogon.com/forums/threads/pok%C3%A9mon-showdown-damage-calculator.3593546/" class="links-lighten" target="_blank">Bug Reports</a></li>
             <li><a href="https://github.com/smogon/damage-calc" class="links-lighten" target="_blank">GitHub repository</a></li></ul>
             <button type="button" id="dark-theme-toggle"></button>
-            <script type="text/javascript" src="./js/dark-theme-toggle.js?b8bb93fc"></script>
+            <script type="text/javascript" src="./js/dark-theme-toggle.js?c2d63560"></script>
     </div>
 
 </body>

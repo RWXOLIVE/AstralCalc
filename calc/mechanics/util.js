@@ -139,7 +139,7 @@ function getFinalSpeed(gen, pokemon, field, side) {
         (pokemon.hasAbility('Chlorophyll') && weather.includes('Sun')) ||
         (pokemon.hasAbility('Heated Rush') && weather.includes('Sun')) ||
         (pokemon.hasAbility('Sand Rush') && weather === 'Sand') ||
-        (pokemon.hasAbility('Swift Swim') && weather.includes('Rain')) ||
+        (pokemon.hasAbility('Swift Swim', 'Surge Cutter') && weather.includes('Rain')) ||
         (pokemon.hasAbility('Slush Rush') && ['Hail', 'Snow'].includes(weather)) ||
         (pokemon.hasAbility('Surge Surfer') && terrain === 'Electric')) {
         speedMods.push(8192);
@@ -150,11 +150,7 @@ function getFinalSpeed(gen, pokemon, field, side) {
     else if (pokemon.hasAbility('Slow Start') && pokemon.abilityOn) {
         speedMods.push(2048);
     }
-    else if (getMostProficientStat(pokemon, gen) === 'spe' &&
-        ((pokemon.hasAbility('Protosynthesis') &&
-            (weather.includes('Sun') || pokemon.hasItem('Booster Energy'))) ||
-            (pokemon.hasAbility('Quark Drive') &&
-                (terrain === 'Electric' || pokemon.hasItem('Booster Energy'))))) {
+    else if (getProtoQuarkBoostedStat(pokemon, field, gen) === 'spe') {
         speedMods.push(6144);
     }
     if (pokemon.hasItem('Choice Scarf')) {
@@ -174,11 +170,24 @@ function getFinalSpeed(gen, pokemon, field, side) {
     return Math.max(0, speed);
 }
 exports.getFinalSpeed = getFinalSpeed;
-function getMoveEffectiveness(gen, move, type, isGhostRevealed, isGravity, isRingTarget) {
+function getTurnOrder(attacker, defender, field) {
+    if (attacker.stats.spe === defender.stats.spe) {
+        return 'last';
+    }
+    var attackerMovesFirst = field.isTrickRoom
+        ? attacker.stats.spe < defender.stats.spe
+        : attacker.stats.spe > defender.stats.spe;
+    return attackerMovesFirst ? 'first' : 'last';
+}
+exports.getTurnOrder = getTurnOrder;
+function getMoveEffectiveness(gen, move, type, isGhostRevealed, isPoisonRevealed, isGravity, isRingTarget) {
     if ((isRingTarget || isGhostRevealed) && type === 'Ghost' && move.hasType('Normal', 'Fighting')) {
         return 1;
     }
     else if ((isRingTarget || isGravity) && type === 'Flying' && move.hasType('Ground')) {
+        return 1;
+    }
+    else if ((isRingTarget || isPoisonRevealed) && type === 'Steel' && move.hasType('Poison')) {
         return 1;
     }
     else if (move.named('Freeze-Dry') && type === 'Water') {
@@ -257,6 +266,23 @@ function checkIntimidate(gen, source, target) {
         }
         if (target.hasAbility('Competitive')) {
             target.boosts.spa = Math.min(6, target.boosts.spa + 2);
+        }
+    }
+    if (source.hasAbility('Illuminate') && source.abilityOn && !blocked) {
+        if (target.hasAbility('Contrary')) {
+            target.boosts.spa = Math.min(6, target.boosts.spa + 1);
+        }
+        else if (target.hasAbility('Simple')) {
+            target.boosts.spa = Math.max(-6, target.boosts.spa - 2);
+        }
+        else {
+            target.boosts.spa = Math.max(-6, target.boosts.spa - 1);
+        }
+        if (target.hasAbility('Competitive')) {
+            target.boosts.spa = Math.min(6, target.boosts.spa + 2);
+        }
+        else if (target.hasAbility('Defiant')) {
+            target.boosts.atk = Math.min(6, target.boosts.atk + 2);
         }
     }
 }
@@ -457,6 +483,20 @@ function getMostProficientStat(pokemon, gen) {
     return bestStat;
 }
 exports.getMostProficientStat = getMostProficientStat;
+function getProtoQuarkBoostedStat(pokemon, field, gen) {
+    if (pokemon.protoQuark === 'inactive')
+        return undefined;
+    if (pokemon.protoQuark && pokemon.protoQuark !== 'auto')
+        return pokemon.protoQuark;
+    var weather = field.weather || '';
+    var terrain = field.terrain;
+    var hasProtoQuarkBoost = (pokemon.hasAbility('Protosynthesis') &&
+        (weather.includes('Sun') || pokemon.hasItem('Booster Energy'))) ||
+        (pokemon.hasAbility('Quark Drive') &&
+            (terrain === 'Electric' || pokemon.hasItem('Booster Energy')));
+    return hasProtoQuarkBoost ? getMostProficientStat(pokemon, gen) : undefined;
+}
+exports.getProtoQuarkBoostedStat = getProtoQuarkBoostedStat;
 function getFinalDamage(baseAmount, i, effectiveness, isBurned, isFrostbite, stabMod, finalMod, protect) {
     var damageAmount = Math.floor(OF32(baseAmount * (85 + i)) / 100);
     if (stabMod !== 4096)

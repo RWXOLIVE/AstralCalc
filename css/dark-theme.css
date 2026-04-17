@@ -107,6 +107,46 @@ a.collapsible-link {
     color: var(--text);
 }
 
+.calc-side-panel {
+    background: #101318;
+    border-left: 1px solid #323a45;
+}
+
+.calc-side-header {
+    background: #181d24;
+    border-bottom-color: #323a45;
+}
+
+.frags-table th,
+.frags-table td {
+    border-color: #3a4452;
+}
+
+.frags-row.frags-rank-1 td.frag-num:first-child,
+.frags-row.frags-rank-1 .frags-mon-cell {
+    color: #d4af37;
+}
+
+.frags-row.frags-rank-2 td.frag-num:first-child,
+.frags-row.frags-rank-2 .frags-mon-cell {
+    color: #c0c0c0;
+}
+
+.frags-row.frags-rank-3 td.frag-num:first-child,
+.frags-row.frags-rank-3 .frags-mon-cell {
+    color: #cd7f32;
+}
+
+.settings-choice-btn.is-active {
+    background: #253a67;
+    border-color: #557cc1;
+}
+
+.frag-context-menu {
+    background: #11161d;
+    border-color: #3f4957;
+}
+
 tr.odd, tr.even {
     background-color: var(--background) !important;
 }
@@ -160,3 +200,6 @@ input.select2-input {
     background: url('../js/vendor/select2/select2.png') no-repeat 100% -22px, var(--background);
 }
 
+.search-label {
+    color: var(--text);
+}

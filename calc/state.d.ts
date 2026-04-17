@@ -5,6 +5,7 @@ export declare namespace State {
         level?: number;
         ability?: I.AbilityName;
         abilityOn?: boolean;
+        protoQuark?: 'auto' | 'inactive' | 'atk' | 'def' | 'spa' | 'spd' | 'spe';
         isDynamaxed?: boolean;
         isSaltCure?: boolean;
         alliesFainted?: number;
@@ -35,6 +36,7 @@ export declare namespace State {
         gameType: I.GameType;
         weather?: I.Weather;
         terrain?: I.Terrain;
+        isTrickRoom?: boolean;
         isMagicRoom?: boolean;
         isWonderRoom?: boolean;
         isGravity?: boolean;
@@ -69,6 +71,7 @@ export declare namespace State {
         isAuroraVeil?: boolean;
         isBattery?: boolean;
         isPowerSpot?: boolean;
+        isPlayer?: boolean;
         isSwitching?: 'out' | 'in';
     }
 }

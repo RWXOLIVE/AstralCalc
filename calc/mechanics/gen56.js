@@ -205,7 +205,7 @@ function calculateBWXY(gen, attacker, defender, move, field) {
     if (move.hits > 1) {
         desc.hits = move.hits;
     }
-    var turnOrder = attacker.stats.spe > defender.stats.spe ? 'first' : 'last';
+    var turnOrder = (0, util_2.getTurnOrder)(attacker, defender, field);
     var basePower;
     switch (move.name) {
         case 'Payback':
@@ -386,7 +386,11 @@ function calculateBWXY(gen, attacker, defender, move, field) {
         }
         desc.attackerAbility = attacker.ability;
     }
-    if (attacker.item && (0, items_1.getItemBoostType)(attacker.item) === move.type) {
+    if (attacker.hasItem('Big Root') && move.drain) {
+        bpMods.push(5325);
+        desc.attackerItem = attacker.item;
+    }
+    else if (attacker.item && (0, items_1.getItemBoostType)(attacker.item) === move.type) {
         bpMods.push(4915);
         desc.attackerItem = attacker.item;
     }
@@ -421,7 +425,7 @@ function calculateBWXY(gen, attacker, defender, move, field) {
         bpMods.push(6144);
         desc.moveBP = basePower * 1.5;
     }
-    else if (move.named('Solar Beam') && field.hasWeather('Rain', 'Heavy Rain', 'Sand', 'Hail')) {
+    else if (move.named('Solar Beam') && field.hasWeather('Rain', 'Heavy Rain', 'Sand', 'Hail', 'Fog')) {
         bpMods.push(2048);
         desc.moveBP = basePower / 2;
         desc.weather = field.weather;
