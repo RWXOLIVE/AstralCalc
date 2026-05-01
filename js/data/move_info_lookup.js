@@ -406,7 +406,7 @@
     "hyperspacefury": {"accuracy": 0, "pp": 5},
     "hyperspacehole": {"accuracy": 0, "pp": 5},
     "hypervoice": {"accuracy": 100, "pp": 10},
-    "hypnosis": {"accuracy": 70, "pp": 20},
+    "hypnosis": {"accuracy": 80, "pp": 20},
     "iceball": {"accuracy": 90, "pp": 20},
     "icebeam": {"accuracy": 100, "pp": 10},
     "iceburn": {"accuracy": 100, "pp": 5},

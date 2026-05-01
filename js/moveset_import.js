@@ -84,6 +84,43 @@ function normalizeSavedMoveList(rawMoves) {
 	return normalizedMoves;
 }
 
+function resolveCustomSetStorageKey(speciesSetMap, requestedSetName) {
+	var preferred = String(requestedSetName || "").trim() || "Custom Set";
+	if (!speciesSetMap || typeof speciesSetMap !== "object") return preferred;
+	if (Object.prototype.hasOwnProperty.call(speciesSetMap, preferred)) return preferred;
+	if (Object.prototype.hasOwnProperty.call(speciesSetMap, "Custom Set")) return "Custom Set";
+	var existingSetNames = Object.keys(speciesSetMap);
+	return existingSetNames.length ? existingSetNames[0] : preferred;
+}
+
+function collapseSpeciesSetMapToSingleEntry(speciesSetMap) {
+	if (!speciesSetMap || typeof speciesSetMap !== "object") return {};
+	var setNames = Object.keys(speciesSetMap);
+	if (!setNames.length) return {};
+	var selectedSetName = resolveCustomSetStorageKey(speciesSetMap, "Custom Set");
+	var selectedSet = speciesSetMap[selectedSetName] || speciesSetMap[setNames[0]] || {};
+	var collapsed = {};
+	collapsed[selectedSetName] = selectedSet;
+	return collapsed;
+}
+
+function normalizeCustomSetStorage(customsets) {
+	var normalized = {};
+	if (!customsets || typeof customsets !== "object") return normalized;
+	for (var pokemon in customsets) {
+		if (!Object.prototype.hasOwnProperty.call(customsets, pokemon)) continue;
+		var collapsedSpeciesSets = collapseSpeciesSetMapToSingleEntry(customsets[pokemon]);
+		var collapsedNames = Object.keys(collapsedSpeciesSets);
+		if (!collapsedNames.length) continue;
+		var keptSetName = collapsedNames[0];
+		var keptSet = collapsedSpeciesSets[keptSetName] || {};
+		keptSet.moves = normalizeSavedMoveList(keptSet.moves);
+		collapsedSpeciesSets[keptSetName] = keptSet;
+		normalized[pokemon] = collapsedSpeciesSets;
+	}
+	return normalized;
+}
+
 function getExistingSetMovesForSave(selectedSet) {
 	if (!selectedSet || typeof setdex === "undefined" || !setdex) return ["(No Move)", "(No Move)", "(No Move)", "(No Move)"];
 	var parsedSet = typeof parseSetId === "function" ? parseSetId(selectedSet) : null;
@@ -177,6 +214,33 @@ function statToLegacyStat(stat) {
 	case 'spe':
 		return "sp";
 	}
+}
+
+function toLegacyStatsTable(statsTable) {
+	var legacy = {};
+	if (!statsTable || typeof statsTable !== "object") return legacy;
+	var statMap = {
+		hp: "hp",
+		atk: "at",
+		def: "df",
+		spa: "sa",
+		spd: "sd",
+		spe: "sp",
+		at: "at",
+		df: "df",
+		sa: "sa",
+		sd: "sd",
+		sp: "sp"
+	};
+	for (var key in statsTable) {
+		if (!Object.prototype.hasOwnProperty.call(statsTable, key)) continue;
+		var mapped = statMap[key];
+		if (!mapped) continue;
+		var value = parseInt(statsTable[key], 10);
+		if (Number.isNaN(value)) continue;
+		legacy[mapped] = value;
+	}
+	return legacy;
 }
 
 function normalizeStatusLabel(status) {
@@ -349,8 +413,8 @@ function addToDex(poke) {
 		dexObject.PreDamage = poke.PreDamage;
 	}
 	dexObject.level = poke.level;
-	dexObject.evs = poke.evs;
-	dexObject.ivs = poke.ivs;
+	dexObject.evs = toLegacyStatsTable(poke.evs);
+	dexObject.ivs = toLegacyStatsTable(poke.ivs);
 	dexObject.moves = normalizeSavedMoveList(poke.moves);
 	dexObject.nature = poke.nature;
 	dexObject.item = poke.item;
@@ -363,24 +427,61 @@ function addToDex(poke) {
 			customsets = {};
 		}
 	}
+	customsets = normalizeCustomSetStorage(customsets);
 	if (!customsets[poke.name]) {
 		customsets[poke.name] = {};
 	}
-	customsets[poke.name][poke.nameProp] = dexObject;
+	var storageSetName = resolveCustomSetStorageKey(customsets[poke.name], poke.nameProp);
+	poke.nameProp = storageSetName;
+	customsets[poke.name] = {};
+	customsets[poke.name][storageSetName] = dexObject;
 	if (poke.name === "Aegislash-Blade") {
-		if (!customsets["Aegislash-Shield"]) {
-			customsets["Aegislash-Shield"] = {};
-		}
-		customsets["Aegislash-Shield"][poke.nameProp] = dexObject;
+		customsets["Aegislash-Shield"] = {};
+		customsets["Aegislash-Shield"][storageSetName] = dexObject;
 	}
 	updateDex(customsets);
+	if (typeof window.captureFragBackupSnapshot === "function") {
+		window.captureFragBackupSnapshot("import-update", false);
+	}
 }
 
 function updateDex(customsets) {
+	customsets = normalizeCustomSetStorage(customsets);
+	var dexTables = [
+		typeof SETDEX_SV === "undefined" ? null : SETDEX_SV,
+		typeof SETDEX_SS === "undefined" ? null : SETDEX_SS,
+		typeof SETDEX_SM === "undefined" ? null : SETDEX_SM,
+		typeof SETDEX_XY === "undefined" ? null : SETDEX_XY,
+		typeof SETDEX_BW === "undefined" ? null : SETDEX_BW,
+		typeof SETDEX_DPP === "undefined" ? null : SETDEX_DPP,
+		typeof SETDEX_ADV === "undefined" ? null : SETDEX_ADV,
+		typeof SETDEX_GSC === "undefined" ? null : SETDEX_GSC,
+		typeof SETDEX_RBY === "undefined" ? null : SETDEX_RBY
+	];
+	for (var tableIndex = 0; tableIndex < dexTables.length; tableIndex++) {
+		var dexTable = dexTables[tableIndex];
+		if (!dexTable) continue;
+		for (var dexPokemon in dexTable) {
+			if (!Object.prototype.hasOwnProperty.call(dexTable, dexPokemon)) continue;
+			var speciesSets = dexTable[dexPokemon];
+			if (!speciesSets || typeof speciesSets !== "object") continue;
+			for (var dexSetName in speciesSets) {
+				if (!Object.prototype.hasOwnProperty.call(speciesSets, dexSetName)) continue;
+				var dexSet = speciesSets[dexSetName];
+				if (dexSet && dexSet.isCustomSet) {
+					delete speciesSets[dexSetName];
+				}
+			}
+			if (!Object.keys(speciesSets).length) {
+				delete dexTable[dexPokemon];
+			}
+		}
+	}
 	for (var pokemon in customsets) {
 		for (var moveset in customsets[pokemon]) {
 			var savedSet = customsets[pokemon][moveset] || {};
 			savedSet.moves = normalizeSavedMoveList(savedSet.moves);
+			savedSet.isCustomSet = true;
 			customsets[pokemon][moveset] = savedSet;
 			if (!SETDEX_SV[pokemon]) SETDEX_SV[pokemon] = {};
 			SETDEX_SV[pokemon][moveset] = savedSet;
@@ -490,6 +591,9 @@ $("#clearSets").click(function () {
 	var yes = confirm("Do you really wish to delete all your mons?")
 	if (!yes){
 		return
+	}
+	if (typeof window.captureFragBackupSnapshot === "function") {
+		window.captureFragBackupSnapshot("before-clear-imports", true);
 	}
 	localStorage.removeItem("customsets");
 	$(allPokemon("#importedSetsOptions")).hide();

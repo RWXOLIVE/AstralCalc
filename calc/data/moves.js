@@ -520,7 +520,7 @@ var ADV_PATCH = {
     Imprison: { bp: 0, category: 'Status', type: 'Psychic' },
     'Mud Sport': { bp: 0, category: 'Status', type: 'Ground' },
     Recycle: { bp: 0, category: 'Status', type: 'Normal' },
-    'Secret Power': { bp: 70, type: 'Normal' },
+    'Secret Power': { bp: 85, type: 'Normal' },
     'Sky Uppercut': { bp: 85, type: 'Fighting', makesContact: true },
     'Slack Off': { bp: 0, category: 'Status', type: 'Normal' },
     Snatch: { bp: 0, category: 'Status', type: 'Dark', priority: 4 },

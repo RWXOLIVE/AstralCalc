@@ -3952,7 +3952,7 @@ var BW_PATCH = {
     },
     'Darmanitan-Zen': {
         types: ['Fire', 'Psychic'],
-        bs: { hp: 105, at: 20, df: 95, sa: 140, sd: 95, sp: 45 },
+        bs: { hp: 105, at: 40, df: 105, sa: 140, sd: 105, sp: 35 },
         weightkg: 92.9,
         baseSpecies: 'Darmanitan',
         abilities: { 0: 'Zen Mode' }
@@ -4679,20 +4679,20 @@ var BW_PATCH = {
         abilities: { 0: 'Wonder Skin' }
     },
     Simipour: {
-        types: ['Water'],
-        bs: { hp: 65, at: 70, df: 60, sa: 115, sd: 85, sp: 100 },
+        types: ['Water', 'Psychic'],
+        bs: { hp: 75, at: 70, df: 70, sa: 115, sd: 85, sp: 100 },
         weightkg: 29,
         abilities: { 0: 'Gluttony' }
     },
     Simisage: {
         types: ['Grass', 'Fighting'],
-        bs: { hp: 65, at: 110, df: 78, sa: 90, sd: 52, sp: 100 },
+        bs: { hp: 75, at: 115, df: 68, sa: 100, sd: 62, sp: 100 },
         weightkg: 30.5,
         abilities: { 0: 'Gluttony' }
     },
     Simisear: {
         types: ['Fire', 'Dark'],
-        bs: { hp: 65, at: 80, df: 85, sa: 80, sd: 85, sp: 100 },
+        bs: { hp: 75, at: 90, df: 85, sa: 80, sd: 90, sp: 100 },
         weightkg: 28,
         abilities: { 0: 'Gluttony' }
     },
@@ -8049,7 +8049,7 @@ var SS_PATCH = {
         baseSpecies: 'Grimmsnarl'
     },
     Grookey: {
-        types: ['Normal'],
+        types: ['Grass', 'Normal'],
         bs: { hp: 50, at: 65, df: 50, sa: 40, sd: 40, sp: 65 },
         weightkg: 5,
         abilities: { 0: 'Overgrow' },
@@ -8342,7 +8342,7 @@ var SS_PATCH = {
         gender: 'N'
     },
     Rillaboom: {
-        types: ['Normal'],
+        types: ['Grass', 'Normal'],
         bs: { hp: 100, at: 125, df: 90, sa: 65, sd: 70, sp: 85 },
         weightkg: 90,
         abilities: { 0: 'Overgrow' },
@@ -8531,7 +8531,7 @@ var SS_PATCH = {
         abilities: { 0: 'Run Away' }
     },
     Thwackey: {
-        types: ['Normal'],
+        types: ['Grass', 'Normal'],
         bs: { hp: 70, at: 85, df: 70, sa: 55, sd: 60, sp: 80 },
         weightkg: 14,
         abilities: { 0: 'Overgrow' },

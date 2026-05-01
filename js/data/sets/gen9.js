@@ -852,6 +852,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Rock Tomb","Zen Headbutt","Thunder","Slam"]
+        },
+    "Pokefan Miguel | Route 103": {
+            "index": "0000000304",
+            "level": 48,
+            "ability": "Mold Breaker",
+            "item": "Choice Band",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Head Smash"]
         }
     },
     "Gible": {
@@ -1087,6 +1098,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Curse","Aqua Tail","Supercell Slam","Sucker Punch"]
+        },
+    "Fisherman Andrew | Route 103": {
+            "index": "0000000300",
+            "level": 46,
+            "ability": "Illuminate",
+            "item": "Blunder Policy",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Thunder","Blizzard","Hydro Pump","Flash"]
         }
     },
     "Sliggoo": {
@@ -1113,6 +1135,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Stockpile","Spit Up","Air Slash","Whirlpool"]
+        },
+    "Swimmer Isabelle & Pete | Route 103": {
+            "index": "0000000295",
+            "level": 47,
+            "ability": "Drizzle",
+            "item": "Focus Sash",
+            "nature": "Timid",
+            "setdouble": "True",
+            "setdoubleGroup": "route-103-swimmer-isabelle-pete",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Tailwind","Hurricane","Surf","Protect"]
         }
     },
     "Rotom-Wash": {
@@ -1724,6 +1760,21 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Swords Dance","Earthquake","Ice Shard","Leaf Storm"]
+        },
+    "Shawn & Angelo | Mauville City": {
+            "index": "0000000351",
+            "level": 48,
+            "ability": "Soundproof",
+            "item": "Focus Sash",
+            "nature": "Serious",
+            "setdouble": "True",
+            "nature": "Timid",
+            "setdoubleGroup": "mauville-city-shawn-angelo",
+            "setdoubleSide": 2,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Icy Wind","Leech Seed","Protect","Helping Hand"]
         }
     },
     "Vanilluxe": {
@@ -1763,6 +1814,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Drill Peck","Ice Spinner","Flash Cannon","Yawn"]
+        },
+    "Swimmer Isabelle & Pete | Route 103": {
+            "index": "0000000298",
+            "level": 46,
+            "ability": "Competitive",
+            "item": "Adrenaline Orb",
+            "nature": "Modest",
+            "setdouble": "True",
+            "setdoubleGroup": "route-103-swimmer-isabelle-pete",
+            "setdoubleSide": 2,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Scald","Roost","Icy Wind","Flash Cannon"]
         }
     },
     "Arctovish": {
@@ -1869,6 +1934,36 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Acrobatics","Knock Off","Leech Seed","Seed Bomb"]
+        },
+    "Celina & Tyron | Route 111": {
+            "index": "0000000366",
+            "level": 52,
+            "ability": "Grassy Surge",
+            "item": "Terrain Extender",
+            "nature": "Adamant",
+            "setdouble": "True",
+            "setdoubleGroup": "route-111-celina-tyron",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fake Out","Grassy Glide","High Horsepower","Brutal Swing"]
+        }
+    },
+    "Roserade": {
+    "Celina & Tyron | Route 111": {
+            "index": "0000000367",
+            "level": 52,
+            "ability": "Serene Grace",
+            "item": "Wise Glasses",
+            "nature": "Timid",
+            "setdouble": "True",
+            "setdoubleGroup": "route-111-celina-tyron",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Extrasensory","Energy Ball","Sludge Bomb","Grassy Glide"]
         }
     },
     "Lickilicky": {
@@ -1959,6 +2054,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Night Slash","Psycho Cut","Shadow Claw","Throat Chop"]
+        },
+    "Psychic Edward | Route 110": {
+            "index": "0000000329",
+            "level": 47,
+            "ability": "Super Luck",
+            "item": "Scope Lens",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Night Slash","Psycho Cut","Shadow Claw","Swords Dance"]
         }
     },
     "Drampa": {
@@ -2148,6 +2254,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
             },
             "moves": ["Body Press","Avalanche","Gyro Ball","Stealth Rock"]
+        },
+    "Guitarist Joseph | Route 110": {
+            "index": "0000000323",
+            "level": 48,
+            "ability": "Soundproof",
+            "item": "Chople Berry",
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Curse","Foul Play","Heavy Slam","Body Press"]
         }
     },
     "Dunsparce": {
@@ -2402,6 +2519,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Sing","Dream Eater","Hyper Voice","Thunder"]
+        },
+    "Youngster Timmy | Route 110": {
+            "index": "0000000317",
+            "level": 47,
+            "ability": "Serene Grace",
+            "item": "Chople Berry",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Counter","Soft-Boiled","Psychic","Alluring Voice"]
         }
     },
     "Scream Tail": {
@@ -2580,6 +2708,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Toxic","Solar Beam","Sludge Bomb","Earthquake"]
+        },
+    "Aroma Lady Daisy | Route 103": {
+            "index": "0000000311",
+            "level": 47,
+            "ability": "Chlorophyll",
+            "item": "Occa Berry",
+            "nature": "Hasty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Growth","Earthquake","Weather Ball","Sludge Bomb"]
         }
     },
     "Eevee-Starter": {
@@ -2757,7 +2896,7 @@ var SETDEX_SV = {
             "level": 40,
             "ability": "Tera Shift",
             "item": "Leftovers",
-            "nature": "Timid",
+            "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -2782,11 +2921,11 @@ var SETDEX_SV = {
             "level": 41,
             "ability": "Berserk",
             "item": "Drampanite",
-            "nature": "Modest",
+            "nature": "Naughty",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Hydro Pump","Thunder","Hyper Voice","Fire Blast"]
+            "moves": ["Hydro Pump","Shock Wave","Hyper Voice","Dragon Breath"]
         },
     "Gym Leader Norman - DB | Petalburg Gym": {
             "index": "0000000184",
@@ -2980,6 +3119,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Volt Tackle","Grass Knot","Iron Tail","Thunderbolt"]
+        },
+    "Old Man Ty | Route 109": {
+            "index": "0000000289",
+            "level": -1,
+            "ability": "Lightning Rod",
+            "item": "Covert Cloak",
+            "nature": "Timid",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Grass Knot","Alluring Voice","Thunderbolt","Nuzzle"]
         }
     },
     "Froslass": {
@@ -3191,7 +3342,7 @@ var SETDEX_SV = {
     "Psychic Alix | Route 115": {
             "index": "0000000212",
             "level": 45,
-            "ability": "Solar Power",
+            "ability": "Solar Veil",
             "item": "Power Herb",
             "nature": "Jolly",
             "ivs": {
@@ -3226,6 +3377,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Aqua Cutter","Leaf Blade","Psycho Cut","Sacred Sword"]
+        },
+    "Trainer Rival (Tepig) | Route 110": {
+            "index": "0000000333",
+            "level": 49,
+            "ability": "Sharpness",
+            "item": "Coba Berry",
+            "nature": "Adamant",
+            "chosetepig": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Agility","Sacred Sword","Triple Axel","Psycho Cut"]
         }
     },
     "Gorebyss": {
@@ -3321,6 +3484,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Facade","Draco Meteor","Earthquake","Dual Wingbeat"]
+        },
+    "Fisherman Andrew | Route 103": {
+            "index": "0000000301",
+            "level": 46,
+            "ability": "Pixilate",
+            "item": "Yache Berry",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Dragon Dance","Facade","Earthquake","Dual Wingbeat"]
         }
     },
     "Clodsire": {
@@ -3400,6 +3574,31 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Echoed Voice","Flip Turn","Follow Me","Helping Hand"]
+        },
+    "Guitarist Marcos | Route 103": {
+            "index": "0000000313",
+            "level": 46,
+            "ability": "Liquid Voice",
+            "item": "Throat Spray",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Hyper Voice","Draining Kiss","Icy Wind","Calm Mind"]
+        },
+    "Shawn & Angelo | Mauville City": {
+            "index": "0000000350",
+            "level": 48,
+            "ability": "Liquid Voice",
+            "item": "Choice Specs",
+            "nature": "Timid",
+            "setdouble": "True",
+            "setdoubleGroup": "mauville-city-shawn-angelo",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Boomburst"]
         }
     },
     "Tsareena": {
@@ -3525,6 +3724,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Thunder Punch","Aqua Tail","U-turn","Giga Drain"]
+        },
+    "Leader Elesa | Mauville Gym": {
+            "index": "0000000356",
+            "level": 51,
+            "ability": "Levitate",
+            "item": "Eelektrossite",
+            "Terrain": "Electric",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Wild Charge","Liquidation","Drain Punch","U-turn"]
         }
     },
     "Beartic": {
@@ -3551,6 +3762,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Bolt Beak","Surf","Freeze-Dry","Ancient Power"]
+        },
+    "Youngster Ben | Mauville Gym": {
+            "index": "0000000343",
+            "level": 49,
+            "ability": "Volt Absorb",
+            "item": "Electric Gem",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Freeze-Dry","Bolt Beak","Trailblaze","Icicle Crash"]
         }
     },
     "Mr. Mime-Galar": {
@@ -3616,6 +3838,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Sucker Punch","Kowtow Cleave","Psycho Cut","Brick Break"]
+        },
+    "Trainer Rival (Totodile) | Route 110": {
+            "index": "0000000333",
+            "level": 49,
+            "ability": "Supreme Overlord",
+            "item": "Chople Berry",
+            "nature": "Careful",
+            "chosetotodile": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sucker Punch","Kowtow Cleave","Iron Head","Low Kick"]
         }
     },
     "Mandibuzz": {
@@ -3707,6 +3941,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Lash Out","Power-Up Punch","Stomping Tantrum","Poison Jab"]
+        },
+    "Old Man Ty | Route 109": {
+            "index": "0000000291",
+            "level": -2,
+            "ability": "Intimidate",
+            "item": "Focus Sash",
+            "nature": "Jolly",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["High Horsepower","Lash Out","Aqua Tail","Fire Fang"]
         }
     },
     "Beheeyem": {
@@ -3876,6 +4122,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Cosmic Power","Moonblast","Moonlight","Stored Power"]
+        },
+    "Twins Amy & Liv | Route 103": {
+            "index": "0000000306",
+            "level": 46,
+            "ability": "Magic Guard",
+            "item": "Covert Cloak",
+            "nature": "Brave",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sing","Dream Eater","Wake-Up Slap","Moonblast"]
         }
     },
     "Ferrothorn": {
@@ -3939,6 +4196,20 @@ var SETDEX_SV = {
             "moves": ["Take Down","Wild Charge","Submission","Megahorn"]
         }
     },
+    "Archaludon": {
+    "Trainer Rival (Tepig) | Route 110": {
+            "index": "0000000332",
+            "level": 50,
+            "ability": "Stamina",
+            "item": "Power Herb",
+            "chosetepig": true,
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Electro Shot","Thunderbolt","Flash Cannon","Thunder Wave"]
+        }
+    },
     "Hydreigon": {
     "Team Plasma N & Ghetsis | Abandoned Ship": {
             "index": "0000000288",
@@ -3954,6 +4225,991 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Tri Attack","Dragon Pulse","Belch","Tailwind"]
+        },
+    "Trainer Rival (Chikorita) | Route 110": {
+            "index": "0000000332",
+            "level": 51,
+            "ability": "Levitate",
+            "item": "White Herb",
+            "nature": "Timid",
+            "chosechikorita": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Draco Meteor","Dark Pulse","Roost","Nasty Plot"]
+        }
+    },
+    "Lopunny-Mega": {
+    "Old Man Ty | Route 109": {
+            "index": "0000000290",
+            "level": 0,
+            "ability": "Scrappy",
+            "item": "Lopunnite",
+            "nature": "Adamant",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fake Out","Mach Punch","High Jump Kick","Return"]
+        }
+    },
+    "Kingler": {
+    "Old Man Ty | Route 109": {
+            "index": "0000000292",
+            "level": 0,
+            "ability": "Shell Armor",
+            "item": "Mystic Water",
+            "nature": "Jolly",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Liquidation","Meteor Mash","Knock Off","Protect"]
+        }
+    },
+    "Kingdra": {
+    "Old Man Ty | Route 109": {
+            "index": "0000000293",
+            "level": -1,
+            "ability": "Sniper",
+            "item": "Leftovers",
+            "nature": "Timid",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Octazooka","Dragon Pulse","Breaking Swipe","Ice Beam"]
+        }
+    },
+    "Grumpig": {
+    "Old Man Ty | Route 109": {
+            "index": "0000000294",
+            "level": -2,
+            "ability": "Own Tempo",
+            "item": "Leftovers",
+            "nature": "Timid",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Helping Hand","Dazzling Gleam","Hyper Voice","Psychic Noise"]
+        },
+    "Psychic Edward | Route 110": {
+            "index": "0000000330",
+            "level": 47,
+            "ability": "Thick Fat",
+            "item": "Colbur Berry",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Thunder Wave","Teeter Dance","Dazzling Gleam","Expanding Force"]
+        }
+    },
+    "Goodra": {
+    "Swimmer Isabelle & Pete | Route 103": {
+            "index": "0000000296",
+            "level": 46,
+            "ability": "Hydration",
+            "item": "Leftovers",
+            "nature": "Relaxed",
+            "setdouble": "True",
+            "setdoubleGroup": "route-103-swimmer-isabelle-pete",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Rest","Muddy Water","Dragon Claw","Sludge Bomb"]
+        }
+    },
+    "Shiinotic": {
+    "Swimmer Isabelle & Pete | Route 103": {
+            "index": "0000000297",
+            "level": 46,
+            "ability": "Rain Dish",
+            "item": "Covert Cloak",
+            "nature": "Modest",
+            "setdouble": "True",
+            "setdoubleGroup": "route-103-swimmer-isabelle-pete",
+            "setdoubleSide": 2,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Rage Powder","Moonblast","Leech Seed","Giga Drain"]
+        }
+    },
+    "Dubwool": {
+    "Swimmer Isabelle & Pete | Route 103": {
+            "index": "0000000299",
+            "level": 47,
+            "ability": "Fluffy",
+            "item": "Leftovers",
+            "nature": "Impish",
+            "setdouble": "True",
+            "setdoubleGroup": "route-103-swimmer-isabelle-pete",
+            "setdoubleSide": 2,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Cotton Guard","Body Press","Double-Edge","Wild Charge"]
+        }
+    },
+    "Pikachu": {
+    "Pokefan Miguel | Route 103": {
+            "index": "0000000302",
+            "level": 48,
+            "ability": "Lightning Rod",
+            "item": "Light Ball",
+            "nature": "Hasty",
+            "shiny": "Yes",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Volt Tackle","Surf","Knock Off","Nuzzle"]
+        }
+    },
+    "Mime Jr.": {
+    "Pokefan Miguel | Route 103": {
+            "index": "0000000303",
+            "level": 48,
+            "ability": "Filter",
+            "item": "Focus Sash",
+            "nature": "Quiet",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Trick Room","Future Sight","Toxic","Fake Out"]
+        }
+    },
+    "Pyroar": {
+    "Twins Amy & Liv | Route 103": {
+            "index": "0000000305",
+            "level": 46,
+            "ability": "Unnerve",
+            "item": "Covert Cloak",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Heat Wave","Scorching Sands","Sing","Will-O-Wisp"]
+        }
+    },
+    "Gengar": {
+    "Twins Amy & Liv | Route 103": {
+            "index": "0000000307",
+            "level": 46,
+            "ability": "Cursed Body",
+            "item": "Psychic Gem",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Hypnosis","Dream Eater","Hex","Giga Drain"]
+        }
+    },
+    "Hypno": {
+    "Twins Amy & Liv | Route 103": {
+            "index": "0000000308",
+            "level": 46,
+            "ability": "Bad Dreams",
+            "item": "Zoom Lens",
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Dark Void","Foul Play","Seismic Toss","Drain Punch"]
+        }
+    },
+    "Lokix": {
+    "Aroma Lady Daisy | Route 103": {
+            "index": "0000000309",
+            "level": 46,
+            "ability": "Tinted Lens",
+            "item": "Life Orb",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["First Impression","U-turn"]
+        }
+    },
+    "Meganium": {
+    "Aroma Lady Daisy | Route 103": {
+            "index": "0000000310",
+            "level": 47,
+            "ability": "Overgrow",
+            "item": "Heat Rock",
+            "nature": "Calm",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sunny Day","Reflect","Light Screen","Lucky Chant"]
+        }
+    },
+    "Toxtricity": {
+    "Guitarist Marcos | Route 103": {
+            "index": "0000000312",
+            "level": 46,
+            "ability": "Punk Rock",
+            "item": "Throat Spray",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Boomburst","Overdrive","Sludge Bomb","Shift Gear"]
+        },
+    "Shawn & Angelo | Mauville City": {
+            "index": "0000000348",
+            "level": 48,
+            "ability": "Punk Rock",
+            "item": "Throat Spray",
+            "nature": "Timid",
+            "setdouble": "True",
+            "setdoubleGroup": "mauville-city-shawn-angelo",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Boomburst","Sludge Bomb","Psychic Noise","Overdrive"]
+        }
+    },
+    "Kommo-o": {
+    "Guitarist Marcos | Route 103": {
+            "index": "0000000314",
+            "level": 46,
+            "ability": "Soundproof",
+            "item": "Roseli Berry",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Vacuum Wave","Dragon Pulse","Body Press","Iron Head"]
+        }
+    },
+    "Breloom": {
+    "Black Belt Rhett | Route 103": {
+            "index": "0000000315",
+            "level": 46,
+            "ability": "Technician",
+            "item": "Loaded Dice",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Mach Punch","Rock Blast","Bullet Seed","Trailblaze"]
+        }
+    },
+    "Crabominable": {
+    "Black Belt Rhett | Route 103": {
+            "index": "0000000316",
+            "level": 47,
+            "ability": "Iron Fist",
+            "item": "Clear Amulet",
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Crabhammer","Ice Hammer","Hammer Arm","Drain Punch"]
+        }
+    },
+    "Cetitan": {
+    "Youngster Timmy | Route 110": {
+            "index": "0000000318",
+            "level": 47,
+            "ability": "Thick Fat",
+            "item": "Salac Berry",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Belly Drum","Ice Spinner","Liquidation","Earthquake"]
+        }
+    },
+    "Magcargo": {
+    "Youngster Timmy | Route 110": {
+            "index": "0000000319",
+            "level": 48,
+            "ability": "Solid Rock",
+            "item": "Quick Claw",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Eruption","Flamethrower","Scald","Explosion"]
+        }
+    },
+    "Tyranitar": {
+    "Guitarist Joseph | Route 110": {
+            "index": "0000000320",
+            "level": 48,
+            "ability": "Sand Stream",
+            "item": "Black Glasses",
+            "Weather": "Sand",
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Protect","Knock Off","Stone Edge","Earthquake"]
+        }
+    },
+    "Exploud": {
+    "Guitarist Joseph | Route 110": {
+            "index": "0000000321",
+            "level": 47,
+            "ability": "Soundproof",
+            "item": "Throat Spray",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Agility","Boomburst","Shadow Ball","Blizzard"]
+        },
+    "Shawn & Angelo | Mauville City": {
+            "index": "0000000352",
+            "level": 48,
+            "ability": "Soundproof",
+            "item": "Leftovers",
+            "nature": "Relaxed",
+            "setdouble": "True",
+            "setdoubleGroup": "mauville-city-shawn-angelo",
+            "setdoubleSide": 2,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Hyper Voice","Overheat","Low Kick","Psychic"]
+        }
+    },
+    "Magneton": {
+    "Guitarist Joseph | Route 110": {
+            "index": "0000000322",
+            "level": 49,
+            "ability": "Magnet Pull",
+            "item": "Eviolite",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Magnet Rise","Tri Attack","Flash Cannon","Thunderbolt"]
+        }
+    },
+    "Unown-C": {
+    "Collector Edwin | Route 110": {
+            "index": "0000000324",
+            "level": 70,
+            "ability": "Wonder Guard",
+            "item": "Life Orb",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["HP Psychic"]
+        }
+    },
+    "Unown-O": {
+    "Collector Edwin | Route 110": {
+            "index": "0000000325",
+            "level": 75,
+            "ability": "Wonder Guard",
+            "item": "Choice Specs",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["HP Fighting"]
+        }
+    },
+    "Unown-C2": {
+    "Collector Edwin | Route 110": {
+            "index": "0000000326",
+            "level": 80,
+            "ability": "Wonder Guard",
+            "item": "Choice Scarf",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["HP Flying"]
+        }
+    },
+    "Unown-K": {
+    "Collector Edwin | Route 110": {
+            "index": "0000000327",
+            "level": 85,
+            "ability": "Wonder Guard",
+            "item": "Scope Lens",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["HP Ground"]
+        }
+    },
+    "Orbeetle": {
+    "Psychic Edward | Route 110": {
+            "index": "0000000328",
+            "level": 48,
+            "ability": "Psychic Surge",
+            "item": "Terrain Extender",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sticky Web","Expanding Force","Infestation","Recover"]
+        }
+    },
+    "Jynx": {
+    "Psychic Edward | Route 110": {
+            "index": "0000000331",
+            "level": 49,
+            "ability": "Dry Skin",
+            "item": "Clear Amulet",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Nasty Plot","Lovely Kiss","Psyshock","Ice Beam"]
+        }
+    },
+    "Latias": {
+    "Trainer Rival (Totodile) | Route 110": {
+            "index": "0000000332",
+            "level": 50,
+            "ability": "Levitate",
+            "item": "Soul Dew",
+            "nature": "Modest",
+            "chosetotodile": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Psyshock","Dragon Pulse","Mystical Fire","Ice Beam"]
+        }
+    },
+    "Lucario": {
+    "Trainer Rival (Chikorita) | Route 110": {
+            "index": "0000000333",
+            "level": 49,
+            "ability": "Inner Focus",
+            "item": "Sitrus Berry",
+            "nature": "Modest",
+            "chosechikorita": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Steel Beam","Close Combat","Extreme Speed","Flash Cannon"]
+        }
+    },
+    "Corsola-Galar": {
+    "Trainer Rival (Chikorita) | Route 110": {
+            "index": "0000000334",
+            "level": 49,
+            "ability": "Cursed Body",
+            "item": "Eviolite",
+            "nature": "Calm",
+            "chosechikorita": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Strength Sap","Scald","Night Shade","Power Gem"]
+        },
+    "Trainer Rival (Tepig) | Route 110": {
+            "index": "0000000334",
+            "level": 49,
+            "ability": "Cursed Body",
+            "item": "Eviolite",
+            "nature": "Calm",
+            "chosetepig": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Strength Sap","Scald","Night Shade","Power Gem"]
+        },
+    "Trainer Rival (Totodile) | Route 110": {
+            "index": "0000000334",
+            "level": 49,
+            "ability": "Cursed Body",
+            "item": "Eviolite",
+            "nature": "Calm",
+            "chosetotodile": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Strength Sap","Scald","Night Shade","Power Gem"]
+        }
+    },
+    "Luxray": {
+    "Trainer Rival (Chikorita) | Route 110": {
+            "index": "0000000335",
+            "level": 49,
+            "ability": "Guts",
+            "item": "Flame Orb",
+            "nature": "Jolly",
+            "chosechikorita": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bulk Up","Trailblaze","Ice Fang","Zing Zap"]
+        },
+    "Trainer Rival (Tepig) | Route 110": {
+            "index": "0000000335",
+            "level": 49,
+            "ability": "Guts",
+            "item": "Flame Orb",
+            "nature": "Jolly",
+            "chosetepig": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bulk Up","Trailblaze","Ice Fang","Zing Zap"]
+        },
+    "Trainer Rival (Totodile) | Route 110": {
+            "index": "0000000335",
+            "level": 49,
+            "ability": "Guts",
+            "item": "Flame Orb",
+            "nature": "Jolly",
+            "chosetotodile": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bulk Up","Trailblaze","Ice Fang","Zing Zap"]
+        }
+    },
+    "Toucannon": {
+    "Trainer Rival (Chikorita) | Route 110": {
+            "index": "0000000336",
+            "level": 49,
+            "ability": "Skill Link",
+            "item": "Life Orb",
+            "nature": "Jolly",
+            "chosechikorita": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Beak Blast","Boomburst","Bullet Seed","Rock Blast"]
+        },
+    "Trainer Rival (Tepig) | Route 110": {
+            "index": "0000000336",
+            "level": 49,
+            "ability": "Skill Link",
+            "item": "Life Orb",
+            "nature": "Jolly",
+            "chosetepig": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Beak Blast","Boomburst","Bullet Seed","Rock Blast"]
+        },
+    "Trainer Rival (Totodile) | Route 110": {
+            "index": "0000000336",
+            "level": 49,
+            "ability": "Skill Link",
+            "item": "Life Orb",
+            "nature": "Jolly",
+            "chosetotodile": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Beak Blast","Boomburst","Bullet Seed","Rock Blast"]
+        }
+    },
+    "Delphox-Mega": {
+    "Trainer Rival (Chikorita) | Route 110": {
+            "index": "0000000337",
+            "level": 51,
+            "ability": "Levitate",
+            "item": "Delphoxite",
+            "nature": "Timid",
+            "chosechikorita": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Flamethrower","Psyshock","Dazzling Gleam","Will-O-Wisp"]
+        }
+    },
+    "Chesnaught-Mega": {
+    "Trainer Rival (Totodile) | Route 110": {
+            "index": "0000000337",
+            "level": 51,
+            "ability": "Bulletproof",
+            "item": "Chesnaughtite",
+            "nature": "Impish",
+            "chosetotodile": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bulk Up","Body Press","Wood Hammer","Leech Seed"]
+        }
+    },
+    "Greninja-Mega": {
+    "Trainer Rival (Tepig) | Route 110": {
+            "index": "0000000337",
+            "level": 51,
+            "ability": "Protean",
+            "item": "Greninjite",
+            "nature": "Lonely",
+            "chosetepig": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Gunk Shot","Water Shuriken","Dark Pulse","Spikes"]
+        }
+    },
+    "Medicham-Mega": {
+    "Vivian & Kirk | Mauville Gym": {
+            "index": "0000000338",
+            "level": 48,
+            "ability": "Pure Power",
+            "item": "Medichamite",
+            "nature": "Adamant",
+            "setdouble": "True",
+            "setdoubleGroup": "mauville-gym-vivian-kirk",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fake Out","Thunder Punch","Drain Punch","Psycho Cut"]
+        }
+    },
+    "Emboar": {
+    "Vivian & Kirk | Mauville Gym": {
+            "index": "0000000339",
+            "level": 48,
+            "ability": "Rock Head",
+            "item": "Choice Scarf",
+            "nature": "Adamant",
+            "setdouble": "True",
+            "setdoubleGroup": "mauville-gym-vivian-kirk",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Close Combat","Flare Blitz","Head Smash","Wild Charge"]
+        }
+    },
+    "Rotom": {
+    "Vivian & Kirk | Mauville Gym": {
+            "index": "0000000340",
+            "level": 48,
+            "ability": "Levitate",
+            "item": "Weakness Policy",
+            "nature": "Timid",
+            "setdouble": "True",
+            "setdoubleGroup": "mauville-gym-vivian-kirk",
+            "setdoubleSide": 2,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Ominous Wind","Charge Beam","Signal Beam","Will-O-Wisp"]
+        }
+    },
+    "Manectric-Mega": {
+    "Vivian & Kirk | Mauville Gym": {
+            "index": "0000000341",
+            "level": 49,
+            "ability": "Intimidate",
+            "item": "Manectite",
+            "nature": "Bold",
+            "setdouble": "True",
+            "setdoubleGroup": "mauville-gym-vivian-kirk",
+            "setdoubleSide": 2,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Snarl","Thunderbolt","HP Ice","Flamethrower"]
+        }
+    },
+    "Galvantula": {
+    "Youngster Ben | Mauville Gym": {
+            "index": "0000000342",
+            "level": 48,
+            "ability": "Compound Eyes",
+            "item": "Focus Sash",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sticky Web","Thunder","Bug Buzz","Energy Ball"]
+        }
+    },
+    "Steelix-Mega": {
+    "Youngster Ben | Mauville Gym": {
+            "index": "0000000344",
+            "level": 48,
+            "ability": "Sand Force",
+            "item": "Steelixite",
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Stealth Rock","Body Press","Drill Run","Iron Defense"]
+        }
+    },
+    "Kilowattrel": {
+    "Youngster Ben | Mauville Gym": {
+            "index": "0000000345",
+            "level": 48,
+            "ability": "Wind Power",
+            "item": "Leftovers",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Tailwind","Electro Ball","Volt Switch","Air Slash"]
+        }
+    },
+    "Durant": {
+    "Youngster Ben | Mauville Gym": {
+            "index": "0000000346",
+            "level": 48,
+            "ability": "Hustle",
+            "item": "Wide Lens",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Stomping Tantrum","Iron Head","Guillotine","First Impression"]
+        }
+    },
+    "Electabuzz": {
+    "Youngster Ben | Mauville Gym": {
+            "index": "0000000347",
+            "level": 49,
+            "ability": "Static",
+            "item": "Eviolite",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bulk Up","Cross Chop","Supercell Slam","Reflect"]
+        }
+    },
+    "Toxtricity-Low-Key": {
+    "Shawn & Angelo | Mauville City": {
+            "index": "0000000349",
+            "level": 48,
+            "ability": "Punk Rock",
+            "item": "Air Balloon",
+            "nature": "Jolly",
+            "setdouble": "True",
+            "setdoubleGroup": "mauville-city-shawn-angelo",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Boomburst","Overdrive","Encore","HP Ice"]
+        }
+    },
+    "Chatot": {
+    "Shawn & Angelo | Mauville City": {
+            "index": "0000000353",
+            "level": 49,
+            "ability": "Punk Rock",
+            "item": "Normal Gem",
+            "nature": "Timid",
+            "setdouble": "True",
+            "setdoubleGroup": "mauville-city-shawn-angelo",
+            "setdoubleSide": 2,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Hyper Voice","Chatter","Tailwind","Roost"]
+        }
+    },
+    "Iron Hands": {
+    "Leader Elesa | Mauville Gym": {
+            "index": "0000000354",
+            "level": 49,
+            "ability": "Quark Drive",
+            "item": "Electric Seed",
+            "Terrain": "Electric",
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Knock Off","Body Press","Thunder Punch","Fake Out"]
+        }
+    },
+    "Magnezone": {
+    "Leader Elesa | Mauville Gym": {
+            "index": "0000000355",
+            "level": 50,
+            "ability": "Sturdy",
+            "item": "Custap Berry",
+            "Terrain": "Electric",
+            "nature": "Quiet",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Flash Cannon","Thunderbolt","Explosion","HP Grass"]
+        }
+    },
+    "Vikavolt": {
+    "Leader Elesa | Mauville Gym": {
+            "index": "0000000357",
+            "level": 50,
+            "ability": "Speed Boost",
+            "item": "Power Herb",
+            "Terrain": "Electric",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Electro Shot","Discharge","Signal Beam","Energy Ball"]
+        }
+    },
+    "Raichu-Alola": {
+    "Leader Elesa | Mauville Gym": {
+            "index": "0000000358",
+            "level": 49,
+            "ability": "Surge Surfer",
+            "item": "Life Orb",
+            "Terrain": "Electric",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Rising Voltage","Psyshock","Grass Knot","Thunder Wave"]
+        }
+    },
+    "Dracozolt": {
+    "Leader Elesa | Mauville Gym": {
+            "index": "0000000359",
+            "level": 51,
+            "ability": "Hustle",
+            "item": "Wide Lens",
+            "Terrain": "Electric",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Iron Tail","Bolt Beak","Dragon Claw","Fire Fang"]
+        }
+    },
+    "Iron Crown": {
+    "Leader Jasmine | Mauville Gym": {
+            "index": "0000000360",
+            "level": 49,
+            "ability": "Quark Drive",
+            "item": "Booster Energy",
+            "nature": "Relaxed",
+            "Terrain": "None",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Tachyon Cutter","Future Sight","Focus Blast","Agility"]
+        }
+    },
+    "Bisharp": {
+    "Leader Jasmine | Mauville Gym": {
+            "index": "0000000361",
+            "level": 49,
+            "ability": "Defiant",
+            "item": "Chople Berry",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Iron Head","Psycho Cut","Sucker Punch","Low Kick"]
+        }
+    },
+    "Ampharos": {
+    "Leader Jasmine | Mauville Gym": {
+            "index": "0000000362",
+            "level": 51,
+            "ability": "Sheer Force",
+            "item": "Life Orb",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Power Gem","Discharge","Energy Ball","Dragon Pulse"]
+        }
+    },
+    "Skarmory-Mega": {
+    "Leader Jasmine | Mauville Gym": {
+            "index": "0000000363",
+            "level": 50,
+            "ability": "Tough Claws",
+            "item": "Skarmorite",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Swords Dance","Drill Peck","Drill Run","Iron Head"]
+        }
+    },
+    "Golisopod": {
+    "Leader Jasmine | Mauville Gym": {
+            "index": "0000000364",
+            "level": 50,
+            "ability": "Emergency Exit",
+            "item": "Assault Vest",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["First Impression","Liquidation","Leech Life","Stone Edge"]
+        }
+    },
+    "Scizor": {
+    "Leader Jasmine | Mauville Gym": {
+            "index": "0000000365",
+            "level": 50,
+            "ability": "Technician",
+            "item": "Occa Berry",
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Knock Off","Bullet Punch","Bug Bite","U-turn"]
+        }
+    },
+    "Glimmora": {
+    "Celina & Tyron | Route 111": {
+            "index": "0000000368",
+            "level": 52,
+            "ability": "Toxic Debris",
+            "item": "Leftovers",
+            "nature": "Timid",
+            "setdouble": "True",
+            "setdoubleGroup": "route-111-celina-tyron",
+            "setdoubleSide": 2,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Stealth Rock","Energy Ball","Power Gem","Acid Spray"]
+        }
+    },
+    "Darmanitan-Zen": {
+    "Celina & Tyron | Route 111": {
+            "index": "0000000369",
+            "level": 52,
+            "ability": "Sheer Force",
+            "item": "Weakness Policy",
+            "nature": "Relaxed",
+            "setdouble": "True",
+            "setdoubleGroup": "route-111-celina-tyron",
+            "setdoubleSide": 2,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Stored Power","Flamethrower","Terrain Pulse","Will-O-Wisp"]
+        }
+    },
+    "Komala": {
+    "Celina & Tyron | Route 111": {
+            "index": "0000000370",
+            "level": 52,
+            "ability": "Comatose",
+            "item": "Grassy Seed",
+            "nature": "Adamant",
+            "setdouble": "True",
+            "setdoubleGroup": "route-111-celina-tyron",
+            "setdoubleSide": 2,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Wood Hammer","Hammer Arm","Play Rough","Curse"]
         }
     },
  }

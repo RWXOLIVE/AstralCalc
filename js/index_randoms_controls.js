@@ -4,7 +4,7 @@ $("#p2 .ability").bind("keyup change", function () {
 });
 
 $("#p2 .item").bind("keyup change", function () {
-	autosetStatus("#p2", $(this).val());
+	autosetStatus("#p2", getEffectiveItemFromPokeInfo($(this).closest(".poke-info")));
 });
 
 lastManualStatus["#p2"] = "Healthy";
