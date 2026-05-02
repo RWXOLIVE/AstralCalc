@@ -149,11 +149,7 @@ function getFinalSpeed(gen, pokemon, field, side) {
     else if (pokemon.hasAbility('Slow Start') && pokemon.abilityOn) {
         speedMods.push(2048);
     }
-    else if (getMostProficientStat(pokemon, gen) === 'spe' &&
-        ((pokemon.hasAbility('Protosynthesis') &&
-            (weather.includes('Sun') || pokemon.hasItem('Booster Energy'))) ||
-            (pokemon.hasAbility('Quark Drive') &&
-                (terrain === 'Electric' || pokemon.hasItem('Booster Energy'))))) {
+    else if (getProtoQuarkBoostedStat(pokemon, field, gen) === 'spe') {
         speedMods.push(6144);
     }
     if (pokemon.hasItem('Choice Scarf')) {
@@ -483,6 +479,20 @@ function getMostProficientStat(pokemon, gen) {
     return bestStat;
 }
 exports.getMostProficientStat = getMostProficientStat;
+function getProtoQuarkBoostedStat(pokemon, field, gen) {
+    if (pokemon.protoQuark === 'inactive')
+        return undefined;
+    if (pokemon.protoQuark && pokemon.protoQuark !== 'auto')
+        return pokemon.protoQuark;
+    var weather = field.weather || '';
+    var terrain = field.terrain;
+    var hasProtoQuarkBoost = (pokemon.hasAbility('Protosynthesis') &&
+        (weather.includes('Sun') || pokemon.hasItem('Booster Energy'))) ||
+        (pokemon.hasAbility('Quark Drive') &&
+            (terrain === 'Electric' || pokemon.hasItem('Booster Energy')));
+    return hasProtoQuarkBoost ? getMostProficientStat(pokemon, gen) : undefined;
+}
+exports.getProtoQuarkBoostedStat = getProtoQuarkBoostedStat;
 function getFinalDamage(baseAmount, i, effectiveness, isBurned, stabMod, finalMod, protect) {
     var damageAmount = Math.floor(OF32(baseAmount * (85 + i)) / 100);
     if (stabMod !== 4096)

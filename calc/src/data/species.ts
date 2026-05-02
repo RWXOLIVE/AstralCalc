@@ -85,7 +85,7 @@ const RBY: {[name: string]: SpeciesData} = {
   },
   Chansey: {
     types: ['Normal'],
-    bs: {hp: 250, at: 5, df: 5, sp: 50, sl: 35},
+    bs: {hp: 250, at: 35, df: 35, sp: 50, sl: 35},
     weightkg: 34.6,
   },
   Charizard: {
@@ -1023,7 +1023,7 @@ const GSC_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
   },
   Blissey: {
     types: ['Normal'],
-    bs: {hp: 255, at: 10, df: 10, sa: 75, sd: 135, sp: 55},
+    bs: {hp: 255, at: 10, df: 75, sa: 95, sd: 135, sp: 55},
     weightkg: 46.8,
   },
   Celebi: {
@@ -2560,7 +2560,7 @@ const ADV_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
   Solrock: {
     types: ['Rock', 'Psychic'],
     bs: {hp: 90, at: 109, df: 105, sa: 55, sd: 70, sp: 70},
-    weightkg: 154,
+    weightkg: 279,
     abilities: {0: 'Levitate'},
     gender: 'N',
   },
@@ -3123,7 +3123,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
   },
   Dusknoir: {
     types: ['Ghost', 'Fighting'],
-    bs: {hp: 55, at: 125, df: 130, sa: 55, sd: 130, sp: 45},
+    bs: {hp: 75, at: 125, df: 130, sa: 55, sd: 130, sp: 45},
     weightkg: 106.6,
     abilities: {0: 'Pressure'},
   },
@@ -3428,7 +3428,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
   },
   Phione: {
     types: ['Water'],
-    bs: {hp: 80, at: 80, df: 80, sa: 80, sd: 80, sp: 80},
+    bs: {hp: 90, at: 90, df: 90, sa: 90, sd: 90, sp: 90},
     weightkg: 3.1,
     abilities: {0: 'Hydration'},
     gender: 'N',
@@ -3599,7 +3599,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
   },
   Skuntank: {
     types: ['Poison', 'Dark'],
-    bs: {hp: 103, at: 93, df: 67, sa: 71, sd: 61, sp: 84},
+    bs: {hp: 110, at: 97, df: 67, sa: 81, sd: 63, sp: 89},
     weightkg: 38,
     abilities: {0: 'Stench'},
   },
@@ -3919,7 +3919,7 @@ const BW_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
   },
   'Darmanitan-Zen': {
     types: ['Fire', 'Psychic'],
-    bs: {hp: 105, at: 20, df: 95, sa: 140, sd: 95, sp: 45},
+    bs: {hp: 105, at: 40, df: 105, sa: 140, sd: 105, sp: 35},
     weightkg: 92.9,
     baseSpecies: 'Darmanitan',
     abilities: {0: 'Zen Mode'},
@@ -4646,20 +4646,20 @@ const BW_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
     abilities: {0: 'Wonder Skin'},
   },
   Simipour: {
-    types: ['Water'],
-    bs: {hp: 65, at: 70, df: 60, sa: 115, sd: 85, sp: 100},
+    types: ['Water', 'Psychic'],
+    bs: {hp: 75, at: 70, df: 70, sa: 115, sd: 85, sp: 100},
     weightkg: 29,
     abilities: {0: 'Gluttony'},
   },
   Simisage: {
     types: ['Grass', 'Fighting'],
-    bs: {hp: 65, at: 110, df: 78, sa: 90, sd: 52, sp: 100},
+    bs: {hp: 75, at: 115, df: 68, sa: 100, sd: 62, sp: 100},
     weightkg: 30.5,
     abilities: {0: 'Gluttony'},
   },
   Simisear: {
     types: ['Fire', 'Dark'],
-    bs: {hp: 65, at: 80, df: 85, sa: 80, sd: 85, sp: 100},
+    bs: {hp: 75, at: 90, df: 85, sa: 80, sd: 90, sp: 100},
     weightkg: 28,
     abilities: {0: 'Gluttony'},
   },
@@ -4860,7 +4860,7 @@ const BW_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
   },
   Watchog: {
     types: ['Normal'],
-    bs: {hp: 60, at: 85, df: 69, sa: 60, sd: 69, sp: 77},
+    bs: {hp: 95, at: 90, df: 69, sa: 90, sd: 69, sp: 77},
     weightkg: 27,
     abilities: {0: 'Illuminate'},
   },
@@ -5745,7 +5745,7 @@ const XY_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
   },
   'Sableye-Mega': {
     types: ['Dark', 'Ghost'],
-    bs: {hp: 55, at: 90, df: 145, sa: 75, sd: 145, sp: 25},
+    bs: {hp: 55, at: 95, df: 145, sa: 75, sd: 145, sp: 25},
     weightkg: 161,
     abilities: {0: 'Magic Bounce'},
     baseSpecies: 'Sableye',
@@ -8028,7 +8028,7 @@ const SS_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
     baseSpecies: 'Grimmsnarl',
   },
   Grookey: {
-    types: ['Normal'],
+    types: ['Grass', 'Normal'],
     bs: {hp: 50, at: 65, df: 50, sa: 40, sd: 40, sp: 65},
     weightkg: 5,
     abilities: {0: 'Overgrow'},
@@ -8321,7 +8321,7 @@ const SS_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
     gender: 'N',
   },
   Rillaboom: {
-    types: ['Normal'],
+    types: ['Grass', 'Normal'],
     bs: {hp: 100, at: 125, df: 90, sa: 65, sd: 70, sp: 85},
     weightkg: 90,
     abilities: {0: 'Overgrow'},
@@ -8510,7 +8510,7 @@ const SS_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
     abilities: {0: 'Run Away'},
   },
   Thwackey: {
-    types: ['Normal'],
+    types: ['Grass', 'Normal'],
     bs: {hp: 70, at: 85, df: 70, sa: 55, sd: 60, sp: 80},
     weightkg: 14,
     abilities: {0: 'Overgrow'},

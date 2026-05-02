@@ -10,6 +10,7 @@ export declare class Pokemon implements State.Pokemon {
     gender?: I.GenderName;
     ability?: I.AbilityName;
     abilityOn?: boolean;
+    protoQuark?: 'auto' | 'inactive' | 'atk' | 'def' | 'spa' | 'spd' | 'spe';
     isDynamaxed?: boolean;
     isSaltCure?: boolean;
     alliesFainted?: number;

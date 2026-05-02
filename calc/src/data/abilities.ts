@@ -315,6 +315,7 @@ const SV = SS.concat([
   'Mycelium Might',
   'Opportunist',
   'Orichalcum Pulse',
+  'Piercing Drill',
   'Poison Puppeteer',
   'Protosynthesis',
   'Purifying Salt',
@@ -322,6 +323,7 @@ const SV = SS.concat([
   'Rocky Payload',
   'Seed Sower',
   'Sharpness',
+  'Surge Cutter',
   'Supersweet Syrup',
   'Supreme Overlord',
   'Sword of Ruin',
@@ -339,7 +341,7 @@ const SV = SS.concat([
   'Zero to Hero',
   'Floral Payload',
   'Heart Boost',
-  'Swarm Lash',
+  'Infestate',
   'Lunar Veil',
   'Solar Veil',
   'Blazing Soul',
@@ -350,6 +352,8 @@ const SV = SS.concat([
   'Heated Rush',
   'Luchador\'s Pride',
   'Echoing Alloy',
+  'Dragonize',
+  'Mega Sol',
 ]);
 
 export const ABILITIES = [[], RBY, GSC, ADV, DPP, BW, XY, SM, SS, SV];

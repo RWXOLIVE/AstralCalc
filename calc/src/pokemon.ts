@@ -19,6 +19,7 @@ export class Pokemon implements State.Pokemon {
   gender?: I.GenderName;
   ability?: I.AbilityName;
   abilityOn?: boolean;
+  protoQuark?: 'auto' | 'inactive' | 'atk' | 'def' | 'spa' | 'spd' | 'spe';
   isDynamaxed?: boolean;
   isSaltCure?: boolean;
   alliesFainted?: number;
@@ -59,6 +60,7 @@ export class Pokemon implements State.Pokemon {
     this.gender = options.gender || this.species.gender || 'M';
     this.ability = options.ability || this.species.abilities?.[0] || undefined;
     this.abilityOn = !!options.abilityOn;
+    this.protoQuark = options.protoQuark;
 
     this.isDynamaxed = !!options.isDynamaxed;
     this.isSaltCure = !!options.isSaltCure;
@@ -152,6 +154,7 @@ export class Pokemon implements State.Pokemon {
       level: this.level,
       ability: this.ability,
       abilityOn: this.abilityOn,
+      protoQuark: this.protoQuark,
       isDynamaxed: this.isDynamaxed,
       isSaltCure: this.isSaltCure,
       alliesFainted: this.alliesFainted,

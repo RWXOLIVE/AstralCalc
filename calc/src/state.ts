@@ -6,6 +6,7 @@ export namespace State {
     level?: number;
     ability?: I.AbilityName;
     abilityOn?: boolean;
+    protoQuark?: 'auto' | 'inactive' | 'atk' | 'def' | 'spa' | 'spd' | 'spe';
     isDynamaxed?: boolean;
     isSaltCure?: boolean;
     alliesFainted?: number;
@@ -74,6 +75,7 @@ export namespace State {
     isAuroraVeil?: boolean;
     isBattery?: boolean;
     isPowerSpot?: boolean;
+    isPlayer?: boolean;
     isSwitching?: 'out' | 'in';
   }
 }

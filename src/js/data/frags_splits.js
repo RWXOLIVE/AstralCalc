@@ -22,6 +22,20 @@ window.FRAG_SPLIT_RULES = {
 			endTrainers: [
 				"Leader Brawly | Dewford Gym"
 			]
-		}
+		},
+		{
+			split: 3,
+			endTrainers: [
+				"Gym Leader Norman | Petalburg Gym",
+				"Gym Leader Norman - DB | Petalburg Gym"
+			]
+		},
+		{
+			split: 4,
+			endTrainers: [
+				"Leader Elesa | Mauville Gym",
+				"Leader Jasmine | Mauville Gym"
+			]
+		},
 	]
 };

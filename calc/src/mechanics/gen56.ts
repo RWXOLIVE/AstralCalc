@@ -302,7 +302,8 @@ export function calculateBWXY(
     desc.moveBP = basePower;
     break;
   case 'Punishment':
-    basePower = Math.min(200, 60 + 20 * countBoosts(gen, defender.boosts));
+    // Punishment: 60 + 20 * (sum of target's positive stat stages), capped at 200.
+    basePower = Math.min(200, 60 + 20 * Math.max(0, countBoosts(gen, defender.boosts)));
     desc.moveBP = basePower;
     break;
   case 'Low Kick':

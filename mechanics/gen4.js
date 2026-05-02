@@ -185,7 +185,7 @@ function calculateDPP(gen, attacker, defender, move, field) {
             }
             break;
         case 'Punishment':
-            basePower = Math.min(200, 60 + 20 * (0, util_1.countBoosts)(gen, defender.boosts));
+            basePower = Math.min(200, 60 + 20 * Math.max(0, (0, util_1.countBoosts)(gen, defender.boosts)));
             desc.moveBP = basePower;
             break;
         case 'Wake-Up Slap':

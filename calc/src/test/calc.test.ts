@@ -56,6 +56,23 @@ describe('calc', () => {
       });
     });
 
+    inGen(9, ({calculate, Pokemon, Move}) => {
+      test('Heart Boost should ignore frostbite SpA drop', () => {
+        const burned = calculate(
+          Pokemon('Mew', {ability: 'Heart Boost', status: 'brn'}),
+          Pokemon('Blastoise'),
+          Move('Psychic')
+        );
+        const frostbitten = calculate(
+          Pokemon('Mew', {ability: 'Heart Boost', status: 'frb'}),
+          Pokemon('Blastoise'),
+          Move('Psychic')
+        );
+
+        expect(frostbitten.range()).toEqual(burned.range());
+      });
+    });
+
     inGens(4, 9, ({gen, calculate, Pokemon, Move, Field}) => {
       test(`Trick Room reverses move order checks (gen ${gen})`, () => {
         const normal = calculate(
@@ -766,6 +783,20 @@ describe('calc', () => {
         const recovery = result.recovery();
         expect(recovery.recovery).toEqual([161, 161]);
         expect(recovery.text).toBe('52.1 - 52.1% recovered');
+      });
+
+      test('Water Compaction', () => {
+        const blastoise = Pokemon('Blastoise', {
+          evs: {spa: 252},
+        });
+        const palossand = Pokemon('Palossand', {
+          ability: 'Water Compaction',
+          evs: {hp: 252},
+        });
+        const surf = Move('Surf');
+
+        const result = calculate(blastoise, palossand, surf);
+        expect(result.damage).toBe(0);
       });
 
       test('Loaded Field', () => {

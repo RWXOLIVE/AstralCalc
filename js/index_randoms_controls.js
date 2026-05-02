@@ -4,7 +4,7 @@ $("#p2 .ability").bind("keyup change", function () {
 });
 
 $("#p2 .item").bind("keyup change", function () {
-	autosetStatus("#p2", $(this).val());
+	autosetStatus("#p2", getEffectiveItemFromPokeInfo($(this).closest(".poke-info")));
 });
 
 lastManualStatus["#p2"] = "Healthy";
@@ -130,6 +130,9 @@ function performCalculations() {
 	var p2info = $("#p2");
 	var p1 = createPokemon(p1info);
 	var p2 = createPokemon(p2info);
+	applyPowerSplitToPair(p1, p2);
+	syncCommanderButton(p1info, p1);
+	syncCommanderButton(p2info, p2);
 	var p1field = createField();
 	var p2field = p1field.clone().swap();
 
@@ -217,8 +220,11 @@ function calculationsColors(p1info, p2) {
 	if (!p2) {
 		var p2info = $("#p2");
 		var p2 = createPokemon(p2info);
+	} else if (typeof p2.clone === "function") {
+		p2 = p2.clone();
 	}
 	var p1 = createPokemon(p1info);
+	applyPowerSplitToPair(p1, p2);
 	var p1field = createField();
 	var p2field = p1field.clone().swap();
 
@@ -378,6 +384,27 @@ function checkStatBoost(p1, p2) {
 	}
 }
 
+function isCommanderDondozo(pokemon) {
+	return pokemon && pokemon.name && pokemon.name.indexOf('Dondozo') === 0;
+}
+
+function syncCommanderButton(pokeInfo, pokemon) {
+	var button = pokeInfo.find(".commander-boost");
+	if (!button.length) return;
+	button.toggleClass("hide", !(gen === 9 && isCommanderDondozo(pokemon)));
+}
+
+function applyCommanderBoost(pokeInfo) {
+	var stats = ['at', 'df', 'sa', 'sd', 'sp'];
+	for (var i = 0; i < stats.length; i++) {
+		var boostSelector = pokeInfo.find("." + stats[i] + " .boost");
+		if (!boostSelector.length) continue;
+		var currentBoost = parseInt(boostSelector.val(), 10);
+		if (Number.isNaN(currentBoost)) currentBoost = 0;
+		boostSelector.val(String(Math.min(6, currentBoost + 2))).change();
+	}
+}
+
 function calculateAllMoves(gen, p1, p1field, p2, p2field) {
 	checkStatBoost(p1, p2);
 	var results = [[], []];
@@ -387,6 +414,15 @@ function calculateAllMoves(gen, p1, p1field, p2, p2field) {
 	}
 	return results;
 }
+
+$(document).on("click", ".commander-boost", function (ev) {
+	ev.preventDefault();
+	var pokeInfo = $(this).closest(".poke-info");
+	var pokemon = createPokemon(pokeInfo);
+	if (!(gen === 9 && isCommanderDondozo(pokemon))) return;
+	applyCommanderBoost(pokeInfo);
+	performCalculations();
+});
 
 $(".mode").change(function () {
 	var params = new URLSearchParams(window.location.search);
@@ -435,8 +471,14 @@ $(document).ready(function () {
 		if (autoRefreshColorCodes && autoRefreshColorCodes.checked && typeof window.refreshColorCode === "function") {
 			window.refreshColorCode();
 		}
+		if (typeof updateAllMoveMetaDisplays === "function") {
+			updateAllMoveMetaDisplays();
+		}
 		performCalculations();
 	});
+	if (typeof updateAllMoveMetaDisplays === "function") {
+		updateAllMoveMetaDisplays();
+	}
 	performCalculations();
 });
 

@@ -157,6 +157,8 @@
                 <div>
                     <label for="levelL1">Level</label>
                     <input class="level calc-trigger" id="levelL1" type="number" step="1" value="100" />
+                    <span class="level-cap-text">Cap</span>
+                    <input class="level-cap calc-trigger" type="number" min="0" max="100" step="1" value="100" />
                 </div>
                 <div class="hide">
                     <label for="weightL1">Weight (kg)</label>
@@ -456,10 +458,14 @@
 								<option value="5">Five allies fainted</option>
 						  </select>
                 </div>
-                <div class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
-                    <label for="itemL1">Item</label>
-                    <select class="item terrain-trigger calc-trigger" id="itemL1"></select>
-                </div>
+                    <div class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
+                        <label for="itemL1">Item</label>
+                        <select class="item terrain-trigger calc-trigger" id="itemL1"></select>
+                        <label class="item-ignore-toggle-label" for="ignoreItemL1" title="When checked, this Pokemon is treated as if it has no held item, without clearing the selected item.">
+                            <input type="checkbox" class="ignore-item-toggle terrain-trigger calc-trigger" id="ignoreItemL1" />
+                            No Item
+                        </label>
+                    </div>
                 <div class="pool">
                     <div class="ability-pool gen-specific g3 g4 g5 g6 g7 g8 g9">
                         <div>Ability Pool</div>
@@ -507,6 +513,7 @@
                         <option value="14">14/16</option>
                         <option value="15">15/16</option>
                     </select>
+                    <button type="button" class="btn btn-wide commander-boost hide">Commander</button>
                 </div>
             </div>
             <div class="info-group gen-specific g9">
@@ -541,7 +548,7 @@
                 <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critL1" />
                 <label class="btn crit-btn" for="critL1" title="Force this attack to be a critical hit?">Crit</label>
                 <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zL1"/>
-                <label class="btn z-btn gen-specific g7 hide" for="zL1" title="Make this attack a Z-move?">Z</label>
+                <span class="move-meta" title="Move PP and accuracy">PP -- | ACC --</span>
                 <select class="move-hits calc-trigger hide">
                     <option value="2">2 hits</option>
                     <option value="3">3 hits</option>
@@ -575,7 +582,7 @@
                 <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critL2" />
                 <label class="btn crit-btn" for="critL2" title="Force this attack to be a critical hit?">Crit</label>
                 <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zL2"/>
-                <label class="btn z-btn gen-specific g7 hide" for="zL2" title="Make this attack a Z-move?">Z</label>
+                <span class="move-meta" title="Move PP and accuracy">PP -- | ACC --</span>
                 <select class="move-hits calc-trigger hide">
                     <option value="2">2 hits</option>
                     <option value="3">3 hits</option>
@@ -609,7 +616,7 @@
                 <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critL3" />
                 <label class="btn crit-btn" for="critL3" title="Force this attack to be a critical hit?">Crit</label>
                 <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zL3"/>
-                <label class="btn z-btn gen-specific g7 hide" for="zL3" title="Make this attack a Z-move?">Z</label>
+                <span class="move-meta" title="Move PP and accuracy">PP -- | ACC --</span>
                 <select class="move-hits calc-trigger hide">
                     <option value="2">2 hits</option>
                     <option value="3">3 hits</option>
@@ -643,7 +650,7 @@
                 <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critL4" />
                 <label class="btn crit-btn" for="critL4" title="Force this attack to be a critical hit?">Crit</label>
                 <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zL4"/>
-                <label class="btn z-btn gen-specific g7 hide" for="zL4" title="Make this attack a Z-move?">Z</label>
+                <span class="move-meta" title="Move PP and accuracy">PP -- | ACC --</span>
                 <select class="move-hits calc-trigger hide">
                     <option value="2">2 hits</option>
                     <option value="3">3 hits</option>
@@ -972,6 +979,17 @@
                                   <label class="btn btn-xxwide" for="powerSpotR">Power Spot</label>
                               </div></td>
                           </tr>
+                        <tr class="gen-specific g5 g6 g7 g8 g9">
+                            <td><div class="left" title="Apply Power Split: both Pok&eacute;mon's Attack and Sp. Atk become the rounded-down average, ignoring stat stages.">
+                                <div hidden id="selectPowerSplitInstruction">Apply Power Split: both Pok&eacute;mon's Attack and Sp. Atk become the rounded-down average, ignoring stat stages.</div>
+                                <input aria-describedby="selectPowerSplitInstruction" class="visually-hidden calc-trigger" type="checkbox" id="powerSplitL" />
+                                <label class="btn btn-xxwide" for="powerSplitL">Power Split</label>
+                              </div></td>
+                            <td><div class="right" title="Apply Power Split: both Pok&eacute;mon's Attack and Sp. Atk become the rounded-down average, ignoring stat stages.">
+                                <input aria-describedby="selectPowerSplitInstruction" class="visually-hidden calc-trigger" type="checkbox" id="powerSplitR" />
+                                <label class="btn btn-xxwide" for="powerSplitR">Power Split</label>
+                            </div></td>
+                        </tr>
                         <tr class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
                             <td><div class="left" title="Is the defending Pok&eacute;mon switching out?">
                               <div hidden id="selectSwitchingInstruction">Is the defending Pok&eacute;mon switching out?</div>
@@ -981,6 +999,14 @@
                             <td><div class="right" title="Is the defending Pok&eacute;mon switching out?">
                                 <input aria-describedby="selectSwitchingInstruction" class="visually-hidden calc-trigger" type="checkbox" id="switchingR" />
                                 <label class="btn btn-xxwide" for="switchingR">Switching Out</label>
+                            </div></td>
+                        </tr>
+                        <tr class="gen-specific g4 g5 g6 g7 g8 g9">
+                            <td></td>
+                            <td><div class="right" title="Is Trick Room active on the field?">
+                                <div hidden id="selectTrickRoomInstruction">Is Trick Room active on the field?</div>
+                                <input aria-describedby="selectTrickRoomInstruction" class="visually-hidden calc-trigger" type="checkbox" id="trickRoomR" />
+                                <label class="btn btn-xxwide" for="trickRoomR">Trick Room</label>
                             </div></td>
                         </tr>
                     </tbody>
@@ -1313,10 +1339,14 @@
 								<option value="5">Five allies fainted</option>
 						  </select>
                 </div>
-                         <div class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
-                    <label for="itemR1">Item</label>
-                    <select class="item terrain-trigger calc-trigger" id="itemR1"></select>
-                </div>
+                    <div class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
+                        <label for="itemR1">Item</label>
+                        <select class="item terrain-trigger calc-trigger" id="itemR1"></select>
+                        <label class="item-ignore-toggle-label" for="ignoreItemR1" title="When checked, this Pokemon is treated as if it has no held item, without clearing the selected item.">
+                            <input type="checkbox" class="ignore-item-toggle terrain-trigger calc-trigger" id="ignoreItemR1" />
+                            No Item
+                        </label>
+                    </div>
                 <div class="pool">
                     <div class="ability-pool gen-specific g3 g4 g5 g6 g7 g8 g9">
                         <div>Ability Pool</div>
@@ -1346,7 +1376,6 @@
                         <option value="Asleep">Asleep</option>
                         <option value="Frozen">Frozen</option>
                         <option value="Frostbite">Frostbite</option>
-                        <option value="Frostbite">Frostbite</option>
                     </select>
                     <select aria-label="Toxic counter" class="toxic-counter calc-trigger hide">
                         <option value="1">1/16</option>
@@ -1365,6 +1394,7 @@
                         <option value="14">14/16</option>
                         <option value="15">15/16</option>
                     </select>
+                    <button type="button" class="btn btn-wide commander-boost hide">Commander</button>
                 </div>
             </div>
             <div class="info-group gen-specific g9">
@@ -1397,7 +1427,7 @@
                 <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critR1" />
                 <label class="btn crit-btn" for="critR1" title="Force this attack to be a critical hit?">Crit</label>
                 <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zR1"/>
-                <label class="btn z-btn gen-specific g7 hide" for="zR1" title="Make this attack a Z-move?">Z</label>
+                <span class="move-meta" title="Move PP and accuracy">PP -- | ACC --</span>
                 <select class="move-hits calc-trigger hide">
                     <option value="2">2 hits</option>
                     <option value="3">3 hits</option>
@@ -1431,7 +1461,7 @@
                 <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critR2" />
                 <label class="btn crit-btn" for="critR2" title="Force this attack to be a critical hit?">Crit</label>
                 <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zR2"/>
-                <label class="btn z-btn gen-specific g7 hide" for="zR2" title="Make this attack a Z-move?">Z</label>
+                <span class="move-meta" title="Move PP and accuracy">PP -- | ACC --</span>
                 <select class="move-hits calc-trigger hide">
                     <option value="2">2 hits</option>
                     <option value="3">3 hits</option>
@@ -1465,7 +1495,7 @@
                 <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critR3" />
                 <label class="btn crit-btn" for="critR3" title="Force this attack to be a critical hit?">Crit</label>
                 <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zR3"/>
-                <label class="btn z-btn gen-specific g7 hide" for="zR3" title="Make this attack a Z-move?">Z</label>
+                <span class="move-meta" title="Move PP and accuracy">PP -- | ACC --</span>
                 <select class="move-hits calc-trigger hide">
                     <option value="2">2 hits</option>
                     <option value="3">3 hits</option>
@@ -1499,7 +1529,7 @@
                 <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critR4" />
                 <label class="btn crit-btn" for="critR4" title="Force this attack to be a critical hit?">Crit</label>
                 <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zR4"/>
-                <label class="btn z-btn gen-specific g7 hide" for="zR4" title="Make this attack a Z-move?">Z</label>
+                <span class="move-meta" title="Move PP and accuracy">PP -- | ACC --</span>
                 <select class="move-hits calc-trigger hide">
                     <option value="2">2 hits</option>
                     <option value="3">3 hits</option>
@@ -1576,6 +1606,7 @@
     <script type="text/javascript" src="./calc/adaptable.js?"></script>
     <script type="text/javascript" src="./calc/index.js?"></script>
     <script type="text/javascript" src="./js/spritedata.js?"></script>
+    <script type="text/javascript" src="./js/data/move_info_lookup.js?"></script>
     <script type="text/javascript" src="./js/shared_controls.js?"></script>
     <script type="text/javascript" src="./js/index_randoms_controls.js?"></script>
     <script type="text/javascript" src="./js/moveset_import.js?"></script>

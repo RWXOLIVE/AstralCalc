@@ -44,6 +44,10 @@ html, body {
     color: var(--button-hover);
 }
 
+.field-info label.btn.trainer-field-lock-on {
+    box-shadow: inset 0 0 0 2px #63cf8b;
+}
+
 fieldset {
     background-color: var(--fieldset-color);
 }
@@ -135,6 +139,37 @@ a.collapsible-link {
 .frags-row.frags-rank-3 td.frag-num:first-child,
 .frags-row.frags-rank-3 .frags-mon-cell {
     color: #cd7f32;
+}
+
+.frags-split-drop summary {
+    color: #8fb6f5;
+}
+
+.frags-split-drop[open] {
+    border-color: #455568;
+    background: rgba(16, 24, 35, 0.7);
+}
+
+.frags-history-controls {
+    border-color: #455568;
+    background: rgba(16, 24, 35, 0.7);
+}
+
+.notes-turn-card {
+    border-color: #455568;
+    background: rgba(16, 24, 35, 0.7);
+}
+
+.notes-format-btn.is-active {
+    background: #253a67;
+    border-color: #557cc1;
+}
+
+.notes-set-select,
+.notes-note-input {
+    background: #121820;
+    color: var(--text);
+    border: 1px solid #455568;
 }
 
 .settings-choice-btn.is-active {

@@ -347,6 +347,7 @@ var SV = SS.concat([
     'Mycelium Might',
     'Opportunist',
     'Orichalcum Pulse',
+    'Piercing Drill',
     'Poison Puppeteer',
     'Protosynthesis',
     'Purifying Salt',

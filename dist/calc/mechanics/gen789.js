@@ -45,8 +45,13 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
     if (move.category === 'Status' && !move.named('Nature Power')) {
         return result;
     }
+    var hasPiercingContact = !!move.flags.contact &&
+        attacker.hasAbility('Unseen Fist', 'Piercing Drill');
+    var shouldNerfPiercingProtect = field.defenderSide.isProtected &&
+        hasPiercingContact &&
+        !!field.attackerSide.isPlayer;
     var breaksProtect = move.breaksProtect || move.isZ || attacker.isDynamaxed ||
-        (attacker.hasAbility('Unseen Fist') && move.flags.contact);
+        hasPiercingContact;
     if (field.defenderSide.isProtected && !breaksProtect) {
         desc.isProtected = true;
         return result;
@@ -69,13 +74,20 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
     var type = move.type;
     if (move.named('Weather Ball')) {
         var holdingUmbrella = attacker.hasItem('Utility Umbrella');
+        var isMegaSolActive_1 = attacker.hasAbility('Mega Sol');
         type =
-            field.hasWeather('Sun', 'Harsh Sunshine') && !holdingUmbrella ? 'Fire'
-                : field.hasWeather('Rain', 'Heavy Rain') && !holdingUmbrella ? 'Water'
-                    : field.hasWeather('Sand') ? 'Rock'
-                        : field.hasWeather('Hail', 'Snow') ? 'Ice'
-                            : 'Normal';
-        desc.weather = field.weather;
+            isMegaSolActive_1 ? 'Fire'
+                : field.hasWeather('Sun', 'Harsh Sunshine') && !holdingUmbrella ? 'Fire'
+                    : field.hasWeather('Rain', 'Heavy Rain') && !holdingUmbrella ? 'Water'
+                        : field.hasWeather('Sand') ? 'Rock'
+                            : field.hasWeather('Hail', 'Snow') ? 'Ice'
+                                : 'Normal';
+        if (isMegaSolActive_1) {
+            desc.attackerAbility = attacker.ability;
+        }
+        else {
+            desc.weather = field.weather;
+        }
         desc.moveType = type;
     }
     else if (move.named('Judgment') && attacker.item && attacker.item.includes('Plate')) {
@@ -140,8 +152,9 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
     var hasAteAbilityTypeChange = false;
     var isAerilate = false;
     var isPixilate = false;
+    var isDragonize = false;
     var isRefrigerate = false;
-    var isSwarmLash = false;
+    var isInfestate = false;
     var isGalvanize = false;
     var isLiquidVoice = false;
     var isEchoingAlloy = false;
@@ -164,16 +177,19 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
         else if ((isPixilate = attacker.hasAbility('Pixilate') && normal)) {
             type = 'Fairy';
         }
+        else if ((isDragonize = attacker.hasAbility('Dragonize') && normal)) {
+            type = 'Dragon';
+        }
         else if ((isRefrigerate = attacker.hasAbility('Refrigerate') && normal)) {
             type = 'Ice';
         }
-        else if ((isSwarmLash = attacker.hasAbility('Swarm Lash') && normal)) {
+        else if ((isInfestate = attacker.hasAbility('Infestate') && normal)) {
             type = 'Bug';
         }
         else if ((isNormalize = attacker.hasAbility('Normalize'))) {
             type = 'Normal';
         }
-        if (isGalvanize || isPixilate || isRefrigerate || isSwarmLash || isAerilate || isNormalize) {
+        if (isGalvanize || isPixilate || isRefrigerate || isInfestate || isAerilate || isDragonize || isNormalize) {
             desc.attackerAbility = attacker.ability;
             hasAteAbilityTypeChange = true;
         }
@@ -235,8 +251,10 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
         (move.named('Poltergeist') && !defender.item)) {
         return result;
     }
-    if ((field.hasWeather('Harsh Sunshine') && move.hasType('Water')) ||
-        (field.hasWeather('Heavy Rain') && move.hasType('Fire'))) {
+    var isMegaSolWeatherBall = attacker.hasAbility('Mega Sol') && move.named('Weather Ball');
+    if (!isMegaSolWeatherBall &&
+        ((field.hasWeather('Harsh Sunshine') && move.hasType('Water')) ||
+            (field.hasWeather('Heavy Rain') && move.hasType('Fire')))) {
         desc.weather = field.weather;
         return result;
     }
@@ -258,7 +276,8 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
     if ((defender.hasAbility('Wonder Guard') && typeEffectiveness <= 1) ||
         (move.hasType('Grass') && defender.hasAbility('Sap Sipper')) ||
         (move.hasType('Fire') && defender.hasAbility('Flash Fire', 'Well-Baked Body')) ||
-        (move.hasType('Water') && defender.hasAbility('Dry Skin', 'Storm Drain', 'Water Absorb')) ||
+        (move.hasType('Water') &&
+            defender.hasAbility('Dry Skin', 'Storm Drain', 'Water Absorb', 'Water Compaction')) ||
         (move.hasType('Electric') &&
             defender.hasAbility('Lightning Rod', 'Motor Drive', 'Volt Absorb')) ||
         (move.hasType('Ground') &&
@@ -365,7 +384,16 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
     }
     var noWeatherBoost = defender.hasItem('Utility Umbrella');
     var noWeatherBoostAtk = attacker.hasItem('Utility Umbrella');
-    if (!noWeatherBoost && !noWeatherBoostAtk &&
+    var isMegaSolActive = attacker.hasAbility('Mega Sol');
+    if (isMegaSolActive && move.hasType('Fire')) {
+        baseDamage = (0, util_2.pokeRound)((0, util_2.OF32)(baseDamage * 6144) / 4096);
+        desc.attackerAbility = attacker.ability;
+    }
+    else if (isMegaSolActive && move.hasType('Water')) {
+        baseDamage = (0, util_2.pokeRound)((0, util_2.OF32)(baseDamage * 2048) / 4096);
+        desc.attackerAbility = attacker.ability;
+    }
+    else if (!noWeatherBoost && !noWeatherBoostAtk &&
         ((field.hasWeather('Sun', 'Harsh Sunshine') && move.hasType('Fire')) ||
             (field.hasWeather('Rain', 'Heavy Rain') && move.hasType('Water')))) {
         baseDamage = (0, util_2.pokeRound)((0, util_2.OF32)(baseDamage * 6144) / 4096);
@@ -419,13 +447,17 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
     desc.isBurned = applyBurn;
     var applyFrostbite = attacker.hasStatus('frb') &&
         move.category === 'Special' &&
-        !attacker.hasAbility('Guts') &&
+        !attacker.hasAbility('Guts', 'Heart Boost') &&
         !move.named('Facade');
     desc.isFrostbite = applyFrostbite;
     var finalMods = calculateFinalModsSMSSSV(gen, attacker, defender, move, field, desc, isCritical, typeEffectiveness);
     var protect = false;
     if (field.defenderSide.isProtected &&
         (attacker.isDynamaxed || (move.isZ && attacker.item && attacker.item.includes(' Z')))) {
+        protect = true;
+        desc.isProtected = true;
+    }
+    if (shouldNerfPiercingProtect) {
         protect = true;
         desc.isProtected = true;
     }
@@ -525,7 +557,7 @@ function calculateBasePowerSMSSSV(gen, attacker, defender, move, field, hasAteAb
             desc.moveBP = basePower;
             break;
         case 'Punishment':
-            basePower = Math.min(200, 60 + 20 * (0, util_2.countBoosts)(gen, defender.boosts));
+            basePower = Math.min(200, 60 + 20 * Math.max(0, (0, util_2.countBoosts)(gen, defender.boosts)));
             desc.moveBP = basePower;
             break;
         case 'Low Kick':
@@ -571,10 +603,14 @@ function calculateBasePowerSMSSSV(gen, attacker, defender, move, field, hasAteAb
             desc.moveBP = basePower;
             break;
         case 'Weather Ball':
-            basePower = move.bp * (field.weather && !field.hasWeather('Strong Winds') ? 2 : 1);
-            if (field.hasWeather('Sun', 'Harsh Sunshine', 'Rain', 'Heavy Rain') &&
+            var isMegaSolActive = attacker.hasAbility('Mega Sol');
+            basePower = move.bp * ((isMegaSolActive || (field.weather && !field.hasWeather('Strong Winds'))) ? 2 : 1);
+            if (!isMegaSolActive &&
+                field.hasWeather('Sun', 'Harsh Sunshine', 'Rain', 'Heavy Rain') &&
                 attacker.hasItem('Utility Umbrella'))
                 basePower = move.bp;
+            if (isMegaSolActive)
+                desc.attackerAbility = attacker.ability;
             desc.moveBP = basePower;
             break;
         case 'Terrain Pulse':
@@ -775,7 +811,7 @@ function calculateBPModsSMSSSV(gen, attacker, defender, move, field, desc, baseP
         (attacker.hasAbility('Mega Launcher') && move.flags.pulse) ||
         (attacker.hasAbility('Strong Jaw') && move.flags.bite) ||
         (attacker.hasAbility('Steely Spirit') && move.hasType('Steel')) ||
-        (attacker.hasAbility('Sharpness') && move.flags.slicing)) {
+        (attacker.hasAbility('Sharpness', 'Surge Cutter') && move.flags.slicing)) {
         bpMods.push(6144);
         desc.attackerAbility = attacker.ability;
     }
@@ -985,6 +1021,12 @@ function calculateAtModsSMSSSV(gen, attacker, defender, move, field, desc) {
         atMods.push(6144);
         desc.attackerAbility = 'Flash Fire';
     }
+    else if (attacker.hasAbility('Electromorphosis') &&
+        attacker.abilityOn &&
+        move.hasType('Electric')) {
+        atMods.push(8192);
+        desc.attackerAbility = attacker.ability;
+    }
     else if ((attacker.hasAbility('Steelworker') && move.hasType('Steel')) ||
         (attacker.hasAbility('Dragon\'s Maw') && move.hasType('Dragon')) ||
         (attacker.hasAbility('Transistor') && move.hasType('Electric')) ||
@@ -1027,16 +1069,11 @@ function calculateAtModsSMSSSV(gen, attacker, defender, move, field, desc) {
         }
         atMods.push(3072);
     }
-    if ((attacker.hasAbility('Protosynthesis') &&
-        (field.hasWeather('Sun') || attacker.hasItem('Booster Energy'))) ||
-        (attacker.hasAbility('Quark Drive') &&
-            (field.hasTerrain('Electric') || attacker.hasItem('Booster Energy')))) {
-        if ((move.category === 'Physical' &&
-            (0, util_2.getMostProficientStat)(attacker) === 'atk') ||
-            (move.category === 'Special' && (0, util_2.getMostProficientStat)(attacker) === 'spa')) {
-            atMods.push(5325);
-            desc.attackerAbility = attacker.ability;
-        }
+    var attackerProtoQuarkBoostedStat = (0, util_2.getProtoQuarkBoostedStat)(attacker, field);
+    if ((move.category === 'Physical' && attackerProtoQuarkBoostedStat === 'atk') ||
+        (move.category === 'Special' && attackerProtoQuarkBoostedStat === 'spa')) {
+        atMods.push(5325);
+        desc.attackerAbility = attacker.ability;
     }
     if ((attacker.hasAbility('Hadron Engine') && move.category === 'Special' &&
         field.hasTerrain('Electric') && (0, util_2.isGrounded)(attacker, field)) ||
@@ -1143,15 +1180,11 @@ function calculateDfModsSMSSSV(gen, attacker, defender, move, field, desc, isCri
         }
         dfMods.push(3072);
     }
-    if ((defender.hasAbility('Protosynthesis') &&
-        (field.hasWeather('Sun') || attacker.hasItem('Booster Energy'))) ||
-        (defender.hasAbility('Quark Drive') &&
-            (field.hasTerrain('Electric') || attacker.hasItem('Booster Energy')))) {
-        if ((hitsPhysical && (0, util_2.getMostProficientStat)(defender) === 'def') ||
-            (!hitsPhysical && (0, util_2.getMostProficientStat)(defender) === 'spd')) {
-            desc.defenderAbility = defender.ability;
-            dfMods.push(5324);
-        }
+    var defenderProtoQuarkBoostedStat = (0, util_2.getProtoQuarkBoostedStat)(defender, field);
+    if ((hitsPhysical && defenderProtoQuarkBoostedStat === 'def') ||
+        (!hitsPhysical && defenderProtoQuarkBoostedStat === 'spd')) {
+        desc.defenderAbility = defender.ability;
+        dfMods.push(5324);
     }
     if ((defender.hasItem('Eviolite') &&
         (defender.name === 'Dipplin' || ((_a = gen.species.get((0, util_1.toID)(defender.name))) === null || _a === void 0 ? void 0 : _a.nfe))) ||

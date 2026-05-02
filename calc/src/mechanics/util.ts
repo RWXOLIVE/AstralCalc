@@ -103,7 +103,7 @@ export function getFinalSpeed(gen: Generation, pokemon: Pokemon, field: Field, s
       (pokemon.hasAbility('Chlorophyll') && weather.includes('Sun')) ||
       (pokemon.hasAbility('Heated Rush') && weather.includes('Sun')) ||
       (pokemon.hasAbility('Sand Rush') && weather === 'Sand') ||
-      (pokemon.hasAbility('Swift Swim') && weather.includes('Rain')) ||
+      (pokemon.hasAbility('Swift Swim', 'Surge Cutter') && weather.includes('Rain')) ||
       (pokemon.hasAbility('Slush Rush') && ['Hail', 'Snow'].includes(weather)) ||
       (pokemon.hasAbility('Surge Surfer') && terrain === 'Electric')
   ) {
@@ -112,13 +112,7 @@ export function getFinalSpeed(gen: Generation, pokemon: Pokemon, field: Field, s
     speedMods.push(6144);
   } else if (pokemon.hasAbility('Slow Start') && pokemon.abilityOn) {
     speedMods.push(2048);
-  } else if (
-    getMostProficientStat(pokemon, gen) === 'spe' &&
-    ((pokemon.hasAbility('Protosynthesis') &&
-      (weather.includes('Sun') || pokemon.hasItem('Booster Energy'))) ||
-      (pokemon.hasAbility('Quark Drive') &&
-        (terrain === 'Electric' || pokemon.hasItem('Booster Energy'))))
-  ) {
+  } else if (getProtoQuarkBoostedStat(pokemon, field, gen) === 'spe') {
     speedMods.push(6144);
   }
 
@@ -463,6 +457,25 @@ export function getMostProficientStat(
     }
   }
   return bestStat;
+}
+
+export function getProtoQuarkBoostedStat(
+  pokemon: Pokemon,
+  field: Field,
+  gen?: Generation
+): StatID | undefined {
+  if (pokemon.protoQuark === 'inactive') return undefined;
+  if (pokemon.protoQuark && pokemon.protoQuark !== 'auto') return pokemon.protoQuark;
+
+  const weather = field.weather || '';
+  const terrain = field.terrain;
+  const hasProtoQuarkBoost =
+    (pokemon.hasAbility('Protosynthesis') &&
+      (weather.includes('Sun') || pokemon.hasItem('Booster Energy'))) ||
+    (pokemon.hasAbility('Quark Drive') &&
+      (terrain === 'Electric' || pokemon.hasItem('Booster Energy')));
+
+  return hasProtoQuarkBoost ? getMostProficientStat(pokemon, gen) : undefined;
 }
 
 export function getFinalDamage(

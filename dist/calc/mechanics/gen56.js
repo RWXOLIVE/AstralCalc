@@ -233,7 +233,7 @@ function calculateBWXY(gen, attacker, defender, move, field) {
             desc.moveBP = basePower;
             break;
         case 'Punishment':
-            basePower = Math.min(200, 60 + 20 * (0, util_2.countBoosts)(gen, defender.boosts));
+            basePower = Math.min(200, 60 + 20 * Math.max(0, (0, util_2.countBoosts)(gen, defender.boosts)));
             desc.moveBP = basePower;
             break;
         case 'Low Kick':

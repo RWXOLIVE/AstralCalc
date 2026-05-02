@@ -403,6 +403,15 @@
                         <div class="gen-specific g3 g4 g5 g6 g7 g8 g9">
                             <label>Ability</label>
                             <select class="ability terrain-trigger"></select>
+                            <select aria-label="Protosynthesis/Quark Drive state" class="proto-quark-state calc-trigger hide">
+                                <option value="auto" selected="selected">Auto-Select</option>
+                                <option value="inactive">Inactive</option>
+                                <option value="atk">Attack</option>
+                                <option value="def">Defense</option>
+                                <option value="spa">Special Attack</option>
+                                <option value="spd">Special Defense</option>
+                                <option value="spe">Speed</option>
+                            </select>
                             <input hidden type="checkbox" title= "Is this ability active?" class="abilityToggle">
 									 <select hidden aria-label="Allies fainted" class="alliesFainted calc-trigger">
 										  <option value="0">Zero allies fainted</option>
@@ -831,7 +840,7 @@
                                 <label class="btn btn-xxwide" for="powerSpotR">Power Spot</label>
                             </div>
                         </div>
-                        <div class="btn-group gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
+<div class="btn-group gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
                             <div class="left" title="Is the defending Pok&eacute;mon switching out?">
                                 <input class="visually-hidden" type="checkbox" id="switchingL" />
                                 <label class="btn btn-xxwide" for="switchingL">Switching out</label>
@@ -923,6 +932,7 @@
     <script type="text/javascript" src="./calc/adaptable.js?92e49194"></script>
     <script type="text/javascript" src="./calc/index.js?0b1745b9"></script>
     <script type="text/javascript" src="./js/spritedata.js?"></script>
+    <script type="text/javascript" src="./js/data/move_info_lookup.js?"></script>
     <script type="text/javascript" src="./js/shared_controls.js?11db85bb"></script>
     <script type="text/javascript" src="./js/honkalculate_controls.js?23c996e5"></script>
 

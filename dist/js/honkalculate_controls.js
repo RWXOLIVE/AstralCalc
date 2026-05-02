@@ -82,6 +82,7 @@ function performCalculations() {
 					defender = createPokemon(pokeInfo);
 					field.swap();
 				}
+				applyPowerSplitToPair(attacker, defender);
 				if (attacker.ability === "Rivalry") {
 					attacker.gender = "N";
 				}
