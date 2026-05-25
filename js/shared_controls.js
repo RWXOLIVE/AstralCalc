@@ -920,8 +920,10 @@ var fragSheetRefreshTimer = null;
 var playerRosterSearchDebounceTimer = null;
 var notesNoteInputDebounceTimers = {};
 var appUpdateBaselineLastModifiedMs = 0;
+var appUpdateBaselinePageSignature = "";
 var appUpdateCheckTimer = null;
 var appUpdateNoticeShown = false;
+var appUpdatePageUrl = "";
 var fragLastAutoBackupAt = 0;
 var trainerFieldLocksCache = null;
 var trainerFieldLockActiveTrainerKey = "";
@@ -1563,6 +1565,23 @@ function parseHttpDateToMs(rawDateValue) {
 	return isFinite(parsed) ? parsed : 0;
 }
 
+function getAppUpdatePageUrl() {
+	if (!window.location) return "";
+	if (window.location.origin && window.location.pathname) {
+		return String(window.location.origin) + String(window.location.pathname);
+	}
+	return String(window.location.href || "").split("#")[0].split("?")[0];
+}
+
+function getUpdateTextSignature(rawText) {
+	var text = String(rawText || "");
+	var hash = 5381;
+	for (var i = 0; i < text.length; i++) {
+		hash = (((hash << 5) + hash) ^ text.charCodeAt(i)) >>> 0;
+	}
+	return String(hash);
+}
+
 function stopAppUpdateChecker() {
 	if (!appUpdateCheckTimer) return;
 	window.clearInterval(appUpdateCheckTimer);
@@ -1581,15 +1600,24 @@ function notifyAppUpdateAvailable() {
 
 function checkForAppUpdate() {
 	if (appUpdateNoticeShown) return;
-	if (!appUpdateBaselineLastModifiedMs) return;
-	var baseUrl = String(window.location && window.location.href ? window.location.href : "").split("#")[0];
-	if (!baseUrl) return;
-	var requestUrl = baseUrl + (baseUrl.indexOf("?") >= 0 ? "&" : "?") + "_updateCheckTs=" + Date.now();
+	if (!appUpdatePageUrl) return;
+	var requestUrl = appUpdatePageUrl + (appUpdatePageUrl.indexOf("?") >= 0 ? "&" : "?") + "_updateCheckTs=" + Date.now();
 	$.ajax({url: requestUrl, cache: false, dataType: "text"})
-		.done(function (_responseText, _textStatus, jqXHR) {
+		.done(function (responseText, _textStatus, jqXHR) {
 			if (!jqXHR || typeof jqXHR.getResponseHeader !== "function") return;
 			var latestLastModifiedMs = parseHttpDateToMs(jqXHR.getResponseHeader("Last-Modified"));
-			if (latestLastModifiedMs > appUpdateBaselineLastModifiedMs + 1000) {
+			if (!appUpdateBaselineLastModifiedMs && latestLastModifiedMs) {
+				appUpdateBaselineLastModifiedMs = latestLastModifiedMs;
+			} else if (appUpdateBaselineLastModifiedMs && latestLastModifiedMs > appUpdateBaselineLastModifiedMs + 1000) {
+				notifyAppUpdateAvailable();
+				return;
+			}
+			var latestSignature = getUpdateTextSignature(responseText);
+			if (!appUpdateBaselinePageSignature) {
+				appUpdateBaselinePageSignature = latestSignature;
+				return;
+			}
+			if (latestSignature !== appUpdateBaselinePageSignature) {
 				notifyAppUpdateAvailable();
 			}
 		});
@@ -1599,8 +1627,10 @@ function startAppUpdateChecker() {
 	stopAppUpdateChecker();
 	appUpdateNoticeShown = false;
 	if (!window.location || !/^https?:$/i.test(String(window.location.protocol || ""))) return;
+	appUpdatePageUrl = getAppUpdatePageUrl();
+	if (!appUpdatePageUrl) return;
 	appUpdateBaselineLastModifiedMs = parseHttpDateToMs(document.lastModified);
-	if (!appUpdateBaselineLastModifiedMs) return;
+	appUpdateBaselinePageSignature = "";
 	window.setTimeout(checkForAppUpdate, APP_UPDATE_INITIAL_CHECK_DELAY_MS);
 	appUpdateCheckTimer = window.setInterval(checkForAppUpdate, APP_UPDATE_CHECK_INTERVAL_MS);
 }
