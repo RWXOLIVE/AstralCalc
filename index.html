@@ -6,7 +6,7 @@
     <link rel="icon" type="image/gif" href="img/totodile.gif"  >
     <title>Astral Emerald Damage Calculator</title>
     <link type="text/css" rel="stylesheet" href="./js/vendor/select2/select2.css" />
-    <link type="text/css" rel="stylesheet" href="./css/main.css?e2039eec" />
+    <link type="text/css" rel="stylesheet" href="./css/main.css?36cca42a" />
     <link type="text/css" rel="stylesheet" href="./css/vendor/bootstrap.css" />
     <link type="text/css" rel="stylesheet" href="./css/dark-theme.css" id="dark-theme-styles">
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -41,11 +41,11 @@
     <nav><div class="header"><div class="header-color"><div class="header-inner">
         <ul class="nav">
         <li><a class="button nav-first" href="https://astral-dex.vercel.app/">Pokédex</a></li>
-        <li><a class="button nav-first" href="https://rwxolive.github.io/astral-trainer-sheet/resources.html">Trainer Sheet</a></li>
+        <li><a class="button nav-first" href="astral-trainer-sheet.vercel.app">Trainer Sheet</a></li>
 		<li><a class="button" href="https://discord.gg/fZWBmEZeZx">Discord</a></li>
         <li><a class="button" href="https://drive.google.com/drive/folders/1X05r8shCeFDpyGCsSXXkryZ4Bt5pWd5B?usp=sharing">Google Drive</a></li>
-        <li><a class="button" href="https://rwxolive.github.io/astral-mechanics/">Mechanics</a></li>
-        <li><a class="button nav-last" href="https://rwxolive.github.io/astral-ai/">AI Not Added</a></li>
+        <li><a class="button" href="astral-changes.vercel.app">Changes</a></li>
+        <li><a class="button nav-last" href="https://docs.google.com/document/d/1kaztkqptNp5zcVLhKyNJDkLLqFDixCbJ2iWYg8ge-9w/edit?tab=t.0">AI Doc Not Finished</a></li>
 </ul>
         <!--<div style="clear:both"></div>-->
     </div></div></div></nav>
@@ -1195,7 +1195,7 @@
                                 <label class="btn btn-xxwide" for="powerSpotR">Power Spot</label>
                             </div></td>
                         </tr>
-                        <tr class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
+<tr class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
                             <td><div class="left" title="Is the defending Pok&eacute;mon switching out?">
                               <div hidden id="selectSwitchingInstruction">Is the defending Pok&eacute;mon switching out?</div>
                                 <input aria-describedby="selectSwitchingInstruction" class="visually-hidden calc-trigger" type="checkbox" id="switchingL" />
@@ -1854,6 +1854,7 @@
     </div>
     <div id="calc-side-backdrop" class="calc-side-backdrop" hidden></div>
     <aside id="frags-side-panel" class="calc-side-panel" aria-hidden="true" hidden>
+        <div class="calc-side-resize-handle" aria-hidden="true"></div>
         <div class="calc-side-header">
             <strong>Frag Sheet</strong>
             <div class="calc-side-header-actions">
@@ -1871,6 +1872,7 @@
         </div>
     </aside>
     <aside id="notes-side-panel" class="calc-side-panel" aria-hidden="true" hidden>
+        <div class="calc-side-resize-handle" aria-hidden="true"></div>
         <div class="calc-side-header">
             <strong>Notes</strong>
             <div class="calc-side-header-actions">
@@ -1891,6 +1893,7 @@
         </div>
     </aside>
     <aside id="settings-side-panel" class="calc-side-panel" aria-hidden="true" hidden>
+        <div class="calc-side-resize-handle" aria-hidden="true"></div>
         <div class="calc-side-header">
             <strong>Settings</strong>
             <button type="button" id="settings-panel-close" class="btn calc-side-btn">Close</button>
@@ -1910,6 +1913,13 @@
                 <div class="settings-choice-row">
                     <button type="button" class="btn settings-choice-btn" id="settings-theme-dark">Dark</button>
                     <button type="button" class="btn settings-choice-btn" id="settings-theme-light">Light</button>
+                </div>
+            </section>
+            <section class="settings-section">
+                <h4>Layout</h4>
+                <div class="settings-choice-row">
+                    <button type="button" class="btn settings-choice-btn" data-layout-choice="standard">Standard</button>
+                    <button type="button" class="btn settings-choice-btn" data-layout-choice="simplified">Simplified</button>
                 </div>
             </section>
             <section class="settings-section">
@@ -1959,8 +1969,8 @@
     </script>
     <script type="text/javascript" src="./calc/util.js?51463f0d"></script>
     <script type="text/javascript" src="./calc/stats.js?a9e37d1a"></script>
-    <script type="text/javascript" src="./calc/data/species.js?589f47c2"></script>
-	<script type="text/javascript" src="./js/data/sets/gen9.js?6ec0b256"></script>
+    <script type="text/javascript" src="./calc/data/species.js?d38a24dc"></script>
+	<script type="text/javascript" src="./js/data/sets/gen9.js?6faef2a6"></script>
     <script type="text/javascript" src="./js/data/sets/gen8.js?ecf43658"></script>
     <script type="text/javascript" src="./js/data/sets/gen7.js?78168bde"></script>
     <script type="text/javascript" src="./js/data/sets/gen6.js?2219279f"></script>
@@ -1972,7 +1982,7 @@
     <script type="text/javascript" src="./calc/data/types.js?a641e10b"></script>
     <script type="text/javascript" src="./calc/data/natures.js?28612810"></script>
     <script type="text/javascript" src="./calc/data/abilities.js?76822ede"></script>
-    <script type="text/javascript" src="./calc/data/moves.js?4e459154"></script>
+    <script type="text/javascript" src="./calc/data/moves.js?f3ef4305"></script>
     <script type="text/javascript" src="./calc/data/items.js?9ab2e2be"></script>
     <script type="text/javascript" src="./calc/data/index.js?abecbd82"></script>
     <script type="text/javascript" src="./calc/move.js?82ace03e"></script>
@@ -1993,9 +2003,9 @@
     <script type="text/javascript" src="./js/spritedata.js?e6979aa2"></script>
     <script type="text/javascript" src="./js/data/frags_splits.js?c5f8775f"></script>
     <script type="text/javascript" src="./js/data/move_info_lookup.js?1dc4b889"></script>
-    <script type="text/javascript" src="./js/shared_controls.js?695ac5b7"></script>
-    <script type="text/javascript" src="./js/index_randoms_controls.js?26c6ac90"></script>
-    <script type="text/javascript" src="./js/moveset_import.js?b38edf38"></script>
+    <script type="text/javascript" src="./js/shared_controls.js?ff02611a"></script>
+    <script type="text/javascript" src="./js/index_randoms_controls.js?ec402b25"></script>
+    <script type="text/javascript" src="./js/moveset_import.js?fee92d20"></script>
 </div>
 
 <div class="credits">Modification by ForwardFeed Originaly Created by Honko, maintained by Austin and Kris, Special thanks to Hzla

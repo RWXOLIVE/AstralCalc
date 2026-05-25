@@ -1921,7 +1921,7 @@ var ADV_PATCH = {
     },
     Beldum: {
         types: ['Steel', 'Psychic'],
-        bs: { hp: 40, at: 55, df: 80, sa: 35, sd: 60, sp: 30 },
+        bs: { hp: 50, at: 70, df: 80, sa: 35, sd: 60, sp: 30 },
         weightkg: 95.2,
         nfe: true,
         gender: 'N',
@@ -4582,7 +4582,7 @@ var BW_PATCH = {
     },
     Samurott: {
         types: ['Water', 'Rock'],
-        bs: { hp: 95, at: 105, df: 95, sa: 85, sd: 90, sp: 70 },
+        bs: { hp: 95, at: 105, df: 95, sa: 85, sd: 90, sp: 65 },
         weightkg: 94.6,
         abilities: { 0: 'Torrent' }
     },
@@ -4647,7 +4647,7 @@ var BW_PATCH = {
     },
     Serperior: {
         types: ['Grass', 'Dragon'],
-        bs: { hp: 75, at: 75, df: 95, sa: 75, sd: 95, sp: 113 },
+        bs: { hp: 82, at: 75, df: 95, sa: 75, sd: 95, sp: 113 },
         weightkg: 63,
         abilities: { 0: 'Overgrow' }
     },
@@ -8872,7 +8872,7 @@ var PLA_PATCH = {
     },
     'Samurott-Hisui': {
         types: ['Water', 'Dark'],
-        bs: { hp: 90, at: 108, df: 80, sa: 100, sd: 65, sp: 85 },
+        bs: { hp: 90, at: 108, df: 80, sa: 100, sd: 72, sp: 85 },
         weightkg: 58.2,
         abilities: { 0: 'Torrent' },
         baseSpecies: 'Samurott'

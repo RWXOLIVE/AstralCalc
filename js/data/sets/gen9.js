@@ -527,6 +527,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Dragon Dance","Earthquake","Lash Out","Waterfall"]
+        },
+    "Rival Lyra | Union Cave": {
+            "index": "0000000463",
+            "level": 54,
+            "ability": "Intimidate",
+            "item": "Wacan Berry",
+            "Terrain": "Misty",
+            "shiny": "Yes",
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Dragon Dance","Razor Wind","Waterfall","Stone Edge"]
         }
     },
     "Sneasel": {
@@ -889,6 +902,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Rock Blast","Air Slash","Roost","Thief"]
+        },
+    "Cool Trainer Brooke | Route 111": {
+            "index": "0000000422",
+            "level": 53,
+            "ability": "Rocky Payload",
+            "item": "Hard Stone",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Hone Claws","Stone Edge","Brave Bird","Lash Out"]
         }
     },
     "Togedemaru": {
@@ -930,7 +954,7 @@ var SETDEX_SV = {
             "moves": ["Dragon Dance","Rock Tomb","Stomping Tantrum","Rest"]
         }
     },
-    "Metang": {
+    "Beldum": {
     "Leader Roxanne | Rustboro Gym": {
             "index": "0000000066",
             "level": 19,
@@ -968,6 +992,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Ice Fang","Razor Shell","Rock Tomb"]
+        },
+    "Ruin Maniac Dusty | Route 111": {
+            "index": "0000000431",
+            "level": 54,
+            "ability": "Strong Jaw",
+            "item": "Focus Sash",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Shell Smash","Crunch","Rock Slide","Liquidation"]
         }
     },
     "Onix": {
@@ -1534,6 +1569,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Aqua Jet","Body Press","Rock Slide"]
+        },
+    "Black Belt Daisuke | Route 111": {
+            "index": "0000000388",
+            "level": 52,
+            "ability": "Cud Chew",
+            "item": "Apicot Berry",
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Raging Bull","Trailblaze","Aqua Jet","Close Combat"]
         }
     },
     "Riolu": {
@@ -1605,6 +1651,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Mirror Coat","Charm","Destiny Bond","Safeguard"]
+        },
+    "Cool Trainer Brooke | Route 111": {
+            "index": "0000000420",
+            "level": 52,
+            "ability": "Shadow Tag",
+            "item": "Lum Berry",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Counter","Tickle","Encore","Mirror Coat"]
         }
     },
     "Monferno": {
@@ -1904,6 +1961,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Shell Smash","Power Trip","Spore","Population Bomb"]
+        },
+    "Kindler Hayden | Route 111": {
+            "index": "0000000376",
+            "level": 52,
+            "ability": "Moody",
+            "item": "Focus Sash",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Victory Dance","Quiver Dance","Baton Pass","Thunder Wave"]
         }
     },
     "Stoutland": {
@@ -2139,6 +2207,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Yawn","Zen Headbutt","Double-Edge","Heat Crash"]
+        },
+    "Picnicker Becky | Route 111": {
+            "index": "0000000429",
+            "level": 53,
+            "ability": "Gluttony",
+            "item": "Iapapa Berry",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Belly Drum","Slam","Earthquake","Ice Punch"]
         }
     },
     "Scolipede": {
@@ -2189,6 +2268,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Volt Tackle","Boomburst","Heat Wave","Endeavor"]
+        },
+    "Picknicker Carol | Route 112": {
+            "index": "0000000400",
+            "level": 53,
+            "ability": "Scrappy",
+            "item": "Throat Spray",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Heat Wave","Boomburst","Air Slash","Nasty Plot"]
         }
     },
     "Eiscue": {
@@ -2315,6 +2405,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
             },
             "moves": ["Future Sight","HP Water","Flamethrower","Trick Room"]
+        },
+    "Hex Maniac Jennifer | Union Cave": {
+            "index": "0000000434",
+            "level": 54,
+            "ability": "Magician",
+            "item": "White Herb",
+            "Terrain": "Misty",
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Calm Mind","Flamethrower","Psyshock","Confuse Ray"]
         }
     },
     "Brute Bonnet": {
@@ -2354,6 +2456,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Hurricane"]
+        },
+    "Pokemanic Hector | Union Cave": {
+            "index": "0000000453",
+            "level": 54,
+            "ability": "Quark Drive",
+            "item": "Covert Cloak",
+            "Terrain": "Misty",
+            "nature": "Hasty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Work Up","Lash Out","Dual Wingbeat","Earth Power"]
         }
     },
     "Ursaluna": {
@@ -2719,6 +2833,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Growth","Earthquake","Weather Ball","Sludge Bomb"]
+        },
+    "Bryant & Shayla | Route 112": {
+            "index": "0000000416",
+            "level": 52,
+            "ability": "Chlorophyll",
+            "item": "Black Sludge",
+            "nature": "Timid",
+            "setdouble": "True",
+            "setdoubleGroup": "route-112-bryant-shayla",
+            "setdoubleSide": 2,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sleep Powder","Solar Beam","Sludge Bomb","Synthesis"]
         }
     },
     "Eevee-Starter": {
@@ -2810,6 +2938,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Follow Me","Hyper Voice","Population Bomb","Super Fang"]
+        },
+    "Camper Beau | Route 111": {
+            "index": "0000000425",
+            "level": 52,
+            "ability": "Friend Guard",
+            "item": "Sticky Barb",
+            "nature": "Timid",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Follow Me","Helping Hand","Thunder Wave"]
         }
     },
     "Oranguru": {
@@ -2951,6 +3091,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Agility","Alluring Voice","Sparkling Aria","Freeze-Dry"]
+        },
+    "Dragon Tamer Larry | Route 112": {
+            "index": "0000000411",
+            "level": 52,
+            "ability": "Shell Armor",
+            "item": "Clear Amulet",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Dragon Dance","Ice Spinner","Waterfall","Earthquake"]
         }
     },
     "Dusknoir": {
@@ -2991,6 +3142,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Close Combat","Lash Out","Gunk Shot","Body Slam"]
+        },
+    "Hex Maniac Jennifer | Union Cave": {
+            "index": "0000000433",
+            "level": 54,
+            "ability": "Defiant",
+            "item": "Chople Berry",
+            "Terrain": "Misty",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Counter","Gunk Shot","Frustration","Return"]
         }
     },
     "Crobat": {
@@ -3170,6 +3333,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Aqua Tail","Night Slash","Cross Poison","Iron Defense"]
+        },
+    "Hiker Brice | Route 112": {
+            "index": "0000000396",
+            "level": 53,
+            "ability": "Sniper",
+            "item": "Dark Gem",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Pursuit","Cross Poison","Ice Fang","Earthquake"]
         }
     },
     "Accelgor": {
@@ -3336,6 +3510,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Reflect","Future Sight","Dazzling Gleam","Thunder Wave"]
+        },
+    "Picnicker Bianca | Route 111": {
+            "index": "0000000371",
+            "level": 52,
+            "ability": "Inner Focus",
+            "item": "Focus Sash",
+            "nature": "Timid",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Speed Swap","Psychic","Reflect","Light Screen"]
         }
     },
     "Solrock": {
@@ -3430,6 +3616,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Thunder","Slack Off","Mud-Slap","Soak"]
+        },
+    "Picknicker Carol | Route 112": {
+            "index": "0000000402",
+            "level": 53,
+            "ability": "Electromorphosis",
+            "item": "Air Balloon",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Parabolic Charge","Chilling Water","Acid Spray","Soak"]
         }
     },
     "Ambipom": {
@@ -3522,7 +3719,7 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Overheat","Close Combat","Acrobatics","Stone Edge"]
-        }
+        },
     },
     "Palafin": {
     "Swimmer Beverly | Route 105": {
@@ -3700,6 +3897,20 @@ var SETDEX_SV = {
             "moves": ["Rising Voltage","Scald","Recover","Spikes"]
         }
     },
+    "Weezing": {
+    "Firebreather Bill | Union Cave": {
+            "index": "0000000437",
+            "level": 54,
+            "ability": "Levitate",
+            "item": "Black Sludge",
+            "Terrain": "Misty",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Will-O-Wisp","Gunk Shot","Assurance","Destiny Bond"]
+        }
+    },
     "Weezing-Galar": {
     "Cool Trainer Caroline | Route 108": {
             "index": "0000000240",
@@ -3711,6 +3922,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Will-O-Wisp","Strange Steam","Destiny Bond","Gunk Shot"]
+        },
+    "Firebreather Bill | Union Cave": {
+            "index": "0000000439",
+            "level": 54,
+            "ability": "Neutralizing Gas",
+            "item": "Life Orb",
+            "Terrain": "Misty",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Strange Steam","Sludge Wave","Misty Explosion","Fire Blast"]
         }
     },
     "Eelektross-Mega": {
@@ -3825,6 +4048,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Steel Beam"]
+        },
+    "Dragon Tamer Larry | Route 112": {
+            "index": "0000000407",
+            "level": 53,
+            "ability": "Clear Body",
+            "item": "Eviolite",
+            "nature": "Sassy",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Stealth Rock","Flash Cannon","Dragon Pulse","Thunder Wave"]
         }
     },
     "Kingambit": {
@@ -3889,6 +4123,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Flower Trick","Knock Off","U-turn"]
+        },
+    "Picknicker Carol | Route 112": {
+            "index": "0000000399",
+            "level": 53,
+            "ability": "Protean",
+            "item": "Expert Belt",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Flower Trick","Knock Off","Thunder Punch","Low Kick"]
         }
     },
     "Cofagrigus": {
@@ -3902,6 +4147,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Body Press","Toxic Spikes","Will-O-Wisp","Flash Cannon"]
+        },
+    "Hiker Phillip | Union Cave": {
+            "index": "0000000441",
+            "level": 54,
+            "ability": "Mummy",
+            "item": "Air Balloon",
+            "Terrain": "Misty",
+            "nature": "Relaxed",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Body Press","Trick Room","Toxic","Iron Defense"]
         }
     },
     "Mienshao": {
@@ -4065,11 +4322,25 @@ var SETDEX_SV = {
             "level": 46,
             "ability": "Sand Stream",
             "item": "Leftovers",
+            "Weather": "Sandstorm",
             "nature": "Relaxed",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Stealth Rock","Protect","Whirlwind","Earthquake"]
+        },
+    "Camper Travis | Route 111": {
+            "index": "0000000389",
+            "level": 52,
+            "ability": "Sand Stream",
+            "item": "Leftovers",
+            "setdouble": "True",
+            "Weather": "Sandstorm",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Ice Fang","Stealth Rock","Earthquake","Protect"]
         }
     },
     "Cacturne": {
@@ -4133,6 +4404,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Sing","Dream Eater","Wake-Up Slap","Moonblast"]
+        },
+    "Picknicker Carol | Route 112": {
+            "index": "0000000398",
+            "level": 53,
+            "ability": "Magic Guard",
+            "item": "Flame Orb",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Psycho Shift","Moonblast","Psyshock","Cosmic Power"]
         }
     },
     "Ferrothorn": {
@@ -4352,6 +4634,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Cotton Guard","Body Press","Double-Edge","Wild Charge"]
+        },
+    "Cool Trainer Brooke | Route 111": {
+            "index": "0000000421",
+            "level": 53,
+            "ability": "Fluffy",
+            "item": "Chople Berry",
+            "nature": "Sassy",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Cotton Guard","Body Press","Body Slam","Wild Charge"]
         }
     },
     "Pikachu": {
@@ -4392,6 +4685,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Heat Wave","Scorching Sands","Sing","Will-O-Wisp"]
+        }, 
+        "Firebreather Bill | Union Cave": {
+            "index": "0000000440",
+            "level": 54,
+            "ability": "Unnerve",
+            "item": "Normal Gem",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Hyper Beam","Protect","Flamethrower","Dark Pulse"]
         }
     },
     "Gengar": {
@@ -4444,7 +4748,7 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Sunny Day","Reflect","Light Screen","Lucky Chant"]
-        }
+        },
     },
     "Toxtricity": {
     "Guitarist Marcos | Route 103": {
@@ -4497,6 +4801,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Mach Punch","Rock Blast","Bullet Seed","Trailblaze"]
+        },
+    "Pokemanic Hector | Union Cave": {
+            "index": "0000000450",
+            "level": 54,
+            "ability": "Technician",
+            "item": "Loaded Dice",
+            "Terrain": "Misty",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Rock Tomb","Mach Punch","Bullet Seed","Arm Thrust"]
         }
     },
     "Crabominable": {
@@ -4931,6 +5247,19 @@ var SETDEX_SV = {
             "moves": ["Sticky Web","Thunder","Bug Buzz","Energy Ball"]
         }
     },
+    "Steelix": {
+    "Ruin Maniac Dusty | Route 111": {
+            "index": "0000000430",
+            "level": 54,
+            "ability": "Sheer Force",
+            "item": "Occa Berry",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Stealth Rock","Earthquake","Iron Tail","Ice Fang"]
+        }
+    },
     "Steelix-Mega": {
     "Youngster Ben | Mauville Gym": {
             "index": "0000000344",
@@ -5055,6 +5384,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Electro Shot","Discharge","Signal Beam","Energy Ball"]
+        },
+    "Hiker Trent | Route 112": {
+            "index": "0000000404",
+            "level": 52,
+            "ability": "Levitate",
+            "item": "Power Herb",
+            "nature": "Sassy",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Electro Shot","Signal Beam","Laser Focus","Thunderbolt"]
         }
     },
     "Raichu-Alola": {
@@ -5123,6 +5463,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Power Gem","Discharge","Energy Ball","Dragon Pulse"]
+        },
+    "Rival Lyra | Union Cave": {
+            "index": "0000000464",
+            "level": 53,
+            "ability": "Illuminate",
+            "item": "Air Balloon",
+            "Terrain": "Misty",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Focus Blast","Zap Cannon","Ice Beam","Laser Focus"]
         }
     },
     "Skarmory-Mega": {
@@ -5162,6 +5514,111 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Knock Off","Bullet Punch","Bug Bite","U-turn"]
+        },
+    "Cool Trainer Wilton | Route 111": {
+            "index": "0000000417",
+            "level": 53,
+            "ability": "Technician",
+            "item": "Occa Berry",
+            "nature": "Sassy",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bullet Punch","Dual Wingbeat","Knock Off","U-turn"]
+        }
+    },
+    "Dugtrio": {
+    "Cool Trainer Wilton | Route 111": {
+            "index": "0000000418",
+            "level": 53,
+            "ability": "Arena Trap",
+            "item": "Focus Sash",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Hone Claws","Stone Edge","Earthquake","Night Slash"]
+        }
+    },
+    "Azumarill": {
+    "Cool Trainer Brooke | Route 111": {
+            "index": "0000000419",
+            "level": 53,
+            "ability": "Huge Power",
+            "item": "Leftovers",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Whirlpool","Protect","Perish Song","Knock Off"]
+        }
+    },
+    "Dondozo": {
+    "Camper Beau | Route 111": {
+            "index": "0000000424",
+            "level": 53,
+            "ability": "Water Veil",
+            "item": "Ability Shield",
+            "nature": "Careful",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Order Up","Earthquake","Waterfall","Body Press"]
+        }
+    },
+    "Tatsugiri": {
+    "Camper Beau | Route 111": {
+            "index": "0000000423",
+            "level": 53,
+            "ability": "Commander",
+            "item": "Toxic Orb",
+            "prehp": "3",
+            "nature": "Naughty",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Protect"]
+        }
+    },
+    "Granbull": {
+    "Picnicker Becky | Route 111": {
+            "index": "0000000426",
+            "level": 53,
+            "ability": "Intimidate",
+            "item": "Light Clay",
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Reflect","Light Screen","Play Rough","Close Combat"]
+        }
+    },
+    "Emolga": {
+    "Picnicker Becky | Route 111": {
+            "index": "0000000427",
+            "level": 53,
+            "ability": "Static",
+            "item": "Steel Gem",
+            "nature": "Naughty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Iron Tail","Thunder","Dual Wingbeat","Energy Ball"]
+        }
+    },
+    "Polteageist": {
+    "Picnicker Becky | Route 111": {
+            "index": "0000000428",
+            "level": 53,
+            "ability": "Weak Armor",
+            "item": "Starf Berry",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Teatime","Stored Power","Shadow Ball","Shell Smash"]
         }
     },
     "Glimmora": {
@@ -5212,4 +5669,779 @@ var SETDEX_SV = {
             "moves": ["Wood Hammer","Hammer Arm","Play Rough","Curse"]
         }
     },
- }
+    "Machamp": {
+    "Picnicker Bianca | Route 111": {
+            "index": "0000000372",
+            "level": 52,
+            "status": "Frostbite",
+            "ability": "Guts",
+            "item": "Sitrus Berry",
+            "nature": "Jolly",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bullet Punch","Cross Chop","Rock Slide","Double-Edge"]
+        }
+    },
+    "Ninetales": {
+    "Picnicker Bianca | Route 111": {
+            "index": "0000000373",
+            "level": 52,
+            "ability": "Illuminate",
+            "item": "Fire Gem",
+            "nature": "Timid",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Burn Up","Baton Pass","Energy Ball","Calm Mind"]
+        }
+    },
+    "Dewgong": {
+    "Picnicker Bianca | Route 111": {
+            "index": "0000000374",
+            "level": 52,
+            "ability": "Thick Fat",
+            "item": "Never-Melt Ice",
+            "nature": "Hasty",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Blizzard","Fake Out","Whirlpool","Perish Song"]
+        }
+    },
+    "Beedrill": {
+    "Picnicker Bianca | Route 111": {
+            "index": "0000000375",
+            "level": 52,
+            "ability": "Sniper",
+            "item": "Scope Lens",
+            "nature": "Jolly",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Drill Run","Cross Poison","U-turn","X-Scissor"]
+        }
+    },
+    "Camerupt": {
+    "Kindler Hayden | Route 111": {
+            "index": "0000000377",
+            "level": 52,
+            "ability": "Solid Rock",
+            "item": "Quick Claw",
+            "nature": "Relaxed",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Eruption","Flamethrower","Earthquake","Scald"]
+        }
+    },
+    "Typhlosion": {
+    "Kindler Hayden | Route 111": {
+            "index": "0000000378",
+            "level": 53,
+            "ability": "Blaze",
+            "item": "Fire Gem",
+            "nature": "Hasty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Earth Power","Inferno","Flare Blitz","Thunder Punch"]
+        },
+        "Firebreather Bill | Union Cave": {
+        "index": "0000000438",
+            "level": 54,
+            "ability": "Mold Breaker",
+            "item": "Focus Sash",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Earth Power","Eruption","Flamethrower","HP Grass"]
+        }
+    },
+    "Typhlosion-Hisui": {
+    "Kindler Hayden | Route 111": {
+            "index": "0000000379",
+            "level": 53,
+            "ability": "Blazing Soul",
+            "item": "Choice Specs",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Eruption"]
+        }
+    },
+    "Orthworm": {
+    "Camper Irene | Route 111": {
+            "index": "0000000380",
+            "level": 52,
+            "ability": "Earth Eater",
+            "item": "Occa Berry",
+            "nature": "Brave",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Shed Tail","Earthquake","Body Press","Coil"]
+        }
+    },
+    "Carnivine": {
+    "Camper Irene | Route 111": {
+            "index": "0000000381",
+            "level": 53,
+            "ability": "Levitate",
+            "item": "Leftovers",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Snap Trap","Leech Seed","Sludge Bomb","Knock Off"]
+        }
+    },
+    "Ledian": {
+    "Camper Irene | Route 111": {
+            "index": "0000000382",
+            "level": 52,
+            "ability": "Aerilate",
+            "item": "Assault Vest",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Focus Punch","Double-Edge","U-turn","Power-Up Punch"]
+        }
+    },
+    "Whiscash": {
+    "Camper Irene | Route 111": {
+            "index": "0000000383",
+            "level": 53,
+            "ability": "Mold Breaker",
+            "item": "Focus Sash",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Victory Dance","Bounce","Aqua Tail","Headlong Rush"]
+        }
+    },
+    "Furret": {
+    "Camper Irene | Route 111": {
+            "index": "0000000384",
+            "level": 52,
+            "ability": "Adaptability",
+            "item": "Silk Scarf",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fake Out","Last Resort"]
+        }
+    },
+    "Flamigo": {
+    "Black Belt Daisuke | Route 111": {
+            "index": "0000000385",
+            "level": 52,
+            "ability": "Scrappy",
+            "item": "Flying Gem",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Acrobatics","Close Combat","Throat Chop","U-turn"]
+        }
+    },
+    "Great Tusk": {
+    "Black Belt Daisuke | Route 111": {
+            "index": "0000000386",
+            "level": 52,
+            "ability": "Protosynthesis",
+            "item": "Passho Berry",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Rapid Spin","Close Combat","Headlong Rush","Throat Chop"]
+        }
+    },
+    "Sneasler": {
+    "Black Belt Daisuke | Route 111": {
+            "index": "0000000387",
+            "level": 52,
+            "ability": "Unburden",
+            "item": "Air Balloon",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fake Out","Icicle Spear","Close Combat","Acrobatics"]
+        }
+    },
+    "Aerodactyl": {
+    "Camper Travis | Route 111": {
+            "index": "0000000390",
+            "level": 53,
+            "ability": "Unnerve",
+            "item": "Focus Sash",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Tailwind","Rock Slide","Dual Wingbeat","Protect"]
+        },
+    "Ruin Maniac Dusty | Route 111": {
+            "index": "0000000432",
+            "level": 54,
+            "ability": "Unnerve",
+            "item": "Dark Gem",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Pursuit","Aqua Tail","Stone Edge","Dual Wingbeat"]
+        }
+    },
+    "Copperajah": {
+    "Camper Travis | Route 111": {
+            "index": "0000000391",
+            "level": 52,
+            "ability": "Sheer Force",
+            "item": "Metal Coat",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Iron Head","Heat Crash","Superpower","Play Rough"]
+        }
+    },
+    "Stonjourner": {
+    "Camper Travis | Route 111": {
+            "index": "0000000392",
+            "level": 52,
+            "ability": "Power Spot",
+            "item": "Loaded Dice",
+            "shiny": "Yes",
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Rock Blast","Rock Slide","Helping Hand","Stomping Tantrum"]
+        }
+    },
+    "Gastrodon": {
+    "Camper Travis | Route 111": {
+            "index": "0000000393",
+            "level": 52,
+            "ability": "Sand Force",
+            "item": "Rocky Helmet",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Ice Beam","Earth Power","Ancient Power","Recover"]
+        }
+    },
+    "Corviknight": {
+    "Hiker Brice | Route 112": {
+            "index": "0000000394",
+            "level": 53,
+            "ability": "Mirror Armor",
+            "item": "Mirror Herb",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Swagger","Agility","Iron Head","Power Trip"]
+        }
+    },
+    "Lunatone": {
+    "Hiker Brice | Route 112": {
+            "index": "0000000395",
+            "level": 53,
+            "ability": "Levitate",
+            "item": "Weakness Policy",
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Cosmic Power","Moonblast","Night Daze","Stored Power"]
+        }
+    },
+    "Garchomp": {
+    "Hiker Brice | Route 112": {
+            "index": "0000000397",
+            "level": 52,
+            "ability": "Rough Skin",
+            "item": "Loaded Dice",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Swords Dance","Scale Shot","Earthquake","Iron Head"]
+        }
+    },
+    "Scovillain": {
+    "Picknicker Carol | Route 112": {
+            "index": "0000000401",
+            "level": 52,
+            "ability": "Moody",
+            "item": "Bright Powder",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Protect","Overheat","Leech Seed","Super Fang"]
+        }
+    },
+    "Claydol": {
+    "Hiker Trent | Route 112": {
+            "index": "0000000403",
+            "level": 53,
+            "ability": "Levitate",
+            "item": "Sitrus Berry",
+            "nature": "Quiet",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Power Split","Ancient Power","Earthquake","Trick Room"]
+        }
+    },
+    "Stakataka": {
+    "Hiker Trent | Route 112": {
+            "index": "0000000405",
+            "level": 52,
+            "ability": "Beast Boost",
+            "item": "Focus Sash",
+            "nature": "Relaxed",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Trick Room","Gyro Ball","Body Press","High Horsepower"]
+        }
+    },
+    "Dhelmise": {
+    "Hiker Trent | Route 112": {
+            "index": "0000000406",
+            "level": 53,
+            "ability": "Steelworker",
+            "item": "Weakness Policy",
+            "nature": "Sassy",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Anchor Shot","Spirit Shackle","Steel Beam","Giga Drain"]
+        }
+    },
+    "Serperior": {
+    "Dragon Tamer Larry | Route 112": {
+            "index": "0000000408",
+            "level": 52,
+            "ability": "Contrary",
+            "item": "Leftovers",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Leaf Storm","Dragon Pulse","Leech Seed","HP Fire"]
+        }
+    },
+    "Turtonator": {
+    "Dragon Tamer Larry | Route 112": {
+            "index": "0000000409",
+            "level": 53,
+            "ability": "Shell Armor",
+            "item": "Leftovers",
+            "nature": "Sassy",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Shell Trap","Body Press","Dragon Tail","Fire Lash"]
+        }
+    },
+    "Noivern": {
+    "Dragon Tamer Larry | Route 112": {
+            "index": "0000000410",
+            "level": 53,
+            "ability": "Aerilate",
+            "item": "Sharp Beak",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Hyper Voice","Draco Meteor","Psychic Noise","Nasty Plot"]
+        }
+    },
+    "Torkoal": {
+    "Bryant & Shayla | Route 112": {
+            "index": "0000000412",
+            "level": 52,
+            "ability": "Drought",
+            "item": "Sitrus Berry",
+            "nature": "Relaxed",
+            "setdouble": "True",
+            "setdoubleGroup": "route-112-bryant-shayla",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Heat Wave","Solar Beam","Earth Power","Protect"]
+        }
+    },
+    "Heatmor": {
+    "Bryant & Shayla | Route 112": {
+            "index": "0000000413",
+            "level": 53,
+            "ability": "Gluttony",
+            "item": "Shuca Berry",
+            "setdouble": "True",
+            "nature": "Hasty",
+            "setdoubleGroup": "route-112-bryant-shayla",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Iron Head","Drain Punch","Giga Drain","Fire Lash"]
+        }
+    },
+    "Sawsbuck": {
+    "Bryant & Shayla | Route 112": {
+            "index": "0000000415",
+            "level": 52,
+            "ability": "Chlorophyll",
+            "item": "King's Rock",
+            "nature": "Jolly",
+            "setdouble": "True",
+            "setdoubleGroup": "route-112-bryant-shayla",
+            "setdoubleSide": 2,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Body Slam","Stomping Tantrum","Seed Bomb","Grass Whistle"]
+        }
+    },
+    "Charizard": {
+    "Bryant & Shayla | Route 112": {
+            "index": "0000000414",
+            "level": 52,
+            "ability": "Solar Power",
+            "item": "Charti Berry",
+            "nature": "Modest",
+            "setdouble": "True",
+            "setdoubleGroup": "route-112-bryant-shayla",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Solar Beam","Air Slash","Flamethrower","Roost"]
+        },
+    "Cool Trainer Gwen | Union Cave": {
+            "index": "0000000448",
+            "level": 53,
+            "ability": "Blaze",
+            "item": "Focus Sash",
+            "Terrain": "Misty",
+            "nature": "Adamant",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Dragon Dance","Acrobatics","Fire Punch","Thunder Punch"]
+        }
+    },
+    "Lycanroc-Dusk": {
+    "Hex Maniac Jennifer | Union Cave": {
+            "index": "0000000435",
+            "level": 54,
+            "ability": "Tough Claws",
+            "item": "Ghost Gem",
+            "Terrain": "Misty",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Accelerock","Shadow Claw","Close Combat","Stone Edge"]
+        }
+    },
+    "Inteleon": {
+    "Hex Maniac Jennifer | Union Cave": {
+            "index": "0000000436",
+            "level": 54,
+            "ability": "Sniper",
+            "item": "Scope Lens",
+            "Terrain": "Misty",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Snipe Shot","Dark Pulse","Ice Beam","Shadow Ball"]
+        }
+    },
+    "Marowak": {
+    "Hiker Phillip | Union Cave": {
+            "index": "0000000442",
+            "level": 54,
+            "ability": "Rock Head",
+            "item": "Thick Club",
+            "Terrain": "Misty",
+            "nature": "Sassy",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Retaliate","Bonemerang","Thunder Punch","Power-Up Punch"]
+        },
+    "Old Man OpticShadow | Union Cave": {
+            "index": "0000000458",
+            "level": 53,
+            "ability": "Rock Head",
+            "item": "Thick Club",
+            "Terrain": "Misty",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Knock Off","Retaliate","Earthquake","Stone Edge"]
+        }
+    },
+    "Golem": {
+    "Hiker Phillip | Union Cave": {
+            "index": "0000000443",
+            "level": 54,
+            "ability": "Sturdy",
+            "item": "Weakness Policy",
+            "Terrain": "Misty",
+            "nature": "Brave",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Stone Edge","Stomping Tantrum","Thunder Punch","Rock Polish"]
+        }
+    },
+    "Tinkaton": {
+    "Hiker Phillip | Union Cave": {
+            "index": "0000000444",
+            "level": 54,
+            "ability": "Mold Breaker",
+            "item": "Room Service",
+            "Terrain": "Misty",
+            "nature": "Brave",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Gigaton Hammer","Ice Hammer","Hammer Arm","Wood Hammer"]
+        }
+    },
+    "Kangaskhan": {
+    "Cool Trainer Gwen | Union Cave": {
+            "index": "0000000445",
+            "level": 53,
+            "ability": "Inner Focus",
+            "item": "Silk Scarf",
+            "Terrain": "Misty",
+            "nature": "Jolly",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sucker Punch","Last Resort"]
+        }
+    },
+    "Clawitzer": {
+    "Cool Trainer Gwen | Union Cave": {
+            "index": "0000000446",
+            "level": 54,
+            "ability": "Mega Launcher",
+            "item": "Misty Seed",
+            "Terrain": "Misty",
+            "nature": "Modest",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Terrain Pulse","Water Pulse","Flash Cannon","Aqua Jet"]
+        }
+    },
+    "Sylveon": {
+    "Cool Trainer Gwen | Union Cave": {
+            "index": "0000000447",
+            "level": 54,
+            "ability": "Pixilate",
+            "item": "Adrenaline Orb",
+            "Terrain": "Misty",
+            "nature": "Timid",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Mystical Fire","Hyper Voice","Quick Attack","Reflect"]
+        }
+    },
+    "Slurpuff": {
+    "Pokemanic Hector | Union Cave": {
+            "index": "0000000449",
+            "level": 54,
+            "ability": "Unburden",
+            "item": "Misty Seed",
+            "Terrain": "Misty",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sticky Web","Flamethrower","Zen Headbutt","Dazzling Gleam"]
+        },
+    "Old Man OpticShadow | Union Cave": {
+            "index": "0000000459",
+            "level": 55,
+            "ability": "Unburden",
+            "item": "Misty Seed",
+            "Terrain": "Misty",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Misty Explosion"]
+        }
+    },
+    "Porygon2": {
+    "Pokemanic Hector | Union Cave": {
+            "index": "0000000451",
+            "level": 54,
+            "ability": "Download",
+            "item": "Eviolite",
+            "Terrain": "Misty",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Tri Attack","Foul Play","Thunderbolt","Recover"]
+        }
+    },
+    "Crustle": {
+    "Pokemanic Hector | Union Cave": {
+            "index": "0000000452",
+            "level": 53,
+            "ability": "Weak Armor",
+            "item": "White Herb",
+            "Terrain": "Misty",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Shell Smash","Earthquake","Pin Missile","Rock Blast"]
+        }
+    },
+    "Hydrapple": {
+    "Old Man OpticShadow | Union Cave": {
+            "index": "0000000454",
+            "level": 54,
+            "ability": "Supersweet Syrup",
+            "item": "Yache Berry",
+            "Terrain": "Misty",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Syrup Bomb","Power Gem","Infestation","Protect"]
+        }
+    },
+    "Slowbro-Galar": {
+    "Old Man OpticShadow | Union Cave": {
+            "index": "0000000455",
+            "level": 54,
+            "ability": "Quick Draw",
+            "item": "Quick Claw",
+            "Terrain": "Misty",
+            "nature": "Sassy",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Zen Headbutt","Ice Beam","Shell Side Arm","Slack Off"]
+        }
+    },
+    "Blaziken-Mega": {
+    "Old Man OpticShadow | Union Cave": {
+            "index": "0000000456",
+            "level": 55,
+            "ability": "Striker",
+            "item": "Blazikenite",
+            "Terrain": "Misty",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Protect","Blaze Kick","Trop Kick","Triple Kick"]
+        }
+    },
+    "Basculegion-F": {
+    "Old Man OpticShadow | Union Cave": {
+            "index": "0000000457",
+            "level": 54,
+            "ability": "Adaptability",
+            "item": "White Herb",
+            "Terrain": "Misty",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Last Respects","Shadow Ball","Ice Beam","Hydro Pump"]
+        }
+    },
+    "Celebi": {
+    "Rival Lyra | Union Cave": {
+            "index": "0000000460",
+            "level": 54,
+            "ability": "Natural Cure",
+            "item": "Light Clay",
+            "Terrain": "Misty",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Reflect","Light Screen","U-turn","Psychic"]
+        }
+    },
+    "Arcanine-Hisui": {
+    "Rival Lyra | Union Cave": {
+            "index": "0000000461",
+            "level": 54,
+            "ability": "Rock Head",
+            "item": "Focus Sash",
+            "Terrain": "Misty",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Wild Charge","Stone Edge","Sacred Fire","Extreme Speed"]
+        }
+    },
+    "Nidoking": {
+    "Rival Lyra | Union Cave": {
+            "index": "0000000462",
+            "level": 53,
+            "ability": "Sheer Force",
+            "item": "Life Orb",
+            "Terrain": "Misty",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Thunder","Blizzard","Sludge Bomb","Earth Power"]
+        }
+    },
+    "Meganium-Mega": {
+    "Rival Lyra | Union Cave": {
+            "index": "0000000465",
+            "level": 55,
+            "ability": "Mega Sol",
+            "item": "Meganiumite",
+            "Terrain": "Misty",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Synthesis","Earth Power","Solar Beam","Weather Ball"]
+        }
+    },
+}

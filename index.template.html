@@ -41,11 +41,11 @@
     <nav><div class="header"><div class="header-color"><div class="header-inner">
         <ul class="nav">
         <li><a class="button nav-first" href="https://astral-dex.vercel.app/">Pokédex</a></li>
-        <li><a class="button nav-first" href="https://rwxolive.github.io/astral-trainer-sheet/resources.html">Trainer Sheet</a></li>
+        <li><a class="button nav-first" href="astral-trainer-sheet.vercel.app">Trainer Sheet</a></li>
 		<li><a class="button" href="https://discord.gg/fZWBmEZeZx">Discord</a></li>
         <li><a class="button" href="https://drive.google.com/drive/folders/1X05r8shCeFDpyGCsSXXkryZ4Bt5pWd5B?usp=sharing">Google Drive</a></li>
-        <li><a class="button" href="https://rwxolive.github.io/astral-mechanics/">Mechanics</a></li>
-        <li><a class="button nav-last" href="https://rwxolive.github.io/astral-ai/">AI Not Added</a></li>
+        <li><a class="button" href="astral-changes.vercel.app">Changes</a></li>
+        <li><a class="button nav-last" href="https://docs.google.com/document/d/1kaztkqptNp5zcVLhKyNJDkLLqFDixCbJ2iWYg8ge-9w/edit?tab=t.0">AI Doc Not Finished</a></li>
 </ul>
         <!--<div style="clear:both"></div>-->
     </div></div></div></nav>
@@ -1195,7 +1195,7 @@
                                 <label class="btn btn-xxwide" for="powerSpotR">Power Spot</label>
                             </div></td>
                         </tr>
-                        <tr class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
+<tr class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
                             <td><div class="left" title="Is the defending Pok&eacute;mon switching out?">
                               <div hidden id="selectSwitchingInstruction">Is the defending Pok&eacute;mon switching out?</div>
                                 <input aria-describedby="selectSwitchingInstruction" class="visually-hidden calc-trigger" type="checkbox" id="switchingL" />
@@ -1854,6 +1854,7 @@
     </div>
     <div id="calc-side-backdrop" class="calc-side-backdrop" hidden></div>
     <aside id="frags-side-panel" class="calc-side-panel" aria-hidden="true" hidden>
+        <div class="calc-side-resize-handle" aria-hidden="true"></div>
         <div class="calc-side-header">
             <strong>Frag Sheet</strong>
             <div class="calc-side-header-actions">
@@ -1871,6 +1872,7 @@
         </div>
     </aside>
     <aside id="notes-side-panel" class="calc-side-panel" aria-hidden="true" hidden>
+        <div class="calc-side-resize-handle" aria-hidden="true"></div>
         <div class="calc-side-header">
             <strong>Notes</strong>
             <div class="calc-side-header-actions">
@@ -1891,6 +1893,7 @@
         </div>
     </aside>
     <aside id="settings-side-panel" class="calc-side-panel" aria-hidden="true" hidden>
+        <div class="calc-side-resize-handle" aria-hidden="true"></div>
         <div class="calc-side-header">
             <strong>Settings</strong>
             <button type="button" id="settings-panel-close" class="btn calc-side-btn">Close</button>
@@ -1910,6 +1913,13 @@
                 <div class="settings-choice-row">
                     <button type="button" class="btn settings-choice-btn" id="settings-theme-dark">Dark</button>
                     <button type="button" class="btn settings-choice-btn" id="settings-theme-light">Light</button>
+                </div>
+            </section>
+            <section class="settings-section">
+                <h4>Layout</h4>
+                <div class="settings-choice-row">
+                    <button type="button" class="btn settings-choice-btn" data-layout-choice="standard">Standard</button>
+                    <button type="button" class="btn settings-choice-btn" data-layout-choice="simplified">Simplified</button>
                 </div>
             </section>
             <section class="settings-section">

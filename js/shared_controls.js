@@ -542,6 +542,9 @@ var MOVE_INFO_LOADED = false;
 var FOG_ACCURACY_MULTIPLIER = 0.6;
 var HUSTLE_ACCURACY_MULTIPLIER = 0.8;
 var BRIGHT_POWDER_ACCURACY_MULTIPLIER = 0.9;
+var WIDE_LENS_ACCURACY_MULTIPLIER = 1.1;
+var ZOOM_LENS_ACCURACY_MULTIPLIER = 1.2;
+var COMPOUND_EYES_ACCURACY_MULTIPLIER = 1.3;
 var moveMetaVisible = true;
 
 function normalizeMoveInfoKey(moveName) {
@@ -645,19 +648,43 @@ function getMoveInfoForDisplay(moveName) {
 	return info || null;
 }
 
+function parseDisplayedSpeedValue(speedNode) {
+	if (!speedNode || !speedNode.length) return NaN;
+	var speedValue = parseInt($.trim(speedNode.first().text()), 10);
+	return isFinite(speedValue) ? speedValue : NaN;
+}
+
+function doesZoomLensApply(attackerInfo, defenderInfo) {
+	if (!attackerInfo || !attackerInfo.length || !defenderInfo || !defenderInfo.length) return false;
+	var attackerSpeedNode = attackerInfo.find(".sp .totalMod").first();
+	if (attackerSpeedNode.hasClass("speed-slower")) return true;
+	if (attackerSpeedNode.hasClass("speed-faster") || attackerSpeedNode.hasClass("speed-tie")) return false;
+	var attackerSpeed = parseDisplayedSpeedValue(attackerSpeedNode);
+	var defenderSpeed = parseDisplayedSpeedValue(defenderInfo.find(".sp .totalMod").first());
+	if (!isFinite(attackerSpeed) || !isFinite(defenderSpeed) || attackerSpeed === defenderSpeed) return false;
+	var trickRoomActive = $("#trickroom").prop("checked") || $("#trickRoomR").prop("checked");
+	return trickRoomActive ? attackerSpeed > defenderSpeed : attackerSpeed < defenderSpeed;
+}
+
 function getDisplayedMoveAccuracy(moveAccuracy, weatherValue, moveGroupObj, moveCategory) {
 	if (typeof moveAccuracy !== "number" || moveAccuracy <= 0) return "--";
 	var accuracyMultiplier = 1;
 	if (weatherValue === "Fog") accuracyMultiplier *= FOG_ACCURACY_MULTIPLIER;
 	var attackerInfo = moveGroupObj.closest(".poke-info");
+	var attackerItem = getEffectiveItemFromPokeInfo(attackerInfo);
 	var ability = attackerInfo.find(".ability").val();
 	if (ability === "Hustle" && moveCategory === "Physical") accuracyMultiplier *= HUSTLE_ACCURACY_MULTIPLIER;
+	if (ability === "Compound Eyes") accuracyMultiplier *= COMPOUND_EYES_ACCURACY_MULTIPLIER;
+	if (attackerItem === "Wide Lens") accuracyMultiplier *= WIDE_LENS_ACCURACY_MULTIPLIER;
 	var attackerId = attackerInfo.attr("id");
 	var defenderInfo = attackerId === "p1"
 		? $("#p2")
 		: attackerId === "p2"
 			? $("#p1")
 			: $(".poke-info").not(attackerInfo).first();
+	if (attackerItem === "Zoom Lens" && doesZoomLensApply(attackerInfo, defenderInfo)) {
+		accuracyMultiplier *= ZOOM_LENS_ACCURACY_MULTIPLIER;
+	}
 	if (defenderInfo.length && getEffectiveItemFromPokeInfo(defenderInfo) === "Bright Powder") {
 		accuracyMultiplier *= BRIGHT_POWDER_ACCURACY_MULTIPLIER;
 	}
@@ -768,6 +795,8 @@ $(".move-selector").change(function () {
 	moveGroupObj.children(".move-type").val(move.type);
 	moveGroupObj.children(".move-cat").val(move.category);
 	moveGroupObj.children(".move-crit").prop("checked", move.willCrit === true);
+	var linkedTopCritToggle = getTopCritToggleFromBattleToggle(moveGroupObj.children(".move-crit").get(0));
+	if (linkedTopCritToggle) linkedTopCritToggle.checked = move.willCrit === true;
 
 	var stat = move.category === 'Special' ? 'spa' : 'atk';
 	var dropsStats =
@@ -831,6 +860,12 @@ var NOTES_BOARD_STORAGE_KEY = "astralCalcNotesBoard";
 var FRAG_SHEET_STATES_STORAGE_KEY = "astralCalcFragSheetStates";
 var FRAG_SHEET_BACKUPS_STORAGE_KEY = "astralCalcFragSheetBackups";
 var TRAINER_FIELD_LOCKS_STORAGE_KEY = "astralCalcTrainerFieldLocks";
+var LAST_ENCOUNTER_STORAGE_KEY = "astralCalcLastEncounter";
+var CALC_FEATURE_TUTORIAL_SEEN_STORAGE_KEY = "astralCalcFeatureTutorialSeenV1";
+var CALC_FEATURE_TUTORIAL_AUTO_OPEN_DELAY_MS = 1300;
+var CALC_SIDE_PANEL_MIN_WIDTH_PX = 360;
+var CALC_SIDE_PANEL_MAX_WIDTH_VW = 96;
+var CALC_SIDE_PANEL_MIN_MAIN_WIDTH_PX = 620;
 var FRAG_SHEET_STATES_LIMIT = 40;
 var FRAG_SHEET_BACKUPS_LIMIT = 90;
 var FRAG_SHEET_BACKUP_COOLDOWN_MS = 12000;
@@ -880,6 +915,8 @@ var fragContextSourceSet = "";
 var fragContextSourceElement = null;
 var fragSheetAutoObserver = null;
 var fragSheetRefreshTimer = null;
+var playerRosterSearchDebounceTimer = null;
+var notesNoteInputDebounceTimers = {};
 var fragLastAutoBackupAt = 0;
 var trainerFieldLocksCache = null;
 var trainerFieldLockActiveTrainerKey = "";
@@ -887,6 +924,31 @@ var fragsHistoryExpanded = false;
 var FRAG_UNKNOWN_VICTIM_KEY = "__unknown__";
 var deadOpposingSetMap = {};
 var opposingContextSourceSet = "";
+var isRestoringLastEncounterSelection = false;
+var isBootstrappingLastEncounterSelection = true;
+var calcFeatureTutorialState = {
+	isOpen: false,
+	launchedFromSettings: false,
+	stepIndex: 0,
+	steps: [],
+	focusNode: null,
+	focusPrevInlinePosition: "",
+	focusPrevInlineZIndex: "",
+	focusForcedRelative: false,
+	overlayNode: null,
+	cardNode: null,
+	titleNode: null,
+	textNode: null,
+	progressNode: null,
+	visualNode: null,
+	backBtn: null,
+	nextBtn: null
+};
+var calcSidePanelResizeState = null;
+var calcSideResizeCaptureNode = null;
+var PLAYER_ROSTER_SPRITE_SELECTOR = "#team-poke-list .trainer-pok.left-side, #box-poke-list .trainer-pok.left-side, #box-poke-list2 .trainer-pok.left-side, #trash-box .trainer-pok.left-side";
+var PLAYER_ROSTER_SEARCH_DEBOUNCE_MS = 90;
+var NOTES_NOTE_INPUT_DEBOUNCE_MS = 120;
 var SPECIES_DISPLAY_NAME_ALIASES = {
 	"Tauros-Paldea-Blaze": "Tauros-PB",
 	"Tauros-Paldea-Aqua": "Tauros-PA"
@@ -1496,9 +1558,15 @@ function normalizeStarterChoice(rawChoice) {
 	return "totodile";
 }
 
+function normalizeLayoutChoice(rawChoice) {
+	var normalizedChoice = String(rawChoice || "").trim().toLowerCase();
+	return normalizedChoice === "simplified" ? "simplified" : "standard";
+}
+
 function getDefaultAppSettings() {
 	return {
 		starterChoice: "totodile",
+		layoutMode: "standard",
 		moreColour: true,
 		moveColors: false,
 		moveMeta: true,
@@ -1512,6 +1580,7 @@ function getAppSettings(forceReload) {
 	var parsed = safeJsonParse(localStorage.getItem(APP_SETTINGS_STORAGE_KEY), {});
 	appSettingsCache = {
 		starterChoice: normalizeStarterChoice(parsed.starterChoice || defaults.starterChoice),
+		layoutMode: normalizeLayoutChoice(parsed.layoutMode || defaults.layoutMode),
 		moreColour: typeof parsed.moreColour === "boolean" ? parsed.moreColour : defaults.moreColour,
 		moveColors: typeof parsed.moveColors === "boolean" ? parsed.moveColors : defaults.moveColors,
 		moveMeta: typeof parsed.moveMeta === "boolean" ? parsed.moveMeta : defaults.moveMeta,
@@ -1523,6 +1592,7 @@ function getAppSettings(forceReload) {
 function saveAppSettings(nextSettings) {
 	appSettingsCache = {
 		starterChoice: normalizeStarterChoice(nextSettings.starterChoice),
+		layoutMode: normalizeLayoutChoice(nextSettings.layoutMode),
 		moreColour: !!nextSettings.moreColour,
 		moveColors: !!nextSettings.moveColors,
 		moveMeta: !!nextSettings.moveMeta,
@@ -1536,6 +1606,7 @@ function updateAppSettings(partial) {
 	var current = getAppSettings();
 	return saveAppSettings({
 		starterChoice: partial && typeof partial.starterChoice !== "undefined" ? partial.starterChoice : current.starterChoice,
+		layoutMode: partial && typeof partial.layoutMode !== "undefined" ? partial.layoutMode : current.layoutMode,
 		moreColour: partial && typeof partial.moreColour !== "undefined" ? partial.moreColour : current.moreColour,
 		moveColors: partial && typeof partial.moveColors !== "undefined" ? partial.moveColors : current.moveColors,
 		moveMeta: partial && typeof partial.moveMeta !== "undefined" ? partial.moveMeta : current.moveMeta,
@@ -1704,11 +1775,21 @@ function resolveInlineSpriteSpeciesForPokeInfo(pokeInfo) {
 	var transformedSpecies = String(pokeInfo.attr("data-transform-species") || "").trim();
 	if (transformedSpecies) return transformedSpecies;
 	var setSpecies = parseSetId(pokeInfo.find(".set-selector").val()).species || "";
+	var resolvedSetSpecies = resolveSetSpeciesNameForDexLookup(setSpecies);
+	var setSpeciesEntry = pokedex[resolvedSetSpecies] || pokedex[setSpecies];
+	var baseSpeciesEntry = setSpeciesEntry && setSpeciesEntry.baseSpecies ? pokedex[setSpeciesEntry.baseSpecies] : null;
+	var setHasFormes = !!(
+		setSpeciesEntry &&
+		(
+			(setSpeciesEntry.otherFormes && setSpeciesEntry.otherFormes.length) ||
+			(baseSpeciesEntry && baseSpeciesEntry.otherFormes && baseSpeciesEntry.otherFormes.length)
+		)
+	);
 	var formeSelect = pokeInfo.find(".forme");
 	var formeContainer = formeSelect.parent();
 	var useFormeSelection = !!(formeSelect.length && formeContainer.length && formeContainer.is(":visible"));
 	var formeSpecies = useFormeSelection ? String(formeSelect.val() || "").trim() : "";
-	if (formeSpecies) return formeSpecies;
+	if (setHasFormes && formeSpecies) return formeSpecies;
 	return String(setSpecies || "").trim();
 }
 
@@ -1719,7 +1800,13 @@ function syncInlinePokeSprite(pokeInfo) {
 	if (!speciesName) return;
 	setTrainerSpriteImage(inlineSpriteNode, speciesName);
 	var formeSelect = pokeInfo.find(".forme");
-	var hasFormes = formeSelect.length && formeSelect.find("option").length > 1;
+	var formeContainer = formeSelect.parent();
+	var hasFormes = !!(
+		formeSelect.length &&
+		formeContainer.length &&
+		formeContainer.is(":visible") &&
+		formeSelect.find("option").length > 1
+	);
 	inlineSpriteNode.title = hasFormes ? "Click to cycle forms" : "No alternate forms";
 	inlineSpriteNode.style.cursor = hasFormes ? "pointer" : "default";
 }
@@ -1965,9 +2052,10 @@ function ensureAstralDexSidePanel() {
 
 	panel = document.createElement("aside");
 	panel.id = "astraldex-side-panel";
+	panel.className = "calc-side-panel calc-side-panel-astraldex";
 	panel.setAttribute("aria-hidden", "true");
-	panel.style.cssText = "position:fixed;top:0;right:0;height:100vh;width:min(48vw,700px);min-width:360px;max-width:96vw;border-left:1px solid #888;box-shadow:-6px 0 20px rgba(0,0,0,.35);z-index:2500;transform:translateX(100%);transition:transform 160ms ease-in-out;display:flex;flex-direction:column;";
-	panel.innerHTML = '<div class="astraldex-side-header" style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;"><strong class="astraldex-side-title">AstralDex</strong><button type="button" class="astraldex-side-close" style="padding:3px 10px;border-radius:4px;cursor:pointer;">Close</button></div><div class="astraldex-side-body" style="position:relative;overflow:hidden;flex:1 1 auto;"><iframe class="astraldex-side-frame" title="AstralDex" src="' + ASTRALDEX_BASE_URL + '" style="position:absolute;top:0;left:0;width:100%;height:calc(100% + ' + ASTRALDEX_TOP_CHROME_PX + 'px);transform:translateY(-' + ASTRALDEX_TOP_CHROME_PX + 'px);border:0;"></iframe></div>';
+	panel.hidden = true;
+	panel.innerHTML = '<div class="calc-side-resize-handle" aria-hidden="true"></div><div class="calc-side-header astraldex-side-header"><strong class="astraldex-side-title">AstralDex</strong><button type="button" class="btn calc-side-btn astraldex-side-close">Close</button></div><div class="calc-side-body astraldex-side-body" style="position:relative;overflow:hidden;flex:1 1 auto;padding:0;"><iframe class="astraldex-side-frame" title="AstralDex" src="' + ASTRALDEX_BASE_URL + '" style="position:absolute;top:0;left:0;width:100%;height:calc(100% + ' + ASTRALDEX_TOP_CHROME_PX + 'px);transform:translateY(-' + ASTRALDEX_TOP_CHROME_PX + 'px);border:0;"></iframe></div>';
 	document.body.appendChild(panel);
 	applyAstralDexPanelTheme(panel);
 
@@ -1976,10 +2064,7 @@ function ensureAstralDexSidePanel() {
 }
 
 function closeAstralDexSidePanel() {
-	var panel = document.getElementById("astraldex-side-panel");
-	if (!panel) return;
-	panel.style.transform = "translateX(100%)";
-	panel.setAttribute("aria-hidden", "true");
+	closeCalcSidePanel("astraldex-side-panel");
 }
 
 function openAstralDexSidePanel(url, pokemonName) {
@@ -1987,8 +2072,7 @@ function openAstralDexSidePanel(url, pokemonName) {
 	applyAstralDexPanelTheme(panel);
 	panel.querySelector(".astraldex-side-frame").src = url || astralDexUrl(pokemonName);
 	panel.querySelector(".astraldex-side-title").textContent = pokemonName ? ("AstralDex: " + pokemonName) : "AstralDex";
-	panel.style.transform = "translateX(0)";
-	panel.setAttribute("aria-hidden", "false");
+	openCalcSidePanel("astraldex-side-panel");
 }
 
 function bindAstralDexLinks() {
@@ -2115,6 +2199,25 @@ function getCurrentSplitNumber(fightLabel) {
 		return normalizeSplitNumber(splitMatch[1]);
 	}
 	return 1;
+}
+
+function normalizeFragFightLabelForMatch(fightLabel) {
+	var normalized = String(fightLabel || "").trim();
+	if (!normalized) return "";
+	normalized = normalized.replace(/\s*\(split\s*[1-9]\)\s*$/i, "");
+	return normalized.toLowerCase();
+}
+
+function getSplitNumberForFragFightLabel(fightLabel) {
+	var fightText = String(fightLabel || "").trim();
+	var splitMatch = fightText.match(/split\s*([1-9])/i);
+	if (splitMatch && splitMatch[1]) {
+		return normalizeSplitNumber(splitMatch[1]);
+	}
+	var trainerIndex = getTrainerIndexForLabel(fightText);
+	var configuredSplit = getSplitFromRulesByIndex(trainerIndex);
+	if (configuredSplit) return configuredSplit;
+	return getCurrentSplitNumber(fightText);
 }
 
 function normalizeFragVictimKey(rawVictimKey) {
@@ -2506,6 +2609,8 @@ function createRosterSpriteFromSetId(setId) {
 	var sprite = document.createElement("img");
 	sprite.id = buildRosterSpriteNodeId(setId);
 	sprite.className = "trainer-pok left-side";
+	sprite.loading = "lazy";
+	sprite.decoding = "async";
 	setTrainerSpriteImage(sprite, parsed.species);
 	sprite.dataset.id = setId;
 	sprite.addEventListener("dragstart", dragstart_handler);
@@ -2790,20 +2895,45 @@ function mergeFragEntriesFromEvolutionDrop(sourceSetId, targetSetId) {
 function getTrainerPokSpriteElement(node) {
 	if (!node || node.nodeType !== 1) return null;
 	if (node.classList.contains("trainer-pok") && node.classList.contains("left-side")) return node;
-	return $(node).find(".trainer-pok.left-side").get(0) || $(node).closest(".trainer-pok.left-side").get(0) || null;
+	var descendantSprite = node.querySelector(".trainer-pok.left-side");
+	if (descendantSprite) return descendantSprite;
+	var current = node.parentElement;
+	while (current) {
+		if (current.classList &&
+			current.classList.contains("trainer-pok") &&
+			current.classList.contains("left-side")) {
+			return current;
+		}
+		current = current.parentElement;
+	}
+	return null;
 }
 
 function getTrainerPokRootNode(node) {
 	if (!node || node.nodeType !== 1) return null;
 	if (node.classList.contains("trainer-pok-slot")) return node;
-	var wrapped = $(node).closest(".trainer-pok-slot").get(0);
-	return wrapped || node;
+	var current = node.parentElement;
+	while (current) {
+		if (current.classList && current.classList.contains("trainer-pok-slot")) return current;
+		current = current.parentElement;
+	}
+	return node;
 }
 
 function getTrainerPokContainerElement(node) {
 	var rootNode = getTrainerPokRootNode(node);
 	if (!rootNode) return null;
-	return $(rootNode).closest("#team-poke-list, #box-poke-list, #box-poke-list2, #trash-box").get(0) || null;
+	var current = rootNode;
+	while (current) {
+		if (current.id === "team-poke-list" ||
+			current.id === "box-poke-list" ||
+			current.id === "box-poke-list2" ||
+			current.id === "trash-box") {
+			return current;
+		}
+		current = current.parentElement;
+	}
+	return null;
 }
 
 function ensureTrainerPokSlot(spriteElement) {
@@ -2827,6 +2957,7 @@ function hideTrainerFragBorderTotals() {
 	$(".trainer-pok-slot").removeClass("show-frag-total");
 	$(".trainer-pok-frag-total").each(function () {
 		this.style.display = "none";
+		this.className = "trainer-pok-frag-total";
 	});
 }
 
@@ -2837,31 +2968,92 @@ function updateTrainerFragBorderTotals() {
 	if (!showTotalFrags) {
 		return hideTrainerFragBorderTotals();
 	}
+	var spriteRows = [];
 	playerSprites.each(function () {
 		var spriteElement = this;
 		var slot = ensureTrainerPokSlot(spriteElement);
 		if (!slot) return;
 		var fragTotal = getFragTotalForSet($(spriteElement).attr("data-id"));
+		spriteRows.push({
+			slot: slot,
+			fragTotal: fragTotal
+		});
+	});
+	var rankedTotals = spriteRows
+		.map(function (row) { return row.fragTotal; })
+		.filter(function (fragTotal) { return fragTotal > 0; })
+		.sort(function (a, b) { return b - a; });
+	var uniqueRankedTotals = [];
+	for (var i = 0; i < rankedTotals.length; i++) {
+		if (uniqueRankedTotals.indexOf(rankedTotals[i]) !== -1) continue;
+		uniqueRankedTotals.push(rankedTotals[i]);
+		if (uniqueRankedTotals.length >= 3) break;
+	}
+	var rankClassByTotal = {};
+	if (uniqueRankedTotals.length > 0) rankClassByTotal[uniqueRankedTotals[0]] = "frag-rank-gold";
+	if (uniqueRankedTotals.length > 1) rankClassByTotal[uniqueRankedTotals[1]] = "frag-rank-silver";
+	if (uniqueRankedTotals.length > 2) rankClassByTotal[uniqueRankedTotals[2]] = "frag-rank-bronze";
+	for (i = 0; i < spriteRows.length; i++) {
+		var row = spriteRows[i];
+		var slot = row.slot;
 		var badge = slot.querySelector(".trainer-pok-frag-total");
 		if (!badge) {
 			badge = document.createElement("span");
 			badge.className = "trainer-pok-frag-total";
 			slot.appendChild(badge);
 		}
-		badge.textContent = String(fragTotal);
+		badge.className = "trainer-pok-frag-total";
+		var rankClass = rankClassByTotal[row.fragTotal];
+		if (rankClass) badge.classList.add(rankClass);
+		badge.textContent = String(row.fragTotal);
 		badge.style.display = "";
 		slot.classList.add("show-frag-total");
-	});
+	}
 }
 
 function collectPlayerRosterSetIds() {
 	var rosterSetIds = [];
-	$("#team-poke-list .trainer-pok.left-side, #box-poke-list .trainer-pok.left-side, #box-poke-list2 .trainer-pok.left-side, #trash-box .trainer-pok.left-side").each(function () {
-		var setId = $(this).attr("data-id");
-		if (!setId) return;
-		if (rosterSetIds.indexOf(setId) === -1) rosterSetIds.push(setId);
-	});
+	var seenSetIds = {};
+	var rosterSprites = document.querySelectorAll(PLAYER_ROSTER_SPRITE_SELECTOR);
+	for (var i = 0; i < rosterSprites.length; i++) {
+		var setId = String(rosterSprites[i].getAttribute("data-id") || "").trim();
+		if (!setId || seenSetIds[setId]) continue;
+		seenSetIds[setId] = true;
+		rosterSetIds.push(setId);
+	}
 	return rosterSetIds;
+}
+
+function buildPlayerRosterSearchText(setId) {
+	var parsedSet = parseSetId(setId);
+	var speciesName = String(parsedSet.species || "").trim();
+	var setName = String(parsedSet.label || "").trim();
+	var searchParts = [setId, parsedSet.species, parsedSet.label];
+	var setData = speciesName && setName && setdex && setdex[speciesName]
+		? setdex[speciesName][setName]
+		: null;
+	if (setData && typeof setData === "object") {
+		if (typeof setData.ability === "string") searchParts.push(setData.ability);
+		if (Array.isArray(setData.abilities)) searchParts = searchParts.concat(setData.abilities);
+		if (Array.isArray(setData.moves)) searchParts = searchParts.concat(setData.moves);
+	}
+	return searchParts.join(" ").toLowerCase();
+}
+
+function toPlayerRosterSearchToken(value) {
+	return String(value || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+function getPlayerRosterSearchPayloadBySetId(setId, cacheMap) {
+	if (cacheMap && cacheMap[setId]) return cacheMap[setId];
+	var searchText = buildPlayerRosterSearchText(setId);
+	var normalizedSearchText = toPlayerRosterSearchToken(searchText);
+	var payload = {
+		searchText: searchText,
+		normalizedSearchText: normalizedSearchText
+	};
+	if (cacheMap) cacheMap[setId] = payload;
+	return payload;
 }
 
 function applyPlayerRosterSearchFilter() {
@@ -2869,24 +3061,48 @@ function applyPlayerRosterSearchFilter() {
 	var query = String(searchInput && typeof searchInput.value !== "undefined" ? searchInput.value : "")
 		.trim()
 		.toLowerCase();
-	$("#team-poke-list .trainer-pok.left-side, #box-poke-list .trainer-pok.left-side, #box-poke-list2 .trainer-pok.left-side, #trash-box .trainer-pok.left-side").each(function () {
-		var sprite = this;
+	var queryTerms = query.split(/\s+/).filter(Boolean);
+	var normalizedTerms = queryTerms.map(toPlayerRosterSearchToken);
+	var setSearchCache = {};
+	var rosterSprites = document.querySelectorAll(PLAYER_ROSTER_SPRITE_SELECTOR);
+	for (var i = 0; i < rosterSprites.length; i++) {
+		var sprite = rosterSprites[i];
 		var rootNode = getTrainerPokRootNode(sprite);
 		if (!rootNode) rootNode = sprite;
-		var setId = String($(sprite).attr("data-id") || "");
-		var parsedSet = parseSetId(setId);
-		var searchText = (setId + " " + parsedSet.species + " " + parsedSet.label).toLowerCase();
-		var isMatch = !query || searchText.indexOf(query) >= 0;
-		rootNode.style.display = isMatch ? "" : "none";
-	});
+		var setId = String(sprite.getAttribute("data-id") || "");
+		var cachedSearchPayload = getPlayerRosterSearchPayloadBySetId(setId, setSearchCache);
+		var searchText = cachedSearchPayload.searchText;
+		var normalizedSearchText = cachedSearchPayload.normalizedSearchText;
+		var isMatch = !query ||
+			searchText.indexOf(query) >= 0 ||
+			queryTerms.every(function (term, index) {
+				return searchText.indexOf(term) >= 0 ||
+					(normalizedTerms[index] && normalizedSearchText.indexOf(normalizedTerms[index]) >= 0);
+			});
+		var nextDisplay = isMatch ? "" : "none";
+		if (rootNode.style.display !== nextDisplay) rootNode.style.display = nextDisplay;
+	}
 }
 
 function bindPlayerRosterSearchInput() {
 	var searchInput = document.getElementById("search");
 	if (!searchInput) return;
-	$(searchInput).off("input.searchfilter keyup.searchfilter").on("input.searchfilter keyup.searchfilter", function () {
-		applyPlayerRosterSearchFilter();
-	});
+	$(searchInput)
+		.off("input.searchfilter keyup.searchfilter change.searchfilter blur.searchfilter")
+		.on("input.searchfilter keyup.searchfilter", function () {
+			if (playerRosterSearchDebounceTimer) window.clearTimeout(playerRosterSearchDebounceTimer);
+			playerRosterSearchDebounceTimer = window.setTimeout(function () {
+				playerRosterSearchDebounceTimer = null;
+				applyPlayerRosterSearchFilter();
+			}, PLAYER_ROSTER_SEARCH_DEBOUNCE_MS);
+		})
+		.on("change.searchfilter blur.searchfilter", function () {
+			if (playerRosterSearchDebounceTimer) {
+				window.clearTimeout(playerRosterSearchDebounceTimer);
+				playerRosterSearchDebounceTimer = null;
+			}
+			applyPlayerRosterSearchFilter();
+		});
 }
 
 function syncFragRoster(options) {
@@ -2975,7 +3191,7 @@ function removeFragKill(killerSetId, preferredFight) {
 		}
 	}
 	if (!targetFight) return;
-	var split = String(getCurrentSplitNumber(targetFight));
+	var split = String(getSplitNumberForFragFightLabel(targetFight));
 	var victimKey = pickFragVictimKeyForRemoval(entry, targetFight, split);
 	entry.fights[targetFight] -= 1;
 	if (entry.fights[targetFight] <= 0) delete entry.fights[targetFight];
@@ -2998,41 +3214,71 @@ function removeFragKill(killerSetId, preferredFight) {
 
 function clearFragsForCurrentFight() {
 	var fight = getCurrentFightLabel();
-	var split = String(getCurrentSplitNumber(fight));
+	var normalizedFight = normalizeFragFightLabelForMatch(fight);
+	var currentFightIndex = getCurrentFightIndex();
+	var fightIndexCache = {};
 	var state = getFragSheetState();
 	var hadKills = false;
 	for (var setId in state.entries) {
 		if (!Object.prototype.hasOwnProperty.call(state.entries, setId)) continue;
 		var entry = state.entries[setId];
-		if (!entry.fights[fight]) continue;
-		var removed = entry.fights[fight];
-		var fightVictimBucket = getFragVictimBucketForEntry(entry, "fightVictims", fight, false);
-		entry.totalKills = Math.max(0, entry.totalKills - removed);
-		delete entry.fights[fight];
-		if (entry.fightVictims && Object.prototype.hasOwnProperty.call(entry.fightVictims, fight)) {
-			delete entry.fightVictims[fight];
-		}
-		if (entry.splits[split]) {
-			entry.splits[split] = Math.max(0, entry.splits[split] - removed);
-			if (entry.splits[split] <= 0) delete entry.splits[split];
-		}
-		var removedVictimCounts = 0;
-		if (fightVictimBucket) {
-			for (var victimKey in fightVictimBucket) {
-				if (!Object.prototype.hasOwnProperty.call(fightVictimBucket, victimKey)) continue;
-				var victimCount = parseInt(fightVictimBucket[victimKey], 10);
-				if (Number.isNaN(victimCount) || victimCount <= 0) continue;
-				removedVictimCounts += victimCount;
-				decrementFragVictimBucketCount(entry, "splitVictims", split, victimKey, victimCount);
+		if (!entry || !entry.fights || typeof entry.fights !== "object") continue;
+		var fightsToClear = [];
+		for (var fightName in entry.fights) {
+			if (!Object.prototype.hasOwnProperty.call(entry.fights, fightName)) continue;
+			var fightCount = parseInt(entry.fights[fightName], 10);
+			if (Number.isNaN(fightCount) || fightCount <= 0) continue;
+			if (normalizeFragFightLabelForMatch(fightName) === normalizedFight) {
+				fightsToClear.push(fightName);
+				continue;
+			}
+			if (currentFightIndex > 0) {
+				if (!Object.prototype.hasOwnProperty.call(fightIndexCache, fightName)) {
+					fightIndexCache[fightName] = getTrainerIndexForLabel(fightName);
+				}
+				if (fightIndexCache[fightName] === currentFightIndex) {
+					fightsToClear.push(fightName);
+				}
 			}
 		}
-		if (removedVictimCounts < removed) {
-			var unknownRemoved = decrementFragVictimBucketCount(entry, "splitVictims", split, FRAG_UNKNOWN_VICTIM_KEY, removed - removedVictimCounts);
-			if (unknownRemoved < (removed - removedVictimCounts)) {
-				decrementFragVictimBucketByAny(entry, "splitVictims", split, (removed - removedVictimCounts) - unknownRemoved);
+		if (!fightsToClear.length) continue;
+		var removedForEntry = 0;
+		for (var i = 0; i < fightsToClear.length; i++) {
+			var fightKey = fightsToClear[i];
+			var removed = parseInt(entry.fights[fightKey], 10);
+			if (Number.isNaN(removed) || removed <= 0) continue;
+			var split = String(getSplitNumberForFragFightLabel(fightKey));
+			var fightVictimBucket = getFragVictimBucketForEntry(entry, "fightVictims", fightKey, false);
+			delete entry.fights[fightKey];
+			if (entry.fightVictims && Object.prototype.hasOwnProperty.call(entry.fightVictims, fightKey)) {
+				delete entry.fightVictims[fightKey];
 			}
+			if (entry.splits[split]) {
+				entry.splits[split] = Math.max(0, entry.splits[split] - removed);
+				if (entry.splits[split] <= 0) delete entry.splits[split];
+			}
+			var removedVictimCounts = 0;
+			if (fightVictimBucket) {
+				for (var victimKey in fightVictimBucket) {
+					if (!Object.prototype.hasOwnProperty.call(fightVictimBucket, victimKey)) continue;
+					var victimCount = parseInt(fightVictimBucket[victimKey], 10);
+					if (Number.isNaN(victimCount) || victimCount <= 0) continue;
+					removedVictimCounts += victimCount;
+					decrementFragVictimBucketCount(entry, "splitVictims", split, victimKey, victimCount);
+				}
+			}
+			if (removedVictimCounts < removed) {
+				var unknownRemoved = decrementFragVictimBucketCount(entry, "splitVictims", split, FRAG_UNKNOWN_VICTIM_KEY, removed - removedVictimCounts);
+				if (unknownRemoved < (removed - removedVictimCounts)) {
+					decrementFragVictimBucketByAny(entry, "splitVictims", split, (removed - removedVictimCounts) - unknownRemoved);
+				}
+			}
+			removedForEntry += removed;
 		}
-		hadKills = true;
+		if (removedForEntry > 0) {
+			entry.totalKills = Math.max(0, entry.totalKills - removedForEntry);
+			hadKills = true;
+		}
 	}
 	if (hadKills) saveFragSheetState();
 	renderFragSheet();
@@ -3325,26 +3571,39 @@ function renderFragSheet() {
 	updateTrainerFragBorderTotals();
 }
 
+function setCalcSideDockedWidth(widthPx) {
+	var roundedWidth = Math.max(0, Math.round(widthPx || 0));
+	document.documentElement.style.setProperty("--calc-side-panel-open-width", roundedWidth + "px");
+	document.body.classList.toggle("calc-side-panel-docked", roundedWidth > 0);
+}
+
+function updateCalcLayoutForSidePanel() {
+	var panel = document.querySelector(".calc-side-panel.open:not(.fullscreen)");
+	if (!panel) {
+		setCalcSideDockedWidth(0);
+		return;
+	}
+	var panelWidth = Math.round(panel.getBoundingClientRect().width || 0);
+	if (window.innerWidth < 1100 || !panelWidth || (window.innerWidth - panelWidth) < CALC_SIDE_PANEL_MIN_MAIN_WIDTH_PX) {
+		setCalcSideDockedWidth(0);
+		return;
+	}
+	setCalcSideDockedWidth(panelWidth);
+}
+
 function updateCalcSideBackdrop() {
 	var backdrop = document.getElementById("calc-side-backdrop");
 	if (!backdrop) return;
 	var hasOpenPanel = $(".calc-side-panel.open").length > 0;
-	backdrop.hidden = !hasOpenPanel;
-	backdrop.classList.toggle("open", hasOpenPanel);
-}
-
-function openCalcSidePanel(panelId) {
-	var panel = document.getElementById(panelId);
-	if (!panel) return;
-	panel.hidden = false;
-	panel.classList.add("open");
-	panel.setAttribute("aria-hidden", "false");
-	updateCalcSideBackdrop();
+	var showBackdrop = hasOpenPanel && window.innerWidth < 1100;
+	backdrop.hidden = !showBackdrop;
+	backdrop.classList.toggle("open", showBackdrop);
 }
 
 function closeCalcSidePanel(panelId) {
 	var panel = document.getElementById(panelId);
 	if (!panel) return;
+	var wasOpen = panel.classList.contains("open");
 	panel.classList.remove("open");
 	panel.classList.remove("fullscreen");
 	panel.setAttribute("aria-hidden", "true");
@@ -3354,13 +3613,478 @@ function closeCalcSidePanel(panelId) {
 	} else if (panelId === "notes-side-panel") {
 		$("#notes-panel-fullscreen").text("Fullscreen");
 	}
-	updateCalcSideBackdrop();
+	if (calcSidePanelResizeState && calcSidePanelResizeState.panelId === panelId) {
+		endCalcSidePanelResize();
+	}
+	if (wasOpen) {
+		updateCalcSideBackdrop();
+		updateCalcLayoutForSidePanel();
+	}
 }
 
-function closeCalcSidePanels() {
+function closeCalcSidePanels(exceptPanelId) {
 	$(".calc-side-panel.open").each(function () {
+		if (exceptPanelId && this.id === exceptPanelId) return;
 		closeCalcSidePanel(this.id);
 	});
+}
+
+function openCalcSidePanel(panelId) {
+	var panel = document.getElementById(panelId);
+	if (!panel) return;
+	closeCalcSidePanels(panelId);
+	panel.hidden = false;
+	panel.classList.add("open");
+	panel.setAttribute("aria-hidden", "false");
+	updateCalcSideBackdrop();
+	updateCalcLayoutForSidePanel();
+}
+
+function clampCalcSidePanelWidth(widthPx) {
+	var maxWidth = Math.floor((window.innerWidth * CALC_SIDE_PANEL_MAX_WIDTH_VW) / 100);
+	if (maxWidth < CALC_SIDE_PANEL_MIN_WIDTH_PX) maxWidth = CALC_SIDE_PANEL_MIN_WIDTH_PX;
+	return Math.max(CALC_SIDE_PANEL_MIN_WIDTH_PX, Math.min(maxWidth, Math.round(widthPx)));
+}
+
+function ensureCalcSideResizeCaptureNode() {
+	if (calcSideResizeCaptureNode && document.body.contains(calcSideResizeCaptureNode)) return calcSideResizeCaptureNode;
+	var captureNode = document.getElementById("calc-side-resize-capture");
+	if (!captureNode) {
+		captureNode = document.createElement("div");
+		captureNode.id = "calc-side-resize-capture";
+		captureNode.className = "calc-side-resize-capture";
+		captureNode.hidden = true;
+		document.body.appendChild(captureNode);
+	}
+	calcSideResizeCaptureNode = captureNode;
+	return captureNode;
+}
+
+function beginCalcSidePanelResize(panel, startClientX) {
+	if (!panel || panel.classList.contains("fullscreen")) return;
+	var captureNode = ensureCalcSideResizeCaptureNode();
+	calcSidePanelResizeState = {
+		panelId: panel.id,
+		startClientX: startClientX,
+		startWidth: panel.getBoundingClientRect().width || CALC_SIDE_PANEL_MIN_WIDTH_PX
+	};
+	if (captureNode) captureNode.hidden = false;
+	document.body.classList.add("calc-side-resizing");
+}
+
+function continueCalcSidePanelResize(nextClientX, buttonsMask) {
+	if (!calcSidePanelResizeState) return;
+	if (typeof buttonsMask === "number" && buttonsMask === 0) {
+		endCalcSidePanelResize();
+		return;
+	}
+	var panel = document.getElementById(calcSidePanelResizeState.panelId);
+	if (!panel) {
+		endCalcSidePanelResize();
+		return;
+	}
+	var delta = calcSidePanelResizeState.startClientX - nextClientX;
+	var nextWidth = clampCalcSidePanelWidth(calcSidePanelResizeState.startWidth + delta);
+	panel.style.width = nextWidth + "px";
+	updateCalcLayoutForSidePanel();
+}
+
+function endCalcSidePanelResize() {
+	if (!calcSidePanelResizeState) return;
+	calcSidePanelResizeState = null;
+	if (calcSideResizeCaptureNode) calcSideResizeCaptureNode.hidden = true;
+	document.body.classList.remove("calc-side-resizing");
+}
+
+function hasSeenCalcFeatureTutorial() {
+	return localStorage.getItem(CALC_FEATURE_TUTORIAL_SEEN_STORAGE_KEY) === "1";
+}
+
+function markCalcFeatureTutorialSeen() {
+	localStorage.setItem(CALC_FEATURE_TUTORIAL_SEEN_STORAGE_KEY, "1");
+}
+
+function clearCalcFeatureTutorialFocus() {
+	if (!calcFeatureTutorialState.focusNode || !calcFeatureTutorialState.focusNode.classList) return;
+	calcFeatureTutorialState.focusNode.classList.remove("calc-feature-tutorial-focus");
+	if (calcFeatureTutorialState.focusForcedRelative) {
+		calcFeatureTutorialState.focusNode.style.position = calcFeatureTutorialState.focusPrevInlinePosition;
+	}
+	calcFeatureTutorialState.focusNode.style.zIndex = calcFeatureTutorialState.focusPrevInlineZIndex;
+	calcFeatureTutorialState.focusPrevInlinePosition = "";
+	calcFeatureTutorialState.focusPrevInlineZIndex = "";
+	calcFeatureTutorialState.focusForcedRelative = false;
+	calcFeatureTutorialState.focusNode = null;
+}
+
+function setCalcFeatureTutorialFocus(targetNode) {
+	clearCalcFeatureTutorialFocus();
+	if (!targetNode || !targetNode.classList) return;
+	calcFeatureTutorialState.focusPrevInlinePosition = targetNode.style.position || "";
+	calcFeatureTutorialState.focusPrevInlineZIndex = targetNode.style.zIndex || "";
+	calcFeatureTutorialState.focusForcedRelative = false;
+	var computedPosition = window.getComputedStyle ? window.getComputedStyle(targetNode).position : "";
+	if (computedPosition === "static" || !computedPosition) {
+		targetNode.style.position = "relative";
+		calcFeatureTutorialState.focusForcedRelative = true;
+	}
+	targetNode.style.zIndex = "2803";
+	targetNode.classList.add("calc-feature-tutorial-focus");
+	calcFeatureTutorialState.focusNode = targetNode;
+	if (typeof targetNode.scrollIntoView === "function") {
+		targetNode.scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
+	}
+}
+
+function clampCalcFeatureTutorialValue(value, min, max) {
+	return Math.min(max, Math.max(min, value));
+}
+
+function positionCalcFeatureTutorialCard(targetNode) {
+	var cardNode = calcFeatureTutorialState.cardNode;
+	if (!cardNode) return;
+	var margin = 12;
+	var cardWidth = cardNode.offsetWidth || 360;
+	var cardHeight = cardNode.offsetHeight || 280;
+	var viewportWidth = window.innerWidth || document.documentElement.clientWidth || 1280;
+	var viewportHeight = window.innerHeight || document.documentElement.clientHeight || 720;
+
+	var left = viewportWidth - cardWidth - margin;
+	var top = viewportHeight - cardHeight - margin;
+	if (targetNode && targetNode.getBoundingClientRect) {
+		var rect = targetNode.getBoundingClientRect();
+		if (isFinite(rect.left) && isFinite(rect.right) && isFinite(rect.top) && isFinite(rect.bottom)) {
+			var canFitRight = rect.right + 14 + cardWidth <= viewportWidth - margin;
+			var canFitLeft = rect.left - 14 - cardWidth >= margin;
+			if (canFitRight) {
+				left = rect.right + 14;
+			} else if (canFitLeft) {
+				left = rect.left - cardWidth - 14;
+			} else {
+				left = clampCalcFeatureTutorialValue(rect.left, margin, viewportWidth - cardWidth - margin);
+			}
+			var centeredTop = rect.top + ((rect.height - cardHeight) / 2);
+			top = clampCalcFeatureTutorialValue(centeredTop, margin, viewportHeight - cardHeight - margin);
+		}
+	}
+	cardNode.style.left = Math.round(left) + "px";
+	cardNode.style.top = Math.round(top) + "px";
+}
+
+function getFirstCalcFeatureTutorialTarget(selectors) {
+	for (var i = 0; i < selectors.length; i++) {
+		var node = document.querySelector(selectors[i]);
+		if (node) return node;
+	}
+	return null;
+}
+
+function ensureTutorialSettingsSection() {
+	var settingsBody = document.querySelector("#settings-side-panel .settings-side-body");
+	if (!settingsBody) return null;
+	var existingSection = document.getElementById("settings-tutorial-section");
+	if (existingSection) return existingSection;
+	var section = document.createElement("section");
+	section.id = "settings-tutorial-section";
+	section.className = "settings-section settings-tutorial-section";
+	section.innerHTML = "" +
+		"<h4>Tutorial</h4>" +
+		"<p class=\"settings-note\">Replay the feature walkthrough any time.</p>" +
+		"<div class=\"settings-choice-row\">" +
+		"<button type=\"button\" class=\"btn settings-choice-btn\" id=\"settings-open-tutorial\">Replay Feature Tutorial</button>" +
+		"</div>";
+	settingsBody.appendChild(section);
+	return section;
+}
+
+function ensureCalcFeatureTutorialOverlay() {
+	if (calcFeatureTutorialState.overlayNode && document.body.contains(calcFeatureTutorialState.overlayNode)) {
+		return calcFeatureTutorialState.overlayNode;
+	}
+	var overlay = document.createElement("div");
+	overlay.id = "calc-feature-tutorial-overlay";
+	overlay.className = "calc-feature-tutorial-overlay";
+	overlay.hidden = true;
+	overlay.innerHTML = "" +
+		"<div class=\"calc-feature-tutorial-scrim\"></div>" +
+		"<section class=\"calc-feature-tutorial-card\" role=\"dialog\" aria-modal=\"true\" aria-label=\"Feature tutorial\">" +
+		"<div class=\"calc-feature-tutorial-head\">" +
+		"<strong id=\"calc-feature-tutorial-title\"></strong>" +
+		"<span id=\"calc-feature-tutorial-progress\"></span>" +
+		"</div>" +
+		"<p id=\"calc-feature-tutorial-text\" class=\"calc-feature-tutorial-text\"></p>" +
+		"<div id=\"calc-feature-tutorial-visual\" class=\"calc-feature-tutorial-visual\"></div>" +
+		"<div class=\"calc-feature-tutorial-actions\">" +
+		"<button type=\"button\" class=\"btn calc-feature-tutorial-action\" id=\"calc-feature-tutorial-skip\">Skip</button>" +
+		"<div class=\"calc-feature-tutorial-nav\">" +
+		"<button type=\"button\" class=\"btn calc-feature-tutorial-action\" id=\"calc-feature-tutorial-back\">Back</button>" +
+		"<button type=\"button\" class=\"btn calc-feature-tutorial-action\" id=\"calc-feature-tutorial-next\">Next</button>" +
+		"</div>" +
+		"</div>" +
+		"</section>";
+	document.body.appendChild(overlay);
+
+	calcFeatureTutorialState.overlayNode = overlay;
+	calcFeatureTutorialState.cardNode = overlay.querySelector(".calc-feature-tutorial-card");
+	calcFeatureTutorialState.titleNode = document.getElementById("calc-feature-tutorial-title");
+	calcFeatureTutorialState.textNode = document.getElementById("calc-feature-tutorial-text");
+	calcFeatureTutorialState.progressNode = document.getElementById("calc-feature-tutorial-progress");
+	calcFeatureTutorialState.visualNode = document.getElementById("calc-feature-tutorial-visual");
+	calcFeatureTutorialState.backBtn = document.getElementById("calc-feature-tutorial-back");
+	calcFeatureTutorialState.nextBtn = document.getElementById("calc-feature-tutorial-next");
+
+	$("#calc-feature-tutorial-skip").off("click").on("click", function () {
+		finishCalcFeatureTutorial();
+	});
+	$("#calc-feature-tutorial-back").off("click").on("click", function () {
+		if (!calcFeatureTutorialState.isOpen) return;
+		if (calcFeatureTutorialState.stepIndex <= 0) return;
+		calcFeatureTutorialState.stepIndex -= 1;
+		renderCalcFeatureTutorialStep();
+	});
+	$("#calc-feature-tutorial-next").off("click").on("click", function () {
+		if (!calcFeatureTutorialState.isOpen) return;
+		var isLastStep = calcFeatureTutorialState.stepIndex >= calcFeatureTutorialState.steps.length - 1;
+		if (isLastStep) {
+			finishCalcFeatureTutorial();
+			return;
+		}
+		calcFeatureTutorialState.stepIndex += 1;
+		renderCalcFeatureTutorialStep();
+	});
+
+	$(window).off("resize.calctutorial").on("resize.calctutorial", function () {
+		if (!calcFeatureTutorialState.isOpen) return;
+		var activeStep = calcFeatureTutorialState.steps[calcFeatureTutorialState.stepIndex];
+		var target = resolveCalcFeatureTutorialTarget(activeStep);
+		positionCalcFeatureTutorialCard(target);
+	});
+	return overlay;
+}
+
+function resolveCalcFeatureTutorialTarget(step) {
+	if (!step) return null;
+	if (typeof step.selector === "function") return step.selector() || null;
+	if (typeof step.selector === "string" && step.selector) return document.querySelector(step.selector);
+	return null;
+}
+
+function getCalcFeatureTutorialSteps() {
+	return [
+		{
+			title: "Right-click sprites (P1 + P2)",
+			selector: function () {
+				return getFirstCalcFeatureTutorialTarget([
+					"#team-poke-list .trainer-pok.left-side",
+					"#box-poke-list .trainer-pok.left-side",
+					"#box-poke-list2 .trainer-pok.left-side",
+					"#team-poke-list"
+				]);
+			},
+			description: "Right-click any Pokemon 1 sprite in your Team/Box to open the quick action menu. Right-clicking a Pokemon 2 sprite instantly toggles that enemy as Dead/Alive for the current fight.",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Right-click</span><span>P1 sprite</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-arrow\">&#x2193;</div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Add Frag</span><span>Did This Mon Die?</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Hot Swap Team/Box/Trash</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Right-click</span><span>P2 sprite</span><span>&#x2192;</span><span>Mark Dead/Alive instantly</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				if (typeof closeDamageApplyMenu === "function") closeDamageApplyMenu();
+				closeFragContextMenu();
+				closeOpposingContextMenu();
+				closeCalcSidePanels();
+			}
+		},
+		{
+			title: "Frag sheet sync + fullscreen",
+			selector: "#frags-side-panel",
+			description: "All right-click frag actions feed directly into Frag Sheet. Use Overall %, This Fight, and Actions for fast tracking. Fullscreen view expands split details and gives more room per row.",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Panel</span><span>Frag Sheet</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Overall %</span><span>Split %</span><span>This Fight</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Tip</span><span>Use Fullscreen for full split columns.</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				openFragsPanel();
+				var panel = document.getElementById("frags-side-panel");
+				if (panel && !panel.classList.contains("fullscreen")) {
+					panel.classList.add("fullscreen");
+					$("#frags-panel-fullscreen").text("Exit Fullscreen");
+					renderFragSheet();
+				}
+			}
+		},
+		{
+			title: "Highlight damage and apply HP",
+			selector: function () {
+				return getFirstCalcFeatureTutorialTarget(["#damage-apply-menu", "#resultDamageL1", "#resultDamageR1", "#damageValues"]);
+			},
+			description: "Highlight any damage text or min/max % range, then use the popup buttons to subtract that amount from P1 or P2 HP instantly.",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>12.4% - 23.7%</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-arrow\">&#x2193;</div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>- P1 HP</span><span>- P2 HP</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				closeCalcSidePanels();
+				var menuRect = null;
+				var anchorNode = document.getElementById("resultDamageL1") || document.getElementById("resultDamageR1");
+				if (anchorNode && anchorNode.getBoundingClientRect) {
+					menuRect = anchorNode.getBoundingClientRect();
+				}
+				if (typeof openDamageApplyMenuForSelection === "function" && menuRect) {
+					openDamageApplyMenuForSelection("12.4% - 23.7%", menuRect);
+				}
+			}
+		},
+		{
+			title: "Top quick tools",
+			selector: ".calc-top-actions",
+			description: "Use the top buttons for quick access: Pokedex, Notes, and Settings. Notes/Frags open as side panels and can be toggled to fullscreen when you need more workspace.",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Pokedex</span><span>Notes</span><span>Settings</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">View</span><span>Side panel or Fullscreen.</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				closeCalcSidePanels();
+				if (typeof closeDamageApplyMenu === "function") closeDamageApplyMenu();
+			}
+		},
+		{
+			title: "Notes panel details",
+			selector: "#notes-side-panel",
+			description: "Notes tracks turns with selected mons and free text. Switch Single/Double format, add/remove turns, and use Fullscreen when you need bigger side-by-side note space.",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Per Turn</span><span>P1 + P2 selections</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Single / Double</span><span>+ Turn</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Tip</span><span>Fullscreen shows more notes at once.</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				openNotesPanel();
+				var notesPanel = document.getElementById("notes-side-panel");
+				if (notesPanel && !notesPanel.classList.contains("fullscreen")) {
+					notesPanel.classList.add("fullscreen");
+					$("#notes-panel-fullscreen").text("Exit Fullscreen");
+					renderNotesPanel();
+				}
+			}
+		},
+		{
+			title: "Settings explained",
+			selector: "#settings-side-panel .settings-side-body",
+			description: "Settings controls Starter routing, Theme, Layout mode, and QOL toggles (Typing Colors, Move Colors, PP/ACC display, and Total Frags on Border).",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Starter</span><span>Theme</span><span>Layout</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">QOL</span><span>Typing/Move colors, PP/ACC, Border Frags</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				openSettingsPanel();
+			}
+		},
+		{
+			title: "Terrain right-click lock",
+			selector: ".field-info label.btn[for='electric']",
+			description: "Weather is auto-set from permanent Astral weather abilities. Terrain abilities are limited-turn effects, so you can right-click a terrain button to force-lock terrain for that trainer fight.",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Auto</span><span>Weather from permanent abilities</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Manual lock</span><span>Right-click Terrain button</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Toggle is instant for this trainer fight.</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				closeCalcSidePanels();
+				if (typeof closeDamageApplyMenu === "function") closeDamageApplyMenu();
+			}
+		},
+		{
+			title: "Replay any time",
+			selector: "#settings-open-tutorial",
+			description: "You can always revisit this walkthrough from Settings using \"Replay Feature Tutorial\".",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Settings</span><span>&#x2192;</span><span>Replay Feature Tutorial</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				openSettingsPanel();
+				ensureTutorialSettingsSection();
+			}
+		}
+	];
+}
+
+function renderCalcFeatureTutorialStep() {
+	if (!calcFeatureTutorialState.isOpen) return;
+	var steps = calcFeatureTutorialState.steps;
+	if (!steps || !steps.length) return;
+	var index = calcFeatureTutorialState.stepIndex;
+	if (index < 0) index = 0;
+	if (index >= steps.length) index = steps.length - 1;
+	calcFeatureTutorialState.stepIndex = index;
+
+	var step = steps[index];
+	if (step && typeof step.beforeShow === "function") step.beforeShow();
+	var targetNode = resolveCalcFeatureTutorialTarget(step);
+
+	if (calcFeatureTutorialState.titleNode) calcFeatureTutorialState.titleNode.textContent = step.title || "Tutorial";
+	if (calcFeatureTutorialState.textNode) calcFeatureTutorialState.textNode.textContent = step.description || "";
+	if (calcFeatureTutorialState.progressNode) calcFeatureTutorialState.progressNode.textContent = "Step " + (index + 1) + " / " + steps.length;
+	if (calcFeatureTutorialState.visualNode) calcFeatureTutorialState.visualNode.innerHTML = step.visualHtml || "";
+	if (calcFeatureTutorialState.backBtn) calcFeatureTutorialState.backBtn.disabled = index <= 0;
+	if (calcFeatureTutorialState.nextBtn) calcFeatureTutorialState.nextBtn.textContent = index >= steps.length - 1 ? "Done" : "Next";
+
+	setCalcFeatureTutorialFocus(targetNode);
+	positionCalcFeatureTutorialCard(targetNode);
+	window.setTimeout(function () {
+		if (!calcFeatureTutorialState.isOpen) return;
+		positionCalcFeatureTutorialCard(calcFeatureTutorialState.focusNode);
+	}, 180);
+}
+
+function startCalcFeatureTutorial(options) {
+	var startOptions = options || {};
+	ensureTutorialSettingsSection();
+	var overlay = ensureCalcFeatureTutorialOverlay();
+	calcFeatureTutorialState.steps = getCalcFeatureTutorialSteps();
+	calcFeatureTutorialState.stepIndex = 0;
+	calcFeatureTutorialState.launchedFromSettings = !!startOptions.fromSettings;
+	calcFeatureTutorialState.isOpen = true;
+	markCalcFeatureTutorialSeen();
+	overlay.hidden = false;
+	overlay.classList.add("open");
+	document.body.classList.add("calc-feature-tutorial-open");
+	renderCalcFeatureTutorialStep();
+}
+
+function finishCalcFeatureTutorial() {
+	if (!calcFeatureTutorialState.isOpen) return;
+	clearCalcFeatureTutorialFocus();
+	if (calcFeatureTutorialState.overlayNode) {
+		calcFeatureTutorialState.overlayNode.classList.remove("open");
+		calcFeatureTutorialState.overlayNode.hidden = true;
+	}
+	calcFeatureTutorialState.isOpen = false;
+	calcFeatureTutorialState.steps = [];
+	calcFeatureTutorialState.stepIndex = 0;
+	var reopenSettings = !!calcFeatureTutorialState.launchedFromSettings;
+	calcFeatureTutorialState.launchedFromSettings = false;
+	if (typeof closeDamageApplyMenu === "function") closeDamageApplyMenu();
+	closeFragContextMenu();
+	closeOpposingContextMenu();
+	closeCalcSidePanels();
+	if (reopenSettings) openSettingsPanel();
+	document.body.classList.remove("calc-feature-tutorial-open");
+}
+
+function maybeAutoStartCalcFeatureTutorial() {
+	if (hasSeenCalcFeatureTutorial()) return;
+	startCalcFeatureTutorial({fromSettings: false});
 }
 
 function openFragsPanel() {
@@ -3476,7 +4200,7 @@ function getNotesMonSlotHtml(turnIndex, fieldKey, selectedSetId, options, emptyL
 		"<select class=\"notes-set-select\" data-turn-index=\"" + turnIndex + "\" data-notes-field=\"" + escapeHtml(fieldKey) + "\">" +
 		renderNotesSetOptionsHtml(options, selected, emptyLabel) +
 		"</select>" +
-		"<img class=\"" + spriteClass + "\" src=\"" + spriteSrc + "\" data-species=\"" + escapeHtml(speciesName) + "\" alt=\"\"" + spriteOnError + ">" +
+		"<img class=\"" + spriteClass + "\" src=\"" + spriteSrc + "\" data-species=\"" + escapeHtml(speciesName) + "\" alt=\"\" loading=\"lazy\" decoding=\"async\"" + spriteOnError + ">" +
 		"</div>";
 }
 
@@ -3518,11 +4242,11 @@ function renderNotesPanel() {
 
 	var playerOptions = getNotesPlayerSetOptions();
 	var opposingOptions = getNotesOpposingSetOptions();
-	var turnsHtml = "";
+	var turnsHtmlParts = [];
 	for (var i = 0; i < notesState.turns.length; i++) {
-		turnsHtml += getNotesTurnHtml(i, notesState.turns[i], notesState.format, playerOptions, opposingOptions);
+		turnsHtmlParts.push(getNotesTurnHtml(i, notesState.turns[i], notesState.format, playerOptions, opposingOptions));
 	}
-	turnsWrap.innerHTML = turnsHtml;
+	turnsWrap.innerHTML = turnsHtmlParts.join("");
 }
 
 function openNotesPanel() {
@@ -3574,6 +4298,24 @@ function updateNotesTurnField(turnIndex, fieldKey, fieldValue) {
 	if (!allowedFields[fieldKey]) return;
 	notesState.turns[index][fieldKey] = fieldKey === "note" ? String(fieldValue || "") : String(fieldValue || "").trim();
 	saveNotesBoardState();
+}
+
+function scheduleNotesTurnNoteUpdate(turnIndex, noteValue) {
+	var key = String(turnIndex || "");
+	if (notesNoteInputDebounceTimers[key]) window.clearTimeout(notesNoteInputDebounceTimers[key]);
+	notesNoteInputDebounceTimers[key] = window.setTimeout(function () {
+		delete notesNoteInputDebounceTimers[key];
+		updateNotesTurnField(turnIndex, "note", noteValue);
+	}, NOTES_NOTE_INPUT_DEBOUNCE_MS);
+}
+
+function flushScheduledNotesTurnNoteUpdate(turnIndex, noteValue) {
+	var key = String(turnIndex || "");
+	if (notesNoteInputDebounceTimers[key]) {
+		window.clearTimeout(notesNoteInputDebounceTimers[key]);
+		delete notesNoteInputDebounceTimers[key];
+	}
+	updateNotesTurnField(turnIndex, "note", noteValue);
 }
 
 function canScrollForWheelDelta(containerElement, deltaY) {
@@ -3804,11 +4546,116 @@ function hotSwapSetToPlayerContainer(setId, sourceElement, containerId) {
 }
 
 function isSetOptionAvailable(setId) {
-	var options = getSetOptions();
-	for (var i = 0; i < options.length; i++) {
-		if (options[i].id === setId) return true;
+	return !!getSetOptionById(setId);
+}
+
+function getSetOptionById(setId, options) {
+	var normalizedSetId = String(setId || "").trim();
+	if (!normalizedSetId) return null;
+	var sourceOptions = Array.isArray(options) ? options : getSetOptions();
+	for (var i = 0; i < sourceOptions.length; i++) {
+		if (sourceOptions[i] && sourceOptions[i].id === normalizedSetId) return sourceOptions[i];
 	}
-	return false;
+	return null;
+}
+
+function getCustomSetOptionById(setId, options) {
+	var normalizedSetId = String(setId || "").trim();
+	if (!normalizedSetId) return null;
+	var sourceOptions = Array.isArray(options) ? options : getSetOptions();
+	for (var i = 0; i < sourceOptions.length; i++) {
+		var option = sourceOptions[i];
+		if (!option || option.id !== normalizedSetId) continue;
+		if (option.isCustom && option.set) return option;
+	}
+	return null;
+}
+
+function getSelectedSetIdForSide(sideId) {
+	var selector = $("#" + sideId + " .set-selector").first();
+	if (!selector.length) return "";
+	return String(selector.val() || "").trim();
+}
+
+function isSetIdKnownInSetdex(setId) {
+	var parsedSet = parseSetId(setId);
+	var speciesName = String(parsedSet.species || "").trim();
+	var setName = String(parsedSet.label || "").trim();
+	if (!speciesName || !setName || !setdex || !setdex[speciesName]) return false;
+	return Object.prototype.hasOwnProperty.call(setdex[speciesName], setName);
+}
+
+function setSelectedSetIdForSide(sideId, setId) {
+	var normalizedSetId = String(setId || "").trim();
+	if (!normalizedSetId) return false;
+	if (!isSetIdKnownInSetdex(normalizedSetId)) return false;
+	var selector = $("#" + sideId + " .set-selector").first();
+	if (!selector.length) return false;
+	var currentSetId = String(selector.val() || "").trim();
+	if (currentSetId === normalizedSetId) return true;
+	selector.val(normalizedSetId).change();
+	var appliedSetId = String(selector.val() || "").trim();
+	return appliedSetId === normalizedSetId;
+}
+
+function getStoredLastEncounterSelection() {
+	var parsed = safeJsonParse(localStorage.getItem(LAST_ENCOUNTER_STORAGE_KEY), {});
+	return parsed && typeof parsed === "object" ? parsed : {};
+}
+
+function saveLastEncounterSelection() {
+	if (isRestoringLastEncounterSelection || isBootstrappingLastEncounterSelection) return;
+	var playerSetId = getSelectedSetIdForSide("p1");
+	var opposingSetId = getSelectedSetIdForSide("p2");
+	if (!playerSetId && !opposingSetId) return;
+
+	var payload = {
+		playerSet: playerSetId,
+		opposingSet: opposingSetId
+	};
+	if (opposingSetId) {
+		var opposingEntry = parseTrainerPartyEntry(opposingSetId);
+		if (opposingEntry && opposingEntry.setData) {
+			var trainerIndex = getTrainerIndexFromSetData(opposingEntry.setData);
+			if (!Number.isNaN(trainerIndex) && trainerIndex > 0) {
+				payload.trainerIndex = trainerIndex;
+				localStorage.setItem("lasttimetrainer", String(trainerIndex));
+			}
+		}
+	}
+	localStorage.setItem(LAST_ENCOUNTER_STORAGE_KEY, JSON.stringify(payload));
+}
+
+function restoreLastEncounterSelection() {
+	isRestoringLastEncounterSelection = true;
+	var savedSelection = getStoredLastEncounterSelection();
+	var restoredOpposing = false;
+	var restoredPlayer = false;
+
+	try {
+		if (savedSelection.opposingSet) {
+			restoredOpposing = setSelectedSetIdForSide("p2", savedSelection.opposingSet);
+		}
+
+		if (!restoredOpposing) {
+			var trainerIndexRaw = savedSelection.trainerIndex;
+			if (typeof trainerIndexRaw === "undefined" || trainerIndexRaw === null || trainerIndexRaw === "") {
+				trainerIndexRaw = localStorage.getItem("lasttimetrainer");
+			}
+			var trainerIndex = parseInt(trainerIndexRaw, 10);
+			if (!Number.isNaN(trainerIndex) && trainerIndex > 0) {
+				selectTrainer(trainerIndex);
+				restoredOpposing = true;
+			}
+		}
+
+		if (savedSelection.playerSet) {
+			restoredPlayer = setSelectedSetIdForSide("p1", savedSelection.playerSet);
+		}
+		return restoredOpposing || restoredPlayer;
+	} finally {
+		isRestoringLastEncounterSelection = false;
+	}
 }
 
 function refreshSetSelectorsForStarterChoice() {
@@ -3902,9 +4749,12 @@ function refreshThemeChoiceButtons() {
 }
 
 function syncSettingsPanelUi() {
+	ensureTutorialSettingsSection();
 	var settings = getAppSettings();
 	$(".settings-choice-btn[data-starter-choice]").removeClass("is-active");
 	$(".settings-choice-btn[data-starter-choice='" + settings.starterChoice + "']").addClass("is-active");
+	$(".settings-choice-btn[data-layout-choice]").removeClass("is-active");
+	$(".settings-choice-btn[data-layout-choice='" + settings.layoutMode + "']").addClass("is-active");
 	$("#settings-more-colour").prop("checked", !!settings.moreColour);
 	$("#settings-move-colors").prop("checked", !!settings.moveColors);
 	$("#settings-move-meta").prop("checked", !!settings.moveMeta);
@@ -3913,11 +4763,17 @@ function syncSettingsPanelUi() {
 	applyMoreColourSetting(!!settings.moreColour);
 	updateTrainerFragBorderTotals();
 	refreshThemeChoiceButtons();
+	if (typeof applyLayoutMode === "function") {
+		applyLayoutMode(settings.layoutMode);
+	} else {
+		$("body").toggleClass("layout-simplified", settings.layoutMode === "simplified");
+	}
 }
 
 function bindCalcToolEvents() {
 	ensureOpposingContextMenu();
 	ensureFragHistoryControls();
+	ensureTutorialSettingsSection();
 	bindFragsPanelScrollContainment();
 	syncTrainerFieldLockButtonStyles();
 
@@ -3939,6 +4795,10 @@ function bindCalcToolEvents() {
 		openSettingsPanel();
 	});
 
+	$("#settings-open-tutorial").off("click").on("click", function () {
+		startCalcFeatureTutorial({fromSettings: true});
+	});
+
 	$("#frags-panel-close").off("click").on("click", function () {
 		closeCalcSidePanel("frags-side-panel");
 	});
@@ -3957,6 +4817,8 @@ function bindCalcToolEvents() {
 		var isFullscreen = fragsPanel.classList.toggle("fullscreen");
 		$(this).text(isFullscreen ? "Exit Fullscreen" : "Fullscreen");
 		renderFragSheet();
+		updateCalcSideBackdrop();
+		updateCalcLayoutForSidePanel();
 	});
 
 	$("#notes-panel-fullscreen").off("click").on("click", function () {
@@ -3965,6 +4827,8 @@ function bindCalcToolEvents() {
 		var isFullscreen = notesPanel.classList.toggle("fullscreen");
 		$(this).text(isFullscreen ? "Exit Fullscreen" : "Fullscreen");
 		renderNotesPanel();
+		updateCalcSideBackdrop();
+		updateCalcLayoutForSidePanel();
 	});
 
 	$(document).off("click.notesformat", ".notes-format-btn").on("click.notesformat", ".notes-format-btn", function () {
@@ -3998,9 +4862,53 @@ function bindCalcToolEvents() {
 		spriteNode.src = getTrainerSpriteUrlByName(speciesName);
 	});
 
-	$(document).off("input.notesnote change.notesnote", ".notes-note-input").on("input.notesnote change.notesnote", ".notes-note-input", function () {
-		updateNotesTurnField($(this).attr("data-turn-index"), "note", this.value);
+	$(document).off("input.notesnote", ".notes-note-input").on("input.notesnote", ".notes-note-input", function () {
+		scheduleNotesTurnNoteUpdate($(this).attr("data-turn-index"), this.value);
 	});
+
+	$(document).off("change.notesnote blur.notesnote", ".notes-note-input").on("change.notesnote blur.notesnote", ".notes-note-input", function () {
+		flushScheduledNotesTurnNoteUpdate($(this).attr("data-turn-index"), this.value);
+	});
+
+	$(document).off("mousedown.calcsideresize", ".calc-side-resize-handle").on("mousedown.calcsideresize", ".calc-side-resize-handle", function (ev) {
+		if (ev.which && ev.which !== 1) return;
+		var panel = $(this).closest(".calc-side-panel").get(0);
+		if (!panel || panel.hidden || panel.classList.contains("fullscreen")) return;
+		beginCalcSidePanelResize(panel, ev.clientX);
+		ev.preventDefault();
+	});
+
+	$(document).off("mousemove.calcsideresizecapture", "#calc-side-resize-capture").on("mousemove.calcsideresizecapture", "#calc-side-resize-capture", function (ev) {
+		continueCalcSidePanelResize(ev.clientX, ev.buttons);
+	});
+
+	$(document).off("mouseup.calcsideresizecapture", "#calc-side-resize-capture").on("mouseup.calcsideresizecapture", "#calc-side-resize-capture", function () {
+		endCalcSidePanelResize();
+	});
+
+	$(document).off("mousemove.calcsideresize").on("mousemove.calcsideresize", function (ev) {
+		continueCalcSidePanelResize(ev.clientX, ev.buttons);
+	});
+
+	$(document).off("mouseup.calcsideresize").on("mouseup.calcsideresize", function () {
+		endCalcSidePanelResize();
+	});
+
+	$(document).off("mouseleave.calcsideresize").on("mouseleave.calcsideresize", function () {
+		endCalcSidePanelResize();
+	});
+
+	$(window).off("resize.calcpanels").on("resize.calcpanels", function () {
+		updateCalcSideBackdrop();
+		updateCalcLayoutForSidePanel();
+	});
+
+	$(window).off("blur.calcsideresize").on("blur.calcsideresize", function () {
+		endCalcSidePanelResize();
+	});
+
+	updateCalcSideBackdrop();
+	updateCalcLayoutForSidePanel();
 
 	$("#calc-side-backdrop").off("click").on("click", function () {
 		closeCalcSidePanels();
@@ -4165,10 +5073,18 @@ function bindCalcToolEvents() {
 		refreshSetSelectorsForStarterChoice();
 	});
 
+	$(document).off("click.settingslayout", ".settings-choice-btn[data-layout-choice]").on("click.settingslayout", ".settings-choice-btn[data-layout-choice]", function () {
+		var layoutChoice = $(this).attr("data-layout-choice");
+		updateAppSettings({layoutMode: layoutChoice});
+		syncSettingsPanelUi();
+		if (typeof performCalculations === "function") performCalculations();
+	});
+
 	$("#settings-more-colour").off("change").on("change", function () {
 		var enabled = $(this).is(":checked");
 		updateAppSettings({moreColour: enabled});
 		applyMoreColourSetting(enabled);
+		if (typeof performCalculations === "function") performCalculations();
 	});
 
 	$("#settings-move-colors").off("change").on("change", function () {
@@ -4181,6 +5097,7 @@ function bindCalcToolEvents() {
 		updateAppSettings({moveMeta: enabled});
 		setMoveMetaVisibility(enabled);
 		updateAllMoveMetaDisplays();
+		if (typeof performCalculations === "function") performCalculations();
 	});
 
 	$("#settings-total-frags-on-border").off("change").on("change", function () {
@@ -4231,6 +5148,10 @@ function bindCalcToolEvents() {
 
 	$(document).off("keydown.calcpanels").on("keydown.calcpanels", function (ev) {
 		if (ev.key !== "Escape" && ev.keyCode !== 27) return;
+		if (calcFeatureTutorialState.isOpen) {
+			finishCalcFeatureTutorial();
+			return;
+		}
 		closeFragContextMenu();
 		closeOpposingContextMenu();
 		closeCalcSidePanels();
@@ -4248,7 +5169,13 @@ function bindFieldSideControlsToggle() {
 }
 
 function sortmons(a, b) {
-	return parseInt(a.split("[")[1].split("]")[0]) - parseInt(b.split("[")[1].split("]")[0])
+	var aEntry = parseTrainerPartyEntry(String(a || ""));
+	var bEntry = parseTrainerPartyEntry(String(b || ""));
+	var aIndex = getTrainerIndexFromSetData(aEntry.setData);
+	var bIndex = getTrainerIndexFromSetData(bEntry.setData);
+	if (aIndex <= 0) aIndex = aEntry.sortIndex || 0;
+	if (bIndex <= 0) bIndex = bEntry.sortIndex || 0;
+	return aIndex - bIndex;
 }
 
 function normalizeTrainerSpriteName(pokemonName) {
@@ -4528,13 +5455,7 @@ function handleTrainerFieldButtonContextMenu(ev, labelNode) {
 	if (!isTrainerFieldLockableId(fieldId)) return;
 	ev.preventDefault();
 	var trainerKey = getCurrentTrainerFieldLockKey();
-	var trainerLabel = getCurrentFightLabel();
-	var labelText = String($(labelNode).text() || "").replace(/\s+/g, " ").trim() || fieldId;
 	var currentlyLocked = isTrainerFieldLockEnabled(fieldId, trainerKey);
-	var prompt = currentlyLocked
-		? ("Disable trainer lock for \"" + labelText + "\" on " + trainerLabel + "?")
-		: ("Enable \"" + labelText + "\" for " + trainerLabel + "? It will stay enabled while switching Pokemon.");
-	if (!confirm(prompt)) return;
 	setTrainerFieldLockEnabled(fieldId, !currentlyLocked, trainerKey);
 	if (!currentlyLocked) {
 		var input = document.getElementById(fieldId);
@@ -4872,7 +5793,7 @@ function splitSetDoubleEntries(entries) {
 
 function trainerPartyMonHtml(entry) {
 	var label = "[" + entry.indexText + "]" + entry.fullSetName;
-	return '<img class="trainer-pok right-side" src="' + escapeHtml(getTrainerSpriteUrlByName(entry.pokemonName)) + '" data-id="' + escapeHtml(entry.fullSetName) + '" data-species="' + escapeHtml(entry.pokemonName) + '" title="' + escapeHtml(label + ", " + label + " BP") + '" onerror="applyIconSheetFallbackImage(this, this.getAttribute(\'data-species\'))">';
+	return '<img class="trainer-pok right-side" src="' + escapeHtml(getTrainerSpriteUrlByName(entry.pokemonName)) + '" data-id="' + escapeHtml(entry.fullSetName) + '" data-species="' + escapeHtml(entry.pokemonName) + '" title="' + escapeHtml(label + ", " + label + " BP") + '" loading="lazy" decoding="async" onerror="applyIconSheetFallbackImage(this, this.getAttribute(\'data-species\'))">';
 }
 
 function renderOpposingTrainerParties(selectedSetName) {
@@ -4904,7 +5825,8 @@ $(".set-selector").change(function () {
 	window.NO_CALC = true;
 	var currentPokeInfo = $(this).closest(".poke-info");
 	currentPokeInfo.removeAttr("data-transform-species");
-	var fullSetName = $(this).val();
+	var fullSetName = String($(this).val() || "");
+	var parsedSetName = parseSetId(fullSetName);
 	if ($(this).hasClass('opposing')) {
 		topPokemonIcon(fullSetName, $("#p2mon")[0])
 		CURRENT_TRAINER_POKS = get_trainer_poks(fullSetName);
@@ -4915,8 +5837,8 @@ $(".set-selector").change(function () {
 		topPokemonIcon(fullSetName, $("#p1mon")[0])
 	}
 
-	var pokemonName = fullSetName.substring(0, fullSetName.indexOf(" ("));
-	var setName = fullSetName.substring(fullSetName.indexOf("(") + 1, fullSetName.lastIndexOf(")"));
+	var pokemonName = parsedSetName.species;
+	var setName = parsedSetName.label;
 	var pokemonLookupName = resolveSetSpeciesNameForDexLookup(pokemonName);
 	var pokemon = pokedex[pokemonLookupName];
 	if (pokemon) {
@@ -5077,7 +5999,7 @@ $(".set-selector").change(function () {
 			if (is50lvl) pokeObj.find(".level").val(50);
 			//if (isDoubles) field.gameType = 'Doubles'; *TODO*
 		}
-		var formeObj = $(this).siblings().find(".forme").parent();
+		var formeObj = currentPokeInfo.find(".forme").parent();
 		itemObj.prop("disabled", false);
 		var baseForme;
 		if (pokemon.baseSpecies && pokemon.baseSpecies !== pokemon.name) {
@@ -5088,7 +6010,11 @@ $(".set-selector").change(function () {
 		} else if (baseForme && baseForme.otherFormes) {
 			showFormes(formeObj, pokemonName, baseForme, pokemon.baseSpecies);
 		} else {
+			// Prevent stale hidden forme values from overriding the top sprite later.
+			formeObj.children("select").find("option").remove().end().append(getSelectOptions([pokemonName], false, 0));
 			formeObj.hide();
+			var topSpriteNode = getTopSpriteNodeForPokeInfo(currentPokeInfo);
+			if (topSpriteNode) setTrainerSpriteImage(topSpriteNode, pokemonName);
 		}
 		calcHP(pokeObj);
 		calcStats(pokeObj);
@@ -5108,6 +6034,7 @@ $(".set-selector").change(function () {
 	}
 	syncDittoTransformButtons();
 	syncInlinePokeSprite(currentPokeInfo);
+	saveLastEncounterSelection();
 	window.NO_CALC = false;
 });
 
@@ -5126,12 +6053,43 @@ $(document).on("click", ".poke-inline-sprite", function (ev) {
 	var pokeInfo = $(this).closest(".poke-info");
 	var formeSelect = pokeInfo.find(".forme");
 	if (!formeSelect.length) return;
+	var formeContainer = formeSelect.parent();
+	if (!formeContainer.length || !formeContainer.is(":visible")) return;
 	var formeOptions = formeSelect.find("option");
 	if (formeOptions.length <= 1) return;
 	var currentIndex = formeSelect.prop("selectedIndex");
 	if (currentIndex < 0) currentIndex = 0;
 	var nextIndex = (currentIndex + 1) % formeOptions.length;
 	formeSelect.prop("selectedIndex", nextIndex).change();
+});
+
+function getBattleCritToggleFromTopToggle(topToggleNode) {
+	if (!topToggleNode) return null;
+	var topId = String(topToggleNode.id || "");
+	var match = /^critTop([LR])([1-4])$/.exec(topId);
+	if (!match) return null;
+	return document.getElementById("crit" + match[1] + match[2]);
+}
+
+function getTopCritToggleFromBattleToggle(battleToggleNode) {
+	if (!battleToggleNode) return null;
+	var battleId = String(battleToggleNode.id || "");
+	var match = /^crit([LR])([1-4])$/.exec(battleId);
+	if (!match) return null;
+	return document.getElementById("critTop" + match[1] + match[2]);
+}
+
+$(document).on("change", "input.top-crit", function () {
+	var battleCritToggle = getBattleCritToggleFromTopToggle(this);
+	if (!battleCritToggle) return;
+	battleCritToggle.checked = this.checked;
+	$(battleCritToggle).change();
+});
+
+$(document).on("change", ".move-crit", function () {
+	var topCritToggle = getTopCritToggleFromBattleToggle(this);
+	if (!topCritToggle) return;
+	topCritToggle.checked = this.checked;
 });
 
 function formatMovePool(moves) {
@@ -5184,14 +6142,20 @@ function setSelectValueIfValid(select, value, fallback) {
 }
 
 $(".forme").change(function () {
-	var altForme = pokedex[$(this).val()],
-		container = $(this).closest(".info-group").siblings(),
-		fullSetName = container.find("input.set-selector").first().val() || "",
-		pokemonName = fullSetName.substring(0, fullSetName.indexOf(" (")),
-		setName = fullSetName.substring(fullSetName.indexOf("(") + 1, fullSetName.lastIndexOf(")"));
+	var selectedForme = String($(this).val() || "").trim();
+	var altForme = pokedex[selectedForme];
+	if (!altForme) return;
+	var pokeInfo = $(this).closest(".poke-info");
+	var container = pokeInfo;
+	var fullSetName = container.find("input.set-selector").first().val() || "";
+	var parsedSetName = parseSetId(fullSetName);
+	var pokemonName = parsedSetName.species;
+	var setName = parsedSetName.label;
 
-	$(this).parent().siblings().find(".type1").val(altForme.types[0]);
-	$(this).parent().siblings().find(".type2").val(altForme.types[1] ? altForme.types[1] : "");
+	var type1Select = container.find(".type1");
+	var type2Select = container.find(".type2");
+	type1Select.val(altForme.types[0]).trigger("change");
+	type2Select.val(altForme.types[1] ? altForme.types[1] : "").trigger("change");
 	for (var i = 0; i < LEGACY_STATS[9].length; i++) {
 		var baseStat = container.find("." + LEGACY_STATS[9][i]).find(".base");
 		baseStat.val(altForme.bs[LEGACY_STATS[9][i]]);
@@ -5200,8 +6164,8 @@ $(".forme").change(function () {
 	var isRandoms = $("#randoms").prop("checked");
 	var pokemonSets = isRandoms ? randdex[pokemonName] : setdex[pokemonName];
 	var chosenSet = pokemonSets && pokemonSets[setName];
-	var greninjaSet = $(this).val().indexOf("Greninja") !== -1;
-	var isAltForme = $(this).val() !== pokemonName;
+	var greninjaSet = selectedForme.indexOf("Greninja") !== -1;
+	var isAltForme = selectedForme !== pokemonName;
 	if (isAltForme && abilities.indexOf(altForme.ab) !== -1 && !greninjaSet) {
 		container.find(".ability").val(altForme.ab);
 	} else if (greninjaSet) {
@@ -5215,15 +6179,14 @@ $(".forme").change(function () {
 	}
 	container.find(".ability").keyup();
 
-	if ($(this).val().indexOf("-Mega") !== -1 && $(this).val() !== "Rayquaza-Mega") {
+	if (selectedForme.indexOf("-Mega") !== -1 && selectedForme !== "Rayquaza-Mega") {
 		container.find(".item").val("").keyup();
 	} else {
 		container.find(".item").prop("disabled", false);
 	}
-	var pokeInfo = $(this).closest(".poke-info");
 	pokeInfo.removeAttr("data-transform-species");
 	var topSpriteNode = getTopSpriteNodeForPokeInfo(pokeInfo);
-	if (topSpriteNode) setTrainerSpriteImage(topSpriteNode, $(this).val());
+	if (topSpriteNode) setTrainerSpriteImage(topSpriteNode, selectedForme);
 	syncInlinePokeSprite(pokeInfo);
 });
 
@@ -5422,6 +6385,31 @@ function getMoveDetails(moveInfo, species, ability, item, useMax) {
 		ability: ability, item: item, useZ: isZMove, species: species, isCrit: isCrit, hits: hits,
 		timesUsed: timesUsed, timesUsedWithMetronome: timesUsedWithMetronome, overrides: overrides, useMax: useMax
 	});
+}
+
+function getModifiedStatForStage(rawStat, stage) {
+	var raw = Math.max(1, ~~rawStat);
+	var boost = Math.max(-6, Math.min(6, ~~stage));
+	if (boost === 0) return raw;
+	if (boost > 0) return Math.floor(raw * (2 + boost) / 2);
+	return Math.floor(raw * 2 / (2 - boost));
+}
+
+function applyPowerSplitToPair(p1, p2) {
+	if (!p1 || !p2) return;
+	var isPowerSplitActive = $("#powerSplitL").prop("checked") || $("#powerSplitR").prop("checked");
+	if (!isPowerSplitActive) return;
+
+	var avgAtk = Math.floor((p1.rawStats.atk + p2.rawStats.atk) / 2);
+	var avgSpa = Math.floor((p1.rawStats.spa + p2.rawStats.spa) / 2);
+	p1.rawStats.atk = avgAtk;
+	p2.rawStats.atk = avgAtk;
+	p1.rawStats.spa = avgSpa;
+	p2.rawStats.spa = avgSpa;
+	p1.stats.atk = getModifiedStatForStage(avgAtk, p1.boosts.atk);
+	p2.stats.atk = getModifiedStatForStage(avgAtk, p2.boosts.atk);
+	p1.stats.spa = getModifiedStatForStage(avgSpa, p1.boosts.spa);
+	p2.stats.spa = getModifiedStatForStage(avgSpa, p2.boosts.spa);
 }
 
 function createField() {
@@ -5685,13 +6673,16 @@ $(".gen").change(function () {
 	$(".set-selector").change();
 });
 
-function getFirstValidSetOption() {
-	var sets = getSetOptions();
+function getFirstValidSetOptionFromOptions(sets) {
 	// NB: The first set is never valid, so we start searching after it.
 	for (var i = 1; i < sets.length; i++) {
 		if (sets[i].id && sets[i].id.indexOf('(Blank Set)') === -1) return sets[i];
 	}
 	return undefined;
+}
+
+function getFirstValidSetOption() {
+	return getFirstValidSetOptionFromOptions(getSetOptions());
 }
 
 $(".notation").change(function () {
@@ -5739,6 +6730,8 @@ function clearField() {
 	$("#auroraVeilR").prop("checked", false);
 	$("#batteryL").prop("checked", false);
 	$("#batteryR").prop("checked", false);
+	$("#powerSplitL").prop("checked", false);
+	$("#powerSplitR").prop("checked", false);
 	$("#switchingL").prop("checked", false);
 	$("#switchingR").prop("checked", false);
 	$("#trickroom").prop("checked", false);
@@ -5810,7 +6803,7 @@ function getSelectOptions(arr, sort, defaultOption) {
 }
 var stickyMoves = (function () {
 	var lastClicked = 'resultMoveL1';
-	$(".result-move").click(function () {
+	$(".result-move[type='radio']").click(function () {
 		if (this.id === lastClicked) {
 			$(this).toggleClass("locked-move");
 		} else {
@@ -5851,8 +6844,7 @@ function isPokeInfoGrounded(pokeInfo) {
 }
 
 function getTerrainEffects() {
-	var className = $(this).prop("className");
-	className = className.substring(0, className.indexOf(" "));
+	var className = String($(this).prop("className") || "").split(/\s+/)[0];
 	switch (className) {
 		case "type1":
 		case "type2":
@@ -5886,6 +6878,9 @@ function getTerrainEffects() {
 			}
 			break;
 		default:
+			if (!$(this).is("input:checkbox[name='terrain']")) {
+				break;
+			}
 			$("input:checkbox[name='terrain']").not(this).prop("checked", false);
 			if ($(this).prop("checked") && $(this).val() === "Electric") {
 				// need to enable status because it may be disabled by Misty Terrain before.
@@ -5928,6 +6923,8 @@ function doesSetOptionMatchSearchTerms(option, terms) {
 }
 
 function loadDefaultLists() {
+	var initialOptions = getSetOptions();
+	var initialDefaultOption = getFirstValidSetOptionFromOptions(initialOptions);
 	$(".set-selector").select2({
 		formatResult: function (object) {
 			if ($("#randoms").prop("checked")) {
@@ -5963,7 +6960,9 @@ function loadDefaultLists() {
 			});
 		},
 		initSelection: function (element, callback) {
-			callback(getFirstValidSetOption());
+			var selectedSetId = String($(element).val() || "").trim();
+			var selectedOption = getSetOptionById(selectedSetId, initialOptions);
+			callback(selectedOption || initialDefaultOption);
 		}
 	});
 }
@@ -5980,6 +6979,7 @@ function allPokemon(selector) {
 }
 
 function loadCustomList(id) {
+	var customOptions = getSetOptions();
 	$("#" + id + " .set-selector").select2({
 		formatResult: function (set) {
 			if (set.nickname) return getDisplaySpeciesName(set.pokemon) + " (" + set.nickname + ")";
@@ -6006,8 +7006,9 @@ function loadCustomList(id) {
 			});
 		},
 		initSelection: function (element, callback) {
-			var data = "";
-			callback(data);
+			var selectedSetId = String($(element).val() || "").trim();
+			var selectedOption = getCustomSetOptionById(selectedSetId, customOptions);
+			callback(selectedOption || "");
 		}
 	});
 }
@@ -6054,6 +7055,8 @@ function addBoxed(poke) {
 	var newPoke = document.createElement("img");
 	newPoke.id = spriteId;
 	newPoke.className = "trainer-pok left-side";
+	newPoke.loading = "lazy";
+	newPoke.decoding = "async";
 	setTrainerSpriteImage(newPoke, speciesName);
 	newPoke.dataset.id = setId;
 	newPoke.addEventListener("dragstart", dragstart_handler);
@@ -6108,7 +7111,7 @@ function get_trainer_poks(trainer_name) {
 }
 
 function topPokemonIcon(fullname, node) {
-	var speciesName = fullname.split(" (")[0];
+	var speciesName = parseSetId(fullname).species || String(fullname || "");
 	setTrainerSpriteImage(node, speciesName);
 	if (node && node.id === "p1mon") syncInlinePokeSprite($("#p1"));
 	if (node && node.id === "p2mon") syncInlinePokeSprite($("#p2"));
@@ -6124,7 +7127,12 @@ $(document).on('click', '.right-side', function () {
 })
 
 $(document).on("contextmenu", ".trainer-pok.right-side", function (ev) {
-	openOpposingContextMenu(ev, $(this).attr("data-id"));
+	ev.preventDefault();
+	var setId = String($(this).attr("data-id") || "").trim();
+	if (!setId) return;
+	closeFragContextMenu();
+	closeOpposingContextMenu();
+	setOpposingSetDeadMark(setId, !isOpposingSetMarkedDead(setId));
 });
 
 $(document).on('click', '.left-side', function () {
@@ -6178,18 +7186,48 @@ function selectTrainer(value) {
 }
 
 function nextTrainer() {
-	if (!CURRENT_TRAINER_POKS || !CURRENT_TRAINER_POKS.length) return;
-	var maxIndex = parseInt(CURRENT_TRAINER_POKS.slice().sort(sortmons).slice(-1)[0].split("[")[1].split("]")[0], 10);
-	if (Number.isNaN(maxIndex)) return;
+	var trainerBounds = getCurrentTrainerIndexBounds();
+	if (!trainerBounds) return;
+	var maxIndex = trainerBounds.max;
 	clearOpposingDeadMarks();
 	selectTrainer(maxIndex + 1);
 }
 
 function previousTrainer() {
-	if (!CURRENT_TRAINER_POKS || !CURRENT_TRAINER_POKS.length) return;
-	var minIndex = parseInt(CURRENT_TRAINER_POKS.slice().sort(sortmons)[0].split("[")[1].split("]")[0], 10);
-	if (Number.isNaN(minIndex) || minIndex <= 1) return;
+	var trainerBounds = getCurrentTrainerIndexBounds();
+	if (!trainerBounds) return;
+	var minIndex = trainerBounds.min;
+	if (minIndex <= 1) return;
+	clearOpposingDeadMarks();
 	selectTrainer(minIndex - 1);
+}
+
+function getCurrentTrainerIndexBounds() {
+	var selectedOpposing = String($(".opposing").val() || "").trim();
+	var trainerEntries = selectedOpposing ? get_trainer_poks(selectedOpposing) : [];
+	if ((!trainerEntries || !trainerEntries.length) && CURRENT_TRAINER_POKS && CURRENT_TRAINER_POKS.length) {
+		trainerEntries = CURRENT_TRAINER_POKS.slice();
+	}
+	if (trainerEntries && trainerEntries.length) {
+		CURRENT_TRAINER_POKS = trainerEntries.slice();
+	}
+	var minIndex = Infinity;
+	var maxIndex = -Infinity;
+	for (var i = 0; i < trainerEntries.length; i++) {
+		var entry = parseTrainerPartyEntry(trainerEntries[i]);
+		var index = getTrainerIndexFromSetData(entry.setData);
+		if (index <= 0) index = entry.sortIndex || 0;
+		if (!index || index <= 0 || Number.isNaN(index)) continue;
+		if (index < minIndex) minIndex = index;
+		if (index > maxIndex) maxIndex = index;
+	}
+	if (!Number.isFinite(minIndex) || !Number.isFinite(maxIndex)) {
+		var selectedEntry = selectedOpposing ? parseTrainerPartyEntry(selectedOpposing) : null;
+		var selectedIndex = selectedEntry ? getTrainerIndexFromSetData(selectedEntry.setData) : 0;
+		if (selectedIndex > 0) return {min: selectedIndex, max: selectedIndex};
+		return null;
+	}
+	return {min: minIndex, max: maxIndex};
 }
 
 function resetTrainer() {
@@ -6567,16 +7605,30 @@ $(document).ready(function () {
 	syncSettingsPanelUi();
 	syncFragRoster();
 	renderFragSheet();
-	$(".move-selector").select2({
+	$("select.move-selector").select2({
 		dropdownAutoWidth: true,
 		matcher: function (term, text) {
 			// 2nd condition is for Hidden Power
 			return text.toUpperCase().indexOf(term.toUpperCase()) === 0 || text.toUpperCase().indexOf(" " + term.toUpperCase()) >= 0;
 		}
 	});
-	$(".set-selector").val(getFirstValidSetOption().id);
-	$(".set-selector").change();
+	try {
+		var didRestoreLastEncounter = restoreLastEncounterSelection();
+		if (!didRestoreLastEncounter) {
+			var firstValidSet = getFirstValidSetOption();
+			if (firstValidSet && firstValidSet.id) {
+				$(".set-selector").val(firstValidSet.id);
+				$(".set-selector").change();
+			}
+		}
+	} finally {
+		isBootstrappingLastEncounterSelection = false;
+	}
+	saveLastEncounterSelection();
 	updateAllMoveMetaDisplays();
+	window.setTimeout(function () {
+		maybeAutoStartCalcFeatureTutorial();
+	}, CALC_FEATURE_TUTORIAL_AUTO_OPEN_DELAY_MS);
 	$(".terrain-trigger").bind("change keyup", getTerrainEffects);
 	$("#previous-trainer").click(previousTrainer);
 	$("#next-trainer").click(nextTrainer);
@@ -6597,11 +7649,6 @@ $(document).ready(function () {
 		dropzone.ondrop=drop;
 		dropzone.ondragover=allowDrop;
 	}
-	//select last trainer
-	let last = localStorage.getItem("lasttimetrainer");
-	if (last != "") {
-		selectTrainer(parseInt(last, 10));
-	};
 	ensureColorCodesEnabled();
 	applyPlayerRosterSearchFilter();
 	renderFragSheet();

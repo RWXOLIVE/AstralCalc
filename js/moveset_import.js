@@ -620,9 +620,23 @@ $(document).ready(function () {
 	if (localStorage.customsets) {
 		customSets = JSON.parse(localStorage.customsets);
 		updateDex(customSets);
-		selectFirstMon();
+		var restoredSelection = false;
+		if (typeof restoreLastEncounterSelection === "function") {
+			restoredSelection = !!restoreLastEncounterSelection();
+		}
+		if (!restoredSelection) {
+			var activePlayerSet = typeof getSelectedSetIdForSide === "function"
+				? getSelectedSetIdForSide("p1")
+				: String($(".player").val() || "").trim();
+			if (!activePlayerSet) {
+				selectFirstMon();
+			}
+		}
+		if (typeof saveLastEncounterSelection === "function") {
+			saveLastEncounterSelection();
+		}
 		$(allPokemon("#importedSetsOptions")).css("display", "inline");
-	} else {
+	} else if (!$(".set-selector").first().data("select2")) {
 		loadDefaultLists();
 	}
 	//adjust the side buttons that collapse the data wished to be hidden
