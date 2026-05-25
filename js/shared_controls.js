@@ -866,6 +866,8 @@ var CALC_FEATURE_TUTORIAL_AUTO_OPEN_DELAY_MS = 1300;
 var CALC_SIDE_PANEL_MIN_WIDTH_PX = 360;
 var CALC_SIDE_PANEL_MAX_WIDTH_VW = 96;
 var CALC_SIDE_PANEL_MIN_MAIN_WIDTH_PX = 620;
+var APP_UPDATE_CHECK_INTERVAL_MS = 120000;
+var APP_UPDATE_INITIAL_CHECK_DELAY_MS = 12000;
 var FRAG_SHEET_STATES_LIMIT = 40;
 var FRAG_SHEET_BACKUPS_LIMIT = 90;
 var FRAG_SHEET_BACKUP_COOLDOWN_MS = 12000;
@@ -917,6 +919,9 @@ var fragSheetAutoObserver = null;
 var fragSheetRefreshTimer = null;
 var playerRosterSearchDebounceTimer = null;
 var notesNoteInputDebounceTimers = {};
+var appUpdateBaselineLastModifiedMs = 0;
+var appUpdateCheckTimer = null;
+var appUpdateNoticeShown = false;
 var fragLastAutoBackupAt = 0;
 var trainerFieldLocksCache = null;
 var trainerFieldLockActiveTrainerKey = "";
@@ -1550,6 +1555,54 @@ function safeJsonParse(rawJson, fallbackValue) {
 	} catch (err) {
 		return fallbackValue;
 	}
+}
+
+function parseHttpDateToMs(rawDateValue) {
+	if (!rawDateValue) return 0;
+	var parsed = Date.parse(String(rawDateValue));
+	return isFinite(parsed) ? parsed : 0;
+}
+
+function stopAppUpdateChecker() {
+	if (!appUpdateCheckTimer) return;
+	window.clearInterval(appUpdateCheckTimer);
+	appUpdateCheckTimer = null;
+}
+
+function notifyAppUpdateAvailable() {
+	if (appUpdateNoticeShown) return;
+	appUpdateNoticeShown = true;
+	stopAppUpdateChecker();
+	var shouldRefreshNow = window.confirm("There is an update available. Please refresh the page.\n\nPress OK to refresh now.");
+	if (shouldRefreshNow && window.location && typeof window.location.reload === "function") {
+		window.location.reload();
+	}
+}
+
+function checkForAppUpdate() {
+	if (appUpdateNoticeShown) return;
+	if (!appUpdateBaselineLastModifiedMs) return;
+	var baseUrl = String(window.location && window.location.href ? window.location.href : "").split("#")[0];
+	if (!baseUrl) return;
+	var requestUrl = baseUrl + (baseUrl.indexOf("?") >= 0 ? "&" : "?") + "_updateCheckTs=" + Date.now();
+	$.ajax({url: requestUrl, cache: false, dataType: "text"})
+		.done(function (_responseText, _textStatus, jqXHR) {
+			if (!jqXHR || typeof jqXHR.getResponseHeader !== "function") return;
+			var latestLastModifiedMs = parseHttpDateToMs(jqXHR.getResponseHeader("Last-Modified"));
+			if (latestLastModifiedMs > appUpdateBaselineLastModifiedMs + 1000) {
+				notifyAppUpdateAvailable();
+			}
+		});
+}
+
+function startAppUpdateChecker() {
+	stopAppUpdateChecker();
+	appUpdateNoticeShown = false;
+	if (!window.location || !/^https?:$/i.test(String(window.location.protocol || ""))) return;
+	appUpdateBaselineLastModifiedMs = parseHttpDateToMs(document.lastModified);
+	if (!appUpdateBaselineLastModifiedMs) return;
+	window.setTimeout(checkForAppUpdate, APP_UPDATE_INITIAL_CHECK_DELAY_MS);
+	appUpdateCheckTimer = window.setInterval(checkForAppUpdate, APP_UPDATE_CHECK_INTERVAL_MS);
 }
 
 function normalizeStarterChoice(rawChoice) {
@@ -7626,6 +7679,7 @@ $(document).ready(function () {
 	}
 	saveLastEncounterSelection();
 	updateAllMoveMetaDisplays();
+	startAppUpdateChecker();
 	window.setTimeout(function () {
 		maybeAutoStartCalcFeatureTutorial();
 	}, CALC_FEATURE_TUTORIAL_AUTO_OPEN_DELAY_MS);
