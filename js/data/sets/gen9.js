@@ -2493,7 +2493,7 @@ var SETDEX_SV = {
             },
             "moves": ["Facade","Trailblaze","Stomping Tantrum","Night Slash"]
         },
-    "Gym Leader Norman - DB | Petalburg Gym": {
+    "GL Norman - DB | Petalburg Gym": {
             "index": "0000000181",
             "level": 39,
             "ability": "Guts",
@@ -2915,7 +2915,7 @@ var SETDEX_SV = {
         }
     },
     "Maushold-Four": {
-    "Gym Leader Norman - DB | Petalburg Gym": {
+    "GL Norman - DB | Petalburg Gym": {
             "index": "0000000179",
             "level": 39,
             "ability": "Friend Guard",
@@ -2953,7 +2953,7 @@ var SETDEX_SV = {
         }
     },
     "Oranguru": {
-    "Gym Leader Norman - DB | Petalburg Gym": {
+    "GL Norman - DB | Petalburg Gym": {
             "index": "0000000180",
             "level": 39,
             "ability": "Illuminate",
@@ -2991,7 +2991,7 @@ var SETDEX_SV = {
             },
             "moves": ["Tri Attack","Volt Switch","Recover","Dark Pulse"]
         },
-    "Gym Leader Norman - DB | Petalburg Gym": {
+    "GL Norman - DB | Petalburg Gym": {
             "index": "0000000182",
             "level": 39,
             "ability": "Adaptability",
@@ -3042,7 +3042,7 @@ var SETDEX_SV = {
             },
             "moves": ["Scorching Sands","Tera Starstorm","Rapid Spin","Dazzling Gleam"]
         },
-    "Gym Leader Norman - DB | Petalburg Gym": {
+    "GL Norman - DB | Petalburg Gym": {
             "index": "0000000183",
             "level": 40,
             "ability": "Tera Shell",
@@ -3067,7 +3067,7 @@ var SETDEX_SV = {
             },
             "moves": ["Hydro Pump","Shock Wave","Hyper Voice","Dragon Breath"]
         },
-    "Gym Leader Norman - DB | Petalburg Gym": {
+    "GL Norman - DB | Petalburg Gym": {
             "index": "0000000184",
             "level": 41,
             "ability": "Berserk",
