@@ -921,9 +921,11 @@ var playerRosterSearchDebounceTimer = null;
 var notesNoteInputDebounceTimers = {};
 var appUpdateBaselineLastModifiedMs = 0;
 var appUpdateBaselinePageSignature = "";
+var appUpdateBaselineVersionToken = "";
 var appUpdateCheckTimer = null;
 var appUpdateNoticeShown = false;
 var appUpdatePageUrl = "";
+var appUpdateVersionUrl = "";
 var fragLastAutoBackupAt = 0;
 var trainerFieldLocksCache = null;
 var trainerFieldLockActiveTrainerKey = "";
@@ -1573,6 +1575,15 @@ function getAppUpdatePageUrl() {
 	return String(window.location.href || "").split("#")[0].split("?")[0];
 }
 
+function getAppUpdateBaseDirUrl() {
+	var pageUrl = getAppUpdatePageUrl();
+	if (!pageUrl) return "";
+	if (pageUrl.charAt(pageUrl.length - 1) === "/") return pageUrl;
+	var slashIndex = pageUrl.lastIndexOf("/");
+	if (slashIndex < 0) return pageUrl + "/";
+	return pageUrl.slice(0, slashIndex + 1);
+}
+
 function getUpdateTextSignature(rawText) {
 	var text = String(rawText || "");
 	var hash = 5381;
@@ -1600,7 +1611,30 @@ function notifyAppUpdateAvailable() {
 
 function checkForAppUpdate() {
 	if (appUpdateNoticeShown) return;
-	if (!appUpdatePageUrl) return;
+	if (!appUpdateVersionUrl && !appUpdatePageUrl) return;
+	if (appUpdateVersionUrl) {
+		var versionRequestUrl = appUpdateVersionUrl + (appUpdateVersionUrl.indexOf("?") >= 0 ? "&" : "?") + "_updateCheckTs=" + Date.now();
+		$.ajax({url: versionRequestUrl, cache: false, dataType: "text"})
+			.done(function (responseText) {
+				var parsedToken = "";
+				try {
+					var versionPayload = JSON.parse(String(responseText || ""));
+					if (versionPayload && typeof versionPayload === "object") {
+						parsedToken = String(versionPayload.buildId || versionPayload.builtAt || "");
+					}
+				} catch (_err) {}
+				if (!parsedToken) parsedToken = String(responseText || "").trim();
+				if (!parsedToken) return;
+				if (!appUpdateBaselineVersionToken) {
+					appUpdateBaselineVersionToken = parsedToken;
+					return;
+				}
+				if (parsedToken !== appUpdateBaselineVersionToken) {
+					notifyAppUpdateAvailable();
+				}
+			});
+		return;
+	}
 	var requestUrl = appUpdatePageUrl + (appUpdatePageUrl.indexOf("?") >= 0 ? "&" : "?") + "_updateCheckTs=" + Date.now();
 	$.ajax({url: requestUrl, cache: false, dataType: "text"})
 		.done(function (responseText, _textStatus, jqXHR) {
@@ -1629,8 +1663,11 @@ function startAppUpdateChecker() {
 	if (!window.location || !/^https?:$/i.test(String(window.location.protocol || ""))) return;
 	appUpdatePageUrl = getAppUpdatePageUrl();
 	if (!appUpdatePageUrl) return;
+	var baseDirUrl = getAppUpdateBaseDirUrl();
+	appUpdateVersionUrl = baseDirUrl ? (baseDirUrl + "version.json") : "";
 	appUpdateBaselineLastModifiedMs = parseHttpDateToMs(document.lastModified);
 	appUpdateBaselinePageSignature = "";
+	appUpdateBaselineVersionToken = "";
 	window.setTimeout(checkForAppUpdate, APP_UPDATE_INITIAL_CHECK_DELAY_MS);
 	appUpdateCheckTimer = window.setInterval(checkForAppUpdate, APP_UPDATE_CHECK_INTERVAL_MS);
 }
