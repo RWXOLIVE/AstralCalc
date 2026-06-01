@@ -472,7 +472,7 @@ var SETDEX_SV = {
             "level": 16,
             "ability": "Plus",
             "doubles": "True",
-            "item": "Wise Glasses",
+            "item": "Oran Berry",
             "nature": "Modest",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -494,11 +494,11 @@ var SETDEX_SV = {
             "moves": ["Flip Turn","Scald","Seismic Toss","Yawn"]
         }
     },
-    "Gyarados": {
+    "Magikarp": {
     "Fisherman Ivan | Route 104": {
             "index": "0000000035",
             "level": 17,
-            "ability": "Intimidate",
+            "ability": "Swift Swim",
             "item": "Lum Berry",
             "nature": "Hardy",
             "ivs": {
@@ -670,6 +670,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Air Cutter","Revelation Dance","Alluring Voice"]
+        }
+    },
+    "Oricorio-Sensu": {
+    "Tori & Tia | Route 113": {
+            "index": "0000000473",
+            "level": 58,
+            "ability": "Dancer",
+            "item": "Focus Sash",
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Quiver Dance","Revelation Dance","Alluring Voice","Air Slash"]
         }
     },
     "Sinistea": {
@@ -1972,6 +1985,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Victory Dance","Quiver Dance","Baton Pass","Thunder Wave"]
+        },
+    "Youngster Dillon | Route 113": {
+            "index": "0000000481",
+            "level": 59,
+            "ability": "Moody",
+            "item": "Bright Powder",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Spore","Ceaseless Edge","Stone Axe","Sticky Web"]
         }
     },
     "Stoutland": {
@@ -2555,6 +2579,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Teeter Dance","Superpower","Dizzy Punch","Body Slam"]
+        },
+    "Tori & Tia | Route 113": {
+            "index": "0000000472",
+            "level": 58,
+            "ability": "Contrary",
+            "item": "Chople Berry",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Psych Up","Psycho Boost","Superpower","Fake Out"]
         }
     },
     "Toxicroak": {
@@ -2607,6 +2642,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Baneful Bunker","Sludge Bomb","Scald","Hex"]
+        },
+    "Youngster Dillon | Route 113": {
+            "index": "0000000484",
+            "level": 58,
+            "ability": "Corrosion",
+            "item": "Rocky Helmet",
+            "nature": "Calm",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Toxic","Venoshock","Acid Spray","Infestation"]
         }
     },
     "Cursola": {
@@ -3434,6 +3480,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Swords Dance","Ice Shard","Knock Off","Icicle Crash"]
+        },
+    "Youngster Dillon | Route 113": {
+            "index": "0000000482",
+            "level": 59,
+            "ability": "Technician",
+            "item": "Loaded Dice",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fake Out","Icicle Spear","Feint Attack","Covet"]
         }
     },
     "Zebstrika": {
@@ -3745,6 +3802,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Swagger","Sucker Punch","Drill Peck","Superpower"]
+        },
+    "Ninja Boy Lung | Route 113": {
+            "index": "0000000469",
+            "level": 58,
+            "ability": "Super Luck",
+            "item": "Scope Lens",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Brave Bird","Sucker Punch","Superpower","Pursuit"]
         }
     },
     "Corsola": {
@@ -3809,6 +3877,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Power Whip","U-turn","Triple Axel","Aromatic Mist"]
+        },
+    "Ninja Boy Lao | route 113": {
+            "index": "0000000489",
+            "level": 59,
+            "ability": "Queenly Majesty",
+            "item": "Clear Amulet",
+            "nature": "Jolly",
+            "setdouble": "True",
+            "setdoubleGroup": "route-113-ninja-boy-lao",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Coaching","Power Whip","Triple Axel","High Jump Kick"]
         }
     },
     "Magmortar": {
@@ -3848,6 +3930,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Bulk Up","Spirit Break","Lash Out","Drain Punch"]
+        },
+    "Tori & Tia | Route 113": {
+            "index": "0000000471",
+            "level": 58,
+            "ability": "Prankster",
+            "item": "Mirror Herb",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Reflect","Light Screen","Swagger","Psycho Cut"]
         }
     },
     "Politoed": {
@@ -3881,6 +3974,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Future Sight","Psychic Noise","Thunderbolt","Energy Ball"]
+        },
+    "Ninja Boy Lao | route 113": {
+            "index": "0000000487",
+            "level": 58,
+            "ability": "Shadow Tag",
+            "item": "Wise Glasses",
+            "nature": "Modest",
+            "setdouble": "True",
+            "setdoubleGroup": "route-113-ninja-boy-lao",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Shadow Ball","Thunderbolt","Psychic","Thunder Wave"]
         }
     },
     "Pincurchin": {
@@ -3909,6 +4016,21 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Will-O-Wisp","Gunk Shot","Assurance","Destiny Bond"]
+        },
+    "Ninja Boy Lao | route 113": {
+            "index": "0000000486",
+            "level": 58,
+            "ability": "Levitate",
+            "status": "Burned",
+            "item": "Rawst Berry",
+            "nature": "Calm",
+            "setdouble": "True",
+            "setdoubleGroup": "route-113-ninja-boy-lao",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Aromatic Mist","Belch","Heat Wave","Dark Pulse"]
         }
     },
     "Weezing-Galar": {
@@ -4110,6 +4232,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Will-O-Wisp","Flare Blitz","Parting Shot","Throat Chop"]
+        },
+    "Ninja Boy Lao | route 113": {
+            "index": "0000000488",
+            "level": 58,
+            "ability": "Intimidate",
+            "item": "Air Balloon",
+            "nature": "Quiet",
+            "setdouble": "True",
+            "setdoubleGroup": "route-113-ninja-boy-lao",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fake Out","Dark Pulse","Flare Blitz","Will-O-Wisp"]
         }
     },
     "Meowscarada": {
@@ -4354,6 +4490,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Leaf Storm","Protect","Leech Seed","Foul Play"]
+        },
+    "Tori & Tia | Route 113": {
+            "index": "0000000474",
+            "level": 58,
+            "ability": "Water Absorb",
+            "item": "Quick Claw",
+            "nature": "Mild",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Wicked Blow","Sucker Punch","Giga Drain","Gunk Shot"]
         }
     },
     "Aurorus": {
@@ -4735,6 +4882,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["First Impression","U-turn"]
+        },
+    "Ninja Boy Lung | Route 113": {
+            "index": "0000000466",
+            "level": 58,
+            "ability": "Tinted Lens",
+            "item": "Silver Powder",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["First Impression","Leech Life","Knock Off","Stone Edge"]
         }
     },
     "Meganium": {
@@ -5012,6 +5170,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Steel Beam","Close Combat","Extreme Speed","Flash Cannon"]
+        },
+    "Tori & Tia | Route 113": {
+            "index": "0000000475",
+            "level": 57,
+            "ability": "Adaptability",
+            "item": "Choice Specs",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Steel Beam"]
         }
     },
     "Corsola-Galar": {
@@ -5606,6 +5775,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Iron Tail","Thunder","Dual Wingbeat","Energy Ball"]
+        },
+    "Ninja Boy Lao | route 113": {
+            "index": "0000000490",
+            "level": 59,
+            "ability": "Static",
+            "item": "King's Rock",
+            "nature": "Hasty",
+            "setdouble": "True",
+            "setdoubleGroup": "route-113-ninja-boy-lao",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Dual Wingbeat","Thunderbolt","Substitute","Helping Hand"]
         }
     },
     "Polteageist": {
@@ -6104,6 +6287,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Iron Head","Drain Punch","Giga Drain","Fire Lash"]
+        },
+    "Ninja Boy Lung | Route 113": {
+            "index": "0000000470",
+            "level": 58,
+            "ability": "Tough Claws",
+            "item": "Passho Berry",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fire Lash","Power-Up Punch","Stomping Tantrum","Substitute"]
         }
     },
     "Sawsbuck": {
@@ -6442,6 +6636,125 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Synthesis","Earth Power","Solar Beam","Weather Ball"]
+        }
+    },
+    "Gumshoos": {
+    "Ninja Boy Lung | Route 113": {
+            "index": "0000000467",
+            "level": 58,
+            "ability": "Stakeout",
+            "item": "Red Card",
+            "nature": "Sassy",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Retaliate","Trailblaze","Stomping Tantrum","Psychic Fangs"]
+        }
+    },
+    "Aggron": {
+    "Ninja Boy Lung | Route 113": {
+            "index": "0000000468",
+            "level": 59,
+            "ability": "Sturdy",
+            "item": "Custap Berry",
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Body Press","Aqua Tail","Dragon Tail","Stealth Rock"]
+        }
+    },
+    "Camerupt": {
+    "Parasol Lady Madeline | route 113": {
+            "index": "0000000476",
+            "level": 59,
+            "ability": "Analytic",
+            "item": "Quick Claw",
+            "nature": "Sassy",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Searing Shot","Steam Eruption","Earthquake","Explosion"]
+        }
+    },
+    "Roserade": {
+    "Parasol Lady Madeline | route 113": {
+            "index": "0000000477",
+            "level": 58,
+            "ability": "Serene Grace",
+            "item": "Assault Vest",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sludge Bomb","Extrasensory","Petal Dance","Shadow Ball"]
+        }
+    },
+    "Archeops": {
+    "Parasol Lady Madeline | route 113": {
+            "index": "0000000478",
+            "level": 57,
+            "ability": "Dry Skin",
+            "item": "Flying Gem",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Acrobatics","Ancient Power","U-turn","Dragon Rush"]
+        }
+    },
+    "Houndstone": {
+    "Parasol Lady Madeline | route 113": {
+            "index": "0000000479",
+            "level": 58,
+            "ability": "Sand Rush",
+            "item": "Clear Amulet",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Last Respects","Play Rough","Protect","Sandstorm"]
+        }
+    },
+    "Magneton": {
+    "Parasol Lady Madeline | route 113": {
+            "index": "0000000480",
+            "level": 58,
+            "ability": "Analytic",
+            "item": "Eviolite",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Thunderbolt","Flash Cannon","HP Grass","Magnet Rise"]
+        }
+    },
+    "Farigiraf": {
+    "Ninja Boy Lao | route 113": {
+            "index": "0000000485",
+            "level": 59,
+            "ability": "Armor Tail",
+            "item": "Focus Sash",
+            "nature": "Timid",
+            "setdouble": "True",
+            "setdoubleGroup": "route-113-ninja-boy-lao",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 13
+            },
+            "moves": ["Future Sight","Psychic Noise","Hyper Voice","Dazzling Gleam"]
+        }
+    },
+    "Florges-White": {
+    "Youngster Dillon | Route 113": {
+            "index": "0000000483",
+            "level": 60,
+            "ability": "Flower Veil",
+            "item": "Twisted Spoon",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Calm Mind","Psychic","Giga Drain","Alluring Voice"]
         }
     },
 }
