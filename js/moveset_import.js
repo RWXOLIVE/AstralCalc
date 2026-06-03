@@ -501,8 +501,6 @@ function updateDex(customsets) {
 			SETDEX_GSC[pokemon][moveset] = savedSet;
 			if (!SETDEX_RBY[pokemon]) SETDEX_RBY[pokemon] = {};
 			SETDEX_RBY[pokemon][moveset] = savedSet;
-			var poke = {name: pokemon, nameProp: moveset};	
-			addBoxed(poke);
 		}
 	}
 	localStorage.customsets = JSON.stringify(customsets);
@@ -620,6 +618,9 @@ $(document).ready(function () {
 	if (localStorage.customsets) {
 		customSets = JSON.parse(localStorage.customsets);
 		updateDex(customSets);
+		if (typeof restorePlayerRosterLayoutFromStorage === "function") {
+			restorePlayerRosterLayoutFromStorage(customSets);
+		}
 		var restoredSelection = false;
 		if (typeof restoreLastEncounterSelection === "function") {
 			restoredSelection = !!restoreLastEncounterSelection();

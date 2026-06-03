@@ -5336,7 +5336,81 @@ var XY_PATCH = {
         types: ['Normal'],
         bs: { hp: 75, at: 80, df: 60, sa: 65, sd: 90, sp: 102 },
         weightkg: 28,
-        abilities: { 0: 'Fur Coat' }
+        abilities: { 0: 'Fur Coat' },
+        otherFormes: [
+            'Furfrou-Dandy',
+            'Furfrou-Debutante',
+            'Furfrou-Diamond',
+            'Furfrou-Heart',
+            'Furfrou-Kabuki',
+            'Furfrou-La Reine',
+            'Furfrou-Matron',
+            'Furfrou-Pharaoh',
+            'Furfrou-Star',
+        ]
+    },
+    'Furfrou-Dandy': {
+        types: ['Normal', 'Grass'],
+        bs: { hp: 102, at: 80, df: 60, sa: 65, sd: 90, sp: 75 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-Debutante': {
+        types: ['Normal', 'Electric'],
+        bs: { hp: 75, at: 80, df: 60, sa: 85, sd: 60, sp: 112 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-Diamond': {
+        types: ['Normal', 'Rock'],
+        bs: { hp: 75, at: 80, df: 70, sa: 65, sd: 90, sp: 92 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-Heart': {
+        types: ['Normal', 'Fairy'],
+        bs: { hp: 75, at: 65, df: 60, sa: 80, sd: 90, sp: 102 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-Kabuki': {
+        types: ['Normal', 'Fighting'],
+        bs: { hp: 60, at: 75, df: 65, sa: 80, sd: 90, sp: 102 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-La Reine': {
+        types: ['Normal', 'Water'],
+        bs: { hp: 75, at: 80, df: 60, sa: 65, sd: 90, sp: 102 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-Matron': {
+        types: ['Normal', 'Psychic'],
+        bs: { hp: 75, at: 80, df: 60, sa: 65, sd: 90, sp: 102 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-Pharaoh': {
+        types: ['Normal', 'Ghost'],
+        bs: { hp: 75, at: 90, df: 60, sa: 65, sd: 80, sp: 102 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-Star': {
+        types: ['Normal', 'Ice'],
+        bs: { hp: 75, at: 80, df: 60, sa: 55, sd: 90, sp: 112 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
     },
     Gogoat: {
         types: ['Grass'],

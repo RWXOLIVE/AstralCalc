@@ -1877,14 +1877,19 @@ nav .nav {
 }
 
 .calc-side-panel.fullscreen {
-    width: 100vw;
+    left: 0;
+    right: 0;
+    width: auto;
     min-width: 0;
-    max-width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    border-left: none;
 }
 
 .calc-side-panel.fullscreen .calc-side-header,
 .calc-side-panel.fullscreen .calc-side-body {
-    width: min(96vw, 1680px);
+    width: calc(100vw - 24px);
+    max-width: none;
     margin-left: auto;
     margin-right: auto;
     box-sizing: border-box;
@@ -2045,6 +2050,8 @@ body.calc-side-resizing .credits {
 }
 
 .frags-table-wrap {
+    flex: 1 1 auto;
+    min-height: 0;
     overflow: auto;
     overscroll-behavior: contain;
 }
@@ -2195,37 +2202,6 @@ body.calc-side-resizing .credits {
     font-weight: bold;
 }
 
-.frags-split-drop {
-    margin-top: 4px;
-    font-size: 0.78em;
-}
-
-.frags-split-drop summary {
-    display: inline-flex;
-    align-items: center;
-    gap: 4px;
-    cursor: pointer;
-    user-select: none;
-    font-weight: 600;
-    color: #4a668c;
-}
-
-.frags-split-drop summary::after {
-    content: "\25be";
-    font-size: 0.72em;
-}
-
-.frags-split-drop[open] summary::after {
-    content: "\25b4";
-}
-
-.frags-split-drop[open] {
-    padding: 4px 6px;
-    border-radius: 8px;
-    border: 1px solid #b9c4d3;
-    background: rgba(224, 232, 244, 0.45);
-}
-
 .frags-split-list {
     list-style: none;
     margin: 4px 0 0;
@@ -2261,11 +2237,134 @@ body.calc-side-resizing .credits {
     gap: 4px;
 }
 
+.frags-actions-cell {
+    display: grid;
+    gap: 6px;
+}
+
 .frags-action-btn {
     width: auto;
     min-width: 2.5em;
     margin: 0;
     padding: 2px 6px;
+}
+
+.frags-split-drop,
+.frags-edit-drop {
+    margin-top: 4px;
+    font-size: 0.78em;
+}
+
+.frags-split-drop summary,
+.frags-edit-drop summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    user-select: none;
+    font-weight: 600;
+    color: #4a668c;
+}
+
+.frags-split-drop summary::after,
+.frags-edit-drop summary::after {
+    content: "\25be";
+    font-size: 0.72em;
+}
+
+.frags-split-drop[open] summary::after,
+.frags-edit-drop[open] summary::after {
+    content: "\25b4";
+}
+
+.frags-split-drop[open],
+.frags-edit-drop[open] {
+    padding: 4px 6px;
+    border-radius: 8px;
+    border: 1px solid #b9c4d3;
+    background: rgba(224, 232, 244, 0.45);
+}
+
+.frags-edit-body {
+    margin-top: 4px;
+    display: grid;
+    gap: 6px;
+    min-width: 220px;
+}
+
+.frags-edit-fight {
+    display: grid;
+    gap: 4px;
+}
+
+.frags-edit-fight + .frags-edit-fight {
+    padding-top: 5px;
+    border-top: 1px solid rgba(120, 136, 158, 0.28);
+}
+
+.frags-edit-fight-head {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.frags-edit-fight-name {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: 600;
+}
+
+.frags-edit-current-tag {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1px 7px;
+    border-radius: 999px;
+    background: rgba(78, 144, 255, 0.18);
+    border: 1px solid rgba(78, 144, 255, 0.42);
+    font-size: 0.82em;
+    font-weight: 700;
+}
+
+.frags-edit-fight-meta {
+    font-size: 0.84em;
+    color: #6781a4;
+}
+
+.frags-edit-victim-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 4px;
+}
+
+.frags-edit-victim-item {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 6px;
+}
+
+.frags-edit-victim-name {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.frags-edit-victim-count {
+    font-weight: 700;
+}
+
+.frags-edit-remove {
+    width: auto;
+    min-width: 2.7em;
+    margin: 0;
+    padding: 1px 6px;
 }
 
 .settings-side-body {

@@ -37,6 +37,17 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
 var __read = (this && this.__read) || function (o, n) {
     var m = typeof Symbol === "function" && o[Symbol.iterator];
     if (!m) return o;
@@ -69,6 +80,17 @@ function toID(s) {
 }
 exports.toID = toID;
 var GENERATIONS = Object.create(null);
+var FURFROU_FORMES = [
+    'Furfrou-Dandy',
+    'Furfrou-Debutante',
+    'Furfrou-Diamond',
+    'Furfrou-Heart',
+    'Furfrou-Kabuki',
+    'Furfrou-La Reine',
+    'Furfrou-Matron',
+    'Furfrou-Pharaoh',
+    'Furfrou-Star',
+];
 var Generations = (function () {
     function Generations(dex) {
         this.dex = dex;
@@ -342,36 +364,65 @@ var Species = (function () {
         return exists(species, this.dex.gen) ? new Specie(species, this.dex) : undefined;
     };
     Species.prototype[Symbol.iterator] = function () {
-        var _a, _b, _c, _i, id, s;
-        return __generator(this, function (_d) {
-            switch (_d.label) {
+        var _a, _b, _c, _i, id, s, FURFROU_FORMES_1, FURFROU_FORMES_1_1, forme, cosmetic, e_1_1;
+        var e_1, _d;
+        return __generator(this, function (_e) {
+            switch (_e.label) {
                 case 0:
                     _a = this.dex.data.Species;
                     _b = [];
                     for (_c in _a)
                         _b.push(_c);
                     _i = 0;
-                    _d.label = 1;
+                    _e.label = 1;
                 case 1:
-                    if (!(_i < _b.length)) return [3, 6];
+                    if (!(_i < _b.length)) return [3, 13];
                     _c = _b[_i];
-                    if (!(_c in _a)) return [3, 5];
+                    if (!(_c in _a)) return [3, 12];
                     id = _c;
                     s = this.get(id);
-                    if (!s) return [3, 5];
+                    if (!s) return [3, 12];
                     if (!(id === 'aegislash')) return [3, 3];
                     return [4, AegislashBoth(this.dex)];
                 case 2:
-                    _d.sent();
-                    _d.label = 3;
+                    _e.sent();
+                    _e.label = 3;
                 case 3: return [4, s];
                 case 4:
-                    _d.sent();
-                    _d.label = 5;
+                    _e.sent();
+                    if (!(id === 'furfrou')) return [3, 12];
+                    _e.label = 5;
                 case 5:
+                    _e.trys.push([5, 10, 11, 12]);
+                    FURFROU_FORMES_1 = (e_1 = void 0, __values(FURFROU_FORMES)), FURFROU_FORMES_1_1 = FURFROU_FORMES_1.next();
+                    _e.label = 6;
+                case 6:
+                    if (!!FURFROU_FORMES_1_1.done) return [3, 9];
+                    forme = FURFROU_FORMES_1_1.value;
+                    cosmetic = this.get(forme);
+                    if (!cosmetic) return [3, 8];
+                    return [4, cosmetic];
+                case 7:
+                    _e.sent();
+                    _e.label = 8;
+                case 8:
+                    FURFROU_FORMES_1_1 = FURFROU_FORMES_1.next();
+                    return [3, 6];
+                case 9: return [3, 12];
+                case 10:
+                    e_1_1 = _e.sent();
+                    e_1 = { error: e_1_1 };
+                    return [3, 12];
+                case 11:
+                    try {
+                        if (FURFROU_FORMES_1_1 && !FURFROU_FORMES_1_1.done && (_d = FURFROU_FORMES_1["return"])) _d.call(FURFROU_FORMES_1);
+                    }
+                    finally { if (e_1) throw e_1.error; }
+                    return [7];
+                case 12:
                     _i++;
                     return [3, 1];
-                case 6: return [2];
+                case 13: return [2];
             }
         });
     };
@@ -404,7 +455,8 @@ var Specie = (function () {
             this.nfe = nfe;
         if (species.gender === 'N' && dex.gen > 1)
             this.gender = species.gender;
-        var formes = (_b = species.otherFormes) === null || _b === void 0 ? void 0 : _b.filter(function (s) { return exists(dex.species.get(s), dex.gen); });
+        var formes = (_b = (species.otherFormes ||
+            (species.id === 'furfrou' ? FURFROU_FORMES : undefined))) === null || _b === void 0 ? void 0 : _b.filter(function (s) { return exists(dex.species.get(s), dex.gen); });
         if (species.id.startsWith('aegislash')) {
             if (species.id === 'aegislashblade') {
                 this.otherFormes = ['Aegislash-Shield', 'Aegislash-Both'];

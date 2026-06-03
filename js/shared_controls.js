@@ -355,24 +355,24 @@ $(".ability").bind("keyup change", function () {
 	var TOGGLE_ABILITIES = ['Flash Fire', 'Electromorphosis', 'Intimidate', 'Illuminate', 'Minus', 'Plus', 'Slow Start', 'Unburden', 'Stakeout', 'Teraform Zero'];
 
 	if (isProtoQuark) {
-		protoQuarkState.show();
-		abilityToggle.hide().prop("checked", protoQuarkState.val() !== 'inactive');
+		protoQuarkState.prop("hidden", false).show();
+		abilityToggle.prop("hidden", true).hide().prop("checked", protoQuarkState.val() !== 'inactive');
 	} else if (TOGGLE_ABILITIES.indexOf(ability) >= 0) {
-		abilityToggle.show();
+		abilityToggle.prop("hidden", false).show();
 		if (ability === "Unburden") {
 			abilityToggle.prop("checked", false);
 		}
-		protoQuarkState.val("auto").hide();
+		protoQuarkState.val("auto").prop("hidden", true).hide();
 	} else {
-		abilityToggle.hide().prop("checked", false);
-		protoQuarkState.val("auto").hide();
+		abilityToggle.prop("hidden", true).hide().prop("checked", false);
+		protoQuarkState.val("auto").prop("hidden", true).hide();
 	}
 
 	if (ability === "Supreme Overlord") {
-		pokeInfo.find(".alliesFainted").show();
+		pokeInfo.find(".alliesFainted").prop("hidden", false).show();
 	} else {
 		pokeInfo.find(".alliesFainted").val('0');
-		pokeInfo.find(".alliesFainted").hide();
+		pokeInfo.find(".alliesFainted").prop("hidden", true).hide();
 
 	}
 	updateAllMoveMetaDisplays();
@@ -861,6 +861,7 @@ var FRAG_SHEET_STATES_STORAGE_KEY = "astralCalcFragSheetStates";
 var FRAG_SHEET_BACKUPS_STORAGE_KEY = "astralCalcFragSheetBackups";
 var TRAINER_FIELD_LOCKS_STORAGE_KEY = "astralCalcTrainerFieldLocks";
 var LAST_ENCOUNTER_STORAGE_KEY = "astralCalcLastEncounter";
+var PLAYER_ROSTER_LAYOUT_STORAGE_KEY = "astralCalcPlayerRosterLayout";
 var CALC_FEATURE_TUTORIAL_SEEN_STORAGE_KEY = "astralCalcFeatureTutorialSeenV1";
 var CALC_FEATURE_TUTORIAL_AUTO_OPEN_DELAY_MS = 1300;
 var CALC_SIDE_PANEL_MIN_WIDTH_PX = 360;
@@ -2644,20 +2645,49 @@ function normalizeFragEntry(setId, rawEntry) {
 	};
 }
 
+function normalizeFragEntryMap(rawEntries) {
+	var normalizedEntries = {};
+	if (!rawEntries || typeof rawEntries !== "object") return normalizedEntries;
+	for (var setId in rawEntries) {
+		if (!Object.prototype.hasOwnProperty.call(rawEntries, setId)) continue;
+		normalizedEntries[setId] = normalizeFragEntry(setId, rawEntries[setId]);
+	}
+	return normalizedEntries;
+}
+
+function normalizeFragSheetStorage(rawState) {
+	var normalizedState = rawState && typeof rawState === "object" ? rawState : {};
+	var fragState = {
+		entries: normalizeFragEntryMap(normalizedState.entries),
+		archivedEntries: normalizeFragEntryMap(normalizedState.archivedEntries)
+	};
+	for (var activeSetId in fragState.entries) {
+		if (!Object.prototype.hasOwnProperty.call(fragState.entries, activeSetId)) continue;
+		if (Object.prototype.hasOwnProperty.call(fragState.archivedEntries, activeSetId)) {
+			delete fragState.archivedEntries[activeSetId];
+		}
+	}
+	return fragState;
+}
+
+function getFragSheetStateEntryMap(state, mapKey) {
+	if (!state || typeof state !== "object") return {};
+	if (!state[mapKey] || typeof state[mapKey] !== "object") {
+		state[mapKey] = {};
+	}
+	return state[mapKey];
+}
+
 function getFragSheetState() {
 	if (fragSheetState) return fragSheetState;
 	var parsed = safeJsonParse(localStorage.getItem(FRAG_SHEET_STORAGE_KEY), {});
-	var rawEntries = parsed && parsed.entries ? parsed.entries : {};
-	fragSheetState = {entries: {}};
-	for (var setId in rawEntries) {
-		if (!Object.prototype.hasOwnProperty.call(rawEntries, setId)) continue;
-		fragSheetState.entries[setId] = normalizeFragEntry(setId, rawEntries[setId]);
-	}
+	fragSheetState = normalizeFragSheetStorage(parsed);
 	return fragSheetState;
 }
 
 function saveFragSheetState() {
-	localStorage.setItem(FRAG_SHEET_STORAGE_KEY, JSON.stringify(getFragSheetState()));
+	fragSheetState = normalizeFragSheetStorage(getFragSheetState());
+	localStorage.setItem(FRAG_SHEET_STORAGE_KEY, JSON.stringify(fragSheetState));
 	captureFragBackupSnapshot("frag-update", false);
 }
 
@@ -2710,6 +2740,87 @@ function normalizeRosterLayout(rawLayout) {
 	return normalized;
 }
 
+function getStoredPlayerRosterLayout() {
+	var rawLayout = localStorage.getItem(PLAYER_ROSTER_LAYOUT_STORAGE_KEY);
+	if (rawLayout === null) return null;
+	return normalizeRosterLayout(safeJsonParse(rawLayout, {}));
+}
+
+function saveStoredPlayerRosterLayout(layout) {
+	localStorage.setItem(PLAYER_ROSTER_LAYOUT_STORAGE_KEY, JSON.stringify(normalizeRosterLayout(layout)));
+}
+
+function saveCurrentPlayerRosterLayout() {
+	saveStoredPlayerRosterLayout(collectPlayerRosterLayout());
+}
+
+function hasRosterLayoutEntries(layout) {
+	var normalizedLayout = normalizeRosterLayout(layout);
+	return !!(
+		normalizedLayout.team.length ||
+		normalizedLayout.box.length ||
+		normalizedLayout.box2.length ||
+		normalizedLayout.trash.length
+	);
+}
+
+function buildRosterLayoutFromCustomsets(customsets) {
+	var layout = normalizeRosterLayout({});
+	var seenSetIds = {};
+	if (!customsets || typeof customsets !== "object") return layout;
+	for (var speciesName in customsets) {
+		if (!Object.prototype.hasOwnProperty.call(customsets, speciesName)) continue;
+		var speciesSets = customsets[speciesName];
+		if (!speciesSets || typeof speciesSets !== "object") continue;
+		for (var setName in speciesSets) {
+			if (!Object.prototype.hasOwnProperty.call(speciesSets, setName)) continue;
+			var normalizedSpecies = String(speciesName || "").trim();
+			var normalizedSetName = String(setName || "").trim();
+			if (!normalizedSpecies || !normalizedSetName) continue;
+			var setId = normalizedSpecies + " (" + normalizedSetName + ")";
+			if (seenSetIds[setId]) continue;
+			seenSetIds[setId] = true;
+			layout.box.push(setId);
+		}
+	}
+	return layout;
+}
+
+function filterRosterLayoutToAvailableSets(layout) {
+	var normalizedLayout = normalizeRosterLayout(layout);
+	if (typeof getSetOptionById !== "function") return normalizedLayout;
+	var filteredLayout = {
+		team: [],
+		box: [],
+		box2: [],
+		trash: []
+	};
+	var zoneKeys = ["team", "box", "box2", "trash"];
+	for (var i = 0; i < zoneKeys.length; i++) {
+		var zoneKey = zoneKeys[i];
+		for (var j = 0; j < normalizedLayout[zoneKey].length; j++) {
+			var setId = normalizedLayout[zoneKey][j];
+			if (!setId || !getSetOptionById(setId)) continue;
+			filteredLayout[zoneKey].push(setId);
+		}
+	}
+	return filteredLayout;
+}
+
+function restorePlayerRosterLayoutFromStorage(customsets) {
+	var storedLayout = getStoredPlayerRosterLayout();
+	var nextLayout = storedLayout !== null
+		? storedLayout
+		: buildRosterLayoutFromCustomsets(customsets);
+	nextLayout = filterRosterLayoutToAvailableSets(nextLayout);
+	applyPlayerRosterLayout(nextLayout);
+	saveStoredPlayerRosterLayout(nextLayout);
+	applyPlayerRosterSearchFilter();
+	return hasRosterLayoutEntries(nextLayout);
+}
+
+window.restorePlayerRosterLayoutFromStorage = restorePlayerRosterLayoutFromStorage;
+
 function buildRosterSpriteNodeId(setId) {
 	var parsed = parseSetId(setId);
 	var rawBase = String(parsed.species || "") + String(parsed.label || "");
@@ -2760,16 +2871,16 @@ function applyPlayerRosterLayout(layout) {
 			targetContainer.appendChild(spriteNode);
 		}
 	}
+	saveStoredPlayerRosterLayout(normalizedLayout);
 }
 
 function normalizeFragSnapshotPayload(rawPayload) {
 	var payload = rawPayload || {};
-	var normalizedFragSheet = payload.fragSheet && typeof payload.fragSheet === "object"
-		? deepCloneJsonValue(payload.fragSheet, {entries: {}})
-		: {entries: {}};
-	if (!normalizedFragSheet.entries || typeof normalizedFragSheet.entries !== "object") {
-		normalizedFragSheet.entries = {};
-	}
+	var normalizedFragSheet = normalizeFragSheetStorage(
+		payload.fragSheet && typeof payload.fragSheet === "object"
+			? deepCloneJsonValue(payload.fragSheet, {entries: {}, archivedEntries: {}})
+			: {entries: {}, archivedEntries: {}}
+	);
 	var normalizedCustomsets = payload.customsets && typeof payload.customsets === "object"
 		? deepCloneJsonValue(payload.customsets, {})
 		: {};
@@ -2782,9 +2893,9 @@ function normalizeFragSnapshotPayload(rawPayload) {
 }
 
 function createFragSnapshotPayload() {
-	var fragSheetSnapshot = safeJsonParse(localStorage.getItem(FRAG_SHEET_STORAGE_KEY), {entries: {}});
-	if (!fragSheetSnapshot || typeof fragSheetSnapshot !== "object") fragSheetSnapshot = {entries: {}};
-	if (!fragSheetSnapshot.entries || typeof fragSheetSnapshot.entries !== "object") fragSheetSnapshot.entries = {};
+	var fragSheetSnapshot = normalizeFragSheetStorage(
+		safeJsonParse(localStorage.getItem(FRAG_SHEET_STORAGE_KEY), {entries: {}, archivedEntries: {}})
+	);
 	var customsetsSnapshot = safeJsonParse(localStorage.getItem("customsets"), {});
 	if (!customsetsSnapshot || typeof customsetsSnapshot !== "object") customsetsSnapshot = {};
 	return normalizeFragSnapshotPayload({
@@ -2796,12 +2907,18 @@ function createFragSnapshotPayload() {
 
 function getFragTotalKillsFromSnapshotPayload(payload) {
 	var normalized = normalizeFragSnapshotPayload(payload);
-	var entries = normalized.fragSheet.entries || {};
+	var entryMaps = [
+		normalized.fragSheet.entries || {},
+		normalized.fragSheet.archivedEntries || {}
+	];
 	var total = 0;
-	for (var setId in entries) {
-		if (!Object.prototype.hasOwnProperty.call(entries, setId)) continue;
-		var killCount = parseInt(entries[setId] && entries[setId].totalKills, 10);
-		if (!Number.isNaN(killCount) && killCount > 0) total += killCount;
+	for (var mapIndex = 0; mapIndex < entryMaps.length; mapIndex++) {
+		var entries = entryMaps[mapIndex];
+		for (var setId in entries) {
+			if (!Object.prototype.hasOwnProperty.call(entries, setId)) continue;
+			var killCount = parseInt(entries[setId] && entries[setId].totalKills, 10);
+			if (!Number.isNaN(killCount) && killCount > 0) total += killCount;
+		}
 	}
 	return total;
 }
@@ -2937,17 +3054,24 @@ window.captureFragBackupSnapshot = captureFragBackupSnapshot;
 function ensureFragEntryForSet(setId) {
 	if (!setId) return null;
 	var state = getFragSheetState();
-	if (!state.entries[setId]) {
-		state.entries[setId] = normalizeFragEntry(setId, {});
+	var activeEntries = getFragSheetStateEntryMap(state, "entries");
+	if (!activeEntries[setId]) {
+		var archivedEntries = getFragSheetStateEntryMap(state, "archivedEntries");
+		if (archivedEntries[setId]) {
+			activeEntries[setId] = normalizeFragEntry(setId, archivedEntries[setId]);
+			delete archivedEntries[setId];
+		} else {
+			activeEntries[setId] = normalizeFragEntry(setId, {});
+		}
 	}
-	return state.entries[setId];
+	return activeEntries[setId];
 }
 
 function getFragTotalForSet(setId) {
 	var normalizedSetId = String(setId || "");
 	if (!normalizedSetId) return 0;
 	var state = getFragSheetState();
-	var entry = state.entries[normalizedSetId];
+	var entry = getFragSheetStateEntryMap(state, "entries")[normalizedSetId];
 	if (!entry) return 0;
 	var totalKills = parseInt(entry.totalKills, 10);
 	if (Number.isNaN(totalKills) || totalKills < 0) return 0;
@@ -2985,7 +3109,9 @@ function mergeFragVictimBuckets(targetBuckets, sourceBuckets) {
 function mergeFragEntriesFromEvolutionDrop(sourceSetId, targetSetId) {
 	if (!sourceSetId || !targetSetId || sourceSetId === targetSetId) return false;
 	var state = getFragSheetState();
-	var sourceEntry = state.entries[sourceSetId];
+	var activeEntries = getFragSheetStateEntryMap(state, "entries");
+	var archivedEntries = getFragSheetStateEntryMap(state, "archivedEntries");
+	var sourceEntry = activeEntries[sourceSetId] || archivedEntries[sourceSetId];
 	if (!sourceEntry) return false;
 	var targetEntry = ensureFragEntryForSet(targetSetId);
 	if (!targetEntry) return false;
@@ -3005,9 +3131,14 @@ function mergeFragEntriesFromEvolutionDrop(sourceSetId, targetSetId) {
 	if (!targetEntry.lastVictim && sourceEntry.lastVictim) {
 		targetEntry.lastVictim = String(sourceEntry.lastVictim);
 	}
+	if (!targetEntry.isDead && sourceEntry.isDead) {
+		targetEntry.isDead = true;
+		targetEntry.deathFight = String(sourceEntry.deathFight || targetEntry.deathFight || "");
+	}
 
-	state.entries[targetSetId] = normalizeFragEntry(targetSetId, targetEntry);
-	delete state.entries[sourceSetId];
+	activeEntries[targetSetId] = normalizeFragEntry(targetSetId, targetEntry);
+	delete activeEntries[sourceSetId];
+	delete archivedEntries[sourceSetId];
 	saveFragSheetState();
 	return true;
 }
@@ -3231,10 +3362,19 @@ function syncFragRoster(options) {
 	var allowEmptyPrune = !!syncOptions.allowEmptyPrune;
 	var rosterSetIds = collectPlayerRosterSetIds();
 	var state = getFragSheetState();
+	var activeEntries = getFragSheetStateEntryMap(state, "entries");
+	var archivedEntries = getFragSheetStateEntryMap(state, "archivedEntries");
 	var didChange = false;
 	for (var i = 0; i < rosterSetIds.length; i++) {
-		if (!state.entries[rosterSetIds[i]]) {
-			state.entries[rosterSetIds[i]] = normalizeFragEntry(rosterSetIds[i], {});
+		var rosterSetId = rosterSetIds[i];
+		if (archivedEntries[rosterSetId]) {
+			activeEntries[rosterSetId] = normalizeFragEntry(rosterSetId, archivedEntries[rosterSetId]);
+			delete archivedEntries[rosterSetId];
+			didChange = true;
+			continue;
+		}
+		if (!activeEntries[rosterSetId]) {
+			activeEntries[rosterSetId] = normalizeFragEntry(rosterSetId, {});
 			didChange = true;
 		}
 	}
@@ -3242,10 +3382,11 @@ function syncFragRoster(options) {
 		pruneMissing = false;
 	}
 	if (pruneMissing) {
-		for (var setId in state.entries) {
-			if (!Object.prototype.hasOwnProperty.call(state.entries, setId)) continue;
+		for (var setId in activeEntries) {
+			if (!Object.prototype.hasOwnProperty.call(activeEntries, setId)) continue;
 			if (rosterSetIds.indexOf(setId) !== -1) continue;
-			delete state.entries[setId];
+			archivedEntries[setId] = normalizeFragEntry(setId, activeEntries[setId]);
+			delete activeEntries[setId];
 			didChange = true;
 		}
 	}
@@ -3256,6 +3397,7 @@ function scheduleFragSheetRefresh() {
 	if (fragSheetRefreshTimer) return;
 	fragSheetRefreshTimer = window.setTimeout(function () {
 		fragSheetRefreshTimer = null;
+		saveCurrentPlayerRosterLayout();
 		syncFragRoster({pruneMissing: true});
 		renderFragSheet();
 		refreshNotesPanelIfOpen();
@@ -3330,6 +3472,46 @@ function removeFragKill(killerSetId, preferredFight) {
 	entry.totalKills = Math.max(0, entry.totalKills - 1);
 	saveFragSheetState();
 	renderFragSheet();
+}
+
+function removeSpecificFragKill(killerSetId, fightLabel, victimKey) {
+	var normalizedSetId = String(killerSetId || "").trim();
+	var normalizedFight = String(fightLabel || "").trim();
+	if (!normalizedSetId || !normalizedFight) return false;
+	var state = getFragSheetState();
+	var activeEntries = getFragSheetStateEntryMap(state, "entries");
+	var entry = activeEntries[normalizedSetId];
+	if (!entry) return false;
+	var fightCount = parseInt(entry.fights[normalizedFight], 10);
+	if (Number.isNaN(fightCount) || fightCount <= 0) return false;
+
+	var split = String(getSplitNumberForFragFightLabel(normalizedFight));
+	var normalizedVictimKey = normalizeFragVictimKey(victimKey);
+	entry.fights[normalizedFight] = fightCount - 1;
+	if (entry.fights[normalizedFight] <= 0) delete entry.fights[normalizedFight];
+	if (entry.splits[split]) {
+		entry.splits[split] = Math.max(0, entry.splits[split] - 1);
+		if (entry.splits[split] <= 0) delete entry.splits[split];
+	}
+	var removedFromFightVictims = decrementFragVictimBucketCount(entry, "fightVictims", normalizedFight, normalizedVictimKey, 1);
+	if (!removedFromFightVictims && normalizedVictimKey !== FRAG_UNKNOWN_VICTIM_KEY) {
+		removedFromFightVictims = decrementFragVictimBucketCount(entry, "fightVictims", normalizedFight, FRAG_UNKNOWN_VICTIM_KEY, 1);
+	}
+	if (!removedFromFightVictims) {
+		decrementFragVictimBucketByAny(entry, "fightVictims", normalizedFight, 1);
+	}
+	var removedFromSplitVictims = decrementFragVictimBucketCount(entry, "splitVictims", split, normalizedVictimKey, 1);
+	if (!removedFromSplitVictims && normalizedVictimKey !== FRAG_UNKNOWN_VICTIM_KEY) {
+		removedFromSplitVictims = decrementFragVictimBucketCount(entry, "splitVictims", split, FRAG_UNKNOWN_VICTIM_KEY, 1);
+	}
+	if (!removedFromSplitVictims) {
+		decrementFragVictimBucketByAny(entry, "splitVictims", split, 1);
+	}
+	entry.totalKills = Math.max(0, entry.totalKills - 1);
+	if (entry.totalKills <= 0) entry.lastVictim = "";
+	saveFragSheetState();
+	renderFragSheet();
+	return true;
 }
 
 function clearFragsForCurrentFight() {
@@ -3407,6 +3589,7 @@ function clearFragsForCurrentFight() {
 function clearAllFrags() {
 	var state = getFragSheetState();
 	state.entries = {};
+	state.archivedEntries = {};
 	saveFragSheetState();
 	syncFragRoster({pruneMissing: true});
 	renderFragSheet();
@@ -3467,6 +3650,96 @@ function renderFragPercentBar(rawPercent, isDead) {
 		"<div class=\"frags-percent-track\"><div class=\"frags-percent-fill\" style=\"width:" + bounded.toFixed(2) + "%\"></div></div>" +
 		"<span class=\"frags-percent-label\">" + formatted + "%</span>" +
 		"</div>";
+}
+
+function getFragVictimEditorLabel(victimKey) {
+	var normalizedVictimKey = normalizeFragVictimKey(victimKey);
+	if (normalizedVictimKey === FRAG_UNKNOWN_VICTIM_KEY) return "Unknown";
+	return formatSetNameForDisplay(normalizedVictimKey);
+}
+
+function getFragVictimEditorRows(entry, currentFight) {
+	var rows = [];
+	if (!entry || !entry.fights || typeof entry.fights !== "object") return rows;
+	var normalizedCurrentFight = normalizeFragFightLabelForMatch(currentFight);
+	for (var fightName in entry.fights) {
+		if (!Object.prototype.hasOwnProperty.call(entry.fights, fightName)) continue;
+		var fightCount = parseInt(entry.fights[fightName], 10);
+		if (Number.isNaN(fightCount) || fightCount <= 0) continue;
+		var fightBucket = getFragVictimBucketForEntry(entry, "fightVictims", fightName, false);
+		var victimRows = [];
+		var victimTotal = 0;
+		if (fightBucket) {
+			for (var fightVictimKey in fightBucket) {
+				if (!Object.prototype.hasOwnProperty.call(fightBucket, fightVictimKey)) continue;
+				var victimCount = parseInt(fightBucket[fightVictimKey], 10);
+				if (Number.isNaN(victimCount) || victimCount <= 0) continue;
+				victimRows.push({
+					key: fightVictimKey,
+					name: getFragVictimEditorLabel(fightVictimKey),
+					count: victimCount
+				});
+				victimTotal += victimCount;
+			}
+		}
+		if (victimTotal < fightCount) {
+			victimRows.push({
+				key: FRAG_UNKNOWN_VICTIM_KEY,
+				name: "Unknown",
+				count: fightCount - victimTotal
+			});
+		}
+		victimRows.sort(function (a, b) {
+			if (b.count !== a.count) return b.count - a.count;
+			return a.name.localeCompare(b.name);
+		});
+		rows.push({
+			fight: fightName,
+			split: String(getSplitNumberForFragFightLabel(fightName)),
+			isCurrentFight: normalizeFragFightLabelForMatch(fightName) === normalizedCurrentFight,
+			victims: victimRows
+		});
+	}
+	rows.sort(function (a, b) {
+		if (a.isCurrentFight !== b.isCurrentFight) return a.isCurrentFight ? -1 : 1;
+		var aIndex = getTrainerIndexForLabel(a.fight);
+		var bIndex = getTrainerIndexForLabel(b.fight);
+		if (aIndex && bIndex && aIndex !== bIndex) return aIndex - bIndex;
+		if (aIndex && !bIndex) return -1;
+		if (!aIndex && bIndex) return 1;
+		return a.fight.localeCompare(b.fight);
+	});
+	return rows;
+}
+
+function renderFragVictimEditor(entry, currentFight) {
+	var fightRows = getFragVictimEditorRows(entry, currentFight);
+	if (!fightRows.length) return "";
+	var rowsHtml = "";
+	for (var i = 0; i < fightRows.length; i++) {
+		var fightRow = fightRows[i];
+		var victimsHtml = "";
+		for (var j = 0; j < fightRow.victims.length; j++) {
+			var victimRow = fightRow.victims[j];
+			victimsHtml += "<li class=\"frags-edit-victim-item\">" +
+				"<span class=\"frags-edit-victim-name\">" + escapeHtml(victimRow.name) + "</span>" +
+				"<span class=\"frags-edit-victim-count\">x" + victimRow.count + "</span>" +
+				"<button type=\"button\" class=\"btn frags-edit-remove\" data-frag-set=\"" + escapeHtml(entry.setId) + "\" data-frag-fight=\"" + escapeHtml(fightRow.fight) + "\" data-frag-victim=\"" + escapeHtml(victimRow.key) + "\" title=\"Remove one recorded kill from this target\">-1</button>" +
+				"</li>";
+		}
+		rowsHtml += "<div class=\"frags-edit-fight\">" +
+			"<div class=\"frags-edit-fight-head\">" +
+			"<span class=\"frags-edit-fight-name\">" + escapeHtml(fightRow.fight) + "</span>" +
+			(fightRow.isCurrentFight ? "<span class=\"frags-edit-current-tag\">Current</span>" : "") +
+			"</div>" +
+			"<div class=\"frags-edit-fight-meta\">Split " + escapeHtml(fightRow.split) + "</div>" +
+			"<ul class=\"frags-edit-victim-list\">" + victimsHtml + "</ul>" +
+			"</div>";
+	}
+	return "<details class=\"frags-edit-drop\">" +
+		"<summary>Edit kills</summary>" +
+		"<div class=\"frags-edit-body\">" + rowsHtml + "</div>" +
+		"</details>";
 }
 
 function isPlayerSetInTrash(setId) {
@@ -3659,6 +3932,7 @@ function renderFragSheet() {
 			}
 		}
 		var overallPercent = toFragPercent(entry.totalKills, totals.overall);
+		var victimEditorHtml = showAllSplits ? renderFragVictimEditor(entry, currentFight) : "";
 		rowsHtml += "<tr class=\"frags-row" + placementClass + lifeClass + "\">" +
 			"<td class=\"frag-num\">" + (i + 1) + "</td>" +
 			"<td title=\"" + escapeHtml(titleText) + "\" class=\"frags-mon-cell\">" +
@@ -3672,10 +3946,10 @@ function renderFragSheet() {
 			"<td class=\"frag-percent-col\">" + renderFragPercentBar(overallPercent, isDead) + "</td>" +
 			splitPercentColumns +
 			"<td class=\"frag-num\">" + fightKills + "</td>" +
-			"<td><div class=\"frags-actions\">" +
+			"<td><div class=\"frags-actions-cell\"><div class=\"frags-actions\">" +
 			"<button type=\"button\" class=\"btn frags-action-btn frags-inc\" data-frag-set=\"" + escapeHtml(entry.setId) + "\">+1</button>" +
 			"<button type=\"button\" class=\"btn frags-action-btn frags-dec\" data-frag-set=\"" + escapeHtml(entry.setId) + "\">-1</button>" +
-			"</div></td>" +
+			"</div>" + victimEditorHtml + "</div></td>" +
 			"</tr>";
 	}
 	var splitHeaders = "";
@@ -3698,7 +3972,7 @@ function setCalcSideDockedWidth(widthPx) {
 }
 
 function updateCalcLayoutForSidePanel() {
-	var panel = document.querySelector(".calc-side-panel.open:not(.fullscreen)");
+	var panel = document.querySelector(".calc-side-panel.open:not(.fullscreen):not(#frags-side-panel)");
 	if (!panel) {
 		setCalcSideDockedWidth(0);
 		return;
@@ -3709,6 +3983,48 @@ function updateCalcLayoutForSidePanel() {
 		return;
 	}
 	setCalcSideDockedWidth(panelWidth);
+}
+
+function syncCalcSidePanelFullscreenButtonLabel(panelId, isFullscreen) {
+	if (panelId === "frags-side-panel") {
+		$("#frags-panel-fullscreen").text(isFullscreen ? "Exit Fullscreen" : "Fullscreen");
+	} else if (panelId === "notes-side-panel") {
+		$("#notes-panel-fullscreen").text(isFullscreen ? "Exit Fullscreen" : "Fullscreen");
+	}
+}
+
+function setCalcSidePanelFullscreen(panelOrId, shouldBeFullscreen) {
+	var panel = typeof panelOrId === "string" ? document.getElementById(panelOrId) : panelOrId;
+	if (!panel) return false;
+	var nextFullscreen = typeof shouldBeFullscreen === "boolean"
+		? shouldBeFullscreen
+		: !panel.classList.contains("fullscreen");
+	if (nextFullscreen) {
+		var currentWidth = String(panel.style.width || "").trim();
+		if (currentWidth) {
+			panel.setAttribute("data-docked-width", currentWidth);
+		}
+		panel.style.removeProperty("width");
+		panel.classList.add("fullscreen");
+	} else {
+		panel.classList.remove("fullscreen");
+		var dockedWidth = String(panel.getAttribute("data-docked-width") || "").trim();
+		if (dockedWidth) {
+			panel.style.width = dockedWidth;
+		} else {
+			panel.style.removeProperty("width");
+		}
+		panel.removeAttribute("data-docked-width");
+	}
+	syncCalcSidePanelFullscreenButtonLabel(panel.id, nextFullscreen);
+	if (panel.id === "frags-side-panel") {
+		renderFragSheet();
+	} else if (panel.id === "notes-side-panel") {
+		renderNotesPanel();
+	}
+	updateCalcSideBackdrop();
+	updateCalcLayoutForSidePanel();
+	return nextFullscreen;
 }
 
 function updateCalcSideBackdrop() {
@@ -3724,15 +4040,10 @@ function closeCalcSidePanel(panelId) {
 	var panel = document.getElementById(panelId);
 	if (!panel) return;
 	var wasOpen = panel.classList.contains("open");
+	setCalcSidePanelFullscreen(panel, false);
 	panel.classList.remove("open");
-	panel.classList.remove("fullscreen");
 	panel.setAttribute("aria-hidden", "true");
 	panel.hidden = true;
-	if (panelId === "frags-side-panel") {
-		$("#frags-panel-fullscreen").text("Fullscreen");
-	} else if (panelId === "notes-side-panel") {
-		$("#notes-panel-fullscreen").text("Fullscreen");
-	}
 	if (calcSidePanelResizeState && calcSidePanelResizeState.panelId === panelId) {
 		endCalcSidePanelResize();
 	}
@@ -4020,21 +4331,17 @@ function getCalcFeatureTutorialSteps() {
 		{
 			title: "Frag sheet sync + fullscreen",
 			selector: "#frags-side-panel",
-			description: "All right-click frag actions feed directly into Frag Sheet. Use Overall %, This Fight, and Actions for fast tracking. Fullscreen view expands split details and gives more room per row.",
+			description: "All right-click frag actions feed directly into Frag Sheet. Use Overall %, This Fight, and Actions for fast tracking. Drag a base form onto its evolution to merge frags, and use fullscreen Edit kills to remove a mistaken target without touching the rest.",
 			visualHtml: "" +
 				"<div class=\"calc-feature-tutorial-visual-card\">" +
 				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Panel</span><span>Frag Sheet</span></div>" +
 				"<div class=\"calc-feature-tutorial-visual-row\"><span>Overall %</span><span>Split %</span><span>This Fight</span></div>" +
-				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Tip</span><span>Use Fullscreen for full split columns.</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Merge</span><span>Drag Charmander &#x2192; Charmeleon</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Tip</span><span>Fullscreen shows split columns and Edit kills.</span></div>" +
 				"</div>",
 			beforeShow: function () {
 				openFragsPanel();
-				var panel = document.getElementById("frags-side-panel");
-				if (panel && !panel.classList.contains("fullscreen")) {
-					panel.classList.add("fullscreen");
-					$("#frags-panel-fullscreen").text("Exit Fullscreen");
-					renderFragSheet();
-				}
+				setCalcSidePanelFullscreen("frags-side-panel", true);
 			}
 		},
 		{
@@ -4087,12 +4394,7 @@ function getCalcFeatureTutorialSteps() {
 				"</div>",
 			beforeShow: function () {
 				openNotesPanel();
-				var notesPanel = document.getElementById("notes-side-panel");
-				if (notesPanel && !notesPanel.classList.contains("fullscreen")) {
-					notesPanel.classList.add("fullscreen");
-					$("#notes-panel-fullscreen").text("Exit Fullscreen");
-					renderNotesPanel();
-				}
+				setCalcSidePanelFullscreen("notes-side-panel", true);
 			}
 		},
 		{
@@ -4661,6 +4963,7 @@ function hotSwapSetToPlayerContainer(setId, sourceElement, containerId) {
 		$(".player").change();
 		$(".player .select2-chosen").text(formatSetNameForDisplay(setId));
 	}
+	saveCurrentPlayerRosterLayout();
 	syncFragRoster({pruneMissing: true});
 	renderFragSheet();
 }
@@ -4934,21 +5237,13 @@ function bindCalcToolEvents() {
 	$("#frags-panel-fullscreen").off("click").on("click", function () {
 		var fragsPanel = document.getElementById("frags-side-panel");
 		if (!fragsPanel) return;
-		var isFullscreen = fragsPanel.classList.toggle("fullscreen");
-		$(this).text(isFullscreen ? "Exit Fullscreen" : "Fullscreen");
-		renderFragSheet();
-		updateCalcSideBackdrop();
-		updateCalcLayoutForSidePanel();
+		setCalcSidePanelFullscreen(fragsPanel);
 	});
 
 	$("#notes-panel-fullscreen").off("click").on("click", function () {
 		var notesPanel = document.getElementById("notes-side-panel");
 		if (!notesPanel) return;
-		var isFullscreen = notesPanel.classList.toggle("fullscreen");
-		$(this).text(isFullscreen ? "Exit Fullscreen" : "Fullscreen");
-		renderNotesPanel();
-		updateCalcSideBackdrop();
-		updateCalcLayoutForSidePanel();
+		setCalcSidePanelFullscreen(notesPanel);
 	});
 
 	$(document).off("click.notesformat", ".notes-format-btn").on("click.notesformat", ".notes-format-btn", function () {
@@ -5112,6 +5407,14 @@ function bindCalcToolEvents() {
 
 	$(document).off("click.fragsactionsdec", ".frags-dec").on("click.fragsactionsdec", ".frags-dec", function () {
 		removeFragKill($(this).attr("data-frag-set"), getCurrentFightLabel());
+	});
+
+	$(document).off("click.fragsremovevictim", ".frags-edit-remove").on("click.fragsremovevictim", ".frags-edit-remove", function () {
+		removeSpecificFragKill(
+			$(this).attr("data-frag-set"),
+			$(this).attr("data-frag-fight"),
+			$(this).attr("data-frag-victim")
+		);
 	});
 
 	$("#frags-clear-fight").off("click").on("click", function () {
