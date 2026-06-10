@@ -378,6 +378,7 @@ exports.MEGA_STONES = {
     Gyaradosite: 'Gyarados',
     Heracronite: 'Heracross',
     Houndoominite: 'Houndoom',
+    Heatranite: 'Heatran',
     Kangaskhanite: 'Kangaskhan',
     Latiasite: 'Latias',
     Latiosite: 'Latios',

@@ -62,7 +62,7 @@ var __values = (this && this.__values) || function(o) {
     };
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
-var e_1, _a;
+var e_1, _a, e_2, _b;
 exports.__esModule = true;
 
 var util_1 = require("../util");
@@ -3286,13 +3286,15 @@ var DPP_PATCH = {
         types: ['Fire', 'Steel'],
         bs: { hp: 91, at: 90, df: 106, sa: 130, sd: 106, sp: 77 },
         weightkg: 430,
-        abilities: { 0: 'Flash Fire' }
+        abilities: { 0: 'Flash Fire' },
+        otherFormes: ['Heatran-Mega']
     },
     'Heatran-Mega': {
         types: ['Fire', 'Steel'],
         bs: { hp: 91, at: 120, df: 106, sa: 175, sd: 141, sp: 67 },
         weightkg: 570,
-        abilities: { 0: 'Flash Fire' }
+        abilities: { 0: 'Flash Fire' },
+        baseSpecies: 'Heatran'
     },
     Hippopotas: {
         types: ['Ground'],
@@ -3905,7 +3907,7 @@ var BW_PATCH = {
         gender: 'N'
     },
     Cofagrigus: {
-        types: ['Ghost', 'Steel'],
+        types: ['Ghost'],
         bs: { hp: 58, at: 50, df: 145, sa: 95, sd: 105, sp: 30 },
         weightkg: 76.5,
         abilities: { 0: 'Mummy' }
@@ -5683,7 +5685,7 @@ var XY_PATCH = {
     },
     'Garchomp-Mega': {
         types: ['Dragon', 'Ground'],
-        bs: { hp: 108, at: 170, df: 115, sa: 110, sd: 95, sp: 102 },
+        bs: { hp: 108, at: 170, df: 115, sa: 120, sd: 95, sp: 92 },
         weightkg: 95,
         abilities: { 0: 'Sand Force' },
         baseSpecies: 'Garchomp'
@@ -10133,6 +10135,24 @@ var Specie = (function () {
     Specie.EXCLUDE = new Set(['bs', 'otherFormes']);
     return Specie;
 }());
+var SPECIES_ALIASES = [
+    ['Flabebe-Red-Flower', 'flabebe'],
+    ['Floette-Red-Flower', 'floette'],
+    ['Florges-Red-Flower', 'florges'],
+    ['Flabebe-Yellow-Flower', 'flabebe'],
+    ['Flabebe-Orange-Flower', 'flabebe'],
+    ['Flabebe-Blue-Flower', 'flabebe'],
+    ['Flabebe-White-Flower', 'flabebe'],
+    ['Floette-Yellow-Flower', 'floette'],
+    ['Floette-Orange-Flower', 'floette'],
+    ['Floette-Blue-Flower', 'floette'],
+    ['Floette-White-Flower', 'floette'],
+    ['Floette-Eternal-Flower', 'floetteeternal'],
+    ['Florges-Yellow-Flower', 'florges'],
+    ['Florges-Orange-Flower', 'florges'],
+    ['Florges-Blue-Flower', 'florges'],
+    ['Florges-White-Flower', 'florges'],
+];
 var SPECIES_BY_ID = [];
 var gen = 0;
 try {
@@ -10144,6 +10164,20 @@ try {
                 delete species[specie].bs.sl;
             var m = new Specie(specie, species[specie]);
             map[m.id] = m;
+        }
+        try {
+            for (var SPECIES_ALIASES_1 = (e_2 = void 0, __values(SPECIES_ALIASES)), SPECIES_ALIASES_1_1 = SPECIES_ALIASES_1.next(); !SPECIES_ALIASES_1_1.done; SPECIES_ALIASES_1_1 = SPECIES_ALIASES_1.next()) {
+                var _c = __read(SPECIES_ALIASES_1_1.value, 2), aliasName = _c[0], targetId = _c[1];
+                if (map[targetId])
+                    map[(0, util_1.toID)(aliasName)] = map[targetId];
+            }
+        }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+        finally {
+            try {
+                if (SPECIES_ALIASES_1_1 && !SPECIES_ALIASES_1_1.done && (_b = SPECIES_ALIASES_1["return"])) _b.call(SPECIES_ALIASES_1);
+            }
+            finally { if (e_2) throw e_2.error; }
         }
         SPECIES_BY_ID.push(map);
         gen++;

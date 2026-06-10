@@ -521,11 +521,14 @@ function applySimplifiedMoveDisplayFallback(moveSelectNode, moveName) {
 	}
 }
 
-function buildFallbackMoveMetaText(moveName) {
+function buildFallbackMoveMetaText(moveName, sideSelector) {
 	if (!moveName || moveName === "(No Move)" || typeof moves === "undefined" || !moves) return "";
 	var info = moves[moveName];
 	if (!info) return "";
-	var ppText = typeof info.pp === "number" && info.pp >= 0 ? String(info.pp) : "--";
+	var ppText = "--";
+	if (typeof info.pp === "number" && info.pp >= 0) {
+		ppText = sideSelector === "#p2" ? String(Math.floor(info.pp * 8 / 5)) : String(info.pp);
+	}
 	var accText = "--";
 	if (typeof info.accuracy === "number" && isFinite(info.accuracy)) {
 		accText = String(info.accuracy) + "%";
@@ -814,7 +817,7 @@ function renderSimplifiedSideCard(sideSelector, sideIndex, attacker, defender) {
 		moveRow.find(".simplified-side-move-name").text(moveName || "(No Move)");
 		var metaText = sourceMoveRow.length ? $.trim(sourceMoveRow.find(".move-meta").first().text()) : "";
 		if (!metaText || metaText === "PP -- | ACC --") {
-			var fallbackMetaText = buildFallbackMoveMetaText(moveName);
+			var fallbackMetaText = buildFallbackMoveMetaText(moveName, sideSelector);
 			if (fallbackMetaText) metaText = fallbackMetaText;
 		}
 		moveRow.find(".simplified-side-move-meta").text(metaText);
@@ -1230,9 +1233,9 @@ function performCalculations() {
 	var p1field = createField();
 	var p2field = p1field.clone().swap();
 
-	// Keep speed indicators in sync even if damage calc fails.
-	p1info.find(".sp .totalMod").text(p1.stats.spe);
-	p2info.find(".sp .totalMod").text(p2.stats.spe);
+	// Keep displayed modified stats in sync even if damage calc fails.
+	syncDisplayedModifiedStats(p1info, p1, false);
+	syncDisplayedModifiedStats(p2info, p2, false);
 	updateSpeedClasses(p1info, p2info, p1, p2, p1field);
 
 	try {
@@ -1247,8 +1250,8 @@ function performCalculations() {
 	var battling = [p1, p2];
 	p1.maxDamages = [];
 	p2.maxDamages = [];
-	p1info.find(".sp .totalMod").text(p1.stats.spe);
-	p2info.find(".sp .totalMod").text(p2.stats.spe);
+	syncDisplayedModifiedStats(p1info, p1, true);
+	syncDisplayedModifiedStats(p2info, p2, true);
 	updateSpeedClasses(p1info, p2info, p1, p2, p1field);
 	var fastestSide = getFastestSide(p1, p2, p1field);
 

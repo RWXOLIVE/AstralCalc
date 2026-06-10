@@ -386,6 +386,8 @@ var SV = SS.concat([
     'Echoing Alloy',
     'Dragonize',
     'Mega Sol',
+    'Surge Cutter',
+    'Spicy Spray',
 ]);
 exports.ABILITIES = [[], RBY, GSC, ADV, DPP, BW, XY, SM, SS, SV];
 var Abilities = (function () {

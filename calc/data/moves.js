@@ -907,7 +907,8 @@ var DPP_PATCH = {
         bp: 120,
         type: 'Ground',
         makesContact: true,
-        category: 'Physical'
+        category: 'Physical',
+        recoil: [33, 100]
     },
     Fling: { bp: 0, type: 'Dark', category: 'Physical' },
     Gravity: { bp: 0, type: 'Psychic' },
@@ -1002,6 +1003,7 @@ var DPP_PATCH = {
         category: 'Physical'
     },
     'Energy Ball': { bp: 90, type: 'Grass', category: 'Special' },
+    'Glacial Assault': { bp: 120, type: 'Ice', category: 'Physical' },
     'Gunk Shot': { bp: 120, type: 'Poison', category: 'Physical' },
     'Gyro Ball': {
         bp: 0,
@@ -1653,8 +1655,7 @@ var BW_PATCH = {
     Psystrike: {
         bp: 100,
         type: 'Psychic',
-        category: 'Special',
-        overrideDefensiveStat: 'def'
+        category: 'Special'
     },
     'Quiver Dance': { bp: 0, type: 'Bug' },
     'Razor Shell': {

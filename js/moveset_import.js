@@ -578,7 +578,29 @@ function checkExeptions(poke) {
 	case 'Florges-Blue':
 	case 'Florges-Orange':
 	case 'Florges-Yellow':
+	case 'Florges-Red-Flower':
+	case 'Florges-Yellow-Flower':
+	case 'Florges-Orange-Flower':
+	case 'Florges-Blue-Flower':
+	case 'Florges-White-Flower':
 		poke = "Florges";
+		break;
+	case 'Flabebe-Red-Flower':
+	case 'Flabebe-Yellow-Flower':
+	case 'Flabebe-Orange-Flower':
+	case 'Flabebe-Blue-Flower':
+	case 'Flabebe-White-Flower':
+		poke = "Flabébé";
+		break;
+	case 'Floette-Red-Flower':
+	case 'Floette-Yellow-Flower':
+	case 'Floette-Orange-Flower':
+	case 'Floette-Blue-Flower':
+	case 'Floette-White-Flower':
+		poke = "Floette";
+		break;
+	case 'Floette-Eternal-Flower':
+		poke = "Floette-Eternal";
 		break;
 	}
 	return poke;
@@ -632,9 +654,6 @@ $(document).ready(function () {
 			if (!activePlayerSet) {
 				selectFirstMon();
 			}
-		}
-		if (typeof saveLastEncounterSelection === "function") {
-			saveLastEncounterSelection();
 		}
 		$(allPokemon("#importedSetsOptions")).css("display", "inline");
 	} else if (!$(".set-selector").first().data("select2")) {

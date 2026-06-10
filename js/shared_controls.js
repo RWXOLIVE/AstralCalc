@@ -440,12 +440,10 @@ function autosetWeather(ability, i) {
 	syncTrainerFieldLockButtonStyles();
 }
 
-var lastManualTerrain = "";
 var lastAutoTerrain = ["", ""];
 function autosetTerrain(ability, i) {
 	var currentTerrain = $("input:checkbox[name='terrain']:checked").val() || "No terrain";
 	if (lastAutoTerrain.indexOf(currentTerrain) === -1) {
-		lastManualTerrain = currentTerrain;
 		lastAutoTerrain[1 - i] = "";
 	}
 	// terrain input uses checkbox instead of radio, need to uncheck all first
@@ -470,7 +468,7 @@ function autosetTerrain(ability, i) {
 			break;
 		default:
 			lastAutoTerrain[i] = "";
-			var newTerrain = lastAutoTerrain[1 - i] !== "" ? lastAutoTerrain[1 - i] : lastManualTerrain;
+			var newTerrain = lastAutoTerrain[1 - i];
 			if ("No terrain" !== newTerrain) {
 				$("input:checkbox[name='terrain'][value='" + newTerrain + "']").prop("checked", true);
 			}
@@ -542,6 +540,7 @@ var MOVE_INFO_LOADED = false;
 var FOG_ACCURACY_MULTIPLIER = 0.6;
 var HUSTLE_ACCURACY_MULTIPLIER = 0.8;
 var BRIGHT_POWDER_ACCURACY_MULTIPLIER = 0.9;
+var WEATHER_EVASION_ACCURACY_MULTIPLIER = 0.8;
 var WIDE_LENS_ACCURACY_MULTIPLIER = 1.1;
 var ZOOM_LENS_ACCURACY_MULTIPLIER = 1.2;
 var COMPOUND_EYES_ACCURACY_MULTIPLIER = 1.3;
@@ -685,13 +684,31 @@ function getDisplayedMoveAccuracy(moveAccuracy, weatherValue, moveGroupObj, move
 	if (attackerItem === "Zoom Lens" && doesZoomLensApply(attackerInfo, defenderInfo)) {
 		accuracyMultiplier *= ZOOM_LENS_ACCURACY_MULTIPLIER;
 	}
-	if (defenderInfo.length && getEffectiveItemFromPokeInfo(defenderInfo) === "Bright Powder") {
-		accuracyMultiplier *= BRIGHT_POWDER_ACCURACY_MULTIPLIER;
+	if (defenderInfo.length) {
+		var defenderAbility = defenderInfo.find(".ability").val();
+		if (getEffectiveItemFromPokeInfo(defenderInfo) === "Bright Powder") {
+			accuracyMultiplier *= BRIGHT_POWDER_ACCURACY_MULTIPLIER;
+		}
+		if (weatherValue === "Sand" && defenderAbility === "Sand Veil") {
+			accuracyMultiplier *= WEATHER_EVASION_ACCURACY_MULTIPLIER;
+		}
+		if ((weatherValue === "Snow" || weatherValue === "Hail") && defenderAbility === "Snow Cloak") {
+			accuracyMultiplier *= WEATHER_EVASION_ACCURACY_MULTIPLIER;
+		}
 	}
 	if (accuracyMultiplier !== 1) {
 		return String(Math.max(1, Math.floor(moveAccuracy * accuracyMultiplier))) + "%";
 	}
 	return String(moveAccuracy) + "%";
+}
+
+function getDisplayedMovePP(basePP, moveGroupObj) {
+	if (typeof basePP !== "number" || basePP < 0) return "--";
+	var attackerInfo = moveGroupObj.closest(".poke-info");
+	if (attackerInfo.length && attackerInfo.attr("id") === "p2") {
+		return String(Math.floor(basePP * 8 / 5));
+	}
+	return String(basePP);
 }
 
 function ensureMoveMetaForGroup(moveGroupObj) {
@@ -733,7 +750,7 @@ function updateMoveMetaForGroup(moveGroupObj) {
 	var ppText = "--";
 	var accText = "--";
 	if (info) {
-		if (typeof info.pp === "number" && info.pp >= 0) ppText = String(info.pp);
+		if (typeof info.pp === "number" && info.pp >= 0) ppText = getDisplayedMovePP(info.pp, moveGroupObj);
 		accText = getDisplayedMoveAccuracy(info.accuracy, weather, moveGroupObj, moveCategory);
 	}
 	moveMeta.text("PP " + ppText + " | ACC " + accText);
@@ -934,6 +951,7 @@ var fragsHistoryExpanded = false;
 var FRAG_UNKNOWN_VICTIM_KEY = "__unknown__";
 var deadOpposingSetMap = {};
 var opposingContextSourceSet = "";
+var CURRENT_TRAINER_POKS = [];
 var isRestoringLastEncounterSelection = false;
 var isBootstrappingLastEncounterSelection = true;
 var calcFeatureTutorialState = {
@@ -2069,13 +2087,34 @@ function toDexPokemonId(pokemonName) {
 	return normalizedName.toLowerCase().replace(/[^a-z0-9]+/g, "");
 }
 
+var SPECIES_NAME_ALIASES = {
+	"Flabebe-Red-Flower": "Flabébé",
+	"Floette-Red-Flower": "Floette",
+	"Florges-Red-Flower": "Florges",
+	"Flabebe-Yellow-Flower": "Flabébé",
+	"Flabebe-Orange-Flower": "Flabébé",
+	"Flabebe-Blue-Flower": "Flabébé",
+	"Flabebe-White-Flower": "Flabébé",
+	"Floette-Yellow-Flower": "Floette",
+	"Floette-Orange-Flower": "Floette",
+	"Floette-Blue-Flower": "Floette",
+	"Floette-White-Flower": "Floette",
+	"Floette-Eternal-Flower": "Floette-Eternal",
+	"Florges-Yellow-Flower": "Florges",
+	"Florges-Orange-Flower": "Florges",
+	"Florges-Blue-Flower": "Florges",
+	"Florges-White-Flower": "Florges",
+};
+
 function resolveSetSpeciesNameForDexLookup(pokemonName) {
 	var normalizedName = String(pokemonName || "").trim();
 	if (!normalizedName) return "";
+	if (SPECIES_NAME_ALIASES[normalizedName]) return SPECIES_NAME_ALIASES[normalizedName];
 	if (pokedex[normalizedName]) return normalizedName;
 	var dashIndex = normalizedName.indexOf("-");
 	if (dashIndex > 0) {
 		var baseName = normalizedName.substring(0, dashIndex);
+		if (SPECIES_NAME_ALIASES[baseName]) return SPECIES_NAME_ALIASES[baseName];
 		if (pokedex[baseName]) return baseName;
 	}
 	return normalizedName;
@@ -4972,6 +5011,40 @@ function isSetOptionAvailable(setId) {
 	return !!getSetOptionById(setId);
 }
 
+function getTrainerSetOptionsByLabel(trainerLabel, options) {
+	var normalizedTrainerLabel = String(trainerLabel || "").trim();
+	if (!normalizedTrainerLabel) return [];
+	var sourceOptions = Array.isArray(options) ? options : getSetOptions();
+	var matches = [];
+	for (var i = 0; i < sourceOptions.length; i++) {
+		var option = sourceOptions[i];
+		if (!option || !option.id || !option.set || option.set === "Blank Set") continue;
+		var parsedEntry = parseTrainerPartyEntry(option.id);
+		if (parsedEntry.trainerLabel === normalizedTrainerLabel) {
+			matches.push(option);
+		}
+	}
+	matches.sort(function (leftOption, rightOption) {
+		var leftEntry = parseTrainerPartyEntry(leftOption.id);
+		var rightEntry = parseTrainerPartyEntry(rightOption.id);
+		var leftIndex = getTrainerIndexFromSetData(leftEntry.setData) || leftEntry.sortIndex || 0;
+		var rightIndex = getTrainerIndexFromSetData(rightEntry.setData) || rightEntry.sortIndex || 0;
+		if (leftIndex !== rightIndex) return leftIndex - rightIndex;
+		return String(leftOption.id).localeCompare(String(rightOption.id));
+	});
+	return matches;
+}
+
+function selectTrainerFightByLabel(trainerLabel, preferredSetId) {
+	var trainerOptions = getTrainerSetOptionsByLabel(trainerLabel);
+	if (!trainerOptions.length) return false;
+	var normalizedPreferredSetId = String(preferredSetId || "").trim();
+	var targetSetId = normalizedPreferredSetId && getSetOptionById(normalizedPreferredSetId, trainerOptions)
+		? normalizedPreferredSetId
+		: trainerOptions[0].id;
+	return setSelectedSetIdForSide("p2", targetSetId);
+}
+
 function getSetOptionById(setId, options) {
 	var normalizedSetId = String(setId || "").trim();
 	if (!normalizedSetId) return null;
@@ -5011,13 +5084,34 @@ function isSetIdKnownInSetdex(setId) {
 function setSelectedSetIdForSide(sideId, setId) {
 	var normalizedSetId = String(setId || "").trim();
 	if (!normalizedSetId) return false;
-	if (!isSetIdKnownInSetdex(normalizedSetId)) return false;
+	if (!isSetOptionAvailable(normalizedSetId)) {
+		if (window.console && typeof window.console.debug === "function") {
+			window.console.debug("[AstralCalc] setSelectedSetIdForSide skipped unavailable set", {
+				sideId: sideId,
+				setId: normalizedSetId
+			});
+		}
+		return false;
+	}
 	var selector = $("#" + sideId + " .set-selector").first();
 	if (!selector.length) return false;
+	function syncSetSelectorDisplayText() {
+		var select2Container = selector.next(".select2-container");
+		if (!select2Container.length) {
+			select2Container = selector.siblings(".select2-container").first();
+		}
+		select2Container.find(".select2-chosen").first().text(formatSetNameForDisplay(normalizedSetId));
+	}
 	var currentSetId = String(selector.val() || "").trim();
-	if (currentSetId === normalizedSetId) return true;
+	if (currentSetId === normalizedSetId) {
+		syncSetSelectorDisplayText();
+		return true;
+	}
 	selector.val(normalizedSetId).change();
 	var appliedSetId = String(selector.val() || "").trim();
+	if (appliedSetId === normalizedSetId) {
+		syncSetSelectorDisplayText();
+	}
 	return appliedSetId === normalizedSetId;
 }
 
@@ -5038,8 +5132,15 @@ function saveLastEncounterSelection() {
 	};
 	if (opposingSetId) {
 		var opposingEntry = parseTrainerPartyEntry(opposingSetId);
-		if (opposingEntry && opposingEntry.setData) {
+		if (opposingEntry && opposingEntry.trainerLabel) {
+			payload.trainerLabel = opposingEntry.trainerLabel;
+		}
+		if (opposingEntry) {
 			var trainerIndex = getTrainerIndexFromSetData(opposingEntry.setData);
+			var trainerBounds = getCurrentTrainerIndexBounds();
+			if (trainerBounds && trainerBounds.min > 0) {
+				trainerIndex = trainerBounds.min;
+			}
 			if (!Number.isNaN(trainerIndex) && trainerIndex > 0) {
 				payload.trainerIndex = trainerIndex;
 				localStorage.setItem("lasttimetrainer", String(trainerIndex));
@@ -5047,6 +5148,9 @@ function saveLastEncounterSelection() {
 		}
 	}
 	localStorage.setItem(LAST_ENCOUNTER_STORAGE_KEY, JSON.stringify(payload));
+	if (window.console && typeof window.console.debug === "function") {
+		window.console.debug("[AstralCalc] saveLastEncounterSelection " + JSON.stringify(payload));
+	}
 }
 
 function restoreLastEncounterSelection() {
@@ -5054,10 +5158,30 @@ function restoreLastEncounterSelection() {
 	var savedSelection = getStoredLastEncounterSelection();
 	var restoredOpposing = false;
 	var restoredPlayer = false;
+	if (window.console && typeof window.console.debug === "function") {
+		window.console.debug("[AstralCalc] restoreLastEncounterSelection:start " + JSON.stringify(savedSelection));
+	}
 
 	try {
+		var savedOpposingTrainerLabel = savedSelection.opposingSet
+			? parseTrainerPartyEntry(savedSelection.opposingSet).trainerLabel
+			: "";
 		if (savedSelection.opposingSet) {
 			restoredOpposing = setSelectedSetIdForSide("p2", savedSelection.opposingSet);
+			if (!restoredOpposing) {
+				var currentOpposingSetId = getSelectedSetIdForSide("p2");
+				var currentOpposingTrainerLabel = currentOpposingSetId
+					? parseTrainerPartyEntry(currentOpposingSetId).trainerLabel
+					: "";
+				if (currentOpposingSetId === savedSelection.opposingSet ||
+					(savedOpposingTrainerLabel && currentOpposingTrainerLabel === savedOpposingTrainerLabel)) {
+					restoredOpposing = true;
+				}
+			}
+		}
+
+		if (!restoredOpposing && savedSelection.trainerLabel) {
+			restoredOpposing = selectTrainerFightByLabel(savedSelection.trainerLabel, savedSelection.opposingSet);
 		}
 
 		if (!restoredOpposing) {
@@ -5075,7 +5199,16 @@ function restoreLastEncounterSelection() {
 		if (savedSelection.playerSet) {
 			restoredPlayer = setSelectedSetIdForSide("p1", savedSelection.playerSet);
 		}
-		return restoredOpposing || restoredPlayer;
+		if (window.console && typeof window.console.debug === "function") {
+			window.console.debug("[AstralCalc] restoreLastEncounterSelection:result " + JSON.stringify({
+				savedSelection: savedSelection,
+				restoredOpposing: restoredOpposing,
+				restoredPlayer: restoredPlayer,
+				currentOpposing: getSelectedSetIdForSide("p2"),
+				currentPlayer: getSelectedSetIdForSide("p1")
+			}));
+		}
+		return restoredOpposing || (!savedSelection.opposingSet && restoredPlayer);
 	} finally {
 		isRestoringLastEncounterSelection = false;
 	}
@@ -5821,6 +5954,18 @@ function isTrainerFieldLockEnabled(fieldId, trainerKey) {
 	return getTrainerFieldLockedIdsForKey(key).indexOf(normalizedId) !== -1;
 }
 
+function isTrainerFieldExclusiveGroupLocked(exclusiveGroup, trainerKey) {
+	var normalizedGroup = String(exclusiveGroup || "").trim();
+	if (!normalizedGroup) return false;
+	var key = String(trainerKey || getCurrentTrainerFieldLockKey()).trim();
+	if (!key) return false;
+	var lockedIds = getTrainerFieldLockedIdsForKey(key);
+	for (var i = 0; i < lockedIds.length; i++) {
+		if (getTrainerFieldExclusiveGroup(lockedIds[i]) === normalizedGroup) return true;
+	}
+	return false;
+}
+
 function applyTrainerFieldLocksForCurrentTrainer(options) {
 	var applyOptions = options || {};
 	var forceTrigger = !!applyOptions.forceTrigger;
@@ -6131,6 +6276,9 @@ function syncTerrainForSelection(fullSetName, trainerEntries) {
 	var terrainInputs = $("input:checkbox[name='terrain']");
 	if (!terrainInputs.length) return;
 	if (!resolvedTerrain.hasTerrain) {
+		if (!isTrainerFieldExclusiveGroupLocked("terrain")) {
+			terrainInputs.prop("checked", false);
+		}
 		var activeInput = terrainInputs.filter(":checked").first();
 		getTerrainEffects.call(activeInput.length ? activeInput[0] : terrainInputs.first()[0]);
 		var activeTerrain = activeInput.length ? String(activeInput.val() || "") : "";
@@ -6343,6 +6491,16 @@ $(".set-selector").change(function () {
 					(set.ivs && set.ivs[LEGACY_STATS[gen][i]] !== undefined) ? set.ivs[LEGACY_STATS[gen][i]] : 31);
 				pokeObj.find("." + LEGACY_STATS[gen][i] + " .dvs").val(
 					(set.dvs && set.dvs[LEGACY_STATS[gen][i]] !== undefined) ? set.dvs[LEGACY_STATS[gen][i]] : 15);
+				var boostKey = legacyStatToStat(LEGACY_STATS[gen][i]);
+				var boostValue = 0;
+				if (set.boosts && typeof set.boosts === "object") {
+					if (set.boosts[boostKey] !== undefined) {
+						boostValue = set.boosts[boostKey];
+					} else if (set.boosts[LEGACY_STATS[gen][i]] !== undefined) {
+						boostValue = set.boosts[LEGACY_STATS[gen][i]];
+					}
+				}
+				pokeObj.find("." + LEGACY_STATS[gen][i] + " .boost").val(boostValue);
 			}
 			setSelectValueIfValid(pokeObj.find(".nature"), set.nature, "Hardy");
 			var abilityFallback = (typeof pokemon.abilities !== "undefined") ? pokemon.abilities[0] : "";
@@ -6818,6 +6976,52 @@ function getModifiedStatForStage(rawStat, stage) {
 	return Math.floor(raw * 2 / (2 - boost));
 }
 
+var DISPLAYED_MODIFIER_STAT_ROWS = {
+	"at": "atk",
+	"df": "def",
+	"sa": "spa",
+	"sd": "spd",
+	"sl": "spa",
+	"sp": "spe"
+};
+
+function ensureStatTotalModNode(statRow) {
+	if (!statRow || !statRow.length) return $();
+	var totalModNode = statRow.find(".totalMod").first();
+	if (totalModNode.length) return totalModNode;
+	statRow.append('<td><span class="totalMod">---</span></td>');
+	return statRow.find(".totalMod").last();
+}
+
+function getDisplayedModifiedStatValue(pokemon, statKey, preferCalculatedStats) {
+	if (!pokemon) return "---";
+	var normalizedStat = statKey === "spc" ? "spa" : statKey;
+	if (preferCalculatedStats && pokemon.stats && isFinite(pokemon.stats[normalizedStat])) {
+		return pokemon.stats[normalizedStat];
+	}
+	var statSource = pokemon.rawStats || pokemon.stats || {};
+	var rawStat = statSource[normalizedStat];
+	if (!isFinite(rawStat)) return "---";
+	var boostSource = pokemon.boosts || {};
+	var boost = boostSource[normalizedStat];
+	if (typeof boost === "undefined" && normalizedStat === "spa" && typeof boostSource.spc !== "undefined") {
+		boost = boostSource.spc;
+	}
+	return getModifiedStatForStage(rawStat, boost);
+}
+
+function syncDisplayedModifiedStats(pokeInfo, pokemon, preferCalculatedStats) {
+	if (!pokeInfo || !pokeInfo.length) return;
+	for (var legacyStat in DISPLAYED_MODIFIER_STAT_ROWS) {
+		if (!Object.prototype.hasOwnProperty.call(DISPLAYED_MODIFIER_STAT_ROWS, legacyStat)) continue;
+		var statRow = pokeInfo.find("." + legacyStat).first();
+		if (!statRow.length) continue;
+		ensureStatTotalModNode(statRow).text(
+			getDisplayedModifiedStatValue(pokemon, DISPLAYED_MODIFIER_STAT_ROWS[legacyStat], preferCalculatedStats)
+		);
+	}
+}
+
 function applyPowerSplitToPair(p1, p2) {
 	if (!p1 || !p2) return;
 	var isPowerSplitActive = $("#powerSplitL").prop("checked") || $("#powerSplitR").prop("checked");
@@ -7092,8 +7296,16 @@ $(".gen").change(function () {
 	var itemOptions = getSelectOptions(items, true);
 	$("select.item").find("option").remove().end().append("<option value=\"\">(none)</option>" + itemOptions);
 
-	$(".set-selector").val(getFirstValidSetOption().id);
-	$(".set-selector").change();
+	var firstValidSet = getFirstValidSetOption();
+	if (firstValidSet && firstValidSet.id) {
+		if (window.console && typeof window.console.debug === "function") {
+			window.console.debug("[AstralCalc] gen change selecting default encounter", {
+				firstValidSet: firstValidSet.id
+			});
+		}
+		$(".set-selector").val(firstValidSet.id);
+		$(".set-selector").change();
+	}
 });
 
 function getFirstValidSetOptionFromOptions(sets) {
@@ -8003,6 +8215,9 @@ function switchIconDouble(){
 }
 
 $(document).ready(function () {
+	if (window.console && typeof window.console.info === "function") {
+		window.console.info("[AstralCalc] lastencounter-build v5");
+	}
 	var params = new URLSearchParams(window.location.search);
 	var g = GENERATION[params.get('gen')] || 9;
 	$("#gen" + g).prop("checked", true);
@@ -8040,6 +8255,11 @@ $(document).ready(function () {
 		if (!didRestoreLastEncounter) {
 			var firstValidSet = getFirstValidSetOption();
 			if (firstValidSet && firstValidSet.id) {
+				if (window.console && typeof window.console.debug === "function") {
+					window.console.debug("[AstralCalc] document ready fallback selecting default encounter", {
+						firstValidSet: firstValidSet.id
+					});
+				}
 				$(".set-selector").val(firstValidSet.id);
 				$(".set-selector").change();
 			}
@@ -8047,7 +8267,6 @@ $(document).ready(function () {
 	} finally {
 		isBootstrappingLastEncounterSelection = false;
 	}
-	saveLastEncounterSelection();
 	updateAllMoveMetaDisplays();
 	startAppUpdateChecker();
 	window.setTimeout(function () {
