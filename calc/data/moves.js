@@ -1254,7 +1254,7 @@ var BW_PATCH = {
     Thunder: { secondaries: true },
     Thunderbolt: { secondaries: true },
     Uproar: { bp: 90 },
-    Whirlpool: { bp: 35 },
+    Whirlpool: { bp: 60 },
     'Petal Dance': { bp: 90 },
     Tackle: { bp: 40 },
     Thrash: { bp: 120 },

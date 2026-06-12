@@ -716,7 +716,7 @@ var RBY = {
     Seaking: { types: ['Water'], bs: { hp: 80, at: 92, df: 65, sp: 68, sl: 65 }, weightkg: 39 },
     Seel: {
         types: ['Water'],
-        bs: { hp: 65, at: 55, df: 70, sp: 45, sl: 70 },
+        bs: { hp: 90, at: 55, df: 70, sp: 45, sl: 70 },
         weightkg: 90,
         nfe: true
     },
@@ -1340,7 +1340,7 @@ var GSC_PATCH = {
     },
     Phanpy: {
         types: ['Ground'],
-        bs: { hp: 90, at: 60, df: 60, sa: 40, sd: 40, sp: 40 },
+        bs: { hp: 90, at: 90, df: 90, sa: 30, sd: 60, sp: 40 },
         weightkg: 33.5,
         nfe: true
     },
@@ -3023,7 +3023,7 @@ var DPP_PATCH = {
     },
     Buizel: {
         types: ['Water', 'Normal'],
-        bs: { hp: 55, at: 65, df: 35, sa: 60, sd: 30, sp: 85 },
+        bs: { hp: 75, at: 70, df: 35, sa: 75, sd: 30, sp: 90 },
         weightkg: 29.5,
         nfe: true,
         abilities: { 0: 'Swift Swim' }
@@ -5191,7 +5191,7 @@ var XY_PATCH = {
     },
     Clauncher: {
         types: ['Water'],
-        bs: { hp: 50, at: 53, df: 62, sa: 58, sd: 63, sp: 44 },
+        bs: { hp: 61, at: 53, df: 65, sa: 61, sd: 63, sp: 44 },
         weightkg: 8.3,
         abilities: { 0: 'Mega Launcher' },
         nfe: true

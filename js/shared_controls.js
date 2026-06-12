@@ -1876,11 +1876,45 @@ function formatSetNameForDisplay(setId) {
 }
 
 function isDittoSetId(setId) {
-	var parsedSet = parseSetId(setId);
-	return toDexPokemonId(parsedSet.species) === "ditto";
+	var normalizedSetId = String(setId || "").trim();
+	if (!normalizedSetId) return false;
+
+	var parsedSet = parseSetId(normalizedSetId);
+	if (toDexPokemonId(parsedSet.species) === "ditto") return true;
+
+	var matchedOption = getSetOptionById(normalizedSetId);
+	if (matchedOption && toDexPokemonId(matchedOption.pokemon) === "ditto") return true;
+
+	var trainerEntry = parseTrainerPartyEntry(normalizedSetId);
+	return !!(trainerEntry && toDexPokemonId(trainerEntry.pokemonName) === "ditto");
+}
+
+function ensureDittoTransformButtonPlacement() {
+	var placements = [
+		{buttonSelector: "#transformL", containerSelector: "#p1 .i-f-hp"},
+		{buttonSelector: "#transformR", containerSelector: "#p2 .i-f-o-hp"}
+	];
+	for (var i = 0; i < placements.length; i++) {
+		var placement = placements[i];
+		var button = $(placement.buttonSelector);
+		var container = $(placement.containerSelector).first();
+		if (!button.length || !container.length) continue;
+
+		button.addClass("ditto-transform-btn");
+		var slot = container.children(".ditto-transform-slot").first();
+		if (!slot.length) {
+			slot = $('<div class="ditto-transform-slot" title="If Ditto is selected, copy the opposing Pokemon to transform"></div>');
+			slot.hide();
+			container.append(slot);
+		}
+		if (button.parent()[0] !== slot[0]) {
+			slot.append(button);
+		}
+	}
 }
 
 function syncDittoTransformButtons() {
+	ensureDittoTransformButtonPlacement();
 	var p1SetId = $("#p1 .set-selector").val();
 	var p2SetId = $("#p2 .set-selector").val();
 	var showLeft = isDittoSetId(p1SetId);
@@ -1888,9 +1922,13 @@ function syncDittoTransformButtons() {
 	var transformL = $("#transformL");
 	var transformR = $("#transformR");
 	var transformRow = $("#transformRow");
+	var transformLSlot = transformL.closest(".ditto-transform-slot");
+	var transformRSlot = transformR.closest(".ditto-transform-slot");
 	if (transformL.length) transformL.toggle(showLeft);
+	if (transformLSlot.length) transformLSlot.toggle(showLeft);
 	if (transformR.length) transformR.toggle(showRight);
-	if (transformRow.length) transformRow.toggle(showLeft || showRight);
+	if (transformRSlot.length) transformRSlot.toggle(showRight);
+	if (transformRow.length) transformRow.hide();
 }
 
 function getTopSpriteNodeForPokeInfo(pokeInfo) {

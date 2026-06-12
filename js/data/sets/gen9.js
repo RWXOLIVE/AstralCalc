@@ -366,7 +366,7 @@ var SETDEX_SV = {
     "Bug Catcher James | Petalburg Woods": {
             "index": "0000000026",
             "level": 15,
-            "ability": "Multiscale",
+            "ability": "Shield Dust",
             "item": "Leftovers",
             "nature": "Timid",
             "ivs": {
@@ -380,12 +380,12 @@ var SETDEX_SV = {
             "index": "0000000027",
             "level": 16,
             "ability": "Swift Swim",
-            "item": "Loaded Dice",
+            "item": "Oran Berry",
             "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Cut","Rock Blast","Aqua Jet","Bulldoze"]
+            "moves": ["Cut","Rock Throw","Aqua Jet","Bulldoze"]
         },
     "Leader Brock | Rustboro Gym": {
             "index": "0000000070",
@@ -423,7 +423,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Superpower","Double-Edge"]
+            "moves": ["Brick Break","Take Down"]
         }
     },
     "Marill": {

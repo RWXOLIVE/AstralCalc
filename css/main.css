@@ -1363,6 +1363,13 @@ select.toxic-counter {
     vertical-align: middle;
     white-space: nowrap;
 }
+.poke-info .ditto-transform-slot {
+    display: none;
+    margin-top: 0.45em;
+}
+.poke-info .ditto-transform-btn {
+    min-width: 7.25em;
+}
 .poke-info .max-btn {
 	font-size: 0.8em;
 	width: 2.5em;
