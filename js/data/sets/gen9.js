@@ -222,7 +222,7 @@ var SETDEX_SV = {
     "Remoraid": {
     "Aqua Grunt | Petalburg Woods": {  
         "index": "0000000015",
-        "level": 17,
+        "level": 14,
         "ability": "Sniper",
         "item": "King's Rock", 
         "nature": "Mild",
@@ -235,7 +235,7 @@ var SETDEX_SV = {
     "Gastly": {
     "Aqua Grunt | Petalburg Woods": {  
             "index": "0000000016",
-            "level": 18,
+            "level": 13,
             "ability": "Levitate",
             "item": "Eviolite", 
             "nature": "Bold",
@@ -248,7 +248,7 @@ var SETDEX_SV = {
     "Deino": {
     "Aqua Grunt | Petalburg Woods": {  
             "index": "0000000017",
-            "level": 17,
+            "level": 14,
             "ability": "Hustle",
             "item": "Zoom Lens", 
             "nature": "Jolly",
@@ -261,7 +261,7 @@ var SETDEX_SV = {
     "Pawniard": {
     "Aqua Grunt | Petalburg Woods": {  
             "index": "0000000018",
-            "level": 18,
+            "level": 15,
             "ability": "Inner Focus",
             "item": "Chople Berry", 
             "nature": "Jolly",
@@ -274,7 +274,7 @@ var SETDEX_SV = {
     "Binacle": {
     "Aqua Grunt | Petalburg Woods": {  
             "index": "0000000019",
-            "level": 19,
+            "level": 15,
             "ability": "Tough Claws",
             "item": "Lum Berry", 
             "nature": "Jolly",
