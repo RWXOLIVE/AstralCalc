@@ -768,7 +768,7 @@ var RBY = {
     },
     Staryu: {
         types: ['Water'],
-        bs: { hp: 30, at: 45, df: 55, sp: 85, sl: 70 },
+        bs: { hp: 60, at: 45, df: 60, sp: 85, sl: 70 },
         weightkg: 34.5,
         nfe: true
     },
@@ -839,7 +839,7 @@ var RBY = {
     },
     Vulpix: {
         types: ['Fire'],
-        bs: { hp: 40, at: 41, df: 40, sp: 65, sl: 50 },
+        bs: { hp: 75, at: 41, df: 40, sp: 75, sl: 50 },
         weightkg: 9.9,
         nfe: true
     },
@@ -1015,7 +1015,7 @@ var GSC_PATCH = {
     Spearow: { bs: { sa: 31, sd: 31 } },
     Squirtle: { bs: { sa: 50, sd: 64 } },
     Starmie: { bs: { sa: 100, sd: 85 }, gender: 'N' },
-    Staryu: { bs: { sa: 70, sd: 55 }, gender: 'N' },
+    Staryu: { bs: { sa: 70, sd: 90 }, gender: 'N' },
     Tangela: { bs: { sa: 100, sd: 40 } },
     Tauros: { bs: { sa: 40, sd: 70 } },
     Tentacool: { bs: { sa: 50, sd: 100 } },
@@ -1027,7 +1027,7 @@ var GSC_PATCH = {
     Victreebel: { bs: { sa: 100, sd: 100 } },
     Vileplume: { bs: { sa: 110, sd: 95 } },
     Voltorb: { bs: { sa: 55, sd: 55 }, gender: 'N' },
-    Vulpix: { bs: { sa: 50, sd: 65 } },
+    Vulpix: { bs: { sa: 75, sd: 75 } },
     Wartortle: { bs: { sa: 65, sd: 80 } },
     Weedle: { bs: { sa: 20, sd: 20 } },
     Weepinbell: { bs: { sa: 85, sd: 45 } },
@@ -1035,7 +1035,7 @@ var GSC_PATCH = {
     Wigglytuff: { bs: { sa: 95, sd: 74 } },
     Zapdos: { bs: { sa: 125, sd: 90 }, gender: 'N' },
     Zubat: { bs: { sa: 30, sd: 40 } },
-    Aipom: { types: ['Normal'], bs: { hp: 55, at: 70, df: 55, sa: 40, sd: 55, sp: 85 }, weightkg: 11.5 },
+    Aipom: { types: ['Normal'], bs: { hp: 65, at: 88, df: 65, sa: 10, sd: 65, sp: 96 }, weightkg: 11.5 },
     Ampharos: {
         types: ['Electric'],
         bs: { hp: 90, at: 75, df: 85, sa: 115, sd: 90, sp: 55 },
@@ -3330,7 +3330,7 @@ var DPP_PATCH = {
     },
     Kricketune: {
         types: ['Bug'],
-        bs: { hp: 77, at: 75, df: 58, sa: 73, sd: 62, sp: 65 },
+        bs: { hp: 110, at: 90, df: 58, sa: 73, sd: 62, sp: 65 },
         weightkg: 25.5,
         abilities: { 0: 'Swarm' }
     },
@@ -4002,7 +4002,7 @@ var BW_PATCH = {
     },
     Ducklett: {
         types: ['Water', 'Flying'],
-        bs: { hp: 62, at: 54, df: 50, sa: 54, sd: 50, sp: 55 },
+        bs: { hp: 62, at: 54, df: 50, sa: 54, sd: 50, sp: 79 },
         weightkg: 5.5,
         nfe: true,
         abilities: { 0: 'Keen Eye' }
@@ -7339,7 +7339,7 @@ var SM_PATCH = {
     },
     Steenee: {
         types: ['Grass', 'Fighting'],
-        bs: { hp: 60, at: 80, df: 65, sa: 40, sd: 54, sp: 67 },
+        bs: { hp: 60, at: 80, df: 75, sa: 40, sd: 54, sp: 67 },
         weightkg: 8.2,
         nfe: true,
         abilities: { 0: 'Leaf Guard' }
@@ -7462,7 +7462,7 @@ var SM_PATCH = {
     },
     'Vulpix-Alola': {
         types: ['Ice'],
-        bs: { hp: 40, at: 41, df: 40, sa: 65, sd: 65, sp: 65 },
+        bs: { hp: 75, at: 41, df: 40, sa: 75, sd: 75, sp: 75 },
         weightkg: 9.9,
         baseSpecies: 'Vulpix',
         nfe: true,
@@ -7869,7 +7869,7 @@ var SS_PATCH = {
     },
     Cufant: {
         types: ['Steel'],
-        bs: { hp: 72, at: 80, df: 49, sa: 40, sd: 49, sp: 40 },
+        bs: { hp: 105, at: 80, df: 61, sa: 6, sd: 49, sp: 40 },
         weightkg: 100,
         abilities: { 0: 'Sheer Force' },
         nfe: true
@@ -8546,7 +8546,7 @@ var SS_PATCH = {
     },
     'Slowpoke-Galar': {
         types: ['Psychic'],
-        bs: { hp: 90, at: 65, df: 65, sa: 40, sd: 40, sp: 15 },
+        bs: { hp: 90, at: 85, df: 90, sa: 70, sd: 70, sp: 15 },
         weightkg: 36,
         nfe: true,
         abilities: { 0: 'Gluttony' },
@@ -9680,7 +9680,7 @@ var SV_PATCH = {
     },
     Pawmo: {
         types: ['Electric', 'Fighting'],
-        bs: { hp: 60, at: 75, df: 40, sa: 50, sd: 40, sp: 85 },
+        bs: { hp: 65, at: 80, df: 60, sa: 70, sd: 60, sp: 85 },
         weightkg: 6.5,
         abilities: { 0: 'Volt Absorb' },
         nfe: true
