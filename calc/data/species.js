@@ -1516,7 +1516,7 @@ var GSC_PATCH = {
     },
     Teddiursa: {
         types: ['Normal'],
-        bs: { hp: 60, at: 90, df: 50, sa: 50, sd: 50, sp: 80 },
+        bs: { hp: 60, at: 90, df: 75, sa: 50, sd: 75, sp: 80 },
         weightkg: 8.8,
         nfe: true
     },
