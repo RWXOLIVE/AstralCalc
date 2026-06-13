@@ -7869,7 +7869,7 @@ var SS_PATCH = {
     },
     Cufant: {
         types: ['Steel'],
-        bs: { hp: 105, at: 80, df: 61, sa: 6, sd: 49, sp: 40 },
+        bs: { hp: 105, at: 80, df: 61, sa: 60, sd: 49, sp: 40 },
         weightkg: 100,
         abilities: { 0: 'Sheer Force' },
         nfe: true
