@@ -458,7 +458,7 @@ var SETDEX_SV = {
             "level": 16,
             "ability": "Minus",
             "doubles": "True",
-            "item": "Terrain Extender",
+            "item": "Oran Berry",
             "nature": "Timid",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
