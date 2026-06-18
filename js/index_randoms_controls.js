@@ -365,6 +365,7 @@ function ensureSimplifiedSideCard(sideSelector) {
 				'<span class="simplified-side-move-crit-wrap">' +
 					'<input aria-describedby="criticalHitInstruction" class="simplified-side-move-crit-input visually-hidden" type="checkbox" id="' + critInputId + '" />' +
 					'<label class="btn crit-btn simplified-side-move-crit-btn" for="' + critInputId + '" title="Force this attack to be a critical hit?">Crit</label>' +
+					'<span class="move-crit-rate-display simplified-side-move-crit-rate" title="Current crit chance from passive crit-stage modifiers.">1/16</span>' +
 				"</span>" +
 				'<span class="simplified-side-move-damage simplified-damage-chip"></span>' +
 			"</div>"
@@ -418,6 +419,7 @@ function ensureSimplifiedSideCard(sideSelector) {
 					'<span class="simplified-side-hp-paren">(</span>' +
 					'<input type="number" min="0" max="100" step="1" class="simplified-side-percent-hp-input" />' +
 					'<span class="simplified-side-hp-percent">%)</span>' +
+					'<span class="side-residual-chip side-residual-chip-hp simplified-side-residual-chip" hidden></span>' +
 				"</div>" +
 				'<div class="hpbar simplified-side-hpbar hp-green"></div>' +
 			"</div>" +
@@ -822,6 +824,7 @@ function renderSimplifiedSideCard(sideSelector, sideIndex, attacker, defender) {
 		}
 		moveRow.find(".simplified-side-move-meta").text(metaText);
 		moveRow.toggleClass("is-meta-hidden", !showMoveMeta || !metaText);
+		moveRow.find(".move-crit-rate-display").toggle(!!showMoveMeta);
 		var sourceCritToggle = sourceMoveRow.find(".move-crit").first();
 		var simplifiedCritToggle = moveRow.find(".simplified-side-move-crit-input").first();
 		if (simplifiedCritToggle.length) {
@@ -1237,6 +1240,8 @@ function performCalculations() {
 	syncDisplayedModifiedStats(p1info, p1, false);
 	syncDisplayedModifiedStats(p2info, p2, false);
 	updateSpeedClasses(p1info, p2info, p1, p2, p1field);
+	renderSideSupplementalDisplays("#p1", p1, p1field);
+	renderSideSupplementalDisplays("#p2", p2, p2field);
 
 	try {
 		damageResults = calculateAllMoves(gen, p1, p1field, p2, p2field);

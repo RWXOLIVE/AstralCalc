@@ -281,6 +281,18 @@ function normalizeStatusLabel(status) {
 	}
 }
 
+function cloneImportedSpecies(speciesData) {
+	if (!speciesData || typeof speciesData !== "object") return speciesData;
+	if (typeof deepCloneJsonValue === "function") {
+		return deepCloneJsonValue(speciesData, {});
+	}
+	try {
+		return JSON.parse(JSON.stringify(speciesData));
+	} catch (err) {
+		return $.extend ? $.extend(true, {}, speciesData) : speciesData;
+	}
+}
+
 function getStats(currentPoke, rows, offset) {
 	currentPoke.nature = "Serious";
 	var currentEV;
@@ -290,7 +302,10 @@ function getStats(currentPoke, rows, offset) {
 	var currentNature;
 	currentPoke.level = 100;
 	for (var x = offset; x < offset + 9; x++) {
-		var currentRow = rows[x] ? rows[x].split(/[/:]/) : '';
+		if (!rows[x] || !rows[x].trim()) {
+			break;
+		}
+		var currentRow = rows[x].split(/[/:]/);
 		var evs = {};
 		var ivs = {};
 		var ev;
@@ -516,7 +531,7 @@ function addSets(pokes, name) {
 		for (var j = 0; j < currentRow.length; j++) {
 			currentRow[j] = checkExeptions(currentRow[j].trim());
 			if (calc.SPECIES[9][currentRow[j].trim()] !== undefined) {
-				currentPoke = calc.SPECIES[9][currentRow[j].trim()];
+				currentPoke = cloneImportedSpecies(calc.SPECIES[9][currentRow[j].trim()]);
 				currentPoke.name = currentRow[j].trim();
 				currentPoke.item = getItem(currentRow, j + 1);
 				if (j === 1 && currentRow[0].trim()) {

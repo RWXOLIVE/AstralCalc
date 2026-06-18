@@ -253,6 +253,7 @@ img.trainer-pok-visual {
 .trainer-pok:hover {
     outline: 2px solid;
     outline-color: #1abc9c;
+    outline-offset: -1px;
 }
 
 .trainer-pok.right-side.trainer-pok-dead {
@@ -298,6 +299,32 @@ fieldset {
 legend {
     font-weight: bold;
     text-align: center;
+}
+.poke-side-legend {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.35em;
+    flex-wrap: wrap;
+}
+.poke-side-legend-title,
+.poke-info .side-residual-chip {
+    width: auto;
+}
+.poke-info .side-residual-chip {
+    min-width: 0;
+    padding: 2px 7px;
+    border: 1px solid rgba(70, 112, 117, 0.55);
+    border-radius: 999px;
+    background: #7fc4c2;
+    color: #17343a;
+    font-size: 0.78em;
+    line-height: 1.2;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+.poke-info .side-residual-chip-hp {
+    margin-left: 0.45em;
 }
 th, td {
     padding: 0;
@@ -688,6 +715,7 @@ body.layout-simplified .simplified-side-card .btn {
     height: 4.4em;
     margin-left: auto;
     flex: 0 0 auto;
+    overflow: hidden;
 }
 
 .simplified-side-card.side-right .simplified-side-form-wrap {
@@ -1026,11 +1054,23 @@ body.layout-simplified .simplified-side-control-label select {
     display: inline-flex;
     align-items: center;
     justify-content: center;
+    gap: 4px;
 }
 
 .simplified-side-move-crit-btn {
     margin: 0;
     min-width: 2.8em;
+}
+
+.simplified-side-move-crit-rate {
+    width: 2.55em;
+    min-width: 2.55em;
+    height: 1.95em;
+    font-size: 0.66em;
+}
+
+.simplified-side-residual-chip {
+    margin-left: 0.5em;
 }
 
 .simplified-side-move-name {
@@ -1296,6 +1336,7 @@ body.layout-simplified .simplified-side-control-label select {
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
     pointer-events: none;
 }
 #p1 .poke-inline-sprite,
@@ -1354,12 +1395,28 @@ select.toxic-counter {
     height: 1em;
     padding: 3px 3px;
 }
+.poke-info .move-crit-rate-display {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-width: 3.25em;
+  height: 1.35rem;
+  padding: 0 6px;
+
+  font-size: 0.75rem;
+  font-weight: 700;
+  line-height: 1;
+
+  white-space: nowrap;
+  box-sizing: border-box;
+}
 .poke-info .move-meta {
     display: inline-block;
-    min-width: 8.1em;
+    min-width: 7.2em;
     font-size: 0.72em;
     line-height: 1.15;
-    margin-left: 0.15em;
+    margin-left: 0.08em;
     vertical-align: middle;
     white-space: nowrap;
 }
@@ -1838,6 +1895,12 @@ nav .nav {
 .trainer-pok.sprite-icon {
     vertical-align: middle;
     flex: 0 0 auto;
+}
+
+.poke-inline-sprite.sprite-icon-expanded,
+.simplified-side-form-sprite.sprite-icon-expanded {
+    transform: scale(2);
+    transform-origin: center center;
 }
 
 .sprite-portrait {

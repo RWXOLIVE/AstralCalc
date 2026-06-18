@@ -6,7 +6,7 @@
     <link rel="icon" type="image/gif" href="img/totodile.gif"  >
     <title>Astral Emerald Damage Calculator</title>
     <link type="text/css" rel="stylesheet" href="./js/vendor/select2/select2.css" />
-    <link type="text/css" rel="stylesheet" href="./css/main.css?ae338c99" />
+    <link type="text/css" rel="stylesheet" href="./css/main.css?c803f8b9" />
     <link type="text/css" rel="stylesheet" href="./css/vendor/bootstrap.css" />
     <link type="text/css" rel="stylesheet" href="./css/dark-theme.css" id="dark-theme-styles">
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -645,6 +645,7 @@
                     <label for="currentHpL1">Current HP</label>
                     <input class="current-hp calc-trigger" id="currentHpL1" value="341" />/<span class="max-hp">341</span> (
                     <input class="percent-hp calc-trigger" value="100" />%)
+                        <span class="side-residual-chip side-residual-chip-hp" hidden></span>
                         <input class="visually-hidden max calc-trigger btn-input" type="checkbox" id="maxL" />
                         <label class="btn btn-xwide gen-specific g8 hide" for="maxL"
                         title="Use the corresponding Max Move?">Dynamax</label>
@@ -665,6 +666,7 @@
                     <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critL1" />
                     <label class="btn crit-btn" for="critL1" title="Force this attack to be a critical hit?">Crit</label>
                     <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zL1"/>
+                    <span class="move-crit-rate-display" data-side="p1" title="Current crit chance from passive crit-stage modifiers.">1/16</span>
                     <span class="move-meta" title="Move PP and accuracy">PP -- | ACC --</span>
                     <select class="move-hits calc-trigger hide">
                         <option value="2">2 hits</option>
@@ -672,7 +674,7 @@
                         <option value="4">4 hits</option>
                         <option value="5">5 hits</option>
                     </select>
-                    <select class="stat-drops calc-trigger hide" title="How many times was this move used in a row?">>
+                    <select class="stat-drops calc-trigger hide" title="How many times was this move used in a row?">
                         <option value="1">Once</option>
                         <option value="2">Twice</option>
                         <option value="3">3 times</option>
@@ -688,7 +690,7 @@
                         <option value="5">5 times</option>
                     </select>
                 </div>
-                <div class="move2 i-f-move"">
+                <div class="move2 i-f-move">
                     <select class="move-selector calc-trigger small-select"></select>
                     <input class="move-bp calc-trigger" value="0" />
                     <select class="move-type calc-trigger"></select>
@@ -699,6 +701,7 @@
                     <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critL2" />
                     <label class="btn crit-btn" for="critL2" title="Force this attack to be a critical hit?">Crit</label>
                     <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zL2"/>
+                    <span class="move-crit-rate-display" data-side="p1" title="Current crit chance from passive crit-stage modifiers.">1/16</span>
                     <span class="move-meta" title="Move PP and accuracy">PP -- | ACC --</span>
                     <select class="move-hits calc-trigger hide">
                         <option value="2">2 hits</option>
@@ -706,7 +709,7 @@
                         <option value="4">4 hits</option>
                         <option value="5">5 hits</option>
                     </select>
-                    <select class="stat-drops calc-trigger hide" title="How many times was this move used in a row?">>
+                    <select class="stat-drops calc-trigger hide" title="How many times was this move used in a row?">
                         <option value="1">Once</option>
                         <option value="2">Twice</option>
                         <option value="3">3 times</option>
@@ -722,7 +725,7 @@
                         <option value="5">5 times</option>
                     </select>
                 </div>
-                <div class="move3 i-f-move"">
+                <div class="move3 i-f-move">
                     <select class="move-selector calc-trigger small-select"></select>
                     <input class="move-bp calc-trigger" value="0" />
                     <select class="move-type calc-trigger"></select>
@@ -733,6 +736,7 @@
                     <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critL3" />
                     <label class="btn crit-btn" for="critL3" title="Force this attack to be a critical hit?">Crit</label>
                     <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zL3"/>
+                    <span class="move-crit-rate-display" data-side="p1" title="Current crit chance from passive crit-stage modifiers.">1/16</span>
                     <span class="move-meta" title="Move PP and accuracy">PP -- | ACC --</span>
                     <select class="move-hits calc-trigger hide">
                         <option value="2">2 hits</option>
@@ -740,7 +744,7 @@
                         <option value="4">4 hits</option>
                         <option value="5">5 hits</option>
                     </select>
-                    <select class="stat-drops calc-trigger hide" title="How many times was this move used in a row?">>
+                    <select class="stat-drops calc-trigger hide" title="How many times was this move used in a row?">
                         <option value="1">Once</option>
                         <option value="2">Twice</option>
                         <option value="3">3 times</option>
@@ -756,7 +760,7 @@
                         <option value="5">5 times</option>
                     </select>
                 </div>
-                <div class="move4 i-f-move"">
+                <div class="move4 i-f-move">
                     <select class="move-selector calc-trigger small-select"></select>
                     <input class="move-bp calc-trigger" value="0" />
                     <select class="move-type calc-trigger"></select>
@@ -767,6 +771,7 @@
                     <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critL4" />
                     <label class="btn crit-btn" for="critL4" title="Force this attack to be a critical hit?">Crit</label>
                     <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zL4"/>
+                    <span class="move-crit-rate-display" data-side="p1" title="Current crit chance from passive crit-stage modifiers.">1/16</span>
                     <span class="move-meta" title="Move PP and accuracy">PP -- | ACC --</span>
                     <select class="move-hits calc-trigger hide">
                         <option value="2">2 hits</option>
@@ -774,7 +779,7 @@
                         <option value="4">4 hits</option>
                         <option value="5">5 hits</option>
                     </select>
-                    <select class="stat-drops calc-trigger hide" title="How many times was this move used in a row?">>
+                    <select class="stat-drops calc-trigger hide" title="How many times was this move used in a row?">
                         <option value="1">Once</option>
                         <option value="2">Twice</option>
                         <option value="3">3 times</option>
@@ -1672,6 +1677,7 @@
                     <label for="currentHpR1">Current HP</label>
                     <input class="current-hp calc-trigger" id="currentHpR1" value="341" />/<span class="max-hp">341</span> (
                     <input class="percent-hp calc-trigger" value="100" />%)
+                        <span class="side-residual-chip side-residual-chip-hp" hidden></span>
                         <input class="visually-hidden max calc-trigger btn-input" type="checkbox" id="maxR" />
                         <label class="btn btn-xwide gen-specific g8 hide" for="maxR"
                         title="Use the corresponding Max Move?">Dynamax</label>
@@ -1690,6 +1696,7 @@
                     <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critR1" />
                     <label class="btn crit-btn" for="critR1" title="Force this attack to be a critical hit?">Crit</label>
                     <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zR1"/>
+                    <span class="move-crit-rate-display" data-side="p2" title="Current crit chance from passive crit-stage modifiers.">1/16</span>
                     <span class="move-meta" title="Move PP and accuracy">PP -- | ACC --</span>
                     <select class="move-hits calc-trigger hide">
                         <option value="2">2 hits</option>
@@ -1697,7 +1704,7 @@
                         <option value="4">4 hits</option>
                         <option value="5">5 hits</option>
                     </select>
-                    <select class="stat-drops calc-trigger hide" title="How many times was this move used in a row?">>
+                    <select class="stat-drops calc-trigger hide" title="How many times was this move used in a row?">
                         <option value="1">Once</option>
                         <option value="2">Twice</option>
                         <option value="3">3 times</option>
@@ -1724,6 +1731,7 @@
                     <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critR2" />
                     <label class="btn crit-btn" for="critR2" title="Force this attack to be a critical hit?">Crit</label>
                     <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zR2"/>
+                    <span class="move-crit-rate-display" data-side="p2" title="Current crit chance from passive crit-stage modifiers.">1/16</span>
                     <span class="move-meta" title="Move PP and accuracy">PP -- | ACC --</span>
                     <select class="move-hits calc-trigger hide">
                         <option value="2">2 hits</option>
@@ -1731,7 +1739,7 @@
                         <option value="4">4 hits</option>
                         <option value="5">5 hits</option>
                     </select>
-                    <select class="stat-drops calc-trigger hide" title="How many times was this move used in a row?">>
+                    <select class="stat-drops calc-trigger hide" title="How many times was this move used in a row?">
                         <option value="1">Once</option>
                         <option value="2">Twice</option>
                         <option value="3">3 times</option>
@@ -1758,6 +1766,7 @@
                     <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critR3" />
                     <label class="btn crit-btn" for="critR3" title="Force this attack to be a critical hit?">Crit</label>
                     <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zR3"/>
+                    <span class="move-crit-rate-display" data-side="p2" title="Current crit chance from passive crit-stage modifiers.">1/16</span>
                     <span class="move-meta" title="Move PP and accuracy">PP -- | ACC --</span>
                     <select class="move-hits calc-trigger hide">
                         <option value="2">2 hits</option>
@@ -1765,7 +1774,7 @@
                         <option value="4">4 hits</option>
                         <option value="5">5 hits</option>
                     </select>
-                    <select class="stat-drops calc-trigger hide" title="How many times was this move used in a row?">>
+                    <select class="stat-drops calc-trigger hide" title="How many times was this move used in a row?">
                         <option value="1">Once</option>
                         <option value="2">Twice</option>
                         <option value="3">3 times</option>
@@ -1792,6 +1801,7 @@
                     <input aria-describedby="criticalHitInstruction" class="move-crit calc-trigger visually-hidden" type="checkbox" id="critR4" />
                     <label class="btn crit-btn" for="critR4" title="Force this attack to be a critical hit?">Crit</label>
                     <input aria-describedby="zMoveInstruction" class="move-z calc-trigger visually-hidden" type="checkbox" id="zR4"/>
+                    <span class="move-crit-rate-display" data-side="p2" title="Current crit chance from passive crit-stage modifiers.">1/16</span>
                     <span class="move-meta" title="Move PP and accuracy">PP -- | ACC --</span>
                     <select class="move-hits calc-trigger hide">
                         <option value="2">2 hits</option>
@@ -1799,7 +1809,7 @@
                         <option value="4">4 hits</option>
                         <option value="5">5 hits</option>
                     </select>
-                    <select class="stat-drops calc-trigger hide" title="How many times was this move used in a row?">>
+                    <select class="stat-drops calc-trigger hide" title="How many times was this move used in a row?">
                         <option value="1">Once</option>
                         <option value="2">Twice</option>
                         <option value="3">3 times</option>
@@ -1909,6 +1919,13 @@
                 </div>
             </section>
             <section class="settings-section">
+                <h4>Battle</h4>
+                <label class="settings-checkbox-row" title="Critical hit chance for AI: 1/8 on Stage 0, 1/4 on Stage 1. Critical hit chance for Player: 1/16 on Stage 0, 1/8 on Stage 1.">
+                    <input type="checkbox" id="settings-starting-crit-status" />
+                    Starting Crit Status
+                </label>
+            </section>
+            <section class="settings-section">
                 <h4>Theme</h4>
                 <div class="settings-choice-row">
                     <button type="button" class="btn settings-choice-btn" id="settings-theme-dark">Dark</button>
@@ -1934,7 +1951,7 @@
                 </label>
                 <label class="settings-checkbox-row">
                     <input type="checkbox" id="settings-move-meta" />
-                    Show PP & ACC
+                    Show Crit Rates, PP & ACC
                 </label>
                 <label class="settings-checkbox-row">
                     <input type="checkbox" id="settings-total-frags-on-border" />
@@ -1969,7 +1986,7 @@
     </script>
     <script type="text/javascript" src="./calc/util.js?51463f0d"></script>
     <script type="text/javascript" src="./calc/stats.js?a9e37d1a"></script>
-    <script type="text/javascript" src="./calc/data/species.js?8efac068"></script>
+    <script type="text/javascript" src="./calc/data/species.js?f3767b6f"></script>
 	<script type="text/javascript" src="./js/data/sets/gen9.js?8a6aafc0"></script>
     <script type="text/javascript" src="./js/data/sets/gen8.js?ecf43658"></script>
     <script type="text/javascript" src="./js/data/sets/gen7.js?78168bde"></script>
@@ -1982,10 +1999,10 @@
     <script type="text/javascript" src="./calc/data/types.js?a641e10b"></script>
     <script type="text/javascript" src="./calc/data/natures.js?28612810"></script>
     <script type="text/javascript" src="./calc/data/abilities.js?71b22902"></script>
-    <script type="text/javascript" src="./calc/data/moves.js?fb523b58"></script>
+    <script type="text/javascript" src="./calc/data/moves.js?f4f70946"></script>
     <script type="text/javascript" src="./calc/data/items.js?56e951ca"></script>
     <script type="text/javascript" src="./calc/data/index.js?abecbd82"></script>
-    <script type="text/javascript" src="./calc/move.js?82ace03e"></script>
+    <script type="text/javascript" src="./calc/move.js?5a4ba07d"></script>
     <script type="text/javascript" src="./calc/pokemon.js?a155eb0e"></script>
     <script type="text/javascript" src="./calc/field.js?c56d8bcb"></script>
     <script type="text/javascript" src="./calc/items.js?067e42a4"></script>
@@ -2003,9 +2020,9 @@
     <script type="text/javascript" src="./js/spritedata.js?e6979aa2"></script>
     <script type="text/javascript" src="./js/data/frags_splits.js?c5f8775f"></script>
     <script type="text/javascript" src="./js/data/move_info_lookup.js?1dc4b889"></script>
-    <script type="text/javascript" src="./js/shared_controls.js?c4fbe9ca"></script>
-    <script type="text/javascript" src="./js/index_randoms_controls.js?635821bc"></script>
-    <script type="text/javascript" src="./js/moveset_import.js?507336f8"></script>
+    <script type="text/javascript" src="./js/shared_controls.js?6efb372f"></script>
+    <script type="text/javascript" src="./js/index_randoms_controls.js?21b20d69"></script>
+    <script type="text/javascript" src="./js/moveset_import.js?c4922971"></script>
 </div>
 
 <div class="credits">Modification by ForwardFeed Originaly Created by Honko, maintained by Austin and Kris, Special thanks to Hzla

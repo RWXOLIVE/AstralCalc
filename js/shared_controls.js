@@ -726,6 +726,7 @@ function ensureMoveMetaForGroup(moveGroupObj) {
 
 function applyMoveMetaVisibility() {
 	$(".move-meta").toggle(!!moveMetaVisible);
+	$(".move-crit-rate-display").toggle(!!moveMetaVisible);
 }
 
 function setMoveMetaVisibility(enabled) {
@@ -1705,6 +1706,7 @@ function normalizeLayoutChoice(rawChoice) {
 function getDefaultAppSettings() {
 	return {
 		starterChoice: "totodile",
+		startingCritStatus: false,
 		layoutMode: "standard",
 		moreColour: true,
 		moveColors: false,
@@ -1719,6 +1721,7 @@ function getAppSettings(forceReload) {
 	var parsed = safeJsonParse(localStorage.getItem(APP_SETTINGS_STORAGE_KEY), {});
 	appSettingsCache = {
 		starterChoice: normalizeStarterChoice(parsed.starterChoice || defaults.starterChoice),
+		startingCritStatus: typeof parsed.startingCritStatus === "boolean" ? parsed.startingCritStatus : defaults.startingCritStatus,
 		layoutMode: normalizeLayoutChoice(parsed.layoutMode || defaults.layoutMode),
 		moreColour: typeof parsed.moreColour === "boolean" ? parsed.moreColour : defaults.moreColour,
 		moveColors: typeof parsed.moveColors === "boolean" ? parsed.moveColors : defaults.moveColors,
@@ -1731,6 +1734,7 @@ function getAppSettings(forceReload) {
 function saveAppSettings(nextSettings) {
 	appSettingsCache = {
 		starterChoice: normalizeStarterChoice(nextSettings.starterChoice),
+		startingCritStatus: !!nextSettings.startingCritStatus,
 		layoutMode: normalizeLayoutChoice(nextSettings.layoutMode),
 		moreColour: !!nextSettings.moreColour,
 		moveColors: !!nextSettings.moveColors,
@@ -1745,6 +1749,7 @@ function updateAppSettings(partial) {
 	var current = getAppSettings();
 	return saveAppSettings({
 		starterChoice: partial && typeof partial.starterChoice !== "undefined" ? partial.starterChoice : current.starterChoice,
+		startingCritStatus: partial && typeof partial.startingCritStatus !== "undefined" ? partial.startingCritStatus : current.startingCritStatus,
 		layoutMode: partial && typeof partial.layoutMode !== "undefined" ? partial.layoutMode : current.layoutMode,
 		moreColour: partial && typeof partial.moreColour !== "undefined" ? partial.moreColour : current.moreColour,
 		moveColors: partial && typeof partial.moveColors !== "undefined" ? partial.moveColors : current.moveColors,
@@ -2098,7 +2103,7 @@ function transformDittoFromOpposing(targetSideSelector, sourceSideSelector) {
 }
 
 function getFragSpriteUrl(speciesName) {
-	return getTrainerSpriteUrlByName(speciesName);
+	return getInitialTrainerSpriteUrlByName(speciesName);
 }
 
 function normalizeSplitNumber(rawSplit) {
@@ -2946,6 +2951,7 @@ function applyPlayerRosterLayout(layout) {
 			var spriteNode = createRosterSpriteFromSetId(setId);
 			if (!spriteNode) continue;
 			targetContainer.appendChild(spriteNode);
+			applyPrimaryIconSheetIfNeeded(spriteNode, parseSetId(setId).species);
 		}
 	}
 	saveStoredPlayerRosterLayout(normalizedLayout);
@@ -4014,7 +4020,7 @@ function renderFragSheet() {
 			"<td class=\"frag-num\">" + (i + 1) + "</td>" +
 			"<td title=\"" + escapeHtml(titleText) + "\" class=\"frags-mon-cell\">" +
 			"<div class=\"frags-mon-content\">" +
-			"<img class=\"frags-mon-sprite\" src=\"" + escapeHtml(getFragSpriteUrl(entry.species)) + "\" data-species=\"" + escapeHtml(entry.species) + "\" onerror=\"applyIconSheetFallbackImage(this, this.getAttribute('data-species'))\" alt=\"\">" +
+			"<img class=\"frags-mon-sprite\" src=\"" + escapeHtml(getFragSpriteUrl(entry.species)) + "\" data-species=\"" + escapeHtml(entry.species) + "\"" + getPrimaryIconSheetLoadAttr(entry.species) + " onerror=\"applyIconSheetFallbackImage(this, this.getAttribute('data-species'))\" alt=\"\">" +
 			"<span>" + escapeHtml(entry.species) + "</span></div></td>" +
 			"<td class=\"frag-life-cell\"><span class=\"frags-life-badge " + (isDead ? "frags-life-dead" : "frags-life-alive") + "\">" + (isDead ? "Dead" : "Alive") + "</span>" +
 			(deathFight ? "<div class=\"frags-death-fight\" title=\"Died on " + escapeHtml(deathFight) + "\">" + escapeHtml(deathFight) + "</div>" : "") +
@@ -4691,15 +4697,16 @@ function getNotesMonSlotHtml(turnIndex, fieldKey, selectedSetId, options, emptyL
 	var selected = String(selectedSetId || "").trim();
 	var speciesName = parseSetId(selected).species || "";
 	var spriteSrc = speciesName
-		? escapeHtml(getTrainerSpriteUrlByName(speciesName))
-		: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+		? escapeHtml(getInitialTrainerSpriteUrlByName(speciesName))
+		: POKEMON_ICON_FALLBACK_DATA_URL;
 	var spriteClass = "notes-mon-sprite" + (speciesName ? "" : " notes-mon-sprite-empty");
+	var spriteOnLoad = speciesName ? getPrimaryIconSheetLoadAttr(speciesName) : "";
 	var spriteOnError = speciesName ? " onerror=\"applyIconSheetFallbackImage(this, this.getAttribute('data-species'))\"" : "";
 	return "<div class=\"notes-mon-slot\">" +
 		"<select class=\"notes-set-select\" data-turn-index=\"" + turnIndex + "\" data-notes-field=\"" + escapeHtml(fieldKey) + "\">" +
 		renderNotesSetOptionsHtml(options, selected, emptyLabel) +
 		"</select>" +
-		"<img class=\"" + spriteClass + "\" src=\"" + spriteSrc + "\" data-species=\"" + escapeHtml(speciesName) + "\" alt=\"\" loading=\"lazy\" decoding=\"async\"" + spriteOnError + ">" +
+		"<img class=\"" + spriteClass + "\" src=\"" + spriteSrc + "\" data-species=\"" + escapeHtml(speciesName) + "\" alt=\"\" loading=\"lazy\" decoding=\"async\"" + spriteOnLoad + spriteOnError + ">" +
 		"</div>";
 }
 
@@ -5349,6 +5356,7 @@ function syncSettingsPanelUi() {
 	$(".settings-choice-btn[data-starter-choice='" + settings.starterChoice + "']").addClass("is-active");
 	$(".settings-choice-btn[data-layout-choice]").removeClass("is-active");
 	$(".settings-choice-btn[data-layout-choice='" + settings.layoutMode + "']").addClass("is-active");
+	$("#settings-starting-crit-status").prop("checked", !!settings.startingCritStatus);
 	$("#settings-more-colour").prop("checked", !!settings.moreColour);
 	$("#settings-move-colors").prop("checked", !!settings.moveColors);
 	$("#settings-move-meta").prop("checked", !!settings.moveMeta);
@@ -5439,13 +5447,12 @@ function bindCalcToolEvents() {
 		if (!spriteNode) return;
 		if (!speciesName) {
 			setTrainerSpriteImage(spriteNode, "");
-			spriteNode.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+			spriteNode.src = POKEMON_ICON_FALLBACK_DATA_URL;
 			spriteNode.classList.add("notes-mon-sprite-empty");
 			return;
 		}
 		spriteNode.classList.remove("notes-mon-sprite-empty");
 		setTrainerSpriteImage(spriteNode, speciesName);
-		spriteNode.src = getTrainerSpriteUrlByName(speciesName);
 	});
 
 	$(document).off("input.notesnote", ".notes-note-input").on("input.notesnote", ".notes-note-input", function () {
@@ -5674,6 +5681,12 @@ function bindCalcToolEvents() {
 		if (typeof performCalculations === "function") performCalculations();
 	});
 
+	$("#settings-starting-crit-status").off("change").on("change", function () {
+		var enabled = $(this).is(":checked");
+		updateAppSettings({startingCritStatus: enabled});
+		if (typeof performCalculations === "function") performCalculations();
+	});
+
 	$("#settings-more-colour").off("change").on("change", function () {
 		var enabled = $(this).is(":checked");
 		updateAppSettings({moreColour: enabled});
@@ -5785,56 +5798,373 @@ function normalizeTrainerSpriteName(pokemonName) {
 	return spriteName;
 }
 
-var POKEMON_ICON_SHEET_URL = "https://play.pokemonshowdown.com/sprites/pokemonicons-sheet.png?v16";
+function getAlternateTrainerSpriteName(pokemonName) {
+	var spriteName = normalizeTrainerSpriteName(pokemonName);
+	if (!spriteName) return "";
+	var megaMarkerIndex = spriteName.indexOf("-Mega");
+	if (megaMarkerIndex < 0) return "";
+	var prefix = spriteName.substring(0, megaMarkerIndex);
+	var suffix = spriteName.substring(megaMarkerIndex + 5).replace(/-/g, "");
+	var alternateName = prefix + "Mega" + suffix;
+	return alternateName !== spriteName ? alternateName : "";
+}
+
+function getTrainerSpriteBaseFallbackSpecies(pokemonName) {
+	var resolvedName = String(pokemonName || "").trim();
+	if (!resolvedName) return "";
+	if (typeof pokedex !== "undefined" && pokedex && pokedex[resolvedName] && pokedex[resolvedName].baseSpecies) {
+		return String(pokedex[resolvedName].baseSpecies || "").trim();
+	}
+	var megaMarkerIndex = resolvedName.indexOf("-Mega");
+	if (megaMarkerIndex > 0) {
+		return resolvedName.substring(0, megaMarkerIndex);
+	}
+	return "";
+}
+
+function shouldUseExpandedIconFallback(imgNode) {
+	if (!imgNode || !imgNode.classList) return false;
+	return imgNode.classList.contains("poke-inline-sprite") ||
+		imgNode.classList.contains("simplified-side-form-sprite");
+}
+
+function shouldTryShowdownSpriteFallback(imgNode) {
+	if (!imgNode) return false;
+	if (imgNode.id === "p1mon" || imgNode.id === "p2mon") return true;
+	if (!imgNode.classList) return false;
+	return imgNode.classList.contains("poke-inline-sprite") ||
+		imgNode.classList.contains("simplified-side-form-sprite");
+}
+
+var DEFAULT_TRAINER_SPRITE_REPO_URL = "https://raw.githubusercontent.com/May8th1995/sprites/master/";
+var CUSTOM_TRAINER_SPRITE_REPO_URL = "https://raw.githubusercontent.com/RWXOLIVE/sprites/master/";
+var POKEMON_ICON_SHEET_URL = "https://play.pokemonshowdown.com/sprites/pokemonicons-sheet.png";
 var POKEMON_ICON_WIDTH = 40;
 var POKEMON_ICON_HEIGHT = 30;
+var POKEMON_ICON_SHEET_COLUMNS = 12;
+var POKEMON_ICON_FALLBACK_DATA_URL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAALSURBVBhXY2AAAgAABQABqtXIUQAAAABJRU5ErkJggg==";
+var pokemonIconSheetRowsCache = 0;
+
+function shouldUseCustomTrainerSpriteRepo(pokemonName) {
+	return false;
+}
+
+function getTrainerSpriteRepoBaseUrlByName(pokemonName) {
+	return shouldUseCustomTrainerSpriteRepo(pokemonName)
+		? CUSTOM_TRAINER_SPRITE_REPO_URL
+		: DEFAULT_TRAINER_SPRITE_REPO_URL;
+}
 
 function getTrainerSpriteUrlByName(pokemonName) {
 	var normalizedName = pokemonName === "Aegislash-Shield" ? "Aegislash" : pokemonName;
 	var spriteName = normalizeTrainerSpriteName(normalizedName);
-	return "https://raw.githubusercontent.com/May8th1995/sprites/master/" + spriteName + ".png";
+	return getTrainerSpriteRepoBaseUrlByName(normalizedName) + spriteName + ".png";
 }
 
-function getIconSheetPositionForSpecies(speciesName) {
+function getAlternateTrainerSpriteUrlByName(pokemonName) {
+	var alternateName = getAlternateTrainerSpriteName(pokemonName);
+	return alternateName
+		? (getTrainerSpriteRepoBaseUrlByName(pokemonName) + alternateName + ".png")
+		: "";
+}
+
+function buildTrainerSpriteExtraUrls(pokemonName) {
+	var resolvedName = String(pokemonName || "").trim();
+	if (!resolvedName) return [];
+	var urls = [];
+	var primaryUrl = getTrainerSpriteUrlByName(resolvedName);
+	function pushUrl(url) {
+		if (!url || url === primaryUrl || urls.indexOf(url) !== -1) return;
+		urls.push(url);
+	}
+	pushUrl(getAlternateTrainerSpriteUrlByName(resolvedName));
+	var megaMatch = resolvedName.match(/^(.*)-Mega(?:-(.*))?$/);
+	if (megaMatch) {
+		var megaBase = megaMatch[1];
+		var megaSuffix = megaMatch[2] ? String(megaMatch[2]).trim() : "";
+		var noHyphenSuffix = megaSuffix ? megaSuffix : "";
+		var spacedSuffix = megaSuffix ? " " + megaSuffix : "";
+		var underscoredSuffix = megaSuffix ? "_" + megaSuffix : "";
+		var repoBaseUrl = getTrainerSpriteRepoBaseUrlByName(resolvedName);
+		pushUrl(repoBaseUrl + (megaBase + "-Mega" + noHyphenSuffix).replace(/ /g, "%20") + ".png");
+		pushUrl(repoBaseUrl + (megaBase + "_Mega" + underscoredSuffix).replace(/ /g, "%20") + ".png");
+		pushUrl(repoBaseUrl + (megaBase + " Mega" + spacedSuffix).replace(/ /g, "%20") + ".png");
+	}
+	return urls;
+}
+
+function consumeNextTrainerSpriteExtraUrl(node) {
+	if (!node) return "";
+	var serializedUrls = String(node.getAttribute("data-sprite-extra-urls") || "");
+	if (!serializedUrls) return "";
+	var urls = serializedUrls.split("\n").filter(Boolean);
+	if (!urls.length) return "";
+	var nextUrl = urls.shift();
+	node.setAttribute("data-sprite-extra-urls", urls.join("\n"));
+	return nextUrl;
+}
+
+function normalizeShowdownSpriteName(pokemonName) {
+	var spriteName = String(pokemonName || "").trim();
+	if (!spriteName) return "";
+	if (spriteName === "Aegislash-Shield") spriteName = "Aegislash";
+	if (spriteName === "Zygarde-10%") spriteName = "Zygarde-10";
+	if (spriteName === "Tauros-Paldea-Water") spriteName = "Tauros-Paldea-Aqua";
+	if (spriteName === "Tauros-Paldea-Fire") spriteName = "Tauros-Paldea-Blaze";
+	if (spriteName === "Tauros-Paldea") spriteName = "Tauros-Paldea-Combat";
+	if (spriteName === "Wooper-Paldea") spriteName = "Wooper-Paldea";
+	if (spriteName === "Mime Jr.") spriteName = "Mime Jr";
+	if (spriteName === "Mr. Mime") spriteName = "Mr Mime";
+	if (spriteName === "Type: Null") spriteName = "Type Null";
+	if (spriteName === "Nidoran♀") spriteName = "Nidoran-F";
+	if (spriteName === "Nidoran♂") spriteName = "Nidoran-M";
+	return spriteName
+		.toLowerCase()
+		.replace(/[’']/g, "")
+		.replace(/[%:.]/g, "")
+		.replace(/\s+/g, "-")
+		.replace(/[^a-z0-9-]+/g, "");
+}
+
+function getShowdownTrainerSpriteUrlByName(pokemonName) {
+	var spriteName = normalizeShowdownSpriteName(pokemonName);
+	return spriteName
+		? ("https://play.pokemonshowdown.com/sprites/gen5/" + spriteName + ".png")
+		: "";
+}
+
+function getIconSheetIndexForSpecies(speciesName) {
 	var iconIndexTable = typeof BattlePokemonIconIndexes === "undefined" ? null : BattlePokemonIconIndexes;
 	if (!iconIndexTable) return null;
 	var speciesId = toDexPokemonId(speciesName);
 	if (!speciesId) return null;
 	var num = iconIndexTable[speciesId];
-	if (num === undefined || num === null) return null;
+	return (num === undefined || num === null) ? null : num;
+}
+
+function getIconSheetPositionForSpecies(speciesName) {
+	var iconIndex = getIconSheetIndexForSpecies(speciesName);
+	if (iconIndex === null) return null;
 	return {
-		left: (num % 12) * POKEMON_ICON_WIDTH,
-		top: Math.floor(num / 12) * POKEMON_ICON_HEIGHT
+		row: Math.floor(iconIndex / POKEMON_ICON_SHEET_COLUMNS),
+		col: iconIndex % POKEMON_ICON_SHEET_COLUMNS
+	};
+}
+
+function shouldPreferIconFallbackForSpecies(speciesName) {
+	var resolvedSpecies = String(speciesName || "").trim();
+	if (!resolvedSpecies) return false;
+	if (resolvedSpecies.indexOf("-Mega") === -1) return false;
+	return !!getIconSheetPositionForSpecies(resolvedSpecies);
+}
+
+function shouldUseIconSheetAsPrimarySpriteSource(speciesName) {
+	return shouldPreferIconFallbackForSpecies(speciesName);
+}
+
+function getInitialTrainerSpriteUrlByName(pokemonName) {
+	return shouldUseIconSheetAsPrimarySpriteSource(pokemonName)
+		? POKEMON_ICON_FALLBACK_DATA_URL
+		: getTrainerSpriteUrlByName(pokemonName);
+}
+
+function getPrimaryIconSheetLoadAttr(speciesName) {
+	return shouldUseIconSheetAsPrimarySpriteSource(speciesName)
+		? " onload=\"applyIconSheetFallbackImage(this, this.getAttribute('data-species'))\""
+		: "";
+}
+
+function isTrainerRosterSpriteNode(imgNode) {
+	if (!imgNode || !imgNode.classList) return false;
+	return imgNode.classList.contains("trainer-pok");
+}
+
+function getIconSheetFallbackSpecies(speciesName, imgNode) {
+	var resolvedSpecies = String(speciesName || "").trim();
+	if (!resolvedSpecies) return "";
+	return resolvedSpecies;
+}
+
+function shouldUseBackgroundSheetFallback(imgNode) {
+	if (!imgNode) return false;
+	if (imgNode.id === "p1mon" || imgNode.id === "p2mon") return true;
+	return shouldUseExpandedIconFallback(imgNode);
+}
+
+function getPokemonIconSheetBackgroundImageValue(imgNode) {
+	var targetNode = imgNode || document.documentElement;
+	var computedStyle = typeof window !== "undefined" && window.getComputedStyle
+		? window.getComputedStyle(targetNode)
+		: null;
+	var backgroundImage = computedStyle ? String(computedStyle.getPropertyValue("--pokemon-icon-sheet") || "").trim() : "";
+	return backgroundImage || ("url('" + POKEMON_ICON_SHEET_URL + "')");
+}
+
+function getPokemonIconSheetMetrics() {
+	var rows = pokemonIconSheetRowsCache;
+	if (!rows) {
+		var iconIndexTable = typeof BattlePokemonIconIndexes === "undefined" ? null : BattlePokemonIconIndexes;
+		var maxIndex = 0;
+		if (iconIndexTable) {
+			for (var speciesId in iconIndexTable) {
+				if (!Object.prototype.hasOwnProperty.call(iconIndexTable, speciesId)) continue;
+				var num = iconIndexTable[speciesId];
+				if (typeof num !== "number") continue;
+				if (num > maxIndex) maxIndex = num;
+			}
+		}
+		rows = Math.floor(maxIndex / POKEMON_ICON_SHEET_COLUMNS) + 1;
+		pokemonIconSheetRowsCache = rows;
+	}
+	return {
+		columns: POKEMON_ICON_SHEET_COLUMNS,
+		rows: Math.max(rows, 1)
+	};
+}
+
+function getIconSheetRenderBox(imgNode, useExpandedFallback) {
+	var nodeWidth = POKEMON_ICON_WIDTH;
+	var nodeHeight = POKEMON_ICON_HEIGHT;
+	if (useExpandedFallback && imgNode) {
+		var computedStyle = typeof window !== "undefined" && window.getComputedStyle
+			? window.getComputedStyle(imgNode)
+			: null;
+		var computedWidth = computedStyle ? parseFloat(computedStyle.width) : 0;
+		var computedHeight = computedStyle ? parseFloat(computedStyle.height) : 0;
+		nodeWidth = imgNode.clientWidth || imgNode.offsetWidth || computedWidth || nodeWidth;
+		nodeHeight = imgNode.clientHeight || imgNode.offsetHeight || computedHeight || nodeHeight;
+	}
+	var scale = useExpandedFallback
+		? Math.max(1, Math.min(nodeWidth / POKEMON_ICON_WIDTH, nodeHeight / POKEMON_ICON_HEIGHT))
+		: 1;
+	var cellWidth = POKEMON_ICON_WIDTH * scale;
+	var cellHeight = POKEMON_ICON_HEIGHT * scale;
+	return {
+		nodeWidth: nodeWidth,
+		nodeHeight: nodeHeight,
+		cellWidth: cellWidth,
+		cellHeight: cellHeight,
+		offsetX: (nodeWidth - cellWidth) / 2,
+		offsetY: (nodeHeight - cellHeight) / 2
 	};
 }
 
 function applyIconSheetFallbackImage(imgNode, speciesName) {
 	if (!imgNode) return false;
 	imgNode.onerror = null;
-	var resolvedSpecies = speciesName || imgNode.getAttribute("data-species") || "";
+	imgNode.onload = null;
+	var requestedSpecies = speciesName || imgNode.getAttribute("data-species") || "";
+	var resolvedSpecies = getIconSheetFallbackSpecies(requestedSpecies, imgNode);
 	var position = getIconSheetPositionForSpecies(resolvedSpecies);
 	if (!position) return false;
-	imgNode.src = POKEMON_ICON_SHEET_URL;
+	if (imgNode.classList) imgNode.classList.add("sprite-icon");
+	var useExpandedFallback = shouldUseExpandedIconFallback(imgNode);
+	var renderBox = getIconSheetRenderBox(imgNode, useExpandedFallback);
+	var scale = renderBox.cellWidth / POKEMON_ICON_WIDTH;
+	if (imgNode.classList) {
+		imgNode.classList.toggle("sprite-icon-expanded", false);
+	}
+	imgNode.src = POKEMON_ICON_FALLBACK_DATA_URL;
+	imgNode.style.backgroundImage = getPokemonIconSheetBackgroundImageValue(imgNode);
+	imgNode.style.backgroundRepeat = "no-repeat";
+	imgNode.style.backgroundPosition = "-" + (position.col * POKEMON_ICON_WIDTH) + "px -" + (position.row * POKEMON_ICON_HEIGHT) + "px";
+	imgNode.style.backgroundSize = "";
 	imgNode.style.width = POKEMON_ICON_WIDTH + "px";
 	imgNode.style.height = POKEMON_ICON_HEIGHT + "px";
-	imgNode.style.objectFit = "none";
-	imgNode.style.objectPosition = "-" + position.left + "px -" + position.top + "px";
+	imgNode.style.objectFit = "fill";
+	imgNode.style.objectPosition = "center center";
 	imgNode.style.imageRendering = "auto";
+	imgNode.style.transform = scale > 1
+		? ("translate(" + renderBox.offsetX + "px, " + renderBox.offsetY + "px) scale(" + scale + ")")
+		: "none";
+	imgNode.style.transformOrigin = "center center";
 	return true;
+}
+
+function applyPrimaryIconSheetIfNeeded(node, speciesName) {
+	if (!node) return;
+	var resolvedSpecies = String(speciesName || node.getAttribute("data-species") || "").trim();
+	if (!resolvedSpecies) return;
+	if (!shouldUseIconSheetAsPrimarySpriteSource(resolvedSpecies)) return;
+	applyIconSheetFallbackImage(node, resolvedSpecies);
+}
+
+function advanceTrainerSpriteFallback(node, resolvedSpecies, tryShowdownFallback) {
+	if (!node) return;
+	var currentStage = String(node.getAttribute("data-sprite-fallback-stage") || "");
+	var nextPrimaryUrl = consumeNextTrainerSpriteExtraUrl(node);
+	var fallbackSpecies = String(node.getAttribute("data-sprite-fallback-species") || "").trim();
+	if (nextPrimaryUrl && (currentStage === "" || currentStage === "alt-primary")) {
+		node.setAttribute("data-sprite-fallback-stage", "alt-primary");
+		node.src = nextPrimaryUrl;
+		return;
+	}
+	if (tryShowdownFallback && (currentStage === "" || currentStage === "alt-primary")) {
+		var showdownPrimaryUrl = getShowdownTrainerSpriteUrlByName(resolvedSpecies);
+		if (showdownPrimaryUrl) {
+			node.setAttribute("data-sprite-fallback-stage", "showdown-primary");
+			node.src = showdownPrimaryUrl;
+			return;
+		}
+	}
+	if (shouldPreferIconFallbackForSpecies(resolvedSpecies) && currentStage !== "icon") {
+		node.setAttribute("data-sprite-fallback-stage", "icon");
+		if (applyIconSheetFallbackImage(node, resolvedSpecies)) {
+			return;
+		}
+	}
+	if (fallbackSpecies && currentStage !== "base" && currentStage !== "showdown-base") {
+		node.setAttribute("data-sprite-fallback-stage", "base");
+		node.src = getTrainerSpriteUrlByName(fallbackSpecies);
+		return;
+	}
+	if (tryShowdownFallback && fallbackSpecies && currentStage !== "showdown-base") {
+		var showdownBaseUrl = getShowdownTrainerSpriteUrlByName(fallbackSpecies);
+		if (showdownBaseUrl) {
+			node.setAttribute("data-sprite-fallback-stage", "showdown-base");
+			node.src = showdownBaseUrl;
+			return;
+		}
+	}
+	applyIconSheetFallbackImage(node, resolvedSpecies);
 }
 
 function setTrainerSpriteImage(node, speciesName) {
 	if (!node) return;
 	var resolvedSpecies = speciesName || "";
+	var baseFallbackSpecies = getTrainerSpriteBaseFallbackSpecies(resolvedSpecies);
+	var extraPrimaryUrls = buildTrainerSpriteExtraUrls(resolvedSpecies);
+	var tryShowdownFallback = shouldTryShowdownSpriteFallback(node);
 	node.setAttribute("data-species", resolvedSpecies);
+	node.setAttribute("data-sprite-fallback-stage", "");
+	node.setAttribute("data-sprite-extra-urls", extraPrimaryUrls.join("\n"));
+	node.setAttribute("data-sprite-fallback-species", baseFallbackSpecies && baseFallbackSpecies !== resolvedSpecies ? baseFallbackSpecies : "");
 	// Clear any icon-sheet fallback styling from a previous failed load.
+	if (node.classList) node.classList.remove("sprite-icon");
+	if (node.classList) node.classList.remove("sprite-icon-expanded");
 	node.style.width = "";
 	node.style.height = "";
 	node.style.objectFit = "";
 	node.style.objectPosition = "";
 	node.style.imageRendering = "";
+	node.style.transform = "";
+	node.style.transformOrigin = "";
+	node.style.backgroundImage = "";
+	node.style.backgroundRepeat = "";
+	node.style.backgroundPosition = "";
+	node.style.backgroundSize = "";
+	if (shouldUseIconSheetAsPrimarySpriteSource(resolvedSpecies)) {
+		node.setAttribute("data-sprite-fallback-stage", "icon");
+		applyIconSheetFallbackImage(node, resolvedSpecies);
+		return;
+	}
+	node.onload = function () {
+		if (this.naturalWidth <= 1 || this.naturalHeight <= 1) {
+			advanceTrainerSpriteFallback(this, resolvedSpecies, tryShowdownFallback);
+		}
+	};
 	node.onerror = function () {
-		applyIconSheetFallbackImage(this, resolvedSpecies);
+		advanceTrainerSpriteFallback(this, resolvedSpecies, tryShowdownFallback);
 	};
 	node.src = getTrainerSpriteUrlByName(resolvedSpecies);
 }
@@ -6402,7 +6732,7 @@ function splitSetDoubleEntries(entries) {
 
 function trainerPartyMonHtml(entry) {
 	var label = "[" + entry.indexText + "]" + entry.fullSetName;
-	return '<img class="trainer-pok right-side" src="' + escapeHtml(getTrainerSpriteUrlByName(entry.pokemonName)) + '" data-id="' + escapeHtml(entry.fullSetName) + '" data-species="' + escapeHtml(entry.pokemonName) + '" title="' + escapeHtml(label + ", " + label + " BP") + '" loading="lazy" decoding="async" onerror="applyIconSheetFallbackImage(this, this.getAttribute(\'data-species\'))">';
+	return '<img class="trainer-pok right-side" src="' + escapeHtml(getInitialTrainerSpriteUrlByName(entry.pokemonName)) + '" data-id="' + escapeHtml(entry.fullSetName) + '" data-species="' + escapeHtml(entry.pokemonName) + '" title="' + escapeHtml(label + ", " + label + " BP") + '" loading="lazy" decoding="async"' + getPrimaryIconSheetLoadAttr(entry.pokemonName) + ' onerror="applyIconSheetFallbackImage(this, this.getAttribute(\'data-species\'))">';
 }
 
 function renderOpposingTrainerParties(selectedSetName) {
@@ -6426,6 +6756,9 @@ function renderOpposingTrainerParties(selectedSetName) {
 	$(".trainer-pok-list-opposing").html(primaryHtml);
 	$(".trainer-pok-list-opposing2").html(secondaryHtml).prop("hidden", !showSecondary);
 	$(".trainer-pok-divider").prop("hidden", !showSecondary);
+	$(".trainer-pok.right-side").each(function () {
+		applyPrimaryIconSheetIfNeeded(this, this.getAttribute("data-species"));
+	});
 	applyOpposingDeadMarks();
 }
 
@@ -7057,6 +7390,329 @@ function syncDisplayedModifiedStats(pokeInfo, pokemon, preferCalculatedStats) {
 		ensureStatTotalModNode(statRow).text(
 			getDisplayedModifiedStatValue(pokemon, DISPLAYED_MODIFIER_STAT_ROWS[legacyStat], preferCalculatedStats)
 		);
+	}
+}
+
+var DEFAULT_CRIT_RATE_BY_STAGE = [
+	{num: 1, den: 16},
+	{num: 1, den: 8},
+	{num: 1, den: 4},
+	{num: 1, den: 3},
+	{num: 1, den: 2},
+	{num: 1, den: 1}
+];
+var STARTING_CRIT_RATE_OVERRIDE_BY_SIDE = {
+	p1: {},
+	p2: {
+		0: {num: 1, den: 8},
+		1: {num: 1, den: 4}
+	}
+};
+
+function normalizeCritSpeciesId(rawSpecies) {
+	return String(rawSpecies || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+function isStartingCritStatusActive() {
+	return !!getAppSettings().startingCritStatus;
+}
+
+function getPassiveCritStageDetails(pokemon) {
+	var stage = 0;
+	var sources = [];
+	if (!pokemon) return {stage: 0, sources: sources};
+	if (pokemon.hasAbility && pokemon.hasAbility("Super Luck")) {
+		stage += 1;
+		sources.push("Super Luck");
+	}
+	var itemName = String(pokemon.item || "");
+	var speciesId = normalizeCritSpeciesId(
+		pokemon.name || (pokemon.species && pokemon.species.name) || ""
+	);
+	if (itemName === "Scope Lens" || itemName === "Razor Claw") {
+		stage += 1;
+		sources.push(itemName);
+	} else if (itemName === "Lucky Punch" && speciesId === "chansey") {
+		stage += 2;
+		sources.push(itemName);
+	} else if ((itemName === "Leek" || itemName === "Stick") &&
+		(speciesId === "farfetchd" || speciesId === "sirfetchd")) {
+		stage += 2;
+		sources.push(itemName);
+	}
+	return {stage: stage, sources: sources};
+}
+
+function getCritChanceForStage(stage, sideId) {
+	var normalizedStage = Math.max(0, Math.min(DEFAULT_CRIT_RATE_BY_STAGE.length - 1, ~~stage));
+	var overrides = sideId ? STARTING_CRIT_RATE_OVERRIDE_BY_SIDE[sideId] : null;
+	if (isStartingCritStatusActive() && overrides && overrides[normalizedStage]) {
+		return overrides[normalizedStage];
+	}
+	return DEFAULT_CRIT_RATE_BY_STAGE[normalizedStage];
+}
+
+function formatCritChanceText(chance) {
+	if (!chance) return "1/16";
+	return chance.den === 1 ? "100%" : (chance.num + "/" + chance.den);
+}
+
+function getCritBlockerAbilityName(pokemon) {
+	if (!pokemon || !pokemon.hasAbility) return "";
+	var blockers = ["Battle Armor", "Shell Armor"];
+	if (gen >= 5) blockers.push("Magma Armor");
+	if (gen >= 7) blockers.push("Leaf Guard");
+	return pokemon.hasAbility.apply(pokemon, blockers) ? String(pokemon.ability || blockers[0]) : "";
+}
+
+function hasResidualDisplayType(pokemon) {
+	if (!pokemon) return false;
+	var types = Array.prototype.slice.call(arguments, 1);
+	if (pokemon.teraType) return types.indexOf(pokemon.teraType) !== -1;
+	return pokemon.hasType ? pokemon.hasType.apply(pokemon, types) : false;
+}
+
+function isResidualDisplayGrounded(pokemon, field) {
+	if (!pokemon || !field) return false;
+	if (field.isGravity) return true;
+	if (pokemon.teraType) return pokemon.teraType !== "Flying" &&
+		!pokemon.hasAbility("Levitate") &&
+		!pokemon.hasItem("Air Balloon");
+	return !pokemon.hasType("Flying") &&
+		!pokemon.hasAbility("Levitate") &&
+		!pokemon.hasItem("Air Balloon");
+}
+
+function getMoveCritRateDisplay(pokemon, opposingPokemon, move, sideId) {
+	if (!move || move.name === "(No Move)") {
+		return {text: "--", title: "No move selected."};
+	}
+	if (move.category === "Status") {
+		return {text: "--", title: move.name + " is a status move and cannot crit."};
+	}
+	var passiveDetails = getPassiveCritStageDetails(pokemon);
+	var totalStage = passiveDetails.stage;
+	var sources = passiveDetails.sources.slice();
+	var moveCritStage = Math.max(0, ((move.critRatio || 1) - 1));
+	if (moveCritStage) {
+		totalStage += moveCritStage;
+		sources.push(move.name);
+	}
+	var chance = getCritChanceForStage(totalStage, sideId);
+	var chanceText = formatCritChanceText(chance);
+	var title = "Current crit chance: " + chanceText + " (stage " + totalStage + ")";
+	if (sources.length) title += " via " + sources.join(", ");
+	if (isStartingCritStatusActive() && sideId === "p2" && totalStage <= 1) {
+		title += ". Starting crit status active.";
+	}
+	var blockedBy = getCritBlockerAbilityName(opposingPokemon);
+	if (blockedBy) {
+		return {
+			text: "0%",
+			title: "Critical hits are blocked by " + blockedBy + "."
+		};
+	}
+	if (move.willCrit) {
+		return {
+			text: "100%",
+			title: move.name + " always crits."
+		};
+	}
+	if (gen >= 7 &&
+		pokemon && pokemon.hasAbility && pokemon.hasAbility("Merciless") &&
+		opposingPokemon && opposingPokemon.hasStatus && opposingPokemon.hasStatus("psn", "tox")) {
+		return {
+			text: "100%",
+			title: "Guaranteed critical hit via Merciless against a poisoned target."
+		};
+	}
+	if (move.isCrit) {
+		return {
+			text: "100%",
+			title: "Critical hit forced for the current calculation. Base chance: " + chanceText +
+				" (stage " + totalStage + ")" + (sources.length ? " via " + sources.join(", ") : "") +
+				(isStartingCritStatusActive() && sideId === "p2" && totalStage <= 1 ? ". Starting crit status active." : "")
+		};
+	}
+	return {
+		text: chanceText,
+		title: title
+	};
+}
+
+function getSelectedPokeInfoStatus(pokeInfo) {
+	if (!pokeInfo || !pokeInfo.length) return "Healthy";
+	return String(pokeInfo.find(".status").val() || "Healthy");
+}
+
+function getSelectedPokeInfoToxicCounter(pokeInfo) {
+	if (!pokeInfo || !pokeInfo.length) return 1;
+	var toxicCounter = parseInt(pokeInfo.find(".toxic-counter").val(), 10);
+	return Number.isNaN(toxicCounter) || toxicCounter < 1 ? 1 : toxicCounter;
+}
+
+function getSideResidualChipDisplay(pokeInfo, pokemon, opposingPokemon, field) {
+	if (!pokeInfo || !pokeInfo.length || !pokemon || !field || typeof pokemon.maxHP !== "function") {
+		return {text: "", title: ""};
+	}
+	var maxHP = pokemon.maxHP();
+	if (!maxHP || maxHP <= 0) return {text: "", title: ""};
+	var hpDelta = 0;
+	var sources = [];
+	var statusValue = getSelectedPokeInfoStatus(pokeInfo);
+	if (field.hasWeather("Sun", "Harsh Sunshine")) {
+		if (pokemon.hasAbility("Dry Skin", "Solar Power")) {
+			hpDelta -= Math.floor(maxHP / 8);
+			sources.push(String(pokemon.ability || "Weather") + " damage");
+		}
+	} else if (field.hasWeather("Rain", "Heavy Rain")) {
+		if (pokemon.hasAbility("Dry Skin")) {
+			hpDelta += Math.floor(maxHP / 8);
+			sources.push("Dry Skin recovery");
+		} else if (pokemon.hasAbility("Rain Dish")) {
+			hpDelta += Math.floor(maxHP / 16);
+			sources.push("Rain Dish recovery");
+		}
+	} else if (field.hasWeather("Sand")) {
+		if (!hasResidualDisplayType(pokemon, "Rock", "Ground", "Steel") &&
+			!pokemon.hasAbility("Magic Guard", "Overcoat", "Sand Force", "Sand Rush", "Sand Veil") &&
+			!pokemon.hasItem("Safety Goggles")) {
+			hpDelta -= Math.floor(maxHP / (gen === 2 ? 8 : 16));
+			sources.push("sandstorm damage");
+		}
+	} else if (field.hasWeather("Hail", "Snow")) {
+		if (pokemon.hasAbility("Ice Body")) {
+			hpDelta += Math.floor(maxHP / 16);
+			sources.push("Ice Body recovery");
+		} else if (!hasResidualDisplayType(pokemon, "Ice") &&
+			!pokemon.hasAbility("Magic Guard", "Overcoat", "Snow Cloak") &&
+			!pokemon.hasItem("Safety Goggles") &&
+			field.hasWeather("Hail")) {
+			hpDelta -= Math.floor(maxHP / 16);
+			sources.push("hail damage");
+		}
+	}
+	if (pokemon.hasItem("Leftovers")) {
+		hpDelta += Math.floor(maxHP / 16);
+		sources.push("Leftovers recovery");
+	} else if (pokemon.hasItem("Black Sludge")) {
+		if (hasResidualDisplayType(pokemon, "Poison")) {
+			hpDelta += Math.floor(maxHP / 16);
+			sources.push("Black Sludge recovery");
+		} else if (!pokemon.hasAbility("Magic Guard", "Klutz")) {
+			hpDelta -= Math.floor(maxHP / 8);
+			sources.push("Black Sludge damage");
+		}
+	} else if (pokemon.hasItem("Sticky Barb")) {
+		hpDelta -= Math.floor(maxHP / 8);
+		sources.push("Sticky Barb damage");
+	}
+	if (field.attackerSide && field.attackerSide.isSeeded && !pokemon.hasAbility("Magic Guard")) {
+		hpDelta -= Math.floor(maxHP / (gen >= 2 ? 8 : 16));
+		sources.push("Leech Seed damage");
+	}
+	if (field.defenderSide && field.defenderSide.isSeeded &&
+		opposingPokemon && typeof opposingPokemon.maxHP === "function" &&
+		!opposingPokemon.hasAbility("Magic Guard")) {
+		var leechSeedAmount = Math.floor(opposingPokemon.maxHP() / (gen >= 2 ? 8 : 16));
+		if (opposingPokemon.hasAbility("Liquid Ooze")) {
+			hpDelta -= leechSeedAmount;
+			sources.push("Liquid Ooze damage");
+		} else {
+			hpDelta += leechSeedAmount;
+			sources.push("Leech Seed recovery");
+		}
+	}
+	if (field.hasTerrain("Grassy") && isResidualDisplayGrounded(pokemon, field)) {
+		hpDelta += Math.floor(maxHP / 16);
+		sources.push("Grassy Terrain recovery");
+	}
+	if (statusValue === "Poisoned") {
+		if (pokemon.hasAbility("Poison Heal")) {
+			hpDelta += Math.floor(maxHP / 8);
+			sources.push("Poison Heal");
+		} else if (!pokemon.hasAbility("Magic Guard")) {
+			hpDelta -= Math.floor(maxHP / (gen === 1 ? 16 : 8));
+			sources.push("poison damage");
+		}
+	} else if (statusValue === "Badly Poisoned") {
+		if (pokemon.hasAbility("Poison Heal")) {
+			hpDelta += Math.floor(maxHP / 8);
+			sources.push("Poison Heal");
+		} else if (!pokemon.hasAbility("Magic Guard")) {
+			hpDelta -= Math.floor((getSelectedPokeInfoToxicCounter(pokeInfo) * maxHP) / 16);
+			sources.push("toxic damage");
+		}
+	} else if (statusValue === "Burned") {
+		if (pokemon.hasAbility("Heatproof")) {
+			hpDelta -= Math.floor(maxHP / (gen > 6 ? 32 : 16));
+			sources.push("reduced burn damage");
+		} else if (!pokemon.hasAbility("Magic Guard")) {
+			hpDelta -= Math.floor(maxHP / (gen === 1 || gen > 6 ? 16 : 8));
+			sources.push("burn damage");
+		}
+	}
+	if ((statusValue === "Asleep" || pokemon.hasAbility("Comatose")) &&
+		opposingPokemon && opposingPokemon.hasAbility && opposingPokemon.hasAbility("Bad Dreams") &&
+		!pokemon.hasAbility("Magic Guard")) {
+		hpDelta -= Math.floor(maxHP / 8);
+		sources.push("Bad Dreams");
+	}
+	if (pokemon.isSaltCure && !pokemon.hasAbility("Magic Guard")) {
+		hpDelta -= Math.floor(maxHP / (hasResidualDisplayType(pokemon, "Water", "Steel") ? 4 : 8));
+		sources.push("Salt Cure");
+	}
+	if (!pokemon.hasAbility("Magic Guard") && field.attackerSide) {
+		if (!hasResidualDisplayType(pokemon, "Grass") && field.attackerSide.vinelash) {
+			hpDelta -= Math.floor(maxHP / 6);
+			sources.push("Vine Lash damage");
+		}
+		if (!hasResidualDisplayType(pokemon, "Fire") && field.attackerSide.wildfire) {
+			hpDelta -= Math.floor(maxHP / 6);
+			sources.push("Wildfire damage");
+		}
+		if (!hasResidualDisplayType(pokemon, "Water") && field.attackerSide.cannonade) {
+			hpDelta -= Math.floor(maxHP / 6);
+			sources.push("Cannonade damage");
+		}
+		if (!hasResidualDisplayType(pokemon, "Rock") && field.attackerSide.volcalith) {
+			hpDelta -= Math.floor(maxHP / 6);
+			sources.push("Volcalith damage");
+		}
+	}
+	if (!hpDelta) return {text: "", title: ""};
+	return {
+		text: (hpDelta > 0 ? "+" : "") + hpDelta + " per turn",
+		title: sources.join(", ")
+	};
+}
+
+function renderSideSupplementalDisplays(sideSelector, pokemon, opposingPokemon, field) {
+	var pokeInfo = $(sideSelector);
+	if (!pokeInfo.length) return;
+	var sideId = String(pokeInfo.attr("id") || "");
+	for (var moveIndex = 0; moveIndex < 4; moveIndex++) {
+		var move = pokemon && pokemon.moves ? pokemon.moves[moveIndex] : null;
+		var critDisplay = getMoveCritRateDisplay(pokemon, opposingPokemon, move, sideId);
+		var critTargets = $();
+		var moveRow = pokeInfo.find(".move" + (moveIndex + 1)).first();
+		if (moveRow.length) critTargets = critTargets.add(moveRow.find(".move-crit-rate-display"));
+		critTargets = critTargets.add(
+			pokeInfo.find('.simplified-side-move-row[data-move-index="' + moveIndex + '"] .move-crit-rate-display')
+		);
+		critTargets.text(critDisplay.text).attr("title", critDisplay.title);
+	}
+	var residualChips = pokeInfo.find(".side-residual-chip");
+	if (!residualChips.length) return;
+	var chipDisplay = getSideResidualChipDisplay(pokeInfo, pokemon, opposingPokemon, field);
+	if (chipDisplay.text) {
+		residualChips.text(chipDisplay.text);
+		residualChips.attr("title", chipDisplay.title || "Expected end-of-turn HP swing");
+		residualChips.prop("hidden", false).show();
+	} else {
+		residualChips.text("");
+		residualChips.removeAttr("title");
+		residualChips.prop("hidden", true).hide();
 	}
 }
 
@@ -7718,6 +8374,7 @@ function addBoxed(poke) {
 		keepSprite.id = spriteId;
 		keepSprite.dataset.id = setId;
 		setTrainerSpriteImage(keepSprite, speciesName);
+		applyPrimaryIconSheetIfNeeded(keepSprite, speciesName);
 		scheduleFragSheetRefresh();
 		applyPlayerRosterSearchFilter();
 		return;
@@ -7734,6 +8391,7 @@ function addBoxed(poke) {
 	newPoke.dataset.id = setId;
 	newPoke.addEventListener("dragstart", dragstart_handler);
 	$('#box-poke-list')[0].appendChild(newPoke)
+	applyPrimaryIconSheetIfNeeded(newPoke, speciesName);
 	scheduleFragSheetRefresh();
 	applyPlayerRosterSearchFilter();
 }
@@ -7743,7 +8401,7 @@ function getSrcImgPokemon(poke) {
 	if (!poke || !poke.name) {
 		return
 	}
-	return getTrainerSpriteUrlByName(poke.name);
+	return getInitialTrainerSpriteUrlByName(poke.name);
 }
 
 function get_trainer_poks(trainer_name) {

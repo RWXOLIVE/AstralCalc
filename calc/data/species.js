@@ -704,7 +704,7 @@ var RBY = {
     },
     Sandslash: {
         types: ['Ground', 'Fighting'],
-        bs: { hp: 75, at: 110, df: 105, sp: 75, sl: 40 },
+        bs: { hp: 75, at: 110, df: 115, sp: 75, sl: 40 },
         weightkg: 29.5
     },
     Scyther: {
@@ -1003,7 +1003,7 @@ var GSC_PATCH = {
     Rhydon: { bs: { sa: 45, sd: 45 } },
     Rhyhorn: { bs: { sa: 30, sd: 30 } },
     Sandshrew: { bs: { sa: 20, sd: 30 } },
-    Sandslash: { bs: { sa: 40, sd: 55 } },
+    Sandslash: { bs: { sa: 40, sd: 75 } },
     Scyther: { bs: { sa: 55, sd: 80 }, nfe: true },
     Seadra: { bs: { sa: 95, sd: 45 }, nfe: true },
     Seaking: { bs: { sa: 65, sd: 80 } },
@@ -1219,7 +1219,7 @@ var GSC_PATCH = {
     },
     Houndour: {
         types: ['Dark', 'Fire'],
-        bs: { hp: 45, at: 60, df: 30, sa: 80, sd: 50, sp: 65 },
+        bs: { hp: 45, at: 80, df: 30, sa: 80, sd: 50, sp: 85 },
         weightkg: 10.8,
         nfe: true
     },
@@ -7143,7 +7143,7 @@ var SM_PATCH = {
     },
     'Sandslash-Alola': {
         types: ['Ice', 'Steel'],
-        bs: { hp: 75, at: 100, df: 120, sa: 25, sd: 65, sp: 75 },
+        bs: { hp: 75, at: 105, df: 125, sa: 35, sd: 75, sp: 75 },
         weightkg: 55,
         baseSpecies: 'Sandslash',
         abilities: { 0: 'Snow Cloak' }
