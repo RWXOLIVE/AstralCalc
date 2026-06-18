@@ -7560,6 +7560,7 @@ function getSideResidualChipDisplay(pokeInfo, pokemon, opposingPokemon, field) {
 	var hpDelta = 0;
 	var sources = [];
 	var statusValue = getSelectedPokeInfoStatus(pokeInfo);
+	var itemEffectsSuppressed = !!(field && field.isMagicRoom) || pokemon.hasAbility("Klutz");
 	if (field.hasWeather("Sun", "Harsh Sunshine")) {
 		if (pokemon.hasAbility("Dry Skin", "Solar Power")) {
 			hpDelta -= Math.floor(maxHP / 8);
@@ -7592,18 +7593,18 @@ function getSideResidualChipDisplay(pokeInfo, pokemon, opposingPokemon, field) {
 			sources.push("hail damage");
 		}
 	}
-	if (pokemon.hasItem("Leftovers")) {
+	if (pokemon.hasItem("Leftovers") && !itemEffectsSuppressed) {
 		hpDelta += Math.floor(maxHP / 16);
 		sources.push("Leftovers recovery");
-	} else if (pokemon.hasItem("Black Sludge")) {
+	} else if (pokemon.hasItem("Black Sludge") && !itemEffectsSuppressed) {
 		if (hasResidualDisplayType(pokemon, "Poison")) {
 			hpDelta += Math.floor(maxHP / 16);
 			sources.push("Black Sludge recovery");
-		} else if (!pokemon.hasAbility("Magic Guard", "Klutz")) {
+		} else if (!pokemon.hasAbility("Magic Guard")) {
 			hpDelta -= Math.floor(maxHP / 8);
 			sources.push("Black Sludge damage");
 		}
-	} else if (pokemon.hasItem("Sticky Barb")) {
+	} else if (pokemon.hasItem("Sticky Barb") && !itemEffectsSuppressed && !pokemon.hasAbility("Magic Guard")) {
 		hpDelta -= Math.floor(maxHP / 8);
 		sources.push("Sticky Barb damage");
 	}
@@ -7615,12 +7616,16 @@ function getSideResidualChipDisplay(pokeInfo, pokemon, opposingPokemon, field) {
 		opposingPokemon && typeof opposingPokemon.maxHP === "function" &&
 		!opposingPokemon.hasAbility("Magic Guard")) {
 		var leechSeedAmount = Math.floor(opposingPokemon.maxHP() / (gen >= 2 ? 8 : 16));
+		var hasBigRoot = !itemEffectsSuppressed && pokemon.hasItem && pokemon.hasItem("Big Root");
+		if (hasBigRoot) leechSeedAmount = Math.floor(leechSeedAmount * 1.3);
 		if (opposingPokemon.hasAbility("Liquid Ooze")) {
-			hpDelta -= leechSeedAmount;
-			sources.push("Liquid Ooze damage");
+			if (!pokemon.hasAbility("Magic Guard")) {
+				hpDelta -= leechSeedAmount;
+				sources.push(hasBigRoot ? "Liquid Ooze damage (Big Root)" : "Liquid Ooze damage");
+			}
 		} else {
 			hpDelta += leechSeedAmount;
-			sources.push("Leech Seed recovery");
+			sources.push(hasBigRoot ? "Leech Seed recovery (Big Root)" : "Leech Seed recovery");
 		}
 	}
 	if (field.hasTerrain("Grassy") && isResidualDisplayGrounded(pokemon, field)) {

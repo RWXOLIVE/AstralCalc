@@ -365,7 +365,7 @@ function ensureSimplifiedSideCard(sideSelector) {
 				'<span class="simplified-side-move-crit-wrap">' +
 					'<input aria-describedby="criticalHitInstruction" class="simplified-side-move-crit-input visually-hidden" type="checkbox" id="' + critInputId + '" />' +
 					'<label class="btn crit-btn simplified-side-move-crit-btn" for="' + critInputId + '" title="Force this attack to be a critical hit?">Crit</label>' +
-					'<span class="move-crit-rate-display simplified-side-move-crit-rate" title="Current crit chance from passive crit-stage modifiers.">1/16</span>' +
+					'<span class="move-crit-rate-display simplified-side-move-crit-rate" title="Current crit chance for this move.">1/16</span>' +
 				"</span>" +
 				'<span class="simplified-side-move-damage simplified-damage-chip"></span>' +
 			"</div>"
@@ -1240,8 +1240,8 @@ function performCalculations() {
 	syncDisplayedModifiedStats(p1info, p1, false);
 	syncDisplayedModifiedStats(p2info, p2, false);
 	updateSpeedClasses(p1info, p2info, p1, p2, p1field);
-	renderSideSupplementalDisplays("#p1", p1, p1field);
-	renderSideSupplementalDisplays("#p2", p2, p2field);
+	renderSideSupplementalDisplays("#p1", p1, p2, p1field);
+	renderSideSupplementalDisplays("#p2", p2, p1, p2field);
 
 	try {
 		damageResults = calculateAllMoves(gen, p1, p1field, p2, p2field);
