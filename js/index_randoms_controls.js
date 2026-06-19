@@ -1511,9 +1511,17 @@ function applyCommanderBoost(pokeInfo) {
 function calculateAllMoves(gen, p1, p1field, p2, p2field) {
 	checkStatBoost(p1, p2);
 	var results = [[], []];
+	var useSingleTargetSpreadDamage = typeof shouldUseSingleTargetSpreadDamageForCurrentTrainerBattle === "function" &&
+		shouldUseSingleTargetSpreadDamageForCurrentTrainerBattle();
+	var adjustedP1Field = typeof getFieldWithSingleTargetSpreadDamageOverride === "function"
+		? getFieldWithSingleTargetSpreadDamageOverride(p1field, useSingleTargetSpreadDamage)
+		: p1field;
+	var adjustedP2Field = typeof getFieldWithSingleTargetSpreadDamageOverride === "function"
+		? getFieldWithSingleTargetSpreadDamageOverride(p2field, useSingleTargetSpreadDamage)
+		: p2field;
 	for (var i = 0; i < 4; i++) {
-		results[0][i] = calc.calculate(gen, p1, p2, p1.moves[i], p1field);
-		results[1][i] = calc.calculate(gen, p2, p1, p2.moves[i], p2field);
+		results[0][i] = calc.calculate(gen, p1, p2, p1.moves[i], adjustedP1Field);
+		results[1][i] = calc.calculate(gen, p2, p1, p2.moves[i], adjustedP2Field);
 	}
 	return results;
 }

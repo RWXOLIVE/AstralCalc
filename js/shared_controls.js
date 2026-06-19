@@ -1566,10 +1566,14 @@ var FRAG_PREVO_BY_SPECIES_ID = {
 	"zweilous": "deino"
 };
 var FRAG_EVOLUTION_SPECIES_ID_LOOKUP = {};
+var FRAG_NEXT_EVO_SPECIES_IDS = {};
 for (var fragEvoSpeciesId in FRAG_PREVO_BY_SPECIES_ID) {
 	if (!Object.prototype.hasOwnProperty.call(FRAG_PREVO_BY_SPECIES_ID, fragEvoSpeciesId)) continue;
+	var fragPrevoSpeciesId = FRAG_PREVO_BY_SPECIES_ID[fragEvoSpeciesId];
 	FRAG_EVOLUTION_SPECIES_ID_LOOKUP[fragEvoSpeciesId] = true;
-	FRAG_EVOLUTION_SPECIES_ID_LOOKUP[FRAG_PREVO_BY_SPECIES_ID[fragEvoSpeciesId]] = true;
+	FRAG_EVOLUTION_SPECIES_ID_LOOKUP[fragPrevoSpeciesId] = true;
+	if (!FRAG_NEXT_EVO_SPECIES_IDS[fragPrevoSpeciesId]) FRAG_NEXT_EVO_SPECIES_IDS[fragPrevoSpeciesId] = [];
+	FRAG_NEXT_EVO_SPECIES_IDS[fragPrevoSpeciesId].push(fragEvoSpeciesId);
 }
 
 function safeJsonParse(rawJson, fallbackValue) {
@@ -1952,26 +1956,21 @@ function getInlineSpriteNodeForPokeInfo(pokeInfo) {
 	return null;
 }
 
+function getSelectedFormeNameIfVisible(pokeInfo) {
+	if (!pokeInfo || !pokeInfo.length) return "";
+	var formeSelect = pokeInfo.find(".forme");
+	var formeContainer = formeSelect.parent();
+	if (!(formeSelect.length && formeContainer.length && formeContainer.is(":visible"))) return "";
+	return String(formeSelect.val() || "").trim();
+}
+
 function resolveInlineSpriteSpeciesForPokeInfo(pokeInfo) {
 	if (!pokeInfo || !pokeInfo.length) return "";
 	var transformedSpecies = String(pokeInfo.attr("data-transform-species") || "").trim();
 	if (transformedSpecies) return transformedSpecies;
+	var formeSpecies = getSelectedFormeNameIfVisible(pokeInfo);
+	if (formeSpecies) return formeSpecies;
 	var setSpecies = parseSetId(pokeInfo.find(".set-selector").val()).species || "";
-	var resolvedSetSpecies = resolveSetSpeciesNameForDexLookup(setSpecies);
-	var setSpeciesEntry = pokedex[resolvedSetSpecies] || pokedex[setSpecies];
-	var baseSpeciesEntry = setSpeciesEntry && setSpeciesEntry.baseSpecies ? pokedex[setSpeciesEntry.baseSpecies] : null;
-	var setHasFormes = !!(
-		setSpeciesEntry &&
-		(
-			(setSpeciesEntry.otherFormes && setSpeciesEntry.otherFormes.length) ||
-			(baseSpeciesEntry && baseSpeciesEntry.otherFormes && baseSpeciesEntry.otherFormes.length)
-		)
-	);
-	var formeSelect = pokeInfo.find(".forme");
-	var formeContainer = formeSelect.parent();
-	var useFormeSelection = !!(formeSelect.length && formeContainer.length && formeContainer.is(":visible"));
-	var formeSpecies = useFormeSelection ? String(formeSelect.val() || "").trim() : "";
-	if (setHasFormes && formeSpecies) return formeSpecies;
 	return String(setSpecies || "").trim();
 }
 
@@ -4884,9 +4883,11 @@ function applyOpposingDeadMarks() {
 function setOpposingSetDeadMark(setId, isDead) {
 	var key = String(setId || "");
 	if (!key) return;
+	var wasDead = !!deadOpposingSetMap[key];
 	if (isDead) deadOpposingSetMap[key] = true;
 	else delete deadOpposingSetMap[key];
 	applyOpposingDeadMarks();
+	if (wasDead !== !!isDead && typeof performCalculations === "function") performCalculations();
 }
 
 function clearOpposingDeadMarks() {
@@ -6334,6 +6335,88 @@ function isTrainerFieldExclusiveGroupLocked(exclusiveGroup, trainerKey) {
 	return false;
 }
 
+function getCurrentGenSpeciesNameByEvolutionId(speciesId) {
+	if (!speciesId || !pokedex) return "";
+	for (var speciesName in pokedex) {
+		if (!Object.prototype.hasOwnProperty.call(pokedex, speciesName)) continue;
+		if (toDexPokemonId(speciesName) === speciesId) return speciesName;
+	}
+	return "";
+}
+
+function appendUniqueFormeOption(optionNames, seenOptionNames, optionName) {
+	var normalizedOptionName = String(optionName || "").trim();
+	if (!normalizedOptionName || seenOptionNames[normalizedOptionName]) return;
+	seenOptionNames[normalizedOptionName] = true;
+	optionNames.push(normalizedOptionName);
+}
+
+function appendSpeciesAndOtherFormes(optionNames, seenOptionNames, excludedOptionNames, speciesName) {
+	var normalizedSpeciesName = String(speciesName || "").trim();
+	if (!normalizedSpeciesName || excludedOptionNames[normalizedSpeciesName]) return;
+	appendUniqueFormeOption(optionNames, seenOptionNames, normalizedSpeciesName);
+	var speciesEntry = pokedex && pokedex[normalizedSpeciesName];
+	if (!speciesEntry || !speciesEntry.otherFormes) return;
+	for (var i = 0; i < speciesEntry.otherFormes.length; i++) {
+		var otherFormeName = String(speciesEntry.otherFormes[i] || "").trim();
+		if (!otherFormeName || excludedOptionNames[otherFormeName]) continue;
+		appendUniqueFormeOption(optionNames, seenOptionNames, otherFormeName);
+	}
+}
+
+function collectEvolutionLineSpeciesIds(speciesId, speciesIds, visitedSpeciesIds) {
+	if (!speciesId || visitedSpeciesIds[speciesId]) return;
+	visitedSpeciesIds[speciesId] = true;
+	speciesIds.push(speciesId);
+
+	var nextEvoSpeciesIds = FRAG_NEXT_EVO_SPECIES_IDS[speciesId];
+	if (!nextEvoSpeciesIds || !nextEvoSpeciesIds.length) return;
+	for (var i = 0; i < nextEvoSpeciesIds.length; i++) {
+		collectEvolutionLineSpeciesIds(nextEvoSpeciesIds[i], speciesIds, visitedSpeciesIds);
+	}
+}
+
+function getEvolutionLineSpeciesNames(speciesName, excludedSpeciesNames) {
+	var speciesId = resolveEvolutionLookupSpeciesId(speciesName);
+	if (!speciesId) return [];
+
+	var rootSpeciesId = speciesId;
+	for (var depth = 0; depth < 12; depth++) {
+		var prevoSpeciesId = FRAG_PREVO_BY_SPECIES_ID[rootSpeciesId];
+		if (!prevoSpeciesId || prevoSpeciesId === rootSpeciesId) break;
+		rootSpeciesId = prevoSpeciesId;
+	}
+
+	var excludedSpeciesIds = {};
+	var excludedOptionNames = {};
+	for (var i = 0; i < excludedSpeciesNames.length; i++) {
+		var excludedSpeciesName = String(excludedSpeciesNames[i] || "").trim();
+		if (!excludedSpeciesName) continue;
+		excludedOptionNames[excludedSpeciesName] = true;
+		var excludedSpeciesId = resolveEvolutionLookupSpeciesId(excludedSpeciesName) || toDexPokemonId(excludedSpeciesName);
+		if (excludedSpeciesId) excludedSpeciesIds[excludedSpeciesId] = true;
+	}
+
+	var evolutionLineSpeciesIds = [];
+	collectEvolutionLineSpeciesIds(rootSpeciesId, evolutionLineSpeciesIds, {});
+
+	var seenOptionNames = {};
+	var evolutionLineSpeciesNames = [];
+	for (i = 0; i < evolutionLineSpeciesIds.length; i++) {
+		var evolutionLineSpeciesId = evolutionLineSpeciesIds[i];
+		if (excludedSpeciesIds[evolutionLineSpeciesId]) continue;
+		var evolutionLineSpeciesName = getCurrentGenSpeciesNameByEvolutionId(evolutionLineSpeciesId);
+		if (!evolutionLineSpeciesName) continue;
+		appendSpeciesAndOtherFormes(
+			evolutionLineSpeciesNames,
+			seenOptionNames,
+			excludedOptionNames,
+			evolutionLineSpeciesName
+		);
+	}
+	return evolutionLineSpeciesNames;
+}
+
 function applyTrainerFieldLocksForCurrentTrainer(options) {
 	var applyOptions = options || {};
 	var forceTrigger = !!applyOptions.forceTrigger;
@@ -6730,6 +6813,38 @@ function splitSetDoubleEntries(entries) {
 	return {primary: primary, secondary: secondary};
 }
 
+function isTrainerPartySideFullyMarkedDead(entries) {
+	if (!Array.isArray(entries) || !entries.length) return false;
+	for (var i = 0; i < entries.length; i++) {
+		if (!isOpposingSetMarkedDead(entries[i].fullSetName)) return false;
+	}
+	return true;
+}
+
+function getCurrentOpposingTrainerSideSplitEntries() {
+	var sortedEntries = (CURRENT_TRAINER_POKS || []).slice().sort(sortmons).map(parseTrainerPartyEntry);
+	if (!sortedEntries.length || !isSetDoubleEncounter(sortedEntries) || !shouldUseSetDoubleLayout(sortedEntries)) return null;
+	var splitEntries = splitSetDoubleEntries(sortedEntries);
+	if (!splitEntries.primary.length || !splitEntries.secondary.length) return null;
+	return splitEntries;
+}
+
+function shouldUseSingleTargetSpreadDamageForCurrentTrainerBattle() {
+	if ($("input:radio[name='format']:checked").val() !== "Doubles") return false;
+	var splitEntries = getCurrentOpposingTrainerSideSplitEntries();
+	if (!splitEntries) return false;
+	var isPrimaryCleared = isTrainerPartySideFullyMarkedDead(splitEntries.primary);
+	var isSecondaryCleared = isTrainerPartySideFullyMarkedDead(splitEntries.secondary);
+	return isPrimaryCleared !== isSecondaryCleared;
+}
+
+function getFieldWithSingleTargetSpreadDamageOverride(field, useSingleTargetSpreadDamage) {
+	if (!field || !useSingleTargetSpreadDamage) return field;
+	var adjustedField = typeof field.clone === "function" ? field.clone() : field;
+	adjustedField.ignoreSpreadDamageReduction = true;
+	return adjustedField;
+}
+
 function trainerPartyMonHtml(entry) {
 	var label = "[" + entry.indexText + "]" + entry.fullSetName;
 	return '<img class="trainer-pok right-side" src="' + escapeHtml(getInitialTrainerSpriteUrlByName(entry.pokemonName)) + '" data-id="' + escapeHtml(entry.fullSetName) + '" data-species="' + escapeHtml(entry.pokemonName) + '" title="' + escapeHtml(label + ", " + label + " BP") + '" loading="lazy" decoding="async"' + getPrimaryIconSheetLoadAttr(entry.pokemonName) + ' onerror="applyIconSheetFallbackImage(this, this.getAttribute(\'data-species\'))">';
@@ -6957,11 +7072,9 @@ $(".set-selector").change(function () {
 		if (pokemon.baseSpecies && pokemon.baseSpecies !== pokemon.name) {
 			baseForme = pokedex[pokemon.baseSpecies];
 		}
-		if (pokemon.otherFormes) {
-			showFormes(formeObj, pokemonName, pokemon, pokemonName);
-		} else if (baseForme && baseForme.otherFormes) {
-			showFormes(formeObj, pokemonName, baseForme, pokemon.baseSpecies);
-		} else {
+		var formeSourcePokemon = (baseForme && baseForme.otherFormes) ? baseForme : pokemon;
+		var formeBaseName = (baseForme && baseForme.otherFormes) ? pokemon.baseSpecies : pokemonName;
+		if (!showFormes(formeObj, pokemonName, formeSourcePokemon, formeBaseName)) {
 			// Prevent stale hidden forme values from overriding the top sprite later.
 			formeObj.children("select").find("option").remove().end().append(getSelectOptions([pokemonName], false, 0));
 			formeObj.hide();
@@ -7008,11 +7121,19 @@ $(document).on("click", ".poke-inline-sprite", function (ev) {
 	var formeContainer = formeSelect.parent();
 	if (!formeContainer.length || !formeContainer.is(":visible")) return;
 	var formeOptions = formeSelect.find("option");
-	if (formeOptions.length <= 1) return;
+	var enabledFormeOptions = formeOptions.filter(function () {
+		return !this.disabled;
+	});
+	if (enabledFormeOptions.length <= 1) return;
 	var currentIndex = formeSelect.prop("selectedIndex");
 	if (currentIndex < 0) currentIndex = 0;
-	var nextIndex = (currentIndex + 1) % formeOptions.length;
-	formeSelect.prop("selectedIndex", nextIndex).change();
+	for (var i = 0; i < formeOptions.length; i++) {
+		currentIndex = (currentIndex + 1) % formeOptions.length;
+		if (!formeOptions.eq(currentIndex).prop("disabled")) {
+			formeSelect.prop("selectedIndex", currentIndex).change();
+			return;
+		}
+	}
 });
 
 function getBattleCritToggleFromTopToggle(topToggleNode) {
@@ -7078,15 +7199,30 @@ function selectMovesFromRandomOptions(moves) {
 }
 
 function showFormes(formeObj, pokemonName, pokemon, baseFormeName) {
-	var formes = pokemon.otherFormes.slice();
-	formes.unshift(baseFormeName);
+	var formes = [];
+	var seenFormeNames = {};
+	appendUniqueFormeOption(formes, seenFormeNames, baseFormeName || pokemonName);
+	if (pokemon.otherFormes) {
+		for (var i = 0; i < pokemon.otherFormes.length; i++) {
+			appendUniqueFormeOption(formes, seenFormeNames, pokemon.otherFormes[i]);
+		}
+	}
+	var evolutionLine = getEvolutionLineSpeciesNames(pokemonName, formes);
+	if (formes.length + evolutionLine.length <= 1) return false;
 
-	var defaultForme = formes.indexOf(pokemonName);
-	if (defaultForme < 0) defaultForme = 0;
-
-	var formeOptions = getSelectOptions(formes, false, defaultForme);
+	var formeOptions = '';
+	for (var i = 0; i < formes.length; i++) {
+		formeOptions += '<option value="' + escapeHtml(formes[i]) + '" ' + (formes[i] === pokemonName ? 'selected' : '') + '>' + escapeHtml(formes[i]) + '</option>';
+	}
+	if (evolutionLine.length) {
+		formeOptions += '<option value="" disabled>[ Evo Line ]</option>';
+		for (i = 0; i < evolutionLine.length; i++) {
+			formeOptions += '<option value="' + escapeHtml(evolutionLine[i]) + '">' + escapeHtml(evolutionLine[i]) + '</option>';
+		}
+	}
 	formeObj.children("select").find("option").remove().end().append(formeOptions).change();
 	formeObj.show();
+	return true;
 }
 
 function setSelectValueIfValid(select, value, fallback) {
@@ -7094,6 +7230,7 @@ function setSelectValueIfValid(select, value, fallback) {
 }
 
 $(".forme").change(function () {
+	if ($(this).find("option:selected").prop("disabled")) return;
 	var selectedForme = String($(this).val() || "").trim();
 	var altForme = pokedex[selectedForme];
 	if (!altForme) return;
@@ -7239,18 +7376,19 @@ function createPokemon(pokeInfo) {
 			moves: pokemonMoves
 		});
 	} else {
-			var setName = pokeInfo.find("input.set-selector").val();
+		var setName = pokeInfo.find("input.set-selector").val();
+		var selectedFormeName = getSelectedFormeNameIfVisible(pokeInfo);
 		var name;
 		if (setName.indexOf("(") === -1) {
-			name = setName;
+			name = selectedFormeName || setName;
 		} else {
 			var pokemonName = setName.substring(0, setName.indexOf(" ("));
 			var pokemonLookupName = resolveSetSpeciesNameForDexLookup(pokemonName);
 			var species = pokedex[pokemonLookupName];
 			if (!species) {
-				name = pokemonName;
+				name = selectedFormeName || pokemonName;
 			} else {
-				name = (species.otherFormes || (species.baseSpecies && species.baseSpecies !== pokemonLookupName)) ? pokeInfo.find(".forme").val() : pokemonLookupName;
+				name = selectedFormeName || pokemonLookupName;
 			}
 		}
 

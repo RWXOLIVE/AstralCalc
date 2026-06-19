@@ -1340,7 +1340,7 @@ var GSC_PATCH = {
     },
     Phanpy: {
         types: ['Ground'],
-        bs: { hp: 90, at: 90, df: 90, sa: 30, sd: 60, sp: 40 },
+        bs: { hp: 90, at: 90, df: 90, sa: 30, sd: 60, sp: 45 },
         weightkg: 33.5,
         nfe: true
     },
@@ -1499,7 +1499,7 @@ var GSC_PATCH = {
     },
     Sunflora: {
         types: ['Grass'],
-        bs: { hp: 75, at: 75, df: 55, sa: 110, sd: 85, sp: 40 },
+        bs: { hp: 75, at: 75, df: 55, sa: 110, sd: 85, sp: 50 },
         weightkg: 8.5
     },
     Sunkern: {
@@ -2675,7 +2675,7 @@ var ADV_PATCH = {
     },
     Trapinch: {
         types: ['Ground', 'Bug'],
-        bs: { hp: 45, at: 100, df: 70, sa: 45, sd: 45, sp: 10 },
+        bs: { hp: 55, at: 100, df: 100, sa: 45, sd: 45, sp: 10 },
         weightkg: 15,
         nfe: true,
         abilities: { 0: 'Hyper Cutter' }
@@ -2695,7 +2695,7 @@ var ADV_PATCH = {
     },
     Vibrava: {
         types: ['Bug', 'Dragon'],
-        bs: { hp: 55, at: 80, df: 70, sa: 80, sd: 70, sp: 70 },
+        bs: { hp: 85, at: 80, df: 75, sa: 80, sd: 75, sp: 95 },
         weightkg: 15.3,
         abilities: { 0: 'Levitate' },
         nfe: true

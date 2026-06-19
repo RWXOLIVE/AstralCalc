@@ -137,8 +137,13 @@ function getSelectedTiers() {
 
 function calculateMovesOfAttacker(gen, attacker, defender, field) {
 	var results = [];
+	var useSingleTargetSpreadDamage = typeof shouldUseSingleTargetSpreadDamageForCurrentTrainerBattle === "function" &&
+		shouldUseSingleTargetSpreadDamageForCurrentTrainerBattle();
+	var adjustedField = typeof getFieldWithSingleTargetSpreadDamageOverride === "function"
+		? getFieldWithSingleTargetSpreadDamageOverride(field, useSingleTargetSpreadDamage)
+		: field;
 	for (var i = 0; i < 4; i++) {
-		results[i] = calc.calculate(gen, attacker, defender, attacker.moves[i], field);
+		results[i] = calc.calculate(gen, attacker, defender, attacker.moves[i], adjustedField);
 	}
 	return results;
 }
