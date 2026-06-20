@@ -1812,6 +1812,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Bulk Up","Drain Punch","Sucker Punch","Stone Edge"]
+        },
+    "Gym Leader Norman | Petalburg Gym": {
+            "index": "0000000177",
+            "level": 40,
+            "ability": "Guts",
+            "item": "Flame Orb",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Substitute","Focus Punch","Ice Punch","Sucker Punch"]
         }
     },
     "Sandslash": {
@@ -2657,28 +2668,17 @@ var SETDEX_SV = {
             },
             "moves": ["Trailblaze","Stomping Tantrum","Facade","Avalanche"]
         },
-    "Gym Leader Norman | Petalburg Gym": {
-            "index": "0000000175",
-            "level": 39,
-            "ability": "Guts",
-            "item": "Flame Orb",
-            "nature": "Jolly",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Facade","Trailblaze","Stomping Tantrum","Night Slash"]
-        },
     "GL Norman - DB | Petalburg Gym": {
-            "index": "0000000181",
+            "index": "0000000180",
             "level": 39,
             "ability": "Guts",
-            "item": "Flame Orb",
-            "nature": "Jolly",
+            "item": "Iapapa Berry",
+            "nature": "Careful",
             "setdouble": "True",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Protect","High Horsepower","Trailblaze","Facade"]
+            "moves": ["Facade","Stomping Tantrum","Night Slash","Bulk Up"]
         },
         "Pokemaniac Steve | Route 114": {
             "index": "0000000523",
@@ -2691,6 +2691,31 @@ var SETDEX_SV = {
             },
             "moves": ["Earthquake","Trailblaze","Stone Edge","Body Slam"]
         },
+    },
+    "Talonflame": {
+    "Gym Leader Norman | Petalburg Gym": {
+            "index": "0000000173",
+            "level": 40,
+            "ability": "Gale Wings",
+            "item": "Power Herb",
+            "nature": "Naive",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sky Attack","Acrobatics","Overheat","U-turn"]
+        },
+    "GL Norman - DB | Petalburg Gym": {
+            "index": "0000000179",
+            "level": 40,
+            "ability": "Flame Body",
+            "item": "Fire Gem",
+            "nature": "Hasty",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Searing Shot","Acrobatics","U-turn","Upper Hand"]
+        }
     },
     "Zoroark": {
     "Cool Trainer Parker | Petalburg Gym": {
@@ -3175,19 +3200,32 @@ var SETDEX_SV = {
             "moves": ["Body Press","Chilling Water","Earth Power","Shadow Ball"]
         }
     },
-    "Maushold-Four": {
+    "Audino-Mega": {
+    "Gym Leader Norman | Petalburg Gym": {
+            "index": "0000000178",
+            "level": 41,
+            "ability": "Fairy Aura",
+            "item": "Audinite",
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Hyper Voice","Moonblast","Mystical Fire","Calm Mind"]
+        },
     "GL Norman - DB | Petalburg Gym": {
-            "index": "0000000179",
-            "level": 39,
-            "ability": "Friend Guard",
-            "item": "Lum Berry",
-            "nature": "Timid",
+            "index": "0000000182",
+            "level": 41,
+            "ability": "Healer",
+            "item": "Audinite",
+            "nature": "Modest",
             "setdouble": "True",
             "ivs": {
-                "hp": 31, "at": 0, "df": 31, "sa": 31, "sd": 31, "sp": 31
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Bullet Seed","Population Bomb","Low Kick","Follow Me"]
-        },
+            "moves": ["Calm Mind","Heal Pulse","Alluring Voice","Hyper Voice"]
+        }
+    },
+    "Maushold-Four": {
     "Tag Partner Norman": {
             "index": "0000000280",
             "level": 46,
@@ -3214,19 +3252,6 @@ var SETDEX_SV = {
         }
     },
     "Oranguru": {
-    "GL Norman - DB | Petalburg Gym": {
-            "index": "0000000180",
-            "level": 39,
-            "ability": "Illuminate",
-            "item": "Covert Cloak",
-            "nature": "Bold",
-            "shiny": "Yes",
-            "setdouble": "True",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Instruct","Hyper Voice","Future Sight","Protect"]
-        },
     "Tag Partner Norman": {
             "index": "0000000281",
             "level": 46,
@@ -3240,43 +3265,7 @@ var SETDEX_SV = {
             "moves": ["Future Sight","Protect","Helping Hand","Instruct"]
         }
     },
-    "Porygon-Z": {
-    "Gym Leader Norman | Petalburg Gym": {
-            "index": "0000000173",
-            "level": 39,
-            "ability": "Adaptability",
-            "item": "King's Rock",
-            "nature": "Timid",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Tri Attack","Volt Switch","Recover","Dark Pulse"]
-        },
-    "GL Norman - DB | Petalburg Gym": {
-            "index": "0000000182",
-            "level": 39,
-            "ability": "Adaptability",
-            "item": "Expert Belt",
-            "nature": "Timid",
-            "setdouble": "True",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Tri Attack","Electroweb","Flamethrower","Ice Beam"]
-        }
-    },
     "Tauros": {
-    "Gym Leader Norman | Petalburg Gym": {
-            "index": "0000000174",
-            "level": 39,
-            "ability": "Intimidate",
-            "item": "Clear Amulet",
-            "nature": "Jolly",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Swords Dance","Retaliate","Pursuit","Stone Edge"]
-        },
     "Firebreather Bernie | Route 114": {
             "index": "0000000531",
             "level": 60,
@@ -3289,67 +3278,44 @@ var SETDEX_SV = {
             "moves": ["Fire Blast","Blizzard","Thunder","Body Slam"]
         }
     },
-    "Ditto": {
+    "Grafaiai": {
     "Gym Leader Norman | Petalburg Gym": {
-            "index": "0000000176",
+            "index": "0000000174",
             "level": 39,
-            "ability": "Imposter",
-            "item": "Quick Claw",
-            "nature": "Serious",
+            "ability": "Prankster",
+            "item": "Focus Sash",
+            "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Transform"]
+            "moves": ["Retaliate","Temper Flare","Low Kick","Parting Shot"]
+        }
+    },
+    "Terapagos": {
+    "Gym Leader Norman | Petalburg Gym": {
+            "index": "0000000175",
+            "level": 40,
+            "ability": "Tera Shell",
+            "item": "Leftovers",
+            "nature": "Rash",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Charge Beam","Rapid Spin","Tri Attack","Dark Pulse"]
         }
     },
     "Terapagos-Terastal": {
-    "Gym Leader Norman | Petalburg Gym": {
-            "index": "0000000177",
-            "level": 40,
-            "ability": "Tera Shell",
-            "item": "Leftovers",
-            "nature": "Adamant",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Scorching Sands","Tera Starstorm","Rapid Spin","Dazzling Gleam"]
-        },
-    "GL Norman - DB | Petalburg Gym": {
-            "index": "0000000183",
-            "level": 40,
-            "ability": "Tera Shell",
-            "item": "Leftovers",
-            "setdouble": "True",
-            "nature": "Adamant",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Tera Starstorm","Dark Pulse"]
-        }
-    },
-    "Drampa-Mega": {
-    "Gym Leader Norman | Petalburg Gym": {
-            "index": "0000000178",
-            "level": 41,
-            "ability": "Berserk",
-            "item": "Drampanite",
-            "nature": "Naughty",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Hydro Pump","Shock Wave","Hyper Voice","Dragon Breath"]
-        },
     "GL Norman - DB | Petalburg Gym": {
             "index": "0000000184",
-            "level": 41,
-            "ability": "Berserk",
-            "item": "Drampanite",
+            "level": 40,
+            "ability": "Tera Shell",
+            "item": "Power Herb",
             "setdouble": "True",
-            "nature": "Naughty",
+            "nature": "Timid",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Hyper Voice","Twister","Flamethrower","Thunder Wave"]
+            "moves": ["Meteor Beam","Dark Pulse","Hyper Beam","Aura Sphere"]
         }
     },
     "Lapras": {
@@ -4048,7 +4014,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Facade","Draco Meteor","Earthquake","Dual Wingbeat"]
+            "moves": ["Facade","Dragon Rush","Earthquake","Dual Wingbeat"]
         },
     "Fisherman Andrew | Route 103": {
             "index": "0000000301",
@@ -4525,6 +4491,32 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Destiny Bond","Acrobatics","Strength Sap","Phantom Force"]
+        },
+    "GL Norman - DB | Petalburg Gym": {
+            "index": "0000000181",
+            "level": 40,
+            "ability": "Flare Boost",
+            "item": "Wise Glasses",
+            "nature": "Modest",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Hypnosis","Hex","Air Slash","Thunderbolt"]
+        }
+    },
+    "Wugtrio": {
+    "GL Norman - DB | Petalburg Gym": {
+            "index": "0000000183",
+            "level": 40,
+            "ability": "Water Veil",
+            "item": "Focus Sash",
+            "nature": "Adamant",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Triple Dive","Sucker Punch","Stomping Tantrum","Protect"]
         }
     },
     "Duraludon": {
@@ -6057,6 +6049,17 @@ var SETDEX_SV = {
         }
     },
     "Vikavolt": {
+    "Gym Leader Norman | Petalburg Gym": {
+            "index": "0000000176",
+            "level": 39,
+            "ability": "Speed Boost",
+            "item": "Sitrus Berry",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Thunderbolt","Bug Buzz","Thunder Wave","Baton Pass"]
+        },
     "Leader Elesa | Mauville Gym": {
             "index": "0000000357",
             "level": 50,

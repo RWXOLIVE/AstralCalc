@@ -1499,7 +1499,7 @@ var GSC_PATCH = {
     },
     Sunflora: {
         types: ['Grass'],
-        bs: { hp: 75, at: 75, df: 55, sa: 110, sd: 85, sp: 50 },
+        bs: { hp: 75, at: 75, df: 65, sa: 110, sd: 85, sp: 50 },
         weightkg: 8.5
     },
     Sunkern: {

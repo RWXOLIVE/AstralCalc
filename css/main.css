@@ -1083,6 +1083,17 @@ body.layout-simplified .simplified-side-control-label select {
     overflow-wrap: anywhere;
 }
 
+.simplified-side-move-name.move-colour-btn {
+    display: inline-block;
+    max-width: 100%;
+    justify-self: start;
+    padding: 2px 8px;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 999px;
+    box-sizing: border-box;
+}
+
 .simplified-side-move-info {
     display: grid;
     row-gap: 2px;

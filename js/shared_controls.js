@@ -7534,8 +7534,6 @@ function syncDisplayedModifiedStats(pokeInfo, pokemon, preferCalculatedStats) {
 var DEFAULT_CRIT_RATE_BY_STAGE = [
 	{num: 1, den: 16},
 	{num: 1, den: 8},
-	{num: 1, den: 4},
-	{num: 1, den: 3},
 	{num: 1, den: 2},
 	{num: 1, den: 1}
 ];
@@ -7591,8 +7589,13 @@ function getCritChanceForStage(stage, sideId) {
 }
 
 function formatCritChanceText(chance) {
-	if (!chance) return "1/16";
-	return chance.den === 1 ? "100%" : (chance.num + "/" + chance.den);
+	var fallbackPercent = 100 / 16;
+	if (!chance || !chance.den) {
+		return fallbackPercent.toFixed(2).replace(/\.?0+$/, "") + "%";
+	}
+	var percent = (Number(chance.num || 0) / Number(chance.den)) * 100;
+	if (!isFinite(percent)) percent = fallbackPercent;
+	return percent.toFixed(2).replace(/\.?0+$/, "") + "%";
 }
 
 function getCritBlockerAbilityName(pokemon) {
