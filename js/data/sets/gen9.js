@@ -3215,7 +3215,7 @@ var SETDEX_SV = {
     "GL Norman - DB | Petalburg Gym": {
             "index": "0000000182",
             "level": 41,
-            "ability": "Healer",
+            "ability": "Fairy Aura",
             "item": "Audinite",
             "nature": "Modest",
             "setdouble": "True",
