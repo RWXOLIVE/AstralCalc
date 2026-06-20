@@ -3291,7 +3291,7 @@ var SETDEX_SV = {
             "moves": ["Retaliate","Temper Flare","Low Kick","Parting Shot"]
         }
     },
-    "Terapagos": {
+    "Terapagos-Terastal": {
     "Gym Leader Norman | Petalburg Gym": {
             "index": "0000000175",
             "level": 40,
@@ -3302,10 +3302,8 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Charge Beam","Rapid Spin","Tri Attack","Dark Pulse"]
-        }
-    },
-    "Terapagos-Terastal": {
-    "GL Norman - DB | Petalburg Gym": {
+        },
+        "GL Norman - DB | Petalburg Gym": {
             "index": "0000000184",
             "level": 40,
             "ability": "Tera Shell",
