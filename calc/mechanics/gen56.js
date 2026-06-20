@@ -632,7 +632,7 @@ function calculateBWXY(gen, attacker, defender, move, field) {
     }
     defense = (0, util_2.OF16)(Math.max(1, (0, util_2.pokeRound)((defense * (0, util_2.chainMods)(dfMods, 410, 131072)) / 4096)));
     var baseDamage = (0, util_2.getBaseDamage)(attacker.level, basePower, attack, defense);
-    var isSpread = field.gameType !== 'Singles' &&
+    var isSpread = !field.ignoreSpreadDamageReduction && field.gameType !== 'Singles' &&
         ['allAdjacent', 'allAdjacentFoes'].includes(move.target);
     if (isSpread) {
         baseDamage = (0, util_2.pokeRound)((0, util_2.OF32)(baseDamage * 3072) / 4096);

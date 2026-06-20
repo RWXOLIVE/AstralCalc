@@ -6,6 +6,17 @@ export function toID(s: string) {
 }
 
 const GENERATIONS = Object.create(null) as {[num: number]: Generation};
+const FURFROU_FORMES = [
+  'Furfrou-Dandy',
+  'Furfrou-Debutante',
+  'Furfrou-Diamond',
+  'Furfrou-Heart',
+  'Furfrou-Kabuki',
+  'Furfrou-La Reine',
+  'Furfrou-Matron',
+  'Furfrou-Pharaoh',
+  'Furfrou-Star',
+] as I.SpeciesName[];
 
 export class Generations implements I.Generations {
   private readonly dex: D.ModdedDex;
@@ -271,6 +282,12 @@ class Species implements I.Species {
       if (s) {
         if (id === 'aegislash') yield AegislashBoth(this.dex);
         yield s;
+        if (id === 'furfrou') {
+          for (const forme of FURFROU_FORMES) {
+            const cosmetic = this.get(forme);
+            if (cosmetic) yield cosmetic;
+          }
+        }
       }
     }
   }
@@ -317,7 +334,10 @@ class Specie implements I.Specie {
     if (nfe) this.nfe = nfe;
     if (species.gender === 'N' && dex.gen > 1) this.gender = species.gender;
 
-    const formes = species.otherFormes?.filter((s: string) => exists(dex.species.get(s), dex.gen));
+    const formes = (
+      species.otherFormes ||
+      (species.id === 'furfrou' ? FURFROU_FORMES : undefined)
+    )?.filter((s: string) => exists(dex.species.get(s), dex.gen));
     if (species.id.startsWith('aegislash')) {
       if (species.id === 'aegislashblade') {
         this.otherFormes = ['Aegislash-Shield', 'Aegislash-Both'] as I.SpeciesName[];

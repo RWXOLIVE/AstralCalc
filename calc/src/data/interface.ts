@@ -115,6 +115,7 @@ export interface Move extends Data<MoveName> {
   readonly hasCrashDamage?: boolean;
   readonly mindBlownRecoil?: boolean;
   readonly struggleRecoil?: boolean;
+  readonly critRatio?: number;
   readonly willCrit?: boolean;
   readonly drain?: [number, number];
   readonly priority?: number;

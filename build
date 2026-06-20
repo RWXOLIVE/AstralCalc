@@ -5,7 +5,20 @@ const path = require('path');
 const fs = require('fs');
 const crypto = require('crypto');
 
-const rootDir = '.';
+const rootDir = __dirname;
+const DIST_SYNC_TARGET = process.env.ASTRALCALC_DIST_SYNC_TARGET || 'R:\\Users\\linkp\\Desktop\\AstralCalc\\AstralCalc';
+
+function normalizeExternalPath(rawPath) {
+	const value = String(rawPath || '').trim();
+	if (!value) return value;
+	// Running from WSL/Linux: convert Windows drive paths like R:\foo\bar -> /mnt/r/foo/bar
+	if (process.platform !== 'win32' && /^[A-Za-z]:[\\/]/.test(value)) {
+		const driveLetter = value.charAt(0).toLowerCase();
+		const tail = value.slice(2).replace(/\\/g, '/').replace(/^\/+/, '');
+		return '/mnt/' + driveLetter + '/' + tail;
+	}
+	return value;
+}
 
 // update version
 function makeCachebuster(template, output) {
@@ -30,6 +43,8 @@ function makeCachebuster(template, output) {
 
 function cpdir(src, dest) {
 	console.log("Copying `" + src + "` to `" + dest + "`");
+	src = path.resolve(rootDir, src);
+	dest = path.resolve(rootDir, dest);
 	try {
 		fs.mkdirSync(dest, '0755');
 	} catch(e) {
@@ -51,6 +66,50 @@ function cpdir(src, dest) {
 	}
 }
 
+function cpdirExact(src, dest) {
+	src = path.resolve(rootDir, src);
+	dest = path.resolve(normalizeExternalPath(dest));
+	console.log("Syncing `" + src + "` to `" + dest + "`");
+	if (!fs.existsSync(src)) throw new Error("Sync source does not exist: " + src);
+	try {
+		fs.mkdirSync(dest, '0755');
+	} catch (e) {
+		if (e.code != 'EEXIST') throw e;
+	}
+	for (const file of fs.readdirSync(src)) {
+		const srcPath = path.join(src, file);
+		const destPath = path.join(dest, file);
+		const current = fs.lstatSync(srcPath);
+		if (typeof fs.cpSync === 'function') {
+			fs.cpSync(srcPath, destPath, {recursive: true, force: true});
+			continue;
+		}
+		if (current.isDirectory()) {
+			cpdirExact(srcPath, destPath);
+		} else if (current.isSymbolicLink()) {
+			const symlink = fs.readlinkSync(srcPath);
+			try {
+				fs.unlinkSync(destPath);
+			} catch (e) {
+				if (e.code !== 'ENOENT') throw e;
+			}
+			fs.symlinkSync(symlink, destPath);
+		} else {
+			fs.copyFileSync(srcPath, destPath);
+		}
+	}
+}
+
+function writeBuildVersion() {
+	const versionPath = path.resolve(rootDir, 'dist', 'version.json');
+	const payload = {
+		buildId: String(Date.now()),
+		builtAt: new Date().toISOString(),
+	};
+	fs.writeFileSync(versionPath, JSON.stringify(payload));
+	console.log("Wrote `" + versionPath + "`");
+}
+
 if (process.argv[2] !== 'view') {
 	require('child_process').execSync('npm --prefix calc/ run compile', {stdio: 'inherit'});
 }
@@ -60,3 +119,8 @@ cpdir('calc/dist', 'dist/calc');
 makeCachebuster('dist/honkalculate.template.html', 'dist/honkalculate.html');
 makeCachebuster('dist/index.template.html', 'dist/index.html');
 makeCachebuster('dist/randoms.template.html', 'dist/randoms.html');
+writeBuildVersion();
+
+if (DIST_SYNC_TARGET) {
+	cpdirExact('dist', DIST_SYNC_TARGET);
+}

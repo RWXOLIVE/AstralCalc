@@ -10,6 +10,7 @@ export class Field implements State.Field {
   isWonderRoom: boolean;
   isGravity: boolean;
   isInverse: boolean;
+  ignoreSpreadDamageReduction?: boolean;
   isAuraBreak?: boolean;
   isFairyAura?: boolean;
   isDarkAura?: boolean;
@@ -29,6 +30,7 @@ export class Field implements State.Field {
     this.isWonderRoom = !!field.isWonderRoom;
     this.isGravity = !!field.isGravity;
     this.isInverse = !!field.isInverse;
+    this.ignoreSpreadDamageReduction = !!field.ignoreSpreadDamageReduction;
     this.isAuraBreak = field.isAuraBreak || false;
     this.isFairyAura = field.isFairyAura || false;
     this.isDarkAura = field.isDarkAura || false;
@@ -64,6 +66,7 @@ export class Field implements State.Field {
       isWonderRoom: this.isWonderRoom,
       isGravity: this.isGravity,
       isInverse: this.isInverse,
+      ignoreSpreadDamageReduction: this.ignoreSpreadDamageReduction,
       attackerSide: this.attackerSide,
       defenderSide: this.defenderSide,
       isAuraBreak: this.isAuraBreak,

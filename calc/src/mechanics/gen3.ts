@@ -247,7 +247,8 @@ export function calculateADV(
     desc.isSwitching = 'out';
   }
 
-  if (field.gameType !== 'Singles' && move.target === 'allAdjacentFoes') {
+  if (!field.ignoreSpreadDamageReduction &&
+      field.gameType !== 'Singles' && move.target === 'allAdjacentFoes') {
     baseDamage = Math.floor(baseDamage / 2);
   }
 

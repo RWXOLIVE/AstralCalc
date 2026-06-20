@@ -281,6 +281,18 @@ function normalizeStatusLabel(status) {
 	}
 }
 
+function cloneImportedSpecies(speciesData) {
+	if (!speciesData || typeof speciesData !== "object") return speciesData;
+	if (typeof deepCloneJsonValue === "function") {
+		return deepCloneJsonValue(speciesData, {});
+	}
+	try {
+		return JSON.parse(JSON.stringify(speciesData));
+	} catch (err) {
+		return $.extend ? $.extend(true, {}, speciesData) : speciesData;
+	}
+}
+
 function getStats(currentPoke, rows, offset) {
 	currentPoke.nature = "Serious";
 	var currentEV;
@@ -290,7 +302,10 @@ function getStats(currentPoke, rows, offset) {
 	var currentNature;
 	currentPoke.level = 100;
 	for (var x = offset; x < offset + 9; x++) {
-		var currentRow = rows[x] ? rows[x].split(/[/:]/) : '';
+		if (!rows[x] || !rows[x].trim()) {
+			break;
+		}
+		var currentRow = rows[x].split(/[/:]/);
 		var evs = {};
 		var ivs = {};
 		var ev;
@@ -501,8 +516,6 @@ function updateDex(customsets) {
 			SETDEX_GSC[pokemon][moveset] = savedSet;
 			if (!SETDEX_RBY[pokemon]) SETDEX_RBY[pokemon] = {};
 			SETDEX_RBY[pokemon][moveset] = savedSet;
-			var poke = {name: pokemon, nameProp: moveset};	
-			addBoxed(poke);
 		}
 	}
 	localStorage.customsets = JSON.stringify(customsets);
@@ -518,7 +531,7 @@ function addSets(pokes, name) {
 		for (var j = 0; j < currentRow.length; j++) {
 			currentRow[j] = checkExeptions(currentRow[j].trim());
 			if (calc.SPECIES[9][currentRow[j].trim()] !== undefined) {
-				currentPoke = calc.SPECIES[9][currentRow[j].trim()];
+				currentPoke = cloneImportedSpecies(calc.SPECIES[9][currentRow[j].trim()]);
 				currentPoke.name = currentRow[j].trim();
 				currentPoke.item = getItem(currentRow, j + 1);
 				if (j === 1 && currentRow[0].trim()) {
@@ -580,7 +593,29 @@ function checkExeptions(poke) {
 	case 'Florges-Blue':
 	case 'Florges-Orange':
 	case 'Florges-Yellow':
+	case 'Florges-Red-Flower':
+	case 'Florges-Yellow-Flower':
+	case 'Florges-Orange-Flower':
+	case 'Florges-Blue-Flower':
+	case 'Florges-White-Flower':
 		poke = "Florges";
+		break;
+	case 'Flabebe-Red-Flower':
+	case 'Flabebe-Yellow-Flower':
+	case 'Flabebe-Orange-Flower':
+	case 'Flabebe-Blue-Flower':
+	case 'Flabebe-White-Flower':
+		poke = "Flabébé";
+		break;
+	case 'Floette-Red-Flower':
+	case 'Floette-Yellow-Flower':
+	case 'Floette-Orange-Flower':
+	case 'Floette-Blue-Flower':
+	case 'Floette-White-Flower':
+		poke = "Floette";
+		break;
+	case 'Floette-Eternal-Flower':
+		poke = "Floette-Eternal";
 		break;
 	}
 	return poke;
@@ -620,6 +655,9 @@ $(document).ready(function () {
 	if (localStorage.customsets) {
 		customSets = JSON.parse(localStorage.customsets);
 		updateDex(customSets);
+		if (typeof restorePlayerRosterLayoutFromStorage === "function") {
+			restorePlayerRosterLayoutFromStorage(customSets);
+		}
 		var restoredSelection = false;
 		if (typeof restoreLastEncounterSelection === "function") {
 			restoredSelection = !!restoreLastEncounterSelection();
@@ -631,9 +669,6 @@ $(document).ready(function () {
 			if (!activePlayerSet) {
 				selectFirstMon();
 			}
-		}
-		if (typeof saveLastEncounterSelection === "function") {
-			saveLastEncounterSelection();
 		}
 		$(allPokemon("#importedSetsOptions")).css("display", "inline");
 	} else if (!$(".set-selector").first().data("select2")) {

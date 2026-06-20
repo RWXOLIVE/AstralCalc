@@ -39,6 +39,7 @@ export declare namespace State {
         isWonderRoom?: boolean;
         isGravity?: boolean;
         isInverse?: boolean;
+        ignoreSpreadDamageReduction?: boolean;
         isAuraBreak?: boolean;
         isFairyAura?: boolean;
         isDarkAura?: boolean;

@@ -23,6 +23,7 @@ export declare class Move implements State.Move {
     hasCrashDamage: boolean;
     mindBlownRecoil: boolean;
     struggleRecoil: boolean;
+    critRatio: number;
     isCrit: boolean;
     drain?: [number, number];
     priority: number;

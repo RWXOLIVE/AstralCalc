@@ -62,7 +62,7 @@ var __values = (this && this.__values) || function(o) {
     };
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
-var e_1, _a;
+var e_1, _a, e_2, _b;
 exports.__esModule = true;
 
 var util_1 = require("../util");
@@ -704,7 +704,7 @@ var RBY = {
     },
     Sandslash: {
         types: ['Ground', 'Fighting'],
-        bs: { hp: 75, at: 110, df: 105, sp: 75, sl: 40 },
+        bs: { hp: 75, at: 110, df: 115, sp: 75, sl: 40 },
         weightkg: 29.5
     },
     Scyther: {
@@ -716,7 +716,7 @@ var RBY = {
     Seaking: { types: ['Water'], bs: { hp: 80, at: 92, df: 65, sp: 68, sl: 65 }, weightkg: 39 },
     Seel: {
         types: ['Water'],
-        bs: { hp: 65, at: 55, df: 70, sp: 45, sl: 70 },
+        bs: { hp: 90, at: 55, df: 70, sp: 45, sl: 70 },
         weightkg: 90,
         nfe: true
     },
@@ -768,7 +768,7 @@ var RBY = {
     },
     Staryu: {
         types: ['Water'],
-        bs: { hp: 30, at: 45, df: 55, sp: 85, sl: 70 },
+        bs: { hp: 60, at: 45, df: 60, sp: 85, sl: 70 },
         weightkg: 34.5,
         nfe: true
     },
@@ -839,7 +839,7 @@ var RBY = {
     },
     Vulpix: {
         types: ['Fire'],
-        bs: { hp: 40, at: 41, df: 40, sp: 65, sl: 50 },
+        bs: { hp: 75, at: 41, df: 40, sp: 75, sl: 50 },
         weightkg: 9.9,
         nfe: true
     },
@@ -1003,7 +1003,7 @@ var GSC_PATCH = {
     Rhydon: { bs: { sa: 45, sd: 45 } },
     Rhyhorn: { bs: { sa: 30, sd: 30 } },
     Sandshrew: { bs: { sa: 20, sd: 30 } },
-    Sandslash: { bs: { sa: 40, sd: 55 } },
+    Sandslash: { bs: { sa: 40, sd: 75 } },
     Scyther: { bs: { sa: 55, sd: 80 }, nfe: true },
     Seadra: { bs: { sa: 95, sd: 45 }, nfe: true },
     Seaking: { bs: { sa: 65, sd: 80 } },
@@ -1015,7 +1015,7 @@ var GSC_PATCH = {
     Spearow: { bs: { sa: 31, sd: 31 } },
     Squirtle: { bs: { sa: 50, sd: 64 } },
     Starmie: { bs: { sa: 100, sd: 85 }, gender: 'N' },
-    Staryu: { bs: { sa: 70, sd: 55 }, gender: 'N' },
+    Staryu: { bs: { sa: 70, sd: 90 }, gender: 'N' },
     Tangela: { bs: { sa: 100, sd: 40 } },
     Tauros: { bs: { sa: 40, sd: 70 } },
     Tentacool: { bs: { sa: 50, sd: 100 } },
@@ -1027,7 +1027,7 @@ var GSC_PATCH = {
     Victreebel: { bs: { sa: 100, sd: 100 } },
     Vileplume: { bs: { sa: 110, sd: 95 } },
     Voltorb: { bs: { sa: 55, sd: 55 }, gender: 'N' },
-    Vulpix: { bs: { sa: 50, sd: 65 } },
+    Vulpix: { bs: { sa: 75, sd: 75 } },
     Wartortle: { bs: { sa: 65, sd: 80 } },
     Weedle: { bs: { sa: 20, sd: 20 } },
     Weepinbell: { bs: { sa: 85, sd: 45 } },
@@ -1035,7 +1035,7 @@ var GSC_PATCH = {
     Wigglytuff: { bs: { sa: 95, sd: 74 } },
     Zapdos: { bs: { sa: 125, sd: 90 }, gender: 'N' },
     Zubat: { bs: { sa: 30, sd: 40 } },
-    Aipom: { types: ['Normal'], bs: { hp: 55, at: 70, df: 55, sa: 40, sd: 55, sp: 85 }, weightkg: 11.5 },
+    Aipom: { types: ['Normal'], bs: { hp: 65, at: 88, df: 65, sa: 10, sd: 65, sp: 96 }, weightkg: 11.5 },
     Ampharos: {
         types: ['Electric'],
         bs: { hp: 90, at: 75, df: 85, sa: 115, sd: 90, sp: 55 },
@@ -1219,7 +1219,7 @@ var GSC_PATCH = {
     },
     Houndour: {
         types: ['Dark', 'Fire'],
-        bs: { hp: 45, at: 60, df: 30, sa: 80, sd: 50, sp: 65 },
+        bs: { hp: 45, at: 80, df: 30, sa: 80, sd: 50, sp: 85 },
         weightkg: 10.8,
         nfe: true
     },
@@ -1340,7 +1340,7 @@ var GSC_PATCH = {
     },
     Phanpy: {
         types: ['Ground'],
-        bs: { hp: 90, at: 60, df: 60, sa: 40, sd: 40, sp: 40 },
+        bs: { hp: 90, at: 90, df: 90, sa: 30, sd: 60, sp: 45 },
         weightkg: 33.5,
         nfe: true
     },
@@ -1499,7 +1499,7 @@ var GSC_PATCH = {
     },
     Sunflora: {
         types: ['Grass'],
-        bs: { hp: 75, at: 75, df: 55, sa: 110, sd: 85, sp: 40 },
+        bs: { hp: 75, at: 75, df: 65, sa: 110, sd: 85, sp: 50 },
         weightkg: 8.5
     },
     Sunkern: {
@@ -1516,7 +1516,7 @@ var GSC_PATCH = {
     },
     Teddiursa: {
         types: ['Normal'],
-        bs: { hp: 60, at: 90, df: 50, sa: 50, sd: 50, sp: 80 },
+        bs: { hp: 60, at: 90, df: 75, sa: 50, sd: 75, sp: 80 },
         weightkg: 8.8,
         nfe: true
     },
@@ -1921,7 +1921,7 @@ var ADV_PATCH = {
     },
     Beldum: {
         types: ['Steel', 'Psychic'],
-        bs: { hp: 40, at: 55, df: 80, sa: 35, sd: 60, sp: 30 },
+        bs: { hp: 50, at: 70, df: 80, sa: 35, sd: 60, sp: 30 },
         weightkg: 95.2,
         nfe: true,
         gender: 'N',
@@ -2675,7 +2675,7 @@ var ADV_PATCH = {
     },
     Trapinch: {
         types: ['Ground', 'Bug'],
-        bs: { hp: 45, at: 100, df: 70, sa: 45, sd: 45, sp: 10 },
+        bs: { hp: 55, at: 100, df: 100, sa: 45, sd: 45, sp: 10 },
         weightkg: 15,
         nfe: true,
         abilities: { 0: 'Hyper Cutter' }
@@ -2695,7 +2695,7 @@ var ADV_PATCH = {
     },
     Vibrava: {
         types: ['Bug', 'Dragon'],
-        bs: { hp: 55, at: 80, df: 70, sa: 80, sd: 70, sp: 70 },
+        bs: { hp: 85, at: 80, df: 75, sa: 80, sd: 75, sp: 95 },
         weightkg: 15.3,
         abilities: { 0: 'Levitate' },
         nfe: true
@@ -3023,7 +3023,7 @@ var DPP_PATCH = {
     },
     Buizel: {
         types: ['Water', 'Normal'],
-        bs: { hp: 55, at: 65, df: 35, sa: 60, sd: 30, sp: 85 },
+        bs: { hp: 75, at: 70, df: 35, sa: 75, sd: 30, sp: 90 },
         weightkg: 29.5,
         nfe: true,
         abilities: { 0: 'Swift Swim' }
@@ -3286,13 +3286,15 @@ var DPP_PATCH = {
         types: ['Fire', 'Steel'],
         bs: { hp: 91, at: 90, df: 106, sa: 130, sd: 106, sp: 77 },
         weightkg: 430,
-        abilities: { 0: 'Flash Fire' }
+        abilities: { 0: 'Flash Fire' },
+        otherFormes: ['Heatran-Mega']
     },
     'Heatran-Mega': {
         types: ['Fire', 'Steel'],
         bs: { hp: 91, at: 120, df: 106, sa: 175, sd: 141, sp: 67 },
         weightkg: 570,
-        abilities: { 0: 'Flash Fire' }
+        abilities: { 0: 'Flash Fire' },
+        baseSpecies: 'Heatran'
     },
     Hippopotas: {
         types: ['Ground'],
@@ -3328,7 +3330,7 @@ var DPP_PATCH = {
     },
     Kricketune: {
         types: ['Bug'],
-        bs: { hp: 77, at: 75, df: 58, sa: 73, sd: 62, sp: 65 },
+        bs: { hp: 110, at: 90, df: 58, sa: 73, sd: 62, sp: 65 },
         weightkg: 25.5,
         abilities: { 0: 'Swarm' }
     },
@@ -3905,7 +3907,7 @@ var BW_PATCH = {
         gender: 'N'
     },
     Cofagrigus: {
-        types: ['Ghost', 'Steel'],
+        types: ['Ghost'],
         bs: { hp: 58, at: 50, df: 145, sa: 95, sd: 105, sp: 30 },
         weightkg: 76.5,
         abilities: { 0: 'Mummy' }
@@ -4000,7 +4002,7 @@ var BW_PATCH = {
     },
     Ducklett: {
         types: ['Water', 'Flying'],
-        bs: { hp: 62, at: 54, df: 50, sa: 54, sd: 50, sp: 55 },
+        bs: { hp: 62, at: 54, df: 50, sa: 54, sd: 50, sp: 79 },
         weightkg: 5.5,
         nfe: true,
         abilities: { 0: 'Keen Eye' }
@@ -4582,7 +4584,7 @@ var BW_PATCH = {
     },
     Samurott: {
         types: ['Water', 'Rock'],
-        bs: { hp: 95, at: 105, df: 95, sa: 85, sd: 90, sp: 70 },
+        bs: { hp: 95, at: 105, df: 95, sa: 85, sd: 90, sp: 65 },
         weightkg: 94.6,
         abilities: { 0: 'Torrent' }
     },
@@ -4647,7 +4649,7 @@ var BW_PATCH = {
     },
     Serperior: {
         types: ['Grass', 'Dragon'],
-        bs: { hp: 75, at: 75, df: 95, sa: 75, sd: 95, sp: 113 },
+        bs: { hp: 82, at: 75, df: 95, sa: 75, sd: 95, sp: 113 },
         weightkg: 63,
         abilities: { 0: 'Overgrow' }
     },
@@ -5189,7 +5191,7 @@ var XY_PATCH = {
     },
     Clauncher: {
         types: ['Water'],
-        bs: { hp: 50, at: 53, df: 62, sa: 58, sd: 63, sp: 44 },
+        bs: { hp: 61, at: 53, df: 65, sa: 61, sd: 63, sp: 44 },
         weightkg: 8.3,
         abilities: { 0: 'Mega Launcher' },
         nfe: true
@@ -5336,7 +5338,81 @@ var XY_PATCH = {
         types: ['Normal'],
         bs: { hp: 75, at: 80, df: 60, sa: 65, sd: 90, sp: 102 },
         weightkg: 28,
-        abilities: { 0: 'Fur Coat' }
+        abilities: { 0: 'Fur Coat' },
+        otherFormes: [
+            'Furfrou-Dandy',
+            'Furfrou-Debutante',
+            'Furfrou-Diamond',
+            'Furfrou-Heart',
+            'Furfrou-Kabuki',
+            'Furfrou-La Reine',
+            'Furfrou-Matron',
+            'Furfrou-Pharaoh',
+            'Furfrou-Star',
+        ]
+    },
+    'Furfrou-Dandy': {
+        types: ['Normal', 'Grass'],
+        bs: { hp: 102, at: 80, df: 60, sa: 65, sd: 90, sp: 75 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-Debutante': {
+        types: ['Normal', 'Electric'],
+        bs: { hp: 75, at: 80, df: 60, sa: 85, sd: 60, sp: 112 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-Diamond': {
+        types: ['Normal', 'Rock'],
+        bs: { hp: 75, at: 80, df: 70, sa: 65, sd: 90, sp: 92 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-Heart': {
+        types: ['Normal', 'Fairy'],
+        bs: { hp: 75, at: 65, df: 60, sa: 80, sd: 90, sp: 102 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-Kabuki': {
+        types: ['Normal', 'Fighting'],
+        bs: { hp: 60, at: 75, df: 65, sa: 80, sd: 90, sp: 102 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-La Reine': {
+        types: ['Normal', 'Water'],
+        bs: { hp: 75, at: 80, df: 60, sa: 65, sd: 90, sp: 102 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-Matron': {
+        types: ['Normal', 'Psychic'],
+        bs: { hp: 75, at: 80, df: 60, sa: 65, sd: 90, sp: 102 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-Pharaoh': {
+        types: ['Normal', 'Ghost'],
+        bs: { hp: 75, at: 90, df: 60, sa: 65, sd: 80, sp: 102 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-Star': {
+        types: ['Normal', 'Ice'],
+        bs: { hp: 75, at: 80, df: 60, sa: 55, sd: 90, sp: 112 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
     },
     Gogoat: {
         types: ['Grass'],
@@ -5609,7 +5685,7 @@ var XY_PATCH = {
     },
     'Garchomp-Mega': {
         types: ['Dragon', 'Ground'],
-        bs: { hp: 108, at: 170, df: 115, sa: 110, sd: 95, sp: 102 },
+        bs: { hp: 108, at: 170, df: 115, sa: 120, sd: 95, sp: 92 },
         weightkg: 95,
         abilities: { 0: 'Sand Force' },
         baseSpecies: 'Garchomp'
@@ -7067,7 +7143,7 @@ var SM_PATCH = {
     },
     'Sandslash-Alola': {
         types: ['Ice', 'Steel'],
-        bs: { hp: 75, at: 100, df: 120, sa: 25, sd: 65, sp: 75 },
+        bs: { hp: 75, at: 105, df: 125, sa: 35, sd: 75, sp: 75 },
         weightkg: 55,
         baseSpecies: 'Sandslash',
         abilities: { 0: 'Snow Cloak' }
@@ -7263,7 +7339,7 @@ var SM_PATCH = {
     },
     Steenee: {
         types: ['Grass', 'Fighting'],
-        bs: { hp: 60, at: 80, df: 65, sa: 40, sd: 54, sp: 67 },
+        bs: { hp: 60, at: 80, df: 75, sa: 40, sd: 54, sp: 67 },
         weightkg: 8.2,
         nfe: true,
         abilities: { 0: 'Leaf Guard' }
@@ -7386,7 +7462,7 @@ var SM_PATCH = {
     },
     'Vulpix-Alola': {
         types: ['Ice'],
-        bs: { hp: 40, at: 41, df: 40, sa: 65, sd: 65, sp: 65 },
+        bs: { hp: 75, at: 41, df: 40, sa: 75, sd: 75, sp: 75 },
         weightkg: 9.9,
         baseSpecies: 'Vulpix',
         nfe: true,
@@ -7793,7 +7869,7 @@ var SS_PATCH = {
     },
     Cufant: {
         types: ['Steel'],
-        bs: { hp: 72, at: 80, df: 49, sa: 40, sd: 49, sp: 40 },
+        bs: { hp: 105, at: 80, df: 61, sa: 60, sd: 49, sp: 40 },
         weightkg: 100,
         abilities: { 0: 'Sheer Force' },
         nfe: true
@@ -8470,7 +8546,7 @@ var SS_PATCH = {
     },
     'Slowpoke-Galar': {
         types: ['Psychic'],
-        bs: { hp: 90, at: 65, df: 65, sa: 40, sd: 40, sp: 15 },
+        bs: { hp: 90, at: 85, df: 90, sa: 70, sd: 70, sp: 15 },
         weightkg: 36,
         nfe: true,
         abilities: { 0: 'Gluttony' },
@@ -8872,7 +8948,7 @@ var PLA_PATCH = {
     },
     'Samurott-Hisui': {
         types: ['Water', 'Dark'],
-        bs: { hp: 90, at: 108, df: 80, sa: 100, sd: 65, sp: 85 },
+        bs: { hp: 90, at: 108, df: 80, sa: 100, sd: 72, sp: 85 },
         weightkg: 58.2,
         abilities: { 0: 'Torrent' },
         baseSpecies: 'Samurott'
@@ -9604,7 +9680,7 @@ var SV_PATCH = {
     },
     Pawmo: {
         types: ['Electric', 'Fighting'],
-        bs: { hp: 60, at: 75, df: 40, sa: 50, sd: 40, sp: 85 },
+        bs: { hp: 65, at: 80, df: 60, sa: 70, sd: 60, sp: 85 },
         weightkg: 6.5,
         abilities: { 0: 'Volt Absorb' },
         nfe: true
@@ -10059,6 +10135,24 @@ var Specie = (function () {
     Specie.EXCLUDE = new Set(['bs', 'otherFormes']);
     return Specie;
 }());
+var SPECIES_ALIASES = [
+    ['Flabebe-Red-Flower', 'flabebe'],
+    ['Floette-Red-Flower', 'floette'],
+    ['Florges-Red-Flower', 'florges'],
+    ['Flabebe-Yellow-Flower', 'flabebe'],
+    ['Flabebe-Orange-Flower', 'flabebe'],
+    ['Flabebe-Blue-Flower', 'flabebe'],
+    ['Flabebe-White-Flower', 'flabebe'],
+    ['Floette-Yellow-Flower', 'floette'],
+    ['Floette-Orange-Flower', 'floette'],
+    ['Floette-Blue-Flower', 'floette'],
+    ['Floette-White-Flower', 'floette'],
+    ['Floette-Eternal-Flower', 'floetteeternal'],
+    ['Florges-Yellow-Flower', 'florges'],
+    ['Florges-Orange-Flower', 'florges'],
+    ['Florges-Blue-Flower', 'florges'],
+    ['Florges-White-Flower', 'florges'],
+];
 var SPECIES_BY_ID = [];
 var gen = 0;
 try {
@@ -10070,6 +10164,20 @@ try {
                 delete species[specie].bs.sl;
             var m = new Specie(specie, species[specie]);
             map[m.id] = m;
+        }
+        try {
+            for (var SPECIES_ALIASES_1 = (e_2 = void 0, __values(SPECIES_ALIASES)), SPECIES_ALIASES_1_1 = SPECIES_ALIASES_1.next(); !SPECIES_ALIASES_1_1.done; SPECIES_ALIASES_1_1 = SPECIES_ALIASES_1.next()) {
+                var _c = __read(SPECIES_ALIASES_1_1.value, 2), aliasName = _c[0], targetId = _c[1];
+                if (map[targetId])
+                    map[(0, util_1.toID)(aliasName)] = map[targetId];
+            }
+        }
+        catch (e_2_1) { e_2 = { error: e_2_1 }; }
+        finally {
+            try {
+                if (SPECIES_ALIASES_1_1 && !SPECIES_ALIASES_1_1.done && (_b = SPECIES_ALIASES_1["return"])) _b.call(SPECIES_ALIASES_1);
+            }
+            finally { if (e_2) throw e_2.error; }
         }
         SPECIES_BY_ID.push(map);
         gen++;

@@ -29,6 +29,7 @@ export class Move implements State.Move {
   hasCrashDamage: boolean;
   mindBlownRecoil: boolean;
   struggleRecoil: boolean;
+  critRatio: number;
   isCrit: boolean;
   drain?: [number, number];
   priority: number;
@@ -135,6 +136,7 @@ export class Move implements State.Move {
     this.hasCrashDamage = !!data.hasCrashDamage;
     this.mindBlownRecoil = !!data.mindBlownRecoil;
     this.struggleRecoil = !!data.struggleRecoil;
+    this.critRatio = data.critRatio || 1;
     this.isCrit = !!options.isCrit || !!data.willCrit ||
       // These don't *always* crit (255/256 chance), but for the purposes of the calc they do
       gen.num === 1 && ['crabhammer', 'razorleaf', 'slash', 'karate chop'].includes(data.id);

@@ -355,24 +355,24 @@ $(".ability").bind("keyup change", function () {
 	var TOGGLE_ABILITIES = ['Flash Fire', 'Electromorphosis', 'Intimidate', 'Illuminate', 'Minus', 'Plus', 'Slow Start', 'Unburden', 'Stakeout', 'Teraform Zero'];
 
 	if (isProtoQuark) {
-		protoQuarkState.show();
-		abilityToggle.hide().prop("checked", protoQuarkState.val() !== 'inactive');
+		protoQuarkState.prop("hidden", false).show();
+		abilityToggle.prop("hidden", true).hide().prop("checked", protoQuarkState.val() !== 'inactive');
 	} else if (TOGGLE_ABILITIES.indexOf(ability) >= 0) {
-		abilityToggle.show();
+		abilityToggle.prop("hidden", false).show();
 		if (ability === "Unburden") {
 			abilityToggle.prop("checked", false);
 		}
-		protoQuarkState.val("auto").hide();
+		protoQuarkState.val("auto").prop("hidden", true).hide();
 	} else {
-		abilityToggle.hide().prop("checked", false);
-		protoQuarkState.val("auto").hide();
+		abilityToggle.prop("hidden", true).hide().prop("checked", false);
+		protoQuarkState.val("auto").prop("hidden", true).hide();
 	}
 
 	if (ability === "Supreme Overlord") {
-		pokeInfo.find(".alliesFainted").show();
+		pokeInfo.find(".alliesFainted").prop("hidden", false).show();
 	} else {
 		pokeInfo.find(".alliesFainted").val('0');
-		pokeInfo.find(".alliesFainted").hide();
+		pokeInfo.find(".alliesFainted").prop("hidden", true).hide();
 
 	}
 	updateAllMoveMetaDisplays();
@@ -440,12 +440,10 @@ function autosetWeather(ability, i) {
 	syncTrainerFieldLockButtonStyles();
 }
 
-var lastManualTerrain = "";
 var lastAutoTerrain = ["", ""];
 function autosetTerrain(ability, i) {
 	var currentTerrain = $("input:checkbox[name='terrain']:checked").val() || "No terrain";
 	if (lastAutoTerrain.indexOf(currentTerrain) === -1) {
-		lastManualTerrain = currentTerrain;
 		lastAutoTerrain[1 - i] = "";
 	}
 	// terrain input uses checkbox instead of radio, need to uncheck all first
@@ -470,7 +468,7 @@ function autosetTerrain(ability, i) {
 			break;
 		default:
 			lastAutoTerrain[i] = "";
-			var newTerrain = lastAutoTerrain[1 - i] !== "" ? lastAutoTerrain[1 - i] : lastManualTerrain;
+			var newTerrain = lastAutoTerrain[1 - i];
 			if ("No terrain" !== newTerrain) {
 				$("input:checkbox[name='terrain'][value='" + newTerrain + "']").prop("checked", true);
 			}
@@ -542,6 +540,10 @@ var MOVE_INFO_LOADED = false;
 var FOG_ACCURACY_MULTIPLIER = 0.6;
 var HUSTLE_ACCURACY_MULTIPLIER = 0.8;
 var BRIGHT_POWDER_ACCURACY_MULTIPLIER = 0.9;
+var WEATHER_EVASION_ACCURACY_MULTIPLIER = 0.8;
+var WIDE_LENS_ACCURACY_MULTIPLIER = 1.1;
+var ZOOM_LENS_ACCURACY_MULTIPLIER = 1.2;
+var COMPOUND_EYES_ACCURACY_MULTIPLIER = 1.3;
 var moveMetaVisible = true;
 
 function normalizeMoveInfoKey(moveName) {
@@ -645,26 +647,68 @@ function getMoveInfoForDisplay(moveName) {
 	return info || null;
 }
 
+function parseDisplayedSpeedValue(speedNode) {
+	if (!speedNode || !speedNode.length) return NaN;
+	var speedValue = parseInt($.trim(speedNode.first().text()), 10);
+	return isFinite(speedValue) ? speedValue : NaN;
+}
+
+function doesZoomLensApply(attackerInfo, defenderInfo) {
+	if (!attackerInfo || !attackerInfo.length || !defenderInfo || !defenderInfo.length) return false;
+	var attackerSpeedNode = attackerInfo.find(".sp .totalMod").first();
+	if (attackerSpeedNode.hasClass("speed-slower")) return true;
+	if (attackerSpeedNode.hasClass("speed-faster") || attackerSpeedNode.hasClass("speed-tie")) return false;
+	var attackerSpeed = parseDisplayedSpeedValue(attackerSpeedNode);
+	var defenderSpeed = parseDisplayedSpeedValue(defenderInfo.find(".sp .totalMod").first());
+	if (!isFinite(attackerSpeed) || !isFinite(defenderSpeed) || attackerSpeed === defenderSpeed) return false;
+	var trickRoomActive = $("#trickroom").prop("checked") || $("#trickRoomR").prop("checked");
+	return trickRoomActive ? attackerSpeed > defenderSpeed : attackerSpeed < defenderSpeed;
+}
+
 function getDisplayedMoveAccuracy(moveAccuracy, weatherValue, moveGroupObj, moveCategory) {
 	if (typeof moveAccuracy !== "number" || moveAccuracy <= 0) return "--";
 	var accuracyMultiplier = 1;
 	if (weatherValue === "Fog") accuracyMultiplier *= FOG_ACCURACY_MULTIPLIER;
 	var attackerInfo = moveGroupObj.closest(".poke-info");
+	var attackerItem = getEffectiveItemFromPokeInfo(attackerInfo);
 	var ability = attackerInfo.find(".ability").val();
 	if (ability === "Hustle" && moveCategory === "Physical") accuracyMultiplier *= HUSTLE_ACCURACY_MULTIPLIER;
+	if (ability === "Compound Eyes") accuracyMultiplier *= COMPOUND_EYES_ACCURACY_MULTIPLIER;
+	if (attackerItem === "Wide Lens") accuracyMultiplier *= WIDE_LENS_ACCURACY_MULTIPLIER;
 	var attackerId = attackerInfo.attr("id");
 	var defenderInfo = attackerId === "p1"
 		? $("#p2")
 		: attackerId === "p2"
 			? $("#p1")
 			: $(".poke-info").not(attackerInfo).first();
-	if (defenderInfo.length && getEffectiveItemFromPokeInfo(defenderInfo) === "Bright Powder") {
-		accuracyMultiplier *= BRIGHT_POWDER_ACCURACY_MULTIPLIER;
+	if (attackerItem === "Zoom Lens" && doesZoomLensApply(attackerInfo, defenderInfo)) {
+		accuracyMultiplier *= ZOOM_LENS_ACCURACY_MULTIPLIER;
+	}
+	if (defenderInfo.length) {
+		var defenderAbility = defenderInfo.find(".ability").val();
+		if (getEffectiveItemFromPokeInfo(defenderInfo) === "Bright Powder") {
+			accuracyMultiplier *= BRIGHT_POWDER_ACCURACY_MULTIPLIER;
+		}
+		if (weatherValue === "Sand" && defenderAbility === "Sand Veil") {
+			accuracyMultiplier *= WEATHER_EVASION_ACCURACY_MULTIPLIER;
+		}
+		if ((weatherValue === "Snow" || weatherValue === "Hail") && defenderAbility === "Snow Cloak") {
+			accuracyMultiplier *= WEATHER_EVASION_ACCURACY_MULTIPLIER;
+		}
 	}
 	if (accuracyMultiplier !== 1) {
 		return String(Math.max(1, Math.floor(moveAccuracy * accuracyMultiplier))) + "%";
 	}
 	return String(moveAccuracy) + "%";
+}
+
+function getDisplayedMovePP(basePP, moveGroupObj) {
+	if (typeof basePP !== "number" || basePP < 0) return "--";
+	var attackerInfo = moveGroupObj.closest(".poke-info");
+	if (attackerInfo.length && attackerInfo.attr("id") === "p2") {
+		return String(Math.floor(basePP * 8 / 5));
+	}
+	return String(basePP);
 }
 
 function ensureMoveMetaForGroup(moveGroupObj) {
@@ -682,6 +726,7 @@ function ensureMoveMetaForGroup(moveGroupObj) {
 
 function applyMoveMetaVisibility() {
 	$(".move-meta").toggle(!!moveMetaVisible);
+	$(".move-crit-rate-display").toggle(!!moveMetaVisible);
 }
 
 function setMoveMetaVisibility(enabled) {
@@ -706,7 +751,7 @@ function updateMoveMetaForGroup(moveGroupObj) {
 	var ppText = "--";
 	var accText = "--";
 	if (info) {
-		if (typeof info.pp === "number" && info.pp >= 0) ppText = String(info.pp);
+		if (typeof info.pp === "number" && info.pp >= 0) ppText = getDisplayedMovePP(info.pp, moveGroupObj);
 		accText = getDisplayedMoveAccuracy(info.accuracy, weather, moveGroupObj, moveCategory);
 	}
 	moveMeta.text("PP " + ppText + " | ACC " + accText);
@@ -834,6 +879,14 @@ var FRAG_SHEET_STATES_STORAGE_KEY = "astralCalcFragSheetStates";
 var FRAG_SHEET_BACKUPS_STORAGE_KEY = "astralCalcFragSheetBackups";
 var TRAINER_FIELD_LOCKS_STORAGE_KEY = "astralCalcTrainerFieldLocks";
 var LAST_ENCOUNTER_STORAGE_KEY = "astralCalcLastEncounter";
+var PLAYER_ROSTER_LAYOUT_STORAGE_KEY = "astralCalcPlayerRosterLayout";
+var CALC_FEATURE_TUTORIAL_SEEN_STORAGE_KEY = "astralCalcFeatureTutorialSeenV1";
+var CALC_FEATURE_TUTORIAL_AUTO_OPEN_DELAY_MS = 1300;
+var CALC_SIDE_PANEL_MIN_WIDTH_PX = 360;
+var CALC_SIDE_PANEL_MAX_WIDTH_VW = 96;
+var CALC_SIDE_PANEL_MIN_MAIN_WIDTH_PX = 620;
+var APP_UPDATE_CHECK_INTERVAL_MS = 120000;
+var APP_UPDATE_INITIAL_CHECK_DELAY_MS = 12000;
 var FRAG_SHEET_STATES_LIMIT = 40;
 var FRAG_SHEET_BACKUPS_LIMIT = 90;
 var FRAG_SHEET_BACKUP_COOLDOWN_MS = 12000;
@@ -883,6 +936,15 @@ var fragContextSourceSet = "";
 var fragContextSourceElement = null;
 var fragSheetAutoObserver = null;
 var fragSheetRefreshTimer = null;
+var playerRosterSearchDebounceTimer = null;
+var notesNoteInputDebounceTimers = {};
+var appUpdateBaselineLastModifiedMs = 0;
+var appUpdateBaselinePageSignature = "";
+var appUpdateBaselineVersionToken = "";
+var appUpdateCheckTimer = null;
+var appUpdateNoticeShown = false;
+var appUpdatePageUrl = "";
+var appUpdateVersionUrl = "";
 var fragLastAutoBackupAt = 0;
 var trainerFieldLocksCache = null;
 var trainerFieldLockActiveTrainerKey = "";
@@ -890,8 +952,32 @@ var fragsHistoryExpanded = false;
 var FRAG_UNKNOWN_VICTIM_KEY = "__unknown__";
 var deadOpposingSetMap = {};
 var opposingContextSourceSet = "";
+var CURRENT_TRAINER_POKS = [];
 var isRestoringLastEncounterSelection = false;
 var isBootstrappingLastEncounterSelection = true;
+var calcFeatureTutorialState = {
+	isOpen: false,
+	launchedFromSettings: false,
+	stepIndex: 0,
+	steps: [],
+	focusNode: null,
+	focusPrevInlinePosition: "",
+	focusPrevInlineZIndex: "",
+	focusForcedRelative: false,
+	overlayNode: null,
+	cardNode: null,
+	titleNode: null,
+	textNode: null,
+	progressNode: null,
+	visualNode: null,
+	backBtn: null,
+	nextBtn: null
+};
+var calcSidePanelResizeState = null;
+var calcSideResizeCaptureNode = null;
+var PLAYER_ROSTER_SPRITE_SELECTOR = "#team-poke-list .trainer-pok.left-side, #box-poke-list .trainer-pok.left-side, #box-poke-list2 .trainer-pok.left-side, #trash-box .trainer-pok.left-side";
+var PLAYER_ROSTER_SEARCH_DEBOUNCE_MS = 90;
+var NOTES_NOTE_INPUT_DEBOUNCE_MS = 120;
 var SPECIES_DISPLAY_NAME_ALIASES = {
 	"Tauros-Paldea-Blaze": "Tauros-PB",
 	"Tauros-Paldea-Aqua": "Tauros-PA"
@@ -1480,10 +1566,14 @@ var FRAG_PREVO_BY_SPECIES_ID = {
 	"zweilous": "deino"
 };
 var FRAG_EVOLUTION_SPECIES_ID_LOOKUP = {};
+var FRAG_NEXT_EVO_SPECIES_IDS = {};
 for (var fragEvoSpeciesId in FRAG_PREVO_BY_SPECIES_ID) {
 	if (!Object.prototype.hasOwnProperty.call(FRAG_PREVO_BY_SPECIES_ID, fragEvoSpeciesId)) continue;
+	var fragPrevoSpeciesId = FRAG_PREVO_BY_SPECIES_ID[fragEvoSpeciesId];
 	FRAG_EVOLUTION_SPECIES_ID_LOOKUP[fragEvoSpeciesId] = true;
-	FRAG_EVOLUTION_SPECIES_ID_LOOKUP[FRAG_PREVO_BY_SPECIES_ID[fragEvoSpeciesId]] = true;
+	FRAG_EVOLUTION_SPECIES_ID_LOOKUP[fragPrevoSpeciesId] = true;
+	if (!FRAG_NEXT_EVO_SPECIES_IDS[fragPrevoSpeciesId]) FRAG_NEXT_EVO_SPECIES_IDS[fragPrevoSpeciesId] = [];
+	FRAG_NEXT_EVO_SPECIES_IDS[fragPrevoSpeciesId].push(fragEvoSpeciesId);
 }
 
 function safeJsonParse(rawJson, fallbackValue) {
@@ -1495,15 +1585,133 @@ function safeJsonParse(rawJson, fallbackValue) {
 	}
 }
 
+function parseHttpDateToMs(rawDateValue) {
+	if (!rawDateValue) return 0;
+	var parsed = Date.parse(String(rawDateValue));
+	return isFinite(parsed) ? parsed : 0;
+}
+
+function getAppUpdatePageUrl() {
+	if (!window.location) return "";
+	if (window.location.origin && window.location.pathname) {
+		return String(window.location.origin) + String(window.location.pathname);
+	}
+	return String(window.location.href || "").split("#")[0].split("?")[0];
+}
+
+function getAppUpdateBaseDirUrl() {
+	var pageUrl = getAppUpdatePageUrl();
+	if (!pageUrl) return "";
+	if (pageUrl.charAt(pageUrl.length - 1) === "/") return pageUrl;
+	var slashIndex = pageUrl.lastIndexOf("/");
+	if (slashIndex < 0) return pageUrl + "/";
+	return pageUrl.slice(0, slashIndex + 1);
+}
+
+function getUpdateTextSignature(rawText) {
+	var text = String(rawText || "");
+	var hash = 5381;
+	for (var i = 0; i < text.length; i++) {
+		hash = (((hash << 5) + hash) ^ text.charCodeAt(i)) >>> 0;
+	}
+	return String(hash);
+}
+
+function stopAppUpdateChecker() {
+	if (!appUpdateCheckTimer) return;
+	window.clearInterval(appUpdateCheckTimer);
+	appUpdateCheckTimer = null;
+}
+
+function notifyAppUpdateAvailable() {
+	if (appUpdateNoticeShown) return;
+	appUpdateNoticeShown = true;
+	stopAppUpdateChecker();
+	var shouldRefreshNow = window.confirm("There is an update available. Please refresh the page.\n\nPress OK to refresh now.");
+	if (shouldRefreshNow && window.location && typeof window.location.reload === "function") {
+		window.location.reload();
+	}
+}
+
+function checkForAppUpdate() {
+	if (appUpdateNoticeShown) return;
+	if (!appUpdateVersionUrl && !appUpdatePageUrl) return;
+	if (appUpdateVersionUrl) {
+		var versionRequestUrl = appUpdateVersionUrl + (appUpdateVersionUrl.indexOf("?") >= 0 ? "&" : "?") + "_updateCheckTs=" + Date.now();
+		$.ajax({url: versionRequestUrl, cache: false, dataType: "text"})
+			.done(function (responseText) {
+				var parsedToken = "";
+				try {
+					var versionPayload = JSON.parse(String(responseText || ""));
+					if (versionPayload && typeof versionPayload === "object") {
+						parsedToken = String(versionPayload.buildId || versionPayload.builtAt || "");
+					}
+				} catch (_err) {}
+				if (!parsedToken) parsedToken = String(responseText || "").trim();
+				if (!parsedToken) return;
+				if (!appUpdateBaselineVersionToken) {
+					appUpdateBaselineVersionToken = parsedToken;
+					return;
+				}
+				if (parsedToken !== appUpdateBaselineVersionToken) {
+					notifyAppUpdateAvailable();
+				}
+			});
+		return;
+	}
+	var requestUrl = appUpdatePageUrl + (appUpdatePageUrl.indexOf("?") >= 0 ? "&" : "?") + "_updateCheckTs=" + Date.now();
+	$.ajax({url: requestUrl, cache: false, dataType: "text"})
+		.done(function (responseText, _textStatus, jqXHR) {
+			if (!jqXHR || typeof jqXHR.getResponseHeader !== "function") return;
+			var latestLastModifiedMs = parseHttpDateToMs(jqXHR.getResponseHeader("Last-Modified"));
+			if (!appUpdateBaselineLastModifiedMs && latestLastModifiedMs) {
+				appUpdateBaselineLastModifiedMs = latestLastModifiedMs;
+			} else if (appUpdateBaselineLastModifiedMs && latestLastModifiedMs > appUpdateBaselineLastModifiedMs + 1000) {
+				notifyAppUpdateAvailable();
+				return;
+			}
+			var latestSignature = getUpdateTextSignature(responseText);
+			if (!appUpdateBaselinePageSignature) {
+				appUpdateBaselinePageSignature = latestSignature;
+				return;
+			}
+			if (latestSignature !== appUpdateBaselinePageSignature) {
+				notifyAppUpdateAvailable();
+			}
+		});
+}
+
+function startAppUpdateChecker() {
+	stopAppUpdateChecker();
+	appUpdateNoticeShown = false;
+	if (!window.location || !/^https?:$/i.test(String(window.location.protocol || ""))) return;
+	appUpdatePageUrl = getAppUpdatePageUrl();
+	if (!appUpdatePageUrl) return;
+	var baseDirUrl = getAppUpdateBaseDirUrl();
+	appUpdateVersionUrl = baseDirUrl ? (baseDirUrl + "version.json") : "";
+	appUpdateBaselineLastModifiedMs = parseHttpDateToMs(document.lastModified);
+	appUpdateBaselinePageSignature = "";
+	appUpdateBaselineVersionToken = "";
+	window.setTimeout(checkForAppUpdate, APP_UPDATE_INITIAL_CHECK_DELAY_MS);
+	appUpdateCheckTimer = window.setInterval(checkForAppUpdate, APP_UPDATE_CHECK_INTERVAL_MS);
+}
+
 function normalizeStarterChoice(rawChoice) {
 	var normalizedChoice = String(rawChoice || "").trim().toLowerCase();
 	if (STARTER_CHOICES.indexOf(normalizedChoice) >= 0) return normalizedChoice;
 	return "totodile";
 }
 
+function normalizeLayoutChoice(rawChoice) {
+	var normalizedChoice = String(rawChoice || "").trim().toLowerCase();
+	return normalizedChoice === "simplified" ? "simplified" : "standard";
+}
+
 function getDefaultAppSettings() {
 	return {
 		starterChoice: "totodile",
+		startingCritStatus: false,
+		layoutMode: "standard",
 		moreColour: true,
 		moveColors: false,
 		moveMeta: true,
@@ -1517,6 +1725,8 @@ function getAppSettings(forceReload) {
 	var parsed = safeJsonParse(localStorage.getItem(APP_SETTINGS_STORAGE_KEY), {});
 	appSettingsCache = {
 		starterChoice: normalizeStarterChoice(parsed.starterChoice || defaults.starterChoice),
+		startingCritStatus: typeof parsed.startingCritStatus === "boolean" ? parsed.startingCritStatus : defaults.startingCritStatus,
+		layoutMode: normalizeLayoutChoice(parsed.layoutMode || defaults.layoutMode),
 		moreColour: typeof parsed.moreColour === "boolean" ? parsed.moreColour : defaults.moreColour,
 		moveColors: typeof parsed.moveColors === "boolean" ? parsed.moveColors : defaults.moveColors,
 		moveMeta: typeof parsed.moveMeta === "boolean" ? parsed.moveMeta : defaults.moveMeta,
@@ -1528,6 +1738,8 @@ function getAppSettings(forceReload) {
 function saveAppSettings(nextSettings) {
 	appSettingsCache = {
 		starterChoice: normalizeStarterChoice(nextSettings.starterChoice),
+		startingCritStatus: !!nextSettings.startingCritStatus,
+		layoutMode: normalizeLayoutChoice(nextSettings.layoutMode),
 		moreColour: !!nextSettings.moreColour,
 		moveColors: !!nextSettings.moveColors,
 		moveMeta: !!nextSettings.moveMeta,
@@ -1541,6 +1753,8 @@ function updateAppSettings(partial) {
 	var current = getAppSettings();
 	return saveAppSettings({
 		starterChoice: partial && typeof partial.starterChoice !== "undefined" ? partial.starterChoice : current.starterChoice,
+		startingCritStatus: partial && typeof partial.startingCritStatus !== "undefined" ? partial.startingCritStatus : current.startingCritStatus,
+		layoutMode: partial && typeof partial.layoutMode !== "undefined" ? partial.layoutMode : current.layoutMode,
 		moreColour: partial && typeof partial.moreColour !== "undefined" ? partial.moreColour : current.moreColour,
 		moveColors: partial && typeof partial.moveColors !== "undefined" ? partial.moveColors : current.moveColors,
 		moveMeta: partial && typeof partial.moveMeta !== "undefined" ? partial.moveMeta : current.moveMeta,
@@ -1671,11 +1885,45 @@ function formatSetNameForDisplay(setId) {
 }
 
 function isDittoSetId(setId) {
-	var parsedSet = parseSetId(setId);
-	return toDexPokemonId(parsedSet.species) === "ditto";
+	var normalizedSetId = String(setId || "").trim();
+	if (!normalizedSetId) return false;
+
+	var parsedSet = parseSetId(normalizedSetId);
+	if (toDexPokemonId(parsedSet.species) === "ditto") return true;
+
+	var matchedOption = getSetOptionById(normalizedSetId);
+	if (matchedOption && toDexPokemonId(matchedOption.pokemon) === "ditto") return true;
+
+	var trainerEntry = parseTrainerPartyEntry(normalizedSetId);
+	return !!(trainerEntry && toDexPokemonId(trainerEntry.pokemonName) === "ditto");
+}
+
+function ensureDittoTransformButtonPlacement() {
+	var placements = [
+		{buttonSelector: "#transformL", containerSelector: "#p1 .i-f-hp"},
+		{buttonSelector: "#transformR", containerSelector: "#p2 .i-f-o-hp"}
+	];
+	for (var i = 0; i < placements.length; i++) {
+		var placement = placements[i];
+		var button = $(placement.buttonSelector);
+		var container = $(placement.containerSelector).first();
+		if (!button.length || !container.length) continue;
+
+		button.addClass("ditto-transform-btn");
+		var slot = container.children(".ditto-transform-slot").first();
+		if (!slot.length) {
+			slot = $('<div class="ditto-transform-slot" title="If Ditto is selected, copy the opposing Pokemon to transform"></div>');
+			slot.hide();
+			container.append(slot);
+		}
+		if (button.parent()[0] !== slot[0]) {
+			slot.append(button);
+		}
+	}
 }
 
 function syncDittoTransformButtons() {
+	ensureDittoTransformButtonPlacement();
 	var p1SetId = $("#p1 .set-selector").val();
 	var p2SetId = $("#p2 .set-selector").val();
 	var showLeft = isDittoSetId(p1SetId);
@@ -1683,9 +1931,13 @@ function syncDittoTransformButtons() {
 	var transformL = $("#transformL");
 	var transformR = $("#transformR");
 	var transformRow = $("#transformRow");
+	var transformLSlot = transformL.closest(".ditto-transform-slot");
+	var transformRSlot = transformR.closest(".ditto-transform-slot");
 	if (transformL.length) transformL.toggle(showLeft);
+	if (transformLSlot.length) transformLSlot.toggle(showLeft);
 	if (transformR.length) transformR.toggle(showRight);
-	if (transformRow.length) transformRow.toggle(showLeft || showRight);
+	if (transformRSlot.length) transformRSlot.toggle(showRight);
+	if (transformRow.length) transformRow.hide();
 }
 
 function getTopSpriteNodeForPokeInfo(pokeInfo) {
@@ -1704,26 +1956,21 @@ function getInlineSpriteNodeForPokeInfo(pokeInfo) {
 	return null;
 }
 
+function getSelectedFormeNameIfVisible(pokeInfo) {
+	if (!pokeInfo || !pokeInfo.length) return "";
+	var formeSelect = pokeInfo.find(".forme");
+	var formeContainer = formeSelect.parent();
+	if (!(formeSelect.length && formeContainer.length && formeContainer.is(":visible"))) return "";
+	return String(formeSelect.val() || "").trim();
+}
+
 function resolveInlineSpriteSpeciesForPokeInfo(pokeInfo) {
 	if (!pokeInfo || !pokeInfo.length) return "";
 	var transformedSpecies = String(pokeInfo.attr("data-transform-species") || "").trim();
 	if (transformedSpecies) return transformedSpecies;
+	var formeSpecies = getSelectedFormeNameIfVisible(pokeInfo);
+	if (formeSpecies) return formeSpecies;
 	var setSpecies = parseSetId(pokeInfo.find(".set-selector").val()).species || "";
-	var resolvedSetSpecies = resolveSetSpeciesNameForDexLookup(setSpecies);
-	var setSpeciesEntry = pokedex[resolvedSetSpecies] || pokedex[setSpecies];
-	var baseSpeciesEntry = setSpeciesEntry && setSpeciesEntry.baseSpecies ? pokedex[setSpeciesEntry.baseSpecies] : null;
-	var setHasFormes = !!(
-		setSpeciesEntry &&
-		(
-			(setSpeciesEntry.otherFormes && setSpeciesEntry.otherFormes.length) ||
-			(baseSpeciesEntry && baseSpeciesEntry.otherFormes && baseSpeciesEntry.otherFormes.length)
-		)
-	);
-	var formeSelect = pokeInfo.find(".forme");
-	var formeContainer = formeSelect.parent();
-	var useFormeSelection = !!(formeSelect.length && formeContainer.length && formeContainer.is(":visible"));
-	var formeSpecies = useFormeSelection ? String(formeSelect.val() || "").trim() : "";
-	if (setHasFormes && formeSpecies) return formeSpecies;
 	return String(setSpecies || "").trim();
 }
 
@@ -1855,7 +2102,7 @@ function transformDittoFromOpposing(targetSideSelector, sourceSideSelector) {
 }
 
 function getFragSpriteUrl(speciesName) {
-	return getTrainerSpriteUrlByName(speciesName);
+	return getInitialTrainerSpriteUrlByName(speciesName);
 }
 
 function normalizeSplitNumber(rawSplit) {
@@ -1882,13 +2129,34 @@ function toDexPokemonId(pokemonName) {
 	return normalizedName.toLowerCase().replace(/[^a-z0-9]+/g, "");
 }
 
+var SPECIES_NAME_ALIASES = {
+	"Flabebe-Red-Flower": "Flabébé",
+	"Floette-Red-Flower": "Floette",
+	"Florges-Red-Flower": "Florges",
+	"Flabebe-Yellow-Flower": "Flabébé",
+	"Flabebe-Orange-Flower": "Flabébé",
+	"Flabebe-Blue-Flower": "Flabébé",
+	"Flabebe-White-Flower": "Flabébé",
+	"Floette-Yellow-Flower": "Floette",
+	"Floette-Orange-Flower": "Floette",
+	"Floette-Blue-Flower": "Floette",
+	"Floette-White-Flower": "Floette",
+	"Floette-Eternal-Flower": "Floette-Eternal",
+	"Florges-Yellow-Flower": "Florges",
+	"Florges-Orange-Flower": "Florges",
+	"Florges-Blue-Flower": "Florges",
+	"Florges-White-Flower": "Florges",
+};
+
 function resolveSetSpeciesNameForDexLookup(pokemonName) {
 	var normalizedName = String(pokemonName || "").trim();
 	if (!normalizedName) return "";
+	if (SPECIES_NAME_ALIASES[normalizedName]) return SPECIES_NAME_ALIASES[normalizedName];
 	if (pokedex[normalizedName]) return normalizedName;
 	var dashIndex = normalizedName.indexOf("-");
 	if (dashIndex > 0) {
 		var baseName = normalizedName.substring(0, dashIndex);
+		if (SPECIES_NAME_ALIASES[baseName]) return SPECIES_NAME_ALIASES[baseName];
 		if (pokedex[baseName]) return baseName;
 	}
 	return normalizedName;
@@ -1986,9 +2254,10 @@ function ensureAstralDexSidePanel() {
 
 	panel = document.createElement("aside");
 	panel.id = "astraldex-side-panel";
+	panel.className = "calc-side-panel calc-side-panel-astraldex";
 	panel.setAttribute("aria-hidden", "true");
-	panel.style.cssText = "position:fixed;top:0;right:0;height:100vh;width:min(48vw,700px);min-width:360px;max-width:96vw;border-left:1px solid #888;box-shadow:-6px 0 20px rgba(0,0,0,.35);z-index:2500;transform:translateX(100%);transition:transform 160ms ease-in-out;display:flex;flex-direction:column;";
-	panel.innerHTML = '<div class="astraldex-side-header" style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;"><strong class="astraldex-side-title">AstralDex</strong><button type="button" class="astraldex-side-close" style="padding:3px 10px;border-radius:4px;cursor:pointer;">Close</button></div><div class="astraldex-side-body" style="position:relative;overflow:hidden;flex:1 1 auto;"><iframe class="astraldex-side-frame" title="AstralDex" src="' + ASTRALDEX_BASE_URL + '" style="position:absolute;top:0;left:0;width:100%;height:calc(100% + ' + ASTRALDEX_TOP_CHROME_PX + 'px);transform:translateY(-' + ASTRALDEX_TOP_CHROME_PX + 'px);border:0;"></iframe></div>';
+	panel.hidden = true;
+	panel.innerHTML = '<div class="calc-side-resize-handle" aria-hidden="true"></div><div class="calc-side-header astraldex-side-header"><strong class="astraldex-side-title">AstralDex</strong><button type="button" class="btn calc-side-btn astraldex-side-close">Close</button></div><div class="calc-side-body astraldex-side-body" style="position:relative;overflow:hidden;flex:1 1 auto;padding:0;"><iframe class="astraldex-side-frame" title="AstralDex" src="' + ASTRALDEX_BASE_URL + '" style="position:absolute;top:0;left:0;width:100%;height:calc(100% + ' + ASTRALDEX_TOP_CHROME_PX + 'px);transform:translateY(-' + ASTRALDEX_TOP_CHROME_PX + 'px);border:0;"></iframe></div>';
 	document.body.appendChild(panel);
 	applyAstralDexPanelTheme(panel);
 
@@ -1997,10 +2266,7 @@ function ensureAstralDexSidePanel() {
 }
 
 function closeAstralDexSidePanel() {
-	var panel = document.getElementById("astraldex-side-panel");
-	if (!panel) return;
-	panel.style.transform = "translateX(100%)";
-	panel.setAttribute("aria-hidden", "true");
+	closeCalcSidePanel("astraldex-side-panel");
 }
 
 function openAstralDexSidePanel(url, pokemonName) {
@@ -2008,8 +2274,7 @@ function openAstralDexSidePanel(url, pokemonName) {
 	applyAstralDexPanelTheme(panel);
 	panel.querySelector(".astraldex-side-frame").src = url || astralDexUrl(pokemonName);
 	panel.querySelector(".astraldex-side-title").textContent = pokemonName ? ("AstralDex: " + pokemonName) : "AstralDex";
-	panel.style.transform = "translateX(0)";
-	panel.setAttribute("aria-hidden", "false");
+	openCalcSidePanel("astraldex-side-panel");
 }
 
 function bindAstralDexLinks() {
@@ -2136,6 +2401,25 @@ function getCurrentSplitNumber(fightLabel) {
 		return normalizeSplitNumber(splitMatch[1]);
 	}
 	return 1;
+}
+
+function normalizeFragFightLabelForMatch(fightLabel) {
+	var normalized = String(fightLabel || "").trim();
+	if (!normalized) return "";
+	normalized = normalized.replace(/\s*\(split\s*[1-9]\)\s*$/i, "");
+	return normalized.toLowerCase();
+}
+
+function getSplitNumberForFragFightLabel(fightLabel) {
+	var fightText = String(fightLabel || "").trim();
+	var splitMatch = fightText.match(/split\s*([1-9])/i);
+	if (splitMatch && splitMatch[1]) {
+		return normalizeSplitNumber(splitMatch[1]);
+	}
+	var trainerIndex = getTrainerIndexForLabel(fightText);
+	var configuredSplit = getSplitFromRulesByIndex(trainerIndex);
+	if (configuredSplit) return configuredSplit;
+	return getCurrentSplitNumber(fightText);
 }
 
 function normalizeFragVictimKey(rawVictimKey) {
@@ -2442,20 +2726,49 @@ function normalizeFragEntry(setId, rawEntry) {
 	};
 }
 
+function normalizeFragEntryMap(rawEntries) {
+	var normalizedEntries = {};
+	if (!rawEntries || typeof rawEntries !== "object") return normalizedEntries;
+	for (var setId in rawEntries) {
+		if (!Object.prototype.hasOwnProperty.call(rawEntries, setId)) continue;
+		normalizedEntries[setId] = normalizeFragEntry(setId, rawEntries[setId]);
+	}
+	return normalizedEntries;
+}
+
+function normalizeFragSheetStorage(rawState) {
+	var normalizedState = rawState && typeof rawState === "object" ? rawState : {};
+	var fragState = {
+		entries: normalizeFragEntryMap(normalizedState.entries),
+		archivedEntries: normalizeFragEntryMap(normalizedState.archivedEntries)
+	};
+	for (var activeSetId in fragState.entries) {
+		if (!Object.prototype.hasOwnProperty.call(fragState.entries, activeSetId)) continue;
+		if (Object.prototype.hasOwnProperty.call(fragState.archivedEntries, activeSetId)) {
+			delete fragState.archivedEntries[activeSetId];
+		}
+	}
+	return fragState;
+}
+
+function getFragSheetStateEntryMap(state, mapKey) {
+	if (!state || typeof state !== "object") return {};
+	if (!state[mapKey] || typeof state[mapKey] !== "object") {
+		state[mapKey] = {};
+	}
+	return state[mapKey];
+}
+
 function getFragSheetState() {
 	if (fragSheetState) return fragSheetState;
 	var parsed = safeJsonParse(localStorage.getItem(FRAG_SHEET_STORAGE_KEY), {});
-	var rawEntries = parsed && parsed.entries ? parsed.entries : {};
-	fragSheetState = {entries: {}};
-	for (var setId in rawEntries) {
-		if (!Object.prototype.hasOwnProperty.call(rawEntries, setId)) continue;
-		fragSheetState.entries[setId] = normalizeFragEntry(setId, rawEntries[setId]);
-	}
+	fragSheetState = normalizeFragSheetStorage(parsed);
 	return fragSheetState;
 }
 
 function saveFragSheetState() {
-	localStorage.setItem(FRAG_SHEET_STORAGE_KEY, JSON.stringify(getFragSheetState()));
+	fragSheetState = normalizeFragSheetStorage(getFragSheetState());
+	localStorage.setItem(FRAG_SHEET_STORAGE_KEY, JSON.stringify(fragSheetState));
 	captureFragBackupSnapshot("frag-update", false);
 }
 
@@ -2508,6 +2821,87 @@ function normalizeRosterLayout(rawLayout) {
 	return normalized;
 }
 
+function getStoredPlayerRosterLayout() {
+	var rawLayout = localStorage.getItem(PLAYER_ROSTER_LAYOUT_STORAGE_KEY);
+	if (rawLayout === null) return null;
+	return normalizeRosterLayout(safeJsonParse(rawLayout, {}));
+}
+
+function saveStoredPlayerRosterLayout(layout) {
+	localStorage.setItem(PLAYER_ROSTER_LAYOUT_STORAGE_KEY, JSON.stringify(normalizeRosterLayout(layout)));
+}
+
+function saveCurrentPlayerRosterLayout() {
+	saveStoredPlayerRosterLayout(collectPlayerRosterLayout());
+}
+
+function hasRosterLayoutEntries(layout) {
+	var normalizedLayout = normalizeRosterLayout(layout);
+	return !!(
+		normalizedLayout.team.length ||
+		normalizedLayout.box.length ||
+		normalizedLayout.box2.length ||
+		normalizedLayout.trash.length
+	);
+}
+
+function buildRosterLayoutFromCustomsets(customsets) {
+	var layout = normalizeRosterLayout({});
+	var seenSetIds = {};
+	if (!customsets || typeof customsets !== "object") return layout;
+	for (var speciesName in customsets) {
+		if (!Object.prototype.hasOwnProperty.call(customsets, speciesName)) continue;
+		var speciesSets = customsets[speciesName];
+		if (!speciesSets || typeof speciesSets !== "object") continue;
+		for (var setName in speciesSets) {
+			if (!Object.prototype.hasOwnProperty.call(speciesSets, setName)) continue;
+			var normalizedSpecies = String(speciesName || "").trim();
+			var normalizedSetName = String(setName || "").trim();
+			if (!normalizedSpecies || !normalizedSetName) continue;
+			var setId = normalizedSpecies + " (" + normalizedSetName + ")";
+			if (seenSetIds[setId]) continue;
+			seenSetIds[setId] = true;
+			layout.box.push(setId);
+		}
+	}
+	return layout;
+}
+
+function filterRosterLayoutToAvailableSets(layout) {
+	var normalizedLayout = normalizeRosterLayout(layout);
+	if (typeof getSetOptionById !== "function") return normalizedLayout;
+	var filteredLayout = {
+		team: [],
+		box: [],
+		box2: [],
+		trash: []
+	};
+	var zoneKeys = ["team", "box", "box2", "trash"];
+	for (var i = 0; i < zoneKeys.length; i++) {
+		var zoneKey = zoneKeys[i];
+		for (var j = 0; j < normalizedLayout[zoneKey].length; j++) {
+			var setId = normalizedLayout[zoneKey][j];
+			if (!setId || !getSetOptionById(setId)) continue;
+			filteredLayout[zoneKey].push(setId);
+		}
+	}
+	return filteredLayout;
+}
+
+function restorePlayerRosterLayoutFromStorage(customsets) {
+	var storedLayout = getStoredPlayerRosterLayout();
+	var nextLayout = storedLayout !== null
+		? storedLayout
+		: buildRosterLayoutFromCustomsets(customsets);
+	nextLayout = filterRosterLayoutToAvailableSets(nextLayout);
+	applyPlayerRosterLayout(nextLayout);
+	saveStoredPlayerRosterLayout(nextLayout);
+	applyPlayerRosterSearchFilter();
+	return hasRosterLayoutEntries(nextLayout);
+}
+
+window.restorePlayerRosterLayoutFromStorage = restorePlayerRosterLayoutFromStorage;
+
 function buildRosterSpriteNodeId(setId) {
 	var parsed = parseSetId(setId);
 	var rawBase = String(parsed.species || "") + String(parsed.label || "");
@@ -2527,6 +2921,8 @@ function createRosterSpriteFromSetId(setId) {
 	var sprite = document.createElement("img");
 	sprite.id = buildRosterSpriteNodeId(setId);
 	sprite.className = "trainer-pok left-side";
+	sprite.loading = "lazy";
+	sprite.decoding = "async";
 	setTrainerSpriteImage(sprite, parsed.species);
 	sprite.dataset.id = setId;
 	sprite.addEventListener("dragstart", dragstart_handler);
@@ -2554,18 +2950,19 @@ function applyPlayerRosterLayout(layout) {
 			var spriteNode = createRosterSpriteFromSetId(setId);
 			if (!spriteNode) continue;
 			targetContainer.appendChild(spriteNode);
+			applyPrimaryIconSheetIfNeeded(spriteNode, parseSetId(setId).species);
 		}
 	}
+	saveStoredPlayerRosterLayout(normalizedLayout);
 }
 
 function normalizeFragSnapshotPayload(rawPayload) {
 	var payload = rawPayload || {};
-	var normalizedFragSheet = payload.fragSheet && typeof payload.fragSheet === "object"
-		? deepCloneJsonValue(payload.fragSheet, {entries: {}})
-		: {entries: {}};
-	if (!normalizedFragSheet.entries || typeof normalizedFragSheet.entries !== "object") {
-		normalizedFragSheet.entries = {};
-	}
+	var normalizedFragSheet = normalizeFragSheetStorage(
+		payload.fragSheet && typeof payload.fragSheet === "object"
+			? deepCloneJsonValue(payload.fragSheet, {entries: {}, archivedEntries: {}})
+			: {entries: {}, archivedEntries: {}}
+	);
 	var normalizedCustomsets = payload.customsets && typeof payload.customsets === "object"
 		? deepCloneJsonValue(payload.customsets, {})
 		: {};
@@ -2578,9 +2975,9 @@ function normalizeFragSnapshotPayload(rawPayload) {
 }
 
 function createFragSnapshotPayload() {
-	var fragSheetSnapshot = safeJsonParse(localStorage.getItem(FRAG_SHEET_STORAGE_KEY), {entries: {}});
-	if (!fragSheetSnapshot || typeof fragSheetSnapshot !== "object") fragSheetSnapshot = {entries: {}};
-	if (!fragSheetSnapshot.entries || typeof fragSheetSnapshot.entries !== "object") fragSheetSnapshot.entries = {};
+	var fragSheetSnapshot = normalizeFragSheetStorage(
+		safeJsonParse(localStorage.getItem(FRAG_SHEET_STORAGE_KEY), {entries: {}, archivedEntries: {}})
+	);
 	var customsetsSnapshot = safeJsonParse(localStorage.getItem("customsets"), {});
 	if (!customsetsSnapshot || typeof customsetsSnapshot !== "object") customsetsSnapshot = {};
 	return normalizeFragSnapshotPayload({
@@ -2592,12 +2989,18 @@ function createFragSnapshotPayload() {
 
 function getFragTotalKillsFromSnapshotPayload(payload) {
 	var normalized = normalizeFragSnapshotPayload(payload);
-	var entries = normalized.fragSheet.entries || {};
+	var entryMaps = [
+		normalized.fragSheet.entries || {},
+		normalized.fragSheet.archivedEntries || {}
+	];
 	var total = 0;
-	for (var setId in entries) {
-		if (!Object.prototype.hasOwnProperty.call(entries, setId)) continue;
-		var killCount = parseInt(entries[setId] && entries[setId].totalKills, 10);
-		if (!Number.isNaN(killCount) && killCount > 0) total += killCount;
+	for (var mapIndex = 0; mapIndex < entryMaps.length; mapIndex++) {
+		var entries = entryMaps[mapIndex];
+		for (var setId in entries) {
+			if (!Object.prototype.hasOwnProperty.call(entries, setId)) continue;
+			var killCount = parseInt(entries[setId] && entries[setId].totalKills, 10);
+			if (!Number.isNaN(killCount) && killCount > 0) total += killCount;
+		}
 	}
 	return total;
 }
@@ -2733,17 +3136,24 @@ window.captureFragBackupSnapshot = captureFragBackupSnapshot;
 function ensureFragEntryForSet(setId) {
 	if (!setId) return null;
 	var state = getFragSheetState();
-	if (!state.entries[setId]) {
-		state.entries[setId] = normalizeFragEntry(setId, {});
+	var activeEntries = getFragSheetStateEntryMap(state, "entries");
+	if (!activeEntries[setId]) {
+		var archivedEntries = getFragSheetStateEntryMap(state, "archivedEntries");
+		if (archivedEntries[setId]) {
+			activeEntries[setId] = normalizeFragEntry(setId, archivedEntries[setId]);
+			delete archivedEntries[setId];
+		} else {
+			activeEntries[setId] = normalizeFragEntry(setId, {});
+		}
 	}
-	return state.entries[setId];
+	return activeEntries[setId];
 }
 
 function getFragTotalForSet(setId) {
 	var normalizedSetId = String(setId || "");
 	if (!normalizedSetId) return 0;
 	var state = getFragSheetState();
-	var entry = state.entries[normalizedSetId];
+	var entry = getFragSheetStateEntryMap(state, "entries")[normalizedSetId];
 	if (!entry) return 0;
 	var totalKills = parseInt(entry.totalKills, 10);
 	if (Number.isNaN(totalKills) || totalKills < 0) return 0;
@@ -2781,7 +3191,9 @@ function mergeFragVictimBuckets(targetBuckets, sourceBuckets) {
 function mergeFragEntriesFromEvolutionDrop(sourceSetId, targetSetId) {
 	if (!sourceSetId || !targetSetId || sourceSetId === targetSetId) return false;
 	var state = getFragSheetState();
-	var sourceEntry = state.entries[sourceSetId];
+	var activeEntries = getFragSheetStateEntryMap(state, "entries");
+	var archivedEntries = getFragSheetStateEntryMap(state, "archivedEntries");
+	var sourceEntry = activeEntries[sourceSetId] || archivedEntries[sourceSetId];
 	if (!sourceEntry) return false;
 	var targetEntry = ensureFragEntryForSet(targetSetId);
 	if (!targetEntry) return false;
@@ -2801,9 +3213,14 @@ function mergeFragEntriesFromEvolutionDrop(sourceSetId, targetSetId) {
 	if (!targetEntry.lastVictim && sourceEntry.lastVictim) {
 		targetEntry.lastVictim = String(sourceEntry.lastVictim);
 	}
+	if (!targetEntry.isDead && sourceEntry.isDead) {
+		targetEntry.isDead = true;
+		targetEntry.deathFight = String(sourceEntry.deathFight || targetEntry.deathFight || "");
+	}
 
-	state.entries[targetSetId] = normalizeFragEntry(targetSetId, targetEntry);
-	delete state.entries[sourceSetId];
+	activeEntries[targetSetId] = normalizeFragEntry(targetSetId, targetEntry);
+	delete activeEntries[sourceSetId];
+	delete archivedEntries[sourceSetId];
 	saveFragSheetState();
 	return true;
 }
@@ -2811,20 +3228,45 @@ function mergeFragEntriesFromEvolutionDrop(sourceSetId, targetSetId) {
 function getTrainerPokSpriteElement(node) {
 	if (!node || node.nodeType !== 1) return null;
 	if (node.classList.contains("trainer-pok") && node.classList.contains("left-side")) return node;
-	return $(node).find(".trainer-pok.left-side").get(0) || $(node).closest(".trainer-pok.left-side").get(0) || null;
+	var descendantSprite = node.querySelector(".trainer-pok.left-side");
+	if (descendantSprite) return descendantSprite;
+	var current = node.parentElement;
+	while (current) {
+		if (current.classList &&
+			current.classList.contains("trainer-pok") &&
+			current.classList.contains("left-side")) {
+			return current;
+		}
+		current = current.parentElement;
+	}
+	return null;
 }
 
 function getTrainerPokRootNode(node) {
 	if (!node || node.nodeType !== 1) return null;
 	if (node.classList.contains("trainer-pok-slot")) return node;
-	var wrapped = $(node).closest(".trainer-pok-slot").get(0);
-	return wrapped || node;
+	var current = node.parentElement;
+	while (current) {
+		if (current.classList && current.classList.contains("trainer-pok-slot")) return current;
+		current = current.parentElement;
+	}
+	return node;
 }
 
 function getTrainerPokContainerElement(node) {
 	var rootNode = getTrainerPokRootNode(node);
 	if (!rootNode) return null;
-	return $(rootNode).closest("#team-poke-list, #box-poke-list, #box-poke-list2, #trash-box").get(0) || null;
+	var current = rootNode;
+	while (current) {
+		if (current.id === "team-poke-list" ||
+			current.id === "box-poke-list" ||
+			current.id === "box-poke-list2" ||
+			current.id === "trash-box") {
+			return current;
+		}
+		current = current.parentElement;
+	}
+	return null;
 }
 
 function ensureTrainerPokSlot(spriteElement) {
@@ -2848,6 +3290,7 @@ function hideTrainerFragBorderTotals() {
 	$(".trainer-pok-slot").removeClass("show-frag-total");
 	$(".trainer-pok-frag-total").each(function () {
 		this.style.display = "none";
+		this.className = "trainer-pok-frag-total";
 	});
 }
 
@@ -2858,31 +3301,92 @@ function updateTrainerFragBorderTotals() {
 	if (!showTotalFrags) {
 		return hideTrainerFragBorderTotals();
 	}
+	var spriteRows = [];
 	playerSprites.each(function () {
 		var spriteElement = this;
 		var slot = ensureTrainerPokSlot(spriteElement);
 		if (!slot) return;
 		var fragTotal = getFragTotalForSet($(spriteElement).attr("data-id"));
+		spriteRows.push({
+			slot: slot,
+			fragTotal: fragTotal
+		});
+	});
+	var rankedTotals = spriteRows
+		.map(function (row) { return row.fragTotal; })
+		.filter(function (fragTotal) { return fragTotal > 0; })
+		.sort(function (a, b) { return b - a; });
+	var uniqueRankedTotals = [];
+	for (var i = 0; i < rankedTotals.length; i++) {
+		if (uniqueRankedTotals.indexOf(rankedTotals[i]) !== -1) continue;
+		uniqueRankedTotals.push(rankedTotals[i]);
+		if (uniqueRankedTotals.length >= 3) break;
+	}
+	var rankClassByTotal = {};
+	if (uniqueRankedTotals.length > 0) rankClassByTotal[uniqueRankedTotals[0]] = "frag-rank-gold";
+	if (uniqueRankedTotals.length > 1) rankClassByTotal[uniqueRankedTotals[1]] = "frag-rank-silver";
+	if (uniqueRankedTotals.length > 2) rankClassByTotal[uniqueRankedTotals[2]] = "frag-rank-bronze";
+	for (i = 0; i < spriteRows.length; i++) {
+		var row = spriteRows[i];
+		var slot = row.slot;
 		var badge = slot.querySelector(".trainer-pok-frag-total");
 		if (!badge) {
 			badge = document.createElement("span");
 			badge.className = "trainer-pok-frag-total";
 			slot.appendChild(badge);
 		}
-		badge.textContent = String(fragTotal);
+		badge.className = "trainer-pok-frag-total";
+		var rankClass = rankClassByTotal[row.fragTotal];
+		if (rankClass) badge.classList.add(rankClass);
+		badge.textContent = String(row.fragTotal);
 		badge.style.display = "";
 		slot.classList.add("show-frag-total");
-	});
+	}
 }
 
 function collectPlayerRosterSetIds() {
 	var rosterSetIds = [];
-	$("#team-poke-list .trainer-pok.left-side, #box-poke-list .trainer-pok.left-side, #box-poke-list2 .trainer-pok.left-side, #trash-box .trainer-pok.left-side").each(function () {
-		var setId = $(this).attr("data-id");
-		if (!setId) return;
-		if (rosterSetIds.indexOf(setId) === -1) rosterSetIds.push(setId);
-	});
+	var seenSetIds = {};
+	var rosterSprites = document.querySelectorAll(PLAYER_ROSTER_SPRITE_SELECTOR);
+	for (var i = 0; i < rosterSprites.length; i++) {
+		var setId = String(rosterSprites[i].getAttribute("data-id") || "").trim();
+		if (!setId || seenSetIds[setId]) continue;
+		seenSetIds[setId] = true;
+		rosterSetIds.push(setId);
+	}
 	return rosterSetIds;
+}
+
+function buildPlayerRosterSearchText(setId) {
+	var parsedSet = parseSetId(setId);
+	var speciesName = String(parsedSet.species || "").trim();
+	var setName = String(parsedSet.label || "").trim();
+	var searchParts = [setId, parsedSet.species, parsedSet.label];
+	var setData = speciesName && setName && setdex && setdex[speciesName]
+		? setdex[speciesName][setName]
+		: null;
+	if (setData && typeof setData === "object") {
+		if (typeof setData.ability === "string") searchParts.push(setData.ability);
+		if (Array.isArray(setData.abilities)) searchParts = searchParts.concat(setData.abilities);
+		if (Array.isArray(setData.moves)) searchParts = searchParts.concat(setData.moves);
+	}
+	return searchParts.join(" ").toLowerCase();
+}
+
+function toPlayerRosterSearchToken(value) {
+	return String(value || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+function getPlayerRosterSearchPayloadBySetId(setId, cacheMap) {
+	if (cacheMap && cacheMap[setId]) return cacheMap[setId];
+	var searchText = buildPlayerRosterSearchText(setId);
+	var normalizedSearchText = toPlayerRosterSearchToken(searchText);
+	var payload = {
+		searchText: searchText,
+		normalizedSearchText: normalizedSearchText
+	};
+	if (cacheMap) cacheMap[setId] = payload;
+	return payload;
 }
 
 function applyPlayerRosterSearchFilter() {
@@ -2890,24 +3394,48 @@ function applyPlayerRosterSearchFilter() {
 	var query = String(searchInput && typeof searchInput.value !== "undefined" ? searchInput.value : "")
 		.trim()
 		.toLowerCase();
-	$("#team-poke-list .trainer-pok.left-side, #box-poke-list .trainer-pok.left-side, #box-poke-list2 .trainer-pok.left-side, #trash-box .trainer-pok.left-side").each(function () {
-		var sprite = this;
+	var queryTerms = query.split(/\s+/).filter(Boolean);
+	var normalizedTerms = queryTerms.map(toPlayerRosterSearchToken);
+	var setSearchCache = {};
+	var rosterSprites = document.querySelectorAll(PLAYER_ROSTER_SPRITE_SELECTOR);
+	for (var i = 0; i < rosterSprites.length; i++) {
+		var sprite = rosterSprites[i];
 		var rootNode = getTrainerPokRootNode(sprite);
 		if (!rootNode) rootNode = sprite;
-		var setId = String($(sprite).attr("data-id") || "");
-		var parsedSet = parseSetId(setId);
-		var searchText = (setId + " " + parsedSet.species + " " + parsedSet.label).toLowerCase();
-		var isMatch = !query || searchText.indexOf(query) >= 0;
-		rootNode.style.display = isMatch ? "" : "none";
-	});
+		var setId = String(sprite.getAttribute("data-id") || "");
+		var cachedSearchPayload = getPlayerRosterSearchPayloadBySetId(setId, setSearchCache);
+		var searchText = cachedSearchPayload.searchText;
+		var normalizedSearchText = cachedSearchPayload.normalizedSearchText;
+		var isMatch = !query ||
+			searchText.indexOf(query) >= 0 ||
+			queryTerms.every(function (term, index) {
+				return searchText.indexOf(term) >= 0 ||
+					(normalizedTerms[index] && normalizedSearchText.indexOf(normalizedTerms[index]) >= 0);
+			});
+		var nextDisplay = isMatch ? "" : "none";
+		if (rootNode.style.display !== nextDisplay) rootNode.style.display = nextDisplay;
+	}
 }
 
 function bindPlayerRosterSearchInput() {
 	var searchInput = document.getElementById("search");
 	if (!searchInput) return;
-	$(searchInput).off("input.searchfilter keyup.searchfilter").on("input.searchfilter keyup.searchfilter", function () {
-		applyPlayerRosterSearchFilter();
-	});
+	$(searchInput)
+		.off("input.searchfilter keyup.searchfilter change.searchfilter blur.searchfilter")
+		.on("input.searchfilter keyup.searchfilter", function () {
+			if (playerRosterSearchDebounceTimer) window.clearTimeout(playerRosterSearchDebounceTimer);
+			playerRosterSearchDebounceTimer = window.setTimeout(function () {
+				playerRosterSearchDebounceTimer = null;
+				applyPlayerRosterSearchFilter();
+			}, PLAYER_ROSTER_SEARCH_DEBOUNCE_MS);
+		})
+		.on("change.searchfilter blur.searchfilter", function () {
+			if (playerRosterSearchDebounceTimer) {
+				window.clearTimeout(playerRosterSearchDebounceTimer);
+				playerRosterSearchDebounceTimer = null;
+			}
+			applyPlayerRosterSearchFilter();
+		});
 }
 
 function syncFragRoster(options) {
@@ -2916,10 +3444,19 @@ function syncFragRoster(options) {
 	var allowEmptyPrune = !!syncOptions.allowEmptyPrune;
 	var rosterSetIds = collectPlayerRosterSetIds();
 	var state = getFragSheetState();
+	var activeEntries = getFragSheetStateEntryMap(state, "entries");
+	var archivedEntries = getFragSheetStateEntryMap(state, "archivedEntries");
 	var didChange = false;
 	for (var i = 0; i < rosterSetIds.length; i++) {
-		if (!state.entries[rosterSetIds[i]]) {
-			state.entries[rosterSetIds[i]] = normalizeFragEntry(rosterSetIds[i], {});
+		var rosterSetId = rosterSetIds[i];
+		if (archivedEntries[rosterSetId]) {
+			activeEntries[rosterSetId] = normalizeFragEntry(rosterSetId, archivedEntries[rosterSetId]);
+			delete archivedEntries[rosterSetId];
+			didChange = true;
+			continue;
+		}
+		if (!activeEntries[rosterSetId]) {
+			activeEntries[rosterSetId] = normalizeFragEntry(rosterSetId, {});
 			didChange = true;
 		}
 	}
@@ -2927,10 +3464,11 @@ function syncFragRoster(options) {
 		pruneMissing = false;
 	}
 	if (pruneMissing) {
-		for (var setId in state.entries) {
-			if (!Object.prototype.hasOwnProperty.call(state.entries, setId)) continue;
+		for (var setId in activeEntries) {
+			if (!Object.prototype.hasOwnProperty.call(activeEntries, setId)) continue;
 			if (rosterSetIds.indexOf(setId) !== -1) continue;
-			delete state.entries[setId];
+			archivedEntries[setId] = normalizeFragEntry(setId, activeEntries[setId]);
+			delete activeEntries[setId];
 			didChange = true;
 		}
 	}
@@ -2941,6 +3479,7 @@ function scheduleFragSheetRefresh() {
 	if (fragSheetRefreshTimer) return;
 	fragSheetRefreshTimer = window.setTimeout(function () {
 		fragSheetRefreshTimer = null;
+		saveCurrentPlayerRosterLayout();
 		syncFragRoster({pruneMissing: true});
 		renderFragSheet();
 		refreshNotesPanelIfOpen();
@@ -2996,7 +3535,7 @@ function removeFragKill(killerSetId, preferredFight) {
 		}
 	}
 	if (!targetFight) return;
-	var split = String(getCurrentSplitNumber(targetFight));
+	var split = String(getSplitNumberForFragFightLabel(targetFight));
 	var victimKey = pickFragVictimKeyForRemoval(entry, targetFight, split);
 	entry.fights[targetFight] -= 1;
 	if (entry.fights[targetFight] <= 0) delete entry.fights[targetFight];
@@ -3017,43 +3556,113 @@ function removeFragKill(killerSetId, preferredFight) {
 	renderFragSheet();
 }
 
+function removeSpecificFragKill(killerSetId, fightLabel, victimKey) {
+	var normalizedSetId = String(killerSetId || "").trim();
+	var normalizedFight = String(fightLabel || "").trim();
+	if (!normalizedSetId || !normalizedFight) return false;
+	var state = getFragSheetState();
+	var activeEntries = getFragSheetStateEntryMap(state, "entries");
+	var entry = activeEntries[normalizedSetId];
+	if (!entry) return false;
+	var fightCount = parseInt(entry.fights[normalizedFight], 10);
+	if (Number.isNaN(fightCount) || fightCount <= 0) return false;
+
+	var split = String(getSplitNumberForFragFightLabel(normalizedFight));
+	var normalizedVictimKey = normalizeFragVictimKey(victimKey);
+	entry.fights[normalizedFight] = fightCount - 1;
+	if (entry.fights[normalizedFight] <= 0) delete entry.fights[normalizedFight];
+	if (entry.splits[split]) {
+		entry.splits[split] = Math.max(0, entry.splits[split] - 1);
+		if (entry.splits[split] <= 0) delete entry.splits[split];
+	}
+	var removedFromFightVictims = decrementFragVictimBucketCount(entry, "fightVictims", normalizedFight, normalizedVictimKey, 1);
+	if (!removedFromFightVictims && normalizedVictimKey !== FRAG_UNKNOWN_VICTIM_KEY) {
+		removedFromFightVictims = decrementFragVictimBucketCount(entry, "fightVictims", normalizedFight, FRAG_UNKNOWN_VICTIM_KEY, 1);
+	}
+	if (!removedFromFightVictims) {
+		decrementFragVictimBucketByAny(entry, "fightVictims", normalizedFight, 1);
+	}
+	var removedFromSplitVictims = decrementFragVictimBucketCount(entry, "splitVictims", split, normalizedVictimKey, 1);
+	if (!removedFromSplitVictims && normalizedVictimKey !== FRAG_UNKNOWN_VICTIM_KEY) {
+		removedFromSplitVictims = decrementFragVictimBucketCount(entry, "splitVictims", split, FRAG_UNKNOWN_VICTIM_KEY, 1);
+	}
+	if (!removedFromSplitVictims) {
+		decrementFragVictimBucketByAny(entry, "splitVictims", split, 1);
+	}
+	entry.totalKills = Math.max(0, entry.totalKills - 1);
+	if (entry.totalKills <= 0) entry.lastVictim = "";
+	saveFragSheetState();
+	renderFragSheet();
+	return true;
+}
+
 function clearFragsForCurrentFight() {
 	var fight = getCurrentFightLabel();
-	var split = String(getCurrentSplitNumber(fight));
+	var normalizedFight = normalizeFragFightLabelForMatch(fight);
+	var currentFightIndex = getCurrentFightIndex();
+	var fightIndexCache = {};
 	var state = getFragSheetState();
 	var hadKills = false;
 	for (var setId in state.entries) {
 		if (!Object.prototype.hasOwnProperty.call(state.entries, setId)) continue;
 		var entry = state.entries[setId];
-		if (!entry.fights[fight]) continue;
-		var removed = entry.fights[fight];
-		var fightVictimBucket = getFragVictimBucketForEntry(entry, "fightVictims", fight, false);
-		entry.totalKills = Math.max(0, entry.totalKills - removed);
-		delete entry.fights[fight];
-		if (entry.fightVictims && Object.prototype.hasOwnProperty.call(entry.fightVictims, fight)) {
-			delete entry.fightVictims[fight];
-		}
-		if (entry.splits[split]) {
-			entry.splits[split] = Math.max(0, entry.splits[split] - removed);
-			if (entry.splits[split] <= 0) delete entry.splits[split];
-		}
-		var removedVictimCounts = 0;
-		if (fightVictimBucket) {
-			for (var victimKey in fightVictimBucket) {
-				if (!Object.prototype.hasOwnProperty.call(fightVictimBucket, victimKey)) continue;
-				var victimCount = parseInt(fightVictimBucket[victimKey], 10);
-				if (Number.isNaN(victimCount) || victimCount <= 0) continue;
-				removedVictimCounts += victimCount;
-				decrementFragVictimBucketCount(entry, "splitVictims", split, victimKey, victimCount);
+		if (!entry || !entry.fights || typeof entry.fights !== "object") continue;
+		var fightsToClear = [];
+		for (var fightName in entry.fights) {
+			if (!Object.prototype.hasOwnProperty.call(entry.fights, fightName)) continue;
+			var fightCount = parseInt(entry.fights[fightName], 10);
+			if (Number.isNaN(fightCount) || fightCount <= 0) continue;
+			if (normalizeFragFightLabelForMatch(fightName) === normalizedFight) {
+				fightsToClear.push(fightName);
+				continue;
+			}
+			if (currentFightIndex > 0) {
+				if (!Object.prototype.hasOwnProperty.call(fightIndexCache, fightName)) {
+					fightIndexCache[fightName] = getTrainerIndexForLabel(fightName);
+				}
+				if (fightIndexCache[fightName] === currentFightIndex) {
+					fightsToClear.push(fightName);
+				}
 			}
 		}
-		if (removedVictimCounts < removed) {
-			var unknownRemoved = decrementFragVictimBucketCount(entry, "splitVictims", split, FRAG_UNKNOWN_VICTIM_KEY, removed - removedVictimCounts);
-			if (unknownRemoved < (removed - removedVictimCounts)) {
-				decrementFragVictimBucketByAny(entry, "splitVictims", split, (removed - removedVictimCounts) - unknownRemoved);
+		if (!fightsToClear.length) continue;
+		var removedForEntry = 0;
+		for (var i = 0; i < fightsToClear.length; i++) {
+			var fightKey = fightsToClear[i];
+			var removed = parseInt(entry.fights[fightKey], 10);
+			if (Number.isNaN(removed) || removed <= 0) continue;
+			var split = String(getSplitNumberForFragFightLabel(fightKey));
+			var fightVictimBucket = getFragVictimBucketForEntry(entry, "fightVictims", fightKey, false);
+			delete entry.fights[fightKey];
+			if (entry.fightVictims && Object.prototype.hasOwnProperty.call(entry.fightVictims, fightKey)) {
+				delete entry.fightVictims[fightKey];
 			}
+			if (entry.splits[split]) {
+				entry.splits[split] = Math.max(0, entry.splits[split] - removed);
+				if (entry.splits[split] <= 0) delete entry.splits[split];
+			}
+			var removedVictimCounts = 0;
+			if (fightVictimBucket) {
+				for (var victimKey in fightVictimBucket) {
+					if (!Object.prototype.hasOwnProperty.call(fightVictimBucket, victimKey)) continue;
+					var victimCount = parseInt(fightVictimBucket[victimKey], 10);
+					if (Number.isNaN(victimCount) || victimCount <= 0) continue;
+					removedVictimCounts += victimCount;
+					decrementFragVictimBucketCount(entry, "splitVictims", split, victimKey, victimCount);
+				}
+			}
+			if (removedVictimCounts < removed) {
+				var unknownRemoved = decrementFragVictimBucketCount(entry, "splitVictims", split, FRAG_UNKNOWN_VICTIM_KEY, removed - removedVictimCounts);
+				if (unknownRemoved < (removed - removedVictimCounts)) {
+					decrementFragVictimBucketByAny(entry, "splitVictims", split, (removed - removedVictimCounts) - unknownRemoved);
+				}
+			}
+			removedForEntry += removed;
 		}
-		hadKills = true;
+		if (removedForEntry > 0) {
+			entry.totalKills = Math.max(0, entry.totalKills - removedForEntry);
+			hadKills = true;
+		}
 	}
 	if (hadKills) saveFragSheetState();
 	renderFragSheet();
@@ -3062,6 +3671,7 @@ function clearFragsForCurrentFight() {
 function clearAllFrags() {
 	var state = getFragSheetState();
 	state.entries = {};
+	state.archivedEntries = {};
 	saveFragSheetState();
 	syncFragRoster({pruneMissing: true});
 	renderFragSheet();
@@ -3122,6 +3732,96 @@ function renderFragPercentBar(rawPercent, isDead) {
 		"<div class=\"frags-percent-track\"><div class=\"frags-percent-fill\" style=\"width:" + bounded.toFixed(2) + "%\"></div></div>" +
 		"<span class=\"frags-percent-label\">" + formatted + "%</span>" +
 		"</div>";
+}
+
+function getFragVictimEditorLabel(victimKey) {
+	var normalizedVictimKey = normalizeFragVictimKey(victimKey);
+	if (normalizedVictimKey === FRAG_UNKNOWN_VICTIM_KEY) return "Unknown";
+	return formatSetNameForDisplay(normalizedVictimKey);
+}
+
+function getFragVictimEditorRows(entry, currentFight) {
+	var rows = [];
+	if (!entry || !entry.fights || typeof entry.fights !== "object") return rows;
+	var normalizedCurrentFight = normalizeFragFightLabelForMatch(currentFight);
+	for (var fightName in entry.fights) {
+		if (!Object.prototype.hasOwnProperty.call(entry.fights, fightName)) continue;
+		var fightCount = parseInt(entry.fights[fightName], 10);
+		if (Number.isNaN(fightCount) || fightCount <= 0) continue;
+		var fightBucket = getFragVictimBucketForEntry(entry, "fightVictims", fightName, false);
+		var victimRows = [];
+		var victimTotal = 0;
+		if (fightBucket) {
+			for (var fightVictimKey in fightBucket) {
+				if (!Object.prototype.hasOwnProperty.call(fightBucket, fightVictimKey)) continue;
+				var victimCount = parseInt(fightBucket[fightVictimKey], 10);
+				if (Number.isNaN(victimCount) || victimCount <= 0) continue;
+				victimRows.push({
+					key: fightVictimKey,
+					name: getFragVictimEditorLabel(fightVictimKey),
+					count: victimCount
+				});
+				victimTotal += victimCount;
+			}
+		}
+		if (victimTotal < fightCount) {
+			victimRows.push({
+				key: FRAG_UNKNOWN_VICTIM_KEY,
+				name: "Unknown",
+				count: fightCount - victimTotal
+			});
+		}
+		victimRows.sort(function (a, b) {
+			if (b.count !== a.count) return b.count - a.count;
+			return a.name.localeCompare(b.name);
+		});
+		rows.push({
+			fight: fightName,
+			split: String(getSplitNumberForFragFightLabel(fightName)),
+			isCurrentFight: normalizeFragFightLabelForMatch(fightName) === normalizedCurrentFight,
+			victims: victimRows
+		});
+	}
+	rows.sort(function (a, b) {
+		if (a.isCurrentFight !== b.isCurrentFight) return a.isCurrentFight ? -1 : 1;
+		var aIndex = getTrainerIndexForLabel(a.fight);
+		var bIndex = getTrainerIndexForLabel(b.fight);
+		if (aIndex && bIndex && aIndex !== bIndex) return aIndex - bIndex;
+		if (aIndex && !bIndex) return -1;
+		if (!aIndex && bIndex) return 1;
+		return a.fight.localeCompare(b.fight);
+	});
+	return rows;
+}
+
+function renderFragVictimEditor(entry, currentFight) {
+	var fightRows = getFragVictimEditorRows(entry, currentFight);
+	if (!fightRows.length) return "";
+	var rowsHtml = "";
+	for (var i = 0; i < fightRows.length; i++) {
+		var fightRow = fightRows[i];
+		var victimsHtml = "";
+		for (var j = 0; j < fightRow.victims.length; j++) {
+			var victimRow = fightRow.victims[j];
+			victimsHtml += "<li class=\"frags-edit-victim-item\">" +
+				"<span class=\"frags-edit-victim-name\">" + escapeHtml(victimRow.name) + "</span>" +
+				"<span class=\"frags-edit-victim-count\">x" + victimRow.count + "</span>" +
+				"<button type=\"button\" class=\"btn frags-edit-remove\" data-frag-set=\"" + escapeHtml(entry.setId) + "\" data-frag-fight=\"" + escapeHtml(fightRow.fight) + "\" data-frag-victim=\"" + escapeHtml(victimRow.key) + "\" title=\"Remove one recorded kill from this target\">-1</button>" +
+				"</li>";
+		}
+		rowsHtml += "<div class=\"frags-edit-fight\">" +
+			"<div class=\"frags-edit-fight-head\">" +
+			"<span class=\"frags-edit-fight-name\">" + escapeHtml(fightRow.fight) + "</span>" +
+			(fightRow.isCurrentFight ? "<span class=\"frags-edit-current-tag\">Current</span>" : "") +
+			"</div>" +
+			"<div class=\"frags-edit-fight-meta\">Split " + escapeHtml(fightRow.split) + "</div>" +
+			"<ul class=\"frags-edit-victim-list\">" + victimsHtml + "</ul>" +
+			"</div>";
+	}
+	return "<details class=\"frags-edit-drop\">" +
+		"<summary>Edit kills</summary>" +
+		"<div class=\"frags-edit-body\">" + rowsHtml + "</div>" +
+		"</details>";
 }
 
 function isPlayerSetInTrash(setId) {
@@ -3314,11 +4014,12 @@ function renderFragSheet() {
 			}
 		}
 		var overallPercent = toFragPercent(entry.totalKills, totals.overall);
+		var victimEditorHtml = showAllSplits ? renderFragVictimEditor(entry, currentFight) : "";
 		rowsHtml += "<tr class=\"frags-row" + placementClass + lifeClass + "\">" +
 			"<td class=\"frag-num\">" + (i + 1) + "</td>" +
 			"<td title=\"" + escapeHtml(titleText) + "\" class=\"frags-mon-cell\">" +
 			"<div class=\"frags-mon-content\">" +
-			"<img class=\"frags-mon-sprite\" src=\"" + escapeHtml(getFragSpriteUrl(entry.species)) + "\" data-species=\"" + escapeHtml(entry.species) + "\" onerror=\"applyIconSheetFallbackImage(this, this.getAttribute('data-species'))\" alt=\"\">" +
+			"<img class=\"frags-mon-sprite\" src=\"" + escapeHtml(getFragSpriteUrl(entry.species)) + "\" data-species=\"" + escapeHtml(entry.species) + "\"" + getPrimaryIconSheetLoadAttr(entry.species) + " onerror=\"applyIconSheetFallbackImage(this, this.getAttribute('data-species'))\" alt=\"\">" +
 			"<span>" + escapeHtml(entry.species) + "</span></div></td>" +
 			"<td class=\"frag-life-cell\"><span class=\"frags-life-badge " + (isDead ? "frags-life-dead" : "frags-life-alive") + "\">" + (isDead ? "Dead" : "Alive") + "</span>" +
 			(deathFight ? "<div class=\"frags-death-fight\" title=\"Died on " + escapeHtml(deathFight) + "\">" + escapeHtml(deathFight) + "</div>" : "") +
@@ -3327,10 +4028,10 @@ function renderFragSheet() {
 			"<td class=\"frag-percent-col\">" + renderFragPercentBar(overallPercent, isDead) + "</td>" +
 			splitPercentColumns +
 			"<td class=\"frag-num\">" + fightKills + "</td>" +
-			"<td><div class=\"frags-actions\">" +
+			"<td><div class=\"frags-actions-cell\"><div class=\"frags-actions\">" +
 			"<button type=\"button\" class=\"btn frags-action-btn frags-inc\" data-frag-set=\"" + escapeHtml(entry.setId) + "\">+1</button>" +
 			"<button type=\"button\" class=\"btn frags-action-btn frags-dec\" data-frag-set=\"" + escapeHtml(entry.setId) + "\">-1</button>" +
-			"</div></td>" +
+			"</div>" + victimEditorHtml + "</div></td>" +
 			"</tr>";
 	}
 	var splitHeaders = "";
@@ -3346,42 +4047,548 @@ function renderFragSheet() {
 	updateTrainerFragBorderTotals();
 }
 
+function setCalcSideDockedWidth(widthPx) {
+	var roundedWidth = Math.max(0, Math.round(widthPx || 0));
+	document.documentElement.style.setProperty("--calc-side-panel-open-width", roundedWidth + "px");
+	document.body.classList.toggle("calc-side-panel-docked", roundedWidth > 0);
+}
+
+function updateCalcLayoutForSidePanel() {
+	var panel = document.querySelector(".calc-side-panel.open:not(.fullscreen):not(#frags-side-panel)");
+	if (!panel) {
+		setCalcSideDockedWidth(0);
+		return;
+	}
+	var panelWidth = Math.round(panel.getBoundingClientRect().width || 0);
+	if (window.innerWidth < 1100 || !panelWidth || (window.innerWidth - panelWidth) < CALC_SIDE_PANEL_MIN_MAIN_WIDTH_PX) {
+		setCalcSideDockedWidth(0);
+		return;
+	}
+	setCalcSideDockedWidth(panelWidth);
+}
+
+function syncCalcSidePanelFullscreenButtonLabel(panelId, isFullscreen) {
+	if (panelId === "frags-side-panel") {
+		$("#frags-panel-fullscreen").text(isFullscreen ? "Exit Fullscreen" : "Fullscreen");
+	} else if (panelId === "notes-side-panel") {
+		$("#notes-panel-fullscreen").text(isFullscreen ? "Exit Fullscreen" : "Fullscreen");
+	}
+}
+
+function setCalcSidePanelFullscreen(panelOrId, shouldBeFullscreen) {
+	var panel = typeof panelOrId === "string" ? document.getElementById(panelOrId) : panelOrId;
+	if (!panel) return false;
+	var nextFullscreen = typeof shouldBeFullscreen === "boolean"
+		? shouldBeFullscreen
+		: !panel.classList.contains("fullscreen");
+	if (nextFullscreen) {
+		var currentWidth = String(panel.style.width || "").trim();
+		if (currentWidth) {
+			panel.setAttribute("data-docked-width", currentWidth);
+		}
+		panel.style.removeProperty("width");
+		panel.classList.add("fullscreen");
+	} else {
+		panel.classList.remove("fullscreen");
+		var dockedWidth = String(panel.getAttribute("data-docked-width") || "").trim();
+		if (dockedWidth) {
+			panel.style.width = dockedWidth;
+		} else {
+			panel.style.removeProperty("width");
+		}
+		panel.removeAttribute("data-docked-width");
+	}
+	syncCalcSidePanelFullscreenButtonLabel(panel.id, nextFullscreen);
+	if (panel.id === "frags-side-panel") {
+		renderFragSheet();
+	} else if (panel.id === "notes-side-panel") {
+		renderNotesPanel();
+	}
+	updateCalcSideBackdrop();
+	updateCalcLayoutForSidePanel();
+	return nextFullscreen;
+}
+
 function updateCalcSideBackdrop() {
 	var backdrop = document.getElementById("calc-side-backdrop");
 	if (!backdrop) return;
 	var hasOpenPanel = $(".calc-side-panel.open").length > 0;
-	backdrop.hidden = !hasOpenPanel;
-	backdrop.classList.toggle("open", hasOpenPanel);
-}
-
-function openCalcSidePanel(panelId) {
-	var panel = document.getElementById(panelId);
-	if (!panel) return;
-	panel.hidden = false;
-	panel.classList.add("open");
-	panel.setAttribute("aria-hidden", "false");
-	updateCalcSideBackdrop();
+	var showBackdrop = hasOpenPanel && window.innerWidth < 1100;
+	backdrop.hidden = !showBackdrop;
+	backdrop.classList.toggle("open", showBackdrop);
 }
 
 function closeCalcSidePanel(panelId) {
 	var panel = document.getElementById(panelId);
 	if (!panel) return;
+	var wasOpen = panel.classList.contains("open");
+	setCalcSidePanelFullscreen(panel, false);
 	panel.classList.remove("open");
-	panel.classList.remove("fullscreen");
 	panel.setAttribute("aria-hidden", "true");
 	panel.hidden = true;
-	if (panelId === "frags-side-panel") {
-		$("#frags-panel-fullscreen").text("Fullscreen");
-	} else if (panelId === "notes-side-panel") {
-		$("#notes-panel-fullscreen").text("Fullscreen");
+	if (calcSidePanelResizeState && calcSidePanelResizeState.panelId === panelId) {
+		endCalcSidePanelResize();
 	}
-	updateCalcSideBackdrop();
+	if (wasOpen) {
+		updateCalcSideBackdrop();
+		updateCalcLayoutForSidePanel();
+	}
 }
 
-function closeCalcSidePanels() {
+function closeCalcSidePanels(exceptPanelId) {
 	$(".calc-side-panel.open").each(function () {
+		if (exceptPanelId && this.id === exceptPanelId) return;
 		closeCalcSidePanel(this.id);
 	});
+}
+
+function openCalcSidePanel(panelId) {
+	var panel = document.getElementById(panelId);
+	if (!panel) return;
+	closeCalcSidePanels(panelId);
+	panel.hidden = false;
+	panel.classList.add("open");
+	panel.setAttribute("aria-hidden", "false");
+	updateCalcSideBackdrop();
+	updateCalcLayoutForSidePanel();
+}
+
+function clampCalcSidePanelWidth(widthPx) {
+	var maxWidth = Math.floor((window.innerWidth * CALC_SIDE_PANEL_MAX_WIDTH_VW) / 100);
+	if (maxWidth < CALC_SIDE_PANEL_MIN_WIDTH_PX) maxWidth = CALC_SIDE_PANEL_MIN_WIDTH_PX;
+	return Math.max(CALC_SIDE_PANEL_MIN_WIDTH_PX, Math.min(maxWidth, Math.round(widthPx)));
+}
+
+function ensureCalcSideResizeCaptureNode() {
+	if (calcSideResizeCaptureNode && document.body.contains(calcSideResizeCaptureNode)) return calcSideResizeCaptureNode;
+	var captureNode = document.getElementById("calc-side-resize-capture");
+	if (!captureNode) {
+		captureNode = document.createElement("div");
+		captureNode.id = "calc-side-resize-capture";
+		captureNode.className = "calc-side-resize-capture";
+		captureNode.hidden = true;
+		document.body.appendChild(captureNode);
+	}
+	calcSideResizeCaptureNode = captureNode;
+	return captureNode;
+}
+
+function beginCalcSidePanelResize(panel, startClientX) {
+	if (!panel || panel.classList.contains("fullscreen")) return;
+	var captureNode = ensureCalcSideResizeCaptureNode();
+	calcSidePanelResizeState = {
+		panelId: panel.id,
+		startClientX: startClientX,
+		startWidth: panel.getBoundingClientRect().width || CALC_SIDE_PANEL_MIN_WIDTH_PX
+	};
+	if (captureNode) captureNode.hidden = false;
+	document.body.classList.add("calc-side-resizing");
+}
+
+function continueCalcSidePanelResize(nextClientX, buttonsMask) {
+	if (!calcSidePanelResizeState) return;
+	if (typeof buttonsMask === "number" && buttonsMask === 0) {
+		endCalcSidePanelResize();
+		return;
+	}
+	var panel = document.getElementById(calcSidePanelResizeState.panelId);
+	if (!panel) {
+		endCalcSidePanelResize();
+		return;
+	}
+	var delta = calcSidePanelResizeState.startClientX - nextClientX;
+	var nextWidth = clampCalcSidePanelWidth(calcSidePanelResizeState.startWidth + delta);
+	panel.style.width = nextWidth + "px";
+	updateCalcLayoutForSidePanel();
+}
+
+function endCalcSidePanelResize() {
+	if (!calcSidePanelResizeState) return;
+	calcSidePanelResizeState = null;
+	if (calcSideResizeCaptureNode) calcSideResizeCaptureNode.hidden = true;
+	document.body.classList.remove("calc-side-resizing");
+}
+
+function hasSeenCalcFeatureTutorial() {
+	return localStorage.getItem(CALC_FEATURE_TUTORIAL_SEEN_STORAGE_KEY) === "1";
+}
+
+function markCalcFeatureTutorialSeen() {
+	localStorage.setItem(CALC_FEATURE_TUTORIAL_SEEN_STORAGE_KEY, "1");
+}
+
+function clearCalcFeatureTutorialFocus() {
+	if (!calcFeatureTutorialState.focusNode || !calcFeatureTutorialState.focusNode.classList) return;
+	calcFeatureTutorialState.focusNode.classList.remove("calc-feature-tutorial-focus");
+	if (calcFeatureTutorialState.focusForcedRelative) {
+		calcFeatureTutorialState.focusNode.style.position = calcFeatureTutorialState.focusPrevInlinePosition;
+	}
+	calcFeatureTutorialState.focusNode.style.zIndex = calcFeatureTutorialState.focusPrevInlineZIndex;
+	calcFeatureTutorialState.focusPrevInlinePosition = "";
+	calcFeatureTutorialState.focusPrevInlineZIndex = "";
+	calcFeatureTutorialState.focusForcedRelative = false;
+	calcFeatureTutorialState.focusNode = null;
+}
+
+function setCalcFeatureTutorialFocus(targetNode) {
+	clearCalcFeatureTutorialFocus();
+	if (!targetNode || !targetNode.classList) return;
+	calcFeatureTutorialState.focusPrevInlinePosition = targetNode.style.position || "";
+	calcFeatureTutorialState.focusPrevInlineZIndex = targetNode.style.zIndex || "";
+	calcFeatureTutorialState.focusForcedRelative = false;
+	var computedPosition = window.getComputedStyle ? window.getComputedStyle(targetNode).position : "";
+	if (computedPosition === "static" || !computedPosition) {
+		targetNode.style.position = "relative";
+		calcFeatureTutorialState.focusForcedRelative = true;
+	}
+	targetNode.style.zIndex = "2803";
+	targetNode.classList.add("calc-feature-tutorial-focus");
+	calcFeatureTutorialState.focusNode = targetNode;
+	if (typeof targetNode.scrollIntoView === "function") {
+		targetNode.scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
+	}
+}
+
+function clampCalcFeatureTutorialValue(value, min, max) {
+	return Math.min(max, Math.max(min, value));
+}
+
+function positionCalcFeatureTutorialCard(targetNode) {
+	var cardNode = calcFeatureTutorialState.cardNode;
+	if (!cardNode) return;
+	var margin = 12;
+	var cardWidth = cardNode.offsetWidth || 360;
+	var cardHeight = cardNode.offsetHeight || 280;
+	var viewportWidth = window.innerWidth || document.documentElement.clientWidth || 1280;
+	var viewportHeight = window.innerHeight || document.documentElement.clientHeight || 720;
+
+	var left = viewportWidth - cardWidth - margin;
+	var top = viewportHeight - cardHeight - margin;
+	if (targetNode && targetNode.getBoundingClientRect) {
+		var rect = targetNode.getBoundingClientRect();
+		if (isFinite(rect.left) && isFinite(rect.right) && isFinite(rect.top) && isFinite(rect.bottom)) {
+			var canFitRight = rect.right + 14 + cardWidth <= viewportWidth - margin;
+			var canFitLeft = rect.left - 14 - cardWidth >= margin;
+			if (canFitRight) {
+				left = rect.right + 14;
+			} else if (canFitLeft) {
+				left = rect.left - cardWidth - 14;
+			} else {
+				left = clampCalcFeatureTutorialValue(rect.left, margin, viewportWidth - cardWidth - margin);
+			}
+			var centeredTop = rect.top + ((rect.height - cardHeight) / 2);
+			top = clampCalcFeatureTutorialValue(centeredTop, margin, viewportHeight - cardHeight - margin);
+		}
+	}
+	cardNode.style.left = Math.round(left) + "px";
+	cardNode.style.top = Math.round(top) + "px";
+}
+
+function getFirstCalcFeatureTutorialTarget(selectors) {
+	for (var i = 0; i < selectors.length; i++) {
+		var node = document.querySelector(selectors[i]);
+		if (node) return node;
+	}
+	return null;
+}
+
+function ensureTutorialSettingsSection() {
+	var settingsBody = document.querySelector("#settings-side-panel .settings-side-body");
+	if (!settingsBody) return null;
+	var existingSection = document.getElementById("settings-tutorial-section");
+	if (existingSection) return existingSection;
+	var section = document.createElement("section");
+	section.id = "settings-tutorial-section";
+	section.className = "settings-section settings-tutorial-section";
+	section.innerHTML = "" +
+		"<h4>Tutorial</h4>" +
+		"<p class=\"settings-note\">Replay the feature walkthrough any time.</p>" +
+		"<div class=\"settings-choice-row\">" +
+		"<button type=\"button\" class=\"btn settings-choice-btn\" id=\"settings-open-tutorial\">Replay Feature Tutorial</button>" +
+		"</div>";
+	settingsBody.appendChild(section);
+	return section;
+}
+
+function ensureCalcFeatureTutorialOverlay() {
+	if (calcFeatureTutorialState.overlayNode && document.body.contains(calcFeatureTutorialState.overlayNode)) {
+		return calcFeatureTutorialState.overlayNode;
+	}
+	var overlay = document.createElement("div");
+	overlay.id = "calc-feature-tutorial-overlay";
+	overlay.className = "calc-feature-tutorial-overlay";
+	overlay.hidden = true;
+	overlay.innerHTML = "" +
+		"<div class=\"calc-feature-tutorial-scrim\"></div>" +
+		"<section class=\"calc-feature-tutorial-card\" role=\"dialog\" aria-modal=\"true\" aria-label=\"Feature tutorial\">" +
+		"<div class=\"calc-feature-tutorial-head\">" +
+		"<strong id=\"calc-feature-tutorial-title\"></strong>" +
+		"<span id=\"calc-feature-tutorial-progress\"></span>" +
+		"</div>" +
+		"<p id=\"calc-feature-tutorial-text\" class=\"calc-feature-tutorial-text\"></p>" +
+		"<div id=\"calc-feature-tutorial-visual\" class=\"calc-feature-tutorial-visual\"></div>" +
+		"<div class=\"calc-feature-tutorial-actions\">" +
+		"<button type=\"button\" class=\"btn calc-feature-tutorial-action\" id=\"calc-feature-tutorial-skip\">Skip</button>" +
+		"<div class=\"calc-feature-tutorial-nav\">" +
+		"<button type=\"button\" class=\"btn calc-feature-tutorial-action\" id=\"calc-feature-tutorial-back\">Back</button>" +
+		"<button type=\"button\" class=\"btn calc-feature-tutorial-action\" id=\"calc-feature-tutorial-next\">Next</button>" +
+		"</div>" +
+		"</div>" +
+		"</section>";
+	document.body.appendChild(overlay);
+
+	calcFeatureTutorialState.overlayNode = overlay;
+	calcFeatureTutorialState.cardNode = overlay.querySelector(".calc-feature-tutorial-card");
+	calcFeatureTutorialState.titleNode = document.getElementById("calc-feature-tutorial-title");
+	calcFeatureTutorialState.textNode = document.getElementById("calc-feature-tutorial-text");
+	calcFeatureTutorialState.progressNode = document.getElementById("calc-feature-tutorial-progress");
+	calcFeatureTutorialState.visualNode = document.getElementById("calc-feature-tutorial-visual");
+	calcFeatureTutorialState.backBtn = document.getElementById("calc-feature-tutorial-back");
+	calcFeatureTutorialState.nextBtn = document.getElementById("calc-feature-tutorial-next");
+
+	$("#calc-feature-tutorial-skip").off("click").on("click", function () {
+		finishCalcFeatureTutorial();
+	});
+	$("#calc-feature-tutorial-back").off("click").on("click", function () {
+		if (!calcFeatureTutorialState.isOpen) return;
+		if (calcFeatureTutorialState.stepIndex <= 0) return;
+		calcFeatureTutorialState.stepIndex -= 1;
+		renderCalcFeatureTutorialStep();
+	});
+	$("#calc-feature-tutorial-next").off("click").on("click", function () {
+		if (!calcFeatureTutorialState.isOpen) return;
+		var isLastStep = calcFeatureTutorialState.stepIndex >= calcFeatureTutorialState.steps.length - 1;
+		if (isLastStep) {
+			finishCalcFeatureTutorial();
+			return;
+		}
+		calcFeatureTutorialState.stepIndex += 1;
+		renderCalcFeatureTutorialStep();
+	});
+
+	$(window).off("resize.calctutorial").on("resize.calctutorial", function () {
+		if (!calcFeatureTutorialState.isOpen) return;
+		var activeStep = calcFeatureTutorialState.steps[calcFeatureTutorialState.stepIndex];
+		var target = resolveCalcFeatureTutorialTarget(activeStep);
+		positionCalcFeatureTutorialCard(target);
+	});
+	return overlay;
+}
+
+function resolveCalcFeatureTutorialTarget(step) {
+	if (!step) return null;
+	if (typeof step.selector === "function") return step.selector() || null;
+	if (typeof step.selector === "string" && step.selector) return document.querySelector(step.selector);
+	return null;
+}
+
+function getCalcFeatureTutorialSteps() {
+	return [
+		{
+			title: "Right-click sprites (P1 + P2)",
+			selector: function () {
+				return getFirstCalcFeatureTutorialTarget([
+					"#team-poke-list .trainer-pok.left-side",
+					"#box-poke-list .trainer-pok.left-side",
+					"#box-poke-list2 .trainer-pok.left-side",
+					"#team-poke-list"
+				]);
+			},
+			description: "Right-click any Pokemon 1 sprite in your Team/Box to open the quick action menu. Right-clicking a Pokemon 2 sprite instantly toggles that enemy as Dead/Alive for the current fight.",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Right-click</span><span>P1 sprite</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-arrow\">&#x2193;</div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Add Frag</span><span>Did This Mon Die?</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Hot Swap Team/Box/Trash</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Right-click</span><span>P2 sprite</span><span>&#x2192;</span><span>Mark Dead/Alive instantly</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				if (typeof closeDamageApplyMenu === "function") closeDamageApplyMenu();
+				closeFragContextMenu();
+				closeOpposingContextMenu();
+				closeCalcSidePanels();
+			}
+		},
+		{
+			title: "Frag sheet sync + fullscreen",
+			selector: "#frags-side-panel",
+			description: "All right-click frag actions feed directly into Frag Sheet. Use Overall %, This Fight, and Actions for fast tracking. Drag a base form onto its evolution to merge frags, and use fullscreen Edit kills to remove a mistaken target without touching the rest.",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Panel</span><span>Frag Sheet</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Overall %</span><span>Split %</span><span>This Fight</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Merge</span><span>Drag Charmander &#x2192; Charmeleon</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Tip</span><span>Fullscreen shows split columns and Edit kills.</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				openFragsPanel();
+				setCalcSidePanelFullscreen("frags-side-panel", true);
+			}
+		},
+		{
+			title: "Highlight damage and apply HP",
+			selector: function () {
+				return getFirstCalcFeatureTutorialTarget(["#damage-apply-menu", "#resultDamageL1", "#resultDamageR1", "#damageValues"]);
+			},
+			description: "Highlight any damage text or min/max % range, then use the popup buttons to subtract that amount from P1 or P2 HP instantly.",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>12.4% - 23.7%</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-arrow\">&#x2193;</div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>- P1 HP</span><span>- P2 HP</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				closeCalcSidePanels();
+				var menuRect = null;
+				var anchorNode = document.getElementById("resultDamageL1") || document.getElementById("resultDamageR1");
+				if (anchorNode && anchorNode.getBoundingClientRect) {
+					menuRect = anchorNode.getBoundingClientRect();
+				}
+				if (typeof openDamageApplyMenuForSelection === "function" && menuRect) {
+					openDamageApplyMenuForSelection("12.4% - 23.7%", menuRect);
+				}
+			}
+		},
+		{
+			title: "Top quick tools",
+			selector: ".calc-top-actions",
+			description: "Use the top buttons for quick access: Pokedex, Notes, and Settings. Notes/Frags open as side panels and can be toggled to fullscreen when you need more workspace.",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Pokedex</span><span>Notes</span><span>Settings</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">View</span><span>Side panel or Fullscreen.</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				closeCalcSidePanels();
+				if (typeof closeDamageApplyMenu === "function") closeDamageApplyMenu();
+			}
+		},
+		{
+			title: "Notes panel details",
+			selector: "#notes-side-panel",
+			description: "Notes tracks turns with selected mons and free text. Switch Single/Double format, add/remove turns, and use Fullscreen when you need bigger side-by-side note space.",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Per Turn</span><span>P1 + P2 selections</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Single / Double</span><span>+ Turn</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Tip</span><span>Fullscreen shows more notes at once.</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				openNotesPanel();
+				setCalcSidePanelFullscreen("notes-side-panel", true);
+			}
+		},
+		{
+			title: "Settings explained",
+			selector: "#settings-side-panel .settings-side-body",
+			description: "Settings controls Starter routing, Theme, Layout mode, and QOL toggles (Typing Colors, Move Colors, PP/ACC display, and Total Frags on Border).",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Starter</span><span>Theme</span><span>Layout</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">QOL</span><span>Typing/Move colors, PP/ACC, Border Frags</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				openSettingsPanel();
+			}
+		},
+		{
+			title: "Terrain right-click lock",
+			selector: ".field-info label.btn[for='electric']",
+			description: "Weather is auto-set from permanent Astral weather abilities. Terrain abilities are limited-turn effects, so you can right-click a terrain button to force-lock terrain for that trainer fight.",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Auto</span><span>Weather from permanent abilities</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Manual lock</span><span>Right-click Terrain button</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Toggle is instant for this trainer fight.</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				closeCalcSidePanels();
+				if (typeof closeDamageApplyMenu === "function") closeDamageApplyMenu();
+			}
+		},
+		{
+			title: "Replay any time",
+			selector: "#settings-open-tutorial",
+			description: "You can always revisit this walkthrough from Settings using \"Replay Feature Tutorial\".",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Settings</span><span>&#x2192;</span><span>Replay Feature Tutorial</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				openSettingsPanel();
+				ensureTutorialSettingsSection();
+			}
+		}
+	];
+}
+
+function renderCalcFeatureTutorialStep() {
+	if (!calcFeatureTutorialState.isOpen) return;
+	var steps = calcFeatureTutorialState.steps;
+	if (!steps || !steps.length) return;
+	var index = calcFeatureTutorialState.stepIndex;
+	if (index < 0) index = 0;
+	if (index >= steps.length) index = steps.length - 1;
+	calcFeatureTutorialState.stepIndex = index;
+
+	var step = steps[index];
+	if (step && typeof step.beforeShow === "function") step.beforeShow();
+	var targetNode = resolveCalcFeatureTutorialTarget(step);
+
+	if (calcFeatureTutorialState.titleNode) calcFeatureTutorialState.titleNode.textContent = step.title || "Tutorial";
+	if (calcFeatureTutorialState.textNode) calcFeatureTutorialState.textNode.textContent = step.description || "";
+	if (calcFeatureTutorialState.progressNode) calcFeatureTutorialState.progressNode.textContent = "Step " + (index + 1) + " / " + steps.length;
+	if (calcFeatureTutorialState.visualNode) calcFeatureTutorialState.visualNode.innerHTML = step.visualHtml || "";
+	if (calcFeatureTutorialState.backBtn) calcFeatureTutorialState.backBtn.disabled = index <= 0;
+	if (calcFeatureTutorialState.nextBtn) calcFeatureTutorialState.nextBtn.textContent = index >= steps.length - 1 ? "Done" : "Next";
+
+	setCalcFeatureTutorialFocus(targetNode);
+	positionCalcFeatureTutorialCard(targetNode);
+	window.setTimeout(function () {
+		if (!calcFeatureTutorialState.isOpen) return;
+		positionCalcFeatureTutorialCard(calcFeatureTutorialState.focusNode);
+	}, 180);
+}
+
+function startCalcFeatureTutorial(options) {
+	var startOptions = options || {};
+	ensureTutorialSettingsSection();
+	var overlay = ensureCalcFeatureTutorialOverlay();
+	calcFeatureTutorialState.steps = getCalcFeatureTutorialSteps();
+	calcFeatureTutorialState.stepIndex = 0;
+	calcFeatureTutorialState.launchedFromSettings = !!startOptions.fromSettings;
+	calcFeatureTutorialState.isOpen = true;
+	markCalcFeatureTutorialSeen();
+	overlay.hidden = false;
+	overlay.classList.add("open");
+	document.body.classList.add("calc-feature-tutorial-open");
+	renderCalcFeatureTutorialStep();
+}
+
+function finishCalcFeatureTutorial() {
+	if (!calcFeatureTutorialState.isOpen) return;
+	clearCalcFeatureTutorialFocus();
+	if (calcFeatureTutorialState.overlayNode) {
+		calcFeatureTutorialState.overlayNode.classList.remove("open");
+		calcFeatureTutorialState.overlayNode.hidden = true;
+	}
+	calcFeatureTutorialState.isOpen = false;
+	calcFeatureTutorialState.steps = [];
+	calcFeatureTutorialState.stepIndex = 0;
+	var reopenSettings = !!calcFeatureTutorialState.launchedFromSettings;
+	calcFeatureTutorialState.launchedFromSettings = false;
+	if (typeof closeDamageApplyMenu === "function") closeDamageApplyMenu();
+	closeFragContextMenu();
+	closeOpposingContextMenu();
+	closeCalcSidePanels();
+	if (reopenSettings) openSettingsPanel();
+	document.body.classList.remove("calc-feature-tutorial-open");
+}
+
+function maybeAutoStartCalcFeatureTutorial() {
+	if (hasSeenCalcFeatureTutorial()) return;
+	startCalcFeatureTutorial({fromSettings: false});
 }
 
 function openFragsPanel() {
@@ -3489,15 +4696,16 @@ function getNotesMonSlotHtml(turnIndex, fieldKey, selectedSetId, options, emptyL
 	var selected = String(selectedSetId || "").trim();
 	var speciesName = parseSetId(selected).species || "";
 	var spriteSrc = speciesName
-		? escapeHtml(getTrainerSpriteUrlByName(speciesName))
-		: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+		? escapeHtml(getInitialTrainerSpriteUrlByName(speciesName))
+		: POKEMON_ICON_FALLBACK_DATA_URL;
 	var spriteClass = "notes-mon-sprite" + (speciesName ? "" : " notes-mon-sprite-empty");
+	var spriteOnLoad = speciesName ? getPrimaryIconSheetLoadAttr(speciesName) : "";
 	var spriteOnError = speciesName ? " onerror=\"applyIconSheetFallbackImage(this, this.getAttribute('data-species'))\"" : "";
 	return "<div class=\"notes-mon-slot\">" +
 		"<select class=\"notes-set-select\" data-turn-index=\"" + turnIndex + "\" data-notes-field=\"" + escapeHtml(fieldKey) + "\">" +
 		renderNotesSetOptionsHtml(options, selected, emptyLabel) +
 		"</select>" +
-		"<img class=\"" + spriteClass + "\" src=\"" + spriteSrc + "\" data-species=\"" + escapeHtml(speciesName) + "\" alt=\"\"" + spriteOnError + ">" +
+		"<img class=\"" + spriteClass + "\" src=\"" + spriteSrc + "\" data-species=\"" + escapeHtml(speciesName) + "\" alt=\"\" loading=\"lazy\" decoding=\"async\"" + spriteOnLoad + spriteOnError + ">" +
 		"</div>";
 }
 
@@ -3539,11 +4747,11 @@ function renderNotesPanel() {
 
 	var playerOptions = getNotesPlayerSetOptions();
 	var opposingOptions = getNotesOpposingSetOptions();
-	var turnsHtml = "";
+	var turnsHtmlParts = [];
 	for (var i = 0; i < notesState.turns.length; i++) {
-		turnsHtml += getNotesTurnHtml(i, notesState.turns[i], notesState.format, playerOptions, opposingOptions);
+		turnsHtmlParts.push(getNotesTurnHtml(i, notesState.turns[i], notesState.format, playerOptions, opposingOptions));
 	}
-	turnsWrap.innerHTML = turnsHtml;
+	turnsWrap.innerHTML = turnsHtmlParts.join("");
 }
 
 function openNotesPanel() {
@@ -3595,6 +4803,24 @@ function updateNotesTurnField(turnIndex, fieldKey, fieldValue) {
 	if (!allowedFields[fieldKey]) return;
 	notesState.turns[index][fieldKey] = fieldKey === "note" ? String(fieldValue || "") : String(fieldValue || "").trim();
 	saveNotesBoardState();
+}
+
+function scheduleNotesTurnNoteUpdate(turnIndex, noteValue) {
+	var key = String(turnIndex || "");
+	if (notesNoteInputDebounceTimers[key]) window.clearTimeout(notesNoteInputDebounceTimers[key]);
+	notesNoteInputDebounceTimers[key] = window.setTimeout(function () {
+		delete notesNoteInputDebounceTimers[key];
+		updateNotesTurnField(turnIndex, "note", noteValue);
+	}, NOTES_NOTE_INPUT_DEBOUNCE_MS);
+}
+
+function flushScheduledNotesTurnNoteUpdate(turnIndex, noteValue) {
+	var key = String(turnIndex || "");
+	if (notesNoteInputDebounceTimers[key]) {
+		window.clearTimeout(notesNoteInputDebounceTimers[key]);
+		delete notesNoteInputDebounceTimers[key];
+	}
+	updateNotesTurnField(turnIndex, "note", noteValue);
 }
 
 function canScrollForWheelDelta(containerElement, deltaY) {
@@ -3657,9 +4883,11 @@ function applyOpposingDeadMarks() {
 function setOpposingSetDeadMark(setId, isDead) {
 	var key = String(setId || "");
 	if (!key) return;
+	var wasDead = !!deadOpposingSetMap[key];
 	if (isDead) deadOpposingSetMap[key] = true;
 	else delete deadOpposingSetMap[key];
 	applyOpposingDeadMarks();
+	if (wasDead !== !!isDead && typeof performCalculations === "function") performCalculations();
 }
 
 function clearOpposingDeadMarks() {
@@ -3820,12 +5048,47 @@ function hotSwapSetToPlayerContainer(setId, sourceElement, containerId) {
 		$(".player").change();
 		$(".player .select2-chosen").text(formatSetNameForDisplay(setId));
 	}
+	saveCurrentPlayerRosterLayout();
 	syncFragRoster({pruneMissing: true});
 	renderFragSheet();
 }
 
 function isSetOptionAvailable(setId) {
 	return !!getSetOptionById(setId);
+}
+
+function getTrainerSetOptionsByLabel(trainerLabel, options) {
+	var normalizedTrainerLabel = String(trainerLabel || "").trim();
+	if (!normalizedTrainerLabel) return [];
+	var sourceOptions = Array.isArray(options) ? options : getSetOptions();
+	var matches = [];
+	for (var i = 0; i < sourceOptions.length; i++) {
+		var option = sourceOptions[i];
+		if (!option || !option.id || !option.set || option.set === "Blank Set") continue;
+		var parsedEntry = parseTrainerPartyEntry(option.id);
+		if (parsedEntry.trainerLabel === normalizedTrainerLabel) {
+			matches.push(option);
+		}
+	}
+	matches.sort(function (leftOption, rightOption) {
+		var leftEntry = parseTrainerPartyEntry(leftOption.id);
+		var rightEntry = parseTrainerPartyEntry(rightOption.id);
+		var leftIndex = getTrainerIndexFromSetData(leftEntry.setData) || leftEntry.sortIndex || 0;
+		var rightIndex = getTrainerIndexFromSetData(rightEntry.setData) || rightEntry.sortIndex || 0;
+		if (leftIndex !== rightIndex) return leftIndex - rightIndex;
+		return String(leftOption.id).localeCompare(String(rightOption.id));
+	});
+	return matches;
+}
+
+function selectTrainerFightByLabel(trainerLabel, preferredSetId) {
+	var trainerOptions = getTrainerSetOptionsByLabel(trainerLabel);
+	if (!trainerOptions.length) return false;
+	var normalizedPreferredSetId = String(preferredSetId || "").trim();
+	var targetSetId = normalizedPreferredSetId && getSetOptionById(normalizedPreferredSetId, trainerOptions)
+		? normalizedPreferredSetId
+		: trainerOptions[0].id;
+	return setSelectedSetIdForSide("p2", targetSetId);
 }
 
 function getSetOptionById(setId, options) {
@@ -3856,15 +5119,45 @@ function getSelectedSetIdForSide(sideId) {
 	return String(selector.val() || "").trim();
 }
 
+function isSetIdKnownInSetdex(setId) {
+	var parsedSet = parseSetId(setId);
+	var speciesName = String(parsedSet.species || "").trim();
+	var setName = String(parsedSet.label || "").trim();
+	if (!speciesName || !setName || !setdex || !setdex[speciesName]) return false;
+	return Object.prototype.hasOwnProperty.call(setdex[speciesName], setName);
+}
+
 function setSelectedSetIdForSide(sideId, setId) {
 	var normalizedSetId = String(setId || "").trim();
 	if (!normalizedSetId) return false;
+	if (!isSetOptionAvailable(normalizedSetId)) {
+		if (window.console && typeof window.console.debug === "function") {
+			window.console.debug("[AstralCalc] setSelectedSetIdForSide skipped unavailable set", {
+				sideId: sideId,
+				setId: normalizedSetId
+			});
+		}
+		return false;
+	}
 	var selector = $("#" + sideId + " .set-selector").first();
 	if (!selector.length) return false;
+	function syncSetSelectorDisplayText() {
+		var select2Container = selector.next(".select2-container");
+		if (!select2Container.length) {
+			select2Container = selector.siblings(".select2-container").first();
+		}
+		select2Container.find(".select2-chosen").first().text(formatSetNameForDisplay(normalizedSetId));
+	}
 	var currentSetId = String(selector.val() || "").trim();
-	if (currentSetId === normalizedSetId) return true;
+	if (currentSetId === normalizedSetId) {
+		syncSetSelectorDisplayText();
+		return true;
+	}
 	selector.val(normalizedSetId).change();
 	var appliedSetId = String(selector.val() || "").trim();
+	if (appliedSetId === normalizedSetId) {
+		syncSetSelectorDisplayText();
+	}
 	return appliedSetId === normalizedSetId;
 }
 
@@ -3885,8 +5178,15 @@ function saveLastEncounterSelection() {
 	};
 	if (opposingSetId) {
 		var opposingEntry = parseTrainerPartyEntry(opposingSetId);
-		if (opposingEntry && opposingEntry.setData) {
+		if (opposingEntry && opposingEntry.trainerLabel) {
+			payload.trainerLabel = opposingEntry.trainerLabel;
+		}
+		if (opposingEntry) {
 			var trainerIndex = getTrainerIndexFromSetData(opposingEntry.setData);
+			var trainerBounds = getCurrentTrainerIndexBounds();
+			if (trainerBounds && trainerBounds.min > 0) {
+				trainerIndex = trainerBounds.min;
+			}
 			if (!Number.isNaN(trainerIndex) && trainerIndex > 0) {
 				payload.trainerIndex = trainerIndex;
 				localStorage.setItem("lasttimetrainer", String(trainerIndex));
@@ -3894,6 +5194,9 @@ function saveLastEncounterSelection() {
 		}
 	}
 	localStorage.setItem(LAST_ENCOUNTER_STORAGE_KEY, JSON.stringify(payload));
+	if (window.console && typeof window.console.debug === "function") {
+		window.console.debug("[AstralCalc] saveLastEncounterSelection " + JSON.stringify(payload));
+	}
 }
 
 function restoreLastEncounterSelection() {
@@ -3901,10 +5204,30 @@ function restoreLastEncounterSelection() {
 	var savedSelection = getStoredLastEncounterSelection();
 	var restoredOpposing = false;
 	var restoredPlayer = false;
+	if (window.console && typeof window.console.debug === "function") {
+		window.console.debug("[AstralCalc] restoreLastEncounterSelection:start " + JSON.stringify(savedSelection));
+	}
 
 	try {
+		var savedOpposingTrainerLabel = savedSelection.opposingSet
+			? parseTrainerPartyEntry(savedSelection.opposingSet).trainerLabel
+			: "";
 		if (savedSelection.opposingSet) {
 			restoredOpposing = setSelectedSetIdForSide("p2", savedSelection.opposingSet);
+			if (!restoredOpposing) {
+				var currentOpposingSetId = getSelectedSetIdForSide("p2");
+				var currentOpposingTrainerLabel = currentOpposingSetId
+					? parseTrainerPartyEntry(currentOpposingSetId).trainerLabel
+					: "";
+				if (currentOpposingSetId === savedSelection.opposingSet ||
+					(savedOpposingTrainerLabel && currentOpposingTrainerLabel === savedOpposingTrainerLabel)) {
+					restoredOpposing = true;
+				}
+			}
+		}
+
+		if (!restoredOpposing && savedSelection.trainerLabel) {
+			restoredOpposing = selectTrainerFightByLabel(savedSelection.trainerLabel, savedSelection.opposingSet);
 		}
 
 		if (!restoredOpposing) {
@@ -3922,7 +5245,16 @@ function restoreLastEncounterSelection() {
 		if (savedSelection.playerSet) {
 			restoredPlayer = setSelectedSetIdForSide("p1", savedSelection.playerSet);
 		}
-		return restoredOpposing || restoredPlayer;
+		if (window.console && typeof window.console.debug === "function") {
+			window.console.debug("[AstralCalc] restoreLastEncounterSelection:result " + JSON.stringify({
+				savedSelection: savedSelection,
+				restoredOpposing: restoredOpposing,
+				restoredPlayer: restoredPlayer,
+				currentOpposing: getSelectedSetIdForSide("p2"),
+				currentPlayer: getSelectedSetIdForSide("p1")
+			}));
+		}
+		return restoredOpposing || (!savedSelection.opposingSet && restoredPlayer);
 	} finally {
 		isRestoringLastEncounterSelection = false;
 	}
@@ -4019,9 +5351,13 @@ function refreshThemeChoiceButtons() {
 }
 
 function syncSettingsPanelUi() {
+	ensureTutorialSettingsSection();
 	var settings = getAppSettings();
 	$(".settings-choice-btn[data-starter-choice]").removeClass("is-active");
 	$(".settings-choice-btn[data-starter-choice='" + settings.starterChoice + "']").addClass("is-active");
+	$(".settings-choice-btn[data-layout-choice]").removeClass("is-active");
+	$(".settings-choice-btn[data-layout-choice='" + settings.layoutMode + "']").addClass("is-active");
+	$("#settings-starting-crit-status").prop("checked", !!settings.startingCritStatus);
 	$("#settings-more-colour").prop("checked", !!settings.moreColour);
 	$("#settings-move-colors").prop("checked", !!settings.moveColors);
 	$("#settings-move-meta").prop("checked", !!settings.moveMeta);
@@ -4030,11 +5366,17 @@ function syncSettingsPanelUi() {
 	applyMoreColourSetting(!!settings.moreColour);
 	updateTrainerFragBorderTotals();
 	refreshThemeChoiceButtons();
+	if (typeof applyLayoutMode === "function") {
+		applyLayoutMode(settings.layoutMode);
+	} else {
+		$("body").toggleClass("layout-simplified", settings.layoutMode === "simplified");
+	}
 }
 
 function bindCalcToolEvents() {
 	ensureOpposingContextMenu();
 	ensureFragHistoryControls();
+	ensureTutorialSettingsSection();
 	bindFragsPanelScrollContainment();
 	syncTrainerFieldLockButtonStyles();
 
@@ -4056,6 +5398,10 @@ function bindCalcToolEvents() {
 		openSettingsPanel();
 	});
 
+	$("#settings-open-tutorial").off("click").on("click", function () {
+		startCalcFeatureTutorial({fromSettings: true});
+	});
+
 	$("#frags-panel-close").off("click").on("click", function () {
 		closeCalcSidePanel("frags-side-panel");
 	});
@@ -4071,17 +5417,13 @@ function bindCalcToolEvents() {
 	$("#frags-panel-fullscreen").off("click").on("click", function () {
 		var fragsPanel = document.getElementById("frags-side-panel");
 		if (!fragsPanel) return;
-		var isFullscreen = fragsPanel.classList.toggle("fullscreen");
-		$(this).text(isFullscreen ? "Exit Fullscreen" : "Fullscreen");
-		renderFragSheet();
+		setCalcSidePanelFullscreen(fragsPanel);
 	});
 
 	$("#notes-panel-fullscreen").off("click").on("click", function () {
 		var notesPanel = document.getElementById("notes-side-panel");
 		if (!notesPanel) return;
-		var isFullscreen = notesPanel.classList.toggle("fullscreen");
-		$(this).text(isFullscreen ? "Exit Fullscreen" : "Fullscreen");
-		renderNotesPanel();
+		setCalcSidePanelFullscreen(notesPanel);
 	});
 
 	$(document).off("click.notesformat", ".notes-format-btn").on("click.notesformat", ".notes-format-btn", function () {
@@ -4106,18 +5448,61 @@ function bindCalcToolEvents() {
 		if (!spriteNode) return;
 		if (!speciesName) {
 			setTrainerSpriteImage(spriteNode, "");
-			spriteNode.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+			spriteNode.src = POKEMON_ICON_FALLBACK_DATA_URL;
 			spriteNode.classList.add("notes-mon-sprite-empty");
 			return;
 		}
 		spriteNode.classList.remove("notes-mon-sprite-empty");
 		setTrainerSpriteImage(spriteNode, speciesName);
-		spriteNode.src = getTrainerSpriteUrlByName(speciesName);
 	});
 
-	$(document).off("input.notesnote change.notesnote", ".notes-note-input").on("input.notesnote change.notesnote", ".notes-note-input", function () {
-		updateNotesTurnField($(this).attr("data-turn-index"), "note", this.value);
+	$(document).off("input.notesnote", ".notes-note-input").on("input.notesnote", ".notes-note-input", function () {
+		scheduleNotesTurnNoteUpdate($(this).attr("data-turn-index"), this.value);
 	});
+
+	$(document).off("change.notesnote blur.notesnote", ".notes-note-input").on("change.notesnote blur.notesnote", ".notes-note-input", function () {
+		flushScheduledNotesTurnNoteUpdate($(this).attr("data-turn-index"), this.value);
+	});
+
+	$(document).off("mousedown.calcsideresize", ".calc-side-resize-handle").on("mousedown.calcsideresize", ".calc-side-resize-handle", function (ev) {
+		if (ev.which && ev.which !== 1) return;
+		var panel = $(this).closest(".calc-side-panel").get(0);
+		if (!panel || panel.hidden || panel.classList.contains("fullscreen")) return;
+		beginCalcSidePanelResize(panel, ev.clientX);
+		ev.preventDefault();
+	});
+
+	$(document).off("mousemove.calcsideresizecapture", "#calc-side-resize-capture").on("mousemove.calcsideresizecapture", "#calc-side-resize-capture", function (ev) {
+		continueCalcSidePanelResize(ev.clientX, ev.buttons);
+	});
+
+	$(document).off("mouseup.calcsideresizecapture", "#calc-side-resize-capture").on("mouseup.calcsideresizecapture", "#calc-side-resize-capture", function () {
+		endCalcSidePanelResize();
+	});
+
+	$(document).off("mousemove.calcsideresize").on("mousemove.calcsideresize", function (ev) {
+		continueCalcSidePanelResize(ev.clientX, ev.buttons);
+	});
+
+	$(document).off("mouseup.calcsideresize").on("mouseup.calcsideresize", function () {
+		endCalcSidePanelResize();
+	});
+
+	$(document).off("mouseleave.calcsideresize").on("mouseleave.calcsideresize", function () {
+		endCalcSidePanelResize();
+	});
+
+	$(window).off("resize.calcpanels").on("resize.calcpanels", function () {
+		updateCalcSideBackdrop();
+		updateCalcLayoutForSidePanel();
+	});
+
+	$(window).off("blur.calcsideresize").on("blur.calcsideresize", function () {
+		endCalcSidePanelResize();
+	});
+
+	updateCalcSideBackdrop();
+	updateCalcLayoutForSidePanel();
 
 	$("#calc-side-backdrop").off("click").on("click", function () {
 		closeCalcSidePanels();
@@ -4203,6 +5588,14 @@ function bindCalcToolEvents() {
 		removeFragKill($(this).attr("data-frag-set"), getCurrentFightLabel());
 	});
 
+	$(document).off("click.fragsremovevictim", ".frags-edit-remove").on("click.fragsremovevictim", ".frags-edit-remove", function () {
+		removeSpecificFragKill(
+			$(this).attr("data-frag-set"),
+			$(this).attr("data-frag-fight"),
+			$(this).attr("data-frag-victim")
+		);
+	});
+
 	$("#frags-clear-fight").off("click").on("click", function () {
 		if (!confirm("Clear all frags for the current fight?")) return;
 		clearFragsForCurrentFight();
@@ -4282,10 +5675,24 @@ function bindCalcToolEvents() {
 		refreshSetSelectorsForStarterChoice();
 	});
 
+	$(document).off("click.settingslayout", ".settings-choice-btn[data-layout-choice]").on("click.settingslayout", ".settings-choice-btn[data-layout-choice]", function () {
+		var layoutChoice = $(this).attr("data-layout-choice");
+		updateAppSettings({layoutMode: layoutChoice});
+		syncSettingsPanelUi();
+		if (typeof performCalculations === "function") performCalculations();
+	});
+
+	$("#settings-starting-crit-status").off("change").on("change", function () {
+		var enabled = $(this).is(":checked");
+		updateAppSettings({startingCritStatus: enabled});
+		if (typeof performCalculations === "function") performCalculations();
+	});
+
 	$("#settings-more-colour").off("change").on("change", function () {
 		var enabled = $(this).is(":checked");
 		updateAppSettings({moreColour: enabled});
 		applyMoreColourSetting(enabled);
+		if (typeof performCalculations === "function") performCalculations();
 	});
 
 	$("#settings-move-colors").off("change").on("change", function () {
@@ -4298,6 +5705,7 @@ function bindCalcToolEvents() {
 		updateAppSettings({moveMeta: enabled});
 		setMoveMetaVisibility(enabled);
 		updateAllMoveMetaDisplays();
+		if (typeof performCalculations === "function") performCalculations();
 	});
 
 	$("#settings-total-frags-on-border").off("change").on("change", function () {
@@ -4348,6 +5756,10 @@ function bindCalcToolEvents() {
 
 	$(document).off("keydown.calcpanels").on("keydown.calcpanels", function (ev) {
 		if (ev.key !== "Escape" && ev.keyCode !== 27) return;
+		if (calcFeatureTutorialState.isOpen) {
+			finishCalcFeatureTutorial();
+			return;
+		}
 		closeFragContextMenu();
 		closeOpposingContextMenu();
 		closeCalcSidePanels();
@@ -4365,7 +5777,13 @@ function bindFieldSideControlsToggle() {
 }
 
 function sortmons(a, b) {
-	return parseInt(a.split("[")[1].split("]")[0]) - parseInt(b.split("[")[1].split("]")[0])
+	var aEntry = parseTrainerPartyEntry(String(a || ""));
+	var bEntry = parseTrainerPartyEntry(String(b || ""));
+	var aIndex = getTrainerIndexFromSetData(aEntry.setData);
+	var bIndex = getTrainerIndexFromSetData(bEntry.setData);
+	if (aIndex <= 0) aIndex = aEntry.sortIndex || 0;
+	if (bIndex <= 0) bIndex = bEntry.sortIndex || 0;
+	return aIndex - bIndex;
 }
 
 function normalizeTrainerSpriteName(pokemonName) {
@@ -4381,56 +5799,373 @@ function normalizeTrainerSpriteName(pokemonName) {
 	return spriteName;
 }
 
-var POKEMON_ICON_SHEET_URL = "https://play.pokemonshowdown.com/sprites/pokemonicons-sheet.png?v16";
+function getAlternateTrainerSpriteName(pokemonName) {
+	var spriteName = normalizeTrainerSpriteName(pokemonName);
+	if (!spriteName) return "";
+	var megaMarkerIndex = spriteName.indexOf("-Mega");
+	if (megaMarkerIndex < 0) return "";
+	var prefix = spriteName.substring(0, megaMarkerIndex);
+	var suffix = spriteName.substring(megaMarkerIndex + 5).replace(/-/g, "");
+	var alternateName = prefix + "Mega" + suffix;
+	return alternateName !== spriteName ? alternateName : "";
+}
+
+function getTrainerSpriteBaseFallbackSpecies(pokemonName) {
+	var resolvedName = String(pokemonName || "").trim();
+	if (!resolvedName) return "";
+	if (typeof pokedex !== "undefined" && pokedex && pokedex[resolvedName] && pokedex[resolvedName].baseSpecies) {
+		return String(pokedex[resolvedName].baseSpecies || "").trim();
+	}
+	var megaMarkerIndex = resolvedName.indexOf("-Mega");
+	if (megaMarkerIndex > 0) {
+		return resolvedName.substring(0, megaMarkerIndex);
+	}
+	return "";
+}
+
+function shouldUseExpandedIconFallback(imgNode) {
+	if (!imgNode || !imgNode.classList) return false;
+	return imgNode.classList.contains("poke-inline-sprite") ||
+		imgNode.classList.contains("simplified-side-form-sprite");
+}
+
+function shouldTryShowdownSpriteFallback(imgNode) {
+	if (!imgNode) return false;
+	if (imgNode.id === "p1mon" || imgNode.id === "p2mon") return true;
+	if (!imgNode.classList) return false;
+	return imgNode.classList.contains("poke-inline-sprite") ||
+		imgNode.classList.contains("simplified-side-form-sprite");
+}
+
+var DEFAULT_TRAINER_SPRITE_REPO_URL = "https://raw.githubusercontent.com/May8th1995/sprites/master/";
+var CUSTOM_TRAINER_SPRITE_REPO_URL = "https://raw.githubusercontent.com/RWXOLIVE/sprites/master/";
+var POKEMON_ICON_SHEET_URL = "https://play.pokemonshowdown.com/sprites/pokemonicons-sheet.png";
 var POKEMON_ICON_WIDTH = 40;
 var POKEMON_ICON_HEIGHT = 30;
+var POKEMON_ICON_SHEET_COLUMNS = 12;
+var POKEMON_ICON_FALLBACK_DATA_URL = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAALSURBVBhXY2AAAgAABQABqtXIUQAAAABJRU5ErkJggg==";
+var pokemonIconSheetRowsCache = 0;
+
+function shouldUseCustomTrainerSpriteRepo(pokemonName) {
+	return false;
+}
+
+function getTrainerSpriteRepoBaseUrlByName(pokemonName) {
+	return shouldUseCustomTrainerSpriteRepo(pokemonName)
+		? CUSTOM_TRAINER_SPRITE_REPO_URL
+		: DEFAULT_TRAINER_SPRITE_REPO_URL;
+}
 
 function getTrainerSpriteUrlByName(pokemonName) {
 	var normalizedName = pokemonName === "Aegislash-Shield" ? "Aegislash" : pokemonName;
 	var spriteName = normalizeTrainerSpriteName(normalizedName);
-	return "https://raw.githubusercontent.com/May8th1995/sprites/master/" + spriteName + ".png";
+	return getTrainerSpriteRepoBaseUrlByName(normalizedName) + spriteName + ".png";
 }
 
-function getIconSheetPositionForSpecies(speciesName) {
+function getAlternateTrainerSpriteUrlByName(pokemonName) {
+	var alternateName = getAlternateTrainerSpriteName(pokemonName);
+	return alternateName
+		? (getTrainerSpriteRepoBaseUrlByName(pokemonName) + alternateName + ".png")
+		: "";
+}
+
+function buildTrainerSpriteExtraUrls(pokemonName) {
+	var resolvedName = String(pokemonName || "").trim();
+	if (!resolvedName) return [];
+	var urls = [];
+	var primaryUrl = getTrainerSpriteUrlByName(resolvedName);
+	function pushUrl(url) {
+		if (!url || url === primaryUrl || urls.indexOf(url) !== -1) return;
+		urls.push(url);
+	}
+	pushUrl(getAlternateTrainerSpriteUrlByName(resolvedName));
+	var megaMatch = resolvedName.match(/^(.*)-Mega(?:-(.*))?$/);
+	if (megaMatch) {
+		var megaBase = megaMatch[1];
+		var megaSuffix = megaMatch[2] ? String(megaMatch[2]).trim() : "";
+		var noHyphenSuffix = megaSuffix ? megaSuffix : "";
+		var spacedSuffix = megaSuffix ? " " + megaSuffix : "";
+		var underscoredSuffix = megaSuffix ? "_" + megaSuffix : "";
+		var repoBaseUrl = getTrainerSpriteRepoBaseUrlByName(resolvedName);
+		pushUrl(repoBaseUrl + (megaBase + "-Mega" + noHyphenSuffix).replace(/ /g, "%20") + ".png");
+		pushUrl(repoBaseUrl + (megaBase + "_Mega" + underscoredSuffix).replace(/ /g, "%20") + ".png");
+		pushUrl(repoBaseUrl + (megaBase + " Mega" + spacedSuffix).replace(/ /g, "%20") + ".png");
+	}
+	return urls;
+}
+
+function consumeNextTrainerSpriteExtraUrl(node) {
+	if (!node) return "";
+	var serializedUrls = String(node.getAttribute("data-sprite-extra-urls") || "");
+	if (!serializedUrls) return "";
+	var urls = serializedUrls.split("\n").filter(Boolean);
+	if (!urls.length) return "";
+	var nextUrl = urls.shift();
+	node.setAttribute("data-sprite-extra-urls", urls.join("\n"));
+	return nextUrl;
+}
+
+function normalizeShowdownSpriteName(pokemonName) {
+	var spriteName = String(pokemonName || "").trim();
+	if (!spriteName) return "";
+	if (spriteName === "Aegislash-Shield") spriteName = "Aegislash";
+	if (spriteName === "Zygarde-10%") spriteName = "Zygarde-10";
+	if (spriteName === "Tauros-Paldea-Water") spriteName = "Tauros-Paldea-Aqua";
+	if (spriteName === "Tauros-Paldea-Fire") spriteName = "Tauros-Paldea-Blaze";
+	if (spriteName === "Tauros-Paldea") spriteName = "Tauros-Paldea-Combat";
+	if (spriteName === "Wooper-Paldea") spriteName = "Wooper-Paldea";
+	if (spriteName === "Mime Jr.") spriteName = "Mime Jr";
+	if (spriteName === "Mr. Mime") spriteName = "Mr Mime";
+	if (spriteName === "Type: Null") spriteName = "Type Null";
+	if (spriteName === "Nidoran♀") spriteName = "Nidoran-F";
+	if (spriteName === "Nidoran♂") spriteName = "Nidoran-M";
+	return spriteName
+		.toLowerCase()
+		.replace(/[’']/g, "")
+		.replace(/[%:.]/g, "")
+		.replace(/\s+/g, "-")
+		.replace(/[^a-z0-9-]+/g, "");
+}
+
+function getShowdownTrainerSpriteUrlByName(pokemonName) {
+	var spriteName = normalizeShowdownSpriteName(pokemonName);
+	return spriteName
+		? ("https://play.pokemonshowdown.com/sprites/gen5/" + spriteName + ".png")
+		: "";
+}
+
+function getIconSheetIndexForSpecies(speciesName) {
 	var iconIndexTable = typeof BattlePokemonIconIndexes === "undefined" ? null : BattlePokemonIconIndexes;
 	if (!iconIndexTable) return null;
 	var speciesId = toDexPokemonId(speciesName);
 	if (!speciesId) return null;
 	var num = iconIndexTable[speciesId];
-	if (num === undefined || num === null) return null;
+	return (num === undefined || num === null) ? null : num;
+}
+
+function getIconSheetPositionForSpecies(speciesName) {
+	var iconIndex = getIconSheetIndexForSpecies(speciesName);
+	if (iconIndex === null) return null;
 	return {
-		left: (num % 12) * POKEMON_ICON_WIDTH,
-		top: Math.floor(num / 12) * POKEMON_ICON_HEIGHT
+		row: Math.floor(iconIndex / POKEMON_ICON_SHEET_COLUMNS),
+		col: iconIndex % POKEMON_ICON_SHEET_COLUMNS
+	};
+}
+
+function shouldPreferIconFallbackForSpecies(speciesName) {
+	var resolvedSpecies = String(speciesName || "").trim();
+	if (!resolvedSpecies) return false;
+	if (resolvedSpecies.indexOf("-Mega") === -1) return false;
+	return !!getIconSheetPositionForSpecies(resolvedSpecies);
+}
+
+function shouldUseIconSheetAsPrimarySpriteSource(speciesName) {
+	return shouldPreferIconFallbackForSpecies(speciesName);
+}
+
+function getInitialTrainerSpriteUrlByName(pokemonName) {
+	return shouldUseIconSheetAsPrimarySpriteSource(pokemonName)
+		? POKEMON_ICON_FALLBACK_DATA_URL
+		: getTrainerSpriteUrlByName(pokemonName);
+}
+
+function getPrimaryIconSheetLoadAttr(speciesName) {
+	return shouldUseIconSheetAsPrimarySpriteSource(speciesName)
+		? " onload=\"applyIconSheetFallbackImage(this, this.getAttribute('data-species'))\""
+		: "";
+}
+
+function isTrainerRosterSpriteNode(imgNode) {
+	if (!imgNode || !imgNode.classList) return false;
+	return imgNode.classList.contains("trainer-pok");
+}
+
+function getIconSheetFallbackSpecies(speciesName, imgNode) {
+	var resolvedSpecies = String(speciesName || "").trim();
+	if (!resolvedSpecies) return "";
+	return resolvedSpecies;
+}
+
+function shouldUseBackgroundSheetFallback(imgNode) {
+	if (!imgNode) return false;
+	if (imgNode.id === "p1mon" || imgNode.id === "p2mon") return true;
+	return shouldUseExpandedIconFallback(imgNode);
+}
+
+function getPokemonIconSheetBackgroundImageValue(imgNode) {
+	var targetNode = imgNode || document.documentElement;
+	var computedStyle = typeof window !== "undefined" && window.getComputedStyle
+		? window.getComputedStyle(targetNode)
+		: null;
+	var backgroundImage = computedStyle ? String(computedStyle.getPropertyValue("--pokemon-icon-sheet") || "").trim() : "";
+	return backgroundImage || ("url('" + POKEMON_ICON_SHEET_URL + "')");
+}
+
+function getPokemonIconSheetMetrics() {
+	var rows = pokemonIconSheetRowsCache;
+	if (!rows) {
+		var iconIndexTable = typeof BattlePokemonIconIndexes === "undefined" ? null : BattlePokemonIconIndexes;
+		var maxIndex = 0;
+		if (iconIndexTable) {
+			for (var speciesId in iconIndexTable) {
+				if (!Object.prototype.hasOwnProperty.call(iconIndexTable, speciesId)) continue;
+				var num = iconIndexTable[speciesId];
+				if (typeof num !== "number") continue;
+				if (num > maxIndex) maxIndex = num;
+			}
+		}
+		rows = Math.floor(maxIndex / POKEMON_ICON_SHEET_COLUMNS) + 1;
+		pokemonIconSheetRowsCache = rows;
+	}
+	return {
+		columns: POKEMON_ICON_SHEET_COLUMNS,
+		rows: Math.max(rows, 1)
+	};
+}
+
+function getIconSheetRenderBox(imgNode, useExpandedFallback) {
+	var nodeWidth = POKEMON_ICON_WIDTH;
+	var nodeHeight = POKEMON_ICON_HEIGHT;
+	if (useExpandedFallback && imgNode) {
+		var computedStyle = typeof window !== "undefined" && window.getComputedStyle
+			? window.getComputedStyle(imgNode)
+			: null;
+		var computedWidth = computedStyle ? parseFloat(computedStyle.width) : 0;
+		var computedHeight = computedStyle ? parseFloat(computedStyle.height) : 0;
+		nodeWidth = imgNode.clientWidth || imgNode.offsetWidth || computedWidth || nodeWidth;
+		nodeHeight = imgNode.clientHeight || imgNode.offsetHeight || computedHeight || nodeHeight;
+	}
+	var scale = useExpandedFallback
+		? Math.max(1, Math.min(nodeWidth / POKEMON_ICON_WIDTH, nodeHeight / POKEMON_ICON_HEIGHT))
+		: 1;
+	var cellWidth = POKEMON_ICON_WIDTH * scale;
+	var cellHeight = POKEMON_ICON_HEIGHT * scale;
+	return {
+		nodeWidth: nodeWidth,
+		nodeHeight: nodeHeight,
+		cellWidth: cellWidth,
+		cellHeight: cellHeight,
+		offsetX: (nodeWidth - cellWidth) / 2,
+		offsetY: (nodeHeight - cellHeight) / 2
 	};
 }
 
 function applyIconSheetFallbackImage(imgNode, speciesName) {
 	if (!imgNode) return false;
 	imgNode.onerror = null;
-	var resolvedSpecies = speciesName || imgNode.getAttribute("data-species") || "";
+	imgNode.onload = null;
+	var requestedSpecies = speciesName || imgNode.getAttribute("data-species") || "";
+	var resolvedSpecies = getIconSheetFallbackSpecies(requestedSpecies, imgNode);
 	var position = getIconSheetPositionForSpecies(resolvedSpecies);
 	if (!position) return false;
-	imgNode.src = POKEMON_ICON_SHEET_URL;
+	if (imgNode.classList) imgNode.classList.add("sprite-icon");
+	var useExpandedFallback = shouldUseExpandedIconFallback(imgNode);
+	var renderBox = getIconSheetRenderBox(imgNode, useExpandedFallback);
+	var scale = renderBox.cellWidth / POKEMON_ICON_WIDTH;
+	if (imgNode.classList) {
+		imgNode.classList.toggle("sprite-icon-expanded", false);
+	}
+	imgNode.src = POKEMON_ICON_FALLBACK_DATA_URL;
+	imgNode.style.backgroundImage = getPokemonIconSheetBackgroundImageValue(imgNode);
+	imgNode.style.backgroundRepeat = "no-repeat";
+	imgNode.style.backgroundPosition = "-" + (position.col * POKEMON_ICON_WIDTH) + "px -" + (position.row * POKEMON_ICON_HEIGHT) + "px";
+	imgNode.style.backgroundSize = "";
 	imgNode.style.width = POKEMON_ICON_WIDTH + "px";
 	imgNode.style.height = POKEMON_ICON_HEIGHT + "px";
-	imgNode.style.objectFit = "none";
-	imgNode.style.objectPosition = "-" + position.left + "px -" + position.top + "px";
+	imgNode.style.objectFit = "fill";
+	imgNode.style.objectPosition = "center center";
 	imgNode.style.imageRendering = "auto";
+	imgNode.style.transform = scale > 1
+		? ("translate(" + renderBox.offsetX + "px, " + renderBox.offsetY + "px) scale(" + scale + ")")
+		: "none";
+	imgNode.style.transformOrigin = "center center";
 	return true;
+}
+
+function applyPrimaryIconSheetIfNeeded(node, speciesName) {
+	if (!node) return;
+	var resolvedSpecies = String(speciesName || node.getAttribute("data-species") || "").trim();
+	if (!resolvedSpecies) return;
+	if (!shouldUseIconSheetAsPrimarySpriteSource(resolvedSpecies)) return;
+	applyIconSheetFallbackImage(node, resolvedSpecies);
+}
+
+function advanceTrainerSpriteFallback(node, resolvedSpecies, tryShowdownFallback) {
+	if (!node) return;
+	var currentStage = String(node.getAttribute("data-sprite-fallback-stage") || "");
+	var nextPrimaryUrl = consumeNextTrainerSpriteExtraUrl(node);
+	var fallbackSpecies = String(node.getAttribute("data-sprite-fallback-species") || "").trim();
+	if (nextPrimaryUrl && (currentStage === "" || currentStage === "alt-primary")) {
+		node.setAttribute("data-sprite-fallback-stage", "alt-primary");
+		node.src = nextPrimaryUrl;
+		return;
+	}
+	if (tryShowdownFallback && (currentStage === "" || currentStage === "alt-primary")) {
+		var showdownPrimaryUrl = getShowdownTrainerSpriteUrlByName(resolvedSpecies);
+		if (showdownPrimaryUrl) {
+			node.setAttribute("data-sprite-fallback-stage", "showdown-primary");
+			node.src = showdownPrimaryUrl;
+			return;
+		}
+	}
+	if (shouldPreferIconFallbackForSpecies(resolvedSpecies) && currentStage !== "icon") {
+		node.setAttribute("data-sprite-fallback-stage", "icon");
+		if (applyIconSheetFallbackImage(node, resolvedSpecies)) {
+			return;
+		}
+	}
+	if (fallbackSpecies && currentStage !== "base" && currentStage !== "showdown-base") {
+		node.setAttribute("data-sprite-fallback-stage", "base");
+		node.src = getTrainerSpriteUrlByName(fallbackSpecies);
+		return;
+	}
+	if (tryShowdownFallback && fallbackSpecies && currentStage !== "showdown-base") {
+		var showdownBaseUrl = getShowdownTrainerSpriteUrlByName(fallbackSpecies);
+		if (showdownBaseUrl) {
+			node.setAttribute("data-sprite-fallback-stage", "showdown-base");
+			node.src = showdownBaseUrl;
+			return;
+		}
+	}
+	applyIconSheetFallbackImage(node, resolvedSpecies);
 }
 
 function setTrainerSpriteImage(node, speciesName) {
 	if (!node) return;
 	var resolvedSpecies = speciesName || "";
+	var baseFallbackSpecies = getTrainerSpriteBaseFallbackSpecies(resolvedSpecies);
+	var extraPrimaryUrls = buildTrainerSpriteExtraUrls(resolvedSpecies);
+	var tryShowdownFallback = shouldTryShowdownSpriteFallback(node);
 	node.setAttribute("data-species", resolvedSpecies);
+	node.setAttribute("data-sprite-fallback-stage", "");
+	node.setAttribute("data-sprite-extra-urls", extraPrimaryUrls.join("\n"));
+	node.setAttribute("data-sprite-fallback-species", baseFallbackSpecies && baseFallbackSpecies !== resolvedSpecies ? baseFallbackSpecies : "");
 	// Clear any icon-sheet fallback styling from a previous failed load.
+	if (node.classList) node.classList.remove("sprite-icon");
+	if (node.classList) node.classList.remove("sprite-icon-expanded");
 	node.style.width = "";
 	node.style.height = "";
 	node.style.objectFit = "";
 	node.style.objectPosition = "";
 	node.style.imageRendering = "";
+	node.style.transform = "";
+	node.style.transformOrigin = "";
+	node.style.backgroundImage = "";
+	node.style.backgroundRepeat = "";
+	node.style.backgroundPosition = "";
+	node.style.backgroundSize = "";
+	if (shouldUseIconSheetAsPrimarySpriteSource(resolvedSpecies)) {
+		node.setAttribute("data-sprite-fallback-stage", "icon");
+		applyIconSheetFallbackImage(node, resolvedSpecies);
+		return;
+	}
+	node.onload = function () {
+		if (this.naturalWidth <= 1 || this.naturalHeight <= 1) {
+			advanceTrainerSpriteFallback(this, resolvedSpecies, tryShowdownFallback);
+		}
+	};
 	node.onerror = function () {
-		applyIconSheetFallbackImage(this, resolvedSpecies);
+		advanceTrainerSpriteFallback(this, resolvedSpecies, tryShowdownFallback);
 	};
 	node.src = getTrainerSpriteUrlByName(resolvedSpecies);
 }
@@ -4588,6 +6323,100 @@ function isTrainerFieldLockEnabled(fieldId, trainerKey) {
 	return getTrainerFieldLockedIdsForKey(key).indexOf(normalizedId) !== -1;
 }
 
+function isTrainerFieldExclusiveGroupLocked(exclusiveGroup, trainerKey) {
+	var normalizedGroup = String(exclusiveGroup || "").trim();
+	if (!normalizedGroup) return false;
+	var key = String(trainerKey || getCurrentTrainerFieldLockKey()).trim();
+	if (!key) return false;
+	var lockedIds = getTrainerFieldLockedIdsForKey(key);
+	for (var i = 0; i < lockedIds.length; i++) {
+		if (getTrainerFieldExclusiveGroup(lockedIds[i]) === normalizedGroup) return true;
+	}
+	return false;
+}
+
+function getCurrentGenSpeciesNameByEvolutionId(speciesId) {
+	if (!speciesId || !pokedex) return "";
+	for (var speciesName in pokedex) {
+		if (!Object.prototype.hasOwnProperty.call(pokedex, speciesName)) continue;
+		if (toDexPokemonId(speciesName) === speciesId) return speciesName;
+	}
+	return "";
+}
+
+function appendUniqueFormeOption(optionNames, seenOptionNames, optionName) {
+	var normalizedOptionName = String(optionName || "").trim();
+	if (!normalizedOptionName || seenOptionNames[normalizedOptionName]) return;
+	seenOptionNames[normalizedOptionName] = true;
+	optionNames.push(normalizedOptionName);
+}
+
+function appendSpeciesAndOtherFormes(optionNames, seenOptionNames, excludedOptionNames, speciesName) {
+	var normalizedSpeciesName = String(speciesName || "").trim();
+	if (!normalizedSpeciesName || excludedOptionNames[normalizedSpeciesName]) return;
+	appendUniqueFormeOption(optionNames, seenOptionNames, normalizedSpeciesName);
+	var speciesEntry = pokedex && pokedex[normalizedSpeciesName];
+	if (!speciesEntry || !speciesEntry.otherFormes) return;
+	for (var i = 0; i < speciesEntry.otherFormes.length; i++) {
+		var otherFormeName = String(speciesEntry.otherFormes[i] || "").trim();
+		if (!otherFormeName || excludedOptionNames[otherFormeName]) continue;
+		appendUniqueFormeOption(optionNames, seenOptionNames, otherFormeName);
+	}
+}
+
+function collectEvolutionLineSpeciesIds(speciesId, speciesIds, visitedSpeciesIds) {
+	if (!speciesId || visitedSpeciesIds[speciesId]) return;
+	visitedSpeciesIds[speciesId] = true;
+	speciesIds.push(speciesId);
+
+	var nextEvoSpeciesIds = FRAG_NEXT_EVO_SPECIES_IDS[speciesId];
+	if (!nextEvoSpeciesIds || !nextEvoSpeciesIds.length) return;
+	for (var i = 0; i < nextEvoSpeciesIds.length; i++) {
+		collectEvolutionLineSpeciesIds(nextEvoSpeciesIds[i], speciesIds, visitedSpeciesIds);
+	}
+}
+
+function getEvolutionLineSpeciesNames(speciesName, excludedSpeciesNames) {
+	var speciesId = resolveEvolutionLookupSpeciesId(speciesName);
+	if (!speciesId) return [];
+
+	var rootSpeciesId = speciesId;
+	for (var depth = 0; depth < 12; depth++) {
+		var prevoSpeciesId = FRAG_PREVO_BY_SPECIES_ID[rootSpeciesId];
+		if (!prevoSpeciesId || prevoSpeciesId === rootSpeciesId) break;
+		rootSpeciesId = prevoSpeciesId;
+	}
+
+	var excludedSpeciesIds = {};
+	var excludedOptionNames = {};
+	for (var i = 0; i < excludedSpeciesNames.length; i++) {
+		var excludedSpeciesName = String(excludedSpeciesNames[i] || "").trim();
+		if (!excludedSpeciesName) continue;
+		excludedOptionNames[excludedSpeciesName] = true;
+		var excludedSpeciesId = resolveEvolutionLookupSpeciesId(excludedSpeciesName) || toDexPokemonId(excludedSpeciesName);
+		if (excludedSpeciesId) excludedSpeciesIds[excludedSpeciesId] = true;
+	}
+
+	var evolutionLineSpeciesIds = [];
+	collectEvolutionLineSpeciesIds(rootSpeciesId, evolutionLineSpeciesIds, {});
+
+	var seenOptionNames = {};
+	var evolutionLineSpeciesNames = [];
+	for (i = 0; i < evolutionLineSpeciesIds.length; i++) {
+		var evolutionLineSpeciesId = evolutionLineSpeciesIds[i];
+		if (excludedSpeciesIds[evolutionLineSpeciesId]) continue;
+		var evolutionLineSpeciesName = getCurrentGenSpeciesNameByEvolutionId(evolutionLineSpeciesId);
+		if (!evolutionLineSpeciesName) continue;
+		appendSpeciesAndOtherFormes(
+			evolutionLineSpeciesNames,
+			seenOptionNames,
+			excludedOptionNames,
+			evolutionLineSpeciesName
+		);
+	}
+	return evolutionLineSpeciesNames;
+}
+
 function applyTrainerFieldLocksForCurrentTrainer(options) {
 	var applyOptions = options || {};
 	var forceTrigger = !!applyOptions.forceTrigger;
@@ -4645,13 +6474,7 @@ function handleTrainerFieldButtonContextMenu(ev, labelNode) {
 	if (!isTrainerFieldLockableId(fieldId)) return;
 	ev.preventDefault();
 	var trainerKey = getCurrentTrainerFieldLockKey();
-	var trainerLabel = getCurrentFightLabel();
-	var labelText = String($(labelNode).text() || "").replace(/\s+/g, " ").trim() || fieldId;
 	var currentlyLocked = isTrainerFieldLockEnabled(fieldId, trainerKey);
-	var prompt = currentlyLocked
-		? ("Disable trainer lock for \"" + labelText + "\" on " + trainerLabel + "?")
-		: ("Enable \"" + labelText + "\" for " + trainerLabel + "? It will stay enabled while switching Pokemon.");
-	if (!confirm(prompt)) return;
 	setTrainerFieldLockEnabled(fieldId, !currentlyLocked, trainerKey);
 	if (!currentlyLocked) {
 		var input = document.getElementById(fieldId);
@@ -4904,6 +6727,9 @@ function syncTerrainForSelection(fullSetName, trainerEntries) {
 	var terrainInputs = $("input:checkbox[name='terrain']");
 	if (!terrainInputs.length) return;
 	if (!resolvedTerrain.hasTerrain) {
+		if (!isTrainerFieldExclusiveGroupLocked("terrain")) {
+			terrainInputs.prop("checked", false);
+		}
 		var activeInput = terrainInputs.filter(":checked").first();
 		getTerrainEffects.call(activeInput.length ? activeInput[0] : terrainInputs.first()[0]);
 		var activeTerrain = activeInput.length ? String(activeInput.val() || "") : "";
@@ -4987,9 +6813,41 @@ function splitSetDoubleEntries(entries) {
 	return {primary: primary, secondary: secondary};
 }
 
+function isTrainerPartySideFullyMarkedDead(entries) {
+	if (!Array.isArray(entries) || !entries.length) return false;
+	for (var i = 0; i < entries.length; i++) {
+		if (!isOpposingSetMarkedDead(entries[i].fullSetName)) return false;
+	}
+	return true;
+}
+
+function getCurrentOpposingTrainerSideSplitEntries() {
+	var sortedEntries = (CURRENT_TRAINER_POKS || []).slice().sort(sortmons).map(parseTrainerPartyEntry);
+	if (!sortedEntries.length || !isSetDoubleEncounter(sortedEntries) || !shouldUseSetDoubleLayout(sortedEntries)) return null;
+	var splitEntries = splitSetDoubleEntries(sortedEntries);
+	if (!splitEntries.primary.length || !splitEntries.secondary.length) return null;
+	return splitEntries;
+}
+
+function shouldUseSingleTargetSpreadDamageForCurrentTrainerBattle() {
+	if ($("input:radio[name='format']:checked").val() !== "Doubles") return false;
+	var splitEntries = getCurrentOpposingTrainerSideSplitEntries();
+	if (!splitEntries) return false;
+	var isPrimaryCleared = isTrainerPartySideFullyMarkedDead(splitEntries.primary);
+	var isSecondaryCleared = isTrainerPartySideFullyMarkedDead(splitEntries.secondary);
+	return isPrimaryCleared !== isSecondaryCleared;
+}
+
+function getFieldWithSingleTargetSpreadDamageOverride(field, useSingleTargetSpreadDamage) {
+	if (!field || !useSingleTargetSpreadDamage) return field;
+	var adjustedField = typeof field.clone === "function" ? field.clone() : field;
+	adjustedField.ignoreSpreadDamageReduction = true;
+	return adjustedField;
+}
+
 function trainerPartyMonHtml(entry) {
 	var label = "[" + entry.indexText + "]" + entry.fullSetName;
-	return '<img class="trainer-pok right-side" src="' + escapeHtml(getTrainerSpriteUrlByName(entry.pokemonName)) + '" data-id="' + escapeHtml(entry.fullSetName) + '" data-species="' + escapeHtml(entry.pokemonName) + '" title="' + escapeHtml(label + ", " + label + " BP") + '" onerror="applyIconSheetFallbackImage(this, this.getAttribute(\'data-species\'))">';
+	return '<img class="trainer-pok right-side" src="' + escapeHtml(getInitialTrainerSpriteUrlByName(entry.pokemonName)) + '" data-id="' + escapeHtml(entry.fullSetName) + '" data-species="' + escapeHtml(entry.pokemonName) + '" title="' + escapeHtml(label + ", " + label + " BP") + '" loading="lazy" decoding="async"' + getPrimaryIconSheetLoadAttr(entry.pokemonName) + ' onerror="applyIconSheetFallbackImage(this, this.getAttribute(\'data-species\'))">';
 }
 
 function renderOpposingTrainerParties(selectedSetName) {
@@ -5013,6 +6871,9 @@ function renderOpposingTrainerParties(selectedSetName) {
 	$(".trainer-pok-list-opposing").html(primaryHtml);
 	$(".trainer-pok-list-opposing2").html(secondaryHtml).prop("hidden", !showSecondary);
 	$(".trainer-pok-divider").prop("hidden", !showSecondary);
+	$(".trainer-pok.right-side").each(function () {
+		applyPrimaryIconSheetIfNeeded(this, this.getAttribute("data-species"));
+	});
 	applyOpposingDeadMarks();
 }
 
@@ -5116,6 +6977,16 @@ $(".set-selector").change(function () {
 					(set.ivs && set.ivs[LEGACY_STATS[gen][i]] !== undefined) ? set.ivs[LEGACY_STATS[gen][i]] : 31);
 				pokeObj.find("." + LEGACY_STATS[gen][i] + " .dvs").val(
 					(set.dvs && set.dvs[LEGACY_STATS[gen][i]] !== undefined) ? set.dvs[LEGACY_STATS[gen][i]] : 15);
+				var boostKey = legacyStatToStat(LEGACY_STATS[gen][i]);
+				var boostValue = 0;
+				if (set.boosts && typeof set.boosts === "object") {
+					if (set.boosts[boostKey] !== undefined) {
+						boostValue = set.boosts[boostKey];
+					} else if (set.boosts[LEGACY_STATS[gen][i]] !== undefined) {
+						boostValue = set.boosts[LEGACY_STATS[gen][i]];
+					}
+				}
+				pokeObj.find("." + LEGACY_STATS[gen][i] + " .boost").val(boostValue);
 			}
 			setSelectValueIfValid(pokeObj.find(".nature"), set.nature, "Hardy");
 			var abilityFallback = (typeof pokemon.abilities !== "undefined") ? pokemon.abilities[0] : "";
@@ -5201,11 +7072,9 @@ $(".set-selector").change(function () {
 		if (pokemon.baseSpecies && pokemon.baseSpecies !== pokemon.name) {
 			baseForme = pokedex[pokemon.baseSpecies];
 		}
-		if (pokemon.otherFormes) {
-			showFormes(formeObj, pokemonName, pokemon, pokemonName);
-		} else if (baseForme && baseForme.otherFormes) {
-			showFormes(formeObj, pokemonName, baseForme, pokemon.baseSpecies);
-		} else {
+		var formeSourcePokemon = (baseForme && baseForme.otherFormes) ? baseForme : pokemon;
+		var formeBaseName = (baseForme && baseForme.otherFormes) ? pokemon.baseSpecies : pokemonName;
+		if (!showFormes(formeObj, pokemonName, formeSourcePokemon, formeBaseName)) {
 			// Prevent stale hidden forme values from overriding the top sprite later.
 			formeObj.children("select").find("option").remove().end().append(getSelectOptions([pokemonName], false, 0));
 			formeObj.hide();
@@ -5252,11 +7121,19 @@ $(document).on("click", ".poke-inline-sprite", function (ev) {
 	var formeContainer = formeSelect.parent();
 	if (!formeContainer.length || !formeContainer.is(":visible")) return;
 	var formeOptions = formeSelect.find("option");
-	if (formeOptions.length <= 1) return;
+	var enabledFormeOptions = formeOptions.filter(function () {
+		return !this.disabled;
+	});
+	if (enabledFormeOptions.length <= 1) return;
 	var currentIndex = formeSelect.prop("selectedIndex");
 	if (currentIndex < 0) currentIndex = 0;
-	var nextIndex = (currentIndex + 1) % formeOptions.length;
-	formeSelect.prop("selectedIndex", nextIndex).change();
+	for (var i = 0; i < formeOptions.length; i++) {
+		currentIndex = (currentIndex + 1) % formeOptions.length;
+		if (!formeOptions.eq(currentIndex).prop("disabled")) {
+			formeSelect.prop("selectedIndex", currentIndex).change();
+			return;
+		}
+	}
 });
 
 function getBattleCritToggleFromTopToggle(topToggleNode) {
@@ -5322,15 +7199,30 @@ function selectMovesFromRandomOptions(moves) {
 }
 
 function showFormes(formeObj, pokemonName, pokemon, baseFormeName) {
-	var formes = pokemon.otherFormes.slice();
-	formes.unshift(baseFormeName);
+	var formes = [];
+	var seenFormeNames = {};
+	appendUniqueFormeOption(formes, seenFormeNames, baseFormeName || pokemonName);
+	if (pokemon.otherFormes) {
+		for (var i = 0; i < pokemon.otherFormes.length; i++) {
+			appendUniqueFormeOption(formes, seenFormeNames, pokemon.otherFormes[i]);
+		}
+	}
+	var evolutionLine = getEvolutionLineSpeciesNames(pokemonName, formes);
+	if (formes.length + evolutionLine.length <= 1) return false;
 
-	var defaultForme = formes.indexOf(pokemonName);
-	if (defaultForme < 0) defaultForme = 0;
-
-	var formeOptions = getSelectOptions(formes, false, defaultForme);
+	var formeOptions = '';
+	for (var i = 0; i < formes.length; i++) {
+		formeOptions += '<option value="' + escapeHtml(formes[i]) + '" ' + (formes[i] === pokemonName ? 'selected' : '') + '>' + escapeHtml(formes[i]) + '</option>';
+	}
+	if (evolutionLine.length) {
+		formeOptions += '<option value="" disabled>[ Evo Line ]</option>';
+		for (i = 0; i < evolutionLine.length; i++) {
+			formeOptions += '<option value="' + escapeHtml(evolutionLine[i]) + '">' + escapeHtml(evolutionLine[i]) + '</option>';
+		}
+	}
 	formeObj.children("select").find("option").remove().end().append(formeOptions).change();
 	formeObj.show();
+	return true;
 }
 
 function setSelectValueIfValid(select, value, fallback) {
@@ -5338,6 +7230,7 @@ function setSelectValueIfValid(select, value, fallback) {
 }
 
 $(".forme").change(function () {
+	if ($(this).find("option:selected").prop("disabled")) return;
 	var selectedForme = String($(this).val() || "").trim();
 	var altForme = pokedex[selectedForme];
 	if (!altForme) return;
@@ -5348,8 +7241,10 @@ $(".forme").change(function () {
 	var pokemonName = parsedSetName.species;
 	var setName = parsedSetName.label;
 
-	container.find(".type1").val(altForme.types[0]);
-	container.find(".type2").val(altForme.types[1] ? altForme.types[1] : "");
+	var type1Select = container.find(".type1");
+	var type2Select = container.find(".type2");
+	type1Select.val(altForme.types[0]).trigger("change");
+	type2Select.val(altForme.types[1] ? altForme.types[1] : "").trigger("change");
 	for (var i = 0; i < LEGACY_STATS[9].length; i++) {
 		var baseStat = container.find("." + LEGACY_STATS[9][i]).find(".base");
 		baseStat.val(altForme.bs[LEGACY_STATS[9][i]]);
@@ -5481,18 +7376,19 @@ function createPokemon(pokeInfo) {
 			moves: pokemonMoves
 		});
 	} else {
-			var setName = pokeInfo.find("input.set-selector").val();
+		var setName = pokeInfo.find("input.set-selector").val();
+		var selectedFormeName = getSelectedFormeNameIfVisible(pokeInfo);
 		var name;
 		if (setName.indexOf("(") === -1) {
-			name = setName;
+			name = selectedFormeName || setName;
 		} else {
 			var pokemonName = setName.substring(0, setName.indexOf(" ("));
 			var pokemonLookupName = resolveSetSpeciesNameForDexLookup(pokemonName);
 			var species = pokedex[pokemonLookupName];
 			if (!species) {
-				name = pokemonName;
+				name = selectedFormeName || pokemonName;
 			} else {
-				name = (species.otherFormes || (species.baseSpecies && species.baseSpecies !== pokemonLookupName)) ? pokeInfo.find(".forme").val() : pokemonLookupName;
+				name = selectedFormeName || pokemonLookupName;
 			}
 		}
 
@@ -5587,6 +7483,383 @@ function getModifiedStatForStage(rawStat, stage) {
 	if (boost === 0) return raw;
 	if (boost > 0) return Math.floor(raw * (2 + boost) / 2);
 	return Math.floor(raw * 2 / (2 - boost));
+}
+
+var DISPLAYED_MODIFIER_STAT_ROWS = {
+	"at": "atk",
+	"df": "def",
+	"sa": "spa",
+	"sd": "spd",
+	"sl": "spa",
+	"sp": "spe"
+};
+
+function ensureStatTotalModNode(statRow) {
+	if (!statRow || !statRow.length) return $();
+	var totalModNode = statRow.find(".totalMod").first();
+	if (totalModNode.length) return totalModNode;
+	statRow.append('<td><span class="totalMod">---</span></td>');
+	return statRow.find(".totalMod").last();
+}
+
+function getDisplayedModifiedStatValue(pokemon, statKey, preferCalculatedStats) {
+	if (!pokemon) return "---";
+	var normalizedStat = statKey === "spc" ? "spa" : statKey;
+	if (preferCalculatedStats && pokemon.stats && isFinite(pokemon.stats[normalizedStat])) {
+		return pokemon.stats[normalizedStat];
+	}
+	var statSource = pokemon.rawStats || pokemon.stats || {};
+	var rawStat = statSource[normalizedStat];
+	if (!isFinite(rawStat)) return "---";
+	var boostSource = pokemon.boosts || {};
+	var boost = boostSource[normalizedStat];
+	if (typeof boost === "undefined" && normalizedStat === "spa" && typeof boostSource.spc !== "undefined") {
+		boost = boostSource.spc;
+	}
+	return getModifiedStatForStage(rawStat, boost);
+}
+
+function syncDisplayedModifiedStats(pokeInfo, pokemon, preferCalculatedStats) {
+	if (!pokeInfo || !pokeInfo.length) return;
+	for (var legacyStat in DISPLAYED_MODIFIER_STAT_ROWS) {
+		if (!Object.prototype.hasOwnProperty.call(DISPLAYED_MODIFIER_STAT_ROWS, legacyStat)) continue;
+		var statRow = pokeInfo.find("." + legacyStat).first();
+		if (!statRow.length) continue;
+		ensureStatTotalModNode(statRow).text(
+			getDisplayedModifiedStatValue(pokemon, DISPLAYED_MODIFIER_STAT_ROWS[legacyStat], preferCalculatedStats)
+		);
+	}
+}
+
+var DEFAULT_CRIT_RATE_BY_STAGE = [
+	{num: 1, den: 16},
+	{num: 1, den: 8},
+	{num: 1, den: 2},
+	{num: 1, den: 1}
+];
+var STARTING_CRIT_RATE_OVERRIDE_BY_SIDE = {
+	p1: {},
+	p2: {
+		0: {num: 1, den: 8},
+		1: {num: 1, den: 4}
+	}
+};
+
+function normalizeCritSpeciesId(rawSpecies) {
+	return String(rawSpecies || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+function isStartingCritStatusActive() {
+	return !!getAppSettings().startingCritStatus;
+}
+
+function getPassiveCritStageDetails(pokemon) {
+	var stage = 0;
+	var sources = [];
+	if (!pokemon) return {stage: 0, sources: sources};
+	if (pokemon.hasAbility && pokemon.hasAbility("Super Luck")) {
+		stage += 1;
+		sources.push("Super Luck");
+	}
+	var itemName = String(pokemon.item || "");
+	var speciesId = normalizeCritSpeciesId(
+		pokemon.name || (pokemon.species && pokemon.species.name) || ""
+	);
+	if (itemName === "Scope Lens" || itemName === "Razor Claw") {
+		stage += 1;
+		sources.push(itemName);
+	} else if (itemName === "Lucky Punch" && speciesId === "chansey") {
+		stage += 2;
+		sources.push(itemName);
+	} else if ((itemName === "Leek" || itemName === "Stick") &&
+		(speciesId === "farfetchd" || speciesId === "sirfetchd")) {
+		stage += 2;
+		sources.push(itemName);
+	}
+	return {stage: stage, sources: sources};
+}
+
+function getCritChanceForStage(stage, sideId) {
+	var normalizedStage = Math.max(0, Math.min(DEFAULT_CRIT_RATE_BY_STAGE.length - 1, ~~stage));
+	var overrides = sideId ? STARTING_CRIT_RATE_OVERRIDE_BY_SIDE[sideId] : null;
+	if (isStartingCritStatusActive() && overrides && overrides[normalizedStage]) {
+		return overrides[normalizedStage];
+	}
+	return DEFAULT_CRIT_RATE_BY_STAGE[normalizedStage];
+}
+
+function formatCritChanceText(chance) {
+	var fallbackPercent = 100 / 16;
+	if (!chance || !chance.den) {
+		return fallbackPercent.toFixed(2).replace(/\.?0+$/, "") + "%";
+	}
+	var percent = (Number(chance.num || 0) / Number(chance.den)) * 100;
+	if (!isFinite(percent)) percent = fallbackPercent;
+	return percent.toFixed(2).replace(/\.?0+$/, "") + "%";
+}
+
+function getCritBlockerAbilityName(pokemon) {
+	if (!pokemon || !pokemon.hasAbility) return "";
+	var blockers = ["Battle Armor", "Shell Armor"];
+	if (gen >= 5) blockers.push("Magma Armor");
+	if (gen >= 7) blockers.push("Leaf Guard");
+	return pokemon.hasAbility.apply(pokemon, blockers) ? String(pokemon.ability || blockers[0]) : "";
+}
+
+function hasResidualDisplayType(pokemon) {
+	if (!pokemon) return false;
+	var types = Array.prototype.slice.call(arguments, 1);
+	if (pokemon.teraType) return types.indexOf(pokemon.teraType) !== -1;
+	return pokemon.hasType ? pokemon.hasType.apply(pokemon, types) : false;
+}
+
+function isResidualDisplayGrounded(pokemon, field) {
+	if (!pokemon || !field) return false;
+	if (field.isGravity) return true;
+	if (pokemon.teraType) return pokemon.teraType !== "Flying" &&
+		!pokemon.hasAbility("Levitate") &&
+		!pokemon.hasItem("Air Balloon");
+	return !pokemon.hasType("Flying") &&
+		!pokemon.hasAbility("Levitate") &&
+		!pokemon.hasItem("Air Balloon");
+}
+
+function getMoveCritRateDisplay(pokemon, opposingPokemon, move, sideId) {
+	if (!move || move.name === "(No Move)") {
+		return {text: "--", title: "No move selected."};
+	}
+	if (move.category === "Status") {
+		return {text: "--", title: move.name + " is a status move and cannot crit."};
+	}
+	var passiveDetails = getPassiveCritStageDetails(pokemon);
+	var totalStage = passiveDetails.stage;
+	var sources = passiveDetails.sources.slice();
+	var moveCritStage = Math.max(0, ((move.critRatio || 1) - 1));
+	if (moveCritStage) {
+		totalStage += moveCritStage;
+		sources.push(move.name);
+	}
+	var chance = getCritChanceForStage(totalStage, sideId);
+	var chanceText = formatCritChanceText(chance);
+	var title = "Current crit chance: " + chanceText + " (stage " + totalStage + ")";
+	if (sources.length) title += " via " + sources.join(", ");
+	if (isStartingCritStatusActive() && sideId === "p2" && totalStage <= 1) {
+		title += ". Starting crit status active.";
+	}
+	var blockedBy = getCritBlockerAbilityName(opposingPokemon);
+	if (blockedBy) {
+		return {
+			text: "0%",
+			title: "Critical hits are blocked by " + blockedBy + "."
+		};
+	}
+	if (move.willCrit) {
+		return {
+			text: "100%",
+			title: move.name + " always crits."
+		};
+	}
+	if (gen >= 7 &&
+		pokemon && pokemon.hasAbility && pokemon.hasAbility("Merciless") &&
+		opposingPokemon && opposingPokemon.hasStatus && opposingPokemon.hasStatus("psn", "tox")) {
+		return {
+			text: "100%",
+			title: "Guaranteed critical hit via Merciless against a poisoned target."
+		};
+	}
+	if (move.isCrit) {
+		return {
+			text: "100%",
+			title: "Critical hit forced for the current calculation. Base chance: " + chanceText +
+				" (stage " + totalStage + ")" + (sources.length ? " via " + sources.join(", ") : "") +
+				(isStartingCritStatusActive() && sideId === "p2" && totalStage <= 1 ? ". Starting crit status active." : "")
+		};
+	}
+	return {
+		text: chanceText,
+		title: title
+	};
+}
+
+function getSelectedPokeInfoStatus(pokeInfo) {
+	if (!pokeInfo || !pokeInfo.length) return "Healthy";
+	return String(pokeInfo.find(".status").val() || "Healthy");
+}
+
+function getSelectedPokeInfoToxicCounter(pokeInfo) {
+	if (!pokeInfo || !pokeInfo.length) return 1;
+	var toxicCounter = parseInt(pokeInfo.find(".toxic-counter").val(), 10);
+	return Number.isNaN(toxicCounter) || toxicCounter < 1 ? 1 : toxicCounter;
+}
+
+function getSideResidualChipDisplay(pokeInfo, pokemon, opposingPokemon, field) {
+	if (!pokeInfo || !pokeInfo.length || !pokemon || !field || typeof pokemon.maxHP !== "function") {
+		return {text: "", title: ""};
+	}
+	var maxHP = pokemon.maxHP();
+	if (!maxHP || maxHP <= 0) return {text: "", title: ""};
+	var hpDelta = 0;
+	var sources = [];
+	var statusValue = getSelectedPokeInfoStatus(pokeInfo);
+	var itemEffectsSuppressed = !!(field && field.isMagicRoom) || pokemon.hasAbility("Klutz");
+	if (field.hasWeather("Sun", "Harsh Sunshine")) {
+		if (pokemon.hasAbility("Dry Skin", "Solar Power")) {
+			hpDelta -= Math.floor(maxHP / 8);
+			sources.push(String(pokemon.ability || "Weather") + " damage");
+		}
+	} else if (field.hasWeather("Rain", "Heavy Rain")) {
+		if (pokemon.hasAbility("Dry Skin")) {
+			hpDelta += Math.floor(maxHP / 8);
+			sources.push("Dry Skin recovery");
+		} else if (pokemon.hasAbility("Rain Dish")) {
+			hpDelta += Math.floor(maxHP / 16);
+			sources.push("Rain Dish recovery");
+		}
+	} else if (field.hasWeather("Sand")) {
+		if (!hasResidualDisplayType(pokemon, "Rock", "Ground", "Steel") &&
+			!pokemon.hasAbility("Magic Guard", "Overcoat", "Sand Force", "Sand Rush", "Sand Veil") &&
+			!pokemon.hasItem("Safety Goggles")) {
+			hpDelta -= Math.floor(maxHP / (gen === 2 ? 8 : 16));
+			sources.push("sandstorm damage");
+		}
+	} else if (field.hasWeather("Hail", "Snow")) {
+		if (pokemon.hasAbility("Ice Body")) {
+			hpDelta += Math.floor(maxHP / 16);
+			sources.push("Ice Body recovery");
+		} else if (!hasResidualDisplayType(pokemon, "Ice") &&
+			!pokemon.hasAbility("Magic Guard", "Overcoat", "Snow Cloak") &&
+			!pokemon.hasItem("Safety Goggles") &&
+			field.hasWeather("Hail")) {
+			hpDelta -= Math.floor(maxHP / 16);
+			sources.push("hail damage");
+		}
+	}
+	if (pokemon.hasItem("Leftovers") && !itemEffectsSuppressed) {
+		hpDelta += Math.floor(maxHP / 16);
+		sources.push("Leftovers recovery");
+	} else if (pokemon.hasItem("Black Sludge") && !itemEffectsSuppressed) {
+		if (hasResidualDisplayType(pokemon, "Poison")) {
+			hpDelta += Math.floor(maxHP / 16);
+			sources.push("Black Sludge recovery");
+		} else if (!pokemon.hasAbility("Magic Guard")) {
+			hpDelta -= Math.floor(maxHP / 8);
+			sources.push("Black Sludge damage");
+		}
+	} else if (pokemon.hasItem("Sticky Barb") && !itemEffectsSuppressed && !pokemon.hasAbility("Magic Guard")) {
+		hpDelta -= Math.floor(maxHP / 8);
+		sources.push("Sticky Barb damage");
+	}
+	if (field.attackerSide && field.attackerSide.isSeeded && !pokemon.hasAbility("Magic Guard")) {
+		hpDelta -= Math.floor(maxHP / (gen >= 2 ? 8 : 16));
+		sources.push("Leech Seed damage");
+	}
+	if (field.defenderSide && field.defenderSide.isSeeded &&
+		opposingPokemon && typeof opposingPokemon.maxHP === "function" &&
+		!opposingPokemon.hasAbility("Magic Guard")) {
+		var leechSeedAmount = Math.floor(opposingPokemon.maxHP() / (gen >= 2 ? 8 : 16));
+		var hasBigRoot = !itemEffectsSuppressed && pokemon.hasItem && pokemon.hasItem("Big Root");
+		if (hasBigRoot) leechSeedAmount = Math.floor(leechSeedAmount * 1.3);
+		if (opposingPokemon.hasAbility("Liquid Ooze")) {
+			if (!pokemon.hasAbility("Magic Guard")) {
+				hpDelta -= leechSeedAmount;
+				sources.push(hasBigRoot ? "Liquid Ooze damage (Big Root)" : "Liquid Ooze damage");
+			}
+		} else {
+			hpDelta += leechSeedAmount;
+			sources.push(hasBigRoot ? "Leech Seed recovery (Big Root)" : "Leech Seed recovery");
+		}
+	}
+	if (field.hasTerrain("Grassy") && isResidualDisplayGrounded(pokemon, field)) {
+		hpDelta += Math.floor(maxHP / 16);
+		sources.push("Grassy Terrain recovery");
+	}
+	if (statusValue === "Poisoned") {
+		if (pokemon.hasAbility("Poison Heal")) {
+			hpDelta += Math.floor(maxHP / 8);
+			sources.push("Poison Heal");
+		} else if (!pokemon.hasAbility("Magic Guard")) {
+			hpDelta -= Math.floor(maxHP / (gen === 1 ? 16 : 8));
+			sources.push("poison damage");
+		}
+	} else if (statusValue === "Badly Poisoned") {
+		if (pokemon.hasAbility("Poison Heal")) {
+			hpDelta += Math.floor(maxHP / 8);
+			sources.push("Poison Heal");
+		} else if (!pokemon.hasAbility("Magic Guard")) {
+			hpDelta -= Math.floor((getSelectedPokeInfoToxicCounter(pokeInfo) * maxHP) / 16);
+			sources.push("toxic damage");
+		}
+	} else if (statusValue === "Burned") {
+		if (pokemon.hasAbility("Heatproof")) {
+			hpDelta -= Math.floor(maxHP / (gen > 6 ? 32 : 16));
+			sources.push("reduced burn damage");
+		} else if (!pokemon.hasAbility("Magic Guard")) {
+			hpDelta -= Math.floor(maxHP / (gen === 1 || gen > 6 ? 16 : 8));
+			sources.push("burn damage");
+		}
+	}
+	if ((statusValue === "Asleep" || pokemon.hasAbility("Comatose")) &&
+		opposingPokemon && opposingPokemon.hasAbility && opposingPokemon.hasAbility("Bad Dreams") &&
+		!pokemon.hasAbility("Magic Guard")) {
+		hpDelta -= Math.floor(maxHP / 8);
+		sources.push("Bad Dreams");
+	}
+	if (pokemon.isSaltCure && !pokemon.hasAbility("Magic Guard")) {
+		hpDelta -= Math.floor(maxHP / (hasResidualDisplayType(pokemon, "Water", "Steel") ? 4 : 8));
+		sources.push("Salt Cure");
+	}
+	if (!pokemon.hasAbility("Magic Guard") && field.attackerSide) {
+		if (!hasResidualDisplayType(pokemon, "Grass") && field.attackerSide.vinelash) {
+			hpDelta -= Math.floor(maxHP / 6);
+			sources.push("Vine Lash damage");
+		}
+		if (!hasResidualDisplayType(pokemon, "Fire") && field.attackerSide.wildfire) {
+			hpDelta -= Math.floor(maxHP / 6);
+			sources.push("Wildfire damage");
+		}
+		if (!hasResidualDisplayType(pokemon, "Water") && field.attackerSide.cannonade) {
+			hpDelta -= Math.floor(maxHP / 6);
+			sources.push("Cannonade damage");
+		}
+		if (!hasResidualDisplayType(pokemon, "Rock") && field.attackerSide.volcalith) {
+			hpDelta -= Math.floor(maxHP / 6);
+			sources.push("Volcalith damage");
+		}
+	}
+	if (!hpDelta) return {text: "", title: ""};
+	return {
+		text: (hpDelta > 0 ? "+" : "") + hpDelta + " per turn",
+		title: sources.join(", ")
+	};
+}
+
+function renderSideSupplementalDisplays(sideSelector, pokemon, opposingPokemon, field) {
+	var pokeInfo = $(sideSelector);
+	if (!pokeInfo.length) return;
+	var sideId = String(pokeInfo.attr("id") || "");
+	for (var moveIndex = 0; moveIndex < 4; moveIndex++) {
+		var move = pokemon && pokemon.moves ? pokemon.moves[moveIndex] : null;
+		var critDisplay = getMoveCritRateDisplay(pokemon, opposingPokemon, move, sideId);
+		var critTargets = $();
+		var moveRow = pokeInfo.find(".move" + (moveIndex + 1)).first();
+		if (moveRow.length) critTargets = critTargets.add(moveRow.find(".move-crit-rate-display"));
+		critTargets = critTargets.add(
+			pokeInfo.find('.simplified-side-move-row[data-move-index="' + moveIndex + '"] .move-crit-rate-display')
+		);
+		critTargets.text(critDisplay.text).attr("title", critDisplay.title);
+	}
+	var residualChips = pokeInfo.find(".side-residual-chip");
+	if (!residualChips.length) return;
+	var chipDisplay = getSideResidualChipDisplay(pokeInfo, pokemon, opposingPokemon, field);
+	if (chipDisplay.text) {
+		residualChips.text(chipDisplay.text);
+		residualChips.attr("title", chipDisplay.title || "Expected end-of-turn HP swing");
+		residualChips.prop("hidden", false).show();
+	} else {
+		residualChips.text("");
+		residualChips.removeAttr("title");
+		residualChips.prop("hidden", true).hide();
+	}
 }
 
 function applyPowerSplitToPair(p1, p2) {
@@ -5863,8 +8136,16 @@ $(".gen").change(function () {
 	var itemOptions = getSelectOptions(items, true);
 	$("select.item").find("option").remove().end().append("<option value=\"\">(none)</option>" + itemOptions);
 
-	$(".set-selector").val(getFirstValidSetOption().id);
-	$(".set-selector").change();
+	var firstValidSet = getFirstValidSetOption();
+	if (firstValidSet && firstValidSet.id) {
+		if (window.console && typeof window.console.debug === "function") {
+			window.console.debug("[AstralCalc] gen change selecting default encounter", {
+				firstValidSet: firstValidSet.id
+			});
+		}
+		$(".set-selector").val(firstValidSet.id);
+		$(".set-selector").change();
+	}
 });
 
 function getFirstValidSetOptionFromOptions(sets) {
@@ -6038,8 +8319,7 @@ function isPokeInfoGrounded(pokeInfo) {
 }
 
 function getTerrainEffects() {
-	var className = $(this).prop("className");
-	className = className.substring(0, className.indexOf(" "));
+	var className = String($(this).prop("className") || "").split(/\s+/)[0];
 	switch (className) {
 		case "type1":
 		case "type2":
@@ -6073,6 +8353,9 @@ function getTerrainEffects() {
 			}
 			break;
 		default:
+			if (!$(this).is("input:checkbox[name='terrain']")) {
+				break;
+			}
 			$("input:checkbox[name='terrain']").not(this).prop("checked", false);
 			if ($(this).prop("checked") && $(this).val() === "Electric") {
 				// need to enable status because it may be disabled by Misty Terrain before.
@@ -6237,6 +8520,7 @@ function addBoxed(poke) {
 		keepSprite.id = spriteId;
 		keepSprite.dataset.id = setId;
 		setTrainerSpriteImage(keepSprite, speciesName);
+		applyPrimaryIconSheetIfNeeded(keepSprite, speciesName);
 		scheduleFragSheetRefresh();
 		applyPlayerRosterSearchFilter();
 		return;
@@ -6247,10 +8531,13 @@ function addBoxed(poke) {
 	var newPoke = document.createElement("img");
 	newPoke.id = spriteId;
 	newPoke.className = "trainer-pok left-side";
+	newPoke.loading = "lazy";
+	newPoke.decoding = "async";
 	setTrainerSpriteImage(newPoke, speciesName);
 	newPoke.dataset.id = setId;
 	newPoke.addEventListener("dragstart", dragstart_handler);
 	$('#box-poke-list')[0].appendChild(newPoke)
+	applyPrimaryIconSheetIfNeeded(newPoke, speciesName);
 	scheduleFragSheetRefresh();
 	applyPlayerRosterSearchFilter();
 }
@@ -6260,7 +8547,7 @@ function getSrcImgPokemon(poke) {
 	if (!poke || !poke.name) {
 		return
 	}
-	return getTrainerSpriteUrlByName(poke.name);
+	return getInitialTrainerSpriteUrlByName(poke.name);
 }
 
 function get_trainer_poks(trainer_name) {
@@ -6309,23 +8596,28 @@ function topPokemonIcon(fullname, node) {
 
 $(document).on('click', '.right-side', function () {
 	var set = $(this).attr('data-id');
-	if (!setSelectedSetIdForSide("p2", set)) {
-		$('.opposing').val(set);
-		$('.opposing').change();
-	}
+	topPokemonIcon(set, $("#p2mon")[0])
+	$('.opposing').val(set);
+	$('.opposing').change();
+	$('.opposing .select2-chosen').text(formatSetNameForDisplay(set));
 	renderFragSheet();
 })
 
 $(document).on("contextmenu", ".trainer-pok.right-side", function (ev) {
-	openOpposingContextMenu(ev, $(this).attr("data-id"));
+	ev.preventDefault();
+	var setId = String($(this).attr("data-id") || "").trim();
+	if (!setId) return;
+	closeFragContextMenu();
+	closeOpposingContextMenu();
+	setOpposingSetDeadMark(setId, !isOpposingSetMarkedDead(setId));
 });
 
 $(document).on('click', '.left-side', function () {
 	var set = $(this).attr('data-id');
-	if (!setSelectedSetIdForSide("p1", set)) {
-		$('.player').val(set);
-		$('.player').change();
-	}
+	topPokemonIcon(set, $("#p1mon")[0])
+	$('.player').val(set);
+	$('.player').change();
+	$('.player .select2-chosen').text(formatSetNameForDisplay(set));
 	renderFragSheet();
 })
 
@@ -6344,10 +8636,9 @@ function selectFirstMon() {
 	if (!set) {
 		return;
 	}
-	if (!setSelectedSetIdForSide("p1", set)) {
-		$('.player').val(set);
-		$('.player').change();
-	}
+	$('.player').val(set);
+	$('.player').change();
+	$('.player .select2-chosen').text(formatSetNameForDisplay(set));
 }
 
 function selectTrainer(value) {
@@ -6360,10 +8651,9 @@ function selectTrainer(value) {
 			if (!doesSetMatchStarterChoice(pok_name, pok_tr_names[i], poks[pok_tr_names[i]])) continue;
 			if (index == value) {
 				var set = `${pok_name} (${pok_tr_names[i]})`;
-				if (!setSelectedSetIdForSide("p2", set)) {
-					$('.opposing').val(set);
-					$('.opposing').change();
-				}
+				$('.opposing').val(set);
+				$('.opposing').change();
+				$('.opposing .select2-chosen').text(formatSetNameForDisplay(set));
 				renderFragSheet();
 				return;
 			}
@@ -6373,14 +8663,48 @@ function selectTrainer(value) {
 }
 
 function nextTrainer() {
-	var value = getCurrentFightIndex() + 1;
+	var trainerBounds = getCurrentTrainerIndexBounds();
+	if (!trainerBounds) return;
+	var maxIndex = trainerBounds.max;
 	clearOpposingDeadMarks();
-	selectTrainer(value);
+	selectTrainer(maxIndex + 1);
 }
 
 function previousTrainer() {
-	var value = getCurrentFightIndex() - 1;
-	selectTrainer(value);
+	var trainerBounds = getCurrentTrainerIndexBounds();
+	if (!trainerBounds) return;
+	var minIndex = trainerBounds.min;
+	if (minIndex <= 1) return;
+	clearOpposingDeadMarks();
+	selectTrainer(minIndex - 1);
+}
+
+function getCurrentTrainerIndexBounds() {
+	var selectedOpposing = String($(".opposing").val() || "").trim();
+	var trainerEntries = selectedOpposing ? get_trainer_poks(selectedOpposing) : [];
+	if ((!trainerEntries || !trainerEntries.length) && CURRENT_TRAINER_POKS && CURRENT_TRAINER_POKS.length) {
+		trainerEntries = CURRENT_TRAINER_POKS.slice();
+	}
+	if (trainerEntries && trainerEntries.length) {
+		CURRENT_TRAINER_POKS = trainerEntries.slice();
+	}
+	var minIndex = Infinity;
+	var maxIndex = -Infinity;
+	for (var i = 0; i < trainerEntries.length; i++) {
+		var entry = parseTrainerPartyEntry(trainerEntries[i]);
+		var index = getTrainerIndexFromSetData(entry.setData);
+		if (index <= 0) index = entry.sortIndex || 0;
+		if (!index || index <= 0 || Number.isNaN(index)) continue;
+		if (index < minIndex) minIndex = index;
+		if (index > maxIndex) maxIndex = index;
+	}
+	if (!Number.isFinite(minIndex) || !Number.isFinite(maxIndex)) {
+		var selectedEntry = selectedOpposing ? parseTrainerPartyEntry(selectedOpposing) : null;
+		var selectedIndex = selectedEntry ? getTrainerIndexFromSetData(selectedEntry.setData) : 0;
+		if (selectedIndex > 0) return {min: selectedIndex, max: selectedIndex};
+		return null;
+	}
+	return {min: minIndex, max: maxIndex};
 }
 
 function resetTrainer() {
@@ -6733,6 +9057,9 @@ function switchIconDouble(){
 }
 
 $(document).ready(function () {
+	if (window.console && typeof window.console.info === "function") {
+		window.console.info("[AstralCalc] lastencounter-build v5");
+	}
 	var params = new URLSearchParams(window.location.search);
 	var g = GENERATION[params.get('gen')] || 9;
 	$("#gen" + g).prop("checked", true);
@@ -6758,7 +9085,7 @@ $(document).ready(function () {
 	syncSettingsPanelUi();
 	syncFragRoster();
 	renderFragSheet();
-	$(".move-selector").select2({
+	$("select.move-selector").select2({
 		dropdownAutoWidth: true,
 		matcher: function (term, text) {
 			// 2nd condition is for Hidden Power
@@ -6770,6 +9097,11 @@ $(document).ready(function () {
 		if (!didRestoreLastEncounter) {
 			var firstValidSet = getFirstValidSetOption();
 			if (firstValidSet && firstValidSet.id) {
+				if (window.console && typeof window.console.debug === "function") {
+					window.console.debug("[AstralCalc] document ready fallback selecting default encounter", {
+						firstValidSet: firstValidSet.id
+					});
+				}
 				$(".set-selector").val(firstValidSet.id);
 				$(".set-selector").change();
 			}
@@ -6777,8 +9109,11 @@ $(document).ready(function () {
 	} finally {
 		isBootstrappingLastEncounterSelection = false;
 	}
-	saveLastEncounterSelection();
 	updateAllMoveMetaDisplays();
+	startAppUpdateChecker();
+	window.setTimeout(function () {
+		maybeAutoStartCalcFeatureTutorial();
+	}, CALC_FEATURE_TUTORIAL_AUTO_OPEN_DELAY_MS);
 	$(".terrain-trigger").bind("change keyup", getTerrainEffects);
 	$("#previous-trainer").click(previousTrainer);
 	$("#next-trainer").click(nextTrainer);

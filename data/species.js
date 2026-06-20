@@ -5402,7 +5402,71 @@ var XY_PATCH = {
         types: ['Normal'],
         bs: { hp: 75, at: 80, df: 60, sa: 65, sd: 90, sp: 102 },
         weightkg: 28,
-        abilities: { 0: 'Fur Coat' }
+        abilities: { 0: 'Fur Coat' },
+        otherFormes: ['Furfrou-Dandy', 'Furfrou-Debutante', 'Furfrou-Diamond', 'Furfrou-Heart', 'Furfrou-Kabuki', 'Furfrou-La Reine', 'Furfrou-Matron', 'Furfrou-Pharaoh', 'Furfrou-Star']
+    },
+    'Furfrou-Dandy': {
+        types: ['Normal'],
+        bs: { hp: 75, at: 80, df: 60, sa: 65, sd: 90, sp: 102 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-Debutante': {
+        types: ['Normal'],
+        bs: { hp: 75, at: 80, df: 60, sa: 65, sd: 90, sp: 102 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-Diamond': {
+        types: ['Normal'],
+        bs: { hp: 75, at: 80, df: 60, sa: 65, sd: 90, sp: 102 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-Heart': {
+        types: ['Normal'],
+        bs: { hp: 75, at: 80, df: 60, sa: 65, sd: 90, sp: 102 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-Kabuki': {
+        types: ['Normal'],
+        bs: { hp: 75, at: 80, df: 60, sa: 65, sd: 90, sp: 102 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-La Reine': {
+        types: ['Normal'],
+        bs: { hp: 75, at: 80, df: 60, sa: 65, sd: 90, sp: 102 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-Matron': {
+        types: ['Normal'],
+        bs: { hp: 75, at: 80, df: 60, sa: 65, sd: 90, sp: 102 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-Pharaoh': {
+        types: ['Normal'],
+        bs: { hp: 75, at: 80, df: 60, sa: 65, sd: 90, sp: 102 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
+    },
+    'Furfrou-Star': {
+        types: ['Normal'],
+        bs: { hp: 75, at: 80, df: 60, sa: 65, sd: 90, sp: 102 },
+        weightkg: 28,
+        abilities: { 0: 'Fur Coat' },
+        baseSpecies: 'Furfrou'
     },
     Gogoat: {
         types: ['Grass'],
@@ -9837,6 +9901,24 @@ var Specie = (function () {
     Specie.EXCLUDE = new Set(['bs', 'otherFormes']);
     return Specie;
 }());
+var SPECIES_ALIASES = [
+    ['Flabebe-Red-Flower', 'flabebe'],
+    ['Floette-Red-Flower', 'floette'],
+    ['Florges-Red-Flower', 'florges'],
+    ['Flabebe-Yellow-Flower', 'flabebe'],
+    ['Flabebe-Orange-Flower', 'flabebe'],
+    ['Flabebe-Blue-Flower', 'flabebe'],
+    ['Flabebe-White-Flower', 'flabebe'],
+    ['Floette-Yellow-Flower', 'floette'],
+    ['Floette-Orange-Flower', 'floette'],
+    ['Floette-Blue-Flower', 'floette'],
+    ['Floette-White-Flower', 'floette'],
+    ['Floette-Eternal-Flower', 'floetteeternal'],
+    ['Florges-Yellow-Flower', 'florges'],
+    ['Florges-Orange-Flower', 'florges'],
+    ['Florges-Blue-Flower', 'florges'],
+    ['Florges-White-Flower', 'florges'],
+];
 var SPECIES_BY_ID = [];
 var gen = 0;
 try {
@@ -9848,6 +9930,12 @@ try {
                 delete species[specie].bs.sl;
             var m = new Specie(specie, species[specie]);
             map[m.id] = m;
+        }
+        for (var i = 0; i < SPECIES_ALIASES.length; i++) {
+            var aliasName = SPECIES_ALIASES[i][0];
+            var targetId = SPECIES_ALIASES[i][1];
+            if (map[targetId])
+                map[(0, util_1.toID)(aliasName)] = map[targetId];
         }
         SPECIES_BY_ID.push(map);
         gen++;

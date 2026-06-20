@@ -361,7 +361,7 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
         (move.named('Shell Side Arm') && (0, util_2.getShellSideArmCategory)(attacker, defender) === 'Physical');
     var defenseStat = hitsPhysical ? 'def' : 'spd';
     var baseDamage = (0, util_2.getBaseDamage)(attacker.level, basePower, attack, defense);
-    var isSpread = field.gameType !== 'Singles' &&
+    var isSpread = !field.ignoreSpreadDamageReduction && field.gameType !== 'Singles' &&
         ['allAdjacent', 'allAdjacentFoes'].includes(move.target);
     if (isSpread) {
         baseDamage = (0, util_2.pokeRound)((0, util_2.OF32)(baseDamage * 3072) / 4096);

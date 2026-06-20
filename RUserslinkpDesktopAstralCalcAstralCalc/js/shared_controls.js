@@ -1,0 +1,7808 @@
+if (!Array.prototype.indexOf) {
+	Array.prototype.indexOf = function (searchElement, fromIndex) { // eslint-disable-line no-extend-native
+		var k;
+		if (this == null) {
+			throw new TypeError('"this" equals null or n is undefined');
+		}
+		var O = Object(this);
+		var len = O.length >>> 0;
+		if (len === 0) {
+			return -1;
+		}
+		var n = +fromIndex || 0;
+		if (Math.abs(n) === Infinity) {
+			n = 0;
+		}
+		if (n >= len) {
+			return -1;
+		}
+		k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
+		while (k < len) {
+			if (k in O && O[k] === searchElement) {
+				return k;
+			}
+			k++;
+		}
+		return -1;
+	};
+}
+
+function startsWith(string, target) {
+	return (string || '').slice(0, target.length) === target;
+}
+
+var LEGACY_STATS_RBY = ["hp", "at", "df", "sl", "sp"];
+var LEGACY_STATS_GSC = ["hp", "at", "df", "sa", "sd", "sp"];
+var LEGACY_STATS = [[], LEGACY_STATS_RBY, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC, LEGACY_STATS_GSC];
+var HIDDEN_POWER_REGEX = /Hidden Power (\w*)/;
+var NATURE_EFFECTS = {
+	Adamant: {plus: "at", minus: "sa"},
+	Bashful: {plus: "sa", minus: "sa"},
+	Bold: {plus: "df", minus: "at"},
+	Brave: {plus: "at", minus: "sp"},
+	Calm: {plus: "sd", minus: "at"},
+	Careful: {plus: "sd", minus: "sa"},
+	Docile: {plus: "df", minus: "df"},
+	Gentle: {plus: "sd", minus: "df"},
+	Hardy: {plus: "at", minus: "at"},
+	Hasty: {plus: "sp", minus: "df"},
+	Impish: {plus: "df", minus: "sa"},
+	Jolly: {plus: "sp", minus: "sa"},
+	Lax: {plus: "df", minus: "sd"},
+	Lonely: {plus: "at", minus: "df"},
+	Mild: {plus: "sa", minus: "df"},
+	Modest: {plus: "sa", minus: "at"},
+	Naive: {plus: "sp", minus: "sd"},
+	Naughty: {plus: "at", minus: "sd"},
+	Quiet: {plus: "sa", minus: "sp"},
+	Quirky: {plus: "sd", minus: "sd"},
+	Rash: {plus: "sa", minus: "sd"},
+	Relaxed: {plus: "df", minus: "sp"},
+	Sassy: {plus: "sd", minus: "sp"},
+	Serious: {plus: "sp", minus: "sp"},
+	Timid: {plus: "sp", minus: "at"}
+};
+
+var CALC_STATUS = {
+	'Healthy': '',
+	'Paralyzed': 'par',
+	'Poisoned': 'psn',
+	'Badly Poisoned': 'tox',
+	'Burned': 'brn',
+	'Asleep': 'slp',
+	'Frozen': 'frz'
+};
+
+function legacyStatToStat(st) {
+	switch (st) {
+		case 'hp':
+			return "hp";
+		case 'at':
+			return "atk";
+		case 'df':
+			return "def";
+		case 'sa':
+			return "spa";
+		case 'sd':
+			return "spd";
+		case 'sp':
+			return "spe";
+		case 'sl':
+			return "spc";
+	}
+}
+
+// input field validation
+var bounds = {
+	"level": [0, 100],
+	"base": [1, 255],
+	"evs": [0, 252],
+	"ivs": [0, 31],
+	"dvs": [0, 15],
+	"move-bp": [0, 65535]
+};
+for (var bounded in bounds) {
+	attachValidation(bounded, bounds[bounded][0], bounds[bounded][1]);
+}
+function attachValidation(clazz, min, max) {
+	$("." + clazz).keyup(function () {
+		validate($(this), min, max);
+	});
+}
+function validate(obj, min, max) {
+	obj.val(Math.max(min, Math.min(max, ~~obj.val())));
+}
+function clampLevelValue(level) {
+	return Math.max(bounds.level[0], Math.min(bounds.level[1], level));
+}
+function getLevelCap(sourceInput) {
+	var levelCapInput = sourceInput && sourceInput.length ? sourceInput : $(".level-cap").first();
+	if (!levelCapInput.length) return bounds.level[1];
+
+	var levelCap = parseInt(levelCapInput.val(), 10);
+	if (Number.isNaN(levelCap)) levelCap = bounds.level[1];
+	levelCap = clampLevelValue(levelCap);
+	$(".level-cap").val(levelCap);
+	return levelCap;
+}
+function isZeroLevelFlag(levelFlag) {
+	return levelFlag === 0 || (typeof levelFlag === "string" && levelFlag.trim() === "0");
+}
+function isRelativeLevelFlag(levelFlag) {
+	if (isZeroLevelFlag(levelFlag)) return true;
+	return typeof levelFlag === "string" && /^[+-]\d+$/.test(levelFlag.trim());
+}
+function resolveSetLevelFlag(levelFlag, fallbackLevel) {
+	var resolvedLevel;
+	if (isZeroLevelFlag(levelFlag)) {
+		resolvedLevel = getLevelCap();
+	} else if (typeof levelFlag === "number" && Number.isFinite(levelFlag)) {
+		resolvedLevel = Math.round(levelFlag);
+	} else if (isRelativeLevelFlag(levelFlag)) {
+		resolvedLevel = getLevelCap() + parseInt(levelFlag, 10);
+	} else {
+		var parsedLevel = parseInt(levelFlag, 10);
+		if (!Number.isNaN(parsedLevel)) {
+			resolvedLevel = parsedLevel;
+		} else {
+			var parsedFallback = parseInt(fallbackLevel, 10);
+			resolvedLevel = Number.isNaN(parsedFallback) ? getLevelCap() : parsedFallback;
+		}
+	}
+	return clampLevelValue(resolvedLevel);
+}
+function refreshRelativeSetLevels() {
+	$(".poke-info").each(function () {
+		var poke = $(this);
+		var levelFlag = poke.attr("data-level-flag");
+		if (!isRelativeLevelFlag(levelFlag)) return;
+		poke.find(".level").val(resolveSetLevelFlag(levelFlag, poke.find(".level").val()));
+		calcHP(poke);
+		calcStats(poke);
+	});
+}
+
+$("input:radio[name='format']").change(function () {
+	var gameType = $("input:radio[name='format']:checked").val();
+	if (gameType === 'Singles') {
+		$("input:checkbox[name='ruin']:checked").prop("checked", false);
+	}
+	$(".format-specific." + gameType.toLowerCase()).each(function () {
+		if ($(this).hasClass("gen-specific") && !$(this).hasClass("g" + gen)) {
+			return;
+		}
+		$(this).show();
+	});
+	$(".format-specific").not("." + gameType.toLowerCase()).hide();
+	setDoubleIconVisibility(gameType === "Doubles");
+});
+
+// auto-calc stats and current HP on change
+$(".level").keyup(function () {
+	var poke = $(this).closest(".poke-info");
+	calcHP(poke);
+	calcStats(poke);
+});
+$(".level-cap").bind("input keyup change", function () {
+	validate($(this), bounds.level[0], bounds.level[1]);
+	getLevelCap($(this));
+	refreshRelativeSetLevels();
+});
+$(".nature").bind("keyup change", function () {
+	calcStats($(this).closest(".poke-info"));
+});
+$(".hp .base, .hp .evs, .hp .ivs").bind("keyup change", function () {
+	calcHP($(this).closest(".poke-info"));
+});
+$(".at .base, .at .evs, .at .ivs").bind("keyup change", function () {
+	calcStat($(this).closest(".poke-info"), 'at');
+});
+$(".df .base, .df .evs, .df .ivs").bind("keyup change", function () {
+	calcStat($(this).closest(".poke-info"), 'df');
+});
+$(".sa .base, .sa .evs, .sa .ivs").bind("keyup change", function () {
+	calcStat($(this).closest(".poke-info"), 'sa');
+});
+$(".sd .base, .sd .evs, .sd .ivs").bind("keyup change", function () {
+	calcStat($(this).closest(".poke-info"), 'sd');
+});
+$(".sp .base, .sp .evs, .sp .ivs").bind("keyup change", function () {
+	calcStat($(this).closest(".poke-info"), 'sp');
+});
+$(".sl .base").keyup(function () {
+	calcStat($(this).closest(".poke-info"), 'sl');
+});
+$(".at .dvs").keyup(function () {
+	var poke = $(this).closest(".poke-info");
+	calcStat(poke, 'at');
+	poke.find(".hp .dvs").val(getHPDVs(poke));
+	calcHP(poke);
+});
+$(".df .dvs").keyup(function () {
+	var poke = $(this).closest(".poke-info");
+	calcStat(poke, 'df');
+	poke.find(".hp .dvs").val(getHPDVs(poke));
+	calcHP(poke);
+});
+$(".sa .dvs").keyup(function () {
+	var poke = $(this).closest(".poke-info");
+	calcStat(poke, 'sa');
+	poke.find(".sd .dvs").val($(this).val());
+	calcStat(poke, 'sd');
+	poke.find(".hp .dvs").val(getHPDVs(poke));
+	calcHP(poke);
+});
+$(".sp .dvs").keyup(function () {
+	var poke = $(this).closest(".poke-info");
+	calcStat(poke, 'sp');
+	poke.find(".hp .dvs").val(getHPDVs(poke));
+	calcHP(poke);
+});
+$(".stat-changer").on("click", function (ev) {
+	ev.preventDefault();
+	var boostSelector = $(this).closest("tr").find(".boost");
+	if (!boostSelector.length) return;
+	var currentBoost = parseInt(boostSelector.val(), 10);
+	if (Number.isNaN(currentBoost)) currentBoost = 0;
+	var delta = $(this).text().trim() === "+" ? 1 : -1;
+	var nextBoost = Math.max(-6, Math.min(6, currentBoost + delta));
+	boostSelector.val(String(nextBoost)).change();
+});
+$(".sl .dvs").keyup(function () {
+	var poke = $(this).closest(".poke-info");
+	calcStat(poke, 'sl');
+	poke.find(".hp .dvs").val(getHPDVs(poke));
+	calcHP(poke);
+});
+
+function getHPDVs(poke) {
+	return (~~poke.find(".at .dvs").val() % 2) * 8 +
+		(~~poke.find(".df .dvs").val() % 2) * 4 +
+		(~~poke.find(".sp .dvs").val() % 2) * 2 +
+		(~~poke.find(gen === 1 ? ".sl .dvs" : ".sa .dvs").val() % 2);
+}
+
+function calcStats(poke) {
+	for (var i = 0; i < LEGACY_STATS[gen].length; i++) {
+		calcStat(poke, LEGACY_STATS[gen][i]);
+	}
+}
+
+function calcCurrentHP(poke, max, percent, skipDraw) {
+	var current = Math.round(Number(percent) * Number(max) / 100);
+	poke.find(".current-hp").val(current);
+	if (!skipDraw) drawHealthBar(poke, max, current);
+	return current;
+}
+function calcPercentHP(poke, max, current, skipDraw) {
+	var percent = Math.round(100 * Number(current) / Number(max));
+	if (percent === 0 && current > 0) {
+		percent = 1;
+	} else if (percent === 100 & current < max) {
+		percent = 99;
+	}
+
+	poke.find(".percent-hp").val(percent);
+	if (!skipDraw) drawHealthBar(poke, max, current);
+	return percent;
+}
+function applySetPreHp(poke, set) {
+	if (!set || typeof set.prehp === "undefined" || set.prehp === null || set.prehp === "") return;
+	var max = parseInt(poke.find(".max-hp").text(), 10);
+	var prehp = parseInt(set.prehp, 10);
+	if (Number.isNaN(max) || max <= 0 || Number.isNaN(prehp)) return;
+	prehp = Math.max(0, Math.min(max, prehp));
+	poke.find(".current-hp").val(prehp);
+	calcPercentHP(poke, max, prehp);
+}
+function normalizeSetStatusValue(value) {
+	if (typeof value === "undefined" || value === null) return "";
+	var normalized = String(value).trim().toLowerCase();
+	if (!normalized) return "";
+	if (normalized === "healthy" || normalized === "none") return "Healthy";
+	if (normalized === "burn" || normalized === "burned" || normalized === "brn") return "Burned";
+	if (normalized === "poison" || normalized === "poisoned" || normalized === "psn") return "Poisoned";
+	if (normalized === "badly poisoned" || normalized === "toxic" || normalized === "tox") return "Badly Poisoned";
+	if (normalized === "paralyze" || normalized === "paralyzed" || normalized === "par") return "Paralyzed";
+	if (normalized === "sleep" || normalized === "asleep" || normalized === "slp") return "Asleep";
+	if (normalized === "freeze" || normalized === "frozen" || normalized === "frz") return "Frozen";
+	return "";
+}
+function applySetStatus(poke, set) {
+	if (!set) return;
+	var statusValue = normalizeSetStatusValue(set.status);
+	if (!statusValue) return;
+	poke.find(".status").val(statusValue);
+	poke.find(".status").change();
+	if (statusValue !== "Badly Poisoned") poke.find(".toxic-counter").val(0);
+}
+function drawHealthBar(poke, max, current) {
+	var fillPercent = 100 * current / max;
+	var fillColor = fillPercent > 50 ? "green" : fillPercent > 20 ? "yellow" : "red";
+
+	var healthbar = poke.find(".hpbar");
+	healthbar.addClass("hp-" + fillColor);
+	var unwantedColors = ["green", "yellow", "red"];
+	unwantedColors.splice(unwantedColors.indexOf(fillColor), 1);
+	for (var i = 0; i < unwantedColors.length; i++) {
+		healthbar.removeClass("hp-" + unwantedColors[i]);
+	}
+	healthbar.css("background", "linear-gradient(to right, " + fillColor + " " + fillPercent + "%, white 0%");
+}
+// TODO: these HP inputs should really be input type=number with min=0, step=1, constrained by max=maxHP or 100
+$(".current-hp").keyup(function () {
+	var max = $(this).parent().children(".max-hp").text();
+	validate($(this), 0, max);
+	var current = $(this).val();
+	calcPercentHP($(this).parent(), max, current);
+});
+$(".percent-hp").keyup(function () {
+	var max = $(this).parent().children(".max-hp").text();
+	validate($(this), 0, 100);
+	var percent = $(this).val();
+	calcCurrentHP($(this).parent(), max, percent);
+});
+
+$(".ability").bind("keyup change", function () {
+	var pokeInfo = $(this).closest(".poke-info");
+	updatePokeMoveHitsFromAbilityItem(pokeInfo);
+
+	var ability = pokeInfo.find(".ability").val();
+	var isProtoQuark = ability === 'Quark Drive' || ability === 'Protosynthesis';
+	var protoQuarkState = pokeInfo.find(".proto-quark-state");
+	var abilityToggle = pokeInfo.find(".abilityToggle");
+
+	var TOGGLE_ABILITIES = ['Flash Fire', 'Electromorphosis', 'Intimidate', 'Illuminate', 'Minus', 'Plus', 'Slow Start', 'Unburden', 'Stakeout', 'Teraform Zero'];
+
+	if (isProtoQuark) {
+		protoQuarkState.show();
+		abilityToggle.hide().prop("checked", protoQuarkState.val() !== 'inactive');
+	} else if (TOGGLE_ABILITIES.indexOf(ability) >= 0) {
+		abilityToggle.show();
+		if (ability === "Unburden") {
+			abilityToggle.prop("checked", false);
+		}
+		protoQuarkState.val("auto").hide();
+	} else {
+		abilityToggle.hide().prop("checked", false);
+		protoQuarkState.val("auto").hide();
+	}
+
+	if (ability === "Supreme Overlord") {
+		pokeInfo.find(".alliesFainted").show();
+	} else {
+		pokeInfo.find(".alliesFainted").val('0');
+		pokeInfo.find(".alliesFainted").hide();
+
+	}
+	updateAllMoveMetaDisplays();
+});
+$(".proto-quark-state").bind("keyup change", function () {
+	var pokeInfo = $(this).closest(".poke-info");
+	var ability = pokeInfo.find(".ability").val();
+	if (ability === 'Quark Drive' || ability === 'Protosynthesis') {
+		pokeInfo.find(".abilityToggle").prop("checked", $(this).val() !== 'inactive');
+	}
+});
+
+$("#p1 .ability").bind("keyup change", function () {
+	autosetWeather($(this).val(), 0);
+	autosetTerrain($(this).val(), 0);
+});
+
+var lastManualWeather = "";
+var lastAutoWeather = ["", ""];
+function autosetWeather(ability, i) {
+	var currentWeather = $("input:radio[name='weather']:checked").val();
+	if (lastAutoWeather.indexOf(currentWeather) === -1) {
+		lastManualWeather = currentWeather;
+		lastAutoWeather[1 - i] = "";
+	}
+	switch (ability) {
+		case "Drought":
+		case "Orichalcum Pulse":
+			lastAutoWeather[i] = "Sun";
+			$("#sun").prop("checked", true);
+			break;
+		case "Drizzle":
+			lastAutoWeather[i] = "Rain";
+			$("#rain").prop("checked", true);
+			break;
+		case "Sand Stream":
+			lastAutoWeather[i] = "Sand";
+			$("#sand").prop("checked", true);
+			break;
+		case "Snow Warning":
+			if (gen >= 9) {
+				lastAutoWeather[i] = "Snow";
+				$("#snow").prop("checked", true);
+			} else {
+				lastAutoWeather[i] = "Hail";
+				$("#hail").prop("checked", true);
+			}
+			break;
+		case "Desolate Land":
+			lastAutoWeather[i] = "Harsh Sunshine";
+			$("#harsh-sunshine").prop("checked", true);
+			break;
+		case "Primordial Sea":
+			lastAutoWeather[i] = "Heavy Rain";
+			$("#heavy-rain").prop("checked", true);
+			break;
+		case "Delta Stream":
+			lastAutoWeather[i] = "Strong Winds";
+			$("#strong-winds").prop("checked", true);
+			break;
+		default:
+			break;
+	}
+	applyTrainerFieldLocksForCurrentTrainer();
+	syncTrainerFieldLockButtonStyles();
+}
+
+var lastManualTerrain = "";
+var lastAutoTerrain = ["", ""];
+function autosetTerrain(ability, i) {
+	var currentTerrain = $("input:checkbox[name='terrain']:checked").val() || "No terrain";
+	if (lastAutoTerrain.indexOf(currentTerrain) === -1) {
+		lastManualTerrain = currentTerrain;
+		lastAutoTerrain[1 - i] = "";
+	}
+	// terrain input uses checkbox instead of radio, need to uncheck all first
+	$("input:checkbox[name='terrain']:checked").prop("checked", false);
+	switch (ability) {
+		case "Electric Surge":
+		case "Hadron Engine":
+			lastAutoTerrain[i] = "Electric";
+			$("#electric").prop("checked", true);
+			break;
+		case "Grassy Surge":
+			lastAutoTerrain[i] = "Grassy";
+			$("#grassy").prop("checked", true);
+			break;
+		case "Misty Surge":
+			lastAutoTerrain[i] = "Misty";
+			$("#misty").prop("checked", true);
+			break;
+		case "Psychic Surge":
+			lastAutoTerrain[i] = "Psychic";
+			$("#psychic").prop("checked", true);
+			break;
+		default:
+			lastAutoTerrain[i] = "";
+			var newTerrain = lastAutoTerrain[1 - i] !== "" ? lastAutoTerrain[1 - i] : lastManualTerrain;
+			if ("No terrain" !== newTerrain) {
+				$("input:checkbox[name='terrain'][value='" + newTerrain + "']").prop("checked", true);
+			}
+			break;
+	}
+	applyTrainerFieldLocksForCurrentTrainer();
+	syncTrainerFieldLockButtonStyles();
+}
+
+$("#p1 .item").bind("keyup change", function () {
+	autosetStatus("#p1", getEffectiveItemFromPokeInfo($(this).closest(".poke-info")));
+});
+
+var lastManualStatus = { "#p1": "Healthy" };
+var lastAutoStatus = { "#p1": "Healthy" };
+function isIgnoreItemToggleChecked(pokeInfo) {
+	var info = pokeInfo && pokeInfo.jquery ? pokeInfo : $(pokeInfo);
+	return !!(info && info.length && info.find(".ignore-item-toggle").is(":checked"));
+}
+function getEffectiveItemFromPokeInfo(pokeInfo) {
+	var info = pokeInfo && pokeInfo.jquery ? pokeInfo : $(pokeInfo);
+	if (!info || !info.length) return "";
+	return isIgnoreItemToggleChecked(info) ? "" : (info.find(".item").val() || "");
+}
+function updatePokeMoveHitsFromAbilityItem(pokeInfo) {
+	var info = pokeInfo && pokeInfo.jquery ? pokeInfo : $(pokeInfo);
+	if (!info || !info.length) return;
+	var abilityValue = info.find(".ability").val();
+	var itemValue = getEffectiveItemFromPokeInfo(info);
+	var moveHits = abilityValue === "Skill Link" ? 5 : itemValue === "Loaded Dice" ? 4 : 3;
+	info.find(".move-hits").val(moveHits);
+}
+function updatePokeMetronomeVisibilityFromItem(pokeInfo) {
+	var info = pokeInfo && pokeInfo.jquery ? pokeInfo : $(pokeInfo);
+	if (!info || !info.length) return;
+	var itemValue = getEffectiveItemFromPokeInfo(info);
+	var metronomeControl = info.find(".metronome");
+	if (itemValue === "Metronome") {
+		metronomeControl.show();
+	} else {
+		metronomeControl.hide();
+	}
+}
+function autosetStatus(p, item) {
+	var currentStatus = $(p + " .status").val();
+	if (item === "Flame Orb") {
+		lastAutoStatus[p] = "Burned";
+		$(p + " .status").val("Burned");
+		$(p + " .status").change();
+	} else if (item === "Toxic Orb") {
+		lastAutoStatus[p] = "Badly Poisoned";
+		$(p + " .status").val("Badly Poisoned");
+		$(p + " .status").change();
+	}
+}
+
+$(".status").bind("keyup change", function () {
+	if ($(this).val() === 'Badly Poisoned') {
+		$(this).parent().children(".toxic-counter").show();
+	} else {
+		$(this).parent().children(".toxic-counter").hide();
+	}
+});
+
+var lockerMove = "";
+var MOVE_INFO_LOOKUP = {};
+var MOVE_INFO_LOADING = false;
+var MOVE_INFO_LOADED = false;
+var FOG_ACCURACY_MULTIPLIER = 0.6;
+var HUSTLE_ACCURACY_MULTIPLIER = 0.8;
+var BRIGHT_POWDER_ACCURACY_MULTIPLIER = 0.9;
+var WIDE_LENS_ACCURACY_MULTIPLIER = 1.1;
+var ZOOM_LENS_ACCURACY_MULTIPLIER = 1.2;
+var COMPOUND_EYES_ACCURACY_MULTIPLIER = 1.3;
+var moveMetaVisible = true;
+
+function normalizeMoveInfoKey(moveName) {
+	if (typeof calc !== "undefined" && calc && typeof calc.toID === "function") {
+		return calc.toID(moveName);
+	}
+	return String(moveName || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+function parseMoveInfoNumericValue(lineText) {
+	if (!lineText) return null;
+	var cleaned = String(lineText).split("//")[0];
+	var ternaryIndex = cleaned.indexOf("?");
+	if (ternaryIndex >= 0) {
+		var ternaryValue = cleaned.slice(ternaryIndex + 1).match(/-?\d+/);
+		if (ternaryValue) return +ternaryValue[0];
+	}
+	var equalsValue = cleaned.match(/=\s*(-?\d+)/);
+	if (equalsValue) return +equalsValue[1];
+	var anyValue = cleaned.match(/-?\d+/);
+	return anyValue ? +anyValue[0] : null;
+}
+
+function parseMovesInfoHeader(rawText) {
+	var lookup = {};
+	if (!rawText) return lookup;
+	var blockRegex = /^\s*\[MOVE_[^\]]+\]\s*=\s*\{([\s\S]*?)^\s*\},/gm;
+	var blockMatch;
+	while ((blockMatch = blockRegex.exec(rawText)) !== null) {
+		var blockText = blockMatch[1];
+		var nameMatch = blockText.match(/\.name\s*=\s*COMPOUND_STRING\(\s*"([^"]+)"\s*\)/);
+		if (!nameMatch) continue;
+		var moveName = nameMatch[1];
+		var accuracy = null;
+		var pp = null;
+		var blockLines = blockText.split(/\r?\n/);
+		for (var i = 0; i < blockLines.length; i++) {
+			var line = blockLines[i];
+			if (accuracy === null && line.indexOf(".accuracy") !== -1) {
+				accuracy = parseMoveInfoNumericValue(line);
+			}
+			if (pp === null && line.indexOf(".pp") !== -1) {
+				pp = parseMoveInfoNumericValue(line);
+			}
+			if (accuracy !== null && pp !== null) break;
+		}
+		lookup[normalizeMoveInfoKey(moveName)] = {accuracy: accuracy, pp: pp};
+	}
+	lookup[normalizeMoveInfoKey("(No Move)")] = {accuracy: 0, pp: 0};
+	return lookup;
+}
+
+function applyMoveInfoLookup(lookup) {
+	if (!lookup || !Object.keys(lookup).length) return false;
+	MOVE_INFO_LOOKUP = lookup;
+	MOVE_INFO_LOADED = true;
+	return true;
+}
+
+function loadMoveInfoLookup() {
+	if (MOVE_INFO_LOADED || MOVE_INFO_LOADING) return;
+	if (applyMoveInfoLookup(window.MOVE_INFO_STATIC_LOOKUP)) {
+		updateAllMoveMetaDisplays();
+		return;
+	}
+	var moveInfoPaths = ["./src/moves_info.h", "./moves_info.h", "./dist/moves_info.h", "../src/moves_info.h", "../moves_info.h"];
+	MOVE_INFO_LOADING = true;
+	var applyMoveInfoText = function(rawText) {
+		var parsed = parseMovesInfoHeader(rawText);
+		applyMoveInfoLookup(parsed);
+		MOVE_INFO_LOADING = false;
+		updateAllMoveMetaDisplays();
+	};
+	var tryLoadMoveInfoPath = function(pathIndex) {
+		if (pathIndex >= moveInfoPaths.length) {
+			MOVE_INFO_LOADING = false;
+			updateAllMoveMetaDisplays();
+			return;
+		}
+		$.ajax({url: moveInfoPaths[pathIndex], dataType: "text", cache: false})
+			.done(applyMoveInfoText)
+			.fail(function () {
+				tryLoadMoveInfoPath(pathIndex + 1);
+			});
+	};
+	tryLoadMoveInfoPath(0);
+}
+
+function getSelectedWeatherForMoveMeta() {
+	return gen === 2
+		? $("input:radio[name='gscWeather']:checked").val()
+		: $("input:radio[name='weather']:checked").val();
+}
+
+function getMoveInfoForDisplay(moveName) {
+	var normalized = normalizeMoveInfoKey(moveName);
+	var info = MOVE_INFO_LOOKUP[normalized];
+	if (!info && HIDDEN_POWER_REGEX.test(moveName)) {
+		info = MOVE_INFO_LOOKUP[normalizeMoveInfoKey("Hidden Power")];
+	}
+	return info || null;
+}
+
+function parseDisplayedSpeedValue(speedNode) {
+	if (!speedNode || !speedNode.length) return NaN;
+	var speedValue = parseInt($.trim(speedNode.first().text()), 10);
+	return isFinite(speedValue) ? speedValue : NaN;
+}
+
+function doesZoomLensApply(attackerInfo, defenderInfo) {
+	if (!attackerInfo || !attackerInfo.length || !defenderInfo || !defenderInfo.length) return false;
+	var attackerSpeedNode = attackerInfo.find(".sp .totalMod").first();
+	if (attackerSpeedNode.hasClass("speed-slower")) return true;
+	if (attackerSpeedNode.hasClass("speed-faster") || attackerSpeedNode.hasClass("speed-tie")) return false;
+	var attackerSpeed = parseDisplayedSpeedValue(attackerSpeedNode);
+	var defenderSpeed = parseDisplayedSpeedValue(defenderInfo.find(".sp .totalMod").first());
+	if (!isFinite(attackerSpeed) || !isFinite(defenderSpeed) || attackerSpeed === defenderSpeed) return false;
+	var trickRoomActive = $("#trickroom").prop("checked") || $("#trickRoomR").prop("checked");
+	return trickRoomActive ? attackerSpeed > defenderSpeed : attackerSpeed < defenderSpeed;
+}
+
+function getDisplayedMoveAccuracy(moveAccuracy, weatherValue, moveGroupObj, moveCategory) {
+	if (typeof moveAccuracy !== "number" || moveAccuracy <= 0) return "--";
+	var accuracyMultiplier = 1;
+	if (weatherValue === "Fog") accuracyMultiplier *= FOG_ACCURACY_MULTIPLIER;
+	var attackerInfo = moveGroupObj.closest(".poke-info");
+	var attackerItem = getEffectiveItemFromPokeInfo(attackerInfo);
+	var ability = attackerInfo.find(".ability").val();
+	if (ability === "Hustle" && moveCategory === "Physical") accuracyMultiplier *= HUSTLE_ACCURACY_MULTIPLIER;
+	if (ability === "Compound Eyes") accuracyMultiplier *= COMPOUND_EYES_ACCURACY_MULTIPLIER;
+	if (attackerItem === "Wide Lens") accuracyMultiplier *= WIDE_LENS_ACCURACY_MULTIPLIER;
+	var attackerId = attackerInfo.attr("id");
+	var defenderInfo = attackerId === "p1"
+		? $("#p2")
+		: attackerId === "p2"
+			? $("#p1")
+			: $(".poke-info").not(attackerInfo).first();
+	if (attackerItem === "Zoom Lens" && doesZoomLensApply(attackerInfo, defenderInfo)) {
+		accuracyMultiplier *= ZOOM_LENS_ACCURACY_MULTIPLIER;
+	}
+	if (defenderInfo.length && getEffectiveItemFromPokeInfo(defenderInfo) === "Bright Powder") {
+		accuracyMultiplier *= BRIGHT_POWDER_ACCURACY_MULTIPLIER;
+	}
+	if (accuracyMultiplier !== 1) {
+		return String(Math.max(1, Math.floor(moveAccuracy * accuracyMultiplier))) + "%";
+	}
+	return String(moveAccuracy) + "%";
+}
+
+function ensureMoveMetaForGroup(moveGroupObj) {
+	var moveMeta = moveGroupObj.children(".move-meta");
+	if (moveMeta.length) return moveMeta.first();
+	moveMeta = $('<span class="move-meta" title="Move PP and accuracy">PP -- | ACC --</span>');
+	var moveZ = moveGroupObj.children(".move-z");
+	if (moveZ.length) {
+		moveZ.after(moveMeta);
+	} else {
+		moveGroupObj.append(moveMeta);
+	}
+	return moveMeta;
+}
+
+function applyMoveMetaVisibility() {
+	$(".move-meta").toggle(!!moveMetaVisible);
+}
+
+function setMoveMetaVisibility(enabled) {
+	moveMetaVisible = !!enabled;
+	var toggle = $("#settings-move-meta");
+	if (toggle.length) toggle.prop("checked", moveMetaVisible);
+	applyMoveMetaVisibility();
+}
+
+function updateMoveMetaForGroup(moveGroupObj) {
+	var moveMeta = ensureMoveMetaForGroup(moveGroupObj);
+	if (!moveMetaVisible) {
+		moveMeta.hide();
+		return;
+	}
+	moveMeta.show();
+	var moveName = moveGroupObj.children("select.move-selector").val() || "(No Move)";
+	var weather = getSelectedWeatherForMoveMeta();
+	var info = getMoveInfoForDisplay(moveName);
+	var moveData = moves[moveName] || moves["(No Move)"] || {};
+	var moveCategory = moveGroupObj.children(".move-cat").val() || moveData.category || "";
+	var ppText = "--";
+	var accText = "--";
+	if (info) {
+		if (typeof info.pp === "number" && info.pp >= 0) ppText = String(info.pp);
+		accText = getDisplayedMoveAccuracy(info.accuracy, weather, moveGroupObj, moveCategory);
+	}
+	moveMeta.text("PP " + ppText + " | ACC " + accText);
+}
+
+function updateAllMoveMetaDisplays() {
+	$(".poke-info .move1, .poke-info .move2, .poke-info .move3, .poke-info .move4").each(function () {
+		updateMoveMetaForGroup($(this));
+	});
+	applyMoveMetaVisibility();
+}
+
+// auto-update move details on select
+$(".move-selector").change(function () {
+	var moveName = $(this).val();
+	var move = moves[moveName] || moves['(No Move)'];
+	var moveGroupObj = $(this).parent();
+	moveGroupObj.children(".move-bp").val(moveName === 'Present' ? 40 : move.bp);
+	var m = moveName.match(HIDDEN_POWER_REGEX);
+	if (m) {
+		var pokeObj = $(this).closest(".poke-info");
+		var pokemon = createPokemon(pokeObj);
+		var actual = calc.Stats.getHiddenPower(GENERATION, pokemon.ivs);
+		if (actual.type !== m[1]) {
+			var hpIVs = calc.Stats.getHiddenPowerIVs(GENERATION, m[1]);
+			if (hpIVs && gen < 7) {
+				for (var i = 0; i < LEGACY_STATS[gen].length; i++) {
+					var legacyStat = LEGACY_STATS[gen][i];
+					var stat = legacyStatToStat(legacyStat);
+					pokeObj.find("." + legacyStat + " .ivs").val(hpIVs[stat] !== undefined ? hpIVs[stat] : 31);
+					pokeObj.find("." + legacyStat + " .dvs").val(hpIVs[stat] !== undefined ? calc.Stats.IVToDV(hpIVs[stat]) : 15);
+				}
+				if (gen < 3) {
+					var hpDV = calc.Stats.getHPDV({
+						atk: pokeObj.find(".at .ivs").val(),
+						def: pokeObj.find(".df .ivs").val(),
+						spe: pokeObj.find(".sp .ivs").val(),
+						spc: pokeObj.find(".sa .ivs").val()
+					});
+					pokeObj.find(".hp .ivs").val(calc.Stats.DVToIV(hpDV));
+					pokeObj.find(".hp .dvs").val(hpDV);
+				}
+				pokeObj.change();
+				moveGroupObj.children(".move-bp").val(gen >= 6 ? 60 : 70);
+			}
+		} else {
+			moveGroupObj.children(".move-bp").val(actual.power);
+		}
+	} else if (gen >= 2 && gen <= 6 && HIDDEN_POWER_REGEX.test($(this).attr('data-prev'))) {
+		// If this selector was previously Hidden Power but now isn't, reset all IVs/DVs to max.
+		var pokeObj = $(this).closest(".poke-info");
+		for (var i = 0; i < LEGACY_STATS[gen].length; i++) {
+			var legacyStat = LEGACY_STATS[gen][i];
+			pokeObj.find("." + legacyStat + " .ivs").val(31);
+			pokeObj.find("." + legacyStat + " .dvs").val(15);
+		}
+	}
+	$(this).attr('data-prev', moveName);
+	moveGroupObj.children(".move-type").val(move.type);
+	moveGroupObj.children(".move-cat").val(move.category);
+	moveGroupObj.children(".move-crit").prop("checked", move.willCrit === true);
+	var linkedTopCritToggle = getTopCritToggleFromBattleToggle(moveGroupObj.children(".move-crit").get(0));
+	if (linkedTopCritToggle) linkedTopCritToggle.checked = move.willCrit === true;
+
+	var stat = move.category === 'Special' ? 'spa' : 'atk';
+	var dropsStats =
+		move.self && move.self.boosts && move.self.boosts[stat] && move.self.boosts[stat] < 0;
+	if (Array.isArray(move.multihit)) {
+		moveGroupObj.children(".stat-drops").hide();
+		moveGroupObj.children(".move-hits").show();
+		var pokemon = $(this).closest(".poke-info");
+		var moveHits =
+		pokemon.find(".ability").val() === 'Skill Link' ? 5 :
+			getEffectiveItemFromPokeInfo(pokemon) === 'Loaded Dice' ? 4 : 3;
+		moveGroupObj.children(".move-hits").val(moveHits);
+	} else if (dropsStats) {
+		moveGroupObj.children(".move-hits").hide();
+		moveGroupObj.children(".stat-drops").show();
+	} else {
+		moveGroupObj.children(".move-hits").hide();
+		moveGroupObj.children(".stat-drops").hide();
+	}
+	moveGroupObj.children(".move-z").prop("checked", false);
+	updateMoveMetaForGroup(moveGroupObj);
+});
+
+$("input:radio[name='weather'], input:radio[name='gscWeather']").change(function () {
+	updateAllMoveMetaDisplays();
+});
+$(".move-cat").change(function () {
+	updateMoveMetaForGroup($(this).parent());
+});
+
+$(".item").change(function () {
+	var pokeInfo = $(this).closest(".poke-info");
+	var pokeId = String(pokeInfo.attr("id") || "");
+	var itemName = getEffectiveItemFromPokeInfo(pokeInfo);
+	updatePokeMetronomeVisibilityFromItem(pokeInfo);
+	updatePokeMoveHitsFromAbilityItem(pokeInfo);
+	if (pokeId === "p1" || pokeId === "p2") {
+		autosetStatus("#" + pokeId, itemName);
+	}
+	updateAllMoveMetaDisplays();
+});
+
+$(".ignore-item-toggle").change(function () {
+	var pokeInfo = $(this).closest(".poke-info");
+	var pokeId = String(pokeInfo.attr("id") || "");
+	updatePokeMetronomeVisibilityFromItem(pokeInfo);
+	updatePokeMoveHitsFromAbilityItem(pokeInfo);
+	if (pokeId === "p1" || pokeId === "p2") {
+		autosetStatus("#" + pokeId, getEffectiveItemFromPokeInfo(pokeInfo));
+	}
+	var itemControl = pokeInfo.find(".item").get(0);
+	if (itemControl) getTerrainEffects.call(itemControl);
+	updateAllMoveMetaDisplays();
+});
+
+var ASTRALDEX_BASE_URL = "https://astral-dex.vercel.app/";
+var ASTRALDEX_TOP_CHROME_PX = 52;
+var APP_SETTINGS_STORAGE_KEY = "astralCalcSettings";
+var FRAG_SHEET_STORAGE_KEY = "astralCalcFragSheet";
+var NOTES_BOARD_STORAGE_KEY = "astralCalcNotesBoard";
+var FRAG_SHEET_STATES_STORAGE_KEY = "astralCalcFragSheetStates";
+var FRAG_SHEET_BACKUPS_STORAGE_KEY = "astralCalcFragSheetBackups";
+var TRAINER_FIELD_LOCKS_STORAGE_KEY = "astralCalcTrainerFieldLocks";
+var LAST_ENCOUNTER_STORAGE_KEY = "astralCalcLastEncounter";
+var CALC_FEATURE_TUTORIAL_SEEN_STORAGE_KEY = "astralCalcFeatureTutorialSeenV1";
+var CALC_FEATURE_TUTORIAL_AUTO_OPEN_DELAY_MS = 1300;
+var CALC_SIDE_PANEL_MIN_WIDTH_PX = 360;
+var CALC_SIDE_PANEL_MAX_WIDTH_VW = 96;
+var CALC_SIDE_PANEL_MIN_MAIN_WIDTH_PX = 620;
+var APP_UPDATE_CHECK_INTERVAL_MS = 120000;
+var APP_UPDATE_INITIAL_CHECK_DELAY_MS = 12000;
+var FRAG_SHEET_STATES_LIMIT = 40;
+var FRAG_SHEET_BACKUPS_LIMIT = 90;
+var FRAG_SHEET_BACKUP_COOLDOWN_MS = 12000;
+var TRAINER_FIELD_LOCKABLE_IDS = {
+	electric: true,
+	grassy: true,
+	misty: true,
+	psychic: true,
+	beads: true,
+	tablets: true,
+	sword: true,
+	vessel: true,
+	clear: true,
+	sun: true,
+	rain: true,
+	sand: true,
+	snow: true,
+	hail: true,
+	fog: true,
+	"harsh-sunshine": true,
+	"heavy-rain": true,
+	"strong-winds": true,
+	gscClear: true,
+	gscSun: true,
+	gscRain: true,
+	gscSand: true,
+	magicroom: true,
+	trickroom: true,
+	wonderroom: true,
+	gravity: true,
+	inverse: true
+};
+var TRAINER_FIELD_LOCK_EXCLUDED_IDS = {
+	"singles-format": true,
+	"doubles-format": true
+};
+var STARTER_CHOICES = ["chikorita", "tepig", "totodile"];
+var RIVAL_STARTER_BY_CHOICE = {
+	chikorita: "tepig",
+	tepig: "totodile",
+	totodile: "chikorita"
+};
+var appSettingsCache = null;
+var fragSheetState = null;
+var notesBoardState = null;
+var fragContextSourceSet = "";
+var fragContextSourceElement = null;
+var fragSheetAutoObserver = null;
+var fragSheetRefreshTimer = null;
+var playerRosterSearchDebounceTimer = null;
+var notesNoteInputDebounceTimers = {};
+var appUpdateBaselineLastModifiedMs = 0;
+var appUpdateCheckTimer = null;
+var appUpdateNoticeShown = false;
+var fragLastAutoBackupAt = 0;
+var trainerFieldLocksCache = null;
+var trainerFieldLockActiveTrainerKey = "";
+var fragsHistoryExpanded = false;
+var FRAG_UNKNOWN_VICTIM_KEY = "__unknown__";
+var deadOpposingSetMap = {};
+var opposingContextSourceSet = "";
+var CURRENT_TRAINER_POKS = [];
+var isRestoringLastEncounterSelection = false;
+var isBootstrappingLastEncounterSelection = true;
+var calcFeatureTutorialState = {
+	isOpen: false,
+	launchedFromSettings: false,
+	stepIndex: 0,
+	steps: [],
+	focusNode: null,
+	focusPrevInlinePosition: "",
+	focusPrevInlineZIndex: "",
+	focusForcedRelative: false,
+	overlayNode: null,
+	cardNode: null,
+	titleNode: null,
+	textNode: null,
+	progressNode: null,
+	visualNode: null,
+	backBtn: null,
+	nextBtn: null
+};
+var calcSidePanelResizeState = null;
+var calcSideResizeCaptureNode = null;
+var PLAYER_ROSTER_SPRITE_SELECTOR = "#team-poke-list .trainer-pok.left-side, #box-poke-list .trainer-pok.left-side, #box-poke-list2 .trainer-pok.left-side, #trash-box .trainer-pok.left-side";
+var PLAYER_ROSTER_SEARCH_DEBOUNCE_MS = 90;
+var NOTES_NOTE_INPUT_DEBOUNCE_MS = 120;
+var SPECIES_DISPLAY_NAME_ALIASES = {
+	"Tauros-Paldea-Blaze": "Tauros-PB",
+	"Tauros-Paldea-Aqua": "Tauros-PA"
+};
+var TYPE_COLOR_MAP = {
+	normal: "#A8A77A",
+	fire: "#EE8130",
+	water: "#6390F0",
+	electric: "#F7D02C",
+	grass: "#7AC74C",
+	ice: "#96D9D6",
+	fighting: "#C22E28",
+	poison: "#A33EA1",
+	ground: "#E2BF65",
+	flying: "#A98FF3",
+	psychic: "#F95587",
+	bug: "#A6B91A",
+	rock: "#B6A136",
+	ghost: "#735797",
+	dragon: "#6F35FC",
+	dark: "#705746",
+	steel: "#B7B7CE",
+	fairy: "#D685AD",
+	stellar: "#e0c066"
+};
+
+var FRAG_PREVO_BY_SPECIES_ID = {
+	"abomasnow": "snover",
+	"accelgor": "shelmet",
+	"aegislash": "doublade",
+	"aggron": "lairon",
+	"alakazam": "kadabra",
+	"alcremie": "milcery",
+	"altaria": "swablu",
+	"ambipom": "aipom",
+	"amoonguss": "foongus",
+	"ampharos": "flaaffy",
+	"annihilape": "primeape",
+	"appletun": "applin",
+	"araquanid": "dewpider",
+	"arbok": "ekans",
+	"arboliva": "dolliv",
+	"arcanine": "growlithe",
+	"arcaninehisui": "growlithehisui",
+	"archeops": "archen",
+	"arctibax": "frigibax",
+	"argalis": "cupra",
+	"arghonaut": "privatyke",
+	"ariados": "spinarak",
+	"armaldo": "anorith",
+	"armarouge": "charcadet",
+	"aromatisse": "spritzee",
+	"astrolotl": "solotl",
+	"aurorus": "amaura",
+	"aurumoth": "argalis",
+	"avalugg": "bergmite",
+	"avalugghisui": "bergmite",
+	"azumarill": "marill",
+	"banette": "shuppet",
+	"barbaracle": "binacle",
+	"barraskewda": "arrokuda",
+	"basculegion": "basculinwhitestriped",
+	"basculegionf": "basculinwhitestriped",
+	"bastiodon": "shieldon",
+	"baxcalibur": "arctibax",
+	"bayleef": "chikorita",
+	"beartic": "cubchoo",
+	"beautifly": "silcoon",
+	"beedrill": "kakuna",
+	"beheeyem": "elgyem",
+	"bellibolt": "tadbulb",
+	"bellossom": "gloom",
+	"bewear": "stufful",
+	"bibarel": "bidoof",
+	"bisharp": "pawniard",
+	"blastoise": "wartortle",
+	"blaziken": "combusken",
+	"blissey": "chansey",
+	"boldore": "roggenrola",
+	"boltund": "yamper",
+	"braixen": "fennekin",
+	"brambleghast": "bramblin",
+	"braviary": "rufflet",
+	"braviaryhisui": "rufflet",
+	"breloom": "shroomish",
+	"brionne": "popplio",
+	"bronzong": "bronzor",
+	"butterfree": "metapod",
+	"cacturne": "cacnea",
+	"caimanoe": "floatoy",
+	"camerupt": "numel",
+	"caribolt": "electrelk",
+	"carkol": "rolycoly",
+	"carracosta": "tirtouga",
+	"cascoon": "wurmple",
+	"cawmodore": "cawdet",
+	"centiskorch": "sizzlipede",
+	"ceruledge": "charcadet",
+	"cetitan": "cetoddle",
+	"chandelure": "lampent",
+	"chansey": "happiny",
+	"charizard": "charmeleon",
+	"charjabug": "grubbin",
+	"charmeleon": "charmander",
+	"cherrim": "cherubi",
+	"chesnaught": "quilladin",
+	"chimecho": "chingling",
+	"cinccino": "minccino",
+	"cinderace": "raboot",
+	"clawitzer": "clauncher",
+	"claydol": "baltoy",
+	"clefable": "clefairy",
+	"clefairy": "cleffa",
+	"clodsire": "wooperpaldea",
+	"cloyster": "shellder",
+	"coalossal": "carkol",
+	"cofagrigus": "yamask",
+	"colossoil": "dorsoil",
+	"combusken": "torchic",
+	"conkeldurr": "gurdurr",
+	"copperajah": "cufant",
+	"coribalis": "swirlpool",
+	"corviknight": "corvisquire",
+	"corvisquire": "rookidee",
+	"cosmoem": "cosmog",
+	"crabominable": "crabrawler",
+	"cradily": "lileep",
+	"crawdaunt": "corphish",
+	"crobat": "golbat",
+	"crocalor": "fuecoco",
+	"croconaw": "totodile",
+	"crustle": "dwebble",
+	"cursola": "corsolagalar",
+	"cyclohm": "duohm",
+	"dachsbun": "fidough",
+	"darmanitan": "darumaka",
+	"darmanitangalar": "darumakagalar",
+	"dartrix": "rowlet",
+	"decidueye": "dartrix",
+	"decidueyehisui": "dartrix",
+	"delcatty": "skitty",
+	"delphox": "braixen",
+	"dewgong": "seel",
+	"dewott": "oshawott",
+	"diggersby": "bunnelby",
+	"dodrio": "doduo",
+	"dolliv": "smoliv",
+	"donphan": "phanpy",
+	"dottler": "blipbug",
+	"doublade": "honedge",
+	"dragalge": "skrelp",
+	"dragapult": "drakloak",
+	"dragonair": "dratini",
+	"dragonite": "dragonair",
+	"drakloak": "dreepy",
+	"drapion": "skorupi",
+	"drednaw": "chewtle",
+	"drifblim": "drifloon",
+	"drizzile": "sobble",
+	"dubwool": "wooloo",
+	"dudunsparce": "dunsparce",
+	"dudunsparcethreesegment": "dunsparce",
+	"dugtrio": "diglett",
+	"dugtrioalola": "diglettalola",
+	"duohm": "monohm",
+	"duosion": "solosis",
+	"dusclops": "duskull",
+	"dusknoir": "dusclops",
+	"dustox": "cascoon",
+	"eelektrik": "tynamo",
+	"eelektross": "eelektrik",
+	"eldegoss": "gossifleur",
+	"electabuzz": "elekid",
+	"electivire": "electabuzz",
+	"electrelk": "fawnifer",
+	"electrode": "voltorb",
+	"electrodehisui": "voltorbhisui",
+	"emboar": "pignite",
+	"empoleon": "prinplup",
+	"equilibra": "justyke",
+	"escavalier": "karrablast",
+	"espathra": "flittle",
+	"espeon": "eevee",
+	"excadrill": "drilbur",
+	"exeggutor": "exeggcute",
+	"exeggutoralola": "exeggcute",
+	"exploud": "loudred",
+	"farigiraf": "girafarig",
+	"fearow": "spearow",
+	"feraligatr": "croconaw",
+	"ferrothorn": "ferroseed",
+	"fidgit": "breezi",
+	"flaaffy": "mareep",
+	"flapple": "applin",
+	"flarelm": "embirch",
+	"flareon": "eevee",
+	"fletchinder": "fletchling",
+	"floatzel": "buizel",
+	"floette": "flabeu0301beu0301",
+	"floragato": "sprigatito",
+	"florges": "floette",
+	"flygon": "vibrava",
+	"forretress": "pineco",
+	"fraxure": "axew",
+	"frogadier": "froakie",
+	"froslass": "snorunt",
+	"frosmoth": "snom",
+	"furret": "sentret",
+	"gabite": "gible",
+	"gallade": "kirlia",
+	"galvantula": "joltik",
+	"garbodor": "trubbish",
+	"garchomp": "gabite",
+	"gardevoir": "kirlia",
+	"garganacl": "naclstack",
+	"gastrodon": "shellos",
+	"gengar": "haunter",
+	"gholdengo": "gimmighoul",
+	"gigalith": "boldore",
+	"glaceon": "eevee",
+	"glalie": "snorunt",
+	"glimmora": "glimmet",
+	"gliscor": "gligar",
+	"gloom": "oddish",
+	"gogoat": "skiddo",
+	"golbat": "zubat",
+	"golduck": "psyduck",
+	"golem": "graveler",
+	"golemalola": "graveleralola",
+	"golisopod": "wimpod",
+	"golurk": "golett",
+	"goodra": "sliggoo",
+	"goodrahisui": "sliggoohisui",
+	"gorebyss": "clamperl",
+	"gothitelle": "gothorita",
+	"gothorita": "gothita",
+	"gourgeist": "pumpkaboo",
+	"gourgeistlarge": "pumpkaboolarge",
+	"gourgeistsmall": "pumpkaboosmall",
+	"gourgeistsuper": "pumpkaboosuper",
+	"grafaiai": "shroodle",
+	"granbull": "snubbull",
+	"grapploct": "clobbopus",
+	"graveler": "geodude",
+	"graveleralola": "geodudealola",
+	"greedent": "skwovet",
+	"greninja": "frogadier",
+	"grimmsnarl": "morgrem",
+	"grotle": "turtwig",
+	"grovyle": "treecko",
+	"grumpig": "spoink",
+	"gumshoos": "yungoos",
+	"gurdurr": "timburr",
+	"gyarados": "magikarp",
+	"hakamoo": "jangmoo",
+	"hariyama": "makuhita",
+	"hatterene": "hattrem",
+	"hattrem": "hatenna",
+	"haunter": "gastly",
+	"haxorus": "fraxure",
+	"heliolisk": "helioptile",
+	"herdier": "lillipup",
+	"hippowdon": "hippopotas",
+	"hitmonchan": "tyrogue",
+	"hitmonlee": "tyrogue",
+	"hitmontop": "tyrogue",
+	"honchkrow": "murkrow",
+	"houndoom": "houndour",
+	"houndstone": "greavard",
+	"huntail": "clamperl",
+	"hydreigon": "zweilous",
+	"hypno": "drowzee",
+	"incineroar": "torracat",
+	"infernape": "monferno",
+	"inteleon": "drizzile",
+	"ivysaur": "bulbasaur",
+	"jellicent": "frillish",
+	"jigglypuff": "igglybuff",
+	"jolteon": "eevee",
+	"jumbao": "mumbao",
+	"jumpluff": "skiploom",
+	"jynx": "smoochum",
+	"kabutops": "kabuto",
+	"kadabra": "abra",
+	"kakuna": "weedle",
+	"kerfluffle": "pluffle",
+	"kilowattrel": "wattrel",
+	"kingambit": "bisharp",
+	"kingdra": "seadra",
+	"kingler": "krabby",
+	"kirlia": "ralts",
+	"kitsunoh": "nohface",
+	"klang": "klink",
+	"kleavor": "scyther",
+	"klinklang": "klang",
+	"kommoo": "hakamoo",
+	"kricketune": "kricketot",
+	"krilowatt": "protowatt",
+	"krokorok": "sandile",
+	"krookodile": "krokorok",
+	"lairon": "aron",
+	"lampent": "litwick",
+	"lanturn": "chinchou",
+	"leafeon": "eevee",
+	"leavanny": "swadloon",
+	"ledian": "ledyba",
+	"lickilicky": "lickitung",
+	"liepard": "purrloin",
+	"lilligant": "petilil",
+	"lilliganthisui": "petilil",
+	"linoone": "zigzagoon",
+	"linoonegalar": "zigzagoongalar",
+	"lokix": "nymble",
+	"lombre": "lotad",
+	"lopunny": "buneary",
+	"loudred": "whismur",
+	"lucario": "riolu",
+	"ludicolo": "lombre",
+	"lumineon": "finneon",
+	"lunala": "cosmoem",
+	"lurantis": "fomantis",
+	"luxio": "shinx",
+	"luxray": "luxio",
+	"lycanroc": "rockruff",
+	"lycanrocdusk": "rockruff",
+	"lycanrocmidnight": "rockruff",
+	"mabosstiff": "maschiff",
+	"machamp": "machoke",
+	"machoke": "machop",
+	"magcargo": "slugma",
+	"magmar": "magby",
+	"magmortar": "magmar",
+	"magneton": "magnemite",
+	"magnezone": "magneton",
+	"malaconda": "brattler",
+	"malamar": "inkay",
+	"mamoswine": "piloswine",
+	"mandibuzz": "vullaby",
+	"manectric": "electrike",
+	"mantine": "mantyke",
+	"marill": "azurill",
+	"marowak": "cubone",
+	"marowakalola": "cubone",
+	"marshtomp": "mudkip",
+	"masquerain": "surskit",
+	"maushold": "tandemaus",
+	"mausholdfour": "tandemaus",
+	"medicham": "meditite",
+	"meganium": "bayleef",
+	"meowscarada": "floragato",
+	"meowstic": "espurr",
+	"meowsticf": "espurr",
+	"metagross": "metang",
+	"metang": "beldum",
+	"metapod": "caterpie",
+	"miasmaw": "miasmite",
+	"mienshao": "mienfoo",
+	"mightyena": "poochyena",
+	"milotic": "feebas",
+	"mismagius": "misdreavus",
+	"monferno": "chimchar",
+	"morgrem": "impidimp",
+	"mothim": "burmy",
+	"mrmime": "mimejr",
+	"mrmimegalar": "mimejr",
+	"mrrime": "mrmimegalar",
+	"mudsdale": "mudbray",
+	"muk": "grimer",
+	"mukalola": "grimeralola",
+	"musharna": "munna",
+	"naclstack": "nacli",
+	"naganadel": "poipole",
+	"naviathan": "caimanoe",
+	"necturna": "necturine",
+	"nidoking": "nidorino",
+	"nidoqueen": "nidorina",
+	"nidorina": "nidoranf",
+	"nidorino": "nidoranm",
+	"ninetales": "vulpix",
+	"ninetalesalola": "vulpixalola",
+	"ninjask": "nincada",
+	"noctowl": "hoothoot",
+	"noivern": "noibat",
+	"nuzleaf": "seedot",
+	"obstagoon": "linoonegalar",
+	"octillery": "remoraid",
+	"oinkologne": "lechonk",
+	"oinkolognef": "lechonk",
+	"omastar": "omanyte",
+	"orbeetle": "dottler",
+	"overqwil": "qwilfishhisui",
+	"palafin": "finizen",
+	"palossand": "sandygast",
+	"palpitoad": "tympole",
+	"pangoro": "pancham",
+	"parasect": "paras",
+	"pawmo": "pawmi",
+	"pawmot": "pawmo",
+	"pelipper": "wingull",
+	"perrserker": "meowthgalar",
+	"persian": "meowth",
+	"persianalola": "meowthalola",
+	"pidgeot": "pidgeotto",
+	"pidgeotto": "pidgey",
+	"pignite": "tepig",
+	"pikachu": "pichu",
+	"piloswine": "swinub",
+	"plasmanta": "snugglow",
+	"politoed": "poliwhirl",
+	"poliwhirl": "poliwag",
+	"poliwrath": "poliwhirl",
+	"polteageist": "sinistea",
+	"polteageistantique": "sinisteaantique",
+	"porygon2": "porygon",
+	"porygonz": "porygon2",
+	"primarina": "brionne",
+	"primeape": "mankey",
+	"prinplup": "piplup",
+	"probopass": "nosepass",
+	"pupitar": "larvitar",
+	"purugly": "glameow",
+	"pyroak": "flarelm",
+	"pyroar": "litleo",
+	"quagsire": "wooper",
+	"quaquaval": "quaxwell",
+	"quaxwell": "quaxly",
+	"quilava": "cyndaquil",
+	"quilladin": "chespin",
+	"raboot": "scorbunny",
+	"rabsca": "rellor",
+	"raichu": "pikachu",
+	"raichualola": "pikachu",
+	"rampardos": "cranidos",
+	"rapidash": "ponyta",
+	"rapidashgalar": "ponytagalar",
+	"raticate": "rattata",
+	"raticatealola": "rattataalola",
+	"reuniclus": "duosion",
+	"revavroom": "varoom",
+	"rhydon": "rhyhorn",
+	"rhyperior": "rhydon",
+	"ribombee": "cutiefly",
+	"rillaboom": "thwackey",
+	"roselia": "budew",
+	"roserade": "roselia",
+	"runerigus": "yamaskgalar",
+	"saharaja": "saharascal",
+	"salamence": "shelgon",
+	"salazzle": "salandit",
+	"samurott": "dewott",
+	"samurotthisui": "dewott",
+	"sandaconda": "silicobra",
+	"sandslash": "sandshrew",
+	"sandslashalola": "sandshrewalola",
+	"sawsbuck": "deerling",
+	"sceptile": "grovyle",
+	"scizor": "scyther",
+	"scolipede": "whirlipede",
+	"scovillain": "capsakid",
+	"scrafty": "scraggy",
+	"seadra": "horsea",
+	"seaking": "goldeen",
+	"sealeo": "spheal",
+	"seismitoad": "palpitoad",
+	"serperior": "servine",
+	"servine": "snivy",
+	"sharpedo": "carvanha",
+	"shedinja": "nincada",
+	"shelgon": "bagon",
+	"shiftry": "nuzleaf",
+	"shiinotic": "morelull",
+	"silcoon": "wurmple",
+	"silvally": "typenull",
+	"simipour": "panpour",
+	"simisage": "pansage",
+	"simisear": "pansear",
+	"sirfetchu2019d": "farfetchu2019dgalar",
+	"skeledirge": "crocalor",
+	"skiploom": "hoppip",
+	"skuntank": "stunky",
+	"slaking": "vigoroth",
+	"sliggoo": "goomy",
+	"sliggoohisui": "goomy",
+	"slowbro": "slowpoke",
+	"slowbrogalar": "slowpokegalar",
+	"slowking": "slowpoke",
+	"slowkinggalar": "slowpokegalar",
+	"slurpuff": "swirlix",
+	"smoguana": "smogecko",
+	"smokomodo": "smoguana",
+	"snaelstrom": "coribalis",
+	"sneasler": "sneaselhisui",
+	"snorlax": "munchlax",
+	"solgaleo": "cosmoem",
+	"spewpa": "scatterbug",
+	"spidops": "tarountula",
+	"staraptor": "staravia",
+	"staravia": "starly",
+	"starmie": "staryu",
+	"steelix": "onix",
+	"steenee": "bounsweet",
+	"stoutland": "herdier",
+	"stratagem": "tactite",
+	"sudowoodo": "bonsly",
+	"sunflora": "sunkern",
+	"swadloon": "sewaddle",
+	"swalot": "gulpin",
+	"swampert": "marshtomp",
+	"swanna": "ducklett",
+	"swellow": "taillow",
+	"swoobat": "woobat",
+	"syclant": "syclar",
+	"sylveon": "eevee",
+	"tactite": "rebble",
+	"talonflame": "fletchinder",
+	"tangrowth": "tangela",
+	"tentacruel": "tentacool",
+	"thievul": "nickit",
+	"thwackey": "grookey",
+	"tinkaton": "tinkatuff",
+	"tinkatuff": "tinkatink",
+	"toedscruel": "toedscool",
+	"togekiss": "togetic",
+	"togetic": "togepi",
+	"tomohawk": "scratchet",
+	"torracat": "litten",
+	"torterra": "grotle",
+	"toucannon": "trumbeak",
+	"toxapex": "mareanie",
+	"toxicroak": "croagunk",
+	"toxtricity": "toxel",
+	"toxtricitylowkey": "toxel",
+	"tranquill": "pidove",
+	"trevenant": "phantump",
+	"trumbeak": "pikipek",
+	"tsareena": "steenee",
+	"typhlosion": "quilava",
+	"typhlosionhisui": "quilava",
+	"tyranitar": "pupitar",
+	"tyrantrum": "tyrunt",
+	"umbreon": "eevee",
+	"unfezant": "tranquill",
+	"ursaluna": "ursaring",
+	"ursaring": "teddiursa",
+	"urshifu": "kubfu",
+	"urshifurapidstrike": "kubfu",
+	"vanillish": "vanillite",
+	"vanilluxe": "vanillish",
+	"vaporeon": "eevee",
+	"venomoth": "venonat",
+	"venusaur": "ivysaur",
+	"vespiquen": "combee",
+	"vibrava": "trapinch",
+	"victreebel": "weepinbell",
+	"vigoroth": "slakoth",
+	"vikavolt": "charjabug",
+	"vileplume": "gloom",
+	"vivillon": "spewpa",
+	"vivillonfancy": "spewpa",
+	"volcarona": "larvesta",
+	"volkraken": "volkritter",
+	"voodoom": "voodoll",
+	"wailord": "wailmer",
+	"walrein": "sealeo",
+	"wartortle": "squirtle",
+	"watchog": "patrat",
+	"weavile": "sneasel",
+	"weepinbell": "bellsprout",
+	"weezing": "koffing",
+	"weezinggalar": "koffing",
+	"whimsicott": "cottonee",
+	"whirlipede": "venipede",
+	"whiscash": "barboach",
+	"wigglytuff": "jigglypuff",
+	"wobbuffet": "wynaut",
+	"wormadam": "burmy",
+	"wormadamsandy": "burmy",
+	"wormadamtrash": "burmy",
+	"wugtrio": "wiglett",
+	"wyrdeer": "stantler",
+	"xatu": "natu",
+	"yanmega": "yanma",
+	"zebstrika": "blitzle",
+	"zoroark": "zorua",
+	"zoroarkhisui": "zoruahisui",
+	"zweilous": "deino"
+};
+var FRAG_EVOLUTION_SPECIES_ID_LOOKUP = {};
+for (var fragEvoSpeciesId in FRAG_PREVO_BY_SPECIES_ID) {
+	if (!Object.prototype.hasOwnProperty.call(FRAG_PREVO_BY_SPECIES_ID, fragEvoSpeciesId)) continue;
+	FRAG_EVOLUTION_SPECIES_ID_LOOKUP[fragEvoSpeciesId] = true;
+	FRAG_EVOLUTION_SPECIES_ID_LOOKUP[FRAG_PREVO_BY_SPECIES_ID[fragEvoSpeciesId]] = true;
+}
+
+function safeJsonParse(rawJson, fallbackValue) {
+	if (!rawJson) return fallbackValue;
+	try {
+		return JSON.parse(rawJson);
+	} catch (err) {
+		return fallbackValue;
+	}
+}
+
+function parseHttpDateToMs(rawDateValue) {
+	if (!rawDateValue) return 0;
+	var parsed = Date.parse(String(rawDateValue));
+	return isFinite(parsed) ? parsed : 0;
+}
+
+function stopAppUpdateChecker() {
+	if (!appUpdateCheckTimer) return;
+	window.clearInterval(appUpdateCheckTimer);
+	appUpdateCheckTimer = null;
+}
+
+function notifyAppUpdateAvailable() {
+	if (appUpdateNoticeShown) return;
+	appUpdateNoticeShown = true;
+	stopAppUpdateChecker();
+	var shouldRefreshNow = window.confirm("There is an update available. Please refresh the page.\n\nPress OK to refresh now.");
+	if (shouldRefreshNow && window.location && typeof window.location.reload === "function") {
+		window.location.reload();
+	}
+}
+
+function checkForAppUpdate() {
+	if (appUpdateNoticeShown) return;
+	if (!appUpdateBaselineLastModifiedMs) return;
+	var baseUrl = String(window.location && window.location.href ? window.location.href : "").split("#")[0];
+	if (!baseUrl) return;
+	var requestUrl = baseUrl + (baseUrl.indexOf("?") >= 0 ? "&" : "?") + "_updateCheckTs=" + Date.now();
+	$.ajax({url: requestUrl, cache: false, dataType: "text"})
+		.done(function (_responseText, _textStatus, jqXHR) {
+			if (!jqXHR || typeof jqXHR.getResponseHeader !== "function") return;
+			var latestLastModifiedMs = parseHttpDateToMs(jqXHR.getResponseHeader("Last-Modified"));
+			if (latestLastModifiedMs > appUpdateBaselineLastModifiedMs + 1000) {
+				notifyAppUpdateAvailable();
+			}
+		});
+}
+
+function startAppUpdateChecker() {
+	stopAppUpdateChecker();
+	appUpdateNoticeShown = false;
+	if (!window.location || !/^https?:$/i.test(String(window.location.protocol || ""))) return;
+	appUpdateBaselineLastModifiedMs = parseHttpDateToMs(document.lastModified);
+	if (!appUpdateBaselineLastModifiedMs) return;
+	window.setTimeout(checkForAppUpdate, APP_UPDATE_INITIAL_CHECK_DELAY_MS);
+	appUpdateCheckTimer = window.setInterval(checkForAppUpdate, APP_UPDATE_CHECK_INTERVAL_MS);
+}
+
+function normalizeStarterChoice(rawChoice) {
+	var normalizedChoice = String(rawChoice || "").trim().toLowerCase();
+	if (STARTER_CHOICES.indexOf(normalizedChoice) >= 0) return normalizedChoice;
+	return "totodile";
+}
+
+function normalizeLayoutChoice(rawChoice) {
+	var normalizedChoice = String(rawChoice || "").trim().toLowerCase();
+	return normalizedChoice === "simplified" ? "simplified" : "standard";
+}
+
+function getDefaultAppSettings() {
+	return {
+		starterChoice: "totodile",
+		layoutMode: "standard",
+		moreColour: true,
+		moveColors: false,
+		moveMeta: true,
+		totalFragsOnBorder: false
+	};
+}
+
+function getAppSettings(forceReload) {
+	if (!forceReload && appSettingsCache) return appSettingsCache;
+	var defaults = getDefaultAppSettings();
+	var parsed = safeJsonParse(localStorage.getItem(APP_SETTINGS_STORAGE_KEY), {});
+	appSettingsCache = {
+		starterChoice: normalizeStarterChoice(parsed.starterChoice || defaults.starterChoice),
+		layoutMode: normalizeLayoutChoice(parsed.layoutMode || defaults.layoutMode),
+		moreColour: typeof parsed.moreColour === "boolean" ? parsed.moreColour : defaults.moreColour,
+		moveColors: typeof parsed.moveColors === "boolean" ? parsed.moveColors : defaults.moveColors,
+		moveMeta: typeof parsed.moveMeta === "boolean" ? parsed.moveMeta : defaults.moveMeta,
+		totalFragsOnBorder: typeof parsed.totalFragsOnBorder === "boolean" ? parsed.totalFragsOnBorder : defaults.totalFragsOnBorder
+	};
+	return appSettingsCache;
+}
+
+function saveAppSettings(nextSettings) {
+	appSettingsCache = {
+		starterChoice: normalizeStarterChoice(nextSettings.starterChoice),
+		layoutMode: normalizeLayoutChoice(nextSettings.layoutMode),
+		moreColour: !!nextSettings.moreColour,
+		moveColors: !!nextSettings.moveColors,
+		moveMeta: !!nextSettings.moveMeta,
+		totalFragsOnBorder: !!nextSettings.totalFragsOnBorder
+	};
+	localStorage.setItem(APP_SETTINGS_STORAGE_KEY, JSON.stringify(appSettingsCache));
+	return appSettingsCache;
+}
+
+function updateAppSettings(partial) {
+	var current = getAppSettings();
+	return saveAppSettings({
+		starterChoice: partial && typeof partial.starterChoice !== "undefined" ? partial.starterChoice : current.starterChoice,
+		layoutMode: partial && typeof partial.layoutMode !== "undefined" ? partial.layoutMode : current.layoutMode,
+		moreColour: partial && typeof partial.moreColour !== "undefined" ? partial.moreColour : current.moreColour,
+		moveColors: partial && typeof partial.moveColors !== "undefined" ? partial.moveColors : current.moveColors,
+		moveMeta: partial && typeof partial.moveMeta !== "undefined" ? partial.moveMeta : current.moveMeta,
+		totalFragsOnBorder: partial && typeof partial.totalFragsOnBorder !== "undefined" ? partial.totalFragsOnBorder : current.totalFragsOnBorder
+	});
+}
+
+function normalizeStarterFlagToken(flagToken) {
+	return String(flagToken || "").trim().toLowerCase().replace(/\s+/g, "").replace(/[-_]/g, "");
+}
+
+function getStarterTokensFromFlag(flagValue) {
+	var rawFlag = String(flagValue || "").toLowerCase();
+	var splitTokens = rawFlag.split(/[\s,|/]+/);
+	var normalizedTokens = [];
+	for (var i = 0; i < splitTokens.length; i++) {
+		var normalized = normalizeStarterFlagToken(splitTokens[i]);
+		if (normalized) normalizedTokens.push(normalized);
+	}
+	return normalizedTokens;
+}
+
+function getStarterFlagFromSetData(setData) {
+	if (!setData) return "";
+	var possibleKeys = [
+		"starterFlag", "starterflag",
+		"starterChoice", "starterchoice",
+		"starter", "rivalStarter", "rivalstarter"
+	];
+	for (var i = 0; i < possibleKeys.length; i++) {
+		var key = possibleKeys[i];
+		if (typeof setData[key] !== "undefined" && setData[key] !== null && String(setData[key]).trim()) {
+			return String(setData[key]);
+		}
+	}
+	return "";
+}
+
+function matchesExplicitStarterBooleanFlags(setData, starterChoice) {
+	if (!setData) return null;
+	var normalizedChoice = normalizeStarterChoice(starterChoice);
+	var flagMappings = [
+		{key: "chosechikorita", starter: "chikorita"},
+		{key: "chosetepig", starter: "tepig"},
+		{key: "chosetotodile", starter: "totodile"}
+	];
+	var hasAnyStarterFlag = false;
+	var isMatch = false;
+	for (var i = 0; i < flagMappings.length; i++) {
+		var mapping = flagMappings[i];
+		if (typeof setData[mapping.key] === "undefined") continue;
+		hasAnyStarterFlag = true;
+		if (isTruthySetFlag(setData[mapping.key]) && normalizedChoice === mapping.starter) {
+			isMatch = true;
+		}
+	}
+	if (!hasAnyStarterFlag) return null;
+	return isMatch;
+}
+
+function setMatchesStarterFlag(flagValue, starterChoice) {
+	var normalizedChoice = normalizeStarterChoice(starterChoice);
+	var rivalStarter = RIVAL_STARTER_BY_CHOICE[normalizedChoice];
+	var tokens = getStarterTokensFromFlag(flagValue);
+	if (!tokens.length) return true;
+
+	for (var i = 0; i < tokens.length; i++) {
+		var token = tokens[i];
+		if (token === normalizedChoice || token === ("chose" + normalizedChoice) || token === ("choose" + normalizedChoice)) {
+			return true;
+		}
+		if (token === rivalStarter || token === ("rival" + rivalStarter) || token === ("againstrival" + rivalStarter)) {
+			return true;
+		}
+	}
+	return false;
+}
+
+function doesSetMatchStarterChoice(pokemonName, setName, setData) {
+	if (!setName || !setData || setData.isCustomSet) return true;
+	var starterChoice = getAppSettings().starterChoice;
+	var explicitBooleanMatch = matchesExplicitStarterBooleanFlags(setData, starterChoice);
+	if (explicitBooleanMatch !== null) return explicitBooleanMatch;
+	var rivalStarter = RIVAL_STARTER_BY_CHOICE[starterChoice];
+	var explicitFlag = getStarterFlagFromSetData(setData);
+	if (explicitFlag) return setMatchesStarterFlag(explicitFlag, starterChoice);
+
+	if (!/rival/i.test(setName)) return true;
+	var normalizedBattleText = (String(setName) + " " + String(pokemonName || "")).toLowerCase();
+	var hasStarterName = normalizedBattleText.indexOf("chikorita") >= 0 ||
+		normalizedBattleText.indexOf("tepig") >= 0 ||
+		normalizedBattleText.indexOf("totodile") >= 0;
+	if (!hasStarterName) return true;
+	return normalizedBattleText.indexOf(rivalStarter) >= 0;
+}
+
+function isDarkThemeStylesEnabled() {
+	var darkStyles = document.getElementById("dark-theme-styles");
+	if (!darkStyles) return $("body").hasClass("dark-theme");
+	return !darkStyles.disabled;
+}
+
+function parseSetId(setId) {
+	var normalized = String(setId || "").trim();
+	if (!normalized) return {species: "", label: ""};
+	var splitIndex = normalized.indexOf(" (");
+	if (splitIndex < 0) {
+		return {
+			species: normalized,
+			label: normalized
+		};
+	}
+	return {
+		species: normalized.substring(0, splitIndex),
+		label: normalized.substring(splitIndex + 2, normalized.lastIndexOf(")"))
+	};
+}
+
+function getDisplaySpeciesName(speciesName) {
+	return SPECIES_DISPLAY_NAME_ALIASES[String(speciesName || "").trim()] || speciesName;
+}
+
+function formatSetNameForDisplay(setId) {
+	var parsedSet = parseSetId(setId);
+	if (!parsedSet.species) return String(setId || "");
+	var displaySpecies = getDisplaySpeciesName(parsedSet.species);
+	return parsedSet.label ? (displaySpecies + " (" + parsedSet.label + ")") : displaySpecies;
+}
+
+function isDittoSetId(setId) {
+	var parsedSet = parseSetId(setId);
+	return toDexPokemonId(parsedSet.species) === "ditto";
+}
+
+function syncDittoTransformButtons() {
+	var p1SetId = $("#p1 .set-selector").val();
+	var p2SetId = $("#p2 .set-selector").val();
+	var showLeft = isDittoSetId(p1SetId);
+	var showRight = isDittoSetId(p2SetId);
+	var transformL = $("#transformL");
+	var transformR = $("#transformR");
+	var transformRow = $("#transformRow");
+	if (transformL.length) transformL.toggle(showLeft);
+	if (transformR.length) transformR.toggle(showRight);
+	if (transformRow.length) transformRow.toggle(showLeft || showRight);
+}
+
+function getTopSpriteNodeForPokeInfo(pokeInfo) {
+	if (!pokeInfo || !pokeInfo.length) return null;
+	var pokeId = String(pokeInfo.attr("id") || "");
+	if (pokeId === "p1") return $("#p1mon").get(0);
+	if (pokeId === "p2") return $("#p2mon").get(0);
+	return null;
+}
+
+function getInlineSpriteNodeForPokeInfo(pokeInfo) {
+	if (!pokeInfo || !pokeInfo.length) return null;
+	var pokeId = String(pokeInfo.attr("id") || "");
+	if (pokeId === "p1") return $("#p1-inline-sprite").get(0);
+	if (pokeId === "p2") return $("#p2-inline-sprite").get(0);
+	return null;
+}
+
+function resolveInlineSpriteSpeciesForPokeInfo(pokeInfo) {
+	if (!pokeInfo || !pokeInfo.length) return "";
+	var transformedSpecies = String(pokeInfo.attr("data-transform-species") || "").trim();
+	if (transformedSpecies) return transformedSpecies;
+	var setSpecies = parseSetId(pokeInfo.find(".set-selector").val()).species || "";
+	var resolvedSetSpecies = resolveSetSpeciesNameForDexLookup(setSpecies);
+	var setSpeciesEntry = pokedex[resolvedSetSpecies] || pokedex[setSpecies];
+	var baseSpeciesEntry = setSpeciesEntry && setSpeciesEntry.baseSpecies ? pokedex[setSpeciesEntry.baseSpecies] : null;
+	var setHasFormes = !!(
+		setSpeciesEntry &&
+		(
+			(setSpeciesEntry.otherFormes && setSpeciesEntry.otherFormes.length) ||
+			(baseSpeciesEntry && baseSpeciesEntry.otherFormes && baseSpeciesEntry.otherFormes.length)
+		)
+	);
+	var formeSelect = pokeInfo.find(".forme");
+	var formeContainer = formeSelect.parent();
+	var useFormeSelection = !!(formeSelect.length && formeContainer.length && formeContainer.is(":visible"));
+	var formeSpecies = useFormeSelection ? String(formeSelect.val() || "").trim() : "";
+	if (setHasFormes && formeSpecies) return formeSpecies;
+	return String(setSpecies || "").trim();
+}
+
+function syncInlinePokeSprite(pokeInfo) {
+	var inlineSpriteNode = getInlineSpriteNodeForPokeInfo(pokeInfo);
+	if (!inlineSpriteNode) return;
+	var speciesName = resolveInlineSpriteSpeciesForPokeInfo(pokeInfo);
+	if (!speciesName) return;
+	setTrainerSpriteImage(inlineSpriteNode, speciesName);
+	var formeSelect = pokeInfo.find(".forme");
+	var formeContainer = formeSelect.parent();
+	var hasFormes = !!(
+		formeSelect.length &&
+		formeContainer.length &&
+		formeContainer.is(":visible") &&
+		formeSelect.find("option").length > 1
+	);
+	inlineSpriteNode.title = hasFormes ? "Click to cycle forms" : "No alternate forms";
+	inlineSpriteNode.style.cursor = hasFormes ? "pointer" : "default";
+}
+
+function getDisplayedSpeciesForTransform(pokeInfo) {
+	if (!pokeInfo || !pokeInfo.length) return "";
+	var spriteNode = getTopSpriteNodeForPokeInfo(pokeInfo);
+	var spriteSpecies = spriteNode ? String(spriteNode.getAttribute("data-species") || "").trim() : "";
+	if (spriteSpecies && toDexPokemonId(spriteSpecies) !== "ditto") return spriteSpecies;
+	var parsedSet = parseSetId(pokeInfo.find(".set-selector").val());
+	return String(parsedSet.species || "").trim();
+}
+
+function copyMoveSlotForTransform(sourcePokeInfo, targetPokeInfo, slotNumber) {
+	var sourceMove = sourcePokeInfo.find(".move" + slotNumber);
+	var targetMove = targetPokeInfo.find(".move" + slotNumber);
+	if (!sourceMove.length || !targetMove.length) return;
+
+	var sourceMoveSelector = sourceMove.find("select.move-selector");
+	var targetMoveSelector = targetMove.find("select.move-selector");
+	setSelectValueIfValid(targetMoveSelector, sourceMoveSelector.val(), "(No Move)");
+	targetMoveSelector.change();
+
+	setSelectValueIfValid(targetMove.find(".move-type"), sourceMove.find(".move-type").val(), targetMove.find(".move-type").val());
+	if (targetMove.find(".move-cat").length) {
+		setSelectValueIfValid(targetMove.find(".move-cat"), sourceMove.find(".move-cat").val(), targetMove.find(".move-cat").val());
+	}
+	targetMove.find(".move-bp").val(sourceMove.find(".move-bp").val());
+	targetMove.find(".move-crit").prop("checked", sourceMove.find(".move-crit").is(":checked"));
+	targetMove.find(".move-z").prop("checked", sourceMove.find(".move-z").is(":checked"));
+	targetMove.find(".move-hits").val(sourceMove.find(".move-hits").val());
+	targetMove.find(".stat-drops").val(sourceMove.find(".stat-drops").val());
+	targetMove.find(".metronome").val(sourceMove.find(".metronome").val());
+	updateMoveMetaForGroup(targetMove);
+}
+
+function transformDittoFromOpposing(targetSideSelector, sourceSideSelector) {
+	var targetPokeInfo = $(targetSideSelector);
+	var sourcePokeInfo = $(sourceSideSelector);
+	if (!targetPokeInfo.length || !sourcePokeInfo.length) return;
+	var targetSetSelector = targetPokeInfo.find(".set-selector");
+	if (!targetSetSelector.length || !isDittoSetId(targetSetSelector.val())) return;
+
+	var preservedLevel = targetPokeInfo.find(".level").val();
+	var preservedItem = targetPokeInfo.find(".item").val();
+	var preservedIgnoreItem = targetPokeInfo.find(".ignore-item-toggle").is(":checked");
+	var preservedCurrentHp = targetPokeInfo.find(".current-hp").val();
+	var preservedStatus = targetPokeInfo.find(".status").val();
+	var preservedToxicCounter = targetPokeInfo.find(".toxic-counter").val();
+
+	var sourceType1 = sourcePokeInfo.find(".type1").val();
+	var sourceType2 = sourcePokeInfo.find(".type2").val();
+	if (targetPokeInfo.find(".type1 option[value='" + sourceType1 + "']").length) {
+		targetPokeInfo.find(".type1").val(sourceType1);
+	}
+	if (!sourceType2 || targetPokeInfo.find(".type2 option[value='" + sourceType2 + "']").length) {
+		targetPokeInfo.find(".type2").val(sourceType2 || "");
+	}
+	targetPokeInfo.find(".type1").change();
+	targetPokeInfo.find(".type2").change();
+	setSelectValueIfValid(targetPokeInfo.find(".nature"), sourcePokeInfo.find(".nature").val(), targetPokeInfo.find(".nature").val());
+	setSelectValueIfValid(targetPokeInfo.find(".ability"), sourcePokeInfo.find(".ability").val(), targetPokeInfo.find(".ability").val());
+	targetPokeInfo.find(".ability").change();
+	targetPokeInfo.find(".abilityToggle").prop("checked", sourcePokeInfo.find(".abilityToggle").is(":checked"));
+	targetPokeInfo.find(".proto-quark-state").val(sourcePokeInfo.find(".proto-quark-state").val() || "auto");
+	targetPokeInfo.find(".alliesFainted").val(sourcePokeInfo.find(".alliesFainted").val() || "0");
+
+	for (var i = 0; i < LEGACY_STATS[gen].length; i++) {
+		var legacyStat = LEGACY_STATS[gen][i];
+		targetPokeInfo.find("." + legacyStat + " .base").val(sourcePokeInfo.find("." + legacyStat + " .base").val());
+		targetPokeInfo.find("." + legacyStat + " .ivs").val(sourcePokeInfo.find("." + legacyStat + " .ivs").val());
+		targetPokeInfo.find("." + legacyStat + " .evs").val(sourcePokeInfo.find("." + legacyStat + " .evs").val());
+		targetPokeInfo.find("." + legacyStat + " .dvs").val(sourcePokeInfo.find("." + legacyStat + " .dvs").val());
+		targetPokeInfo.find("." + legacyStat + " .boost").val(sourcePokeInfo.find("." + legacyStat + " .boost").val());
+	}
+
+	for (var slot = 1; slot <= 4; slot++) {
+		copyMoveSlotForTransform(sourcePokeInfo, targetPokeInfo, slot);
+	}
+
+	targetPokeInfo.find(".level").val(preservedLevel);
+	targetPokeInfo.find(".item").val(preservedItem);
+	targetPokeInfo.find(".ignore-item-toggle").prop("checked", preservedIgnoreItem);
+	targetPokeInfo.find(".item").change();
+	targetPokeInfo.find(".ignore-item-toggle").change();
+	targetPokeInfo.find(".status").val(preservedStatus).change();
+	if (preservedStatus === "Badly Poisoned") {
+		targetPokeInfo.find(".toxic-counter").val(preservedToxicCounter);
+	} else {
+		targetPokeInfo.find(".toxic-counter").val(0);
+	}
+
+	calcStats(targetPokeInfo);
+	calcHP(targetPokeInfo);
+	var maxHp = parseInt(targetPokeInfo.find(".max-hp").text(), 10);
+	var restoredCurrentHp = parseInt(preservedCurrentHp, 10);
+	if (!Number.isNaN(maxHp) && maxHp > 0 && !Number.isNaN(restoredCurrentHp)) {
+		restoredCurrentHp = Math.max(0, Math.min(maxHp, restoredCurrentHp));
+		targetPokeInfo.find(".current-hp").val(restoredCurrentHp);
+		calcPercentHP(targetPokeInfo.find(".hp"), maxHp, restoredCurrentHp);
+	}
+
+	var transformedSpecies = getDisplayedSpeciesForTransform(sourcePokeInfo);
+	var targetSpriteNode = getTopSpriteNodeForPokeInfo(targetPokeInfo);
+	if (targetSpriteNode && transformedSpecies) {
+		targetPokeInfo.attr("data-transform-species", transformedSpecies);
+		setTrainerSpriteImage(targetSpriteNode, transformedSpecies);
+	}
+	syncInlinePokeSprite(targetPokeInfo);
+	if (typeof performCalculations === "function") performCalculations();
+	syncDittoTransformButtons();
+}
+
+function getFragSpriteUrl(speciesName) {
+	return getTrainerSpriteUrlByName(speciesName);
+}
+
+function normalizeSplitNumber(rawSplit) {
+	var split = parseInt(rawSplit, 10);
+	if (Number.isNaN(split)) return 1;
+	return Math.max(1, Math.min(9, split));
+}
+
+function escapeHtml(rawValue) {
+	return String(rawValue || "")
+		.replace(/&/g, "&amp;")
+		.replace(/</g, "&lt;")
+		.replace(/>/g, "&gt;")
+		.replace(/"/g, "&quot;")
+		.replace(/'/g, "&#39;");
+}
+
+function toDexPokemonId(pokemonName) {
+	var normalizedName = (pokemonName || "").trim();
+	if (!normalizedName) return "";
+	if (typeof calc !== "undefined" && calc && typeof calc.toID === "function") {
+		return calc.toID(normalizedName);
+	}
+	return normalizedName.toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+function resolveSetSpeciesNameForDexLookup(pokemonName) {
+	var normalizedName = String(pokemonName || "").trim();
+	if (!normalizedName) return "";
+	if (pokedex[normalizedName]) return normalizedName;
+	var dashIndex = normalizedName.indexOf("-");
+	if (dashIndex > 0) {
+		var baseName = normalizedName.substring(0, dashIndex);
+		if (pokedex[baseName]) return baseName;
+	}
+	return normalizedName;
+}
+
+function resolveEvolutionLookupSpeciesId(speciesName) {
+	var rawSpecies = String(speciesName || "").trim();
+	if (!rawSpecies) return "";
+	var resolvedSpecies = resolveSetSpeciesNameForDexLookup(rawSpecies);
+	var candidateNames = [rawSpecies, resolvedSpecies];
+	if (pokedex && resolvedSpecies && pokedex[resolvedSpecies] && pokedex[resolvedSpecies].baseSpecies) {
+		candidateNames.push(String(pokedex[resolvedSpecies].baseSpecies));
+	}
+	var rawDashIndex = rawSpecies.indexOf("-");
+	if (rawDashIndex > 0) {
+		candidateNames.push(rawSpecies.substring(0, rawDashIndex));
+	}
+	for (var i = 0; i < candidateNames.length; i++) {
+		var candidateId = toDexPokemonId(candidateNames[i]);
+		if (!candidateId) continue;
+		if (FRAG_EVOLUTION_SPECIES_ID_LOOKUP[candidateId]) return candidateId;
+	}
+	return toDexPokemonId(resolvedSpecies || rawSpecies);
+}
+
+function isPreEvolutionOfSpecies(sourceSpecies, targetSpecies) {
+	var sourceId = resolveEvolutionLookupSpeciesId(sourceSpecies);
+	var targetId = resolveEvolutionLookupSpeciesId(targetSpecies);
+	if (!sourceId || !targetId || sourceId === targetId) return false;
+	var currentId = targetId;
+	for (var depth = 0; depth < 12; depth++) {
+		var prevoId = FRAG_PREVO_BY_SPECIES_ID[currentId];
+		if (!prevoId || prevoId === currentId) break;
+		if (prevoId === sourceId) return true;
+		currentId = prevoId;
+	}
+	return false;
+}
+
+function shouldMergeFragsByEvolutionDrop(sourceSetId, targetSetId) {
+	if (!sourceSetId || !targetSetId || sourceSetId === targetSetId) return false;
+	var sourceSpecies = parseSetId(sourceSetId).species;
+	var targetSpecies = parseSetId(targetSetId).species;
+	if (!sourceSpecies || !targetSpecies) return false;
+	return isPreEvolutionOfSpecies(sourceSpecies, targetSpecies);
+}
+
+function astralDexUrl(pokemonName) {
+	var pokemonId = toDexPokemonId(pokemonName);
+	if (!pokemonId) return ASTRALDEX_BASE_URL;
+	return ASTRALDEX_BASE_URL + "pokemon/" + encodeURIComponent(pokemonId);
+}
+
+function getSelectedPokemonNameForAnalysis(linkElement) {
+	var link = $(linkElement);
+	var pokeInfo = link.closest(".poke-info");
+	var fullSetName = pokeInfo.find(".set-selector").val() || "";
+	if (fullSetName.indexOf(" (") > 0) {
+		return fullSetName.substring(0, fullSetName.indexOf(" ("));
+	}
+	if (fullSetName) return fullSetName;
+	return link.attr("data-pokemon-name") || "";
+}
+
+function applyAstralDexPanelTheme(panel) {
+	var isDarkTheme = isDarkThemeStylesEnabled();
+	var header = panel.querySelector(".astraldex-side-header");
+	var closeButton = panel.querySelector(".astraldex-side-close");
+	if (!header || !closeButton) return;
+
+	if (isDarkTheme) {
+		panel.style.background = "#101318";
+		panel.style.borderLeft = "1px solid #323a45";
+		header.style.background = "#181d24";
+		header.style.borderBottom = "1px solid #323a45";
+		header.style.color = "#dce6f8";
+		closeButton.style.background = "#2d3239";
+		closeButton.style.border = "1px solid #4a5563";
+		closeButton.style.color = "#f4f7ff";
+	} else {
+		panel.style.background = "#ffffff";
+		panel.style.borderLeft = "1px solid #b3b3b3";
+		header.style.background = "#f2f4f7";
+		header.style.borderBottom = "1px solid #b3b3b3";
+		header.style.color = "#20252b";
+		closeButton.style.background = "#ffffff";
+		closeButton.style.border = "1px solid #9aa3ad";
+		closeButton.style.color = "#20252b";
+	}
+}
+
+function ensureAstralDexSidePanel() {
+	var panel = document.getElementById("astraldex-side-panel");
+	if (panel) return panel;
+
+	panel = document.createElement("aside");
+	panel.id = "astraldex-side-panel";
+	panel.className = "calc-side-panel calc-side-panel-astraldex";
+	panel.setAttribute("aria-hidden", "true");
+	panel.hidden = true;
+	panel.innerHTML = '<div class="calc-side-resize-handle" aria-hidden="true"></div><div class="calc-side-header astraldex-side-header"><strong class="astraldex-side-title">AstralDex</strong><button type="button" class="btn calc-side-btn astraldex-side-close">Close</button></div><div class="calc-side-body astraldex-side-body" style="position:relative;overflow:hidden;flex:1 1 auto;padding:0;"><iframe class="astraldex-side-frame" title="AstralDex" src="' + ASTRALDEX_BASE_URL + '" style="position:absolute;top:0;left:0;width:100%;height:calc(100% + ' + ASTRALDEX_TOP_CHROME_PX + 'px);transform:translateY(-' + ASTRALDEX_TOP_CHROME_PX + 'px);border:0;"></iframe></div>';
+	document.body.appendChild(panel);
+	applyAstralDexPanelTheme(panel);
+
+	panel.querySelector(".astraldex-side-close").onclick = closeAstralDexSidePanel;
+	return panel;
+}
+
+function closeAstralDexSidePanel() {
+	closeCalcSidePanel("astraldex-side-panel");
+}
+
+function openAstralDexSidePanel(url, pokemonName) {
+	var panel = ensureAstralDexSidePanel();
+	applyAstralDexPanelTheme(panel);
+	panel.querySelector(".astraldex-side-frame").src = url || astralDexUrl(pokemonName);
+	panel.querySelector(".astraldex-side-title").textContent = pokemonName ? ("AstralDex: " + pokemonName) : "AstralDex";
+	openCalcSidePanel("astraldex-side-panel");
+}
+
+function bindAstralDexLinks() {
+	$(".analysis").text("Open In Pokedex").attr("rel", "noopener noreferrer");
+	$(document).off("click.astraldex", ".analysis").on("click.astraldex", ".analysis", function (ev) {
+		ev.preventDefault();
+		var link = $(this);
+		var pokemonName = getSelectedPokemonNameForAnalysis(this);
+		var url = astralDexUrl(pokemonName);
+		link.attr("href", url).attr("data-pokemon-name", pokemonName);
+		openAstralDexSidePanel(url, pokemonName);
+	});
+	$(document).off("keydown.astraldex").on("keydown.astraldex", function (ev) {
+		if (ev.key === "Escape" || ev.keyCode === 27) closeAstralDexSidePanel();
+	});
+}
+
+function getCurrentFightLabel() {
+	var trainerLabel = String(window.CURRENT_TRAINER || "").trim();
+	if (trainerLabel) return trainerLabel;
+	var opposingSet = $(".opposing").val() || "";
+	if (!opposingSet) return "Unknown Fight";
+	var start = opposingSet.indexOf("(");
+	var end = opposingSet.lastIndexOf(")");
+	if (start < 0 || end <= start) return opposingSet;
+	return opposingSet.substring(start + 1, end);
+}
+
+function getTrainerIndexFromSetData(setData) {
+	if (!setData || typeof setData.index === "undefined" || setData.index === null) return 0;
+	var parsed = parseInt(setData.index, 10);
+	return Number.isNaN(parsed) ? 0 : parsed;
+}
+
+function getCurrentFightIndex() {
+	var opposingSet = $(".opposing").val();
+	if (opposingSet) {
+		var selectedEntry = parseTrainerPartyEntry(opposingSet);
+		var selectedIndex = getTrainerIndexFromSetData(selectedEntry.setData);
+		if (selectedIndex > 0) return selectedIndex;
+	}
+	if (CURRENT_TRAINER_POKS && CURRENT_TRAINER_POKS.length) {
+		for (var i = 0; i < CURRENT_TRAINER_POKS.length; i++) {
+			var entry = parseTrainerPartyEntry(CURRENT_TRAINER_POKS[i]);
+			var index = getTrainerIndexFromSetData(entry.setData);
+			if (index > 0) return index;
+		}
+	}
+	return 0;
+}
+
+function getFragSplitRules() {
+	var rules = window.FRAG_SPLIT_RULES;
+	if (!rules || !Array.isArray(rules.boundaries)) return [];
+	return rules.boundaries;
+}
+
+function getTrainerIndexForLabel(trainerLabel) {
+	var normalizedTrainerLabel = String(trainerLabel || "").trim();
+	if (!normalizedTrainerLabel) return 0;
+	var activeSetdex = gen === 9 && typeof SETDEX_SV !== "undefined" ? SETDEX_SV : setdex;
+	if (!activeSetdex) return 0;
+	var highestIndex = 0;
+	for (var speciesName in activeSetdex) {
+		if (!Object.prototype.hasOwnProperty.call(activeSetdex, speciesName)) continue;
+		var speciesSets = activeSetdex[speciesName];
+		if (!speciesSets || !Object.prototype.hasOwnProperty.call(speciesSets, normalizedTrainerLabel)) continue;
+		var setData = speciesSets[normalizedTrainerLabel];
+		var trainerIndex = getTrainerIndexFromSetData(setData);
+		if (trainerIndex > highestIndex) highestIndex = trainerIndex;
+	}
+	return highestIndex;
+}
+
+function resolveFragSplitBoundaryIndex(boundaryRule) {
+	if (!boundaryRule) return 0;
+	var boundaryIndex = parseInt(boundaryRule.endIndex, 10);
+	if (!Number.isNaN(boundaryIndex) && boundaryIndex > 0) return boundaryIndex;
+	var labels = boundaryRule.endTrainers;
+	if (typeof labels === "string") labels = [labels];
+	if (!Array.isArray(labels)) return 0;
+	var highestIndex = 0;
+	for (var i = 0; i < labels.length; i++) {
+		var trainerIndex = getTrainerIndexForLabel(labels[i]);
+		if (trainerIndex > highestIndex) highestIndex = trainerIndex;
+	}
+	return highestIndex;
+}
+
+function getSplitFromRulesByIndex(currentIndex) {
+	if (!currentIndex || currentIndex <= 0) return 0;
+	var rules = getFragSplitRules();
+	if (!rules.length) return 0;
+	var boundaries = [];
+	var highestSplit = 1;
+	for (var i = 0; i < rules.length; i++) {
+		var boundaryRule = rules[i] || {};
+		var splitNumber = normalizeSplitNumber(boundaryRule.split);
+		var boundaryIndex = resolveFragSplitBoundaryIndex(boundaryRule);
+		if (boundaryIndex <= 0) continue;
+		boundaries.push({split: splitNumber, endIndex: boundaryIndex});
+		if (splitNumber > highestSplit) highestSplit = splitNumber;
+	}
+	if (!boundaries.length) return 0;
+	boundaries.sort(function (a, b) {
+		if (a.endIndex !== b.endIndex) return a.endIndex - b.endIndex;
+		return a.split - b.split;
+	});
+	for (var b = 0; b < boundaries.length; b++) {
+		if (currentIndex <= boundaries[b].endIndex) return boundaries[b].split;
+	}
+	return Math.min(9, highestSplit + 1);
+}
+
+function getCurrentSplitNumber(fightLabel) {
+	if (window.CURRENT_SPLIT) {
+		return normalizeSplitNumber(window.CURRENT_SPLIT);
+	}
+	var configuredSplit = getSplitFromRulesByIndex(getCurrentFightIndex());
+	if (configuredSplit) return configuredSplit;
+	var fightText = String(fightLabel || getCurrentFightLabel() || "");
+	var splitMatch = fightText.match(/split\s*([1-9])/i);
+	if (splitMatch && splitMatch[1]) {
+		return normalizeSplitNumber(splitMatch[1]);
+	}
+	return 1;
+}
+
+function normalizeFragFightLabelForMatch(fightLabel) {
+	var normalized = String(fightLabel || "").trim();
+	if (!normalized) return "";
+	normalized = normalized.replace(/\s*\(split\s*[1-9]\)\s*$/i, "");
+	return normalized.toLowerCase();
+}
+
+function getSplitNumberForFragFightLabel(fightLabel) {
+	var fightText = String(fightLabel || "").trim();
+	var splitMatch = fightText.match(/split\s*([1-9])/i);
+	if (splitMatch && splitMatch[1]) {
+		return normalizeSplitNumber(splitMatch[1]);
+	}
+	var trainerIndex = getTrainerIndexForLabel(fightText);
+	var configuredSplit = getSplitFromRulesByIndex(trainerIndex);
+	if (configuredSplit) return configuredSplit;
+	return getCurrentSplitNumber(fightText);
+}
+
+function normalizeFragVictimKey(rawVictimKey) {
+	var normalized = String(rawVictimKey || "").trim();
+	return normalized ? normalized : FRAG_UNKNOWN_VICTIM_KEY;
+}
+
+function normalizeFragVictimBucket(rawBucket) {
+	var bucket = {};
+	if (!rawBucket || typeof rawBucket !== "object") return bucket;
+	for (var victimKey in rawBucket) {
+		if (!Object.prototype.hasOwnProperty.call(rawBucket, victimKey)) continue;
+		var victimCount = parseInt(rawBucket[victimKey], 10);
+		if (Number.isNaN(victimCount) || victimCount <= 0) continue;
+		var normalizedVictimKey = normalizeFragVictimKey(victimKey);
+		bucket[normalizedVictimKey] = (bucket[normalizedVictimKey] || 0) + victimCount;
+	}
+	return bucket;
+}
+
+function getFragVictimBucketTotal(bucket) {
+	if (!bucket || typeof bucket !== "object") return 0;
+	var total = 0;
+	for (var victimKey in bucket) {
+		if (!Object.prototype.hasOwnProperty.call(bucket, victimKey)) continue;
+		var victimCount = parseInt(bucket[victimKey], 10);
+		if (!Number.isNaN(victimCount) && victimCount > 0) total += victimCount;
+	}
+	return total;
+}
+
+function normalizeFragFightVictims(rawFightVictims, fights) {
+	var fightVictims = {};
+	if (rawFightVictims && typeof rawFightVictims === "object") {
+		for (var fightName in rawFightVictims) {
+			if (!Object.prototype.hasOwnProperty.call(rawFightVictims, fightName)) continue;
+			var normalizedFightName = String(fightName || "");
+			if (!normalizedFightName) continue;
+			var normalizedBucket = normalizeFragVictimBucket(rawFightVictims[fightName]);
+			if (!Object.keys(normalizedBucket).length) continue;
+			if (!fightVictims[normalizedFightName]) fightVictims[normalizedFightName] = {};
+			for (var victimKey in normalizedBucket) {
+				if (!Object.prototype.hasOwnProperty.call(normalizedBucket, victimKey)) continue;
+				fightVictims[normalizedFightName][victimKey] = (fightVictims[normalizedFightName][victimKey] || 0) + normalizedBucket[victimKey];
+			}
+		}
+	}
+	for (var knownFight in fightVictims) {
+		if (!Object.prototype.hasOwnProperty.call(fightVictims, knownFight)) continue;
+		var fightVictimTotal = getFragVictimBucketTotal(fightVictims[knownFight]);
+		var fightCount = parseInt(fights[knownFight], 10);
+		if (Number.isNaN(fightCount) || fightCount < fightVictimTotal) {
+			fights[knownFight] = fightVictimTotal;
+		}
+	}
+	for (var fightKey in fights) {
+		if (!Object.prototype.hasOwnProperty.call(fights, fightKey)) continue;
+		var currentFightCount = parseInt(fights[fightKey], 10);
+		if (Number.isNaN(currentFightCount) || currentFightCount <= 0) continue;
+		if (!fightVictims[fightKey]) fightVictims[fightKey] = {};
+		var currentFightVictimTotal = getFragVictimBucketTotal(fightVictims[fightKey]);
+		if (currentFightVictimTotal < currentFightCount) {
+			fightVictims[fightKey][FRAG_UNKNOWN_VICTIM_KEY] = (fightVictims[fightKey][FRAG_UNKNOWN_VICTIM_KEY] || 0) + (currentFightCount - currentFightVictimTotal);
+		}
+	}
+	return fightVictims;
+}
+
+function normalizeFragSplitVictims(rawSplitVictims, splits) {
+	var splitVictims = {};
+	if (rawSplitVictims && typeof rawSplitVictims === "object") {
+		for (var splitKey in rawSplitVictims) {
+			if (!Object.prototype.hasOwnProperty.call(rawSplitVictims, splitKey)) continue;
+			var normalizedSplit = String(normalizeSplitNumber(splitKey));
+			var normalizedBucket = normalizeFragVictimBucket(rawSplitVictims[splitKey]);
+			if (!Object.keys(normalizedBucket).length) continue;
+			if (!splitVictims[normalizedSplit]) splitVictims[normalizedSplit] = {};
+			for (var victimKey in normalizedBucket) {
+				if (!Object.prototype.hasOwnProperty.call(normalizedBucket, victimKey)) continue;
+				splitVictims[normalizedSplit][victimKey] = (splitVictims[normalizedSplit][victimKey] || 0) + normalizedBucket[victimKey];
+			}
+		}
+	}
+	for (var knownSplit in splitVictims) {
+		if (!Object.prototype.hasOwnProperty.call(splitVictims, knownSplit)) continue;
+		var splitVictimTotal = getFragVictimBucketTotal(splitVictims[knownSplit]);
+		var splitCount = parseInt(splits[knownSplit], 10);
+		if (Number.isNaN(splitCount) || splitCount < splitVictimTotal) {
+			splits[knownSplit] = splitVictimTotal;
+		}
+	}
+	for (var splitNumber = 1; splitNumber <= 9; splitNumber++) {
+		var splitId = String(splitNumber);
+		var currentSplitCount = parseInt(splits[splitId], 10);
+		if (Number.isNaN(currentSplitCount) || currentSplitCount <= 0) continue;
+		if (!splitVictims[splitId]) splitVictims[splitId] = {};
+		var currentSplitVictimTotal = getFragVictimBucketTotal(splitVictims[splitId]);
+		if (currentSplitVictimTotal < currentSplitCount) {
+			splitVictims[splitId][FRAG_UNKNOWN_VICTIM_KEY] = (splitVictims[splitId][FRAG_UNKNOWN_VICTIM_KEY] || 0) + (currentSplitCount - currentSplitVictimTotal);
+		}
+	}
+	return splitVictims;
+}
+
+function getFragVictimDisplayName(victimKey) {
+	var normalizedVictimKey = normalizeFragVictimKey(victimKey);
+	if (normalizedVictimKey === FRAG_UNKNOWN_VICTIM_KEY) return "Unknown";
+	var parsedVictim = parseSetId(normalizedVictimKey);
+	return parsedVictim.species || normalizedVictimKey;
+}
+
+function getFragVictimBucketForEntry(entry, bucketType, bucketKey, createIfMissing) {
+	if (!entry || !bucketType) return null;
+	var normalizedBucketKey = String(bucketKey || "");
+	if (!normalizedBucketKey) return null;
+	if (!entry[bucketType] || typeof entry[bucketType] !== "object") {
+		if (!createIfMissing) return null;
+		entry[bucketType] = {};
+	}
+	if (!entry[bucketType][normalizedBucketKey] || typeof entry[bucketType][normalizedBucketKey] !== "object") {
+		if (!createIfMissing) return null;
+		entry[bucketType][normalizedBucketKey] = {};
+	}
+	return entry[bucketType][normalizedBucketKey];
+}
+
+function incrementFragVictimBucketCount(entry, bucketType, bucketKey, victimKey, amount) {
+	var incrementBy = parseInt(amount, 10);
+	if (Number.isNaN(incrementBy) || incrementBy <= 0) return;
+	var bucket = getFragVictimBucketForEntry(entry, bucketType, bucketKey, true);
+	if (!bucket) return;
+	var normalizedVictimKey = normalizeFragVictimKey(victimKey);
+	bucket[normalizedVictimKey] = (bucket[normalizedVictimKey] || 0) + incrementBy;
+}
+
+function decrementFragVictimBucketCount(entry, bucketType, bucketKey, victimKey, amount) {
+	var decrementBy = parseInt(amount, 10);
+	if (Number.isNaN(decrementBy) || decrementBy <= 0) return 0;
+	var bucket = getFragVictimBucketForEntry(entry, bucketType, bucketKey, false);
+	if (!bucket) return 0;
+	var normalizedVictimKey = normalizeFragVictimKey(victimKey);
+	var currentCount = parseInt(bucket[normalizedVictimKey], 10);
+	if (Number.isNaN(currentCount) || currentCount <= 0) return 0;
+	var removed = Math.min(currentCount, decrementBy);
+	var nextCount = currentCount - removed;
+	if (nextCount <= 0) delete bucket[normalizedVictimKey];
+	else bucket[normalizedVictimKey] = nextCount;
+	if (!Object.keys(bucket).length && entry[bucketType] && typeof entry[bucketType] === "object") {
+		delete entry[bucketType][String(bucketKey)];
+	}
+	return removed;
+}
+
+function pickFragVictimKeyForRemoval(entry, fightKey, splitKey) {
+	var fightBucket = getFragVictimBucketForEntry(entry, "fightVictims", fightKey, false);
+	if (fightBucket) {
+		for (var fightVictimKey in fightBucket) {
+			if (!Object.prototype.hasOwnProperty.call(fightBucket, fightVictimKey)) continue;
+			var fightCount = parseInt(fightBucket[fightVictimKey], 10);
+			if (!Number.isNaN(fightCount) && fightCount > 0) return fightVictimKey;
+		}
+	}
+	var splitBucket = getFragVictimBucketForEntry(entry, "splitVictims", splitKey, false);
+	if (!splitBucket) return FRAG_UNKNOWN_VICTIM_KEY;
+	for (var splitVictimKey in splitBucket) {
+		if (!Object.prototype.hasOwnProperty.call(splitBucket, splitVictimKey)) continue;
+		var splitCount = parseInt(splitBucket[splitVictimKey], 10);
+		if (!Number.isNaN(splitCount) && splitCount > 0) return splitVictimKey;
+	}
+	return FRAG_UNKNOWN_VICTIM_KEY;
+}
+
+function decrementFragVictimBucketByAny(entry, bucketType, bucketKey, amount) {
+	var remaining = parseInt(amount, 10);
+	if (Number.isNaN(remaining) || remaining <= 0) return 0;
+	var removedTotal = 0;
+	var bucket = getFragVictimBucketForEntry(entry, bucketType, bucketKey, false);
+	if (!bucket) return 0;
+	for (var victimKey in bucket) {
+		if (!Object.prototype.hasOwnProperty.call(bucket, victimKey)) continue;
+		if (remaining <= 0) break;
+		var removed = decrementFragVictimBucketCount(entry, bucketType, bucketKey, victimKey, remaining);
+		if (removed > 0) {
+			removedTotal += removed;
+			remaining -= removed;
+		}
+	}
+	return removedTotal;
+}
+
+function renderFragSplitVictimDropdown(entry, splitKey) {
+	var splitBucket = getFragVictimBucketForEntry(entry, "splitVictims", splitKey, false);
+	if (!splitBucket) return "";
+	var victimRowsBySpecies = {};
+	for (var victimKey in splitBucket) {
+		if (!Object.prototype.hasOwnProperty.call(splitBucket, victimKey)) continue;
+		var victimCount = parseInt(splitBucket[victimKey], 10);
+		if (Number.isNaN(victimCount) || victimCount <= 0) continue;
+		var victimSpecies = getFragVictimDisplayName(victimKey);
+		victimRowsBySpecies[victimSpecies] = (victimRowsBySpecies[victimSpecies] || 0) + victimCount;
+	}
+	var victimRows = [];
+	var victimTotal = 0;
+	for (var victimSpeciesName in victimRowsBySpecies) {
+		if (!Object.prototype.hasOwnProperty.call(victimRowsBySpecies, victimSpeciesName)) continue;
+		var speciesCount = victimRowsBySpecies[victimSpeciesName];
+		if (!speciesCount || speciesCount <= 0) continue;
+		victimRows.push({name: victimSpeciesName, count: speciesCount});
+		victimTotal += speciesCount;
+	}
+	if (!victimRows.length || victimTotal <= 0) return "";
+	victimRows.sort(function (a, b) {
+		if (b.count !== a.count) return b.count - a.count;
+		return a.name.localeCompare(b.name);
+	});
+	var listHtml = "";
+	for (var i = 0; i < victimRows.length; i++) {
+		listHtml += "<li class=\"frags-split-item\"><span class=\"frags-split-item-name\">" +
+			escapeHtml(victimRows[i].name) +
+			"</span><span class=\"frags-split-item-count\">x" + victimRows[i].count + "</span></li>";
+	}
+	return "<details class=\"frags-split-drop\">" +
+		"<summary>Targets (" + victimTotal + ")</summary>" +
+		"<ul class=\"frags-split-list\">" + listHtml + "</ul>" +
+		"</details>";
+}
+
+function normalizeFragEntry(setId, rawEntry) {
+	var entry = rawEntry || {};
+	var parsedSet = parseSetId(setId);
+	var fights = {};
+	if (entry.fights) {
+		for (var fightName in entry.fights) {
+			if (!Object.prototype.hasOwnProperty.call(entry.fights, fightName)) continue;
+			var killCount = parseInt(entry.fights[fightName], 10);
+			if (!Number.isNaN(killCount) && killCount > 0) fights[fightName] = killCount;
+		}
+	}
+	var fightSum = 0;
+	for (var fightKey in fights) {
+		if (Object.prototype.hasOwnProperty.call(fights, fightKey)) fightSum += fights[fightKey];
+	}
+	var splits = {};
+	if (entry.splits) {
+		for (var splitKey in entry.splits) {
+			if (!Object.prototype.hasOwnProperty.call(entry.splits, splitKey)) continue;
+			var normalizedSplit = String(normalizeSplitNumber(splitKey));
+			var splitCount = parseInt(entry.splits[splitKey], 10);
+			if (Number.isNaN(splitCount) || splitCount <= 0) continue;
+			splits[normalizedSplit] = (splits[normalizedSplit] || 0) + splitCount;
+		}
+	}
+	var splitSum = 0;
+	for (var s = 1; s <= 9; s++) {
+		splitSum += (splits[String(s)] || 0);
+	}
+	var totalKills = parseInt(entry.totalKills, 10);
+	var floorTotal = Math.max(fightSum, splitSum);
+	if (Number.isNaN(totalKills) || totalKills < floorTotal) totalKills = floorTotal;
+	if (!splitSum && totalKills > 0) {
+		splits["1"] = totalKills;
+	}
+	if (splitSum && splitSum < totalKills) {
+		splits["1"] = (splits["1"] || 0) + (totalKills - splitSum);
+	}
+	var fightVictims = normalizeFragFightVictims(entry.fightVictims, fights);
+	var splitVictims = normalizeFragSplitVictims(entry.splitVictims, splits);
+	var normalizedFightSum = 0;
+	for (var normalizedFightKey in fights) {
+		if (!Object.prototype.hasOwnProperty.call(fights, normalizedFightKey)) continue;
+		normalizedFightSum += fights[normalizedFightKey];
+	}
+	var normalizedSplitSum = 0;
+	for (var normalizedSplitNumber = 1; normalizedSplitNumber <= 9; normalizedSplitNumber++) {
+		normalizedSplitSum += (splits[String(normalizedSplitNumber)] || 0);
+	}
+	totalKills = Math.max(totalKills, normalizedFightSum, normalizedSplitSum);
+	if (normalizedSplitSum < totalKills) {
+		var splitTopoff = totalKills - normalizedSplitSum;
+		splits["1"] = (splits["1"] || 0) + splitTopoff;
+		if (!splitVictims["1"]) splitVictims["1"] = {};
+		splitVictims["1"][FRAG_UNKNOWN_VICTIM_KEY] = (splitVictims["1"][FRAG_UNKNOWN_VICTIM_KEY] || 0) + splitTopoff;
+	}
+	var isDead = false;
+	if (typeof entry.isDead === "boolean") {
+		isDead = entry.isDead;
+	} else if (typeof entry.isDead !== "undefined") {
+		isDead = !!entry.isDead;
+	}
+	var deathFight = entry.deathFight ? String(entry.deathFight) : "";
+	if (!isDead) deathFight = "";
+	return {
+		setId: setId,
+		species: parsedSet.species,
+		label: parsedSet.label,
+		totalKills: totalKills,
+		fights: fights,
+		splits: splits,
+		fightVictims: fightVictims,
+		splitVictims: splitVictims,
+		lastVictim: entry.lastVictim ? String(entry.lastVictim) : "",
+		isDead: isDead,
+		deathFight: deathFight
+	};
+}
+
+function getFragSheetState() {
+	if (fragSheetState) return fragSheetState;
+	var parsed = safeJsonParse(localStorage.getItem(FRAG_SHEET_STORAGE_KEY), {});
+	var rawEntries = parsed && parsed.entries ? parsed.entries : {};
+	fragSheetState = {entries: {}};
+	for (var setId in rawEntries) {
+		if (!Object.prototype.hasOwnProperty.call(rawEntries, setId)) continue;
+		fragSheetState.entries[setId] = normalizeFragEntry(setId, rawEntries[setId]);
+	}
+	return fragSheetState;
+}
+
+function saveFragSheetState() {
+	localStorage.setItem(FRAG_SHEET_STORAGE_KEY, JSON.stringify(getFragSheetState()));
+	captureFragBackupSnapshot("frag-update", false);
+}
+
+function deepCloneJsonValue(value, fallbackValue) {
+	try {
+		return JSON.parse(JSON.stringify(value));
+	} catch (err) {
+		return fallbackValue;
+	}
+}
+
+function collectRosterSetIdsFromContainer(containerId) {
+	var ids = [];
+	var container = document.getElementById(containerId);
+	if (!container) return ids;
+	$(container).find(".trainer-pok.left-side").each(function () {
+		var setId = String($(this).attr("data-id") || "").trim();
+		if (setId) ids.push(setId);
+	});
+	return ids;
+}
+
+function collectPlayerRosterLayout() {
+	return {
+		team: collectRosterSetIdsFromContainer("team-poke-list"),
+		box: collectRosterSetIdsFromContainer("box-poke-list"),
+		box2: collectRosterSetIdsFromContainer("box-poke-list2"),
+		trash: collectRosterSetIdsFromContainer("trash-box")
+	};
+}
+
+function normalizeRosterLayout(rawLayout) {
+	var layout = rawLayout || {};
+	var normalized = {
+		team: [],
+		box: [],
+		box2: [],
+		trash: []
+	};
+	var keys = ["team", "box", "box2", "trash"];
+	for (var i = 0; i < keys.length; i++) {
+		var key = keys[i];
+		var source = Array.isArray(layout[key]) ? layout[key] : [];
+		for (var j = 0; j < source.length; j++) {
+			var setId = String(source[j] || "").trim();
+			if (!setId) continue;
+			normalized[key].push(setId);
+		}
+	}
+	return normalized;
+}
+
+function buildRosterSpriteNodeId(setId) {
+	var parsed = parseSetId(setId);
+	var rawBase = String(parsed.species || "") + String(parsed.label || "");
+	var base = rawBase.replace(/[^a-zA-Z0-9_-]+/g, "") || "customset";
+	var nodeId = base;
+	var suffix = 1;
+	while (document.getElementById(nodeId)) {
+		nodeId = base + "-" + suffix;
+		suffix += 1;
+	}
+	return nodeId;
+}
+
+function createRosterSpriteFromSetId(setId) {
+	var parsed = parseSetId(setId);
+	if (!parsed.species) return null;
+	var sprite = document.createElement("img");
+	sprite.id = buildRosterSpriteNodeId(setId);
+	sprite.className = "trainer-pok left-side";
+	sprite.loading = "lazy";
+	sprite.decoding = "async";
+	setTrainerSpriteImage(sprite, parsed.species);
+	sprite.dataset.id = setId;
+	sprite.addEventListener("dragstart", dragstart_handler);
+	return sprite;
+}
+
+function applyPlayerRosterLayout(layout) {
+	var normalizedLayout = normalizeRosterLayout(layout);
+	var containerMap = {
+		team: document.getElementById("team-poke-list"),
+		box: document.getElementById("box-poke-list"),
+		box2: document.getElementById("box-poke-list2"),
+		trash: document.getElementById("trash-box")
+	};
+	for (var zoneKey in containerMap) {
+		if (!Object.prototype.hasOwnProperty.call(containerMap, zoneKey)) continue;
+		if (containerMap[zoneKey]) containerMap[zoneKey].innerHTML = "";
+	}
+	for (var listKey in normalizedLayout) {
+		if (!Object.prototype.hasOwnProperty.call(normalizedLayout, listKey)) continue;
+		var targetContainer = containerMap[listKey];
+		if (!targetContainer) continue;
+		for (var i = 0; i < normalizedLayout[listKey].length; i++) {
+			var setId = normalizedLayout[listKey][i];
+			var spriteNode = createRosterSpriteFromSetId(setId);
+			if (!spriteNode) continue;
+			targetContainer.appendChild(spriteNode);
+		}
+	}
+}
+
+function normalizeFragSnapshotPayload(rawPayload) {
+	var payload = rawPayload || {};
+	var normalizedFragSheet = payload.fragSheet && typeof payload.fragSheet === "object"
+		? deepCloneJsonValue(payload.fragSheet, {entries: {}})
+		: {entries: {}};
+	if (!normalizedFragSheet.entries || typeof normalizedFragSheet.entries !== "object") {
+		normalizedFragSheet.entries = {};
+	}
+	var normalizedCustomsets = payload.customsets && typeof payload.customsets === "object"
+		? deepCloneJsonValue(payload.customsets, {})
+		: {};
+	var normalizedRoster = normalizeRosterLayout(payload.roster);
+	return {
+		fragSheet: normalizedFragSheet,
+		customsets: normalizedCustomsets,
+		roster: normalizedRoster
+	};
+}
+
+function createFragSnapshotPayload() {
+	var fragSheetSnapshot = safeJsonParse(localStorage.getItem(FRAG_SHEET_STORAGE_KEY), {entries: {}});
+	if (!fragSheetSnapshot || typeof fragSheetSnapshot !== "object") fragSheetSnapshot = {entries: {}};
+	if (!fragSheetSnapshot.entries || typeof fragSheetSnapshot.entries !== "object") fragSheetSnapshot.entries = {};
+	var customsetsSnapshot = safeJsonParse(localStorage.getItem("customsets"), {});
+	if (!customsetsSnapshot || typeof customsetsSnapshot !== "object") customsetsSnapshot = {};
+	return normalizeFragSnapshotPayload({
+		fragSheet: fragSheetSnapshot,
+		customsets: customsetsSnapshot,
+		roster: collectPlayerRosterLayout()
+	});
+}
+
+function getFragTotalKillsFromSnapshotPayload(payload) {
+	var normalized = normalizeFragSnapshotPayload(payload);
+	var entries = normalized.fragSheet.entries || {};
+	var total = 0;
+	for (var setId in entries) {
+		if (!Object.prototype.hasOwnProperty.call(entries, setId)) continue;
+		var killCount = parseInt(entries[setId] && entries[setId].totalKills, 10);
+		if (!Number.isNaN(killCount) && killCount > 0) total += killCount;
+	}
+	return total;
+}
+
+function formatFragSnapshotDateLabel(rawDate) {
+	var parsedDate = new Date(rawDate || Date.now());
+	if (Number.isNaN(parsedDate.getTime())) return "Unknown Time";
+	return parsedDate.toLocaleString();
+}
+
+function buildFragSnapshotDefaultName(prefix) {
+	var labelPrefix = String(prefix || "Snapshot").trim() || "Snapshot";
+	return labelPrefix + " " + formatFragSnapshotDateLabel(Date.now());
+}
+
+function getStoredFragSheetStates() {
+	var parsed = safeJsonParse(localStorage.getItem(FRAG_SHEET_STATES_STORAGE_KEY), []);
+	return Array.isArray(parsed) ? parsed : [];
+}
+
+function saveStoredFragSheetStates(states) {
+	localStorage.setItem(FRAG_SHEET_STATES_STORAGE_KEY, JSON.stringify(Array.isArray(states) ? states : []));
+}
+
+function getStoredFragSheetBackups() {
+	var parsed = safeJsonParse(localStorage.getItem(FRAG_SHEET_BACKUPS_STORAGE_KEY), []);
+	return Array.isArray(parsed) ? parsed : [];
+}
+
+function saveStoredFragSheetBackups(backups) {
+	localStorage.setItem(FRAG_SHEET_BACKUPS_STORAGE_KEY, JSON.stringify(Array.isArray(backups) ? backups : []));
+}
+
+function createFragSnapshotRecord(snapshotName, sourceLabel) {
+	var normalizedName = String(snapshotName || "").trim() || buildFragSnapshotDefaultName("Snapshot");
+	var payload = createFragSnapshotPayload();
+	return {
+		id: String(sourceLabel || "snapshot") + "-" + Date.now() + "-" + Math.random().toString(36).slice(2, 8),
+		name: normalizedName,
+		source: String(sourceLabel || "snapshot"),
+		savedAt: new Date().toISOString(),
+		totalKills: getFragTotalKillsFromSnapshotPayload(payload),
+		payload: payload
+	};
+}
+
+function saveNamedFragSheetState(snapshotName) {
+	var states = getStoredFragSheetStates();
+	var record = createFragSnapshotRecord(snapshotName || buildFragSnapshotDefaultName("State"), "state");
+	states.unshift(record);
+	if (states.length > FRAG_SHEET_STATES_LIMIT) states.length = FRAG_SHEET_STATES_LIMIT;
+	saveStoredFragSheetStates(states);
+	return record;
+}
+
+function captureFragBackupSnapshot(reason, forceCapture) {
+	var now = Date.now();
+	if (!forceCapture && now - fragLastAutoBackupAt < FRAG_SHEET_BACKUP_COOLDOWN_MS) return null;
+	fragLastAutoBackupAt = now;
+	var backups = getStoredFragSheetBackups();
+	var backupName = buildFragSnapshotDefaultName("Backup");
+	var sourceName = reason ? "backup:" + String(reason) : "backup:auto";
+	var record = createFragSnapshotRecord(backupName, sourceName);
+	backups.unshift(record);
+	if (backups.length > FRAG_SHEET_BACKUPS_LIMIT) backups.length = FRAG_SHEET_BACKUPS_LIMIT;
+	saveStoredFragSheetBackups(backups);
+	if (typeof refreshFragHistoryControls === "function") refreshFragHistoryControls();
+	return record;
+}
+
+function restoreFragSnapshotPayload(payload) {
+	var normalizedPayload = normalizeFragSnapshotPayload(payload);
+	var customsets = normalizedPayload.customsets;
+	localStorage.setItem("customsets", JSON.stringify(customsets));
+	if (typeof updateDex === "function") {
+		updateDex(customsets);
+	}
+	if (Object.keys(customsets).length) {
+		$(allPokemon("#importedSetsOptions")).css("display", "inline");
+	} else {
+		$(allPokemon("#importedSetsOptions")).hide();
+	}
+	applyPlayerRosterLayout(normalizedPayload.roster);
+	localStorage.setItem(FRAG_SHEET_STORAGE_KEY, JSON.stringify(normalizedPayload.fragSheet));
+	fragSheetState = null;
+	syncFragRoster();
+	renderFragSheet();
+	applyPlayerRosterSearchFilter();
+	if (typeof performCalculations === "function") performCalculations();
+	return true;
+}
+
+function restoreFragStateById(stateId) {
+	var targetId = String(stateId || "").trim();
+	if (!targetId) return false;
+	var states = getStoredFragSheetStates();
+	for (var i = 0; i < states.length; i++) {
+		if (String(states[i].id) !== targetId) continue;
+		return restoreFragSnapshotPayload(states[i].payload);
+	}
+	return false;
+}
+
+function restoreFragBackupById(backupId) {
+	var targetId = String(backupId || "").trim();
+	if (!targetId) return false;
+	var backups = getStoredFragSheetBackups();
+	for (var i = 0; i < backups.length; i++) {
+		if (String(backups[i].id) !== targetId) continue;
+		return restoreFragSnapshotPayload(backups[i].payload);
+	}
+	return false;
+}
+
+function deleteFragStateById(stateId) {
+	var targetId = String(stateId || "").trim();
+	if (!targetId) return false;
+	var states = getStoredFragSheetStates();
+	var filtered = states.filter(function (stateRecord) {
+		return String(stateRecord.id) !== targetId;
+	});
+	if (filtered.length === states.length) return false;
+	saveStoredFragSheetStates(filtered);
+	return true;
+}
+
+function saveManualFragBackup() {
+	return captureFragBackupSnapshot("manual", true);
+}
+
+window.captureFragBackupSnapshot = captureFragBackupSnapshot;
+
+function ensureFragEntryForSet(setId) {
+	if (!setId) return null;
+	var state = getFragSheetState();
+	if (!state.entries[setId]) {
+		state.entries[setId] = normalizeFragEntry(setId, {});
+	}
+	return state.entries[setId];
+}
+
+function getFragTotalForSet(setId) {
+	var normalizedSetId = String(setId || "");
+	if (!normalizedSetId) return 0;
+	var state = getFragSheetState();
+	var entry = state.entries[normalizedSetId];
+	if (!entry) return 0;
+	var totalKills = parseInt(entry.totalKills, 10);
+	if (Number.isNaN(totalKills) || totalKills < 0) return 0;
+	return totalKills;
+}
+
+function mergeFragCountMap(targetMap, sourceMap) {
+	if (!sourceMap || typeof sourceMap !== "object") return;
+	for (var mapKey in sourceMap) {
+		if (!Object.prototype.hasOwnProperty.call(sourceMap, mapKey)) continue;
+		var count = parseInt(sourceMap[mapKey], 10);
+		if (Number.isNaN(count) || count <= 0) continue;
+		targetMap[mapKey] = (targetMap[mapKey] || 0) + count;
+	}
+}
+
+function mergeFragVictimBuckets(targetBuckets, sourceBuckets) {
+	if (!sourceBuckets || typeof sourceBuckets !== "object") return;
+	for (var bucketKey in sourceBuckets) {
+		if (!Object.prototype.hasOwnProperty.call(sourceBuckets, bucketKey)) continue;
+		if (!targetBuckets[bucketKey] || typeof targetBuckets[bucketKey] !== "object") {
+			targetBuckets[bucketKey] = {};
+		}
+		var sourceBucket = sourceBuckets[bucketKey];
+		if (!sourceBucket || typeof sourceBucket !== "object") continue;
+		for (var victimKey in sourceBucket) {
+			if (!Object.prototype.hasOwnProperty.call(sourceBucket, victimKey)) continue;
+			var victimCount = parseInt(sourceBucket[victimKey], 10);
+			if (Number.isNaN(victimCount) || victimCount <= 0) continue;
+			targetBuckets[bucketKey][victimKey] = (targetBuckets[bucketKey][victimKey] || 0) + victimCount;
+		}
+	}
+}
+
+function mergeFragEntriesFromEvolutionDrop(sourceSetId, targetSetId) {
+	if (!sourceSetId || !targetSetId || sourceSetId === targetSetId) return false;
+	var state = getFragSheetState();
+	var sourceEntry = state.entries[sourceSetId];
+	if (!sourceEntry) return false;
+	var targetEntry = ensureFragEntryForSet(targetSetId);
+	if (!targetEntry) return false;
+
+	var sourceTotal = parseInt(sourceEntry.totalKills, 10);
+	if (!Number.isNaN(sourceTotal) && sourceTotal > 0) {
+		var targetTotal = parseInt(targetEntry.totalKills, 10);
+		if (Number.isNaN(targetTotal) || targetTotal < 0) targetTotal = 0;
+		targetEntry.totalKills = targetTotal + sourceTotal;
+	}
+
+	mergeFragCountMap(targetEntry.fights, sourceEntry.fights);
+	mergeFragCountMap(targetEntry.splits, sourceEntry.splits);
+	mergeFragVictimBuckets(targetEntry.fightVictims, sourceEntry.fightVictims);
+	mergeFragVictimBuckets(targetEntry.splitVictims, sourceEntry.splitVictims);
+
+	if (!targetEntry.lastVictim && sourceEntry.lastVictim) {
+		targetEntry.lastVictim = String(sourceEntry.lastVictim);
+	}
+
+	state.entries[targetSetId] = normalizeFragEntry(targetSetId, targetEntry);
+	delete state.entries[sourceSetId];
+	saveFragSheetState();
+	return true;
+}
+
+function getTrainerPokSpriteElement(node) {
+	if (!node || node.nodeType !== 1) return null;
+	if (node.classList.contains("trainer-pok") && node.classList.contains("left-side")) return node;
+	var descendantSprite = node.querySelector(".trainer-pok.left-side");
+	if (descendantSprite) return descendantSprite;
+	var current = node.parentElement;
+	while (current) {
+		if (current.classList &&
+			current.classList.contains("trainer-pok") &&
+			current.classList.contains("left-side")) {
+			return current;
+		}
+		current = current.parentElement;
+	}
+	return null;
+}
+
+function getTrainerPokRootNode(node) {
+	if (!node || node.nodeType !== 1) return null;
+	if (node.classList.contains("trainer-pok-slot")) return node;
+	var current = node.parentElement;
+	while (current) {
+		if (current.classList && current.classList.contains("trainer-pok-slot")) return current;
+		current = current.parentElement;
+	}
+	return node;
+}
+
+function getTrainerPokContainerElement(node) {
+	var rootNode = getTrainerPokRootNode(node);
+	if (!rootNode) return null;
+	var current = rootNode;
+	while (current) {
+		if (current.id === "team-poke-list" ||
+			current.id === "box-poke-list" ||
+			current.id === "box-poke-list2" ||
+			current.id === "trash-box") {
+			return current;
+		}
+		current = current.parentElement;
+	}
+	return null;
+}
+
+function ensureTrainerPokSlot(spriteElement) {
+	if (!spriteElement || !spriteElement.classList || !spriteElement.classList.contains("trainer-pok")) return null;
+	if (!spriteElement.classList.contains("left-side")) return null;
+	var existingSlot = $(spriteElement).parent(".trainer-pok-slot").get(0);
+	if (existingSlot) return existingSlot;
+	if (!spriteElement.parentNode) return null;
+	var slot = document.createElement("div");
+	slot.className = "trainer-pok-slot";
+	spriteElement.parentNode.insertBefore(slot, spriteElement);
+	slot.appendChild(spriteElement);
+	var badge = document.createElement("span");
+	badge.className = "trainer-pok-frag-total";
+	badge.textContent = "0";
+	slot.appendChild(badge);
+	return slot;
+}
+
+function hideTrainerFragBorderTotals() {
+	$(".trainer-pok-slot").removeClass("show-frag-total");
+	$(".trainer-pok-frag-total").each(function () {
+		this.style.display = "none";
+		this.className = "trainer-pok-frag-total";
+	});
+}
+
+function updateTrainerFragBorderTotals() {
+	var showTotalFrags = !!getAppSettings().totalFragsOnBorder;
+	var playerSprites = $(".trainer-pok.left-side");
+	if (!playerSprites.length) return hideTrainerFragBorderTotals();
+	if (!showTotalFrags) {
+		return hideTrainerFragBorderTotals();
+	}
+	var spriteRows = [];
+	playerSprites.each(function () {
+		var spriteElement = this;
+		var slot = ensureTrainerPokSlot(spriteElement);
+		if (!slot) return;
+		var fragTotal = getFragTotalForSet($(spriteElement).attr("data-id"));
+		spriteRows.push({
+			slot: slot,
+			fragTotal: fragTotal
+		});
+	});
+	var rankedTotals = spriteRows
+		.map(function (row) { return row.fragTotal; })
+		.filter(function (fragTotal) { return fragTotal > 0; })
+		.sort(function (a, b) { return b - a; });
+	var uniqueRankedTotals = [];
+	for (var i = 0; i < rankedTotals.length; i++) {
+		if (uniqueRankedTotals.indexOf(rankedTotals[i]) !== -1) continue;
+		uniqueRankedTotals.push(rankedTotals[i]);
+		if (uniqueRankedTotals.length >= 3) break;
+	}
+	var rankClassByTotal = {};
+	if (uniqueRankedTotals.length > 0) rankClassByTotal[uniqueRankedTotals[0]] = "frag-rank-gold";
+	if (uniqueRankedTotals.length > 1) rankClassByTotal[uniqueRankedTotals[1]] = "frag-rank-silver";
+	if (uniqueRankedTotals.length > 2) rankClassByTotal[uniqueRankedTotals[2]] = "frag-rank-bronze";
+	for (i = 0; i < spriteRows.length; i++) {
+		var row = spriteRows[i];
+		var slot = row.slot;
+		var badge = slot.querySelector(".trainer-pok-frag-total");
+		if (!badge) {
+			badge = document.createElement("span");
+			badge.className = "trainer-pok-frag-total";
+			slot.appendChild(badge);
+		}
+		badge.className = "trainer-pok-frag-total";
+		var rankClass = rankClassByTotal[row.fragTotal];
+		if (rankClass) badge.classList.add(rankClass);
+		badge.textContent = String(row.fragTotal);
+		badge.style.display = "";
+		slot.classList.add("show-frag-total");
+	}
+}
+
+function collectPlayerRosterSetIds() {
+	var rosterSetIds = [];
+	var seenSetIds = {};
+	var rosterSprites = document.querySelectorAll(PLAYER_ROSTER_SPRITE_SELECTOR);
+	for (var i = 0; i < rosterSprites.length; i++) {
+		var setId = String(rosterSprites[i].getAttribute("data-id") || "").trim();
+		if (!setId || seenSetIds[setId]) continue;
+		seenSetIds[setId] = true;
+		rosterSetIds.push(setId);
+	}
+	return rosterSetIds;
+}
+
+function buildPlayerRosterSearchText(setId) {
+	var parsedSet = parseSetId(setId);
+	var speciesName = String(parsedSet.species || "").trim();
+	var setName = String(parsedSet.label || "").trim();
+	var searchParts = [setId, parsedSet.species, parsedSet.label];
+	var setData = speciesName && setName && setdex && setdex[speciesName]
+		? setdex[speciesName][setName]
+		: null;
+	if (setData && typeof setData === "object") {
+		if (typeof setData.ability === "string") searchParts.push(setData.ability);
+		if (Array.isArray(setData.abilities)) searchParts = searchParts.concat(setData.abilities);
+		if (Array.isArray(setData.moves)) searchParts = searchParts.concat(setData.moves);
+	}
+	return searchParts.join(" ").toLowerCase();
+}
+
+function toPlayerRosterSearchToken(value) {
+	return String(value || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
+}
+
+function getPlayerRosterSearchPayloadBySetId(setId, cacheMap) {
+	if (cacheMap && cacheMap[setId]) return cacheMap[setId];
+	var searchText = buildPlayerRosterSearchText(setId);
+	var normalizedSearchText = toPlayerRosterSearchToken(searchText);
+	var payload = {
+		searchText: searchText,
+		normalizedSearchText: normalizedSearchText
+	};
+	if (cacheMap) cacheMap[setId] = payload;
+	return payload;
+}
+
+function applyPlayerRosterSearchFilter() {
+	var searchInput = document.getElementById("search");
+	var query = String(searchInput && typeof searchInput.value !== "undefined" ? searchInput.value : "")
+		.trim()
+		.toLowerCase();
+	var queryTerms = query.split(/\s+/).filter(Boolean);
+	var normalizedTerms = queryTerms.map(toPlayerRosterSearchToken);
+	var setSearchCache = {};
+	var rosterSprites = document.querySelectorAll(PLAYER_ROSTER_SPRITE_SELECTOR);
+	for (var i = 0; i < rosterSprites.length; i++) {
+		var sprite = rosterSprites[i];
+		var rootNode = getTrainerPokRootNode(sprite);
+		if (!rootNode) rootNode = sprite;
+		var setId = String(sprite.getAttribute("data-id") || "");
+		var cachedSearchPayload = getPlayerRosterSearchPayloadBySetId(setId, setSearchCache);
+		var searchText = cachedSearchPayload.searchText;
+		var normalizedSearchText = cachedSearchPayload.normalizedSearchText;
+		var isMatch = !query ||
+			searchText.indexOf(query) >= 0 ||
+			queryTerms.every(function (term, index) {
+				return searchText.indexOf(term) >= 0 ||
+					(normalizedTerms[index] && normalizedSearchText.indexOf(normalizedTerms[index]) >= 0);
+			});
+		var nextDisplay = isMatch ? "" : "none";
+		if (rootNode.style.display !== nextDisplay) rootNode.style.display = nextDisplay;
+	}
+}
+
+function bindPlayerRosterSearchInput() {
+	var searchInput = document.getElementById("search");
+	if (!searchInput) return;
+	$(searchInput)
+		.off("input.searchfilter keyup.searchfilter change.searchfilter blur.searchfilter")
+		.on("input.searchfilter keyup.searchfilter", function () {
+			if (playerRosterSearchDebounceTimer) window.clearTimeout(playerRosterSearchDebounceTimer);
+			playerRosterSearchDebounceTimer = window.setTimeout(function () {
+				playerRosterSearchDebounceTimer = null;
+				applyPlayerRosterSearchFilter();
+			}, PLAYER_ROSTER_SEARCH_DEBOUNCE_MS);
+		})
+		.on("change.searchfilter blur.searchfilter", function () {
+			if (playerRosterSearchDebounceTimer) {
+				window.clearTimeout(playerRosterSearchDebounceTimer);
+				playerRosterSearchDebounceTimer = null;
+			}
+			applyPlayerRosterSearchFilter();
+		});
+}
+
+function syncFragRoster(options) {
+	var syncOptions = options || {};
+	var pruneMissing = !!syncOptions.pruneMissing;
+	var allowEmptyPrune = !!syncOptions.allowEmptyPrune;
+	var rosterSetIds = collectPlayerRosterSetIds();
+	var state = getFragSheetState();
+	var didChange = false;
+	for (var i = 0; i < rosterSetIds.length; i++) {
+		if (!state.entries[rosterSetIds[i]]) {
+			state.entries[rosterSetIds[i]] = normalizeFragEntry(rosterSetIds[i], {});
+			didChange = true;
+		}
+	}
+	if (pruneMissing && !allowEmptyPrune && !rosterSetIds.length) {
+		pruneMissing = false;
+	}
+	if (pruneMissing) {
+		for (var setId in state.entries) {
+			if (!Object.prototype.hasOwnProperty.call(state.entries, setId)) continue;
+			if (rosterSetIds.indexOf(setId) !== -1) continue;
+			delete state.entries[setId];
+			didChange = true;
+		}
+	}
+	if (didChange) saveFragSheetState();
+}
+
+function scheduleFragSheetRefresh() {
+	if (fragSheetRefreshTimer) return;
+	fragSheetRefreshTimer = window.setTimeout(function () {
+		fragSheetRefreshTimer = null;
+		syncFragRoster({pruneMissing: true});
+		renderFragSheet();
+		refreshNotesPanelIfOpen();
+	}, 40);
+}
+
+function setupFragSheetAutoRefresh() {
+	if (fragSheetAutoObserver || typeof MutationObserver === "undefined") return;
+	var watchNodes = [
+		document.getElementById("team-poke-list"),
+		document.getElementById("box-poke-list"),
+		document.getElementById("box-poke-list2"),
+		document.getElementById("trash-box")
+	];
+	fragSheetAutoObserver = new MutationObserver(function () {
+		scheduleFragSheetRefresh();
+	});
+	for (var i = 0; i < watchNodes.length; i++) {
+		if (!watchNodes[i]) continue;
+		fragSheetAutoObserver.observe(watchNodes[i], {childList: true});
+	}
+}
+
+function addFragKill(killerSetId, victimSetId, fightLabel) {
+	var entry = ensureFragEntryForSet(killerSetId);
+	if (!entry) return;
+	var fight = String(fightLabel || getCurrentFightLabel() || "Unknown Fight");
+	var split = String(getCurrentSplitNumber(fight));
+	var victimKey = normalizeFragVictimKey(victimSetId);
+	entry.totalKills += 1;
+	entry.fights[fight] = (entry.fights[fight] || 0) + 1;
+	entry.splits[split] = (entry.splits[split] || 0) + 1;
+	incrementFragVictimBucketCount(entry, "fightVictims", fight, victimKey, 1);
+	incrementFragVictimBucketCount(entry, "splitVictims", split, victimKey, 1);
+	entry.lastVictim = getFragVictimDisplayName(victimKey);
+	saveFragSheetState();
+	renderFragSheet();
+}
+
+function removeFragKill(killerSetId, preferredFight) {
+	var entry = ensureFragEntryForSet(killerSetId);
+	if (!entry || entry.totalKills <= 0) return;
+
+	var targetFight = String(preferredFight || getCurrentFightLabel() || "");
+	if (!entry.fights[targetFight]) {
+		targetFight = "";
+		for (var fightName in entry.fights) {
+			if (!Object.prototype.hasOwnProperty.call(entry.fights, fightName)) continue;
+			if (entry.fights[fightName] > 0) {
+				targetFight = fightName;
+				break;
+			}
+		}
+	}
+	if (!targetFight) return;
+	var split = String(getSplitNumberForFragFightLabel(targetFight));
+	var victimKey = pickFragVictimKeyForRemoval(entry, targetFight, split);
+	entry.fights[targetFight] -= 1;
+	if (entry.fights[targetFight] <= 0) delete entry.fights[targetFight];
+	if (entry.splits[split]) {
+		entry.splits[split] -= 1;
+		if (entry.splits[split] <= 0) delete entry.splits[split];
+	}
+	var removedFromFightVictims = decrementFragVictimBucketCount(entry, "fightVictims", targetFight, victimKey, 1);
+	if (!removedFromFightVictims) {
+		decrementFragVictimBucketByAny(entry, "fightVictims", targetFight, 1);
+	}
+	var removedFromSplitVictims = decrementFragVictimBucketCount(entry, "splitVictims", split, victimKey, 1);
+	if (!removedFromSplitVictims) {
+		decrementFragVictimBucketByAny(entry, "splitVictims", split, 1);
+	}
+	entry.totalKills = Math.max(0, entry.totalKills - 1);
+	saveFragSheetState();
+	renderFragSheet();
+}
+
+function clearFragsForCurrentFight() {
+	var fight = getCurrentFightLabel();
+	var normalizedFight = normalizeFragFightLabelForMatch(fight);
+	var currentFightIndex = getCurrentFightIndex();
+	var fightIndexCache = {};
+	var state = getFragSheetState();
+	var hadKills = false;
+	for (var setId in state.entries) {
+		if (!Object.prototype.hasOwnProperty.call(state.entries, setId)) continue;
+		var entry = state.entries[setId];
+		if (!entry || !entry.fights || typeof entry.fights !== "object") continue;
+		var fightsToClear = [];
+		for (var fightName in entry.fights) {
+			if (!Object.prototype.hasOwnProperty.call(entry.fights, fightName)) continue;
+			var fightCount = parseInt(entry.fights[fightName], 10);
+			if (Number.isNaN(fightCount) || fightCount <= 0) continue;
+			if (normalizeFragFightLabelForMatch(fightName) === normalizedFight) {
+				fightsToClear.push(fightName);
+				continue;
+			}
+			if (currentFightIndex > 0) {
+				if (!Object.prototype.hasOwnProperty.call(fightIndexCache, fightName)) {
+					fightIndexCache[fightName] = getTrainerIndexForLabel(fightName);
+				}
+				if (fightIndexCache[fightName] === currentFightIndex) {
+					fightsToClear.push(fightName);
+				}
+			}
+		}
+		if (!fightsToClear.length) continue;
+		var removedForEntry = 0;
+		for (var i = 0; i < fightsToClear.length; i++) {
+			var fightKey = fightsToClear[i];
+			var removed = parseInt(entry.fights[fightKey], 10);
+			if (Number.isNaN(removed) || removed <= 0) continue;
+			var split = String(getSplitNumberForFragFightLabel(fightKey));
+			var fightVictimBucket = getFragVictimBucketForEntry(entry, "fightVictims", fightKey, false);
+			delete entry.fights[fightKey];
+			if (entry.fightVictims && Object.prototype.hasOwnProperty.call(entry.fightVictims, fightKey)) {
+				delete entry.fightVictims[fightKey];
+			}
+			if (entry.splits[split]) {
+				entry.splits[split] = Math.max(0, entry.splits[split] - removed);
+				if (entry.splits[split] <= 0) delete entry.splits[split];
+			}
+			var removedVictimCounts = 0;
+			if (fightVictimBucket) {
+				for (var victimKey in fightVictimBucket) {
+					if (!Object.prototype.hasOwnProperty.call(fightVictimBucket, victimKey)) continue;
+					var victimCount = parseInt(fightVictimBucket[victimKey], 10);
+					if (Number.isNaN(victimCount) || victimCount <= 0) continue;
+					removedVictimCounts += victimCount;
+					decrementFragVictimBucketCount(entry, "splitVictims", split, victimKey, victimCount);
+				}
+			}
+			if (removedVictimCounts < removed) {
+				var unknownRemoved = decrementFragVictimBucketCount(entry, "splitVictims", split, FRAG_UNKNOWN_VICTIM_KEY, removed - removedVictimCounts);
+				if (unknownRemoved < (removed - removedVictimCounts)) {
+					decrementFragVictimBucketByAny(entry, "splitVictims", split, (removed - removedVictimCounts) - unknownRemoved);
+				}
+			}
+			removedForEntry += removed;
+		}
+		if (removedForEntry > 0) {
+			entry.totalKills = Math.max(0, entry.totalKills - removedForEntry);
+			hadKills = true;
+		}
+	}
+	if (hadKills) saveFragSheetState();
+	renderFragSheet();
+}
+
+function clearAllFrags() {
+	var state = getFragSheetState();
+	state.entries = {};
+	saveFragSheetState();
+	syncFragRoster({pruneMissing: true});
+	renderFragSheet();
+	applyPlayerRosterSearchFilter();
+}
+
+function getSortedFragEntries() {
+	var state = getFragSheetState();
+	var entries = [];
+	for (var setId in state.entries) {
+		if (!Object.prototype.hasOwnProperty.call(state.entries, setId)) continue;
+		entries.push(state.entries[setId]);
+	}
+	entries.sort(function (a, b) {
+		if (b.totalKills !== a.totalKills) return b.totalKills - a.totalKills;
+		if (a.species !== b.species) return a.species.localeCompare(b.species);
+		return a.setId.localeCompare(b.setId);
+	});
+	return entries;
+}
+
+function getFragSplitTotals(entries) {
+	var totals = {overall: 0, splits: {}};
+	for (var s = 1; s <= 9; s++) {
+		totals.splits[String(s)] = 0;
+	}
+	for (var i = 0; i < entries.length; i++) {
+		var totalKills = parseInt(entries[i].totalKills, 10);
+		if (!Number.isNaN(totalKills) && totalKills > 0) totals.overall += totalKills;
+		for (var splitNumber = 1; splitNumber <= 9; splitNumber++) {
+			var splitKey = String(splitNumber);
+			var splitKills = parseInt(entries[i].splits[splitKey], 10);
+			if (!Number.isNaN(splitKills) && splitKills > 0) totals.splits[splitKey] += splitKills;
+		}
+	}
+	return totals;
+}
+
+function toFragPercent(value, total) {
+	if (!total || total <= 0) return 0;
+	var numericValue = parseInt(value, 10);
+	if (Number.isNaN(numericValue) || numericValue <= 0) return 0;
+	return (numericValue / total) * 100;
+}
+
+function formatFragPercentValue(rawPercent) {
+	var bounded = Math.max(0, Math.min(100, rawPercent || 0));
+	var rounded = Math.round(bounded * 10) / 10;
+	if (Math.abs(rounded - Math.round(rounded)) < 0.001) return String(Math.round(rounded));
+	return rounded.toFixed(1);
+}
+
+function renderFragPercentBar(rawPercent, isDead) {
+	var bounded = Math.max(0, Math.min(100, rawPercent || 0));
+	var formatted = formatFragPercentValue(bounded);
+	var deadClass = isDead ? " is-dead" : "";
+	return "<div class=\"frags-percent-cell" + deadClass + "\">" +
+		"<div class=\"frags-percent-track\"><div class=\"frags-percent-fill\" style=\"width:" + bounded.toFixed(2) + "%\"></div></div>" +
+		"<span class=\"frags-percent-label\">" + formatted + "%</span>" +
+		"</div>";
+}
+
+function isPlayerSetInTrash(setId) {
+	var targetSetId = String(setId || "");
+	if (!targetSetId) return false;
+	var isDead = false;
+	$("#trash-box .trainer-pok.left-side").each(function () {
+		if ($(this).attr("data-id") === targetSetId) {
+			isDead = true;
+			return false;
+		}
+	});
+	return isDead;
+}
+
+function getFragDeathInfo(entry) {
+	if (!entry) return {isDead: false, deathFight: ""};
+	var markedDead = !!entry.isDead;
+	var inTrash = isPlayerSetInTrash(entry.setId);
+	var isDead = markedDead || inTrash;
+	var deathFight = entry.deathFight ? String(entry.deathFight) : "";
+	return {
+		isDead: isDead,
+		deathFight: deathFight
+	};
+}
+
+function setFragSetDeadState(setId, shouldBeDead, fightLabel) {
+	var entry = ensureFragEntryForSet(setId);
+	if (!entry) return;
+	entry.isDead = !!shouldBeDead;
+	entry.deathFight = entry.isDead ? String(fightLabel || getCurrentFightLabel() || "Unknown Fight") : "";
+	saveFragSheetState();
+	renderFragSheet();
+}
+
+function formatFragSnapshotOptionLabel(record, fallbackPrefix) {
+	var snapshotRecord = record || {};
+	var snapshotName = String(snapshotRecord.name || "").trim() || String(fallbackPrefix || "Snapshot");
+	var savedAtLabel = formatFragSnapshotDateLabel(snapshotRecord.savedAt);
+	var totalKills = parseInt(snapshotRecord.totalKills, 10);
+	if (Number.isNaN(totalKills) || totalKills < 0) {
+		totalKills = getFragTotalKillsFromSnapshotPayload(snapshotRecord.payload);
+	}
+	return snapshotName + " - " + savedAtLabel + " (" + totalKills + " kills)";
+}
+
+function setFragHistoryExpanded(isExpanded) {
+	fragsHistoryExpanded = !!isExpanded;
+	var controls = document.getElementById("frags-history-controls");
+	if (!controls) return;
+	var historyBody = document.getElementById("frags-history-body");
+	var toggleBtn = document.getElementById("frags-history-toggle");
+	if (historyBody) historyBody.hidden = !fragsHistoryExpanded;
+	if (toggleBtn) toggleBtn.textContent = fragsHistoryExpanded ? "Hide Save States and Backups \u25b4" : "Show Save States and Backups \u25be";
+}
+
+function showFragHistoryInfoDialog() {
+	alert(
+		"Save States let you create named snapshots of your current frags, imports, and boxes.\n\n" +
+		"Auto Backups are rolling safety snapshots (plus \"Save Backup Now\" for a manual one).\n\n" +
+		"Restoring a state/backup replaces your current frags/imports/boxes, so it can recover accidental clears or bad imports."
+	);
+}
+
+function ensureFragHistoryControls() {
+	var existingControls = document.getElementById("frags-history-controls");
+	if (existingControls) return existingControls;
+	var fragsPanel = document.getElementById("frags-side-panel");
+	if (!fragsPanel) return null;
+	var sideBody = fragsPanel.querySelector(".calc-side-body");
+	if (!sideBody) return null;
+	var controls = document.createElement("div");
+	controls.id = "frags-history-controls";
+	controls.className = "frags-history-controls";
+	controls.hidden = true;
+	controls.innerHTML = "" +
+		"<div class=\"frags-history-header\">" +
+		"<button type=\"button\" id=\"frags-history-toggle\" class=\"btn calc-side-btn frags-history-toggle\">Show Save States and Backups \u25be</button>" +
+		"<button type=\"button\" id=\"frags-history-info\" class=\"btn calc-side-btn frags-history-info\">Info</button>" +
+		"</div>" +
+		"<div id=\"frags-history-body\" class=\"frags-history-body\" hidden>" +
+		"<div class=\"frags-history-group\">" +
+		"<label for=\"frags-state-name\">Save State Name</label>" +
+		"<input id=\"frags-state-name\" class=\"frags-history-input\" type=\"text\" placeholder=\"e.g. Gym Split 2\" />" +
+		"<div class=\"frags-history-actions\">" +
+		"<button type=\"button\" id=\"frags-state-save\" class=\"btn calc-side-btn\">Save State</button>" +
+		"<button type=\"button\" id=\"frags-state-delete\" class=\"btn calc-side-btn\">Delete State</button>" +
+		"</div>" +
+		"<select id=\"frags-state-list\" class=\"frags-history-select\"></select>" +
+		"<button type=\"button\" id=\"frags-state-restore\" class=\"btn calc-side-btn\">Restore State</button>" +
+		"</div>" +
+		"<div class=\"frags-history-group\">" +
+		"<label for=\"frags-backup-list\">Auto Backups</label>" +
+		"<div class=\"frags-history-actions\">" +
+		"<button type=\"button\" id=\"frags-backup-save\" class=\"btn calc-side-btn\">Save Backup Now</button>" +
+		"</div>" +
+		"<select id=\"frags-backup-list\" class=\"frags-history-select\"></select>" +
+		"<button type=\"button\" id=\"frags-backup-restore\" class=\"btn calc-side-btn\">Restore Backup</button>" +
+		"</div>" +
+		"</div>";
+	var tableWrap = document.getElementById("frags-table-wrap");
+	if (tableWrap && tableWrap.parentNode === sideBody) {
+		sideBody.insertBefore(controls, tableWrap);
+	} else {
+		sideBody.appendChild(controls);
+	}
+	setFragHistoryExpanded(fragsHistoryExpanded);
+	return controls;
+}
+
+function refreshFragHistoryControls() {
+	var controls = ensureFragHistoryControls();
+	if (!controls) return;
+	var states = getStoredFragSheetStates();
+	var backups = getStoredFragSheetBackups();
+	var stateSelect = document.getElementById("frags-state-list");
+	var backupSelect = document.getElementById("frags-backup-list");
+	if (stateSelect) {
+		var stateOptions = ["<option value=\"\">Select saved state...</option>"];
+		for (var i = 0; i < states.length; i++) {
+			var stateRecord = states[i];
+			stateOptions.push("<option value=\"" + escapeHtml(stateRecord.id) + "\">" + escapeHtml(formatFragSnapshotOptionLabel(stateRecord, "State")) + "</option>");
+		}
+		stateSelect.innerHTML = stateOptions.join("");
+	}
+	if (backupSelect) {
+		var backupOptions = ["<option value=\"\">Select backup...</option>"];
+		for (var j = 0; j < backups.length; j++) {
+			var backupRecord = backups[j];
+			backupOptions.push("<option value=\"" + escapeHtml(backupRecord.id) + "\">" + escapeHtml(formatFragSnapshotOptionLabel(backupRecord, "Backup")) + "</option>");
+		}
+		backupSelect.innerHTML = backupOptions.join("");
+	}
+}
+
+function setFragHistoryControlsVisibility(isVisible) {
+	var controls = ensureFragHistoryControls();
+	if (!controls) return;
+	controls.hidden = !isVisible;
+	if (isVisible) refreshFragHistoryControls();
+}
+
+function renderFragSheet() {
+	syncFragRoster();
+	var container = document.getElementById("frags-table-wrap");
+	var summaryText = document.getElementById("frags-summary-text");
+	var currentFightLabelNode = document.getElementById("frags-current-fight-label");
+	if (!container || !summaryText || !currentFightLabelNode) return;
+	var fragsPanel = document.getElementById("frags-side-panel");
+	var showAllSplits = !!(fragsPanel && fragsPanel.classList.contains("fullscreen"));
+	setFragHistoryControlsVisibility(showAllSplits);
+
+	var currentFight = getCurrentFightLabel();
+	var activeSplit = getCurrentSplitNumber(currentFight);
+	currentFightLabelNode.textContent = "Fight: " + currentFight + " (Split " + activeSplit + ")";
+	var entries = getSortedFragEntries();
+	if (!entries.length) {
+		summaryText.textContent = "Import sets or add sprites to start tracking frags.";
+		container.innerHTML = "";
+		updateTrainerFragBorderTotals();
+		return;
+	}
+
+	var leader = entries[0];
+	if (leader.totalKills > 0) {
+		summaryText.textContent = leader.species + " is leading with " + leader.totalKills + " total kills.";
+	} else {
+		summaryText.textContent = "No kills tracked yet. Right-click a player sprite to add frags.";
+	}
+
+	var totals = getFragSplitTotals(entries);
+	var rowsHtml = "";
+	for (var i = 0; i < entries.length; i++) {
+		var entry = entries[i];
+		var fightKills = entry.fights[currentFight] || 0;
+		var titleText = entry.setId === entry.species ? entry.species : entry.setId;
+		var deathInfo = getFragDeathInfo(entry);
+		var isDead = deathInfo.isDead;
+		var deathFight = deathInfo.deathFight;
+		var placementClass = i === 0 ? " frags-rank-1" : (i === 1 ? " frags-rank-2" : (i === 2 ? " frags-rank-3" : ""));
+		var lifeClass = isDead ? " frags-is-dead" : "";
+		var splitPercentColumns = "";
+		if (showAllSplits) {
+			for (var splitNumber = 1; splitNumber <= 9; splitNumber++) {
+				var splitKey = String(splitNumber);
+				var splitPercent = toFragPercent(entry.splits[splitKey] || 0, totals.splits[splitKey] || 0);
+				var splitVictimDropdown = renderFragSplitVictimDropdown(entry, splitKey);
+				splitPercentColumns += "<td class=\"frag-percent-col frag-split-detail-col\">" + renderFragPercentBar(splitPercent, isDead) + splitVictimDropdown + "</td>";
+			}
+		}
+		var overallPercent = toFragPercent(entry.totalKills, totals.overall);
+		rowsHtml += "<tr class=\"frags-row" + placementClass + lifeClass + "\">" +
+			"<td class=\"frag-num\">" + (i + 1) + "</td>" +
+			"<td title=\"" + escapeHtml(titleText) + "\" class=\"frags-mon-cell\">" +
+			"<div class=\"frags-mon-content\">" +
+			"<img class=\"frags-mon-sprite\" src=\"" + escapeHtml(getFragSpriteUrl(entry.species)) + "\" data-species=\"" + escapeHtml(entry.species) + "\" onerror=\"applyIconSheetFallbackImage(this, this.getAttribute('data-species'))\" alt=\"\">" +
+			"<span>" + escapeHtml(entry.species) + "</span></div></td>" +
+			"<td class=\"frag-life-cell\"><span class=\"frags-life-badge " + (isDead ? "frags-life-dead" : "frags-life-alive") + "\">" + (isDead ? "Dead" : "Alive") + "</span>" +
+			(deathFight ? "<div class=\"frags-death-fight\" title=\"Died on " + escapeHtml(deathFight) + "\">" + escapeHtml(deathFight) + "</div>" : "") +
+			"</td>" +
+			"<td class=\"frag-num\">" + entry.totalKills + "</td>" +
+			"<td class=\"frag-percent-col\">" + renderFragPercentBar(overallPercent, isDead) + "</td>" +
+			splitPercentColumns +
+			"<td class=\"frag-num\">" + fightKills + "</td>" +
+			"<td><div class=\"frags-actions\">" +
+			"<button type=\"button\" class=\"btn frags-action-btn frags-inc\" data-frag-set=\"" + escapeHtml(entry.setId) + "\">+1</button>" +
+			"<button type=\"button\" class=\"btn frags-action-btn frags-dec\" data-frag-set=\"" + escapeHtml(entry.setId) + "\">-1</button>" +
+			"</div></td>" +
+			"</tr>";
+	}
+	var splitHeaders = "";
+	if (showAllSplits) {
+		for (var hs = 1; hs <= 9; hs++) {
+			splitHeaders += "<th class=\"frag-percent-head\">S" + hs + " %</th>";
+		}
+	}
+	container.innerHTML = "<table class=\"frags-table\">" +
+		"<thead><tr><th>#</th><th>Pokemon</th><th>Status</th><th>Total</th><th class=\"frag-percent-head\">Overall %</th>" + splitHeaders + "<th>This Fight</th><th>Actions</th></tr></thead>" +
+		"<tbody>" + rowsHtml + "</tbody>" +
+		"</table>";
+	updateTrainerFragBorderTotals();
+}
+
+function setCalcSideDockedWidth(widthPx) {
+	var roundedWidth = Math.max(0, Math.round(widthPx || 0));
+	document.documentElement.style.setProperty("--calc-side-panel-open-width", roundedWidth + "px");
+	document.body.classList.toggle("calc-side-panel-docked", roundedWidth > 0);
+}
+
+function updateCalcLayoutForSidePanel() {
+	var panel = document.querySelector(".calc-side-panel.open:not(.fullscreen)");
+	if (!panel) {
+		setCalcSideDockedWidth(0);
+		return;
+	}
+	var panelWidth = Math.round(panel.getBoundingClientRect().width || 0);
+	if (window.innerWidth < 1100 || !panelWidth || (window.innerWidth - panelWidth) < CALC_SIDE_PANEL_MIN_MAIN_WIDTH_PX) {
+		setCalcSideDockedWidth(0);
+		return;
+	}
+	setCalcSideDockedWidth(panelWidth);
+}
+
+function updateCalcSideBackdrop() {
+	var backdrop = document.getElementById("calc-side-backdrop");
+	if (!backdrop) return;
+	var hasOpenPanel = $(".calc-side-panel.open").length > 0;
+	var showBackdrop = hasOpenPanel && window.innerWidth < 1100;
+	backdrop.hidden = !showBackdrop;
+	backdrop.classList.toggle("open", showBackdrop);
+}
+
+function closeCalcSidePanel(panelId) {
+	var panel = document.getElementById(panelId);
+	if (!panel) return;
+	var wasOpen = panel.classList.contains("open");
+	panel.classList.remove("open");
+	panel.classList.remove("fullscreen");
+	panel.setAttribute("aria-hidden", "true");
+	panel.hidden = true;
+	if (panelId === "frags-side-panel") {
+		$("#frags-panel-fullscreen").text("Fullscreen");
+	} else if (panelId === "notes-side-panel") {
+		$("#notes-panel-fullscreen").text("Fullscreen");
+	}
+	if (calcSidePanelResizeState && calcSidePanelResizeState.panelId === panelId) {
+		endCalcSidePanelResize();
+	}
+	if (wasOpen) {
+		updateCalcSideBackdrop();
+		updateCalcLayoutForSidePanel();
+	}
+}
+
+function closeCalcSidePanels(exceptPanelId) {
+	$(".calc-side-panel.open").each(function () {
+		if (exceptPanelId && this.id === exceptPanelId) return;
+		closeCalcSidePanel(this.id);
+	});
+}
+
+function openCalcSidePanel(panelId) {
+	var panel = document.getElementById(panelId);
+	if (!panel) return;
+	closeCalcSidePanels(panelId);
+	panel.hidden = false;
+	panel.classList.add("open");
+	panel.setAttribute("aria-hidden", "false");
+	updateCalcSideBackdrop();
+	updateCalcLayoutForSidePanel();
+}
+
+function clampCalcSidePanelWidth(widthPx) {
+	var maxWidth = Math.floor((window.innerWidth * CALC_SIDE_PANEL_MAX_WIDTH_VW) / 100);
+	if (maxWidth < CALC_SIDE_PANEL_MIN_WIDTH_PX) maxWidth = CALC_SIDE_PANEL_MIN_WIDTH_PX;
+	return Math.max(CALC_SIDE_PANEL_MIN_WIDTH_PX, Math.min(maxWidth, Math.round(widthPx)));
+}
+
+function ensureCalcSideResizeCaptureNode() {
+	if (calcSideResizeCaptureNode && document.body.contains(calcSideResizeCaptureNode)) return calcSideResizeCaptureNode;
+	var captureNode = document.getElementById("calc-side-resize-capture");
+	if (!captureNode) {
+		captureNode = document.createElement("div");
+		captureNode.id = "calc-side-resize-capture";
+		captureNode.className = "calc-side-resize-capture";
+		captureNode.hidden = true;
+		document.body.appendChild(captureNode);
+	}
+	calcSideResizeCaptureNode = captureNode;
+	return captureNode;
+}
+
+function beginCalcSidePanelResize(panel, startClientX) {
+	if (!panel || panel.classList.contains("fullscreen")) return;
+	var captureNode = ensureCalcSideResizeCaptureNode();
+	calcSidePanelResizeState = {
+		panelId: panel.id,
+		startClientX: startClientX,
+		startWidth: panel.getBoundingClientRect().width || CALC_SIDE_PANEL_MIN_WIDTH_PX
+	};
+	if (captureNode) captureNode.hidden = false;
+	document.body.classList.add("calc-side-resizing");
+}
+
+function continueCalcSidePanelResize(nextClientX, buttonsMask) {
+	if (!calcSidePanelResizeState) return;
+	if (typeof buttonsMask === "number" && buttonsMask === 0) {
+		endCalcSidePanelResize();
+		return;
+	}
+	var panel = document.getElementById(calcSidePanelResizeState.panelId);
+	if (!panel) {
+		endCalcSidePanelResize();
+		return;
+	}
+	var delta = calcSidePanelResizeState.startClientX - nextClientX;
+	var nextWidth = clampCalcSidePanelWidth(calcSidePanelResizeState.startWidth + delta);
+	panel.style.width = nextWidth + "px";
+	updateCalcLayoutForSidePanel();
+}
+
+function endCalcSidePanelResize() {
+	if (!calcSidePanelResizeState) return;
+	calcSidePanelResizeState = null;
+	if (calcSideResizeCaptureNode) calcSideResizeCaptureNode.hidden = true;
+	document.body.classList.remove("calc-side-resizing");
+}
+
+function hasSeenCalcFeatureTutorial() {
+	return localStorage.getItem(CALC_FEATURE_TUTORIAL_SEEN_STORAGE_KEY) === "1";
+}
+
+function markCalcFeatureTutorialSeen() {
+	localStorage.setItem(CALC_FEATURE_TUTORIAL_SEEN_STORAGE_KEY, "1");
+}
+
+function clearCalcFeatureTutorialFocus() {
+	if (!calcFeatureTutorialState.focusNode || !calcFeatureTutorialState.focusNode.classList) return;
+	calcFeatureTutorialState.focusNode.classList.remove("calc-feature-tutorial-focus");
+	if (calcFeatureTutorialState.focusForcedRelative) {
+		calcFeatureTutorialState.focusNode.style.position = calcFeatureTutorialState.focusPrevInlinePosition;
+	}
+	calcFeatureTutorialState.focusNode.style.zIndex = calcFeatureTutorialState.focusPrevInlineZIndex;
+	calcFeatureTutorialState.focusPrevInlinePosition = "";
+	calcFeatureTutorialState.focusPrevInlineZIndex = "";
+	calcFeatureTutorialState.focusForcedRelative = false;
+	calcFeatureTutorialState.focusNode = null;
+}
+
+function setCalcFeatureTutorialFocus(targetNode) {
+	clearCalcFeatureTutorialFocus();
+	if (!targetNode || !targetNode.classList) return;
+	calcFeatureTutorialState.focusPrevInlinePosition = targetNode.style.position || "";
+	calcFeatureTutorialState.focusPrevInlineZIndex = targetNode.style.zIndex || "";
+	calcFeatureTutorialState.focusForcedRelative = false;
+	var computedPosition = window.getComputedStyle ? window.getComputedStyle(targetNode).position : "";
+	if (computedPosition === "static" || !computedPosition) {
+		targetNode.style.position = "relative";
+		calcFeatureTutorialState.focusForcedRelative = true;
+	}
+	targetNode.style.zIndex = "2803";
+	targetNode.classList.add("calc-feature-tutorial-focus");
+	calcFeatureTutorialState.focusNode = targetNode;
+	if (typeof targetNode.scrollIntoView === "function") {
+		targetNode.scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
+	}
+}
+
+function clampCalcFeatureTutorialValue(value, min, max) {
+	return Math.min(max, Math.max(min, value));
+}
+
+function positionCalcFeatureTutorialCard(targetNode) {
+	var cardNode = calcFeatureTutorialState.cardNode;
+	if (!cardNode) return;
+	var margin = 12;
+	var cardWidth = cardNode.offsetWidth || 360;
+	var cardHeight = cardNode.offsetHeight || 280;
+	var viewportWidth = window.innerWidth || document.documentElement.clientWidth || 1280;
+	var viewportHeight = window.innerHeight || document.documentElement.clientHeight || 720;
+
+	var left = viewportWidth - cardWidth - margin;
+	var top = viewportHeight - cardHeight - margin;
+	if (targetNode && targetNode.getBoundingClientRect) {
+		var rect = targetNode.getBoundingClientRect();
+		if (isFinite(rect.left) && isFinite(rect.right) && isFinite(rect.top) && isFinite(rect.bottom)) {
+			var canFitRight = rect.right + 14 + cardWidth <= viewportWidth - margin;
+			var canFitLeft = rect.left - 14 - cardWidth >= margin;
+			if (canFitRight) {
+				left = rect.right + 14;
+			} else if (canFitLeft) {
+				left = rect.left - cardWidth - 14;
+			} else {
+				left = clampCalcFeatureTutorialValue(rect.left, margin, viewportWidth - cardWidth - margin);
+			}
+			var centeredTop = rect.top + ((rect.height - cardHeight) / 2);
+			top = clampCalcFeatureTutorialValue(centeredTop, margin, viewportHeight - cardHeight - margin);
+		}
+	}
+	cardNode.style.left = Math.round(left) + "px";
+	cardNode.style.top = Math.round(top) + "px";
+}
+
+function getFirstCalcFeatureTutorialTarget(selectors) {
+	for (var i = 0; i < selectors.length; i++) {
+		var node = document.querySelector(selectors[i]);
+		if (node) return node;
+	}
+	return null;
+}
+
+function ensureTutorialSettingsSection() {
+	var settingsBody = document.querySelector("#settings-side-panel .settings-side-body");
+	if (!settingsBody) return null;
+	var existingSection = document.getElementById("settings-tutorial-section");
+	if (existingSection) return existingSection;
+	var section = document.createElement("section");
+	section.id = "settings-tutorial-section";
+	section.className = "settings-section settings-tutorial-section";
+	section.innerHTML = "" +
+		"<h4>Tutorial</h4>" +
+		"<p class=\"settings-note\">Replay the feature walkthrough any time.</p>" +
+		"<div class=\"settings-choice-row\">" +
+		"<button type=\"button\" class=\"btn settings-choice-btn\" id=\"settings-open-tutorial\">Replay Feature Tutorial</button>" +
+		"</div>";
+	settingsBody.appendChild(section);
+	return section;
+}
+
+function ensureCalcFeatureTutorialOverlay() {
+	if (calcFeatureTutorialState.overlayNode && document.body.contains(calcFeatureTutorialState.overlayNode)) {
+		return calcFeatureTutorialState.overlayNode;
+	}
+	var overlay = document.createElement("div");
+	overlay.id = "calc-feature-tutorial-overlay";
+	overlay.className = "calc-feature-tutorial-overlay";
+	overlay.hidden = true;
+	overlay.innerHTML = "" +
+		"<div class=\"calc-feature-tutorial-scrim\"></div>" +
+		"<section class=\"calc-feature-tutorial-card\" role=\"dialog\" aria-modal=\"true\" aria-label=\"Feature tutorial\">" +
+		"<div class=\"calc-feature-tutorial-head\">" +
+		"<strong id=\"calc-feature-tutorial-title\"></strong>" +
+		"<span id=\"calc-feature-tutorial-progress\"></span>" +
+		"</div>" +
+		"<p id=\"calc-feature-tutorial-text\" class=\"calc-feature-tutorial-text\"></p>" +
+		"<div id=\"calc-feature-tutorial-visual\" class=\"calc-feature-tutorial-visual\"></div>" +
+		"<div class=\"calc-feature-tutorial-actions\">" +
+		"<button type=\"button\" class=\"btn calc-feature-tutorial-action\" id=\"calc-feature-tutorial-skip\">Skip</button>" +
+		"<div class=\"calc-feature-tutorial-nav\">" +
+		"<button type=\"button\" class=\"btn calc-feature-tutorial-action\" id=\"calc-feature-tutorial-back\">Back</button>" +
+		"<button type=\"button\" class=\"btn calc-feature-tutorial-action\" id=\"calc-feature-tutorial-next\">Next</button>" +
+		"</div>" +
+		"</div>" +
+		"</section>";
+	document.body.appendChild(overlay);
+
+	calcFeatureTutorialState.overlayNode = overlay;
+	calcFeatureTutorialState.cardNode = overlay.querySelector(".calc-feature-tutorial-card");
+	calcFeatureTutorialState.titleNode = document.getElementById("calc-feature-tutorial-title");
+	calcFeatureTutorialState.textNode = document.getElementById("calc-feature-tutorial-text");
+	calcFeatureTutorialState.progressNode = document.getElementById("calc-feature-tutorial-progress");
+	calcFeatureTutorialState.visualNode = document.getElementById("calc-feature-tutorial-visual");
+	calcFeatureTutorialState.backBtn = document.getElementById("calc-feature-tutorial-back");
+	calcFeatureTutorialState.nextBtn = document.getElementById("calc-feature-tutorial-next");
+
+	$("#calc-feature-tutorial-skip").off("click").on("click", function () {
+		finishCalcFeatureTutorial();
+	});
+	$("#calc-feature-tutorial-back").off("click").on("click", function () {
+		if (!calcFeatureTutorialState.isOpen) return;
+		if (calcFeatureTutorialState.stepIndex <= 0) return;
+		calcFeatureTutorialState.stepIndex -= 1;
+		renderCalcFeatureTutorialStep();
+	});
+	$("#calc-feature-tutorial-next").off("click").on("click", function () {
+		if (!calcFeatureTutorialState.isOpen) return;
+		var isLastStep = calcFeatureTutorialState.stepIndex >= calcFeatureTutorialState.steps.length - 1;
+		if (isLastStep) {
+			finishCalcFeatureTutorial();
+			return;
+		}
+		calcFeatureTutorialState.stepIndex += 1;
+		renderCalcFeatureTutorialStep();
+	});
+
+	$(window).off("resize.calctutorial").on("resize.calctutorial", function () {
+		if (!calcFeatureTutorialState.isOpen) return;
+		var activeStep = calcFeatureTutorialState.steps[calcFeatureTutorialState.stepIndex];
+		var target = resolveCalcFeatureTutorialTarget(activeStep);
+		positionCalcFeatureTutorialCard(target);
+	});
+	return overlay;
+}
+
+function resolveCalcFeatureTutorialTarget(step) {
+	if (!step) return null;
+	if (typeof step.selector === "function") return step.selector() || null;
+	if (typeof step.selector === "string" && step.selector) return document.querySelector(step.selector);
+	return null;
+}
+
+function getCalcFeatureTutorialSteps() {
+	return [
+		{
+			title: "Right-click sprites (P1 + P2)",
+			selector: function () {
+				return getFirstCalcFeatureTutorialTarget([
+					"#team-poke-list .trainer-pok.left-side",
+					"#box-poke-list .trainer-pok.left-side",
+					"#box-poke-list2 .trainer-pok.left-side",
+					"#team-poke-list"
+				]);
+			},
+			description: "Right-click any Pokemon 1 sprite in your Team/Box to open the quick action menu. Right-clicking a Pokemon 2 sprite instantly toggles that enemy as Dead/Alive for the current fight.",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Right-click</span><span>P1 sprite</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-arrow\">&#x2193;</div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Add Frag</span><span>Did This Mon Die?</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Hot Swap Team/Box/Trash</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Right-click</span><span>P2 sprite</span><span>&#x2192;</span><span>Mark Dead/Alive instantly</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				if (typeof closeDamageApplyMenu === "function") closeDamageApplyMenu();
+				closeFragContextMenu();
+				closeOpposingContextMenu();
+				closeCalcSidePanels();
+			}
+		},
+		{
+			title: "Frag sheet sync + fullscreen",
+			selector: "#frags-side-panel",
+			description: "All right-click frag actions feed directly into Frag Sheet. Use Overall %, This Fight, and Actions for fast tracking. Fullscreen view expands split details and gives more room per row.",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Panel</span><span>Frag Sheet</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Overall %</span><span>Split %</span><span>This Fight</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Tip</span><span>Use Fullscreen for full split columns.</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				openFragsPanel();
+				var panel = document.getElementById("frags-side-panel");
+				if (panel && !panel.classList.contains("fullscreen")) {
+					panel.classList.add("fullscreen");
+					$("#frags-panel-fullscreen").text("Exit Fullscreen");
+					renderFragSheet();
+				}
+			}
+		},
+		{
+			title: "Highlight damage and apply HP",
+			selector: function () {
+				return getFirstCalcFeatureTutorialTarget(["#damage-apply-menu", "#resultDamageL1", "#resultDamageR1", "#damageValues"]);
+			},
+			description: "Highlight any damage text or min/max % range, then use the popup buttons to subtract that amount from P1 or P2 HP instantly.",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>12.4% - 23.7%</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-arrow\">&#x2193;</div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>- P1 HP</span><span>- P2 HP</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				closeCalcSidePanels();
+				var menuRect = null;
+				var anchorNode = document.getElementById("resultDamageL1") || document.getElementById("resultDamageR1");
+				if (anchorNode && anchorNode.getBoundingClientRect) {
+					menuRect = anchorNode.getBoundingClientRect();
+				}
+				if (typeof openDamageApplyMenuForSelection === "function" && menuRect) {
+					openDamageApplyMenuForSelection("12.4% - 23.7%", menuRect);
+				}
+			}
+		},
+		{
+			title: "Top quick tools",
+			selector: ".calc-top-actions",
+			description: "Use the top buttons for quick access: Pokedex, Notes, and Settings. Notes/Frags open as side panels and can be toggled to fullscreen when you need more workspace.",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Pokedex</span><span>Notes</span><span>Settings</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">View</span><span>Side panel or Fullscreen.</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				closeCalcSidePanels();
+				if (typeof closeDamageApplyMenu === "function") closeDamageApplyMenu();
+			}
+		},
+		{
+			title: "Notes panel details",
+			selector: "#notes-side-panel",
+			description: "Notes tracks turns with selected mons and free text. Switch Single/Double format, add/remove turns, and use Fullscreen when you need bigger side-by-side note space.",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Per Turn</span><span>P1 + P2 selections</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Single / Double</span><span>+ Turn</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Tip</span><span>Fullscreen shows more notes at once.</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				openNotesPanel();
+				var notesPanel = document.getElementById("notes-side-panel");
+				if (notesPanel && !notesPanel.classList.contains("fullscreen")) {
+					notesPanel.classList.add("fullscreen");
+					$("#notes-panel-fullscreen").text("Exit Fullscreen");
+					renderNotesPanel();
+				}
+			}
+		},
+		{
+			title: "Settings explained",
+			selector: "#settings-side-panel .settings-side-body",
+			description: "Settings controls Starter routing, Theme, Layout mode, and QOL toggles (Typing Colors, Move Colors, PP/ACC display, and Total Frags on Border).",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Starter</span><span>Theme</span><span>Layout</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">QOL</span><span>Typing/Move colors, PP/ACC, Border Frags</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				openSettingsPanel();
+			}
+		},
+		{
+			title: "Terrain right-click lock",
+			selector: ".field-info label.btn[for='electric']",
+			description: "Weather is auto-set from permanent Astral weather abilities. Terrain abilities are limited-turn effects, so you can right-click a terrain button to force-lock terrain for that trainer fight.",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Auto</span><span>Weather from permanent abilities</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Manual lock</span><span>Right-click Terrain button</span></div>" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Toggle is instant for this trainer fight.</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				closeCalcSidePanels();
+				if (typeof closeDamageApplyMenu === "function") closeDamageApplyMenu();
+			}
+		},
+		{
+			title: "Replay any time",
+			selector: "#settings-open-tutorial",
+			description: "You can always revisit this walkthrough from Settings using \"Replay Feature Tutorial\".",
+			visualHtml: "" +
+				"<div class=\"calc-feature-tutorial-visual-card\">" +
+				"<div class=\"calc-feature-tutorial-visual-row\"><span>Settings</span><span>&#x2192;</span><span>Replay Feature Tutorial</span></div>" +
+				"</div>",
+			beforeShow: function () {
+				openSettingsPanel();
+				ensureTutorialSettingsSection();
+			}
+		}
+	];
+}
+
+function renderCalcFeatureTutorialStep() {
+	if (!calcFeatureTutorialState.isOpen) return;
+	var steps = calcFeatureTutorialState.steps;
+	if (!steps || !steps.length) return;
+	var index = calcFeatureTutorialState.stepIndex;
+	if (index < 0) index = 0;
+	if (index >= steps.length) index = steps.length - 1;
+	calcFeatureTutorialState.stepIndex = index;
+
+	var step = steps[index];
+	if (step && typeof step.beforeShow === "function") step.beforeShow();
+	var targetNode = resolveCalcFeatureTutorialTarget(step);
+
+	if (calcFeatureTutorialState.titleNode) calcFeatureTutorialState.titleNode.textContent = step.title || "Tutorial";
+	if (calcFeatureTutorialState.textNode) calcFeatureTutorialState.textNode.textContent = step.description || "";
+	if (calcFeatureTutorialState.progressNode) calcFeatureTutorialState.progressNode.textContent = "Step " + (index + 1) + " / " + steps.length;
+	if (calcFeatureTutorialState.visualNode) calcFeatureTutorialState.visualNode.innerHTML = step.visualHtml || "";
+	if (calcFeatureTutorialState.backBtn) calcFeatureTutorialState.backBtn.disabled = index <= 0;
+	if (calcFeatureTutorialState.nextBtn) calcFeatureTutorialState.nextBtn.textContent = index >= steps.length - 1 ? "Done" : "Next";
+
+	setCalcFeatureTutorialFocus(targetNode);
+	positionCalcFeatureTutorialCard(targetNode);
+	window.setTimeout(function () {
+		if (!calcFeatureTutorialState.isOpen) return;
+		positionCalcFeatureTutorialCard(calcFeatureTutorialState.focusNode);
+	}, 180);
+}
+
+function startCalcFeatureTutorial(options) {
+	var startOptions = options || {};
+	ensureTutorialSettingsSection();
+	var overlay = ensureCalcFeatureTutorialOverlay();
+	calcFeatureTutorialState.steps = getCalcFeatureTutorialSteps();
+	calcFeatureTutorialState.stepIndex = 0;
+	calcFeatureTutorialState.launchedFromSettings = !!startOptions.fromSettings;
+	calcFeatureTutorialState.isOpen = true;
+	markCalcFeatureTutorialSeen();
+	overlay.hidden = false;
+	overlay.classList.add("open");
+	document.body.classList.add("calc-feature-tutorial-open");
+	renderCalcFeatureTutorialStep();
+}
+
+function finishCalcFeatureTutorial() {
+	if (!calcFeatureTutorialState.isOpen) return;
+	clearCalcFeatureTutorialFocus();
+	if (calcFeatureTutorialState.overlayNode) {
+		calcFeatureTutorialState.overlayNode.classList.remove("open");
+		calcFeatureTutorialState.overlayNode.hidden = true;
+	}
+	calcFeatureTutorialState.isOpen = false;
+	calcFeatureTutorialState.steps = [];
+	calcFeatureTutorialState.stepIndex = 0;
+	var reopenSettings = !!calcFeatureTutorialState.launchedFromSettings;
+	calcFeatureTutorialState.launchedFromSettings = false;
+	if (typeof closeDamageApplyMenu === "function") closeDamageApplyMenu();
+	closeFragContextMenu();
+	closeOpposingContextMenu();
+	closeCalcSidePanels();
+	if (reopenSettings) openSettingsPanel();
+	document.body.classList.remove("calc-feature-tutorial-open");
+}
+
+function maybeAutoStartCalcFeatureTutorial() {
+	if (hasSeenCalcFeatureTutorial()) return;
+	startCalcFeatureTutorial({fromSettings: false});
+}
+
+function openFragsPanel() {
+	openCalcSidePanel("frags-side-panel");
+	renderFragSheet();
+}
+
+function openSettingsPanel() {
+	openCalcSidePanel("settings-side-panel");
+	syncSettingsPanelUi();
+}
+
+function createDefaultNotesTurn() {
+	return {
+		left1: "",
+		left2: "",
+		right1: "",
+		right2: "",
+		note: ""
+	};
+}
+
+function normalizeNotesTurn(rawTurn) {
+	var turn = rawTurn && typeof rawTurn === "object" ? rawTurn : {};
+	return {
+		left1: String(turn.left1 || "").trim(),
+		left2: String(turn.left2 || "").trim(),
+		right1: String(turn.right1 || "").trim(),
+		right2: String(turn.right2 || "").trim(),
+		note: String(turn.note || "")
+	};
+}
+
+function normalizeNotesBoardState(rawState) {
+	var state = rawState && typeof rawState === "object" ? rawState : {};
+	var normalized = {
+		format: state.format === "doubles" ? "doubles" : "singles",
+		turns: []
+	};
+	var rawTurns = Array.isArray(state.turns) ? state.turns : [];
+	for (var i = 0; i < rawTurns.length; i++) {
+		normalized.turns.push(normalizeNotesTurn(rawTurns[i]));
+	}
+	if (!normalized.turns.length) normalized.turns.push(createDefaultNotesTurn());
+	return normalized;
+}
+
+function getNotesBoardState(forceReload) {
+	if (!forceReload && notesBoardState) return notesBoardState;
+	var parsed = safeJsonParse(localStorage.getItem(NOTES_BOARD_STORAGE_KEY), {});
+	notesBoardState = normalizeNotesBoardState(parsed);
+	return notesBoardState;
+}
+
+function saveNotesBoardState() {
+	localStorage.setItem(NOTES_BOARD_STORAGE_KEY, JSON.stringify(getNotesBoardState()));
+}
+
+function ensureNotesSetOption(options, setId) {
+	var normalizedSet = String(setId || "").trim();
+	if (!normalizedSet) return;
+	if (options.indexOf(normalizedSet) >= 0) return;
+	options.push(normalizedSet);
+}
+
+function getNotesPlayerSetOptions() {
+	var options = collectPlayerRosterSetIds();
+	var activePlayerSet = $(".player").val();
+	ensureNotesSetOption(options, activePlayerSet);
+	if (options.length) return options;
+	var customsets = safeJsonParse(localStorage.getItem("customsets"), {});
+	for (var speciesName in customsets) {
+		if (!Object.prototype.hasOwnProperty.call(customsets, speciesName)) continue;
+		var speciesSets = customsets[speciesName];
+		if (!speciesSets || typeof speciesSets !== "object") continue;
+		for (var setLabel in speciesSets) {
+			if (!Object.prototype.hasOwnProperty.call(speciesSets, setLabel)) continue;
+			ensureNotesSetOption(options, speciesName + " (" + setLabel + ")");
+		}
+	}
+	return options;
+}
+
+function getNotesOpposingSetOptions() {
+	var options = collectOpposingTargetSetIds();
+	var activeOpposingSet = $(".opposing").val();
+	ensureNotesSetOption(options, activeOpposingSet);
+	return options;
+}
+
+function renderNotesSetOptionsHtml(options, selectedSetId, emptyLabel) {
+	var normalizedOptions = Array.isArray(options) ? options.slice() : [];
+	ensureNotesSetOption(normalizedOptions, selectedSetId);
+	var selected = String(selectedSetId || "").trim();
+	var html = "<option value=\"\">" + escapeHtml(emptyLabel || "Select Pokemon") + "</option>";
+	for (var i = 0; i < normalizedOptions.length; i++) {
+		var setId = normalizedOptions[i];
+		var selectedAttr = setId === selected ? " selected" : "";
+		html += "<option value=\"" + escapeHtml(setId) + "\"" + selectedAttr + ">" + escapeHtml(formatSetNameForDisplay(setId)) + "</option>";
+	}
+	return html;
+}
+
+function getNotesMonSlotHtml(turnIndex, fieldKey, selectedSetId, options, emptyLabel) {
+	var selected = String(selectedSetId || "").trim();
+	var speciesName = parseSetId(selected).species || "";
+	var spriteSrc = speciesName
+		? escapeHtml(getTrainerSpriteUrlByName(speciesName))
+		: "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+	var spriteClass = "notes-mon-sprite" + (speciesName ? "" : " notes-mon-sprite-empty");
+	var spriteOnError = speciesName ? " onerror=\"applyIconSheetFallbackImage(this, this.getAttribute('data-species'))\"" : "";
+	return "<div class=\"notes-mon-slot\">" +
+		"<select class=\"notes-set-select\" data-turn-index=\"" + turnIndex + "\" data-notes-field=\"" + escapeHtml(fieldKey) + "\">" +
+		renderNotesSetOptionsHtml(options, selected, emptyLabel) +
+		"</select>" +
+		"<img class=\"" + spriteClass + "\" src=\"" + spriteSrc + "\" data-species=\"" + escapeHtml(speciesName) + "\" alt=\"\" loading=\"lazy\" decoding=\"async\"" + spriteOnError + ">" +
+		"</div>";
+}
+
+function getNotesTurnHtml(turnIndex, turnData, formatMode, playerOptions, opposingOptions) {
+	var isDoubles = formatMode === "doubles";
+	var playerSlotsHtml = getNotesMonSlotHtml(turnIndex, "left1", turnData.left1, playerOptions, "Player");
+	if (isDoubles) playerSlotsHtml += getNotesMonSlotHtml(turnIndex, "left2", turnData.left2, playerOptions, "Player 2");
+	var opposingSlotsHtml = getNotesMonSlotHtml(turnIndex, "right1", turnData.right1, opposingOptions, "Opponent");
+	if (isDoubles) opposingSlotsHtml += getNotesMonSlotHtml(turnIndex, "right2", turnData.right2, opposingOptions, "Opponent 2");
+	var removeBtn = "";
+	if (getNotesBoardState().turns.length > 1) {
+		removeBtn = "<button type=\"button\" class=\"btn notes-turn-remove\" data-turn-index=\"" + turnIndex + "\">Remove</button>";
+	}
+	return "<section class=\"notes-turn-card\" data-turn-index=\"" + turnIndex + "\">" +
+		"<div class=\"notes-turn-head\"><strong class=\"notes-turn-label\">T" + (turnIndex + 1) + "</strong>" + removeBtn + "</div>" +
+		"<div class=\"notes-turn-grid" + (isDoubles ? " is-doubles" : "") + "\">" +
+		"<div class=\"notes-side-cell\"><div class=\"notes-side-title\">P</div><div class=\"notes-side-slots\">" + playerSlotsHtml + "</div></div>" +
+		"<div class=\"notes-note-cell\"><textarea class=\"notes-note-input\" data-turn-index=\"" + turnIndex + "\">" + escapeHtml(turnData.note || "") + "</textarea></div>" +
+		"<div class=\"notes-side-cell\"><div class=\"notes-side-title\">P2</div><div class=\"notes-side-slots\">" + opposingSlotsHtml + "</div></div>" +
+		"</div>" +
+		"</section>";
+}
+
+function renderNotesPanel() {
+	var notesPanel = document.getElementById("notes-side-panel");
+	var turnsWrap = document.getElementById("notes-turns-wrap");
+	var fightLabelNode = document.getElementById("notes-current-fight-label");
+	if (!notesPanel || !turnsWrap || !fightLabelNode) return;
+
+	var notesState = getNotesBoardState();
+	if (!Array.isArray(notesState.turns) || !notesState.turns.length) {
+		notesState.turns = [createDefaultNotesTurn()];
+		saveNotesBoardState();
+	}
+
+	fightLabelNode.textContent = "Fight: " + getCurrentFightLabel();
+	$(".notes-format-btn").removeClass("is-active");
+	$(".notes-format-btn[data-notes-format='" + notesState.format + "']").addClass("is-active");
+
+	var playerOptions = getNotesPlayerSetOptions();
+	var opposingOptions = getNotesOpposingSetOptions();
+	var turnsHtmlParts = [];
+	for (var i = 0; i < notesState.turns.length; i++) {
+		turnsHtmlParts.push(getNotesTurnHtml(i, notesState.turns[i], notesState.format, playerOptions, opposingOptions));
+	}
+	turnsWrap.innerHTML = turnsHtmlParts.join("");
+}
+
+function openNotesPanel() {
+	openCalcSidePanel("notes-side-panel");
+	renderNotesPanel();
+}
+
+function isNotesPanelOpen() {
+	var panel = document.getElementById("notes-side-panel");
+	return !!(panel && panel.classList.contains("open"));
+}
+
+function refreshNotesPanelIfOpen() {
+	if (isNotesPanelOpen()) renderNotesPanel();
+}
+
+function setNotesFormat(formatMode) {
+	var notesState = getNotesBoardState();
+	var normalizedMode = formatMode === "doubles" ? "doubles" : "singles";
+	if (notesState.format !== normalizedMode) {
+		notesState.format = normalizedMode;
+		saveNotesBoardState();
+	}
+	renderNotesPanel();
+}
+
+function addNotesTurn() {
+	var notesState = getNotesBoardState();
+	notesState.turns.push(createDefaultNotesTurn());
+	saveNotesBoardState();
+	renderNotesPanel();
+}
+
+function removeNotesTurnAt(turnIndex) {
+	var notesState = getNotesBoardState();
+	var index = parseInt(turnIndex, 10);
+	if (Number.isNaN(index) || index < 0 || index >= notesState.turns.length) return;
+	notesState.turns.splice(index, 1);
+	if (!notesState.turns.length) notesState.turns.push(createDefaultNotesTurn());
+	saveNotesBoardState();
+	renderNotesPanel();
+}
+
+function updateNotesTurnField(turnIndex, fieldKey, fieldValue) {
+	var notesState = getNotesBoardState();
+	var index = parseInt(turnIndex, 10);
+	if (Number.isNaN(index) || index < 0 || index >= notesState.turns.length) return;
+	var allowedFields = {left1: true, left2: true, right1: true, right2: true, note: true};
+	if (!allowedFields[fieldKey]) return;
+	notesState.turns[index][fieldKey] = fieldKey === "note" ? String(fieldValue || "") : String(fieldValue || "").trim();
+	saveNotesBoardState();
+}
+
+function scheduleNotesTurnNoteUpdate(turnIndex, noteValue) {
+	var key = String(turnIndex || "");
+	if (notesNoteInputDebounceTimers[key]) window.clearTimeout(notesNoteInputDebounceTimers[key]);
+	notesNoteInputDebounceTimers[key] = window.setTimeout(function () {
+		delete notesNoteInputDebounceTimers[key];
+		updateNotesTurnField(turnIndex, "note", noteValue);
+	}, NOTES_NOTE_INPUT_DEBOUNCE_MS);
+}
+
+function flushScheduledNotesTurnNoteUpdate(turnIndex, noteValue) {
+	var key = String(turnIndex || "");
+	if (notesNoteInputDebounceTimers[key]) {
+		window.clearTimeout(notesNoteInputDebounceTimers[key]);
+		delete notesNoteInputDebounceTimers[key];
+	}
+	updateNotesTurnField(turnIndex, "note", noteValue);
+}
+
+function canScrollForWheelDelta(containerElement, deltaY) {
+	if (!containerElement || !deltaY) return false;
+	var maxScrollTop = containerElement.scrollHeight - containerElement.clientHeight;
+	if (maxScrollTop <= 0) return false;
+	var scrollTop = containerElement.scrollTop;
+	if (deltaY < 0) return scrollTop > 0;
+	if (deltaY > 0) return scrollTop < maxScrollTop - 1;
+	return false;
+}
+
+function hasScrollableWheelPathWithin(containerBoundary, startNode, deltaY) {
+	var currentNode = startNode && startNode.nodeType === 1 ? startNode : (startNode ? startNode.parentElement : null);
+	while (currentNode) {
+		var overflowY = window.getComputedStyle(currentNode).overflowY;
+		var allowsScroll = overflowY === "auto" || overflowY === "scroll" || overflowY === "overlay";
+		if (allowsScroll && canScrollForWheelDelta(currentNode, deltaY)) return true;
+		if (currentNode === containerBoundary) break;
+		currentNode = currentNode.parentElement;
+	}
+	return false;
+}
+
+function bindFragsPanelScrollContainment() {
+	$("#frags-side-panel .calc-side-body").off("wheel.fragspanel").on("wheel.fragspanel", function (ev) {
+		var rawEvent = ev.originalEvent || ev;
+		var deltaY = Number(rawEvent && rawEvent.deltaY ? rawEvent.deltaY : 0);
+		if (!deltaY) return;
+		if (hasScrollableWheelPathWithin(this, ev.target, deltaY)) return;
+		ev.preventDefault();
+		ev.stopPropagation();
+	});
+}
+
+function ensureOpposingContextMenu() {
+	if (document.getElementById("opp-context-menu")) return;
+	var menu = document.createElement("div");
+	menu.id = "opp-context-menu";
+	menu.className = "frag-context-menu";
+	menu.hidden = true;
+	menu.innerHTML = "" +
+		"<div id=\"opp-context-title\" class=\"frag-context-title\">Opponent Action</div>" +
+		"<button type=\"button\" id=\"opp-context-mark-dead\" class=\"btn frag-context-btn\">Mark as Dead</button>" +
+		"<button type=\"button\" id=\"opp-context-cancel\" class=\"btn frag-context-btn\">Cancel</button>";
+	document.body.appendChild(menu);
+}
+
+function isOpposingSetMarkedDead(setId) {
+	return !!deadOpposingSetMap[String(setId || "")];
+}
+
+function applyOpposingDeadMarks() {
+	$(".trainer-pok.right-side").each(function () {
+		var setId = $(this).attr("data-id") || "";
+		$(this).toggleClass("trainer-pok-dead", isOpposingSetMarkedDead(setId));
+	});
+}
+
+function setOpposingSetDeadMark(setId, isDead) {
+	var key = String(setId || "");
+	if (!key) return;
+	if (isDead) deadOpposingSetMap[key] = true;
+	else delete deadOpposingSetMap[key];
+	applyOpposingDeadMarks();
+}
+
+function clearOpposingDeadMarks() {
+	deadOpposingSetMap = {};
+	applyOpposingDeadMarks();
+}
+
+function closeOpposingContextMenu() {
+	var menu = document.getElementById("opp-context-menu");
+	if (!menu) return;
+	menu.hidden = true;
+	opposingContextSourceSet = "";
+}
+
+function openOpposingContextMenu(ev, sourceSetId) {
+	var menu = document.getElementById("opp-context-menu");
+	if (!menu || !sourceSetId) return;
+	ev.preventDefault();
+	closeFragContextMenu();
+	opposingContextSourceSet = String(sourceSetId);
+	var sourceSpecies = parseSetId(opposingContextSourceSet).species || "Pokemon 2";
+	$("#opp-context-title").text(sourceSpecies + " (Pokemon 2)");
+	$("#opp-context-mark-dead").text(isOpposingSetMarkedDead(opposingContextSourceSet) ? "Unmark Dead" : "Mark as Dead");
+	menu.hidden = false;
+	var left = ev.clientX + 8;
+	var top = ev.clientY + 8;
+	var maxLeft = window.innerWidth - menu.offsetWidth - 10;
+	var maxTop = window.innerHeight - menu.offsetHeight - 10;
+	menu.style.left = Math.max(8, Math.min(left, maxLeft)) + "px";
+	menu.style.top = Math.max(8, Math.min(top, maxTop)) + "px";
+}
+
+function collectOpposingTargetSetIds() {
+	var opposingSetIds = [];
+	$(".trainer-pok.right-side").each(function () {
+		var setId = $(this).attr("data-id");
+		if (!setId) return;
+		if (opposingSetIds.indexOf(setId) < 0) opposingSetIds.push(setId);
+	});
+	var activeOpposingSet = $(".opposing").val();
+	if (activeOpposingSet && opposingSetIds.indexOf(activeOpposingSet) < 0) {
+		opposingSetIds.unshift(activeOpposingSet);
+	}
+	return opposingSetIds;
+}
+
+function updateFragContextTitle() {
+	var sourceSpecies = parseSetId(fragContextSourceSet).species || "Pokemon";
+	var selectedTargetSet = $("#frag-context-target").val() || "";
+	var targetSpecies = parseSetId(selectedTargetSet).species || "Pokemon";
+	$("#frag-context-title").text("Did " + sourceSpecies + " kill " + targetSpecies + "?");
+}
+
+function populateFragContextTargets() {
+	var targetSelect = $("#frag-context-target");
+	var targetSetIds = collectOpposingTargetSetIds();
+	var activeOpposingSet = $(".opposing").val() || "";
+	var previousTargetSet = targetSelect.val() || "";
+	targetSelect.empty();
+	if (!targetSetIds.length) {
+		targetSelect.append("<option value=\"\">No Pokemon 2 target found</option>");
+		targetSelect.prop("disabled", true);
+	} else {
+		targetSelect.prop("disabled", false);
+		for (var i = 0; i < targetSetIds.length; i++) {
+			var parsedTarget = parseSetId(targetSetIds[i]);
+			targetSelect.append("<option value=\"" + escapeHtml(targetSetIds[i]) + "\">" + escapeHtml(parsedTarget.species) + "</option>");
+		}
+		var selectedTargetSet = "";
+		if (activeOpposingSet && targetSetIds.indexOf(activeOpposingSet) >= 0) {
+			selectedTargetSet = activeOpposingSet;
+		} else if (previousTargetSet && targetSetIds.indexOf(previousTargetSet) >= 0) {
+			selectedTargetSet = previousTargetSet;
+		} else {
+			selectedTargetSet = targetSetIds[0];
+		}
+		targetSelect.val(selectedTargetSet);
+	}
+	updateFragContextTitle();
+}
+
+function closeFragContextMenu() {
+	var contextMenu = document.getElementById("frag-context-menu");
+	if (!contextMenu) return;
+	contextMenu.hidden = true;
+	fragContextSourceSet = "";
+	fragContextSourceElement = null;
+}
+
+function openFragContextMenu(ev, sourceSetId, sourceElement) {
+	var contextMenu = document.getElementById("frag-context-menu");
+	if (!contextMenu || !sourceSetId) return;
+	ev.preventDefault();
+	closeOpposingContextMenu();
+	fragContextSourceSet = sourceSetId;
+	fragContextSourceElement = sourceElement || ev.currentTarget || null;
+	populateFragContextTargets();
+	updateFragContextSwapButtons();
+	updateFragContextDeathButton();
+	contextMenu.hidden = false;
+	var left = ev.clientX + 8;
+	var top = ev.clientY + 8;
+	var maxLeft = window.innerWidth - contextMenu.offsetWidth - 10;
+	var maxTop = window.innerHeight - contextMenu.offsetHeight - 10;
+	contextMenu.style.left = Math.max(8, Math.min(left, maxLeft)) + "px";
+	contextMenu.style.top = Math.max(8, Math.min(top, maxTop)) + "px";
+}
+
+function findFragContextSourceElement(setId, sourceElement) {
+	var spriteElement = sourceElement && sourceElement.nodeType === 1 ? sourceElement : null;
+	if (!spriteElement || !spriteElement.parentNode) {
+		spriteElement = $(".trainer-pok.left-side").filter(function () {
+			return $(this).attr("data-id") === setId;
+		}).get(0);
+	}
+	return spriteElement || null;
+}
+
+function updateFragContextSwapButtons() {
+	var sourceElement = findFragContextSourceElement(fragContextSourceSet, fragContextSourceElement);
+	var sourceContainer = getTrainerPokContainerElement(sourceElement);
+	var sourceParentId = sourceContainer ? sourceContainer.id : "";
+	$("#frag-context-swap-team1").prop("hidden", sourceParentId === "team-poke-list");
+	$("#frag-context-swap-team2").prop("hidden", sourceParentId === "box-poke-list2");
+	$("#frag-context-swap-trash").prop("hidden", sourceParentId === "trash-box");
+}
+
+function updateFragContextDeathButton() {
+	var button = $("#frag-context-mark-dead");
+	if (!button.length || !fragContextSourceSet) return;
+	var entry = ensureFragEntryForSet(fragContextSourceSet);
+	var deathInfo = getFragDeathInfo(entry);
+	if (deathInfo.isDead) {
+		button.text("Undo Death");
+	} else {
+		button.text("Did This Mon Die?");
+	}
+}
+
+function hotSwapSetToPlayerContainer(setId, sourceElement, containerId) {
+	if (!setId) return;
+	var targetContainer = document.getElementById(containerId);
+	if (!targetContainer) {
+		alert("Target section not found.");
+		return;
+	}
+	var spriteElement = findFragContextSourceElement(setId, sourceElement);
+	if (!spriteElement) {
+		alert("Could not locate the selected sprite.");
+		return;
+	}
+	var moveNode = getTrainerPokRootNode(spriteElement);
+	if (!moveNode) return;
+	targetContainer.appendChild(moveNode);
+	if (containerId !== "trash-box") {
+		topPokemonIcon(setId, $("#p1mon")[0]);
+		$(".player").val(setId);
+		$(".player").change();
+		$(".player .select2-chosen").text(formatSetNameForDisplay(setId));
+	}
+	syncFragRoster({pruneMissing: true});
+	renderFragSheet();
+}
+
+function isSetOptionAvailable(setId) {
+	return !!getSetOptionById(setId);
+}
+
+function getTrainerSetOptionsByLabel(trainerLabel, options) {
+	var normalizedTrainerLabel = String(trainerLabel || "").trim();
+	if (!normalizedTrainerLabel) return [];
+	var sourceOptions = Array.isArray(options) ? options : getSetOptions();
+	var matches = [];
+	for (var i = 0; i < sourceOptions.length; i++) {
+		var option = sourceOptions[i];
+		if (!option || !option.id || !option.set || option.set === "Blank Set") continue;
+		var parsedEntry = parseTrainerPartyEntry(option.id);
+		if (parsedEntry.trainerLabel === normalizedTrainerLabel) {
+			matches.push(option);
+		}
+	}
+	matches.sort(function (leftOption, rightOption) {
+		var leftEntry = parseTrainerPartyEntry(leftOption.id);
+		var rightEntry = parseTrainerPartyEntry(rightOption.id);
+		var leftIndex = getTrainerIndexFromSetData(leftEntry.setData) || leftEntry.sortIndex || 0;
+		var rightIndex = getTrainerIndexFromSetData(rightEntry.setData) || rightEntry.sortIndex || 0;
+		if (leftIndex !== rightIndex) return leftIndex - rightIndex;
+		return String(leftOption.id).localeCompare(String(rightOption.id));
+	});
+	return matches;
+}
+
+function selectTrainerFightByLabel(trainerLabel, preferredSetId) {
+	var trainerOptions = getTrainerSetOptionsByLabel(trainerLabel);
+	if (!trainerOptions.length) return false;
+	var normalizedPreferredSetId = String(preferredSetId || "").trim();
+	var targetSetId = normalizedPreferredSetId && getSetOptionById(normalizedPreferredSetId, trainerOptions)
+		? normalizedPreferredSetId
+		: trainerOptions[0].id;
+	return setSelectedSetIdForSide("p2", targetSetId);
+}
+
+function getSetOptionById(setId, options) {
+	var normalizedSetId = String(setId || "").trim();
+	if (!normalizedSetId) return null;
+	var sourceOptions = Array.isArray(options) ? options : getSetOptions();
+	for (var i = 0; i < sourceOptions.length; i++) {
+		if (sourceOptions[i] && sourceOptions[i].id === normalizedSetId) return sourceOptions[i];
+	}
+	return null;
+}
+
+function getCustomSetOptionById(setId, options) {
+	var normalizedSetId = String(setId || "").trim();
+	if (!normalizedSetId) return null;
+	var sourceOptions = Array.isArray(options) ? options : getSetOptions();
+	for (var i = 0; i < sourceOptions.length; i++) {
+		var option = sourceOptions[i];
+		if (!option || option.id !== normalizedSetId) continue;
+		if (option.isCustom && option.set) return option;
+	}
+	return null;
+}
+
+function getSelectedSetIdForSide(sideId) {
+	var selector = $("#" + sideId + " .set-selector").first();
+	if (!selector.length) return "";
+	return String(selector.val() || "").trim();
+}
+
+function isSetIdKnownInSetdex(setId) {
+	var parsedSet = parseSetId(setId);
+	var speciesName = String(parsedSet.species || "").trim();
+	var setName = String(parsedSet.label || "").trim();
+	if (!speciesName || !setName || !setdex || !setdex[speciesName]) return false;
+	return Object.prototype.hasOwnProperty.call(setdex[speciesName], setName);
+}
+
+function setSelectedSetIdForSide(sideId, setId) {
+	var normalizedSetId = String(setId || "").trim();
+	if (!normalizedSetId) return false;
+	if (!isSetOptionAvailable(normalizedSetId)) return false;
+	var selector = $("#" + sideId + " .set-selector").first();
+	if (!selector.length) return false;
+	function syncSetSelectorDisplayText() {
+		var select2Container = selector.next(".select2-container");
+		if (!select2Container.length) {
+			select2Container = selector.siblings(".select2-container").first();
+		}
+		select2Container.find(".select2-chosen").first().text(formatSetNameForDisplay(normalizedSetId));
+	}
+	var currentSetId = String(selector.val() || "").trim();
+	if (currentSetId === normalizedSetId) {
+		syncSetSelectorDisplayText();
+		return true;
+	}
+	selector.val(normalizedSetId).change();
+	var appliedSetId = String(selector.val() || "").trim();
+	if (appliedSetId === normalizedSetId) {
+		syncSetSelectorDisplayText();
+	}
+	return appliedSetId === normalizedSetId;
+}
+
+function getStoredLastEncounterSelection() {
+	var parsed = safeJsonParse(localStorage.getItem(LAST_ENCOUNTER_STORAGE_KEY), {});
+	return parsed && typeof parsed === "object" ? parsed : {};
+}
+
+function saveLastEncounterSelection() {
+	if (isRestoringLastEncounterSelection || isBootstrappingLastEncounterSelection) return;
+	var playerSetId = getSelectedSetIdForSide("p1");
+	var opposingSetId = getSelectedSetIdForSide("p2");
+	if (!playerSetId && !opposingSetId) return;
+
+	var payload = {
+		playerSet: playerSetId,
+		opposingSet: opposingSetId
+	};
+	if (opposingSetId) {
+		var opposingEntry = parseTrainerPartyEntry(opposingSetId);
+		if (opposingEntry && opposingEntry.trainerLabel) {
+			payload.trainerLabel = opposingEntry.trainerLabel;
+		}
+		if (opposingEntry) {
+			var trainerIndex = getTrainerIndexFromSetData(opposingEntry.setData);
+			var trainerBounds = getCurrentTrainerIndexBounds();
+			if (trainerBounds && trainerBounds.min > 0) {
+				trainerIndex = trainerBounds.min;
+			}
+			if (!Number.isNaN(trainerIndex) && trainerIndex > 0) {
+				payload.trainerIndex = trainerIndex;
+				localStorage.setItem("lasttimetrainer", String(trainerIndex));
+			}
+		}
+	}
+	localStorage.setItem(LAST_ENCOUNTER_STORAGE_KEY, JSON.stringify(payload));
+	if (window.console && typeof window.console.debug === "function") {
+		window.console.debug("[AstralCalc] saveLastEncounterSelection " + JSON.stringify(payload));
+	}
+}
+
+function restoreLastEncounterSelection() {
+	isRestoringLastEncounterSelection = true;
+	var savedSelection = getStoredLastEncounterSelection();
+	var restoredOpposing = false;
+	var restoredPlayer = false;
+	if (window.console && typeof window.console.debug === "function") {
+		window.console.debug("[AstralCalc] restoreLastEncounterSelection:start " + JSON.stringify(savedSelection));
+	}
+
+	try {
+		var savedOpposingTrainerLabel = savedSelection.opposingSet
+			? parseTrainerPartyEntry(savedSelection.opposingSet).trainerLabel
+			: "";
+		if (savedSelection.opposingSet) {
+			restoredOpposing = setSelectedSetIdForSide("p2", savedSelection.opposingSet);
+			if (!restoredOpposing) {
+				var currentOpposingSetId = getSelectedSetIdForSide("p2");
+				var currentOpposingTrainerLabel = currentOpposingSetId
+					? parseTrainerPartyEntry(currentOpposingSetId).trainerLabel
+					: "";
+				if (currentOpposingSetId === savedSelection.opposingSet ||
+					(savedOpposingTrainerLabel && currentOpposingTrainerLabel === savedOpposingTrainerLabel)) {
+					restoredOpposing = true;
+				}
+			}
+		}
+
+		if (!restoredOpposing && savedSelection.trainerLabel) {
+			restoredOpposing = selectTrainerFightByLabel(savedSelection.trainerLabel, savedSelection.opposingSet);
+		}
+
+		if (!restoredOpposing) {
+			var trainerIndexRaw = savedSelection.trainerIndex;
+			if (typeof trainerIndexRaw === "undefined" || trainerIndexRaw === null || trainerIndexRaw === "") {
+				trainerIndexRaw = localStorage.getItem("lasttimetrainer");
+			}
+			var trainerIndex = parseInt(trainerIndexRaw, 10);
+			if (!Number.isNaN(trainerIndex) && trainerIndex > 0) {
+				selectTrainer(trainerIndex);
+				restoredOpposing = true;
+			}
+		}
+
+		if (savedSelection.playerSet) {
+			restoredPlayer = setSelectedSetIdForSide("p1", savedSelection.playerSet);
+		}
+		if (window.console && typeof window.console.debug === "function") {
+			window.console.debug("[AstralCalc] restoreLastEncounterSelection:result " + JSON.stringify({
+				savedSelection: savedSelection,
+				restoredOpposing: restoredOpposing,
+				restoredPlayer: restoredPlayer,
+				currentOpposing: getSelectedSetIdForSide("p2"),
+				currentPlayer: getSelectedSetIdForSide("p1")
+			}));
+		}
+		return restoredOpposing || (!savedSelection.opposingSet && restoredPlayer);
+	} finally {
+		isRestoringLastEncounterSelection = false;
+	}
+}
+
+function refreshSetSelectorsForStarterChoice() {
+	var playerSet = $(".player").val();
+	var opposingSet = $(".opposing").val();
+	loadDefaultLists();
+	var firstValidSet = getFirstValidSetOption();
+
+	if (playerSet && isSetOptionAvailable(playerSet)) {
+		$(".player").val(playerSet).change();
+		$(".player .select2-chosen").text(formatSetNameForDisplay(playerSet));
+	} else if (firstValidSet) {
+		$(".player").val(firstValidSet.id).change();
+		$(".player .select2-chosen").text(formatSetNameForDisplay(firstValidSet.id));
+	}
+
+	if (opposingSet && isSetOptionAvailable(opposingSet)) {
+		$(".opposing").val(opposingSet).change();
+		$(".opposing .select2-chosen").text(formatSetNameForDisplay(opposingSet));
+	} else if (firstValidSet) {
+		$(".opposing").val(firstValidSet.id).change();
+		$(".opposing .select2-chosen").text(formatSetNameForDisplay(firstValidSet.id));
+	}
+}
+
+function refreshBattleLayoutForCurrentSelection() {
+	var selectedOpposing = $(".opposing").val();
+	if (!selectedOpposing) return;
+	CURRENT_TRAINER_POKS = get_trainer_poks(selectedOpposing);
+	syncBattleFormatForSelection(selectedOpposing, CURRENT_TRAINER_POKS);
+	renderOpposingTrainerParties(selectedOpposing);
+	syncWeatherForSelection(selectedOpposing, CURRENT_TRAINER_POKS);
+	syncTerrainForSelection(selectedOpposing, CURRENT_TRAINER_POKS);
+	renderFragSheet();
+}
+
+function normalizeTypeKey(rawType) {
+	return String(rawType || "")
+		.trim()
+		.toLowerCase()
+		.replace(/[()]/g, "")
+		.replace(/\s+/g, "");
+}
+
+function getReadableTextColor(backgroundHex) {
+	return "#101622";
+}
+
+function applySingleTypeSelectColour(selectElement, enabled) {
+	var selectNode = selectElement && selectElement.jquery ? selectElement : $(selectElement);
+	if (!selectNode || !selectNode.length) return;
+	if (!enabled) {
+		selectNode.removeClass("more-colour-type-select");
+		selectNode.css({
+			backgroundColor: "",
+			borderColor: "",
+			color: ""
+		});
+		return;
+	}
+	var typeKey = normalizeTypeKey(selectNode.val());
+	var typeColour = TYPE_COLOR_MAP[typeKey];
+	if (!typeColour) {
+		selectNode.removeClass("more-colour-type-select");
+		selectNode.css({
+			backgroundColor: "",
+			borderColor: "",
+			color: ""
+		});
+		return;
+	}
+	selectNode.addClass("more-colour-type-select");
+	selectNode.css({
+		backgroundColor: typeColour,
+		borderColor: typeColour,
+		color: "#101622"
+	});
+}
+
+function applyMoreColourSetting(enabled) {
+	var typeSelects = $("#p1 .type1, #p1 .type2, #p1 .teraType, #p2 .type1, #p2 .type2, #p2 .teraType");
+	typeSelects.each(function () {
+		applySingleTypeSelectColour(this, enabled);
+	});
+}
+
+function refreshThemeChoiceButtons() {
+	var isDark = typeof window.isDarkThemeEnabled === "function" ? window.isDarkThemeEnabled() : isDarkThemeStylesEnabled();
+	$("#settings-theme-dark").toggleClass("is-active", isDark);
+	$("#settings-theme-light").toggleClass("is-active", !isDark);
+}
+
+function syncSettingsPanelUi() {
+	ensureTutorialSettingsSection();
+	var settings = getAppSettings();
+	$(".settings-choice-btn[data-starter-choice]").removeClass("is-active");
+	$(".settings-choice-btn[data-starter-choice='" + settings.starterChoice + "']").addClass("is-active");
+	$(".settings-choice-btn[data-layout-choice]").removeClass("is-active");
+	$(".settings-choice-btn[data-layout-choice='" + settings.layoutMode + "']").addClass("is-active");
+	$("#settings-more-colour").prop("checked", !!settings.moreColour);
+	$("#settings-move-colors").prop("checked", !!settings.moveColors);
+	$("#settings-move-meta").prop("checked", !!settings.moveMeta);
+	$("#settings-total-frags-on-border").prop("checked", !!settings.totalFragsOnBorder);
+	setMoveMetaVisibility(!!settings.moveMeta);
+	applyMoreColourSetting(!!settings.moreColour);
+	updateTrainerFragBorderTotals();
+	refreshThemeChoiceButtons();
+	if (typeof applyLayoutMode === "function") {
+		applyLayoutMode(settings.layoutMode);
+	} else {
+		$("body").toggleClass("layout-simplified", settings.layoutMode === "simplified");
+	}
+}
+
+function bindCalcToolEvents() {
+	ensureOpposingContextMenu();
+	ensureFragHistoryControls();
+	ensureTutorialSettingsSection();
+	bindFragsPanelScrollContainment();
+	syncTrainerFieldLockButtonStyles();
+
+	$("#open-pokedex-panel").off("click").on("click", function () {
+		var selectedSet = $(".player").val() || "";
+		var selectedSpecies = parseSetId(selectedSet).species;
+		openAstralDexSidePanel(astralDexUrl(selectedSpecies), selectedSpecies);
+	});
+
+	$("#open-frags-panel").off("click").on("click", function () {
+		openFragsPanel();
+	});
+
+	$("#open-notes-panel").off("click").on("click", function () {
+		openNotesPanel();
+	});
+
+	$("#open-settings-panel").off("click").on("click", function () {
+		openSettingsPanel();
+	});
+
+	$("#settings-open-tutorial").off("click").on("click", function () {
+		startCalcFeatureTutorial({fromSettings: true});
+	});
+
+	$("#frags-panel-close").off("click").on("click", function () {
+		closeCalcSidePanel("frags-side-panel");
+	});
+
+	$("#settings-panel-close").off("click").on("click", function () {
+		closeCalcSidePanel("settings-side-panel");
+	});
+
+	$("#notes-panel-close").off("click").on("click", function () {
+		closeCalcSidePanel("notes-side-panel");
+	});
+
+	$("#frags-panel-fullscreen").off("click").on("click", function () {
+		var fragsPanel = document.getElementById("frags-side-panel");
+		if (!fragsPanel) return;
+		var isFullscreen = fragsPanel.classList.toggle("fullscreen");
+		$(this).text(isFullscreen ? "Exit Fullscreen" : "Fullscreen");
+		renderFragSheet();
+		updateCalcSideBackdrop();
+		updateCalcLayoutForSidePanel();
+	});
+
+	$("#notes-panel-fullscreen").off("click").on("click", function () {
+		var notesPanel = document.getElementById("notes-side-panel");
+		if (!notesPanel) return;
+		var isFullscreen = notesPanel.classList.toggle("fullscreen");
+		$(this).text(isFullscreen ? "Exit Fullscreen" : "Fullscreen");
+		renderNotesPanel();
+		updateCalcSideBackdrop();
+		updateCalcLayoutForSidePanel();
+	});
+
+	$(document).off("click.notesformat", ".notes-format-btn").on("click.notesformat", ".notes-format-btn", function () {
+		setNotesFormat($(this).attr("data-notes-format"));
+	});
+
+	$("#notes-add-turn").off("click").on("click", function () {
+		addNotesTurn();
+	});
+
+	$(document).off("click.notesremove", ".notes-turn-remove").on("click.notesremove", ".notes-turn-remove", function () {
+		removeNotesTurnAt($(this).attr("data-turn-index"));
+	});
+
+	$(document).off("change.notesset", ".notes-set-select").on("change.notesset", ".notes-set-select", function () {
+		var turnIndex = $(this).attr("data-turn-index");
+		var fieldKey = $(this).attr("data-notes-field");
+		var selectedSet = $(this).val() || "";
+		var speciesName = parseSetId(selectedSet).species || "";
+		updateNotesTurnField(turnIndex, fieldKey, selectedSet);
+		var spriteNode = $(this).siblings(".notes-mon-sprite").get(0);
+		if (!spriteNode) return;
+		if (!speciesName) {
+			setTrainerSpriteImage(spriteNode, "");
+			spriteNode.src = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+			spriteNode.classList.add("notes-mon-sprite-empty");
+			return;
+		}
+		spriteNode.classList.remove("notes-mon-sprite-empty");
+		setTrainerSpriteImage(spriteNode, speciesName);
+		spriteNode.src = getTrainerSpriteUrlByName(speciesName);
+	});
+
+	$(document).off("input.notesnote", ".notes-note-input").on("input.notesnote", ".notes-note-input", function () {
+		scheduleNotesTurnNoteUpdate($(this).attr("data-turn-index"), this.value);
+	});
+
+	$(document).off("change.notesnote blur.notesnote", ".notes-note-input").on("change.notesnote blur.notesnote", ".notes-note-input", function () {
+		flushScheduledNotesTurnNoteUpdate($(this).attr("data-turn-index"), this.value);
+	});
+
+	$(document).off("mousedown.calcsideresize", ".calc-side-resize-handle").on("mousedown.calcsideresize", ".calc-side-resize-handle", function (ev) {
+		if (ev.which && ev.which !== 1) return;
+		var panel = $(this).closest(".calc-side-panel").get(0);
+		if (!panel || panel.hidden || panel.classList.contains("fullscreen")) return;
+		beginCalcSidePanelResize(panel, ev.clientX);
+		ev.preventDefault();
+	});
+
+	$(document).off("mousemove.calcsideresizecapture", "#calc-side-resize-capture").on("mousemove.calcsideresizecapture", "#calc-side-resize-capture", function (ev) {
+		continueCalcSidePanelResize(ev.clientX, ev.buttons);
+	});
+
+	$(document).off("mouseup.calcsideresizecapture", "#calc-side-resize-capture").on("mouseup.calcsideresizecapture", "#calc-side-resize-capture", function () {
+		endCalcSidePanelResize();
+	});
+
+	$(document).off("mousemove.calcsideresize").on("mousemove.calcsideresize", function (ev) {
+		continueCalcSidePanelResize(ev.clientX, ev.buttons);
+	});
+
+	$(document).off("mouseup.calcsideresize").on("mouseup.calcsideresize", function () {
+		endCalcSidePanelResize();
+	});
+
+	$(document).off("mouseleave.calcsideresize").on("mouseleave.calcsideresize", function () {
+		endCalcSidePanelResize();
+	});
+
+	$(window).off("resize.calcpanels").on("resize.calcpanels", function () {
+		updateCalcSideBackdrop();
+		updateCalcLayoutForSidePanel();
+	});
+
+	$(window).off("blur.calcsideresize").on("blur.calcsideresize", function () {
+		endCalcSidePanelResize();
+	});
+
+	updateCalcSideBackdrop();
+	updateCalcLayoutForSidePanel();
+
+	$("#calc-side-backdrop").off("click").on("click", function () {
+		closeCalcSidePanels();
+		closeFragContextMenu();
+		closeOpposingContextMenu();
+	});
+
+	$(document).off("click.fragcontext").on("click.fragcontext", function (ev) {
+		if ($(ev.target).closest("#frag-context-menu, #opp-context-menu").length) return;
+		closeFragContextMenu();
+		closeOpposingContextMenu();
+	});
+
+	$(document).off("contextmenu.trainerfieldlocks", ".field-info label.btn[for]").on("contextmenu.trainerfieldlocks", ".field-info label.btn[for]", function (ev) {
+		handleTrainerFieldButtonContextMenu(ev, this);
+	});
+
+	$(document).off("change.fragopposing", ".opposing").on("change.fragopposing", ".opposing", function () {
+		renderFragSheet();
+		if (!$("#frag-context-menu").prop("hidden")) populateFragContextTargets();
+		refreshNotesPanelIfOpen();
+	});
+
+	$(document).off("change.notesactivesets", ".player, .opposing").on("change.notesactivesets", ".player, .opposing", function () {
+		refreshNotesPanelIfOpen();
+	});
+
+	$("#frag-context-target").off("change").on("change", updateFragContextTitle);
+
+	$("#frag-context-add").off("click").on("click", function () {
+		if (!fragContextSourceSet) return;
+		var selectedTargetSet = $("#frag-context-target").val();
+		addFragKill(fragContextSourceSet, selectedTargetSet, getCurrentFightLabel());
+		closeFragContextMenu();
+	});
+
+	$("#frag-context-mark-dead").off("click").on("click", function () {
+		if (!fragContextSourceSet) return;
+		var entry = ensureFragEntryForSet(fragContextSourceSet);
+		var deathInfo = getFragDeathInfo(entry);
+		setFragSetDeadState(fragContextSourceSet, !deathInfo.isDead, getCurrentFightLabel());
+		closeFragContextMenu();
+	});
+
+	$("#frag-context-swap-team1").off("click").on("click", function () {
+		if (!fragContextSourceSet) return;
+		hotSwapSetToPlayerContainer(fragContextSourceSet, fragContextSourceElement, "team-poke-list");
+		closeFragContextMenu();
+	});
+
+	$("#frag-context-swap-team2").off("click").on("click", function () {
+		if (!fragContextSourceSet) return;
+		hotSwapSetToPlayerContainer(fragContextSourceSet, fragContextSourceElement, "box-poke-list2");
+		closeFragContextMenu();
+	});
+
+	$("#frag-context-swap-trash").off("click").on("click", function () {
+		if (!fragContextSourceSet) return;
+		hotSwapSetToPlayerContainer(fragContextSourceSet, fragContextSourceElement, "trash-box");
+		closeFragContextMenu();
+	});
+
+	$("#frag-context-cancel").off("click").on("click", function () {
+		closeFragContextMenu();
+	});
+
+	$("#opp-context-mark-dead").off("click").on("click", function () {
+		if (!opposingContextSourceSet) return;
+		var nextState = !isOpposingSetMarkedDead(opposingContextSourceSet);
+		setOpposingSetDeadMark(opposingContextSourceSet, nextState);
+		closeOpposingContextMenu();
+	});
+
+	$("#opp-context-cancel").off("click").on("click", function () {
+		closeOpposingContextMenu();
+	});
+
+	$(document).off("click.fragsactions", ".frags-inc").on("click.fragsactions", ".frags-inc", function () {
+		addFragKill($(this).attr("data-frag-set"), "", getCurrentFightLabel());
+	});
+
+	$(document).off("click.fragsactionsdec", ".frags-dec").on("click.fragsactionsdec", ".frags-dec", function () {
+		removeFragKill($(this).attr("data-frag-set"), getCurrentFightLabel());
+	});
+
+	$("#frags-clear-fight").off("click").on("click", function () {
+		if (!confirm("Clear all frags for the current fight?")) return;
+		clearFragsForCurrentFight();
+	});
+
+	$("#frags-history-toggle").off("click").on("click", function () {
+		setFragHistoryExpanded(!fragsHistoryExpanded);
+	});
+
+	$("#frags-history-info").off("click").on("click", function () {
+		showFragHistoryInfoDialog();
+	});
+
+	$("#frags-state-save").off("click").on("click", function () {
+		var stateNameInput = document.getElementById("frags-state-name");
+		var requestedName = stateNameInput ? stateNameInput.value : "";
+		var savedState = saveNamedFragSheetState(requestedName);
+		if (stateNameInput) stateNameInput.value = "";
+		refreshFragHistoryControls();
+		alert("Saved state: " + savedState.name);
+	});
+
+	$("#frags-state-restore").off("click").on("click", function () {
+		var selectedStateId = $("#frags-state-list").val();
+		if (!selectedStateId) {
+			alert("Select a saved state first.");
+			return;
+		}
+		if (!confirm("Restore this saved state? This will replace current frags/imports/boxes.")) return;
+		captureFragBackupSnapshot("before-state-restore", true);
+		if (!restoreFragStateById(selectedStateId)) {
+			alert("Could not restore the selected saved state.");
+			return;
+		}
+		refreshFragHistoryControls();
+	});
+
+	$("#frags-state-delete").off("click").on("click", function () {
+		var selectedStateId = $("#frags-state-list").val();
+		if (!selectedStateId) {
+			alert("Select a saved state first.");
+			return;
+		}
+		if (!confirm("Delete this saved state?")) return;
+		if (!deleteFragStateById(selectedStateId)) {
+			alert("Could not delete the selected saved state.");
+			return;
+		}
+		refreshFragHistoryControls();
+	});
+
+	$("#frags-backup-save").off("click").on("click", function () {
+		saveManualFragBackup();
+		refreshFragHistoryControls();
+		alert("Backup saved.");
+	});
+
+	$("#frags-backup-restore").off("click").on("click", function () {
+		var selectedBackupId = $("#frags-backup-list").val();
+		if (!selectedBackupId) {
+			alert("Select a backup first.");
+			return;
+		}
+		if (!confirm("Restore this backup? This will replace current frags/imports/boxes.")) return;
+		captureFragBackupSnapshot("before-backup-restore", true);
+		if (!restoreFragBackupById(selectedBackupId)) {
+			alert("Could not restore the selected backup.");
+			return;
+		}
+		refreshFragHistoryControls();
+	});
+
+	$(document).off("click.settingsstarter", ".settings-choice-btn[data-starter-choice]").on("click.settingsstarter", ".settings-choice-btn[data-starter-choice]", function () {
+		var starterChoice = $(this).attr("data-starter-choice");
+		updateAppSettings({starterChoice: starterChoice});
+		syncSettingsPanelUi();
+		refreshSetSelectorsForStarterChoice();
+	});
+
+	$(document).off("click.settingslayout", ".settings-choice-btn[data-layout-choice]").on("click.settingslayout", ".settings-choice-btn[data-layout-choice]", function () {
+		var layoutChoice = $(this).attr("data-layout-choice");
+		updateAppSettings({layoutMode: layoutChoice});
+		syncSettingsPanelUi();
+		if (typeof performCalculations === "function") performCalculations();
+	});
+
+	$("#settings-more-colour").off("change").on("change", function () {
+		var enabled = $(this).is(":checked");
+		updateAppSettings({moreColour: enabled});
+		applyMoreColourSetting(enabled);
+		if (typeof performCalculations === "function") performCalculations();
+	});
+
+	$("#settings-move-colors").off("change").on("change", function () {
+		var enabled = $(this).is(":checked");
+		updateAppSettings({moveColors: enabled});
+		if (typeof performCalculations === "function") performCalculations();
+	});
+	$("#settings-move-meta").off("change").on("change", function () {
+		var enabled = $(this).is(":checked");
+		updateAppSettings({moveMeta: enabled});
+		setMoveMetaVisibility(enabled);
+		updateAllMoveMetaDisplays();
+		if (typeof performCalculations === "function") performCalculations();
+	});
+
+	$("#settings-total-frags-on-border").off("change").on("change", function () {
+		var enabled = $(this).is(":checked");
+		updateAppSettings({totalFragsOnBorder: enabled});
+		updateTrainerFragBorderTotals();
+	});
+
+	$(document).off("change.morecolourtypes input.morecolourtypes", "#p1 .type1, #p1 .type2, #p1 .teraType, #p2 .type1, #p2 .type2, #p2 .teraType")
+		.on("change.morecolourtypes input.morecolourtypes", "#p1 .type1, #p1 .type2, #p1 .teraType, #p2 .type1, #p2 .type2, #p2 .teraType", function () {
+			applySingleTypeSelectColour(this, !!getAppSettings().moreColour);
+		});
+
+	$(document).off("change.morecoloursets", ".set-selector").on("change.morecoloursets", ".set-selector", function () {
+		if (!getAppSettings().moreColour) return;
+		window.setTimeout(function () {
+			applyMoreColourSetting(true);
+		}, 0);
+	});
+
+	$("#settings-theme-dark").off("click").on("click", function () {
+		if (typeof window.setThemeMode === "function") {
+			window.setThemeMode(true);
+		} else {
+			var darkStyles = document.getElementById("dark-theme-styles");
+			if (darkStyles) darkStyles.disabled = false;
+			localStorage.setItem("darkTheme", "true");
+		}
+		refreshThemeChoiceButtons();
+	});
+
+	$("#settings-theme-light").off("click").on("click", function () {
+		if (typeof window.setThemeMode === "function") {
+			window.setThemeMode(false);
+		} else {
+			var darkStyles = document.getElementById("dark-theme-styles");
+			if (darkStyles) darkStyles.disabled = true;
+			localStorage.setItem("darkTheme", "false");
+		}
+		refreshThemeChoiceButtons();
+	});
+
+	$(document).off("calc-theme-change.settings").on("calc-theme-change.settings", function () {
+		refreshThemeChoiceButtons();
+		var dexPanel = document.getElementById("astraldex-side-panel");
+		if (dexPanel) applyAstralDexPanelTheme(dexPanel);
+	});
+
+	$(document).off("keydown.calcpanels").on("keydown.calcpanels", function (ev) {
+		if (ev.key !== "Escape" && ev.keyCode !== 27) return;
+		if (calcFeatureTutorialState.isOpen) {
+			finishCalcFeatureTutorial();
+			return;
+		}
+		closeFragContextMenu();
+		closeOpposingContextMenu();
+		closeCalcSidePanels();
+	});
+}
+
+function bindFieldSideControlsToggle() {
+	$("#toggle-field-side-controls").off("click").on("click", function () {
+		var controlsWrap = $("#field-side-controls-wrap");
+		if (!controlsWrap.length) return;
+		var willHide = !controlsWrap.prop("hidden");
+		controlsWrap.prop("hidden", willHide);
+		$(this).text(willHide ? "Show More" : "Show Less");
+	});
+}
+
+function sortmons(a, b) {
+	var aEntry = parseTrainerPartyEntry(String(a || ""));
+	var bEntry = parseTrainerPartyEntry(String(b || ""));
+	var aIndex = getTrainerIndexFromSetData(aEntry.setData);
+	var bIndex = getTrainerIndexFromSetData(bEntry.setData);
+	if (aIndex <= 0) aIndex = aEntry.sortIndex || 0;
+	if (bIndex <= 0) bIndex = bEntry.sortIndex || 0;
+	return aIndex - bIndex;
+}
+
+function normalizeTrainerSpriteName(pokemonName) {
+	var spriteName = pokemonName;
+	if (spriteName === "Zygarde-10%") spriteName = "Zygarde-10%25";
+	if (spriteName === "Tauros-Paldea-Water") spriteName = "Tauros-Paldea-Aqua";
+	if (spriteName === "Tauros-Paldea-Fire") spriteName = "Tauros-Paldea-Blaze";
+	if (spriteName === "Tauros-Paldea") spriteName = "Tauros-Paldea-Combat";
+	if (spriteName === "Wooper-Paldea") spriteName = "WooperPaldea";
+	if (spriteName === "Pumpkaboo-Super") spriteName = "Pumpkaboo";
+	if (spriteName === "Mime Jr.") spriteName = "Mime%20Jr";
+	if (spriteName === "Unown-C2") spriteName = "Unown-C";
+	return spriteName;
+}
+
+var POKEMON_ICON_SHEET_URL = "https://play.pokemonshowdown.com/sprites/pokemonicons-sheet.png?v16";
+var POKEMON_ICON_WIDTH = 40;
+var POKEMON_ICON_HEIGHT = 30;
+
+function getTrainerSpriteUrlByName(pokemonName) {
+	var normalizedName = pokemonName === "Aegislash-Shield" ? "Aegislash" : pokemonName;
+	var spriteName = normalizeTrainerSpriteName(normalizedName);
+	return "https://raw.githubusercontent.com/May8th1995/sprites/master/" + spriteName + ".png";
+}
+
+function getIconSheetPositionForSpecies(speciesName) {
+	var iconIndexTable = typeof BattlePokemonIconIndexes === "undefined" ? null : BattlePokemonIconIndexes;
+	if (!iconIndexTable) return null;
+	var speciesId = toDexPokemonId(speciesName);
+	if (!speciesId) return null;
+	var num = iconIndexTable[speciesId];
+	if (num === undefined || num === null) return null;
+	return {
+		left: (num % 12) * POKEMON_ICON_WIDTH,
+		top: Math.floor(num / 12) * POKEMON_ICON_HEIGHT
+	};
+}
+
+function applyIconSheetFallbackImage(imgNode, speciesName) {
+	if (!imgNode) return false;
+	imgNode.onerror = null;
+	var resolvedSpecies = speciesName || imgNode.getAttribute("data-species") || "";
+	var position = getIconSheetPositionForSpecies(resolvedSpecies);
+	if (!position) return false;
+	imgNode.src = POKEMON_ICON_SHEET_URL;
+	imgNode.style.width = POKEMON_ICON_WIDTH + "px";
+	imgNode.style.height = POKEMON_ICON_HEIGHT + "px";
+	imgNode.style.objectFit = "none";
+	imgNode.style.objectPosition = "-" + position.left + "px -" + position.top + "px";
+	imgNode.style.imageRendering = "auto";
+	return true;
+}
+
+function setTrainerSpriteImage(node, speciesName) {
+	if (!node) return;
+	var resolvedSpecies = speciesName || "";
+	node.setAttribute("data-species", resolvedSpecies);
+	// Clear any icon-sheet fallback styling from a previous failed load.
+	node.style.width = "";
+	node.style.height = "";
+	node.style.objectFit = "";
+	node.style.objectPosition = "";
+	node.style.imageRendering = "";
+	node.onerror = function () {
+		applyIconSheetFallbackImage(this, resolvedSpecies);
+	};
+	node.src = getTrainerSpriteUrlByName(resolvedSpecies);
+}
+
+function parseTrainerPartyEntry(entryText) {
+	var closeBracket = entryText.indexOf("]");
+	var indexText = closeBracket >= 0 ? entryText.substring(1, closeBracket) : "0";
+	var fullSetName = closeBracket >= 0 ? entryText.substring(closeBracket + 1) : entryText;
+	var pokemonName = fullSetName.split(" (")[0];
+	var setName = fullSetName.substring(fullSetName.indexOf("(") + 1, fullSetName.lastIndexOf(")"));
+	var trainerParts = parseTrainerSetName(setName);
+	var setData = setdex[pokemonName] && setdex[pokemonName][setName] ? setdex[pokemonName][setName] : null;
+	return {
+		entryText: entryText,
+		indexText: indexText,
+		sortIndex: parseInt(indexText, 10) || 0,
+		fullSetName: fullSetName,
+		pokemonName: pokemonName,
+		trainerLabel: setName,
+		trainerName: trainerParts.trainerName,
+		trainerBattleKey: trainerParts.battleKey,
+		setData: setData
+	};
+}
+
+function parseTrainerSetName(setName) {
+	var normalizedSetName = (setName || "").trim();
+	var separatorIndex = normalizedSetName.indexOf("|");
+	if (separatorIndex < 0) {
+		return {
+			trainerName: normalizedSetName,
+			battleKey: normalizedSetName
+		};
+	}
+	var trainerName = normalizedSetName.substring(0, separatorIndex).trim();
+	var battleKey = normalizedSetName.substring(separatorIndex + 1).trim();
+	return {
+		trainerName: trainerName || normalizedSetName,
+		battleKey: battleKey || normalizedSetName
+	};
+}
+
+function getTrainerFieldLocksState() {
+	if (trainerFieldLocksCache && typeof trainerFieldLocksCache === "object") return trainerFieldLocksCache;
+	var parsed = safeJsonParse(localStorage.getItem(TRAINER_FIELD_LOCKS_STORAGE_KEY), {});
+	trainerFieldLocksCache = parsed && typeof parsed === "object" ? parsed : {};
+	return trainerFieldLocksCache;
+}
+
+function saveTrainerFieldLocksState(nextState) {
+	trainerFieldLocksCache = nextState && typeof nextState === "object" ? nextState : {};
+	localStorage.setItem(TRAINER_FIELD_LOCKS_STORAGE_KEY, JSON.stringify(trainerFieldLocksCache));
+}
+
+function getCurrentTrainerFieldLockKey() {
+	var selectedOpposing = String($(".opposing").val() || "").trim();
+	if (selectedOpposing) {
+		var selectedEntry = parseTrainerPartyEntry(selectedOpposing);
+		if (selectedEntry) {
+			var trainerIndex = getTrainerIndexFromSetData(selectedEntry.setData);
+			if (trainerIndex > 0) return "index:" + trainerIndex;
+			if (selectedEntry.trainerBattleKey) return "battle:" + String(selectedEntry.trainerBattleKey).toLowerCase();
+			if (selectedEntry.trainerLabel) return "label:" + String(selectedEntry.trainerLabel).toLowerCase();
+		}
+	}
+	var currentFightLabel = String(getCurrentFightLabel() || "").trim();
+	if (currentFightLabel && currentFightLabel !== "Unknown Fight") {
+		return "label:" + currentFightLabel.toLowerCase();
+	}
+	return "global";
+}
+
+function handleTrainerFieldLockTrainerTransition() {
+	var currentKey = getCurrentTrainerFieldLockKey();
+	if (!currentKey) return;
+	if (!trainerFieldLockActiveTrainerKey) {
+		trainerFieldLockActiveTrainerKey = currentKey;
+		return;
+	}
+	if (trainerFieldLockActiveTrainerKey === currentKey) return;
+	trainerFieldLockActiveTrainerKey = currentKey;
+	saveTrainerFieldLocksState({});
+	syncTrainerFieldLockButtonStyles();
+}
+
+function getTrainerFieldLockedIdsForKey(trainerKey) {
+	var normalizedKey = String(trainerKey || "").trim();
+	if (!normalizedKey) return [];
+	var state = getTrainerFieldLocksState();
+	var rawIds = state[normalizedKey];
+	if (!Array.isArray(rawIds)) return [];
+	var ids = [];
+	for (var i = 0; i < rawIds.length; i++) {
+		var fieldId = String(rawIds[i] || "").trim();
+		if (!fieldId) continue;
+		if (ids.indexOf(fieldId) !== -1) continue;
+		ids.push(fieldId);
+	}
+	return ids;
+}
+
+function isTrainerFieldLockableId(fieldId) {
+	var normalizedId = String(fieldId || "").trim();
+	if (!normalizedId) return false;
+	if (TRAINER_FIELD_LOCK_EXCLUDED_IDS[normalizedId]) return false;
+	return !!TRAINER_FIELD_LOCKABLE_IDS[normalizedId];
+}
+
+function getTrainerFieldExclusiveGroup(fieldId) {
+	var input = document.getElementById(String(fieldId || ""));
+	if (!input) return "";
+	var inputName = String(input.getAttribute("name") || "");
+	if (inputName === "weather" || inputName === "gscWeather" || inputName === "terrain") return inputName;
+	return "";
+}
+
+function setTrainerFieldLockEnabled(fieldId, enabled, trainerKey) {
+	var normalizedId = String(fieldId || "").trim();
+	if (!isTrainerFieldLockableId(normalizedId)) return false;
+	var key = String(trainerKey || getCurrentTrainerFieldLockKey()).trim();
+	if (!key) return false;
+	var state = getTrainerFieldLocksState();
+	var lockedIds = getTrainerFieldLockedIdsForKey(key);
+	var isCurrentlyLocked = lockedIds.indexOf(normalizedId) !== -1;
+	if (enabled) {
+		if (!isCurrentlyLocked) {
+			var exclusiveGroup = getTrainerFieldExclusiveGroup(normalizedId);
+			if (exclusiveGroup) {
+				lockedIds = lockedIds.filter(function (lockedId) {
+					if (lockedId === normalizedId) return true;
+					return getTrainerFieldExclusiveGroup(lockedId) !== exclusiveGroup;
+				});
+			}
+			lockedIds.push(normalizedId);
+		}
+	} else if (isCurrentlyLocked) {
+		lockedIds = lockedIds.filter(function (lockedId) {
+			return lockedId !== normalizedId;
+		});
+	}
+	if (lockedIds.length) {
+		state[key] = lockedIds;
+	} else {
+		delete state[key];
+	}
+	saveTrainerFieldLocksState(state);
+	return true;
+}
+
+function isTrainerFieldLockEnabled(fieldId, trainerKey) {
+	var normalizedId = String(fieldId || "").trim();
+	if (!normalizedId) return false;
+	var key = String(trainerKey || getCurrentTrainerFieldLockKey()).trim();
+	if (!key) return false;
+	return getTrainerFieldLockedIdsForKey(key).indexOf(normalizedId) !== -1;
+}
+
+function applyTrainerFieldLocksForCurrentTrainer(options) {
+	var applyOptions = options || {};
+	var forceTrigger = !!applyOptions.forceTrigger;
+	var key = getCurrentTrainerFieldLockKey();
+	var lockedIds = getTrainerFieldLockedIdsForKey(key);
+	if (!lockedIds.length) return;
+	for (var i = 0; i < lockedIds.length; i++) {
+		var input = document.getElementById(lockedIds[i]);
+		if (!input) continue;
+		var inputType = String(input.type || "").toLowerCase();
+		var didChange = false;
+		if (inputType === "radio") {
+			if (input.name) $("input:radio[name='" + input.name + "']").prop("checked", false);
+			if (!input.checked) {
+				input.checked = true;
+				didChange = true;
+			}
+		} else if (inputType === "checkbox") {
+			if (!input.checked) {
+				input.checked = true;
+				didChange = true;
+			}
+		}
+		if (didChange || forceTrigger) $(input).change();
+	}
+	var weatherValue = gen === 2
+		? $("input:radio[name='gscWeather']:checked").val()
+		: $("input:radio[name='weather']:checked").val();
+	var activeTerrain = $("input:checkbox[name='terrain']:checked").val() || "";
+	applyFieldEnvironmentTheme(weatherValue, activeTerrain);
+}
+
+function syncTrainerFieldLockButtonStyles() {
+	var key = getCurrentTrainerFieldLockKey();
+	var lockedIds = getTrainerFieldLockedIdsForKey(key);
+	$(document).find(".field-info label.btn[for]").each(function () {
+		var fieldId = String($(this).attr("for") || "").trim();
+		if (!fieldId) return;
+		var isLockable = isTrainerFieldLockableId(fieldId);
+		var isLocked = isLockable && lockedIds.indexOf(fieldId) !== -1;
+		$(this).toggleClass("trainer-field-lock-on", isLocked);
+		var baseTitle = $(this).attr("data-lock-base-title");
+		if (typeof baseTitle === "undefined") {
+			baseTitle = String($(this).attr("title") || "");
+			$(this).attr("data-lock-base-title", baseTitle);
+		}
+		if (!isLockable) return;
+		var lockHint = isLocked ? "Right-click: disable trainer lock" : "Right-click: enable for this trainer";
+		$(this).attr("title", baseTitle ? (baseTitle + " | " + lockHint) : lockHint);
+	});
+}
+
+function handleTrainerFieldButtonContextMenu(ev, labelNode) {
+	var fieldId = String($(labelNode).attr("for") || "").trim();
+	if (!isTrainerFieldLockableId(fieldId)) return;
+	ev.preventDefault();
+	var trainerKey = getCurrentTrainerFieldLockKey();
+	var currentlyLocked = isTrainerFieldLockEnabled(fieldId, trainerKey);
+	setTrainerFieldLockEnabled(fieldId, !currentlyLocked, trainerKey);
+	if (!currentlyLocked) {
+		var input = document.getElementById(fieldId);
+		if (input) {
+			input.checked = true;
+			$(input).change();
+		}
+	}
+	applyTrainerFieldLocksForCurrentTrainer();
+	syncTrainerFieldLockButtonStyles();
+}
+
+function isTruthySetFlag(flagValue) {
+	if (flagValue === true || flagValue === 1) return true;
+	if (typeof flagValue === "string") {
+		var normalized = flagValue.trim().toLowerCase();
+		return normalized === "true" || normalized === "1" || normalized === "yes";
+	}
+	return false;
+}
+
+function getSetDoubleGroupId(setData) {
+	if (!setData) return "";
+	var rawGroup = setData.setdoubleGroup;
+	if (typeof rawGroup === "undefined") rawGroup = setData.setdoublegroup;
+	if (typeof rawGroup === "undefined") rawGroup = setData.setdoubleId;
+	if (typeof rawGroup === "undefined") rawGroup = setData.setdoubleid;
+	if (typeof rawGroup === "undefined" || rawGroup === null) return "";
+	var normalizedGroup = String(rawGroup).trim();
+	return normalizedGroup;
+}
+
+function getSetDoubleSide(setData) {
+	if (!setData) return 0;
+	var rawSide = setData.setdoubleSide;
+	if (typeof rawSide === "undefined") rawSide = setData.setdoubleside;
+	if (typeof rawSide === "undefined" || rawSide === null) return 0;
+	if (typeof rawSide === "number") {
+		return rawSide === 1 || rawSide === 2 ? rawSide : 0;
+	}
+	var normalizedSide = String(rawSide).trim().toLowerCase();
+	if (normalizedSide === "1" || normalizedSide === "top" || normalizedSide === "primary") return 1;
+	if (normalizedSide === "2" || normalizedSide === "bottom" || normalizedSide === "secondary") return 2;
+	return 0;
+}
+
+function isSetDoubleEntry(setData) {
+	return !!setData && (
+		isTruthySetFlag(setData.setdouble) ||
+		isTruthySetFlag(setData.truedoubles) ||
+		getSetDoubleGroupId(setData) !== "" ||
+		getSetDoubleSide(setData) > 0
+	);
+}
+
+function hasSetDoubleLayoutMetadata(setData) {
+	return !!setData && (
+		getSetDoubleGroupId(setData) !== "" ||
+		getSetDoubleSide(setData) > 0
+	);
+}
+
+function shouldUseSetDoubleLayout(entries) {
+	for (var i = 0; i < entries.length; i++) {
+		if (hasSetDoubleLayoutMetadata(entries[i].setData)) return true;
+	}
+	return false;
+}
+
+function isSetDoubleEncounter(entries) {
+	var hasSetDoubleFlag = false;
+	for (var i = 0; i < entries.length; i++) {
+		var setData = entries[i].setData;
+		if (!setData) continue;
+		var hasSetDoubleSignal = typeof setData.setdouble !== "undefined" ||
+			getSetDoubleGroupId(setData) !== "" ||
+			getSetDoubleSide(setData) > 0;
+		if (!hasSetDoubleSignal) continue;
+		hasSetDoubleFlag = true;
+		if (isTruthySetFlag(setData.setdouble) || getSetDoubleGroupId(setData) !== "" || getSetDoubleSide(setData) > 0) return true;
+	}
+	if (hasSetDoubleFlag) return false;
+
+	var hasLegacyTrueDoublesFlag = false;
+	for (var p = 0; p < entries.length; p++) {
+		var legacyTrueSet = entries[p].setData;
+		if (!legacyTrueSet || typeof legacyTrueSet.truedoubles === "undefined") continue;
+		hasLegacyTrueDoublesFlag = true;
+		if (isTruthySetFlag(legacyTrueSet.truedoubles)) return true;
+	}
+	if (hasLegacyTrueDoublesFlag) return false;
+
+	for (var q = 0; q < entries.length; q++) {
+		var legacySet = entries[q].setData;
+		if (legacySet && isTruthySetFlag(legacySet.doubles)) return true;
+	}
+	if (entries.length >= 4 && entries[0] && entries[0].fullSetName.indexOf("&") >= 0) {
+		return true;
+	}
+	return false;
+}
+
+function shouldAutoEnableDoublesForSelection(fullSetName, trainerEntries) {
+	if (Array.isArray(trainerEntries) && trainerEntries.length) {
+		var parsedEntries = trainerEntries.slice().sort(sortmons).map(parseTrainerPartyEntry);
+		return isSetDoubleEncounter(parsedEntries);
+	}
+	if (!fullSetName) return false;
+	var selectedEntry = parseTrainerPartyEntry(fullSetName);
+	return isSetDoubleEntry(selectedEntry.setData);
+}
+
+function enableDoublesFormatIfNeeded(fullSetName, trainerEntries) {
+	if (!shouldAutoEnableDoublesForSelection(fullSetName, trainerEntries)) return;
+	if ($("#doubles-format").prop("checked")) return;
+	$("#doubles-format").prop("checked", true).change();
+}
+
+function syncBattleFormatForSelection(fullSetName, trainerEntries) {
+	var shouldUseDoubles = shouldAutoEnableDoublesForSelection(fullSetName, trainerEntries);
+	var targetFormat = shouldUseDoubles ? $("#doubles-format") : $("#singles-format");
+	if (!targetFormat.length) return;
+	var wasChecked = targetFormat.prop("checked");
+	$("input:radio[name='format']").prop("checked", false);
+	targetFormat.prop("checked", true);
+	if (!wasChecked) targetFormat.change();
+}
+
+function normalizeSetWeatherValue(rawWeather) {
+	var normalized = String(rawWeather || "").trim();
+	if (!normalized) return "";
+	var lower = normalized.toLowerCase();
+	if (lower === "none" || lower === "clear" || lower === "(none)" || lower === "noweather" || lower === "no weather") {
+		return "";
+	}
+	var weatherMap = {
+		"sun": "Sun",
+		"harsh sunshine": "Harsh Sunshine",
+		"rain": "Rain",
+		"heavy rain": "Heavy Rain",
+		"sand": "Sand",
+		"snow": "Snow",
+		"hail": "Hail",
+		"fog": "Fog",
+		"strong winds": "Strong Winds"
+	};
+	return weatherMap[lower] || normalized;
+}
+
+function getWeatherFromSetData(setData) {
+	if (!setData) return {hasWeather: false, weather: ""};
+	var weatherKeys = ["Weather", "weather"];
+	for (var i = 0; i < weatherKeys.length; i++) {
+		var key = weatherKeys[i];
+		if (typeof setData[key] === "undefined" || setData[key] === null) continue;
+		return {
+			hasWeather: true,
+			weather: normalizeSetWeatherValue(setData[key])
+		};
+	}
+	return {hasWeather: false, weather: ""};
+}
+
+function resolveWeatherForSelection(fullSetName, trainerEntries) {
+	var selectedEntry = parseTrainerPartyEntry(fullSetName);
+	var selectedWeather = getWeatherFromSetData(selectedEntry.setData);
+	if (selectedWeather.hasWeather) return selectedWeather.weather;
+	if (Array.isArray(trainerEntries)) {
+		for (var i = 0; i < trainerEntries.length; i++) {
+			var candidateEntry = parseTrainerPartyEntry(trainerEntries[i]);
+			var candidateWeather = getWeatherFromSetData(candidateEntry.setData);
+			if (candidateWeather.hasWeather) return candidateWeather.weather;
+		}
+	}
+	return "";
+}
+
+function syncWeatherForSelection(fullSetName, trainerEntries) {
+	var weatherValue = resolveWeatherForSelection(fullSetName, trainerEntries);
+	var weatherName = gen === 2 ? "gscWeather" : "weather";
+	var clearSelector = gen === 2 ? "#gscClear" : "#clear";
+	var weatherInputs = $("input:radio[name='" + weatherName + "']");
+	if (!weatherInputs.length) return;
+	var targetInput = weatherInputs.filter(function () {
+		return String($(this).val() || "") === weatherValue;
+	}).first();
+	if (!targetInput.length) targetInput = $(clearSelector);
+	if (!targetInput.length) return;
+	var wasChecked = targetInput.prop("checked");
+	weatherInputs.prop("checked", false);
+	targetInput.prop("checked", true);
+	if (!wasChecked) targetInput.change();
+	var terrainValue = $("input:checkbox[name='terrain']:checked").val() || "";
+	applyFieldEnvironmentTheme(weatherValue, terrainValue);
+	applyTrainerFieldLocksForCurrentTrainer();
+	syncTrainerFieldLockButtonStyles();
+}
+
+function normalizeSetTerrainValue(rawTerrain) {
+	var normalized = String(rawTerrain || "").trim();
+	if (!normalized) return "";
+	var lower = normalized.toLowerCase();
+	if (lower === "none" || lower === "clear" || lower === "(none)" || lower === "noterrain" || lower === "no terrain") {
+		return "";
+	}
+	var terrainMap = {
+		"electric": "Electric",
+		"electric terrain": "Electric",
+		"grassy": "Grassy",
+		"grassy terrain": "Grassy",
+		"misty": "Misty",
+		"misty terrain": "Misty",
+		"psychic": "Psychic",
+		"psychic terrain": "Psychic"
+	};
+	return terrainMap[lower] || normalized;
+}
+
+function getTerrainFromSetData(setData) {
+	if (!setData) return {hasTerrain: false, terrain: ""};
+	var terrainKeys = ["Terrain", "terrain"];
+	for (var i = 0; i < terrainKeys.length; i++) {
+		var key = terrainKeys[i];
+		if (typeof setData[key] === "undefined" || setData[key] === null) continue;
+		return {
+			hasTerrain: true,
+			terrain: normalizeSetTerrainValue(setData[key])
+		};
+	}
+	return {hasTerrain: false, terrain: ""};
+}
+
+function resolveTerrainForSelection(fullSetName, trainerEntries) {
+	var selectedEntry = parseTrainerPartyEntry(fullSetName);
+	var selectedTerrain = getTerrainFromSetData(selectedEntry.setData);
+	if (selectedTerrain.hasTerrain) return selectedTerrain;
+	if (Array.isArray(trainerEntries)) {
+		for (var i = 0; i < trainerEntries.length; i++) {
+			var candidateEntry = parseTrainerPartyEntry(trainerEntries[i]);
+			var candidateTerrain = getTerrainFromSetData(candidateEntry.setData);
+			if (candidateTerrain.hasTerrain) return candidateTerrain;
+		}
+	}
+	return {hasTerrain: false, terrain: ""};
+}
+
+function syncTerrainForSelection(fullSetName, trainerEntries) {
+	var resolvedTerrain = resolveTerrainForSelection(fullSetName, trainerEntries);
+	var terrainValue = resolvedTerrain.terrain;
+	var terrainInputs = $("input:checkbox[name='terrain']");
+	if (!terrainInputs.length) return;
+	if (!resolvedTerrain.hasTerrain) {
+		var activeInput = terrainInputs.filter(":checked").first();
+		getTerrainEffects.call(activeInput.length ? activeInput[0] : terrainInputs.first()[0]);
+		var activeTerrain = activeInput.length ? String(activeInput.val() || "") : "";
+		var currentWeather = gen === 2
+			? $("input:radio[name='gscWeather']:checked").val()
+			: $("input:radio[name='weather']:checked").val();
+		applyFieldEnvironmentTheme(currentWeather, activeTerrain);
+		applyTrainerFieldLocksForCurrentTrainer();
+		syncTrainerFieldLockButtonStyles();
+		return;
+	}
+	var targetInput = terrainInputs.filter(function () {
+		return String($(this).val() || "") === terrainValue;
+	}).first();
+	terrainInputs.prop("checked", false);
+	if (targetInput.length) targetInput.prop("checked", true);
+	getTerrainEffects.call(targetInput.length ? targetInput[0] : terrainInputs.first()[0]);
+	var weatherValue = gen === 2
+		? $("input:radio[name='gscWeather']:checked").val()
+		: $("input:radio[name='weather']:checked").val();
+	applyFieldEnvironmentTheme(weatherValue, terrainValue);
+	applyTrainerFieldLocksForCurrentTrainer();
+	syncTrainerFieldLockButtonStyles();
+}
+
+function splitSetDoubleEntries(entries) {
+	var primaryFromSide = [];
+	var secondaryFromSide = [];
+	var unassignedEntries = [];
+	var usesExplicitSide = false;
+	for (var s = 0; s < entries.length; s++) {
+		var side = getSetDoubleSide(entries[s].setData);
+		if (side === 1) {
+			primaryFromSide.push(entries[s]);
+			usesExplicitSide = true;
+		} else if (side === 2) {
+			secondaryFromSide.push(entries[s]);
+			usesExplicitSide = true;
+		} else {
+			unassignedEntries.push(entries[s]);
+		}
+	}
+	if (usesExplicitSide) {
+		for (var u = 0; u < unassignedEntries.length; u++) {
+			if (primaryFromSide.length <= secondaryFromSide.length) primaryFromSide.push(unassignedEntries[u]);
+			else secondaryFromSide.push(unassignedEntries[u]);
+		}
+		return {primary: primaryFromSide, secondary: secondaryFromSide};
+	}
+
+	var groupedEntries = {};
+	var groupOrder = [];
+	for (var i = 0; i < entries.length; i++) {
+		var groupKey = entries[i].trainerName || entries[i].trainerLabel || "";
+		if (!groupedEntries[groupKey]) {
+			groupedEntries[groupKey] = [];
+			groupOrder.push(groupKey);
+		}
+		groupedEntries[groupKey].push(entries[i]);
+	}
+	if (groupOrder.length >= 2) {
+		var primaryGrouped = groupedEntries[groupOrder[0]].slice();
+		var secondaryGrouped = [];
+		for (var g = 1; g < groupOrder.length; g++) {
+			secondaryGrouped = secondaryGrouped.concat(groupedEntries[groupOrder[g]]);
+		}
+		return {primary: primaryGrouped, secondary: secondaryGrouped};
+	}
+
+	var primary = [];
+	var secondary = [];
+	for (var n = 0; n < entries.length; n++) {
+		if (n % 2 === 0) primary.push(entries[n]);
+		else secondary.push(entries[n]);
+	}
+	if (!secondary.length && entries.length > 1) {
+		var half = Math.ceil(entries.length / 2);
+		primary = entries.slice(0, half);
+		secondary = entries.slice(half);
+	}
+	return {primary: primary, secondary: secondary};
+}
+
+function trainerPartyMonHtml(entry) {
+	var label = "[" + entry.indexText + "]" + entry.fullSetName;
+	return '<img class="trainer-pok right-side" src="' + escapeHtml(getTrainerSpriteUrlByName(entry.pokemonName)) + '" data-id="' + escapeHtml(entry.fullSetName) + '" data-species="' + escapeHtml(entry.pokemonName) + '" title="' + escapeHtml(label + ", " + label + " BP") + '" loading="lazy" decoding="async" onerror="applyIconSheetFallbackImage(this, this.getAttribute(\'data-species\'))">';
+}
+
+function renderOpposingTrainerParties(selectedSetName) {
+	var sortedEntries = (CURRENT_TRAINER_POKS || []).slice().sort(sortmons).map(parseTrainerPartyEntry);
+	var useSplitLayout = shouldUseSetDoubleLayout(sortedEntries);
+
+	var primaryEntries = [];
+	var secondaryEntries = [];
+	if (useSplitLayout) {
+		var splitEntries = splitSetDoubleEntries(sortedEntries);
+		primaryEntries = splitEntries.primary;
+		secondaryEntries = splitEntries.secondary;
+	} else {
+		primaryEntries = sortedEntries.slice();
+	}
+
+	var primaryHtml = primaryEntries.map(trainerPartyMonHtml).join("");
+	var secondaryHtml = secondaryEntries.map(trainerPartyMonHtml).join("");
+	var showSecondary = useSplitLayout && secondaryEntries.length > 0;
+
+	$(".trainer-pok-list-opposing").html(primaryHtml);
+	$(".trainer-pok-list-opposing2").html(secondaryHtml).prop("hidden", !showSecondary);
+	$(".trainer-pok-divider").prop("hidden", !showSecondary);
+	applyOpposingDeadMarks();
+}
+
+// auto-update set details on select
+$(".set-selector").change(function () {
+	window.NO_CALC = true;
+	var currentPokeInfo = $(this).closest(".poke-info");
+	currentPokeInfo.removeAttr("data-transform-species");
+	var fullSetName = String($(this).val() || "");
+	var parsedSetName = parseSetId(fullSetName);
+	if ($(this).hasClass('opposing')) {
+		topPokemonIcon(fullSetName, $("#p2mon")[0])
+		CURRENT_TRAINER_POKS = get_trainer_poks(fullSetName);
+		handleTrainerFieldLockTrainerTransition();
+		syncBattleFormatForSelection(fullSetName, CURRENT_TRAINER_POKS);
+		renderOpposingTrainerParties(fullSetName);
+	} else {
+		topPokemonIcon(fullSetName, $("#p1mon")[0])
+	}
+
+	var pokemonName = parsedSetName.species;
+	var setName = parsedSetName.label;
+	var pokemonLookupName = resolveSetSpeciesNameForDexLookup(pokemonName);
+	var pokemon = pokedex[pokemonLookupName];
+	if (pokemon) {
+		var pokeObj = $(this).closest(".poke-info");
+		if (stickyMoves.getSelectedSide() === pokeObj.prop("id")) {
+			stickyMoves.clearStickyMove();
+		}
+		pokeObj.find(".teraToggle").prop("checked", false);
+		pokeObj.find(".analysis")
+			.attr("href", astralDexUrl(pokemonLookupName))
+			.attr("data-pokemon-name", pokemonLookupName)
+			.text("Open In Pokedex");
+		pokeObj.find(".type1").val(pokemon.types[0]);
+		pokeObj.find(".type2").val(pokemon.types[1]);
+		pokeObj.find(".hp .base").val(pokemon.bs.hp);
+		var i;
+		for (i = 0; i < LEGACY_STATS[gen].length; i++) {
+			pokeObj.find("." + LEGACY_STATS[gen][i] + " .base").val(pokemon.bs[LEGACY_STATS[gen][i]]);
+		}
+		pokeObj.find(".boost").val(0);
+		pokeObj.find(".percent-hp").val(100);
+		pokeObj.find(".current-hp").removeAttr("data-set");
+		pokeObj.find(".status").val("Healthy");
+		$(".status").change();
+		var moveObj;
+		var abilityObj = pokeObj.find(".ability");
+		var itemObj = pokeObj.find(".item");
+		var set;
+		var randset = $("#randoms").prop("checked") ? randdex[pokemonName] : undefined;
+		var regSets = pokemonName in setdex && setName in setdex[pokemonName];
+
+		if (randset) {
+			var listItems = randdex[pokemonName].items ? randdex[pokemonName].items : [];
+			var listAbilities = randdex[pokemonName].abilities ? randdex[pokemonName].abilities : [];
+			if (gen >= 3) $(this).closest('.poke-info').find(".ability-pool").show();
+			$(this).closest('.poke-info').find(".extraSetAbilities").text(listAbilities.join(', '));
+			if (gen >= 2) $(this).closest('.poke-info').find(".item-pool").show();
+			$(this).closest('.poke-info').find(".extraSetItems").text(listItems.join(', '));
+			if (gen >= 9) {
+				$(this).closest('.poke-info').find(".role-pool").show();
+				$(this).closest('.poke-info').find(".tera-type-pool").show();
+			}
+			var listRoles = randdex[pokemonName].roles ? Object.keys(randdex[pokemonName].roles) : [];
+			$(this).closest('.poke-info').find(".extraSetRoles").text(listRoles.join(', '));
+			var listTeraTypes = [];
+			if (randdex[pokemonName].roles) {
+				for (var roleName in randdex[pokemonName].roles) {
+					var role = randdex[pokemonName].roles[roleName];
+					for (var q = 0; q < role.teraTypes.length; q++) {
+						if (listTeraTypes.indexOf(role.teraTypes[q]) === -1) {
+							listTeraTypes.push(role.teraTypes[q]);
+						}
+					}
+				}
+			}
+			pokeObj.find(".teraType").val(listTeraTypes[0] || pokemon.types[0]);
+			$(this).closest('.poke-info').find(".extraSetTeraTypes").text(listTeraTypes.join(', '));
+		} else {
+			$(this).closest('.poke-info').find(".ability-pool").hide();
+			$(this).closest('.poke-info').find(".item-pool").hide();
+			$(this).closest('.poke-info').find(".role-pool").hide();
+			$(this).closest('.poke-info').find(".tera-type-pool").hide();
+		}
+		if (regSets || randset) {
+			set = regSets ? correctHiddenPower(setdex[pokemonName][setName]) : randset;
+			if (regSets) {
+				pokeObj.find(".teraType").val(set.teraType || pokemon.types[0]);
+			}
+			pokeObj.find(".level").val(resolveSetLevelFlag(set.level, pokeObj.find(".level").val()));
+			pokeObj.attr("data-level-flag", typeof set.level === "undefined" ? "" : String(set.level));
+			pokeObj.find(".hp .evs").val((set.evs && set.evs.hp !== undefined) ? set.evs.hp : 0);
+			pokeObj.find(".hp .ivs").val((set.ivs && set.ivs.hp !== undefined) ? set.ivs.hp : 31);
+			pokeObj.find(".hp .dvs").val((set.dvs && set.dvs.hp !== undefined) ? set.dvs.hp : 15);
+			for (i = 0; i < LEGACY_STATS[gen].length; i++) {
+				pokeObj.find("." + LEGACY_STATS[gen][i] + " .evs").val(
+					(set.evs && set.evs[LEGACY_STATS[gen][i]] !== undefined) ?
+						set.evs[LEGACY_STATS[gen][i]] : ($("#randoms").prop("checked") ? 84 : 0));
+				pokeObj.find("." + LEGACY_STATS[gen][i] + " .ivs").val(
+					(set.ivs && set.ivs[LEGACY_STATS[gen][i]] !== undefined) ? set.ivs[LEGACY_STATS[gen][i]] : 31);
+				pokeObj.find("." + LEGACY_STATS[gen][i] + " .dvs").val(
+					(set.dvs && set.dvs[LEGACY_STATS[gen][i]] !== undefined) ? set.dvs[LEGACY_STATS[gen][i]] : 15);
+			}
+			setSelectValueIfValid(pokeObj.find(".nature"), set.nature, "Hardy");
+			var abilityFallback = (typeof pokemon.abilities !== "undefined") ? pokemon.abilities[0] : "";
+			if ($("#randoms").prop("checked")) {
+				setSelectValueIfValid(abilityObj, randset.abilities && randset.abilities[0], abilityFallback);
+				setSelectValueIfValid(itemObj, randset.items && randset.items[0], "");
+			} else {
+				setSelectValueIfValid(abilityObj, set.ability, abilityFallback);
+				setSelectValueIfValid(itemObj, set.item, "");
+			}
+			var setMoves = Array.isArray(set.moves) ? set.moves.slice() : [];
+			if (randset) {
+				if (gen < 9) {
+					setMoves = randset.moves;
+				} else {
+					setMoves = [];
+					for (var role in randset.roles) {
+						for (var q = 0; q < randset.roles[role].moves.length; q++) {
+							var moveName = randset.roles[role].moves[q];
+							if (setMoves.indexOf(moveName) === -1) setMoves.push(moveName);
+						}
+					}
+				}
+			}
+			for (var sm = 0; sm < setMoves.length; sm++) {
+				var setMove = setMoves[sm];
+				if (typeof setMove === "string") {
+					setMoves[sm] = setMove;
+				} else if (setMove && typeof setMove.name === "string") {
+					setMoves[sm] = setMove.name;
+				} else {
+					setMoves[sm] = "(No Move)";
+				}
+			}
+			var moves = randset ? selectMovesFromRandomOptions(setMoves) : setMoves.slice(0, 4);
+			while (moves.length < 4) moves.push("(No Move)");
+			for (i = 0; i < 4; i++) {
+				moveObj = pokeObj.find(".move" + (i + 1) + " select.move-selector");
+				moveObj.attr('data-prev', moveObj.val());
+				setSelectValueIfValid(moveObj, moves[i], "(No Move)");
+				moveObj.change();
+			}
+			if (randset) {
+				$(this).closest('.poke-info').find(".move-pool").show();
+				$(this).closest('.poke-info').find(".extraSetMoves").html(formatMovePool(setMoves));
+			}
+		} else {
+			pokeObj.find(".teraType").val(pokemon.types[0]);
+			pokeObj.find(".level").val(100);
+			pokeObj.attr("data-level-flag", "");
+			pokeObj.find(".hp .evs").val(0);
+			pokeObj.find(".hp .ivs").val(31);
+			pokeObj.find(".hp .dvs").val(15);
+			for (i = 0; i < LEGACY_STATS[gen].length; i++) {
+				pokeObj.find("." + LEGACY_STATS[gen][i] + " .evs").val(0);
+				pokeObj.find("." + LEGACY_STATS[gen][i] + " .ivs").val(31);
+				pokeObj.find("." + LEGACY_STATS[gen][i] + " .dvs").val(15);
+			}
+			pokeObj.find(".nature").val("Hardy");
+			setSelectValueIfValid(abilityObj, pokemon.ab, "");
+			itemObj.val("");
+			for (i = 0; i < 4; i++) {
+				moveObj = pokeObj.find(".move" + (i + 1) + " select.move-selector");
+				moveObj.attr('data-prev', moveObj.val());
+				moveObj.val("(No Move)");
+				moveObj.change();
+			}
+			if ($("#randoms").prop("checked")) {
+				$(this).closest('.poke-info').find(".move-pool").hide();
+			}
+		}
+		if (typeof getSelectedTiers === "function") { // doesn't exist when in 1vs1 mode
+			var format = getSelectedTiers()[0];
+			var is50lvl = startsWith(format, "VGC") || startsWith(format, "Battle Spot");
+			//var isDoubles = format === 'Doubles' || has50lvl; *TODO*
+			if (format === "LC") pokeObj.find(".level").val(5);
+			if (is50lvl) pokeObj.find(".level").val(50);
+			//if (isDoubles) field.gameType = 'Doubles'; *TODO*
+		}
+		var formeObj = currentPokeInfo.find(".forme").parent();
+		itemObj.prop("disabled", false);
+		var baseForme;
+		if (pokemon.baseSpecies && pokemon.baseSpecies !== pokemon.name) {
+			baseForme = pokedex[pokemon.baseSpecies];
+		}
+		if (pokemon.otherFormes) {
+			showFormes(formeObj, pokemonName, pokemon, pokemonName);
+		} else if (baseForme && baseForme.otherFormes) {
+			showFormes(formeObj, pokemonName, baseForme, pokemon.baseSpecies);
+		} else {
+			// Prevent stale hidden forme values from overriding the top sprite later.
+			formeObj.children("select").find("option").remove().end().append(getSelectOptions([pokemonName], false, 0));
+			formeObj.hide();
+			var topSpriteNode = getTopSpriteNodeForPokeInfo(currentPokeInfo);
+			if (topSpriteNode) setTrainerSpriteImage(topSpriteNode, pokemonName);
+		}
+		calcHP(pokeObj);
+		calcStats(pokeObj);
+		refreshRelativeSetLevels();
+		applySetPreHp(pokeObj, set);
+		abilityObj.change();
+		itemObj.change();
+		applySetStatus(pokeObj, set);
+		if ($(this).hasClass('opposing')) {
+			syncWeatherForSelection(fullSetName, CURRENT_TRAINER_POKS);
+			syncTerrainForSelection(fullSetName, CURRENT_TRAINER_POKS);
+		}
+		if (pokemon.gender === "N") {
+			pokeObj.find(".gender").parent().hide();
+			pokeObj.find(".gender").val("");
+		} else pokeObj.find(".gender").parent().show();
+	}
+	syncDittoTransformButtons();
+	syncInlinePokeSprite(currentPokeInfo);
+	saveLastEncounterSelection();
+	window.NO_CALC = false;
+});
+
+$(document).on("click", "#transformL", function (ev) {
+	ev.preventDefault();
+	transformDittoFromOpposing("#p1", "#p2");
+});
+
+$(document).on("click", "#transformR", function (ev) {
+	ev.preventDefault();
+	transformDittoFromOpposing("#p2", "#p1");
+});
+
+$(document).on("click", ".poke-inline-sprite", function (ev) {
+	ev.preventDefault();
+	var pokeInfo = $(this).closest(".poke-info");
+	var formeSelect = pokeInfo.find(".forme");
+	if (!formeSelect.length) return;
+	var formeContainer = formeSelect.parent();
+	if (!formeContainer.length || !formeContainer.is(":visible")) return;
+	var formeOptions = formeSelect.find("option");
+	if (formeOptions.length <= 1) return;
+	var currentIndex = formeSelect.prop("selectedIndex");
+	if (currentIndex < 0) currentIndex = 0;
+	var nextIndex = (currentIndex + 1) % formeOptions.length;
+	formeSelect.prop("selectedIndex", nextIndex).change();
+});
+
+function getBattleCritToggleFromTopToggle(topToggleNode) {
+	if (!topToggleNode) return null;
+	var topId = String(topToggleNode.id || "");
+	var match = /^critTop([LR])([1-4])$/.exec(topId);
+	if (!match) return null;
+	return document.getElementById("crit" + match[1] + match[2]);
+}
+
+function getTopCritToggleFromBattleToggle(battleToggleNode) {
+	if (!battleToggleNode) return null;
+	var battleId = String(battleToggleNode.id || "");
+	var match = /^crit([LR])([1-4])$/.exec(battleId);
+	if (!match) return null;
+	return document.getElementById("critTop" + match[1] + match[2]);
+}
+
+$(document).on("change", "input.top-crit", function () {
+	var battleCritToggle = getBattleCritToggleFromTopToggle(this);
+	if (!battleCritToggle) return;
+	battleCritToggle.checked = this.checked;
+	$(battleCritToggle).change();
+});
+
+$(document).on("change", ".move-crit", function () {
+	var topCritToggle = getTopCritToggleFromBattleToggle(this);
+	if (!topCritToggle) return;
+	topCritToggle.checked = this.checked;
+});
+
+function formatMovePool(moves) {
+	var formatted = [];
+	for (var i = 0; i < moves.length; i++) {
+		formatted.push(isKnownDamagingMove(moves[i]) ? moves[i] : '<i>' + moves[i] + '</i>');
+	}
+	return formatted.join(', ');
+}
+
+function isKnownDamagingMove(move) {
+	var m = GENERATION.moves.get(calc.toID(move));
+	return m && m.basePower;
+}
+
+function selectMovesFromRandomOptions(moves) {
+	var selected = [];
+
+	var nonDamaging = [];
+	for (var i = 0; i < moves.length; i++) {
+		if (isKnownDamagingMove(moves[i])) {
+			selected.push(moves[i]);
+			if (selected.length >= 4) break;
+		} else {
+			nonDamaging.push(moves[i]);
+		}
+	}
+
+	while (selected.length < 4 && nonDamaging.length) {
+		selected.push(nonDamaging.pop());
+	}
+
+	return selected;
+}
+
+function showFormes(formeObj, pokemonName, pokemon, baseFormeName) {
+	var formes = pokemon.otherFormes.slice();
+	formes.unshift(baseFormeName);
+
+	var defaultForme = formes.indexOf(pokemonName);
+	if (defaultForme < 0) defaultForme = 0;
+
+	var formeOptions = getSelectOptions(formes, false, defaultForme);
+	formeObj.children("select").find("option").remove().end().append(formeOptions).change();
+	formeObj.show();
+}
+
+function setSelectValueIfValid(select, value, fallback) {
+	select.val(!value ? fallback : select.children("option[value='" + value + "']").length ? value : fallback);
+}
+
+$(".forme").change(function () {
+	var selectedForme = String($(this).val() || "").trim();
+	var altForme = pokedex[selectedForme];
+	if (!altForme) return;
+	var pokeInfo = $(this).closest(".poke-info");
+	var container = pokeInfo;
+	var fullSetName = container.find("input.set-selector").first().val() || "";
+	var parsedSetName = parseSetId(fullSetName);
+	var pokemonName = parsedSetName.species;
+	var setName = parsedSetName.label;
+
+	var type1Select = container.find(".type1");
+	var type2Select = container.find(".type2");
+	type1Select.val(altForme.types[0]).trigger("change");
+	type2Select.val(altForme.types[1] ? altForme.types[1] : "").trigger("change");
+	for (var i = 0; i < LEGACY_STATS[9].length; i++) {
+		var baseStat = container.find("." + LEGACY_STATS[9][i]).find(".base");
+		baseStat.val(altForme.bs[LEGACY_STATS[9][i]]);
+		baseStat.keyup();
+	}
+	var isRandoms = $("#randoms").prop("checked");
+	var pokemonSets = isRandoms ? randdex[pokemonName] : setdex[pokemonName];
+	var chosenSet = pokemonSets && pokemonSets[setName];
+	var greninjaSet = selectedForme.indexOf("Greninja") !== -1;
+	var isAltForme = selectedForme !== pokemonName;
+	if (isAltForme && abilities.indexOf(altForme.ab) !== -1 && !greninjaSet) {
+		container.find(".ability").val(altForme.ab);
+	} else if (greninjaSet) {
+		$(this).parent().find(".ability");
+	} else if (chosenSet) {
+		if (!isRandoms) {
+			container.find(".abilities").val(chosenSet.ability);
+		} else {
+			container.find(".ability").val(chosenSet.abilities[0]);
+		}
+	}
+	container.find(".ability").keyup();
+
+	if (selectedForme.indexOf("-Mega") !== -1 && selectedForme !== "Rayquaza-Mega") {
+		container.find(".item").val("").keyup();
+	} else {
+		container.find(".item").prop("disabled", false);
+	}
+	pokeInfo.removeAttr("data-transform-species");
+	var topSpriteNode = getTopSpriteNodeForPokeInfo(pokeInfo);
+	if (topSpriteNode) setTrainerSpriteImage(topSpriteNode, selectedForme);
+	syncInlinePokeSprite(pokeInfo);
+});
+
+function correctHiddenPower(pokemon) {
+	// After Gen 7 bottlecaps means you can have a HP without perfect IVs
+	if (gen >= 7) return pokemon;
+
+	// Convert the legacy stats table to a useful one, and also figure out if all are maxed
+	var ivs = {};
+	var maxed = true;
+	for (var i = 0; i <= LEGACY_STATS[9].length; i++) {
+		var s = LEGACY_STATS[9][i];
+		var iv = ivs[legacyStatToStat(s)] = (pokemon.ivs && pokemon.ivs[s]) || 31;
+		if (iv !== 31) maxed = false;
+	}
+
+	var expected = calc.Stats.getHiddenPower(GENERATION, ivs);
+	for (var i = 0; i < pokemon.moves.length; i++) {
+		var m = pokemon.moves[i].match(HIDDEN_POWER_REGEX);
+		if (!m) continue;
+		// The Pokemon has Hidden Power and is not maxed but the types don't match we don't
+		// want to attempt to reconcile the user's IVs so instead just correct the HP type
+		if (!maxed && expected.type !== m[1]) {
+			pokemon.moves[i] = "Hidden Power " + expected.type;
+		} else {
+			// Otherwise, use the default preset hidden power IVs that PS would use
+			var hpIVs = calc.Stats.getHiddenPowerIVs(GENERATION, m[1]);
+			if (!hpIVs) continue; // some impossible type was specified, ignore
+
+			pokemon.ivs = pokemon.ivs || { hp: 31, at: 31, df: 31, sa: 31, sd: 31, sp: 31 };
+			pokemon.dvs = pokemon.dvs || { hp: 15, at: 15, df: 15, sa: 15, sd: 15, sp: 15 };
+			for (var stat in hpIVs) {
+				pokemon.ivs[calc.Stats.shortForm(stat)] = hpIVs[stat];
+				pokemon.dvs[calc.Stats.shortForm(stat)] = calc.Stats.IVToDV(hpIVs[stat]);
+			}
+			if (gen < 3) {
+				pokemon.dvs.hp = calc.Stats.getHPDV({
+					atk: pokemon.ivs.at,
+					def: pokemon.ivs.df,
+					spe: pokemon.ivs.sp,
+					spc: pokemon.ivs.sa
+				});
+				pokemon.ivs.hp = calc.Stats.DVToIV(pokemon.dvs.hp);
+			}
+		}
+	}
+	return pokemon;
+}
+
+function createPokemon(pokeInfo) {
+	if (typeof pokeInfo === "string") { // in this case, pokeInfo is the id of an individual setOptions value whose moveset's tier matches the selected tier(s)
+		var name = pokeInfo.substring(0, pokeInfo.indexOf(" ("));
+		var setName = pokeInfo.substring(pokeInfo.indexOf("(") + 1, pokeInfo.lastIndexOf(")"));
+		var isRandoms = $("#randoms").prop("checked");
+		var set = isRandoms ? randdex[name] : setdex[name][setName];
+
+		var ivs = {};
+		var evs = {};
+		for (var i = 0; i < LEGACY_STATS[gen].length; i++) {
+			var legacyStat = LEGACY_STATS[gen][i];
+			var stat = legacyStatToStat(legacyStat);
+
+			ivs[stat] = (gen >= 3 && set.ivs && typeof set.ivs[legacyStat] !== "undefined") ? set.ivs[legacyStat] : 31;
+			evs[stat] = (set.evs && typeof set.evs[legacyStat] !== "undefined") ? set.evs[legacyStat] : 0;
+		}
+		var moveNames = set.moves;
+		if (isRandoms && gen >= 9) {
+			moveNames = [];
+			for (var role in set.roles) {
+				for (var q = 0; q < set.roles[role].moves.length; q++) {
+					var moveName = set.roles[role].moves[q];
+					if (moveNames.indexOf(moveName) === -1) moveNames.push(moveName);
+				}
+			}
+		}
+
+		var pokemonMoves = [];
+		for (var i = 0; i < 4; i++) {
+			var moveName = moveNames[i];
+			var isCrit = $('.move-crit')[i].checked;
+			pokemonMoves.push(new calc.Move(gen, moves[moveName] ? moveName : "(No Move)", { ability: ability, item: item, isCrit: isCrit, }));
+		}
+
+		if (isRandoms) {
+			pokemonMoves = pokemonMoves.filter(function (move) {
+				return move.category !== "Status";
+			});
+		}
+
+		return new calc.Pokemon(gen, name, {
+			level: set.level,
+			ability: set.ability,
+			abilityOn: true,
+			item: set.item && typeof set.item !== "undefined" && (set.item === "Eviolite" || set.item.indexOf("ite") < 0) ? set.item : "",
+			nature: set.nature,
+			ivs: ivs,
+			evs: evs,
+			moves: pokemonMoves
+		});
+	} else {
+			var setName = pokeInfo.find("input.set-selector").val();
+		var name;
+		if (setName.indexOf("(") === -1) {
+			name = setName;
+		} else {
+			var pokemonName = setName.substring(0, setName.indexOf(" ("));
+			var pokemonLookupName = resolveSetSpeciesNameForDexLookup(pokemonName);
+			var species = pokedex[pokemonLookupName];
+			if (!species) {
+				name = pokemonName;
+			} else {
+				name = (species.otherFormes || (species.baseSpecies && species.baseSpecies !== pokemonLookupName)) ? pokeInfo.find(".forme").val() : pokemonLookupName;
+			}
+		}
+
+		var baseStats = {};
+		var ivs = {};
+		var evs = {};
+		var boosts = {};
+		for (var i = 0; i < LEGACY_STATS[gen].length; i++) {
+			var stat = legacyStatToStat(LEGACY_STATS[gen][i]);
+			baseStats[stat === 'spc' ? 'spa' : stat] = ~~pokeInfo.find("." + LEGACY_STATS[gen][i] + " .base").val();
+			ivs[stat] = gen > 2 ? ~~pokeInfo.find("." + LEGACY_STATS[gen][i] + " .ivs").val() : ~~pokeInfo.find("." + LEGACY_STATS[gen][i] + " .dvs").val() * 2 + 1;
+			evs[stat] = ~~pokeInfo.find("." + LEGACY_STATS[gen][i] + " .evs").val();
+			boosts[stat] = ~~pokeInfo.find("." + LEGACY_STATS[gen][i] + " .boost").val();
+		}
+		if (gen === 1) baseStats.spd = baseStats.spa;
+
+		var ability = pokeInfo.find(".ability").val() || "";
+		var item = getEffectiveItemFromPokeInfo(pokeInfo);
+		var protoQuark = (ability === 'Quark Drive' || ability === 'Protosynthesis')
+			? (pokeInfo.find(".proto-quark-state").val() || 'auto')
+			: undefined;
+		var abilityOn = (ability === 'Quark Drive' || ability === 'Protosynthesis')
+			? protoQuark !== 'inactive'
+			: pokeInfo.find(".abilityToggle").is(":checked");
+		var isDynamaxed = pokeInfo.find(".max").prop("checked");
+		var teraType = pokeInfo.find(".teraToggle").is(":checked") ? pokeInfo.find(".teraType").val() : undefined;
+		pokeInfo.isDynamaxed = isDynamaxed;
+		calcHP(pokeInfo);
+		var curHP = ~~pokeInfo.find(".current-hp").val();
+		// FIXME the Pokemon constructor expects non-dynamaxed HP
+		if (isDynamaxed) curHP = Math.floor(curHP / 2);
+		var types = [pokeInfo.find(".type1").val(), pokeInfo.find(".type2").val()];
+		return new calc.Pokemon(gen, name, {
+			level: ~~pokeInfo.find(".level").val(),
+			ability: ability,
+			abilityOn: abilityOn,
+			protoQuark: protoQuark,
+			item: item,
+			gender: pokeInfo.find(".gender").is(":visible") ? getGender(pokeInfo.find(".gender").val()) : "N",
+			nature: pokeInfo.find(".nature").val(),
+			ivs: ivs,
+			evs: evs,
+			isDynamaxed: isDynamaxed,
+			isSaltCure: pokeInfo.find(".saltcure").is(":checked"),
+			alliesFainted: parseInt(pokeInfo.find(".alliesFainted").val()),
+			teraType: teraType,
+			boosts: boosts,
+			curHP: curHP,
+			status: CALC_STATUS[pokeInfo.find(".status").val()],
+			toxicCounter: status === 'Badly Poisoned' ? ~~pokeInfo.find(".toxic-counter").val() : 0,
+			moves: [
+				getMoveDetails(pokeInfo.find(".move1"), name, ability, item, isDynamaxed),
+				getMoveDetails(pokeInfo.find(".move2"), name, ability, item, isDynamaxed),
+				getMoveDetails(pokeInfo.find(".move3"), name, ability, item, isDynamaxed),
+				getMoveDetails(pokeInfo.find(".move4"), name, ability, item, isDynamaxed)
+			],
+			overrides: {
+				baseStats: baseStats,
+				types: types
+			}
+		});
+	}
+}
+
+function getGender(gender) {
+	if (!gender || gender === 'genderless' || gender === 'N') return 'N';
+	if (gender.toLowerCase() === 'male' || gender === 'M') return 'M';
+	return 'F';
+}
+
+function getMoveDetails(moveInfo, species, ability, item, useMax) {
+	var moveName = moveInfo.find("select.move-selector").val();
+	var isZMove = gen > 6 && moveInfo.find("input.move-z").prop("checked");
+	var isCrit = moveInfo.find(".move-crit").prop("checked");
+	var hits = +moveInfo.find(".move-hits").val();
+	var timesUsed = +moveInfo.find(".stat-drops").val();
+	var timesUsedWithMetronome = moveInfo.find(".metronome").is(':visible') ? +moveInfo.find(".metronome").val() : 1;
+	var overrides = {
+		basePower: +moveInfo.find(".move-bp").val(),
+		type: moveInfo.find(".move-type").val()
+	};
+	if (gen >= 4) overrides.category = moveInfo.find(".move-cat").val();
+	return new calc.Move(gen, moveName, {
+		ability: ability, item: item, useZ: isZMove, species: species, isCrit: isCrit, hits: hits,
+		timesUsed: timesUsed, timesUsedWithMetronome: timesUsedWithMetronome, overrides: overrides, useMax: useMax
+	});
+}
+
+function getModifiedStatForStage(rawStat, stage) {
+	var raw = Math.max(1, ~~rawStat);
+	var boost = Math.max(-6, Math.min(6, ~~stage));
+	if (boost === 0) return raw;
+	if (boost > 0) return Math.floor(raw * (2 + boost) / 2);
+	return Math.floor(raw * 2 / (2 - boost));
+}
+
+function applyPowerSplitToPair(p1, p2) {
+	if (!p1 || !p2) return;
+	var isPowerSplitActive = $("#powerSplitL").prop("checked") || $("#powerSplitR").prop("checked");
+	if (!isPowerSplitActive) return;
+
+	var avgAtk = Math.floor((p1.rawStats.atk + p2.rawStats.atk) / 2);
+	var avgSpa = Math.floor((p1.rawStats.spa + p2.rawStats.spa) / 2);
+	p1.rawStats.atk = avgAtk;
+	p2.rawStats.atk = avgAtk;
+	p1.rawStats.spa = avgSpa;
+	p2.rawStats.spa = avgSpa;
+	p1.stats.atk = getModifiedStatForStage(avgAtk, p1.boosts.atk);
+	p2.stats.atk = getModifiedStatForStage(avgAtk, p2.boosts.atk);
+	p1.stats.spa = getModifiedStatForStage(avgSpa, p1.boosts.spa);
+	p2.stats.spa = getModifiedStatForStage(avgSpa, p2.boosts.spa);
+}
+
+function createField() {
+	var gameType = $("input:radio[name='format']:checked").val();
+	var isBeadsOfRuin = $("#beads").prop("checked");
+	var isTabletsOfRuin = $("#tablets").prop("checked");
+	var isSwordOfRuin = $("#sword").prop("checked");
+	var isVesselOfRuin = $("#vessel").prop("checked");
+	var isMagicRoom = $("#magicroom").prop("checked");
+	var isTrickRoom = $("#trickroom").prop("checked") || $("#trickRoomR").prop("checked");
+	var isWonderRoom = $("#wonderroom").prop("checked");
+	var isGravity = $("#gravity").prop("checked");
+	var isInverse = $("#inverse").prop("checked");
+	var isSR = [$("#srL").prop("checked"), $("#srR").prop("checked")];
+	var weather;
+	var spikes;
+	if (gen === 2) {
+		spikes = [$("#gscSpikesL").prop("checked") ? 1 : 0, $("#gscSpikesR").prop("checked") ? 1 : 0];
+		weather = $("input:radio[name='gscWeather']:checked").val();
+	} else {
+		weather = $("input:radio[name='weather']:checked").val();
+		spikes = [~~$("input:radio[name='spikesL']:checked").val(), ~~$("input:radio[name='spikesR']:checked").val()];
+	}
+	var steelsurge = [$("#steelsurgeL").prop("checked"), $("#steelsurgeR").prop("checked")];
+	var vinelash = [$("#vinelashL").prop("checked"), $("#vinelashR").prop("checked")];
+	var wildfire = [$("#wildfireL").prop("checked"), $("#wildfireR").prop("checked")];
+	var cannonade = [$("#cannonadeL").prop("checked"), $("#cannonadeR").prop("checked")];
+	var volcalith = [$("#volcalithL").prop("checked"), $("#volcalithR").prop("checked")];
+	var terrain = ($("input:checkbox[name='terrain']:checked").val()) ? $("input:checkbox[name='terrain']:checked").val() : "";
+	applyFieldEnvironmentTheme(weather, terrain);
+	var isReflect = [$("#reflectL").prop("checked"), $("#reflectR").prop("checked")];
+	var isLightScreen = [$("#lightScreenL").prop("checked"), $("#lightScreenR").prop("checked")];
+	var isProtected = [$("#protectL").prop("checked"), $("#protectR").prop("checked")];
+	var isSeeded = [$("#leechSeedL").prop("checked"), $("#leechSeedR").prop("checked")];
+	var isForesight = [$("#foresightL").prop("checked"), $("#foresightR").prop("checked")];
+	var isHelpingHand = [$("#helpingHandL").prop("checked"), $("#helpingHandR").prop("checked")];
+	var isTailwind = [$("#tailwindL").prop("checked"), $("#tailwindR").prop("checked")];
+	var isFlowerGift = [$("#flowerGiftL").prop("checked"), $("#flowerGiftR").prop("checked")];
+	var isFriendGuard = [$("#friendGuardL").prop("checked"), $("#friendGuardR").prop("checked")];
+	var isAuroraVeil = [$("#auroraVeilL").prop("checked"), $("#auroraVeilR").prop("checked")];
+	var isBattery = [$("#batteryL").prop("checked"), $("#batteryR").prop("checked")];
+	var isPowerSpot = [$("#powerSpotL").prop("checked"), $("#powerSpotR").prop("checked")];
+	// TODO: support switching in as well!
+	var isSwitchingOut = [$("#switchingL").prop("checked"), $("#switchingR").prop("checked")];
+
+	var createSide = function (i) {
+		return new calc.Side({
+			spikes: spikes[i], isSR: isSR[i], steelsurge: steelsurge[i],
+			vinelash: vinelash[i], wildfire: wildfire[i], cannonade: cannonade[i], volcalith: volcalith[i],
+			isReflect: isReflect[i], isLightScreen: isLightScreen[i],
+			isProtected: isProtected[i], isSeeded: isSeeded[i], isForesight: isForesight[i],
+			isTailwind: isTailwind[i], isHelpingHand: isHelpingHand[i], isFlowerGift: isFlowerGift[i], isFriendGuard: isFriendGuard[i],
+			isAuroraVeil: isAuroraVeil[i], isBattery: isBattery[i], isPowerSpot: isPowerSpot[i], isPlayer: i === 0,
+			isSwitching: isSwitchingOut[i] ? 'out' : undefined
+		});
+	};
+	return new calc.Field({
+		gameType: gameType, weather: weather, terrain: terrain,
+		isMagicRoom: isMagicRoom, isTrickRoom: isTrickRoom, isWonderRoom: isWonderRoom, isGravity: isGravity, isInverse: isInverse,
+		isBeadsOfRuin: isBeadsOfRuin, isTabletsOfRuin: isTabletsOfRuin,
+		isSwordOfRuin: isSwordOfRuin, isVesselOfRuin: isVesselOfRuin,
+		attackerSide: createSide(0), defenderSide: createSide(1)
+	});
+}
+
+var FIELD_WEATHER_THEME_CLASSES = "field-weather-none field-weather-sun field-weather-rain field-weather-sand field-weather-snow field-weather-hail field-weather-fog";
+var FIELD_TERRAIN_THEME_CLASSES = "field-terrain-none field-terrain-electric field-terrain-grassy field-terrain-misty field-terrain-psychic";
+
+function getFieldWeatherThemeKey(weatherValue) {
+	var normalized = String(weatherValue || "").trim();
+	switch (normalized) {
+		case "Sun":
+		case "Harsh Sunshine":
+			return "sun";
+		case "Rain":
+		case "Heavy Rain":
+			return "rain";
+		case "Sand":
+			return "sand";
+		case "Snow":
+			return "snow";
+		case "Hail":
+			return "hail";
+		case "Fog":
+		case "Strong Winds":
+			return "fog";
+		default:
+			return "none";
+	}
+}
+
+function getFieldTerrainThemeKey(terrainValue) {
+	var normalized = String(terrainValue || "").trim();
+	switch (normalized) {
+		case "Electric":
+			return "electric";
+		case "Grassy":
+			return "grassy";
+		case "Misty":
+			return "misty";
+		case "Psychic":
+			return "psychic";
+		default:
+			return "none";
+	}
+}
+
+function applyFieldEnvironmentTheme(weatherValue, terrainValue) {
+	var fieldInfo = $(".field-info");
+	if (!fieldInfo.length) return;
+	var weatherKey = getFieldWeatherThemeKey(weatherValue);
+	var terrainKey = getFieldTerrainThemeKey(terrainValue);
+	fieldInfo
+		.removeClass(FIELD_WEATHER_THEME_CLASSES + " " + FIELD_TERRAIN_THEME_CLASSES)
+		.addClass("field-weather-" + weatherKey)
+		.addClass("field-terrain-" + terrainKey);
+}
+
+function applyFieldWeatherTheme(weatherValue) {
+	var terrainValue = $("input:checkbox[name='terrain']:checked").val() || "";
+	applyFieldEnvironmentTheme(weatherValue, terrainValue);
+}
+
+function calcHP(poke) {
+	var total = calcStat(poke, "hp");
+	var $maxHP = poke.find(".max-hp");
+
+	var prevMaxHP = Number($maxHP.attr('data-prev')) || total;
+	var $currentHP = poke.find(".current-hp");
+	var prevCurrentHP = $currentHP.attr('data-set') ? Math.min(Number($currentHP.val()), prevMaxHP) : prevMaxHP;
+	// NOTE: poke.find(".percent-hp").val() is a rounded value!
+	var prevPercentHP = 100 * prevCurrentHP / prevMaxHP;
+
+	$maxHP.text(total);
+	$maxHP.attr('data-prev', total);
+
+	var newCurrentHP = calcCurrentHP(poke, total, prevPercentHP);
+	calcPercentHP(poke, total, newCurrentHP);
+
+	$currentHP.attr('data-set', true);
+}
+
+function calcStat(poke, StatID) {
+	var stat = poke.find("." + StatID);
+	var base = ~~stat.find(".base").val();
+	var level = ~~poke.find(".level").val();
+	var nature, ivs, evs;
+	if (gen < 3) {
+		ivs = ~~stat.find(".dvs").val() * 2;
+		evs = 252;
+	} else {
+		ivs = ~~stat.find(".ivs").val();
+		evs = ~~stat.find(".evs").val();
+		if (StatID !== "hp") nature = poke.find(".nature").val();
+	}
+	// Shedinja still has 1 max HP during the effect even if its Dynamax Level is maxed (DaWoblefet)
+	var total = calc.calcStat(gen, legacyStatToStat(StatID), base, ivs, evs, level, nature);
+	if (gen > 7 && StatID === "hp" && poke.isDynamaxed && total !== 1) {
+		total *= 2;
+	}
+	var totalDisplay = stat.find(".total");
+	totalDisplay.text(total);
+	totalDisplay.removeClass("nature-boost nature-drop");
+	if (gen >= 3 && StatID !== "hp") {
+		var natureEffect = NATURE_EFFECTS[nature];
+		if (natureEffect && natureEffect.plus !== natureEffect.minus) {
+			if (natureEffect.plus === StatID) totalDisplay.addClass("nature-boost");
+			if (natureEffect.minus === StatID) totalDisplay.addClass("nature-drop");
+		}
+	}
+	return total;
+}
+
+var GENERATION = {
+	'1': 1, 'rb': 1, 'rby': 1,
+	'2': 2, 'gs': 2, 'gsc': 2,
+	'3': 3, 'rs': 3, 'rse': 3, 'frlg': 3, 'adv': 3,
+	'4': 4, 'dp': 4, 'dpp': 4, 'hgss': 4,
+	'5': 5, 'bw': 5, 'bw2': 5, 'b2w2': 5,
+	'6': 6, 'xy': 6, 'oras': 6,
+	'7': 7, 'sm': 7, 'usm': 7, 'usum': 7,
+	'8': 8, 'ss': 8,
+	'9': 9, 'sv': 9
+};
+
+var SETDEX = [
+	{},
+	typeof SETDEX_RBY === 'undefined' ? {} : SETDEX_RBY,
+	typeof SETDEX_GSC === 'undefined' ? {} : SETDEX_GSC,
+	typeof SETDEX_ADV === 'undefined' ? {} : SETDEX_ADV,
+	typeof SETDEX_DPP === 'undefined' ? {} : SETDEX_DPP,
+	typeof SETDEX_BW === 'undefined' ? {} : SETDEX_BW,
+	typeof SETDEX_XY === 'undefined' ? {} : SETDEX_XY,
+	typeof SETDEX_SM === 'undefined' ? {} : SETDEX_SM,
+	typeof SETDEX_SS === 'undefined' ? {} : SETDEX_SS,
+	typeof SETDEX_SV === 'undefined' ? {} : SETDEX_SV,
+];
+var RANDDEX = [
+	{},
+	typeof GEN1RANDOMBATTLE === 'undefined' ? {} : GEN1RANDOMBATTLE,
+	typeof GEN2RANDOMBATTLE === 'undefined' ? {} : GEN2RANDOMBATTLE,
+	typeof GEN3RANDOMBATTLE === 'undefined' ? {} : GEN3RANDOMBATTLE,
+	typeof GEN4RANDOMBATTLE === 'undefined' ? {} : GEN4RANDOMBATTLE,
+	typeof GEN5RANDOMBATTLE === 'undefined' ? {} : GEN5RANDOMBATTLE,
+	typeof GEN6RANDOMBATTLE === 'undefined' ? {} : GEN6RANDOMBATTLE,
+	typeof GEN7RANDOMBATTLE === 'undefined' ? {} : GEN7RANDOMBATTLE,
+	typeof GEN8RANDOMBATTLE === 'undefined' ? {} : GEN8RANDOMBATTLE,
+	typeof GEN9RANDOMBATTLE === 'undefined' ? {} : GEN9RANDOMBATTLE,
+];
+var gen, genWasChanged, notation, pokedex, setdex, randdex, typeChart, moves, abilities, items, calcHP, calcStat, GENERATION;
+
+TR_NAMES = get_trainer_names()
+
+$(".gen").change(function () {
+	/*eslint-disable */
+	gen = ~~$(this).val() || 9;
+	GENERATION = calc.Generations.get(gen);
+	var params = new URLSearchParams(window.location.search);
+	if (gen === 9) {
+		params.delete('gen');
+		params = '' + params;
+		if (window.history && window.history.replaceState) {
+			window.history.replaceState({}, document.title, window.location.pathname + (params.length ? '?' + params : ''));
+		}
+	} else {
+		//params.set('gen', gen);
+		if (window.history && window.history.pushState) {
+			params.sort();
+			var path = window.location.pathname + params; //removed questionmark here
+			window.history.pushState({}, document.title, path);
+			gtag('config', 'UA-26211653-3', { 'page_path': path });
+		}
+	}
+	genWasChanged = true;
+	/* eslint-enable */
+	// declaring these variables with var here makes z moves not work; TODO
+	pokedex = calc.SPECIES[gen];
+	setdex = SETDEX[gen];
+	randdex = RANDDEX[gen];
+	typeChart = calc.TYPE_CHART[gen];
+	moves = calc.MOVES[gen];
+	items = calc.ITEMS[gen];
+	abilities = calc.ABILITIES[gen];
+	clearField();
+	$("#importedSets").prop("checked", false);
+	loadDefaultLists();
+	$(".gen-specific.g" + gen).show();
+	$(".gen-specific").not(".g" + gen).hide();
+	var typeOptions = getSelectOptions(Object.keys(typeChart));
+	$("select.type1, select.move-type").find("option").remove().end().append(typeOptions);
+	$("select.teraType").find("option").remove().end().append(getSelectOptions(Object.keys(typeChart).slice(1)));
+	$("select.type2").find("option").remove().end().append("<option value=\"\">(none)</option>" + typeOptions);
+	var moveOptions = getSelectOptions(Object.keys(moves), true);
+	$("select.move-selector").find("option").remove().end().append(moveOptions);
+	var abilityOptions = getSelectOptions(abilities, true);
+	$("select.ability").find("option").remove().end().append("<option value=\"\">(other)</option>" + abilityOptions);
+	var itemOptions = getSelectOptions(items, true);
+	$("select.item").find("option").remove().end().append("<option value=\"\">(none)</option>" + itemOptions);
+
+	$(".set-selector").val(getFirstValidSetOption().id);
+	$(".set-selector").change();
+});
+
+function getFirstValidSetOptionFromOptions(sets) {
+	// NB: The first set is never valid, so we start searching after it.
+	for (var i = 1; i < sets.length; i++) {
+		if (sets[i].id && sets[i].id.indexOf('(Blank Set)') === -1) return sets[i];
+	}
+	return undefined;
+}
+
+function getFirstValidSetOption() {
+	return getFirstValidSetOptionFromOptions(getSetOptions());
+}
+
+$(".notation").change(function () {
+	notation = $(this).val();
+});
+
+function clearField() {
+	$("#singles-format").prop("checked", true);
+	$("#clear").prop("checked", true);
+	$("#gscClear").prop("checked", true);
+	$("#gravity").prop("checked", false);
+	$("#srL").prop("checked", false);
+	$("#srR").prop("checked", false);
+	$("#spikesL0").prop("checked", true);
+	$("#spikesR0").prop("checked", true);
+	$("#gscSpikesL").prop("checked", false);
+	$("#gscSpikesR").prop("checked", false);
+	$("#steelsurgeL").prop("checked", false);
+	$("#steelsurgeR").prop("checked", false);
+	$("#vinelashL").prop("checked", false);
+	$("#vinelashR").prop("checked", false);
+	$("#wildfireL").prop("checked", false);
+	$("#wildfireR").prop("checked", false);
+	$("#cannonadeL").prop("checked", false);
+	$("#cannonadeR").prop("checked", false);
+	$("#volcalithL").prop("checked", false);
+	$("#volcalithR").prop("checked", false);
+	$("#reflectL").prop("checked", false);
+	$("#reflectR").prop("checked", false);
+	$("#lightScreenL").prop("checked", false);
+	$("#lightScreenR").prop("checked", false);
+	$("#protectL").prop("checked", false);
+	$("#protectR").prop("checked", false);
+	$("#leechSeedL").prop("checked", false);
+	$("#leechSeedR").prop("checked", false);
+	$("#foresightL").prop("checked", false);
+	$("#foresightR").prop("checked", false);
+	$("#helpingHandL").prop("checked", false);
+	$("#helpingHandR").prop("checked", false);
+	$("#tailwindL").prop("checked", false);
+	$("#tailwindR").prop("checked", false);
+	$("#friendGuardL").prop("checked", false);
+	$("#friendGuardR").prop("checked", false);
+	$("#auroraVeilL").prop("checked", false);
+	$("#auroraVeilR").prop("checked", false);
+	$("#batteryL").prop("checked", false);
+	$("#batteryR").prop("checked", false);
+	$("#powerSplitL").prop("checked", false);
+	$("#powerSplitR").prop("checked", false);
+	$("#switchingL").prop("checked", false);
+	$("#switchingR").prop("checked", false);
+	$("#trickroom").prop("checked", false);
+	$("#trickRoomR").prop("checked", false);
+	$("input:checkbox[name='terrain']").prop("checked", false);
+	applyFieldEnvironmentTheme("", "");
+}
+
+function getSetOptions(sets) {
+	var setsHolder = sets;
+	if (setsHolder === undefined) {
+		setsHolder = pokedex;
+	}
+	var pokeNames = Object.keys(setsHolder);
+	pokeNames.sort();
+	var setOptions = [];
+	for (var i = 0; i < pokeNames.length; i++) {
+		var pokeName = pokeNames[i];
+		setOptions.push({
+			pokemon: pokeName,
+			text: pokeName
+		});
+		if ($("#randoms").prop("checked")) {
+			if (pokeName in randdex) {
+				setOptions.push({
+					pokemon: pokeName,
+					set: 'Randoms Set',
+					text: pokeName + " (Randoms)",
+					id: pokeName + " (Randoms)"
+				});
+			}
+		} else {
+			if (pokeName in setdex) {
+				var setNames = Object.keys(setdex[pokeName]);
+				for (var j = 0; j < setNames.length; j++) {
+					var setName = setNames[j];
+					var setData = setdex[pokeName][setName];
+					if (!doesSetMatchStarterChoice(pokeName, setName, setData)) continue;
+					setOptions.push({
+						pokemon: pokeName,
+						set: setName,
+						text: pokeName + " (" + setName + ")",
+						id: pokeName + " (" + setName + ")",
+						isCustom: setData.isCustomSet,
+						nickname: setData.nickname || ""
+					});
+				}
+			}
+			setOptions.push({
+				pokemon: pokeName,
+				set: "Blank Set",
+				text: pokeName + " (Blank Set)",
+				id: pokeName + " (Blank Set)"
+			});
+		}
+	}
+	return setOptions;
+}
+
+function getSelectOptions(arr, sort, defaultOption) {
+	if (sort) {
+		arr.sort();
+	}
+	var r = '';
+	for (var i = 0; i < arr.length; i++) {
+		r += '<option value="' + arr[i] + '" ' + (defaultOption === i ? 'selected' : '') + '>' + arr[i] + '</option>';
+	}
+	return r;
+}
+var stickyMoves = (function () {
+	var lastClicked = 'resultMoveL1';
+	$(".result-move[type='radio']").click(function () {
+		if (this.id === lastClicked) {
+			$(this).toggleClass("locked-move");
+		} else {
+			$('.locked-move').removeClass('locked-move');
+		}
+		lastClicked = this.id;
+	});
+
+	return {
+		clearStickyMove: function () {
+			lastClicked = null;
+			$('.locked-move').removeClass('locked-move');
+		},
+		setSelectedMove: function (slot) {
+			lastClicked = slot;
+		},
+		getSelectedSide: function () {
+			if (lastClicked) {
+				if (lastClicked.indexOf('resultMoveL') !== -1) {
+					return 'p1';
+				} else if (lastClicked.indexOf('resultMoveR') !== -1) {
+					return 'p2';
+				}
+			}
+			return null;
+		}
+	};
+})();
+
+function isPokeInfoGrounded(pokeInfo) {
+	var teraType = pokeInfo.find(".teraToggle").is(":checked") ? pokeInfo.find(".teraType").val() : undefined;
+	return $("#gravity").prop("checked") || (
+		teraType ? teraType !== "Flying" : pokeInfo.find(".type1").val() !== "Flying" &&
+			teraType ? teraType !== "Flying" : pokeInfo.find(".type2").val() !== "Flying" &&
+			pokeInfo.find(".ability").val() !== "Levitate" &&
+		getEffectiveItemFromPokeInfo(pokeInfo) !== "Air Balloon"
+	);
+}
+
+function getTerrainEffects() {
+	var className = String($(this).prop("className") || "").split(/\s+/)[0];
+	switch (className) {
+		case "type1":
+		case "type2":
+		case "teraType":
+		case "teraToggle":
+		case "item":
+			var id = $(this).closest(".poke-info").prop("id");
+			var terrainValue = $("input:checkbox[name='terrain']:checked").val();
+			if (terrainValue === "Electric") {
+				$("#" + id).find("[value='Asleep']").prop("disabled", isPokeInfoGrounded($("#" + id)));
+			} else if (terrainValue === "Misty") {
+				$("#" + id).find(".status").prop("disabled", isPokeInfoGrounded($("#" + id)));
+			}
+			break;
+		case "ability":
+			// with autoset, ability change may cause terrain change, need to consider both sides
+			var terrainValue = $("input:checkbox[name='terrain']:checked").val();
+			if (terrainValue === "Electric") {
+				$("#p1").find(".status").prop("disabled", false);
+				$("#p2").find(".status").prop("disabled", false);
+				$("#p1").find("[value='Asleep']").prop("disabled", isPokeInfoGrounded($("#p1")));
+				$("#p2").find("[value='Asleep']").prop("disabled", isPokeInfoGrounded($("#p2")));
+			} else if (terrainValue === "Misty") {
+				$("#p1").find(".status").prop("disabled", isPokeInfoGrounded($("#p1")));
+				$("#p2").find(".status").prop("disabled", isPokeInfoGrounded($("#p2")));
+			} else {
+				$("#p1").find("[value='Asleep']").prop("disabled", false);
+				$("#p1").find(".status").prop("disabled", false);
+				$("#p2").find("[value='Asleep']").prop("disabled", false);
+				$("#p2").find(".status").prop("disabled", false);
+			}
+			break;
+		default:
+			if (!$(this).is("input:checkbox[name='terrain']")) {
+				break;
+			}
+			$("input:checkbox[name='terrain']").not(this).prop("checked", false);
+			if ($(this).prop("checked") && $(this).val() === "Electric") {
+				// need to enable status because it may be disabled by Misty Terrain before.
+				$("#p1").find(".status").prop("disabled", false);
+				$("#p2").find(".status").prop("disabled", false);
+				$("#p1").find("[value='Asleep']").prop("disabled", isPokeInfoGrounded($("#p1")));
+				$("#p2").find("[value='Asleep']").prop("disabled", isPokeInfoGrounded($("#p2")));
+			} else if ($(this).prop("checked") && $(this).val() === "Misty") {
+				$("#p1").find(".status").prop("disabled", isPokeInfoGrounded($("#p1")));
+				$("#p2").find(".status").prop("disabled", isPokeInfoGrounded($("#p2")));
+			} else {
+				$("#p1").find("[value='Asleep']").prop("disabled", false);
+				$("#p1").find(".status").prop("disabled", false);
+				$("#p2").find("[value='Asleep']").prop("disabled", false);
+				$("#p2").find(".status").prop("disabled", false);
+			}
+			break;
+	}
+	var weatherValue = gen === 2
+		? $("input:radio[name='gscWeather']:checked").val()
+		: $("input:radio[name='weather']:checked").val();
+	var activeTerrain = $("input:checkbox[name='terrain']:checked").val() || "";
+	applyFieldEnvironmentTheme(weatherValue, activeTerrain);
+}
+
+function doesSetOptionMatchSearchTerms(option, terms) {
+	if (!terms || !terms.length) return true;
+	var pokeName = String((option && option.pokemon) || "").toUpperCase();
+	var setName = String((option && option.set) || "").toUpperCase();
+	var optionText = String((option && option.text) || "").toUpperCase();
+	return terms.every(function (term) {
+		return pokeName.indexOf(term) === 0 ||
+			pokeName.indexOf("-" + term) >= 0 ||
+			pokeName.indexOf(" " + term) >= 0 ||
+			setName.indexOf(term) === 0 ||
+			setName.indexOf("-" + term) >= 0 ||
+			setName.indexOf(" " + term) >= 0 ||
+			optionText.indexOf(term) >= 0;
+	});
+}
+
+function loadDefaultLists() {
+	var initialOptions = getSetOptions();
+	var initialDefaultOption = getFirstValidSetOptionFromOptions(initialOptions);
+	$(".set-selector").select2({
+		formatResult: function (object) {
+			if ($("#randoms").prop("checked")) {
+				return getDisplaySpeciesName(object.pokemon);
+			} else {
+				return object.set
+					? ("&nbsp;&nbsp;&nbsp;" + formatSetNameForDisplay(object.id || object.text || ""))
+					: ("<b>" + getDisplaySpeciesName(object.text) + "</b>");
+			}
+		},
+		formatSelection: function (object) {
+			if (!object) return "";
+			return formatSetNameForDisplay(object.id || object.text || "");
+		},
+		query: function (query) {
+			var pageSize = 30;
+			var results = [];
+			var options = getSetOptions();
+			var terms = String(query.term || "").toUpperCase().split(/\s+/).filter(Boolean);
+			for (var i = 0; i < options.length; i++) {
+				var option = options[i];
+				if (doesSetOptionMatchSearchTerms(option, terms)) {
+					if ($("#randoms").prop("checked")) {
+						if (option.id) results.push(option);
+					} else {
+						results.push(option);
+					}
+				}
+			}
+			query.callback({
+				results: results.slice((query.page - 1) * pageSize, query.page * pageSize),
+				more: results.length >= query.page * pageSize
+			});
+		},
+		initSelection: function (element, callback) {
+			var selectedSetId = String($(element).val() || "").trim();
+			var selectedOption = getSetOptionById(selectedSetId, initialOptions);
+			callback(selectedOption || initialDefaultOption);
+		}
+	});
+}
+
+function allPokemon(selector) {
+	var allSelector = "";
+	for (var i = 0; i < $(".poke-info").length; i++) {
+		if (i > 0) {
+			allSelector += ", ";
+		}
+		allSelector += "#p" + (i + 1) + " " + selector;
+	}
+	return allSelector;
+}
+
+function loadCustomList(id) {
+	var customOptions = getSetOptions();
+	$("#" + id + " .set-selector").select2({
+		formatResult: function (set) {
+			if (set.nickname) return getDisplaySpeciesName(set.pokemon) + " (" + set.nickname + ")";
+			return formatSetNameForDisplay(set.id);
+		},
+		formatSelection: function (set) {
+			if (!set) return "";
+			return formatSetNameForDisplay(set.id || set.text || "");
+		},
+		query: function (query) {
+			var pageSize = 30;
+			var results = [];
+			var options = getSetOptions();
+			var terms = String(query.term || "").toUpperCase().split(/\s+/).filter(Boolean);
+			for (var i = 0; i < options.length; i++) {
+				var option = options[i];
+				if (option.isCustom && option.set && doesSetOptionMatchSearchTerms(option, terms)) {
+					results.push(option);
+				}
+			}
+			query.callback({
+				results: results.slice((query.page - 1) * pageSize, query.page * pageSize),
+				more: results.length >= query.page * pageSize
+			});
+		},
+		initSelection: function (element, callback) {
+			var selectedSetId = String($(element).val() || "").trim();
+			var selectedOption = getCustomSetOptionById(selectedSetId, customOptions);
+			callback(selectedOption || "");
+		}
+	});
+}
+
+function get_trainer_names() {
+	var all_poks = SETDEX_SV
+	var trainer_names = []
+
+	for (const [pok_name, poks] of Object.entries(all_poks)) {
+		var pok_tr_names = Object.keys(poks)
+		for (i in pok_tr_names) {
+			var index = (poks[pok_tr_names[i]]["index"])
+			var trainer_name = pok_tr_names[i]
+			trainer_names.push(`[${index}]${pok_name} (${trainer_name})`)
+		}
+	}
+	return trainer_names
+}
+function addBoxed(poke) {
+	var speciesName = String(poke && poke.name || "").trim();
+	if (!speciesName) return;
+	var setLabel = String(poke && poke.nameProp || "").trim() || "Custom Set";
+	var setId = speciesName + " (" + setLabel + ")";
+	var spriteId = speciesName + setLabel;
+	var existingSpeciesSprites = $(".trainer-pok.left-side").filter(function () {
+		return String($(this).attr("data-species") || "").trim().toLowerCase() === speciesName.toLowerCase();
+	}).toArray();
+	if (existingSpeciesSprites.length) {
+		var keepSprite = existingSpeciesSprites[0];
+		for (var dupIndex = 1; dupIndex < existingSpeciesSprites.length; dupIndex++) {
+			var duplicateRoot = getTrainerPokRootNode(existingSpeciesSprites[dupIndex]);
+			if (duplicateRoot && duplicateRoot.parentNode) duplicateRoot.parentNode.removeChild(duplicateRoot);
+		}
+		keepSprite.id = spriteId;
+		keepSprite.dataset.id = setId;
+		setTrainerSpriteImage(keepSprite, speciesName);
+		scheduleFragSheetRefresh();
+		applyPlayerRosterSearchFilter();
+		return;
+	}
+	if (document.getElementById(spriteId)) {
+		return;
+	}
+	var newPoke = document.createElement("img");
+	newPoke.id = spriteId;
+	newPoke.className = "trainer-pok left-side";
+	newPoke.loading = "lazy";
+	newPoke.decoding = "async";
+	setTrainerSpriteImage(newPoke, speciesName);
+	newPoke.dataset.id = setId;
+	newPoke.addEventListener("dragstart", dragstart_handler);
+	$('#box-poke-list')[0].appendChild(newPoke)
+	scheduleFragSheetRefresh();
+	applyPlayerRosterSearchFilter();
+}
+
+function getSrcImgPokemon(poke) {
+	//edge case
+	if (!poke || !poke.name) {
+		return
+	}
+	return getTrainerSpriteUrlByName(poke.name);
+}
+
+function get_trainer_poks(trainer_name) {
+	var selectedEntry = parseTrainerPartyEntry(trainer_name);
+	if (selectedEntry.setData && !doesSetMatchStarterChoice(selectedEntry.pokemonName, selectedEntry.trainerLabel, selectedEntry.setData)) {
+		return [];
+	}
+	var selectedTrainerLabel = selectedEntry.trainerLabel;
+	window.CURRENT_TRAINER = selectedTrainerLabel;
+	var matches = [];
+
+	if (hasSetDoubleLayoutMetadata(selectedEntry.setData)) {
+		var selectedGroupId = getSetDoubleGroupId(selectedEntry.setData);
+		var selectedBattleKey = selectedEntry.trainerBattleKey;
+		for (i in TR_NAMES) {
+			var candidateEntry = parseTrainerPartyEntry(TR_NAMES[i]);
+			if (!candidateEntry.setData) continue;
+			if (!doesSetMatchStarterChoice(candidateEntry.pokemonName, candidateEntry.trainerLabel, candidateEntry.setData)) continue;
+			if (!hasSetDoubleLayoutMetadata(candidateEntry.setData)) continue;
+			if (selectedGroupId) {
+				if (getSetDoubleGroupId(candidateEntry.setData) !== selectedGroupId) continue;
+			} else if (candidateEntry.trainerBattleKey !== selectedBattleKey) {
+				continue;
+			}
+			matches.push(TR_NAMES[i]);
+		}
+		if (matches.length) return matches;
+	}
+
+	for (i in TR_NAMES) {
+		var standardEntry = parseTrainerPartyEntry(TR_NAMES[i]);
+		if (standardEntry.setData && !doesSetMatchStarterChoice(standardEntry.pokemonName, standardEntry.trainerLabel, standardEntry.setData)) continue;
+		if (TR_NAMES[i].indexOf("(" + selectedTrainerLabel + ")") >= 0) {
+			matches.push(TR_NAMES[i]);
+		}
+	}
+	return matches;
+}
+
+function topPokemonIcon(fullname, node) {
+	var speciesName = parseSetId(fullname).species || String(fullname || "");
+	setTrainerSpriteImage(node, speciesName);
+	if (node && node.id === "p1mon") syncInlinePokeSprite($("#p1"));
+	if (node && node.id === "p2mon") syncInlinePokeSprite($("#p2"));
+}
+
+$(document).on('click', '.right-side', function () {
+	var set = $(this).attr('data-id');
+	topPokemonIcon(set, $("#p2mon")[0])
+	$('.opposing').val(set);
+	$('.opposing').change();
+	$('.opposing .select2-chosen').text(formatSetNameForDisplay(set));
+	renderFragSheet();
+})
+
+$(document).on("contextmenu", ".trainer-pok.right-side", function (ev) {
+	ev.preventDefault();
+	var setId = String($(this).attr("data-id") || "").trim();
+	if (!setId) return;
+	closeFragContextMenu();
+	closeOpposingContextMenu();
+	setOpposingSetDeadMark(setId, !isOpposingSetMarkedDead(setId));
+});
+
+$(document).on('click', '.left-side', function () {
+	var set = $(this).attr('data-id');
+	topPokemonIcon(set, $("#p1mon")[0])
+	$('.player').val(set);
+	$('.player').change();
+	$('.player .select2-chosen').text(formatSetNameForDisplay(set));
+	renderFragSheet();
+})
+
+$(document).on("contextmenu", ".trainer-pok.left-side", function (ev) {
+	openFragContextMenu(ev, $(this).attr("data-id"), this);
+});
+
+
+//select first mon of the box when loading
+function selectFirstMon() {
+	var pMons = document.getElementsByClassName("trainer-pok left-side");
+	if (!pMons.length) {
+		return;
+	}
+	let set = pMons[0].getAttribute("data-id");
+	if (!set) {
+		return;
+	}
+	$('.player').val(set);
+	$('.player').change();
+	$('.player .select2-chosen').text(formatSetNameForDisplay(set));
+}
+
+function selectTrainer(value) {
+	localStorage.setItem("lasttimetrainer", value);
+	all_poks = SETDEX_SV
+	for (const [pok_name, poks] of Object.entries(all_poks)) {
+		var pok_tr_names = Object.keys(poks)
+		for (i in pok_tr_names) {
+			var index = (poks[pok_tr_names[i]]["index"])
+			if (!doesSetMatchStarterChoice(pok_name, pok_tr_names[i], poks[pok_tr_names[i]])) continue;
+			if (index == value) {
+				var set = `${pok_name} (${pok_tr_names[i]})`;
+				$('.opposing').val(set);
+				$('.opposing').change();
+				$('.opposing .select2-chosen').text(formatSetNameForDisplay(set));
+				renderFragSheet();
+				return;
+			}
+
+		}
+	}
+}
+
+function nextTrainer() {
+	var trainerBounds = getCurrentTrainerIndexBounds();
+	if (!trainerBounds) return;
+	var maxIndex = trainerBounds.max;
+	clearOpposingDeadMarks();
+	selectTrainer(maxIndex + 1);
+}
+
+function previousTrainer() {
+	var trainerBounds = getCurrentTrainerIndexBounds();
+	if (!trainerBounds) return;
+	var minIndex = trainerBounds.min;
+	if (minIndex <= 1) return;
+	clearOpposingDeadMarks();
+	selectTrainer(minIndex - 1);
+}
+
+function getCurrentTrainerIndexBounds() {
+	var selectedOpposing = String($(".opposing").val() || "").trim();
+	var trainerEntries = selectedOpposing ? get_trainer_poks(selectedOpposing) : [];
+	if ((!trainerEntries || !trainerEntries.length) && CURRENT_TRAINER_POKS && CURRENT_TRAINER_POKS.length) {
+		trainerEntries = CURRENT_TRAINER_POKS.slice();
+	}
+	if (trainerEntries && trainerEntries.length) {
+		CURRENT_TRAINER_POKS = trainerEntries.slice();
+	}
+	var minIndex = Infinity;
+	var maxIndex = -Infinity;
+	for (var i = 0; i < trainerEntries.length; i++) {
+		var entry = parseTrainerPartyEntry(trainerEntries[i]);
+		var index = getTrainerIndexFromSetData(entry.setData);
+		if (index <= 0) index = entry.sortIndex || 0;
+		if (!index || index <= 0 || Number.isNaN(index)) continue;
+		if (index < minIndex) minIndex = index;
+		if (index > maxIndex) maxIndex = index;
+	}
+	if (!Number.isFinite(minIndex) || !Number.isFinite(maxIndex)) {
+		var selectedEntry = selectedOpposing ? parseTrainerPartyEntry(selectedOpposing) : null;
+		var selectedIndex = selectedEntry ? getTrainerIndexFromSetData(selectedEntry.setData) : 0;
+		if (selectedIndex > 0) return {min: selectedIndex, max: selectedIndex};
+		return null;
+	}
+	return {min: minIndex, max: maxIndex};
+}
+
+function resetTrainer() {
+	if (confirm(`Are you sure you want to reset? This will clear all imported sets and change your current trainer back to Younger Calvin. This cannot be undone.`)){
+		captureFragBackupSnapshot("before-reset-trainer", true);
+		selectTrainer(1);
+		localStorage.removeItem("customsets");
+		$(allPokemon("#importedSetsOptions")).hide();
+		loadDefaultLists();
+		for (let zone of document.getElementsByClassName("dropzone")){
+			zone.innerHTML="";
+		}
+		applyPlayerRosterSearchFilter();
+		syncFragRoster({pruneMissing: true, allowEmptyPrune: true});
+		renderFragSheet();
+	}
+	
+}
+
+function refreshCurrentTrainerEncounter() {
+	var selectedOpposing = $(".opposing").val();
+	if (!selectedOpposing) return;
+	CURRENT_TRAINER_POKS = get_trainer_poks(selectedOpposing);
+	handleTrainerFieldLockTrainerTransition();
+	syncBattleFormatForSelection(selectedOpposing, CURRENT_TRAINER_POKS);
+	renderOpposingTrainerParties(selectedOpposing);
+	syncWeatherForSelection(selectedOpposing, CURRENT_TRAINER_POKS);
+	syncTerrainForSelection(selectedOpposing, CURRENT_TRAINER_POKS);
+	renderFragSheet();
+	if (typeof performCalculations === "function") performCalculations();
+}
+
+
+function HideShowCCSettings(){
+	$('#show-cc')[0].toggleAttribute("hidden");
+	$('#hide-cc')[0].toggleAttribute("hidden");
+	$('#refr-cc')[0].toggleAttribute("hidden");
+	$('#info-cc')[0].toggleAttribute("hidden");
+	$('#cc-sets')[0].toggleAttribute("hidden");
+}
+
+function colorCodeUpdate(){
+	var speCheck = document.getElementById("cc-spe-border").checked;
+	var ohkoCheck = document.getElementById("cc-ohko-color").checked;
+	if (!speCheck && !ohkoCheck){
+		return
+	}
+	if (typeof calculationsColors !== "function") {
+		console.error("Color coding is unavailable: calculationsColors is not defined.");
+		return;
+	}
+	var pMons = document.getElementsByClassName("trainer-pok left-side");
+	// calculate opposing Pokemon once to reduce repeated work
+	var p2;
+	try {
+		p2 = createPokemon($("#p2"));
+	} catch (err) {
+		console.error("Color coding failed while reading the opposing Pokemon.", err);
+		return;
+	}
+	for (let i = 0; i < pMons.length; i++) {
+		let set = pMons[i].getAttribute("data-id");
+		if (!set) {
+			continue;
+		}
+		let idColor;
+		try {
+			idColor = calculationsColors(set, p2);
+		} catch (err) {
+			console.error(`Color coding skipped set "${set}" due to a calculation error.`, err);
+			continue;
+		}
+		if (speCheck && ohkoCheck){
+			pMons[i].className = `trainer-pok left-side mon-speed-${idColor.speed} mon-dmg-${idColor.code}`;
+		}
+		else if (speCheck){
+			pMons[i].className = `trainer-pok left-side mon-speed-${idColor.speed}`;
+		}
+		else if (ohkoCheck){
+			pMons[i].className = `trainer-pok left-side mon-dmg-${idColor.code}`;
+		}
+		
+		
+	}
+}
+function showColorCodes(){
+	HideShowCCSettings();
+	colorCodeUpdate();
+}
+
+function refreshColorCode(){
+	colorCodeUpdate();
+}
+
+function hideColorCodes(){
+	var pMons = document.getElementsByClassName("trainer-pok left-side");
+	for (let i = 0; i < pMons.length; i++) {
+		pMons[i].className = "trainer-pok left-side";
+	}
+	document.getElementById("cc-auto-refr").checked = false;
+	HideShowCCSettings();
+}
+
+function ensureColorCodesEnabled() {
+	var showBtn = document.getElementById("show-cc");
+	var autoRefreshToggle = document.getElementById("cc-auto-refr");
+	if (autoRefreshToggle) autoRefreshToggle.checked = true;
+	if (showBtn && !showBtn.hidden) {
+		showColorCodes();
+		return;
+	}
+	colorCodeUpdate();
+}
+
+function toggleInfoColorCode(){
+	document.getElementById("info-cc-field").toggleAttribute("hidden");
+}
+
+function TrashPokemon() {
+	var maybeMultiple = document.getElementById("trash-box").getElementsByClassName("trainer-pok");
+	if (maybeMultiple.length == 0){
+		return; //nothing to delete
+	}
+	var numberPKM = maybeMultiple.length > 1 ? `${maybeMultiple.length} Pokemon(s)` : "this Pokemon"; 
+	var yes = confirm(`do you really want to remove ${numberPKM}?`);
+	if (!yes) {
+		return;
+	}
+	captureFragBackupSnapshot("before-trash-remove", true);
+	var customSets = safeJsonParse(localStorage.customsets, {});
+	var length= maybeMultiple.length;
+	for( let i = 0; i<length; i++){
+		var pokeTrashed = maybeMultiple[i];
+		var name = pokeTrashed.getAttribute("data-id").split(" (")[0];
+		delete customSets[name];
+	}
+	document.getElementById("trash-box").innerHTML="";
+	localStorage.setItem("customsets", JSON.stringify(customSets));
+	if (typeof updateDex === "function") updateDex(customSets);
+	applyPlayerRosterSearchFilter();
+	$('#box-poke-list')[0].click();
+	//switch to the next pokemon automatically
+	
+}
+function RemoveAllPokemon() {
+	document.getEle
+}
+function allowDrop(ev) {
+	ev.preventDefault();
+}
+
+var pokeDragged = null;
+function dragstart_handler(ev) {
+	pokeDragged = getTrainerPokRootNode(ev.target);
+}
+
+function drop(ev) {
+	ev.preventDefault();
+	if (!pokeDragged) return;
+	var targetNode = ev.target;
+	var targetSprite = targetNode.classList.contains("left-side")
+		? targetNode
+		: $(targetNode).closest(".trainer-pok.left-side").get(0);
+	var targetDropzone = targetNode.classList.contains("dropzone")
+		? targetNode
+		: $(targetNode).closest(".dropzone").get(0);
+	if (targetSprite) {
+		var targetRoot = getTrainerPokRootNode(targetSprite);
+		if (targetRoot && targetRoot !== pokeDragged) {
+			var draggedSprite = getTrainerPokSpriteElement(pokeDragged);
+			var targetRootSprite = getTrainerPokSpriteElement(targetRoot);
+			var draggedSetId = draggedSprite ? $(draggedSprite).attr("data-id") : "";
+			var targetSetId = targetRootSprite ? $(targetRootSprite).attr("data-id") : "";
+			if (shouldMergeFragsByEvolutionDrop(draggedSetId, targetSetId) &&
+				mergeFragEntriesFromEvolutionDrop(draggedSetId, targetSetId)) {
+				if (pokeDragged.parentNode) pokeDragged.parentNode.removeChild(pokeDragged);
+				targetNode.classList.remove('over');
+				targetRoot.classList.remove('over');
+				pokeDragged = null;
+				scheduleFragSheetRefresh();
+				updateTrainerFragBorderTotals();
+				return;
+			}
+			if (targetRoot.parentNode === pokeDragged.parentNode) {
+				var sharedParent = targetRoot.parentNode;
+				var draggedNext = pokeDragged.nextSibling;
+				var targetNext = targetRoot.nextSibling;
+				if (draggedNext === targetRoot) {
+					sharedParent.insertBefore(targetRoot, pokeDragged);
+				} else if (targetNext === pokeDragged) {
+					sharedParent.insertBefore(pokeDragged, targetRoot);
+				} else {
+					sharedParent.insertBefore(pokeDragged, targetNext);
+					sharedParent.insertBefore(targetRoot, draggedNext);
+				}
+			} else if (targetRoot.parentNode) {
+				targetRoot.parentNode.insertBefore(pokeDragged, targetRoot.nextSibling);
+			}
+		}
+	} else if (targetDropzone) {
+		if (pokeDragged.parentNode) pokeDragged.parentNode.removeChild(pokeDragged);
+		targetDropzone.appendChild(pokeDragged);
+	}
+	targetNode.classList.remove('over');
+	pokeDragged = null;
+	scheduleFragSheetRefresh();
+	updateTrainerFragBorderTotals();
+	applyPlayerRosterSearchFilter();
+}
+
+function handleDragEnter(ev) {
+	ev.target.classList.add('over');
+}
+
+function handleDragLeave(ev) {
+	ev.target.classList.remove('over');
+}
+
+function SpeedBorderSetsChange(ev){
+	var monImgs = document.getElementsByClassName("left-side");
+	if (ev.target.checked){
+		for (let monImg of monImgs){
+			monImg.classList.remove("mon-speed-none")
+		}
+	}else{
+		for (let monImg of monImgs){
+			monImg.classList.add("mon-speed-none")
+		}
+	}
+}
+
+function ColorCodeSetsChange(ev){
+	var monImgs = document.getElementsByClassName("left-side");
+	if (ev.target.checked){
+		for (let monImg of monImgs){
+			monImg.classList.remove("mon-dmg-none")
+		}
+	}else{
+		for (let monImg of monImgs){
+			monImg.classList.add("mon-dmg-none")
+		}
+	}
+}
+function setupSideCollapsers(){
+	var applyF = (btns) => {
+		for (var i = 0; i < btns.length; i++) {
+			let btn = btns[i];
+			btn.cum = btn.offsetHeight;
+			btn.sisterEl = document.getElementsByClassName(btn.getAttribute("data-set"))[0];
+			btn.prevEl = btns[i-1] || null;
+			if (btn.prevEl){
+				btn.cum += btn.prevEl.cum
+			}else{
+				btn.cum = 0;
+			}
+			btn.nextEl = btns[i+1] || null;
+			btn.onclick = sideCollapsersCorrection
+		}
+	}
+	var leftBtns = document.getElementsByClassName("l-side-button");
+	var rigtBtns = document.getElementsByClassName("r-side-button");
+	applyF(leftBtns);
+	applyF(rigtBtns);
+	/*
+		readjust the left buttons
+		Because i couldn't find a proper way to do it with css
+	*/
+	for(let btn of leftBtns){
+		btn.style.left = "-" + btn.offsetWidth + "px";
+	}
+	leftBtns[0].onclick();
+	rigtBtns[0].onclick();
+}
+function sideCollapsersCorrection(ev){
+	if (ev){
+		var arrow = ev.target.children[0] || ev.target.parentNode.children[0];
+		collapseArrow(arrow);
+	}
+	var node = this;
+	if (node.tagName != "BUTTON"){
+		node = this.target.parentNode;
+	}
+	var prev = node.prevEl;
+	var offset = node.sisterEl.offsetTop;
+	var relativeHeight = node.parentNode.offsetTop;
+	if(prev){
+		//since the position is absolute, this will prevent from eating fellows.
+		var prevLowPos = prev.offsetTop + prev.offsetHeight; - relativeHeight ;
+		if(offset==0){// collapsed
+			offset = prevLowPos;
+		}else{// standing
+			offset = offset - relativeHeight;
+			if (offset < prevLowPos){
+				offset = prevLowPos;
+			}
+		}
+	}else{
+		if(offset==0){// collapsed
+			offset = node.offsetTop;
+		}else{// standing
+			offset = offset - relativeHeight;
+		}
+	}
+	node.style.top = offset + "px"
+	//propagate to next buttons
+	if(node.nextEl){
+		node.nextEl.onclick()
+	}
+}
+function collapseArrow(arrow){
+	var arrBtn = arrow.parentNode;
+	var target = arrBtn.getAttribute("data-set");
+	for (let div of document.getElementsByClassName(target)){
+		div.toggleAttribute("hidden");
+	}
+	if (arrBtn.classList.contains("l-side-button")){
+		if (arrow.classList.contains("arrowdown")){
+			arrow.classList.remove("arrowdown");
+			arrow.classList.add("arrowright");
+		}else{
+			arrow.classList.remove("arrowright");
+			arrow.classList.add("arrowdown");
+		}
+	}
+	else if (arrBtn.classList.contains("r-side-button")){
+		if (arrow.classList.contains("arrowdown")){
+			arrow.classList.remove("arrowdown");
+			arrow.classList.add("arrowleft");
+		}else{
+			arrow.classList.remove("arrowleft");
+			arrow.classList.add("arrowdown");
+		}
+	}
+}
+
+/* although those two function could be factorised in one, i may think about more in depth 
+functionality laters that may involve two separate functions, i will remove this comment if i do*/
+function setDoubleIconVisibility(isDoubles) {
+	var doubleIcon = document.getElementById("monDouble");
+	if (!doubleIcon) return;
+	doubleIcon.hidden = !isDoubles;
+}
+
+function switchIconSingle(){
+	setDoubleIconVisibility(false);
+}
+
+function switchIconDouble(){
+	setDoubleIconVisibility(true);
+}
+
+$(document).ready(function () {
+	if (window.console && typeof window.console.info === "function") {
+		window.console.info("[AstralCalc] lastencounter-build v5");
+	}
+	var params = new URLSearchParams(window.location.search);
+	var g = GENERATION[params.get('gen')] || 9;
+	$("#gen" + g).prop("checked", true);
+	$("#gen" + g).change();
+	$("#percentage").prop("checked", true);
+	$("#percentage").change();
+	$("#singles-format").prop("checked", true);
+	$("#singles-format").change();
+	moveMetaVisible = !!getAppSettings().moveMeta;
+	setMoveMetaVisibility(moveMetaVisible);
+	loadMoveInfoLookup();
+	setDoubleIconVisibility(false);
+	bindAstralDexLinks();
+	bindCalcToolEvents();
+	saveTrainerFieldLocksState({});
+	trainerFieldLockActiveTrainerKey = "";
+	syncTrainerFieldLockButtonStyles();
+	bindPlayerRosterSearchInput();
+	ensureFragHistoryControls();
+	bindFieldSideControlsToggle();
+	loadDefaultLists();
+	setupFragSheetAutoRefresh();
+	syncSettingsPanelUi();
+	syncFragRoster();
+	renderFragSheet();
+	$("select.move-selector").select2({
+		dropdownAutoWidth: true,
+		matcher: function (term, text) {
+			// 2nd condition is for Hidden Power
+			return text.toUpperCase().indexOf(term.toUpperCase()) === 0 || text.toUpperCase().indexOf(" " + term.toUpperCase()) >= 0;
+		}
+	});
+	try {
+		var didRestoreLastEncounter = restoreLastEncounterSelection();
+		if (!didRestoreLastEncounter) {
+			var firstValidSet = getFirstValidSetOption();
+			if (firstValidSet && firstValidSet.id) {
+				$(".set-selector").val(firstValidSet.id);
+				$(".set-selector").change();
+			}
+		}
+	} finally {
+		isBootstrappingLastEncounterSelection = false;
+	}
+	updateAllMoveMetaDisplays();
+	startAppUpdateChecker();
+	window.setTimeout(function () {
+		maybeAutoStartCalcFeatureTutorial();
+	}, CALC_FEATURE_TUTORIAL_AUTO_OPEN_DELAY_MS);
+	$(".terrain-trigger").bind("change keyup", getTerrainEffects);
+	$("#previous-trainer").click(previousTrainer);
+	$("#next-trainer").click(nextTrainer);
+	$("#reset-trainer").click(resetTrainer);
+	$("#info-trainer").click(refreshCurrentTrainerEncounter);
+	$('#show-cc').click(showColorCodes);
+	$('#hide-cc').click(hideColorCodes);
+	$('#refr-cc').click(refreshColorCode);
+	$('#info-cc').click(toggleInfoColorCode);
+	$('#trash-pok').click(TrashPokemon);
+	$('#cc-spe-border').change(SpeedBorderSetsChange);
+	$('#cc-ohko-color').change(ColorCodeSetsChange);
+	$('#cc-spe-border')[0].checked=true;
+	$('#cc-ohko-color')[0].checked=true;
+	for (let dropzone of document.getElementsByClassName("dropzone")){
+		dropzone.ondragenter=handleDragEnter;
+		dropzone.ondragleave=handleDragLeave;
+		dropzone.ondrop=drop;
+		dropzone.ondragover=allowDrop;
+	}
+	ensureColorCodesEnabled();
+	applyPlayerRosterSearchFilter();
+	renderFragSheet();
+});
+
+/* Click-to-copy function */
+$("#mainResult").click(function () {
+	navigator.clipboard.writeText($("#mainResult").text()).then(function () {
+		document.getElementById('tooltipText').style.visibility = 'visible';
+		setTimeout(function () {
+			document.getElementById('tooltipText').style.visibility = 'hidden';
+		}, 2000);
+	});
+});

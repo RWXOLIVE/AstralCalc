@@ -319,6 +319,7 @@ export const MEGA_STONES: {[species: string]: string} = {
   Gyaradosite: 'Gyarados',
   Heracronite: 'Heracross',
   Houndoominite: 'Houndoom',
+  Heatranite: 'Heatran',
   Kangaskhanite: 'Kangaskhan',
   Latiasite: 'Latias',
   Latiosite: 'Latios',

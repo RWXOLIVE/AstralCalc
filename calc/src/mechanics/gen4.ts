@@ -424,7 +424,7 @@ export function calculateDPP(
     }
   }
 
-  if (field.gameType !== 'Singles' &&
+  if (!field.ignoreSpreadDamageReduction && field.gameType !== 'Singles' &&
       ['allAdjacent', 'allAdjacentFoes'].includes(move.target)) {
     baseDamage = Math.floor((baseDamage * 3) / 4);
   }

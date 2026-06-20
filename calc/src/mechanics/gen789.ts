@@ -141,6 +141,7 @@ export function calculateSMSSSV(
     'Menacing Moonraze Maelstrom',
     'Moongeist Beam',
     'Photon Geyser',
+    'Psystrike',
     'Searing Sunraze Smash',
     'Sunsteel Strike'
   );
@@ -504,7 +505,7 @@ export function calculateSMSSSV(
   // #region (Special) Attack
   const attack = calculateAttackSMSSSV(gen, attacker, defender, move, field, desc, isCritical);
   const attackSource = move.named('Foul Play') ? defender : attacker;
-  if (move.named('Photon Geyser', 'Light That Burns The Sky') ||
+  if (move.named('Photon Geyser','Psystrike', 'Light That Burns The Sky') ||
       (move.named('Tera Blast') && attackSource.teraType)) {
     move.category = attackSource.stats.atk > attackSource.stats.spa ? 'Physical' : 'Special';
   }
@@ -530,7 +531,7 @@ export function calculateSMSSSV(
 
   let baseDamage = getBaseDamage(attacker.level, basePower, attack, defense);
 
-  const isSpread = field.gameType !== 'Singles' &&
+  const isSpread = !field.ignoreSpreadDamageReduction && field.gameType !== 'Singles' &&
      ['allAdjacent', 'allAdjacentFoes'].includes(move.target);
   if (isSpread) {
     baseDamage = pokeRound(OF32(baseDamage * 3072) / 4096);
@@ -1236,7 +1237,7 @@ export function calculateAttackSMSSSV(
 ) {
   let attack: number;
   const attackSource = move.named('Foul Play') ? defender : attacker;
-  if (move.named('Photon Geyser', 'Light That Burns The Sky') ||
+  if (move.named('Photon Geyser','Psystrike', 'Light That Burns The Sky') ||
       (move.named('Tera Blast') && attackSource.teraType)) {
     move.category = attackSource.stats.atk > attackSource.stats.spa ? 'Physical' : 'Special';
   }

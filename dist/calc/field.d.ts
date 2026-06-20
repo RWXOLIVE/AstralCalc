@@ -9,6 +9,7 @@ export declare class Field implements State.Field {
     isWonderRoom: boolean;
     isGravity: boolean;
     isInverse: boolean;
+    ignoreSpreadDamageReduction?: boolean;
     isAuraBreak?: boolean;
     isFairyAura?: boolean;
     isDarkAura?: boolean;

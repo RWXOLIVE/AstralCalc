@@ -43,7 +43,7 @@
         <li><a class="button nav-first" href="https://astral-dex.vercel.app/">Pokédex</a></li>
         <li><a class="button nav-first" href="https://rwxolive.github.io/astral-trainer-sheet/resources.html">Trainer Sheet</a></li>
 		<li><a class="button" href="https://discord.gg/fZWBmEZeZx">Discord</a></li>
-        <li><a class="button" href="https://drive.google.com/drive/folders/1X05r8shCeFDpyGCsSXXkryZ4Bt5pWd5B?usp=sharing">Google Drive</a></li>
+        <li><a class="button" href="https://drive.google.com/drive/folders/1MXTPeDdmYb_ZOQErrn3Pk_zeZthYReQ2?usp=drive_link">Google Drive</a></li>
         <li><a class="button" href="https://rwxolive.github.io/astral-mechanics/">Mechanics</a></li>
         <li><a class="button nav-last" href="https://rwxolive.github.io/astral-ai/">AI Not Added</a></li>
 </ul>
@@ -243,7 +243,7 @@
                     </div>
                     -->
                     <div class="hide">
-                        <label>Forme</label>
+                        <label>Form/Evo</label>
                         <select class="forme calc-trigger"></select>
                     </div>
                     <div class="hide">
@@ -796,7 +796,7 @@
             <fieldset class="poke-info" id="trainer-mons-player">
                 <legend align="center">Team/Box</legend>
                 <span id="search-inline" class="search-inline">
-                        <input type="text" id="search" placeholder="Search" />
+                        <input type="text" id="search" placeholder="Search - Pokemon/Moves" />
                     </span>
                 <div>
                     <legend align="center">Team</legend>
@@ -985,15 +985,15 @@
                                 <label class="btn btn-xwide" for="srR">Stealth Rock</label>
                             </div></td>
                         </tr>
-                        <tr class="gen-specific g8 hide">
-                            <div hidden id="selectSteelsurgeInstruction">Is Steelsurge affecting this side of the field?</div>
-                            <td><div class="left" title="Is Steelsurge affecting this side of the field?">
+                        <tr class="gen-specific g8 g9">
+                            <div hidden id="selectSteelsurgeInstruction">Is Steel Spikes affecting this side of the field?</div>
+                            <td><div class="left" title="Is Steel Spikes affecting this side of the field?">
                                 <input aria-describedby="selectSteelsurgeInstruction" class="visually-hidden calc-trigger" type="checkbox" id="steelsurgeL" />
-                                <label class="btn btn-xwide" for="steelsurgeL">Steelsurge</label>
+                                <label class="btn btn-xwide" for="steelsurgeL">Steel Spikes</label>
                             </div></td>
-                            <td><div class="right" title="Is Steelsurge affecting this side of the field?">
+                            <td><div class="right" title="Is Steel Spikes affecting this side of the field?">
                                 <input aria-describedby="selectSteelsurgeInstruction" class="visually-hidden calc-trigger" type="checkbox" id="steelsurgeR" />
-                                <label class="btn btn-xwide" for="steelsurgeR">Steelsurge</label>
+                                <label class="btn btn-xwide" for="steelsurgeR">Steel Spikes</label>
                             </div></td>
                         </tr>
                         <tr class="gen-specific g8 hide">
@@ -1286,7 +1286,7 @@
                     </div>
                     -->
                     <div class="hide">
-                        <label>Forme</label>
+                        <label>Form/Evo</label>
                         <select class="forme calc-trigger"></select>
                     </div>
                     <div class="hide">
@@ -1935,7 +1935,7 @@
                 </label>
                 <label class="settings-checkbox-row">
                     <input type="checkbox" id="settings-move-meta" />
-                    Show PP & ACC
+                    Show Crit Rate &PP & ACC
                 </label>
                 <label class="settings-checkbox-row">
                     <input type="checkbox" id="settings-total-frags-on-border" />
@@ -2004,7 +2004,7 @@
     <script type="text/javascript" src="./js/spritedata.js?"></script>
     <script type="text/javascript" src="./js/data/frags_splits.js?"></script>
     <script type="text/javascript" src="./js/data/move_info_lookup.js?"></script>
-    <script type="text/javascript" src="./js/shared_controls.js?"></script>
+    <script type="text/javascript" src="./js/shared_controls.js?spritefix17"></script>
     <script type="text/javascript" src="./js/index_randoms_controls.js?"></script>
     <script type="text/javascript" src="./js/moveset_import.js?"></script>
 </div>

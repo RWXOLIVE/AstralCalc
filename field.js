@@ -27,6 +27,7 @@ var Field = (function () {
         this.isWonderRoom = !!field.isWonderRoom;
         this.isGravity = !!field.isGravity;
         this.isInverse = !!field.isInverse;
+        this.ignoreSpreadDamageReduction = !!field.ignoreSpreadDamageReduction;
         this.isAuraBreak = field.isAuraBreak || false;
         this.isFairyAura = field.isFairyAura || false;
         this.isDarkAura = field.isDarkAura || false;
@@ -65,6 +66,7 @@ var Field = (function () {
             isWonderRoom: this.isWonderRoom,
             isGravity: this.isGravity,
             isInverse: this.isInverse,
+            ignoreSpreadDamageReduction: this.ignoreSpreadDamageReduction,
             attackerSide: this.attackerSide,
             defenderSide: this.defenderSide,
             isAuraBreak: this.isAuraBreak,
