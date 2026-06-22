@@ -52,12 +52,13 @@
 
 <div class="wrapper">
 
-    <div aria-label="Settings" role="region">
+    <div aria-label="Calculator tools" role="region">
         <span class="title-text">Astral Emerald Damage Calculator</span>
         <span class="calc-top-actions" role="group" aria-label="Quick tools">
             <button type="button" class="btn calc-top-action-btn" id="open-pokedex-panel">Pokedex</button>
             <button type="button" class="btn calc-top-action-btn" id="open-notes-panel">Notes</button>
             <button type="button" class="btn calc-top-action-btn" id="open-frags-panel">Frags</button>
+            <button type="button" class="btn calc-top-action-btn" id="open-faq-panel">FAQ</button>
             <button type="button" class="btn calc-top-action-btn" id="open-settings-panel">Settings</button>
         </span>
         <span class="genSelection" aria-labelledby="selectGenInstruction" role="radiogroup" title="Select the generation.">
@@ -1950,6 +1951,19 @@
                     <input type="checkbox" id="settings-total-frags-on-border" />
                     Total Frags on Border
                 </label>
+            </section>
+        </div>
+    </aside>
+    <aside id="faq-side-panel" class="calc-side-panel faq-side-panel" aria-hidden="true" hidden>
+        <div class="calc-side-resize-handle" aria-hidden="true"></div>
+        <div class="calc-side-header">
+            <strong>FAQ</strong>
+            <button type="button" id="faq-panel-close" class="btn calc-side-btn">Close</button>
+        </div>
+        <div class="calc-side-body faq-side-body">
+            <section class="faq-section">
+                <h4>Common Questions</h4>
+                <div id="faq-list" class="faq-list" aria-live="polite"></div>
             </section>
         </div>
     </aside>
