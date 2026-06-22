@@ -878,6 +878,7 @@ var NOTES_BOARD_STORAGE_KEY = "astralCalcNotesBoard";
 var FRAG_SHEET_STATES_STORAGE_KEY = "astralCalcFragSheetStates";
 var FRAG_SHEET_BACKUPS_STORAGE_KEY = "astralCalcFragSheetBackups";
 var TRAINER_FIELD_LOCKS_STORAGE_KEY = "astralCalcTrainerFieldLocks";
+var FIELD_LOCK_GLOBAL_KEY = "global";
 var LAST_ENCOUNTER_STORAGE_KEY = "astralCalcLastEncounter";
 var PLAYER_ROSTER_LAYOUT_STORAGE_KEY = "astralCalcPlayerRosterLayout";
 var CALC_FEATURE_TUTORIAL_SEEN_STORAGE_KEY = "astralCalcFeatureTutorialSeenV1";
@@ -948,6 +949,7 @@ var appUpdateVersionUrl = "";
 var fragLastAutoBackupAt = 0;
 var trainerFieldLocksCache = null;
 var trainerFieldLockActiveTrainerKey = "";
+var isApplyingTrainerFieldLocks = false;
 var fragsHistoryExpanded = false;
 var FRAG_UNKNOWN_VICTIM_KEY = "__unknown__";
 var deadOpposingSetMap = {};
@@ -1710,7 +1712,6 @@ function normalizeLayoutChoice(rawChoice) {
 function getDefaultAppSettings() {
 	return {
 		starterChoice: "totodile",
-		startingCritStatus: false,
 		layoutMode: "standard",
 		moreColour: true,
 		moveColors: false,
@@ -1725,7 +1726,6 @@ function getAppSettings(forceReload) {
 	var parsed = safeJsonParse(localStorage.getItem(APP_SETTINGS_STORAGE_KEY), {});
 	appSettingsCache = {
 		starterChoice: normalizeStarterChoice(parsed.starterChoice || defaults.starterChoice),
-		startingCritStatus: typeof parsed.startingCritStatus === "boolean" ? parsed.startingCritStatus : defaults.startingCritStatus,
 		layoutMode: normalizeLayoutChoice(parsed.layoutMode || defaults.layoutMode),
 		moreColour: typeof parsed.moreColour === "boolean" ? parsed.moreColour : defaults.moreColour,
 		moveColors: typeof parsed.moveColors === "boolean" ? parsed.moveColors : defaults.moveColors,
@@ -1738,7 +1738,6 @@ function getAppSettings(forceReload) {
 function saveAppSettings(nextSettings) {
 	appSettingsCache = {
 		starterChoice: normalizeStarterChoice(nextSettings.starterChoice),
-		startingCritStatus: !!nextSettings.startingCritStatus,
 		layoutMode: normalizeLayoutChoice(nextSettings.layoutMode),
 		moreColour: !!nextSettings.moreColour,
 		moveColors: !!nextSettings.moveColors,
@@ -1753,7 +1752,6 @@ function updateAppSettings(partial) {
 	var current = getAppSettings();
 	return saveAppSettings({
 		starterChoice: partial && typeof partial.starterChoice !== "undefined" ? partial.starterChoice : current.starterChoice,
-		startingCritStatus: partial && typeof partial.startingCritStatus !== "undefined" ? partial.startingCritStatus : current.startingCritStatus,
 		layoutMode: partial && typeof partial.layoutMode !== "undefined" ? partial.layoutMode : current.layoutMode,
 		moreColour: partial && typeof partial.moreColour !== "undefined" ? partial.moreColour : current.moreColour,
 		moveColors: partial && typeof partial.moveColors !== "undefined" ? partial.moveColors : current.moveColors,
@@ -5357,7 +5355,6 @@ function syncSettingsPanelUi() {
 	$(".settings-choice-btn[data-starter-choice='" + settings.starterChoice + "']").addClass("is-active");
 	$(".settings-choice-btn[data-layout-choice]").removeClass("is-active");
 	$(".settings-choice-btn[data-layout-choice='" + settings.layoutMode + "']").addClass("is-active");
-	$("#settings-starting-crit-status").prop("checked", !!settings.startingCritStatus);
 	$("#settings-more-colour").prop("checked", !!settings.moreColour);
 	$("#settings-move-colors").prop("checked", !!settings.moveColors);
 	$("#settings-move-meta").prop("checked", !!settings.moveMeta);
@@ -5519,6 +5516,7 @@ function bindCalcToolEvents() {
 	$(document).off("contextmenu.trainerfieldlocks", ".field-info label.btn[for]").on("contextmenu.trainerfieldlocks", ".field-info label.btn[for]", function (ev) {
 		handleTrainerFieldButtonContextMenu(ev, this);
 	});
+	$(document).off("change.trainerfieldlocks", ".field-info input.calc-trigger").on("change.trainerfieldlocks", ".field-info input.calc-trigger", handleTrainerFieldInputChangeForLocks);
 
 	$(document).off("change.fragopposing", ".opposing").on("change.fragopposing", ".opposing", function () {
 		renderFragSheet();
@@ -5679,12 +5677,6 @@ function bindCalcToolEvents() {
 		var layoutChoice = $(this).attr("data-layout-choice");
 		updateAppSettings({layoutMode: layoutChoice});
 		syncSettingsPanelUi();
-		if (typeof performCalculations === "function") performCalculations();
-	});
-
-	$("#settings-starting-crit-status").off("change").on("change", function () {
-		var enabled = $(this).is(":checked");
-		updateAppSettings({startingCritStatus: enabled});
 		if (typeof performCalculations === "function") performCalculations();
 	});
 
@@ -6221,33 +6213,13 @@ function saveTrainerFieldLocksState(nextState) {
 }
 
 function getCurrentTrainerFieldLockKey() {
-	var selectedOpposing = String($(".opposing").val() || "").trim();
-	if (selectedOpposing) {
-		var selectedEntry = parseTrainerPartyEntry(selectedOpposing);
-		if (selectedEntry) {
-			var trainerIndex = getTrainerIndexFromSetData(selectedEntry.setData);
-			if (trainerIndex > 0) return "index:" + trainerIndex;
-			if (selectedEntry.trainerBattleKey) return "battle:" + String(selectedEntry.trainerBattleKey).toLowerCase();
-			if (selectedEntry.trainerLabel) return "label:" + String(selectedEntry.trainerLabel).toLowerCase();
-		}
-	}
-	var currentFightLabel = String(getCurrentFightLabel() || "").trim();
-	if (currentFightLabel && currentFightLabel !== "Unknown Fight") {
-		return "label:" + currentFightLabel.toLowerCase();
-	}
-	return "global";
+	return FIELD_LOCK_GLOBAL_KEY;
 }
 
 function handleTrainerFieldLockTrainerTransition() {
 	var currentKey = getCurrentTrainerFieldLockKey();
 	if (!currentKey) return;
-	if (!trainerFieldLockActiveTrainerKey) {
-		trainerFieldLockActiveTrainerKey = currentKey;
-		return;
-	}
-	if (trainerFieldLockActiveTrainerKey === currentKey) return;
 	trainerFieldLockActiveTrainerKey = currentKey;
-	saveTrainerFieldLocksState({});
 	syncTrainerFieldLockButtonStyles();
 }
 
@@ -6423,24 +6395,29 @@ function applyTrainerFieldLocksForCurrentTrainer(options) {
 	var key = getCurrentTrainerFieldLockKey();
 	var lockedIds = getTrainerFieldLockedIdsForKey(key);
 	if (!lockedIds.length) return;
-	for (var i = 0; i < lockedIds.length; i++) {
-		var input = document.getElementById(lockedIds[i]);
-		if (!input) continue;
-		var inputType = String(input.type || "").toLowerCase();
-		var didChange = false;
-		if (inputType === "radio") {
-			if (input.name) $("input:radio[name='" + input.name + "']").prop("checked", false);
-			if (!input.checked) {
-				input.checked = true;
-				didChange = true;
+	isApplyingTrainerFieldLocks = true;
+	try {
+		for (var i = 0; i < lockedIds.length; i++) {
+			var input = document.getElementById(lockedIds[i]);
+			if (!input) continue;
+			var inputType = String(input.type || "").toLowerCase();
+			var didChange = false;
+			if (inputType === "radio") {
+				if (input.name) $("input:radio[name='" + input.name + "']").prop("checked", false);
+				if (!input.checked) {
+					input.checked = true;
+					didChange = true;
+				}
+			} else if (inputType === "checkbox") {
+				if (!input.checked) {
+					input.checked = true;
+					didChange = true;
+				}
 			}
-		} else if (inputType === "checkbox") {
-			if (!input.checked) {
-				input.checked = true;
-				didChange = true;
-			}
+			if (didChange || forceTrigger) $(input).change();
 		}
-		if (didChange || forceTrigger) $(input).change();
+	} finally {
+		isApplyingTrainerFieldLocks = false;
 	}
 	var weatherValue = gen === 2
 		? $("input:radio[name='gscWeather']:checked").val()
@@ -6464,7 +6441,7 @@ function syncTrainerFieldLockButtonStyles() {
 			$(this).attr("data-lock-base-title", baseTitle);
 		}
 		if (!isLockable) return;
-		var lockHint = isLocked ? "Right-click: disable trainer lock" : "Right-click: enable for this trainer";
+		var lockHint = isLocked ? "Right-click: unlock field" : "Right-click: lock field";
 		$(this).attr("title", baseTitle ? (baseTitle + " | " + lockHint) : lockHint);
 	});
 }
@@ -6485,6 +6462,22 @@ function handleTrainerFieldButtonContextMenu(ev, labelNode) {
 	}
 	applyTrainerFieldLocksForCurrentTrainer();
 	syncTrainerFieldLockButtonStyles();
+}
+
+function handleTrainerFieldInputChangeForLocks() {
+	if (isApplyingTrainerFieldLocks) return;
+	var fieldId = String(this && this.id || "").trim();
+	if (!isTrainerFieldLockableId(fieldId)) return;
+	var lockGroup = getTrainerFieldExclusiveGroup(fieldId);
+	if (lockGroup && isTrainerFieldExclusiveGroupLocked(lockGroup)) {
+		applyTrainerFieldLocksForCurrentTrainer({forceTrigger: true});
+		syncTrainerFieldLockButtonStyles();
+		return;
+	}
+	if (!lockGroup && isTrainerFieldLockEnabled(fieldId)) {
+		applyTrainerFieldLocksForCurrentTrainer({forceTrigger: true});
+		syncTrainerFieldLockButtonStyles();
+	}
 }
 
 function isTruthySetFlag(flagValue) {
@@ -6655,6 +6648,11 @@ function resolveWeatherForSelection(fullSetName, trainerEntries) {
 function syncWeatherForSelection(fullSetName, trainerEntries) {
 	var weatherValue = resolveWeatherForSelection(fullSetName, trainerEntries);
 	var weatherName = gen === 2 ? "gscWeather" : "weather";
+	if (isTrainerFieldExclusiveGroupLocked(weatherName)) {
+		applyTrainerFieldLocksForCurrentTrainer();
+		syncTrainerFieldLockButtonStyles();
+		return;
+	}
 	var clearSelector = gen === 2 ? "#gscClear" : "#clear";
 	var weatherInputs = $("input:radio[name='" + weatherName + "']");
 	if (!weatherInputs.length) return;
@@ -6726,10 +6724,13 @@ function syncTerrainForSelection(fullSetName, trainerEntries) {
 	var terrainValue = resolvedTerrain.terrain;
 	var terrainInputs = $("input:checkbox[name='terrain']");
 	if (!terrainInputs.length) return;
+	if (isTrainerFieldExclusiveGroupLocked("terrain")) {
+		applyTrainerFieldLocksForCurrentTrainer();
+		syncTrainerFieldLockButtonStyles();
+		return;
+	}
 	if (!resolvedTerrain.hasTerrain) {
-		if (!isTrainerFieldExclusiveGroupLocked("terrain")) {
-			terrainInputs.prop("checked", false);
-		}
+		terrainInputs.prop("checked", false);
 		var activeInput = terrainInputs.filter(":checked").first();
 		getTerrainEffects.call(activeInput.length ? activeInput[0] : terrainInputs.first()[0]);
 		var activeTerrain = activeInput.length ? String(activeInput.val() || "") : "";
@@ -7537,7 +7538,7 @@ var DEFAULT_CRIT_RATE_BY_STAGE = [
 	{num: 1, den: 2},
 	{num: 1, den: 1}
 ];
-var STARTING_CRIT_RATE_OVERRIDE_BY_SIDE = {
+var CRIT_STATUS_RATE_OVERRIDE_BY_SIDE = {
 	p1: {},
 	p2: {
 		0: {num: 1, den: 8},
@@ -7549,8 +7550,43 @@ function normalizeCritSpeciesId(rawSpecies) {
 	return String(rawSpecies || "").toLowerCase().replace(/[^a-z0-9]+/g, "");
 }
 
-function isStartingCritStatusActive() {
-	return !!getAppSettings().startingCritStatus;
+function getCritStatusFromSetData(setData) {
+	if (!setData) return {hasCritStatus: false, critStatus: false};
+	var critStatusKeys = ["CritStatus", "critStatus", "critstatus"];
+	for (var i = 0; i < critStatusKeys.length; i++) {
+		var key = critStatusKeys[i];
+		if (!Object.prototype.hasOwnProperty.call(setData, key)) continue;
+		return {
+			hasCritStatus: true,
+			critStatus: isTruthySetFlag(setData[key])
+		};
+	}
+	return {hasCritStatus: false, critStatus: false};
+}
+
+function getCritStatusForTrainerEntries(trainerEntries) {
+	var foundExplicitFalse = false;
+	if (!Array.isArray(trainerEntries)) return {hasCritStatus: false, critStatus: false};
+	for (var i = 0; i < trainerEntries.length; i++) {
+		var entry = parseTrainerPartyEntry(trainerEntries[i]);
+		var critStatus = getCritStatusFromSetData(entry.setData);
+		if (!critStatus.hasCritStatus) continue;
+		if (critStatus.critStatus) return critStatus;
+		foundExplicitFalse = true;
+	}
+	return {hasCritStatus: foundExplicitFalse, critStatus: false};
+}
+
+function isCritStatusActive() {
+	var currentTrainerStatus = getCritStatusForTrainerEntries(CURRENT_TRAINER_POKS || []);
+	if (currentTrainerStatus.hasCritStatus) return currentTrainerStatus.critStatus;
+	var selectedOpposing = String($(".opposing").val() || "");
+	if (selectedOpposing) {
+		var selectedEntry = parseTrainerPartyEntry(selectedOpposing);
+		var selectedStatus = getCritStatusFromSetData(selectedEntry.setData);
+		if (selectedStatus.hasCritStatus) return selectedStatus.critStatus;
+	}
+	return false;
 }
 
 function getPassiveCritStageDetails(pokemon) {
@@ -7581,8 +7617,8 @@ function getPassiveCritStageDetails(pokemon) {
 
 function getCritChanceForStage(stage, sideId) {
 	var normalizedStage = Math.max(0, Math.min(DEFAULT_CRIT_RATE_BY_STAGE.length - 1, ~~stage));
-	var overrides = sideId ? STARTING_CRIT_RATE_OVERRIDE_BY_SIDE[sideId] : null;
-	if (isStartingCritStatusActive() && overrides && overrides[normalizedStage]) {
+	var overrides = sideId ? CRIT_STATUS_RATE_OVERRIDE_BY_SIDE[sideId] : null;
+	if (isCritStatusActive() && overrides && overrides[normalizedStage]) {
 		return overrides[normalizedStage];
 	}
 	return DEFAULT_CRIT_RATE_BY_STAGE[normalizedStage];
@@ -7643,8 +7679,8 @@ function getMoveCritRateDisplay(pokemon, opposingPokemon, move, sideId) {
 	var chanceText = formatCritChanceText(chance);
 	var title = "Current crit chance: " + chanceText + " (stage " + totalStage + ")";
 	if (sources.length) title += " via " + sources.join(", ");
-	if (isStartingCritStatusActive() && sideId === "p2" && totalStage <= 1) {
-		title += ". Starting crit status active.";
+	if (isCritStatusActive() && sideId === "p2" && totalStage <= 1) {
+		title += ". CritStatus active.";
 	}
 	var blockedBy = getCritBlockerAbilityName(opposingPokemon);
 	if (blockedBy) {
@@ -7672,7 +7708,7 @@ function getMoveCritRateDisplay(pokemon, opposingPokemon, move, sideId) {
 			text: "100%",
 			title: "Critical hit forced for the current calculation. Base chance: " + chanceText +
 				" (stage " + totalStage + ")" + (sources.length ? " via " + sources.join(", ") : "") +
-				(isStartingCritStatusActive() && sideId === "p2" && totalStage <= 1 ? ". Starting crit status active." : "")
+				(isCritStatusActive() && sideId === "p2" && totalStage <= 1 ? ". CritStatus active." : "")
 		};
 	}
 	return {
@@ -8212,7 +8248,12 @@ function clearField() {
 	$("#trickroom").prop("checked", false);
 	$("#trickRoomR").prop("checked", false);
 	$("input:checkbox[name='terrain']").prop("checked", false);
-	applyFieldEnvironmentTheme("", "");
+	applyTrainerFieldLocksForCurrentTrainer();
+	var weatherValue = gen === 2
+		? $("input:radio[name='gscWeather']:checked").val()
+		: $("input:radio[name='weather']:checked").val();
+	var terrainValue = $("input:checkbox[name='terrain']:checked").val() || "";
+	applyFieldEnvironmentTheme(weatherValue, terrainValue);
 }
 
 function getSetOptions(sets) {
@@ -9074,8 +9115,7 @@ $(document).ready(function () {
 	setDoubleIconVisibility(false);
 	bindAstralDexLinks();
 	bindCalcToolEvents();
-	saveTrainerFieldLocksState({});
-	trainerFieldLockActiveTrainerKey = "";
+	trainerFieldLockActiveTrainerKey = getCurrentTrainerFieldLockKey();
 	syncTrainerFieldLockButtonStyles();
 	bindPlayerRosterSearchInput();
 	ensureFragHistoryControls();

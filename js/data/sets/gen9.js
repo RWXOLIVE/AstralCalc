@@ -8,6 +8,7 @@ var SETDEX_SV = {
             "Weather": "None", // Sun, Rain, Hail, Sand, Snow, Fog, None
             "Terrain": "None", //Grassy, Electric, Misty, Psychic
             "status": "None", // Burn, Asleep, Poisoned, Badly Poisoned, Paralyzed, Frozen, Frostbite
+            "CritStatus": true,
             "ability": "Sturdy",
             "setdouble": "True",
             "setdoubleGroup": "rustboro-gym-josh-marc",
