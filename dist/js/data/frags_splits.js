@@ -37,5 +37,11 @@ window.FRAG_SPLIT_RULES = {
 				"Leader Jasmine | Mauville Gym"
 			]
 		},
+		{
+			split: 5,
+			endTrainers: [
+				"Blaine & Flannery | Lavaridge Gym",
+			]
+		},
 	]
 };
