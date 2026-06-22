@@ -6,7 +6,7 @@
     <link rel="icon" type="image/gif" href="img/totodile.gif"  >
     <title>Astral Emerald Damage Calculator</title>
     <link type="text/css" rel="stylesheet" href="./js/vendor/select2/select2.css" />
-    <link type="text/css" rel="stylesheet" href="./css/main.css?rostermegafix2" />
+    <link type="text/css" rel="stylesheet" href="./css/main.css?51a3ed7e" />
     <link type="text/css" rel="stylesheet" href="./css/vendor/bootstrap.css" />
     <link type="text/css" rel="stylesheet" href="./css/dark-theme.css" id="dark-theme-styles">
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -41,10 +41,10 @@
     <nav><div class="header"><div class="header-color"><div class="header-inner">
         <ul class="nav">
         <li><a class="button nav-first" href="https://astral-dex.vercel.app/">Pokédex</a></li>
-        <li><a class="button nav-first" href="astral-trainer-sheet.vercel.app">Trainer Sheet</a></li>
+        <li><a class="button nav-first" href="https://astral-trainer-sheet.vercel.app">Trainer Sheet</a></li>
 		<li><a class="button" href="https://discord.gg/fZWBmEZeZx">Discord</a></li>
         <li><a class="button" href="https://drive.google.com/drive/folders/1MXTPeDdmYb_ZOQErrn3Pk_zeZthYReQ2?usp=drive_link">Google Drive</a></li>
-        <li><a class="button" href="astral-changes.vercel.app">Changes</a></li>
+        <li><a class="button" href="https://astral-changes.vercel.app">Changes</a></li>
         <li><a class="button nav-last" href="https://docs.google.com/document/d/1kaztkqptNp5zcVLhKyNJDkLLqFDixCbJ2iWYg8ge-9w/edit?tab=t.0">AI Doc Not Finished</a></li>
 </ul>
         <!--<div style="clear:both"></div>-->
@@ -52,12 +52,13 @@
 
 <div class="wrapper">
 
-    <div aria-label="Settings" role="region">
+    <div aria-label="Calculator tools" role="region">
         <span class="title-text">Astral Emerald Damage Calculator</span>
         <span class="calc-top-actions" role="group" aria-label="Quick tools">
             <button type="button" class="btn calc-top-action-btn" id="open-pokedex-panel">Pokedex</button>
             <button type="button" class="btn calc-top-action-btn" id="open-notes-panel">Notes</button>
             <button type="button" class="btn calc-top-action-btn" id="open-frags-panel">Frags</button>
+            <button type="button" class="btn calc-top-action-btn" id="open-faq-panel">FAQ</button>
             <button type="button" class="btn calc-top-action-btn" id="open-settings-panel">Settings</button>
         </span>
         <span class="genSelection" aria-labelledby="selectGenInstruction" role="radiogroup" title="Select the generation.">
@@ -1953,6 +1954,19 @@
             </section>
         </div>
     </aside>
+    <aside id="faq-side-panel" class="calc-side-panel faq-side-panel" aria-hidden="true" hidden>
+        <div class="calc-side-resize-handle" aria-hidden="true"></div>
+        <div class="calc-side-header">
+            <strong>FAQ</strong>
+            <button type="button" id="faq-panel-close" class="btn calc-side-btn">Close</button>
+        </div>
+        <div class="calc-side-body faq-side-body">
+            <section class="faq-section">
+                <h4>Common Questions</h4>
+                <div id="faq-list" class="faq-list" aria-live="polite"></div>
+            </section>
+        </div>
+    </aside>
     <div id="frag-context-menu" class="frag-context-menu" hidden>
         <div id="frag-context-title" class="frag-context-title">Log Frag</div>
         <label for="frag-context-target">Target (Pokemon 2)</label>
@@ -1965,7 +1979,7 @@
         <button type="button" id="frag-context-cancel" class="btn frag-context-btn">Cancel</button>
     </div>
     <script type="text/javascript">
-        var linkExtension = '.template.html';
+        var linkExtension = '.html';
     </script>
     <script type="text/javascript" src="./js/vendor/jquery-1.9.1.min.js"></script>
     <script type="text/javascript" src="./js/vendor/select2/select2.min.js"></script>
@@ -1979,8 +1993,8 @@
     </script>
     <script type="text/javascript" src="./calc/util.js?"></script>
     <script type="text/javascript" src="./calc/stats.js?"></script>
-    <script type="text/javascript" src="./calc/data/species.js?"></script>
-	<script type="text/javascript" src="./js/data/sets/gen9.js?"></script>
+    <script type="text/javascript" src="./calc/data/species.js?dad6bdaf"></script>
+	<script type="text/javascript" src="./js/data/sets/gen9.js?2d7e6bd8"></script>
     <script type="text/javascript" src="./js/data/sets/gen8.js?"></script>
     <script type="text/javascript" src="./js/data/sets/gen7.js?"></script>
     <script type="text/javascript" src="./js/data/sets/gen6.js?"></script>
@@ -1991,31 +2005,31 @@
     <script type="text/javascript" src="./js/data/sets/gen1.js?"></script>
     <script type="text/javascript" src="./calc/data/types.js?"></script>
     <script type="text/javascript" src="./calc/data/natures.js?"></script>
-    <script type="text/javascript" src="./calc/data/abilities.js?"></script>
+    <script type="text/javascript" src="./calc/data/abilities.js?b994b992"></script>
     <script type="text/javascript" src="./calc/data/moves.js?"></script>
-    <script type="text/javascript" src="./calc/data/items.js?"></script>
+    <script type="text/javascript" src="./calc/data/items.js?fb313180"></script>
     <script type="text/javascript" src="./calc/data/index.js?"></script>
     <script type="text/javascript" src="./calc/move.js?"></script>
     <script type="text/javascript" src="./calc/pokemon.js?"></script>
-    <script type="text/javascript" src="./calc/field.js?"></script>
+    <script type="text/javascript" src="./calc/field.js?bc54b63a"></script>
     <script type="text/javascript" src="./calc/items.js?"></script>
-    <script type="text/javascript" src="./calc/mechanics/util.js?"></script>
-    <script type="text/javascript" src="./calc/mechanics/gen789.js?"></script>
-    <script type="text/javascript" src="./calc/mechanics/gen56.js?"></script>
-    <script type="text/javascript" src="./calc/mechanics/gen4.js?"></script>
-    <script type="text/javascript" src="./calc/mechanics/gen3.js?"></script>
+    <script type="text/javascript" src="./calc/mechanics/util.js?529f159a"></script>
+    <script type="text/javascript" src="./calc/mechanics/gen789.js?01331ff3"></script>
+    <script type="text/javascript" src="./calc/mechanics/gen56.js?a8799a1d"></script>
+    <script type="text/javascript" src="./calc/mechanics/gen4.js?6525e3d2"></script>
+    <script type="text/javascript" src="./calc/mechanics/gen3.js?e93ab699"></script>
     <script type="text/javascript" src="./calc/mechanics/gen12.js?"></script>
     <script type="text/javascript" src="./calc/calc.js?"></script>
-    <script type="text/javascript" src="./calc/desc.js?"></script>
+    <script type="text/javascript" src="./calc/desc.js?caa3921f"></script>
     <script type="text/javascript" src="./calc/result.js?"></script>
     <script type="text/javascript" src="./calc/adaptable.js?"></script>
     <script type="text/javascript" src="./calc/index.js?"></script>
-    <script type="text/javascript" src="./js/spritedata.js?spritefix2"></script>
-    <script type="text/javascript" src="./js/data/frags_splits.js?"></script>
-    <script type="text/javascript" src="./js/data/move_info_lookup.js?"></script>
-    <script type="text/javascript" src="./js/shared_controls.js?spritefix17"></script>
-    <script type="text/javascript" src="./js/index_randoms_controls.js?critmeta2"></script>
-    <script type="text/javascript" src="./js/moveset_import.js?"></script>
+    <script type="text/javascript" src="./js/spritedata.js?e6979aa2"></script>
+    <script type="text/javascript" src="./js/data/frags_splits.js?34d14868"></script>
+    <script type="text/javascript" src="./js/data/move_info_lookup.js?835c0302"></script>
+    <script type="text/javascript" src="./js/shared_controls.js?342483ef"></script>
+    <script type="text/javascript" src="./js/index_randoms_controls.js?2cbf7c41"></script>
+    <script type="text/javascript" src="./js/moveset_import.js?c4922971"></script>
 </div>
 
 <div class="credits">Modification by ForwardFeed Originaly Created by Honko, maintained by Austin and Kris, Special thanks to Hzla

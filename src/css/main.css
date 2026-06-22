@@ -2452,6 +2452,57 @@ body.calc-side-resizing .credits {
     gap: 14px;
 }
 
+.faq-side-panel {
+    width: min(42vw, 560px);
+}
+
+.faq-side-body {
+    gap: 12px;
+    line-height: 1.35;
+}
+
+.faq-section {
+    border: 1px solid #c0cad6;
+    border-radius: 8px;
+    padding: 10px;
+    background: rgba(225, 233, 245, 0.45);
+}
+
+.faq-section h4 {
+    margin: 0 0 6px;
+}
+
+.faq-list {
+    display: grid;
+    gap: 8px;
+}
+
+.faq-empty {
+    margin: 0;
+    font-size: 0.95em;
+}
+
+.faq-entry {
+    display: grid;
+    gap: 6px;
+    border-top: 1px solid rgba(125, 142, 166, 0.35);
+    padding-top: 8px;
+}
+
+.faq-entry:first-child {
+    border-top: none;
+    padding-top: 0;
+}
+
+.faq-entry summary {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.faq-answer {
+    margin: 6px 0 0;
+}
+
 .notes-side-body {
     gap: 12px;
 }
@@ -2682,130 +2733,6 @@ body.calc-side-resizing .credits {
     margin-right: 4px;
 }
 
-.calc-feature-tutorial-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 2385;
-    pointer-events: none;
-}
-
-.calc-feature-tutorial-overlay.open {
-    pointer-events: auto;
-}
-
-.calc-feature-tutorial-scrim {
-    position: absolute;
-    inset: 0;
-    background: rgba(5, 10, 18, 0.62);
-}
-
-.calc-feature-tutorial-card {
-    position: fixed;
-    z-index: 2802;
-    width: min(420px, calc(100vw - 24px));
-    max-height: calc(100vh - 24px);
-    overflow: auto;
-    border: 1px solid rgba(126, 144, 171, 0.74);
-    border-radius: 10px;
-    background: rgba(14, 19, 29, 0.97);
-    color: #eef3fb;
-    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
-    padding: 12px;
-}
-
-.calc-feature-tutorial-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-    margin-bottom: 8px;
-}
-
-#calc-feature-tutorial-progress {
-    font-size: 0.8em;
-    color: #bfd4f7;
-    white-space: nowrap;
-}
-
-.calc-feature-tutorial-text {
-    margin: 0 0 8px;
-    line-height: 1.35;
-    font-size: 0.95em;
-}
-
-.calc-feature-tutorial-visual {
-    margin: 0 0 10px;
-}
-
-.calc-feature-tutorial-visual-card {
-    border: 1px solid rgba(111, 135, 165, 0.6);
-    border-radius: 8px;
-    background: rgba(36, 47, 64, 0.6);
-    padding: 8px;
-    display: grid;
-    gap: 5px;
-}
-
-.calc-feature-tutorial-visual-row {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 6px;
-    font-size: 0.85em;
-}
-
-.calc-feature-tutorial-visual-arrow {
-    text-align: center;
-    font-size: 0.86em;
-    opacity: 0.85;
-}
-
-.calc-feature-tag {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 1px 7px;
-    border-radius: 999px;
-    background: rgba(96, 144, 214, 0.28);
-    border: 1px solid rgba(129, 170, 230, 0.66);
-    font-size: 0.78em;
-    font-weight: bold;
-    color: #d7e7ff;
-}
-
-.calc-feature-tutorial-actions {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
-}
-
-.calc-feature-tutorial-nav {
-    display: inline-flex;
-    gap: 6px;
-}
-
-.calc-feature-tutorial-action {
-    width: auto;
-    min-width: 5.8em;
-    margin: 0;
-    padding: 4px 8px;
-}
-
-.calc-feature-tutorial-action:disabled {
-    opacity: 0.55;
-    cursor: default;
-}
-
-.calc-feature-tutorial-focus {
-    border-radius: 8px;
-    box-shadow: 0 0 0 2px rgba(118, 190, 255, 0.95), 0 0 0 6px rgba(32, 98, 160, 0.35);
-}
-
-#settings-tutorial-section .settings-choice-btn {
-    min-width: 12.5em;
-}
-
 .frag-context-menu {
     position: fixed;
     width: min(320px, 92vw);
@@ -2847,10 +2774,5 @@ body.calc-side-resizing .credits {
         float: none;
         display: block;
         margin-top: 8px;
-    }
-    .calc-feature-tutorial-card {
-        left: 12px !important;
-        top: auto !important;
-        bottom: 12px;
     }
 }

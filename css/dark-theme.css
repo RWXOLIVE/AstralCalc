@@ -181,6 +181,15 @@ body.calc-side-resizing .calc-side-resize-handle::after {
     background: rgba(16, 24, 35, 0.7);
 }
 
+.faq-section {
+    border-color: #455568;
+    background: rgba(16, 24, 35, 0.7);
+}
+
+.faq-entry summary {
+    color: #dbe8ff;
+}
+
 .notes-format-btn.is-active {
     background: #253a67;
     border-color: #557cc1;

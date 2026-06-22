@@ -875,14 +875,39 @@ var ASTRALDEX_TOP_CHROME_PX = 52;
 var APP_SETTINGS_STORAGE_KEY = "astralCalcSettings";
 var FRAG_SHEET_STORAGE_KEY = "astralCalcFragSheet";
 var NOTES_BOARD_STORAGE_KEY = "astralCalcNotesBoard";
+var FAQ_ENTRIES = [
+	// Add player-facing FAQ entries here:
+	{
+		question: "How do I use the frag sheet?",
+		answer: "Open Frag Sheet from the top buttons. It tracks which of your Pokemon get kills, shows totals and current-fight frags, and updates when you add frags from the Pokemon sprites."
+	},
+	{
+		question: "How do I remove a frag?",
+		answer: "Open Frag Sheet, use Fullscreen if you need more room, then open Edit kills on the Pokemon that has the wrong frag. Press -1 next to the target you want to remove."
+	},
+	{
+		question: "How do I add a frag?",
+		answer: "Right-click a Pokemon 1 sprite, choose the target Pokemon 2 from the Log Frag menu, then press Add Frag. You can also use Did This Mon Die? from that menu when you want to mark the selected enemy as dead."
+	},
+	{
+		question: "How do I merge frags with an evolution line?",
+		answer: "Drag the earlier evolution onto the later evolution in the same line. For example, drag Charmander onto Charmeleon or Charizard to move the earlier form's frags into the evolved form."
+	},
+	{
+		question: "Why does Terrain keep disabling?",
+		answer: "Trainer selection can auto-sync terrain from the current enemy set. If you want terrain to stay fixed for that trainer fight, right-click the terrain button to lock it."
+	},
+	{
+		question: "What does selecting starter choices in the calc do?",
+		answer: "The Starter setting tells the calc which starter you chose, so rival fights show the matching rival team and starter-dependent sets for your route."
+	}
+];
 var FRAG_SHEET_STATES_STORAGE_KEY = "astralCalcFragSheetStates";
 var FRAG_SHEET_BACKUPS_STORAGE_KEY = "astralCalcFragSheetBackups";
 var TRAINER_FIELD_LOCKS_STORAGE_KEY = "astralCalcTrainerFieldLocks";
 var FIELD_LOCK_GLOBAL_KEY = "global";
 var LAST_ENCOUNTER_STORAGE_KEY = "astralCalcLastEncounter";
 var PLAYER_ROSTER_LAYOUT_STORAGE_KEY = "astralCalcPlayerRosterLayout";
-var CALC_FEATURE_TUTORIAL_SEEN_STORAGE_KEY = "astralCalcFeatureTutorialSeenV1";
-var CALC_FEATURE_TUTORIAL_AUTO_OPEN_DELAY_MS = 1300;
 var CALC_SIDE_PANEL_MIN_WIDTH_PX = 360;
 var CALC_SIDE_PANEL_MAX_WIDTH_VW = 96;
 var CALC_SIDE_PANEL_MIN_MAIN_WIDTH_PX = 620;
@@ -957,24 +982,6 @@ var opposingContextSourceSet = "";
 var CURRENT_TRAINER_POKS = [];
 var isRestoringLastEncounterSelection = false;
 var isBootstrappingLastEncounterSelection = true;
-var calcFeatureTutorialState = {
-	isOpen: false,
-	launchedFromSettings: false,
-	stepIndex: 0,
-	steps: [],
-	focusNode: null,
-	focusPrevInlinePosition: "",
-	focusPrevInlineZIndex: "",
-	focusForcedRelative: false,
-	overlayNode: null,
-	cardNode: null,
-	titleNode: null,
-	textNode: null,
-	progressNode: null,
-	visualNode: null,
-	backBtn: null,
-	nextBtn: null
-};
 var calcSidePanelResizeState = null;
 var calcSideResizeCaptureNode = null;
 var PLAYER_ROSTER_SPRITE_SELECTOR = "#team-poke-list .trainer-pok.left-side, #box-poke-list .trainer-pok.left-side, #box-poke-list2 .trainer-pok.left-side, #trash-box .trainer-pok.left-side";
@@ -4207,386 +4214,41 @@ function endCalcSidePanelResize() {
 	document.body.classList.remove("calc-side-resizing");
 }
 
-function hasSeenCalcFeatureTutorial() {
-	return localStorage.getItem(CALC_FEATURE_TUTORIAL_SEEN_STORAGE_KEY) === "1";
-}
-
-function markCalcFeatureTutorialSeen() {
-	localStorage.setItem(CALC_FEATURE_TUTORIAL_SEEN_STORAGE_KEY, "1");
-}
-
-function clearCalcFeatureTutorialFocus() {
-	if (!calcFeatureTutorialState.focusNode || !calcFeatureTutorialState.focusNode.classList) return;
-	calcFeatureTutorialState.focusNode.classList.remove("calc-feature-tutorial-focus");
-	if (calcFeatureTutorialState.focusForcedRelative) {
-		calcFeatureTutorialState.focusNode.style.position = calcFeatureTutorialState.focusPrevInlinePosition;
+function getFaqEntries() {
+	var sourceEntries = Array.isArray(FAQ_ENTRIES) ? FAQ_ENTRIES : [];
+	var entries = [];
+	for (var i = 0; i < sourceEntries.length; i++) {
+		var rawEntry = sourceEntries[i] || {};
+		var question = String(rawEntry.question || "").trim();
+		var answer = String(rawEntry.answer || "").trim();
+		if (!question || !answer) continue;
+		entries.push({
+			question: question,
+			answer: answer
+		});
 	}
-	calcFeatureTutorialState.focusNode.style.zIndex = calcFeatureTutorialState.focusPrevInlineZIndex;
-	calcFeatureTutorialState.focusPrevInlinePosition = "";
-	calcFeatureTutorialState.focusPrevInlineZIndex = "";
-	calcFeatureTutorialState.focusForcedRelative = false;
-	calcFeatureTutorialState.focusNode = null;
+	return entries;
 }
 
-function setCalcFeatureTutorialFocus(targetNode) {
-	clearCalcFeatureTutorialFocus();
-	if (!targetNode || !targetNode.classList) return;
-	calcFeatureTutorialState.focusPrevInlinePosition = targetNode.style.position || "";
-	calcFeatureTutorialState.focusPrevInlineZIndex = targetNode.style.zIndex || "";
-	calcFeatureTutorialState.focusForcedRelative = false;
-	var computedPosition = window.getComputedStyle ? window.getComputedStyle(targetNode).position : "";
-	if (computedPosition === "static" || !computedPosition) {
-		targetNode.style.position = "relative";
-		calcFeatureTutorialState.focusForcedRelative = true;
+function renderFaqPanel() {
+	var listNode = document.getElementById("faq-list");
+	if (!listNode) return;
+	var entries = getFaqEntries();
+	if (!entries.length) {
+		listNode.innerHTML = "<p class=\"faq-empty\">No FAQ entries yet.</p>";
+		return;
 	}
-	targetNode.style.zIndex = "2803";
-	targetNode.classList.add("calc-feature-tutorial-focus");
-	calcFeatureTutorialState.focusNode = targetNode;
-	if (typeof targetNode.scrollIntoView === "function") {
-		targetNode.scrollIntoView({behavior: "smooth", block: "center", inline: "nearest"});
+	var html = "";
+	for (var i = 0; i < entries.length; i++) {
+		var entry = entries[i];
+		html += "<article class=\"faq-entry\">" +
+			"<details>" +
+			"<summary>" + escapeHtml(entry.question) + "</summary>" +
+			"<p class=\"faq-answer\">" + escapeHtml(entry.answer).replace(/\n/g, "<br>") + "</p>" +
+			"</details>" +
+			"</article>";
 	}
-}
-
-function clampCalcFeatureTutorialValue(value, min, max) {
-	return Math.min(max, Math.max(min, value));
-}
-
-function positionCalcFeatureTutorialCard(targetNode) {
-	var cardNode = calcFeatureTutorialState.cardNode;
-	if (!cardNode) return;
-	var margin = 12;
-	var cardWidth = cardNode.offsetWidth || 360;
-	var cardHeight = cardNode.offsetHeight || 280;
-	var viewportWidth = window.innerWidth || document.documentElement.clientWidth || 1280;
-	var viewportHeight = window.innerHeight || document.documentElement.clientHeight || 720;
-
-	var left = viewportWidth - cardWidth - margin;
-	var top = viewportHeight - cardHeight - margin;
-	if (targetNode && targetNode.getBoundingClientRect) {
-		var rect = targetNode.getBoundingClientRect();
-		if (isFinite(rect.left) && isFinite(rect.right) && isFinite(rect.top) && isFinite(rect.bottom)) {
-			var canFitRight = rect.right + 14 + cardWidth <= viewportWidth - margin;
-			var canFitLeft = rect.left - 14 - cardWidth >= margin;
-			if (canFitRight) {
-				left = rect.right + 14;
-			} else if (canFitLeft) {
-				left = rect.left - cardWidth - 14;
-			} else {
-				left = clampCalcFeatureTutorialValue(rect.left, margin, viewportWidth - cardWidth - margin);
-			}
-			var centeredTop = rect.top + ((rect.height - cardHeight) / 2);
-			top = clampCalcFeatureTutorialValue(centeredTop, margin, viewportHeight - cardHeight - margin);
-		}
-	}
-	cardNode.style.left = Math.round(left) + "px";
-	cardNode.style.top = Math.round(top) + "px";
-}
-
-function getFirstCalcFeatureTutorialTarget(selectors) {
-	for (var i = 0; i < selectors.length; i++) {
-		var node = document.querySelector(selectors[i]);
-		if (node) return node;
-	}
-	return null;
-}
-
-function ensureTutorialSettingsSection() {
-	var settingsBody = document.querySelector("#settings-side-panel .settings-side-body");
-	if (!settingsBody) return null;
-	var existingSection = document.getElementById("settings-tutorial-section");
-	if (existingSection) return existingSection;
-	var section = document.createElement("section");
-	section.id = "settings-tutorial-section";
-	section.className = "settings-section settings-tutorial-section";
-	section.innerHTML = "" +
-		"<h4>Tutorial</h4>" +
-		"<p class=\"settings-note\">Replay the feature walkthrough any time.</p>" +
-		"<div class=\"settings-choice-row\">" +
-		"<button type=\"button\" class=\"btn settings-choice-btn\" id=\"settings-open-tutorial\">Replay Feature Tutorial</button>" +
-		"</div>";
-	settingsBody.appendChild(section);
-	return section;
-}
-
-function ensureCalcFeatureTutorialOverlay() {
-	if (calcFeatureTutorialState.overlayNode && document.body.contains(calcFeatureTutorialState.overlayNode)) {
-		return calcFeatureTutorialState.overlayNode;
-	}
-	var overlay = document.createElement("div");
-	overlay.id = "calc-feature-tutorial-overlay";
-	overlay.className = "calc-feature-tutorial-overlay";
-	overlay.hidden = true;
-	overlay.innerHTML = "" +
-		"<div class=\"calc-feature-tutorial-scrim\"></div>" +
-		"<section class=\"calc-feature-tutorial-card\" role=\"dialog\" aria-modal=\"true\" aria-label=\"Feature tutorial\">" +
-		"<div class=\"calc-feature-tutorial-head\">" +
-		"<strong id=\"calc-feature-tutorial-title\"></strong>" +
-		"<span id=\"calc-feature-tutorial-progress\"></span>" +
-		"</div>" +
-		"<p id=\"calc-feature-tutorial-text\" class=\"calc-feature-tutorial-text\"></p>" +
-		"<div id=\"calc-feature-tutorial-visual\" class=\"calc-feature-tutorial-visual\"></div>" +
-		"<div class=\"calc-feature-tutorial-actions\">" +
-		"<button type=\"button\" class=\"btn calc-feature-tutorial-action\" id=\"calc-feature-tutorial-skip\">Skip</button>" +
-		"<div class=\"calc-feature-tutorial-nav\">" +
-		"<button type=\"button\" class=\"btn calc-feature-tutorial-action\" id=\"calc-feature-tutorial-back\">Back</button>" +
-		"<button type=\"button\" class=\"btn calc-feature-tutorial-action\" id=\"calc-feature-tutorial-next\">Next</button>" +
-		"</div>" +
-		"</div>" +
-		"</section>";
-	document.body.appendChild(overlay);
-
-	calcFeatureTutorialState.overlayNode = overlay;
-	calcFeatureTutorialState.cardNode = overlay.querySelector(".calc-feature-tutorial-card");
-	calcFeatureTutorialState.titleNode = document.getElementById("calc-feature-tutorial-title");
-	calcFeatureTutorialState.textNode = document.getElementById("calc-feature-tutorial-text");
-	calcFeatureTutorialState.progressNode = document.getElementById("calc-feature-tutorial-progress");
-	calcFeatureTutorialState.visualNode = document.getElementById("calc-feature-tutorial-visual");
-	calcFeatureTutorialState.backBtn = document.getElementById("calc-feature-tutorial-back");
-	calcFeatureTutorialState.nextBtn = document.getElementById("calc-feature-tutorial-next");
-
-	$("#calc-feature-tutorial-skip").off("click").on("click", function () {
-		finishCalcFeatureTutorial();
-	});
-	$("#calc-feature-tutorial-back").off("click").on("click", function () {
-		if (!calcFeatureTutorialState.isOpen) return;
-		if (calcFeatureTutorialState.stepIndex <= 0) return;
-		calcFeatureTutorialState.stepIndex -= 1;
-		renderCalcFeatureTutorialStep();
-	});
-	$("#calc-feature-tutorial-next").off("click").on("click", function () {
-		if (!calcFeatureTutorialState.isOpen) return;
-		var isLastStep = calcFeatureTutorialState.stepIndex >= calcFeatureTutorialState.steps.length - 1;
-		if (isLastStep) {
-			finishCalcFeatureTutorial();
-			return;
-		}
-		calcFeatureTutorialState.stepIndex += 1;
-		renderCalcFeatureTutorialStep();
-	});
-
-	$(window).off("resize.calctutorial").on("resize.calctutorial", function () {
-		if (!calcFeatureTutorialState.isOpen) return;
-		var activeStep = calcFeatureTutorialState.steps[calcFeatureTutorialState.stepIndex];
-		var target = resolveCalcFeatureTutorialTarget(activeStep);
-		positionCalcFeatureTutorialCard(target);
-	});
-	return overlay;
-}
-
-function resolveCalcFeatureTutorialTarget(step) {
-	if (!step) return null;
-	if (typeof step.selector === "function") return step.selector() || null;
-	if (typeof step.selector === "string" && step.selector) return document.querySelector(step.selector);
-	return null;
-}
-
-function getCalcFeatureTutorialSteps() {
-	return [
-		{
-			title: "Right-click sprites (P1 + P2)",
-			selector: function () {
-				return getFirstCalcFeatureTutorialTarget([
-					"#team-poke-list .trainer-pok.left-side",
-					"#box-poke-list .trainer-pok.left-side",
-					"#box-poke-list2 .trainer-pok.left-side",
-					"#team-poke-list"
-				]);
-			},
-			description: "Right-click any Pokemon 1 sprite in your Team/Box to open the quick action menu. Right-clicking a Pokemon 2 sprite instantly toggles that enemy as Dead/Alive for the current fight.",
-			visualHtml: "" +
-				"<div class=\"calc-feature-tutorial-visual-card\">" +
-				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Right-click</span><span>P1 sprite</span></div>" +
-				"<div class=\"calc-feature-tutorial-visual-arrow\">&#x2193;</div>" +
-				"<div class=\"calc-feature-tutorial-visual-row\"><span>Add Frag</span><span>Did This Mon Die?</span></div>" +
-				"<div class=\"calc-feature-tutorial-visual-row\"><span>Hot Swap Team/Box/Trash</span></div>" +
-				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Right-click</span><span>P2 sprite</span><span>&#x2192;</span><span>Mark Dead/Alive instantly</span></div>" +
-				"</div>",
-			beforeShow: function () {
-				if (typeof closeDamageApplyMenu === "function") closeDamageApplyMenu();
-				closeFragContextMenu();
-				closeOpposingContextMenu();
-				closeCalcSidePanels();
-			}
-		},
-		{
-			title: "Frag sheet sync + fullscreen",
-			selector: "#frags-side-panel",
-			description: "All right-click frag actions feed directly into Frag Sheet. Use Overall %, This Fight, and Actions for fast tracking. Drag a base form onto its evolution to merge frags, and use fullscreen Edit kills to remove a mistaken target without touching the rest.",
-			visualHtml: "" +
-				"<div class=\"calc-feature-tutorial-visual-card\">" +
-				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Panel</span><span>Frag Sheet</span></div>" +
-				"<div class=\"calc-feature-tutorial-visual-row\"><span>Overall %</span><span>Split %</span><span>This Fight</span></div>" +
-				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Merge</span><span>Drag Charmander &#x2192; Charmeleon</span></div>" +
-				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Tip</span><span>Fullscreen shows split columns and Edit kills.</span></div>" +
-				"</div>",
-			beforeShow: function () {
-				openFragsPanel();
-				setCalcSidePanelFullscreen("frags-side-panel", true);
-			}
-		},
-		{
-			title: "Highlight damage and apply HP",
-			selector: function () {
-				return getFirstCalcFeatureTutorialTarget(["#damage-apply-menu", "#resultDamageL1", "#resultDamageR1", "#damageValues"]);
-			},
-			description: "Highlight any damage text or min/max % range, then use the popup buttons to subtract that amount from P1 or P2 HP instantly.",
-			visualHtml: "" +
-				"<div class=\"calc-feature-tutorial-visual-card\">" +
-				"<div class=\"calc-feature-tutorial-visual-row\"><span>12.4% - 23.7%</span></div>" +
-				"<div class=\"calc-feature-tutorial-visual-arrow\">&#x2193;</div>" +
-				"<div class=\"calc-feature-tutorial-visual-row\"><span>- P1 HP</span><span>- P2 HP</span></div>" +
-				"</div>",
-			beforeShow: function () {
-				closeCalcSidePanels();
-				var menuRect = null;
-				var anchorNode = document.getElementById("resultDamageL1") || document.getElementById("resultDamageR1");
-				if (anchorNode && anchorNode.getBoundingClientRect) {
-					menuRect = anchorNode.getBoundingClientRect();
-				}
-				if (typeof openDamageApplyMenuForSelection === "function" && menuRect) {
-					openDamageApplyMenuForSelection("12.4% - 23.7%", menuRect);
-				}
-			}
-		},
-		{
-			title: "Top quick tools",
-			selector: ".calc-top-actions",
-			description: "Use the top buttons for quick access: Pokedex, Notes, and Settings. Notes/Frags open as side panels and can be toggled to fullscreen when you need more workspace.",
-			visualHtml: "" +
-				"<div class=\"calc-feature-tutorial-visual-card\">" +
-				"<div class=\"calc-feature-tutorial-visual-row\"><span>Pokedex</span><span>Notes</span><span>Settings</span></div>" +
-				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">View</span><span>Side panel or Fullscreen.</span></div>" +
-				"</div>",
-			beforeShow: function () {
-				closeCalcSidePanels();
-				if (typeof closeDamageApplyMenu === "function") closeDamageApplyMenu();
-			}
-		},
-		{
-			title: "Notes panel details",
-			selector: "#notes-side-panel",
-			description: "Notes tracks turns with selected mons and free text. Switch Single/Double format, add/remove turns, and use Fullscreen when you need bigger side-by-side note space.",
-			visualHtml: "" +
-				"<div class=\"calc-feature-tutorial-visual-card\">" +
-				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Per Turn</span><span>P1 + P2 selections</span></div>" +
-				"<div class=\"calc-feature-tutorial-visual-row\"><span>Single / Double</span><span>+ Turn</span></div>" +
-				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Tip</span><span>Fullscreen shows more notes at once.</span></div>" +
-				"</div>",
-			beforeShow: function () {
-				openNotesPanel();
-				setCalcSidePanelFullscreen("notes-side-panel", true);
-			}
-		},
-		{
-			title: "Settings explained",
-			selector: "#settings-side-panel .settings-side-body",
-			description: "Settings controls Starter routing, Theme, Layout mode, and QOL toggles (Typing Colors, Move Colors, PP/ACC display, and Total Frags on Border).",
-			visualHtml: "" +
-				"<div class=\"calc-feature-tutorial-visual-card\">" +
-				"<div class=\"calc-feature-tutorial-visual-row\"><span>Starter</span><span>Theme</span><span>Layout</span></div>" +
-				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">QOL</span><span>Typing/Move colors, PP/ACC, Border Frags</span></div>" +
-				"</div>",
-			beforeShow: function () {
-				openSettingsPanel();
-			}
-		},
-		{
-			title: "Terrain right-click lock",
-			selector: ".field-info label.btn[for='electric']",
-			description: "Weather is auto-set from permanent Astral weather abilities. Terrain abilities are limited-turn effects, so you can right-click a terrain button to force-lock terrain for that trainer fight.",
-			visualHtml: "" +
-				"<div class=\"calc-feature-tutorial-visual-card\">" +
-				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Auto</span><span>Weather from permanent abilities</span></div>" +
-				"<div class=\"calc-feature-tutorial-visual-row\"><span class=\"calc-feature-tag\">Manual lock</span><span>Right-click Terrain button</span></div>" +
-				"<div class=\"calc-feature-tutorial-visual-row\"><span>Toggle is instant for this trainer fight.</span></div>" +
-				"</div>",
-			beforeShow: function () {
-				closeCalcSidePanels();
-				if (typeof closeDamageApplyMenu === "function") closeDamageApplyMenu();
-			}
-		},
-		{
-			title: "Replay any time",
-			selector: "#settings-open-tutorial",
-			description: "You can always revisit this walkthrough from Settings using \"Replay Feature Tutorial\".",
-			visualHtml: "" +
-				"<div class=\"calc-feature-tutorial-visual-card\">" +
-				"<div class=\"calc-feature-tutorial-visual-row\"><span>Settings</span><span>&#x2192;</span><span>Replay Feature Tutorial</span></div>" +
-				"</div>",
-			beforeShow: function () {
-				openSettingsPanel();
-				ensureTutorialSettingsSection();
-			}
-		}
-	];
-}
-
-function renderCalcFeatureTutorialStep() {
-	if (!calcFeatureTutorialState.isOpen) return;
-	var steps = calcFeatureTutorialState.steps;
-	if (!steps || !steps.length) return;
-	var index = calcFeatureTutorialState.stepIndex;
-	if (index < 0) index = 0;
-	if (index >= steps.length) index = steps.length - 1;
-	calcFeatureTutorialState.stepIndex = index;
-
-	var step = steps[index];
-	if (step && typeof step.beforeShow === "function") step.beforeShow();
-	var targetNode = resolveCalcFeatureTutorialTarget(step);
-
-	if (calcFeatureTutorialState.titleNode) calcFeatureTutorialState.titleNode.textContent = step.title || "Tutorial";
-	if (calcFeatureTutorialState.textNode) calcFeatureTutorialState.textNode.textContent = step.description || "";
-	if (calcFeatureTutorialState.progressNode) calcFeatureTutorialState.progressNode.textContent = "Step " + (index + 1) + " / " + steps.length;
-	if (calcFeatureTutorialState.visualNode) calcFeatureTutorialState.visualNode.innerHTML = step.visualHtml || "";
-	if (calcFeatureTutorialState.backBtn) calcFeatureTutorialState.backBtn.disabled = index <= 0;
-	if (calcFeatureTutorialState.nextBtn) calcFeatureTutorialState.nextBtn.textContent = index >= steps.length - 1 ? "Done" : "Next";
-
-	setCalcFeatureTutorialFocus(targetNode);
-	positionCalcFeatureTutorialCard(targetNode);
-	window.setTimeout(function () {
-		if (!calcFeatureTutorialState.isOpen) return;
-		positionCalcFeatureTutorialCard(calcFeatureTutorialState.focusNode);
-	}, 180);
-}
-
-function startCalcFeatureTutorial(options) {
-	var startOptions = options || {};
-	ensureTutorialSettingsSection();
-	var overlay = ensureCalcFeatureTutorialOverlay();
-	calcFeatureTutorialState.steps = getCalcFeatureTutorialSteps();
-	calcFeatureTutorialState.stepIndex = 0;
-	calcFeatureTutorialState.launchedFromSettings = !!startOptions.fromSettings;
-	calcFeatureTutorialState.isOpen = true;
-	markCalcFeatureTutorialSeen();
-	overlay.hidden = false;
-	overlay.classList.add("open");
-	document.body.classList.add("calc-feature-tutorial-open");
-	renderCalcFeatureTutorialStep();
-}
-
-function finishCalcFeatureTutorial() {
-	if (!calcFeatureTutorialState.isOpen) return;
-	clearCalcFeatureTutorialFocus();
-	if (calcFeatureTutorialState.overlayNode) {
-		calcFeatureTutorialState.overlayNode.classList.remove("open");
-		calcFeatureTutorialState.overlayNode.hidden = true;
-	}
-	calcFeatureTutorialState.isOpen = false;
-	calcFeatureTutorialState.steps = [];
-	calcFeatureTutorialState.stepIndex = 0;
-	var reopenSettings = !!calcFeatureTutorialState.launchedFromSettings;
-	calcFeatureTutorialState.launchedFromSettings = false;
-	if (typeof closeDamageApplyMenu === "function") closeDamageApplyMenu();
-	closeFragContextMenu();
-	closeOpposingContextMenu();
-	closeCalcSidePanels();
-	if (reopenSettings) openSettingsPanel();
-	document.body.classList.remove("calc-feature-tutorial-open");
-}
-
-function maybeAutoStartCalcFeatureTutorial() {
-	if (hasSeenCalcFeatureTutorial()) return;
-	startCalcFeatureTutorial({fromSettings: false});
+	listNode.innerHTML = html;
 }
 
 function openFragsPanel() {
@@ -4597,6 +4259,11 @@ function openFragsPanel() {
 function openSettingsPanel() {
 	openCalcSidePanel("settings-side-panel");
 	syncSettingsPanelUi();
+}
+
+function openFaqPanel() {
+	openCalcSidePanel("faq-side-panel");
+	renderFaqPanel();
 }
 
 function createDefaultNotesTurn() {
@@ -5349,7 +5016,6 @@ function refreshThemeChoiceButtons() {
 }
 
 function syncSettingsPanelUi() {
-	ensureTutorialSettingsSection();
 	var settings = getAppSettings();
 	$(".settings-choice-btn[data-starter-choice]").removeClass("is-active");
 	$(".settings-choice-btn[data-starter-choice='" + settings.starterChoice + "']").addClass("is-active");
@@ -5373,7 +5039,6 @@ function syncSettingsPanelUi() {
 function bindCalcToolEvents() {
 	ensureOpposingContextMenu();
 	ensureFragHistoryControls();
-	ensureTutorialSettingsSection();
 	bindFragsPanelScrollContainment();
 	syncTrainerFieldLockButtonStyles();
 
@@ -5387,6 +5052,10 @@ function bindCalcToolEvents() {
 		openFragsPanel();
 	});
 
+	$("#open-faq-panel").off("click").on("click", function () {
+		openFaqPanel();
+	});
+
 	$("#open-notes-panel").off("click").on("click", function () {
 		openNotesPanel();
 	});
@@ -5395,16 +5064,16 @@ function bindCalcToolEvents() {
 		openSettingsPanel();
 	});
 
-	$("#settings-open-tutorial").off("click").on("click", function () {
-		startCalcFeatureTutorial({fromSettings: true});
-	});
-
 	$("#frags-panel-close").off("click").on("click", function () {
 		closeCalcSidePanel("frags-side-panel");
 	});
 
 	$("#settings-panel-close").off("click").on("click", function () {
 		closeCalcSidePanel("settings-side-panel");
+	});
+
+	$("#faq-panel-close").off("click").on("click", function () {
+		closeCalcSidePanel("faq-side-panel");
 	});
 
 	$("#notes-panel-close").off("click").on("click", function () {
@@ -5748,10 +5417,6 @@ function bindCalcToolEvents() {
 
 	$(document).off("keydown.calcpanels").on("keydown.calcpanels", function (ev) {
 		if (ev.key !== "Escape" && ev.keyCode !== 27) return;
-		if (calcFeatureTutorialState.isOpen) {
-			finishCalcFeatureTutorial();
-			return;
-		}
 		closeFragContextMenu();
 		closeOpposingContextMenu();
 		closeCalcSidePanels();
@@ -9151,9 +8816,6 @@ $(document).ready(function () {
 	}
 	updateAllMoveMetaDisplays();
 	startAppUpdateChecker();
-	window.setTimeout(function () {
-		maybeAutoStartCalcFeatureTutorial();
-	}, CALC_FEATURE_TUTORIAL_AUTO_OPEN_DELAY_MS);
 	$(".terrain-trigger").bind("change keyup", getTerrainEffects);
 	$("#previous-trainer").click(previousTrainer);
 	$("#next-trainer").click(nextTrainer);

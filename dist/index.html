@@ -6,7 +6,7 @@
     <link rel="icon" type="image/gif" href="img/totodile.gif"  >
     <title>Astral Emerald Damage Calculator</title>
     <link type="text/css" rel="stylesheet" href="./js/vendor/select2/select2.css" />
-    <link type="text/css" rel="stylesheet" href="./css/main.css?73a177d3" />
+    <link type="text/css" rel="stylesheet" href="./css/main.css?51a3ed7e" />
     <link type="text/css" rel="stylesheet" href="./css/vendor/bootstrap.css" />
     <link type="text/css" rel="stylesheet" href="./css/dark-theme.css" id="dark-theme-styles">
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -52,12 +52,13 @@
 
 <div class="wrapper">
 
-    <div aria-label="Settings" role="region">
+    <div aria-label="Calculator tools" role="region">
         <span class="title-text">Astral Emerald Damage Calculator</span>
         <span class="calc-top-actions" role="group" aria-label="Quick tools">
             <button type="button" class="btn calc-top-action-btn" id="open-pokedex-panel">Pokedex</button>
             <button type="button" class="btn calc-top-action-btn" id="open-notes-panel">Notes</button>
             <button type="button" class="btn calc-top-action-btn" id="open-frags-panel">Frags</button>
+            <button type="button" class="btn calc-top-action-btn" id="open-faq-panel">FAQ</button>
             <button type="button" class="btn calc-top-action-btn" id="open-settings-panel">Settings</button>
         </span>
         <span class="genSelection" aria-labelledby="selectGenInstruction" role="radiogroup" title="Select the generation.">
@@ -1953,6 +1954,19 @@
             </section>
         </div>
     </aside>
+    <aside id="faq-side-panel" class="calc-side-panel faq-side-panel" aria-hidden="true" hidden>
+        <div class="calc-side-resize-handle" aria-hidden="true"></div>
+        <div class="calc-side-header">
+            <strong>FAQ</strong>
+            <button type="button" id="faq-panel-close" class="btn calc-side-btn">Close</button>
+        </div>
+        <div class="calc-side-body faq-side-body">
+            <section class="faq-section">
+                <h4>Common Questions</h4>
+                <div id="faq-list" class="faq-list" aria-live="polite"></div>
+            </section>
+        </div>
+    </aside>
     <div id="frag-context-menu" class="frag-context-menu" hidden>
         <div id="frag-context-title" class="frag-context-title">Log Frag</div>
         <label for="frag-context-target">Target (Pokemon 2)</label>
@@ -2013,7 +2027,7 @@
     <script type="text/javascript" src="./js/spritedata.js?e6979aa2"></script>
     <script type="text/javascript" src="./js/data/frags_splits.js?01f4e1ca"></script>
     <script type="text/javascript" src="./js/data/move_info_lookup.js?1dc4b889"></script>
-    <script type="text/javascript" src="./js/shared_controls.js?b0762a41"></script>
+    <script type="text/javascript" src="./js/shared_controls.js?13987d0b"></script>
     <script type="text/javascript" src="./js/index_randoms_controls.js?b3faedad"></script>
     <script type="text/javascript" src="./js/moveset_import.js?c4922971"></script>
 </div>
