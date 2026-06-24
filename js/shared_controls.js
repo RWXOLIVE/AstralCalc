@@ -981,6 +981,7 @@ var fragsHistoryExpanded = false;
 var aeLuaFragWatchedFileHandle = null;
 var aeLuaFragWatchedFileTimer = null;
 var aeLuaFragWatchedFileSignature = "";
+var aeLuaFragLastPayload = null;
 var FRAG_UNKNOWN_VICTIM_KEY = "__unknown__";
 var deadOpposingSetMap = {};
 var opposingContextSourceSet = "";
@@ -3685,8 +3686,19 @@ function getAeLuaFragEventId(event, index) {
 	return [event && event.battleKey, event && event.frame, event && event.trainerSymbol, event && event.victim && event.victim.partyIndex, index].join(":");
 }
 
+function getAeLuaFragTextSignature(fileName, fileText) {
+	var text = String(fileText || "");
+	var hash = 2166136261;
+	for (var i = 0; i < text.length; i++) {
+		hash ^= text.charCodeAt(i);
+		hash = Math.imul(hash, 16777619);
+	}
+	return [fileName || "", text.length, (hash >>> 0).toString(16)].join(":");
+}
+
 function importAeLuaFragEventsFromPayload(exportPayload, sourceLabel) {
 	var payload = exportPayload && typeof exportPayload === "object" ? exportPayload : {};
+	aeLuaFragLastPayload = payload;
 	var events = Array.isArray(payload.events)
 		? payload.events
 		: (Array.isArray(payload) ? payload : []);
@@ -3735,6 +3747,42 @@ function importAeLuaFragEventsFromPayload(exportPayload, sourceLabel) {
 		}
 	}
 	return importedCount;
+}
+
+function suppressAeLuaFragEventsForRemoval(killerSetId, fightLabel, victimKey, maxCount) {
+	var normalizedSetId = String(killerSetId || "").trim();
+	var normalizedFight = String(fightLabel || "").trim();
+	if (!normalizedSetId || !normalizedFight || !aeLuaFragLastPayload) return 0;
+	var events = Array.isArray(aeLuaFragLastPayload.events) ? aeLuaFragLastPayload.events : [];
+	if (!events.length) return 0;
+	var normalizedVictimKey = normalizeFragVictimKey(victimKey);
+	var remaining = Math.max(1, parseInt(maxCount, 10) || 1);
+	var importedEvents = getAeLuaFragImportedEventMap();
+	var suppressedCount = 0;
+	for (var i = events.length - 1; i >= 0 && remaining > 0; i--) {
+		var event = events[i] || {};
+		var eventId = getAeLuaFragEventId(event, i);
+		if (!eventId) continue;
+		var existingRecord = importedEvents[eventId];
+		if (existingRecord && existingRecord.removedAt) continue;
+		if (findAeLuaFragKillerSetId(event) !== normalizedSetId) continue;
+		var victimMatch = findAeLuaFragVictimMatch(event);
+		if (!victimMatch) continue;
+		if (String(victimMatch.fightLabel || "").trim() !== normalizedFight) continue;
+		if (normalizedVictimKey !== FRAG_UNKNOWN_VICTIM_KEY && normalizeFragVictimKey(victimMatch.setId) !== normalizedVictimKey) continue;
+		importedEvents[eventId] = Object.assign({}, existingRecord || {}, {
+			importedAt: existingRecord && existingRecord.importedAt ? existingRecord.importedAt : new Date().toISOString(),
+			removedAt: new Date().toISOString(),
+			killerSetId: normalizedSetId,
+			victimSetId: victimMatch.setId,
+			fightLabel: normalizedFight,
+			source: existingRecord && existingRecord.source ? existingRecord.source : "manual-remove"
+		});
+		suppressedCount += 1;
+		remaining -= 1;
+	}
+	if (suppressedCount) saveAeLuaFragImportedEventMap(importedEvents);
+	return suppressedCount;
 }
 
 function importAeLuaFragEvents() {
@@ -3859,6 +3907,16 @@ function ensureAeLuaFragImportControls() {
 	}
 }
 
+function setAeLuaFragWatchUi(isWatching) {
+	var buttons = document.querySelectorAll(".ae-lua-frag-import-button");
+	for (var i = 0; i < buttons.length; i++) {
+		buttons[i].textContent = isWatching ? "Watching ae_lua" : "Import ae_lua";
+		buttons[i].title = isWatching
+			? "Watching the selected ae_lua.lua while this page stays open"
+			: "Select ae_lua.lua";
+	}
+}
+
 function importAeLuaFragFileText(fileName, fileText, options) {
 	options = options || {};
 	var payload = parseAeLuaFragExportText(fileText || "");
@@ -3866,7 +3924,9 @@ function importAeLuaFragFileText(fileName, fileText, options) {
 	var importedCount = importAeLuaFragEventsFromPayload(payload, sourcePrefix + fileName);
 	renderFragSheet();
 	if (!options.silent) {
-		var suffix = options.watching ? " Watching ae_lua.lua for updates while this page stays open." : "";
+		var suffix = options.watching
+			? " Watching ae_lua.lua for updates while this page stays open."
+			: (options.oneTime ? " This browser only allowed a one-time import, so it cannot auto-update this file." : "");
 		alert("Imported " + importedCount + " ae_lua update" + (importedCount === 1 ? "" : "s") + "." + suffix);
 	}
 	return importedCount;
@@ -3879,6 +3939,7 @@ function stopAeLuaFragWatchedFileImport() {
 	}
 	aeLuaFragWatchedFileHandle = null;
 	aeLuaFragWatchedFileSignature = "";
+	setAeLuaFragWatchUi(false);
 }
 
 function importAeLuaFragWatchedFile(isInitial) {
@@ -3886,10 +3947,10 @@ function importAeLuaFragWatchedFile(isInitial) {
 	if (!handle || typeof handle.getFile !== "function") return;
 	handle.getFile().then(function (file) {
 		if (!file) return null;
-		var signature = [file.name, file.lastModified, file.size].join(":");
-		if (!isInitial && signature === aeLuaFragWatchedFileSignature) return null;
-		aeLuaFragWatchedFileSignature = signature;
 		return file.text().then(function (fileText) {
+			var signature = getAeLuaFragTextSignature(file.name, fileText);
+			if (!isInitial && signature === aeLuaFragWatchedFileSignature) return;
+			aeLuaFragWatchedFileSignature = signature;
 			importAeLuaFragFileText(file.name, fileText, {
 				sourcePrefix: "watch:",
 				silent: !isInitial,
@@ -3906,6 +3967,7 @@ function importAeLuaFragWatchedFile(isInitial) {
 function startAeLuaFragWatchedFileImport(handle) {
 	stopAeLuaFragWatchedFileImport();
 	aeLuaFragWatchedFileHandle = handle;
+	setAeLuaFragWatchUi(true);
 	importAeLuaFragWatchedFile(true);
 	aeLuaFragWatchedFileTimer = window.setInterval(function () {
 		importAeLuaFragWatchedFile(false);
@@ -3945,7 +4007,7 @@ function bindAeLuaFragImportControls() {
 		reader.onload = function () {
 			try {
 				var fileText = reader.result || "";
-				importAeLuaFragFileText(file.name, fileText);
+				importAeLuaFragFileText(file.name, fileText, {oneTime: true});
 				stopAeLuaFragWatchedFileImport();
 			} catch (err) {
 				alert("Could not import ae_lua: " + (err && err.message ? err.message : err));
@@ -3992,6 +4054,7 @@ function removeFragKill(killerSetId, preferredFight) {
 		decrementFragVictimBucketByAny(entry, "splitVictims", split, 1);
 	}
 	entry.totalKills = Math.max(0, entry.totalKills - 1);
+	suppressAeLuaFragEventsForRemoval(killerSetId, targetFight, victimKey, 1);
 	saveFragSheetState();
 	renderFragSheet();
 }
@@ -4031,6 +4094,7 @@ function removeSpecificFragKill(killerSetId, fightLabel, victimKey) {
 	}
 	entry.totalKills = Math.max(0, entry.totalKills - 1);
 	if (entry.totalKills <= 0) entry.lastVictim = "";
+	suppressAeLuaFragEventsForRemoval(normalizedSetId, normalizedFight, normalizedVictimKey, 1);
 	saveFragSheetState();
 	renderFragSheet();
 	return true;
@@ -4073,6 +4137,19 @@ function clearFragsForCurrentFight() {
 			if (Number.isNaN(removed) || removed <= 0) continue;
 			var split = String(getSplitNumberForFragFightLabel(fightKey));
 			var fightVictimBucket = getFragVictimBucketForEntry(entry, "fightVictims", fightKey, false);
+			var suppressedVictimCounts = 0;
+			if (fightVictimBucket) {
+				for (var suppressVictimKey in fightVictimBucket) {
+					if (!Object.prototype.hasOwnProperty.call(fightVictimBucket, suppressVictimKey)) continue;
+					var suppressVictimCount = parseInt(fightVictimBucket[suppressVictimKey], 10);
+					if (Number.isNaN(suppressVictimCount) || suppressVictimCount <= 0) continue;
+					suppressedVictimCounts += suppressVictimCount;
+					suppressAeLuaFragEventsForRemoval(setId, fightKey, suppressVictimKey, suppressVictimCount);
+				}
+			}
+			if (suppressedVictimCounts < removed) {
+				suppressAeLuaFragEventsForRemoval(setId, fightKey, FRAG_UNKNOWN_VICTIM_KEY, removed - suppressedVictimCounts);
+			}
 			delete entry.fights[fightKey];
 			if (entry.fightVictims && Object.prototype.hasOwnProperty.call(entry.fightVictims, fightKey)) {
 				delete entry.fightVictims[fightKey];
@@ -5686,11 +5763,15 @@ function bindCalcToolEvents() {
 		addFragKill($(this).attr("data-frag-set"), "", getCurrentFightLabel());
 	});
 
-	$(document).off("click.fragsactionsdec", ".frags-dec").on("click.fragsactionsdec", ".frags-dec", function () {
+	$(document).off("click.fragsactionsdec", ".frags-dec").on("click.fragsactionsdec", ".frags-dec", function (ev) {
+		ev.preventDefault();
+		ev.stopPropagation();
 		removeFragKill($(this).attr("data-frag-set"), getCurrentFightLabel());
 	});
 
-	$(document).off("click.fragsremovevictim", ".frags-edit-remove").on("click.fragsremovevictim", ".frags-edit-remove", function () {
+	$(document).off("click.fragsremovevictim", ".frags-edit-remove").on("click.fragsremovevictim", ".frags-edit-remove", function (ev) {
+		ev.preventDefault();
+		ev.stopPropagation();
 		removeSpecificFragKill(
 			$(this).attr("data-frag-set"),
 			$(this).attr("data-frag-fight"),
