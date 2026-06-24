@@ -978,9 +978,9 @@ var trainerFieldLocksCache = null;
 var trainerFieldLockActiveTrainerKey = "";
 var isApplyingTrainerFieldLocks = false;
 var fragsHistoryExpanded = false;
-var aeLuaFragImportTimer = null;
-var aeLuaFragImportScriptNode = null;
-var aeLuaFragImportBusy = false;
+var aeLuaFragWatchedFileHandle = null;
+var aeLuaFragWatchedFileTimer = null;
+var aeLuaFragWatchedFileSignature = "";
 var FRAG_UNKNOWN_VICTIM_KEY = "__unknown__";
 var deadOpposingSetMap = {};
 var opposingContextSourceSet = "";
@@ -3604,6 +3604,32 @@ function findAeLuaFragKillerSetId(event) {
 	return candidates[0];
 }
 
+function findAeLuaFragPlayerSetIdForMon(mon) {
+	var monSpecies = normalizeAeLuaFragSpecies(getAeLuaFragMonSpecies(mon));
+	if (!monSpecies) return "";
+	var monNickname = normalizeAeLuaFragText(mon && mon.nickname);
+	var playerSetIds = getAeLuaFragPlayerSetIds();
+	var candidates = [];
+	for (var i = 0; i < playerSetIds.length; i++) {
+		var setId = playerSetIds[i];
+		if (normalizeAeLuaFragSpecies(parseSetId(setId).species) !== monSpecies) continue;
+		candidates.push(setId);
+	}
+	if (!candidates.length) return "";
+	if (monNickname) {
+		for (var nickIndex = 0; nickIndex < candidates.length; nickIndex++) {
+			if (normalizeAeLuaFragText(getAeLuaFragSetNickname(candidates[nickIndex])) === monNickname) {
+				return candidates[nickIndex];
+			}
+		}
+	}
+	var selectedPlayerSetId = getSelectedSetIdForSide("p1");
+	for (var selectedIndex = 0; selectedIndex < candidates.length; selectedIndex++) {
+		if (candidates[selectedIndex] === selectedPlayerSetId) return candidates[selectedIndex];
+	}
+	return candidates[0];
+}
+
 function aeLuaFragTrainerMatchesEvent(entry, event) {
 	var eventLabel = normalizeAeLuaFragText(event && event.trainerLabel);
 	var eventName = normalizeAeLuaFragText(event && event.trainerName);
@@ -3664,7 +3690,8 @@ function importAeLuaFragEventsFromPayload(exportPayload, sourceLabel) {
 	var events = Array.isArray(payload.events)
 		? payload.events
 		: (Array.isArray(payload) ? payload : []);
-	if (!events.length) return 0;
+	var deaths = Array.isArray(payload.deaths) ? payload.deaths : [];
+	if (!events.length && !deaths.length) return 0;
 	var importedEvents = getAeLuaFragImportedEventMap();
 	var importedCount = 0;
 	for (var i = 0; i < events.length; i++) {
@@ -3684,10 +3711,27 @@ function importAeLuaFragEventsFromPayload(exportPayload, sourceLabel) {
 		};
 		importedCount += 1;
 	}
+	for (var deathIndex = 0; deathIndex < deaths.length; deathIndex++) {
+		var deathEvent = deaths[deathIndex] || {};
+		var deathEventId = "death:" + getAeLuaFragEventId(deathEvent, deathIndex);
+		if (!deathEventId || importedEvents[deathEventId]) continue;
+		var deadSetId = findAeLuaFragPlayerSetIdForMon(deathEvent.victim);
+		if (!deadSetId) continue;
+		var deathFightLabel = String(deathEvent.trainerLabel || deathEvent.trainerName || getCurrentFightLabel() || "Unknown Fight");
+		setFragSetDeadState(deadSetId, true, deathFightLabel);
+		importedEvents[deathEventId] = {
+			importedAt: new Date().toISOString(),
+			type: "death",
+			victimSetId: deadSetId,
+			fightLabel: deathFightLabel,
+			source: sourceLabel || "auto"
+		};
+		importedCount += 1;
+	}
 	if (importedCount) {
 		saveAeLuaFragImportedEventMap(importedEvents);
 		if (window.console && typeof window.console.info === "function") {
-			window.console.info("[AstralCalc] imported " + importedCount + " ae_lua frag event" + (importedCount === 1 ? "" : "s"));
+			window.console.info("[AstralCalc] imported " + importedCount + " ae_lua update" + (importedCount === 1 ? "" : "s"));
 		}
 	}
 	return importedCount;
@@ -3721,13 +3765,13 @@ function parseAeLuaFragExportText(text) {
 		return JSON.parse(extractAeLuaFragJsonText(rawText, jsonStart));
 	}
 	if (isAeLuaFragSourceText(rawText)) {
-		throw new Error("That is the ae_lua tracker script, not a frag export. Run frags() in the emulator, then choose the generated ae_lua_frags.lua file.");
+		throw new Error("That ae_lua.lua does not have a live export block yet. Load this same ae_lua.lua in the emulator once, then import it again.");
 	}
 	throw new Error("Could not find an AE_LUA_FRAG_EXPORT JSON payload in that file.");
 }
 
 function isAeLuaFragSourceText(text) {
-	return /aeFragConfig|aeFragState|outputFileName\s*=\s*"ae_lua_frags\.js"/.test(String(text || ""));
+	return /aeFragConfig|aeFragState|AE_LUA_SELF_EXPORT_START/.test(String(text || ""));
 }
 
 function extractAeLuaFragJsonText(rawText, jsonStart) {
@@ -3815,11 +3859,57 @@ function ensureAeLuaFragImportControls() {
 	}
 }
 
-function importAeLuaFragFileText(fileName, fileText) {
+function importAeLuaFragFileText(fileName, fileText, options) {
+	options = options || {};
 	var payload = parseAeLuaFragExportText(fileText || "");
-	var importedCount = importAeLuaFragEventsFromPayload(payload, "upload:" + fileName);
+	var sourcePrefix = options.sourcePrefix || "upload:";
+	var importedCount = importAeLuaFragEventsFromPayload(payload, sourcePrefix + fileName);
 	renderFragSheet();
-	alert("Imported " + importedCount + " ae_lua frag" + (importedCount === 1 ? "" : "s") + ".");
+	if (!options.silent) {
+		var suffix = options.watching ? " Watching ae_lua.lua for updates while this page stays open." : "";
+		alert("Imported " + importedCount + " ae_lua update" + (importedCount === 1 ? "" : "s") + "." + suffix);
+	}
+	return importedCount;
+}
+
+function stopAeLuaFragWatchedFileImport() {
+	if (aeLuaFragWatchedFileTimer) {
+		window.clearInterval(aeLuaFragWatchedFileTimer);
+		aeLuaFragWatchedFileTimer = null;
+	}
+	aeLuaFragWatchedFileHandle = null;
+	aeLuaFragWatchedFileSignature = "";
+}
+
+function importAeLuaFragWatchedFile(isInitial) {
+	var handle = aeLuaFragWatchedFileHandle;
+	if (!handle || typeof handle.getFile !== "function") return;
+	handle.getFile().then(function (file) {
+		if (!file) return null;
+		var signature = [file.name, file.lastModified, file.size].join(":");
+		if (!isInitial && signature === aeLuaFragWatchedFileSignature) return null;
+		aeLuaFragWatchedFileSignature = signature;
+		return file.text().then(function (fileText) {
+			importAeLuaFragFileText(file.name, fileText, {
+				sourcePrefix: "watch:",
+				silent: !isInitial,
+				watching: isInitial
+			});
+		});
+	}).catch(function (err) {
+		if (isInitial) {
+			alert("Could not import ae_lua: " + (err && err.message ? err.message : err));
+		}
+	});
+}
+
+function startAeLuaFragWatchedFileImport(handle) {
+	stopAeLuaFragWatchedFileImport();
+	aeLuaFragWatchedFileHandle = handle;
+	importAeLuaFragWatchedFile(true);
+	aeLuaFragWatchedFileTimer = window.setInterval(function () {
+		importAeLuaFragWatchedFile(false);
+	}, AE_LUA_FRAG_IMPORT_INTERVAL_MS);
 }
 
 function openAeLuaFragNativeFilePicker() {
@@ -3827,21 +3917,16 @@ function openAeLuaFragNativeFilePicker() {
 	window.showOpenFilePicker({
 		multiple: false,
 		types: [{
-			description: "ae_lua frag export",
+			description: "ae_lua.lua",
 			accept: {"text/plain": [".lua"]}
 		}]
 	}).then(function (handles) {
 		var handle = handles && handles[0];
 		if (!handle || typeof handle.getFile !== "function") return;
-		return handle.getFile();
-	}).then(function (file) {
-		if (!file) return;
-		return file.text().then(function (fileText) {
-			importAeLuaFragFileText(file.name, fileText);
-		});
+		startAeLuaFragWatchedFileImport(handle);
 	}).catch(function (err) {
 		if (err && err.name === "AbortError") return;
-		alert("Could not import ae_lua frags: " + (err && err.message ? err.message : err));
+		alert("Could not import ae_lua: " + (err && err.message ? err.message : err));
 	});
 	return true;
 }
@@ -3861,67 +3946,17 @@ function bindAeLuaFragImportControls() {
 			try {
 				var fileText = reader.result || "";
 				importAeLuaFragFileText(file.name, fileText);
+				stopAeLuaFragWatchedFileImport();
 			} catch (err) {
-				alert("Could not import ae_lua frags: " + (err && err.message ? err.message : err));
+				alert("Could not import ae_lua: " + (err && err.message ? err.message : err));
 			}
 		};
 		reader.onerror = function () {
-			alert("Could not read that ae_lua frag file.");
+			alert("Could not read ae_lua.lua.");
 		};
 		reader.readAsText(file);
 		this.value = "";
 	});
-}
-
-function reloadAeLuaFragExport(onComplete) {
-	if (aeLuaFragImportBusy) {
-		if (typeof onComplete === "function") {
-			onComplete(0, new Error("The ae_lua export is already loading. Try again in a moment."));
-		}
-		return;
-	}
-	aeLuaFragImportBusy = true;
-	if (aeLuaFragImportScriptNode && aeLuaFragImportScriptNode.parentNode) {
-		aeLuaFragImportScriptNode.parentNode.removeChild(aeLuaFragImportScriptNode);
-	}
-	var scriptNode = document.createElement("script");
-	aeLuaFragImportScriptNode = scriptNode;
-	scriptNode.async = true;
-	scriptNode.onload = function () {
-		aeLuaFragImportBusy = false;
-		var importedCount = importAeLuaFragEvents();
-		if (typeof onComplete === "function") onComplete(importedCount, null);
-	};
-	scriptNode.onerror = function () {
-		aeLuaFragImportBusy = false;
-		if (typeof onComplete === "function") {
-			onComplete(0, new Error("Could not load js/data/ae_lua_frags.js. Let ae_lua.lua write its export, then try again."));
-		}
-	};
-	scriptNode.src = "./js/data/ae_lua_frags.js?ae_lua_frag_ts=" + Date.now();
-	(document.head || document.documentElement).appendChild(scriptNode);
-}
-
-function shouldAutoReloadAeLuaFragExport() {
-	var locationInfo = window.location || {};
-	var protocol = String(locationInfo.protocol || "").toLowerCase();
-	var hostname = String(locationInfo.hostname || "").toLowerCase();
-	return protocol === "file:"
-		|| hostname === ""
-		|| hostname === "localhost"
-		|| hostname === "127.0.0.1"
-		|| hostname === "::1"
-		|| hostname === "[::1]"
-		|| /^10\./.test(hostname)
-		|| /^192\.168\./.test(hostname)
-		|| /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(hostname);
-}
-
-function startAeLuaFragImporter() {
-	if (aeLuaFragImportTimer) return;
-	if (!shouldAutoReloadAeLuaFragExport()) return;
-	reloadAeLuaFragExport();
-	aeLuaFragImportTimer = window.setInterval(reloadAeLuaFragExport, AE_LUA_FRAG_IMPORT_INTERVAL_MS);
 }
 
 function removeFragKill(killerSetId, preferredFight) {
@@ -9191,7 +9226,6 @@ $(document).ready(function () {
 	syncSettingsPanelUi();
 	syncFragRoster();
 	renderFragSheet();
-	startAeLuaFragImporter();
 	$("select.move-selector").select2({
 		dropdownAutoWidth: true,
 		matcher: function (term, text) {
