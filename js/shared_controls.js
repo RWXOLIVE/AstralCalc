@@ -3716,10 +3716,14 @@ function parseAeLuaFragExportText(text) {
 		if (openingChar !== "{" && openingChar !== "[") continue;
 		return JSON.parse(extractAeLuaFragJsonText(rawText, jsonStart));
 	}
-	if (/aeFragConfig|aeFragState|outputFileName\s*=\s*"ae_lua_frags\.js"/.test(rawText)) {
-		throw new Error("That looks like ae_lua.lua. Choose the generated ae_lua_frags.js export from js/data or dist/js/data instead.");
+	if (isAeLuaFragSourceText(rawText)) {
+		throw new Error("That is the ae_lua tracker script, not a frag export. Run frags() in the emulator, then choose the generated ae_lua_frags.lua file.");
 	}
 	throw new Error("Could not find an AE_LUA_FRAG_EXPORT JSON payload in that file.");
+}
+
+function isAeLuaFragSourceText(text) {
+	return /aeFragConfig|aeFragState|outputFileName\s*=\s*"ae_lua_frags\.js"/.test(String(text || ""));
 }
 
 function extractAeLuaFragJsonText(rawText, jsonStart) {
@@ -3759,8 +3763,6 @@ function createAeLuaFragImportButton(id) {
 	importButton.id = id;
 	importButton.className = "btn calc-side-btn ae-lua-frag-import-button";
 	importButton.textContent = "Import ae_lua";
-	importButton.style.margin = "6px auto 0";
-	importButton.style.display = "block";
 	return importButton;
 }
 
@@ -3770,7 +3772,7 @@ function ensureAeLuaFragFileInput() {
 	fileInput = document.createElement("input");
 	fileInput.type = "file";
 	fileInput.id = "frags-import-ae-lua-file";
-	fileInput.accept = ".js,.json,.txt,application/json,text/plain,text/javascript";
+	fileInput.accept = ".lua";
 	fileInput.hidden = true;
 	(document.body || document.documentElement).appendChild(fileInput);
 	return fileInput;
@@ -3808,7 +3810,8 @@ function bindAeLuaFragImportControls() {
 		var reader = new FileReader();
 		reader.onload = function () {
 			try {
-				var payload = parseAeLuaFragExportText(reader.result || "");
+				var fileText = reader.result || "";
+				var payload = parseAeLuaFragExportText(fileText);
 				var importedCount = importAeLuaFragEventsFromPayload(payload, "upload:" + file.name);
 				renderFragSheet();
 				alert("Imported " + importedCount + " ae_lua frag" + (importedCount === 1 ? "" : "s") + ".");
@@ -3824,8 +3827,13 @@ function bindAeLuaFragImportControls() {
 	});
 }
 
-function reloadAeLuaFragExport() {
-	if (aeLuaFragImportBusy) return;
+function reloadAeLuaFragExport(onComplete) {
+	if (aeLuaFragImportBusy) {
+		if (typeof onComplete === "function") {
+			onComplete(0, new Error("The ae_lua export is already loading. Try again in a moment."));
+		}
+		return;
+	}
 	aeLuaFragImportBusy = true;
 	if (aeLuaFragImportScriptNode && aeLuaFragImportScriptNode.parentNode) {
 		aeLuaFragImportScriptNode.parentNode.removeChild(aeLuaFragImportScriptNode);
@@ -3835,17 +3843,37 @@ function reloadAeLuaFragExport() {
 	scriptNode.async = true;
 	scriptNode.onload = function () {
 		aeLuaFragImportBusy = false;
-		importAeLuaFragEvents();
+		var importedCount = importAeLuaFragEvents();
+		if (typeof onComplete === "function") onComplete(importedCount, null);
 	};
 	scriptNode.onerror = function () {
 		aeLuaFragImportBusy = false;
+		if (typeof onComplete === "function") {
+			onComplete(0, new Error("Could not load js/data/ae_lua_frags.js. Let ae_lua.lua write its export, then try again."));
+		}
 	};
 	scriptNode.src = "./js/data/ae_lua_frags.js?ae_lua_frag_ts=" + Date.now();
 	(document.head || document.documentElement).appendChild(scriptNode);
 }
 
+function shouldAutoReloadAeLuaFragExport() {
+	var locationInfo = window.location || {};
+	var protocol = String(locationInfo.protocol || "").toLowerCase();
+	var hostname = String(locationInfo.hostname || "").toLowerCase();
+	return protocol === "file:"
+		|| hostname === ""
+		|| hostname === "localhost"
+		|| hostname === "127.0.0.1"
+		|| hostname === "::1"
+		|| hostname === "[::1]"
+		|| /^10\./.test(hostname)
+		|| /^192\.168\./.test(hostname)
+		|| /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(hostname);
+}
+
 function startAeLuaFragImporter() {
 	if (aeLuaFragImportTimer) return;
+	if (!shouldAutoReloadAeLuaFragExport()) return;
 	reloadAeLuaFragExport();
 	aeLuaFragImportTimer = window.setInterval(reloadAeLuaFragExport, AE_LUA_FRAG_IMPORT_INTERVAL_MS);
 }
