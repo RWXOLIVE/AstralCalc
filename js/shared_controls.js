@@ -904,6 +904,8 @@ var FAQ_ENTRIES = [
 ];
 var FRAG_SHEET_STATES_STORAGE_KEY = "astralCalcFragSheetStates";
 var FRAG_SHEET_BACKUPS_STORAGE_KEY = "astralCalcFragSheetBackups";
+var AE_LUA_FRAG_IMPORTED_EVENTS_STORAGE_KEY = "astralCalcAeLuaFragImportedEvents";
+var AE_LUA_FRAG_IMPORT_INTERVAL_MS = 2500;
 var TRAINER_FIELD_LOCKS_STORAGE_KEY = "astralCalcTrainerFieldLocks";
 var FIELD_LOCK_GLOBAL_KEY = "global";
 var LAST_ENCOUNTER_STORAGE_KEY = "astralCalcLastEncounter";
@@ -976,6 +978,9 @@ var trainerFieldLocksCache = null;
 var trainerFieldLockActiveTrainerKey = "";
 var isApplyingTrainerFieldLocks = false;
 var fragsHistoryExpanded = false;
+var aeLuaFragImportTimer = null;
+var aeLuaFragImportScriptNode = null;
+var aeLuaFragImportBusy = false;
 var FRAG_UNKNOWN_VICTIM_KEY = "__unknown__";
 var deadOpposingSetMap = {};
 var opposingContextSourceSet = "";
@@ -3522,6 +3527,327 @@ function addFragKill(killerSetId, victimSetId, fightLabel) {
 	entry.lastVictim = getFragVictimDisplayName(victimKey);
 	saveFragSheetState();
 	renderFragSheet();
+}
+
+function getAeLuaFragImportedEventMap() {
+	var parsed = safeJsonParse(localStorage.getItem(AE_LUA_FRAG_IMPORTED_EVENTS_STORAGE_KEY), {});
+	return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+}
+
+function saveAeLuaFragImportedEventMap(eventMap) {
+	localStorage.setItem(AE_LUA_FRAG_IMPORTED_EVENTS_STORAGE_KEY, JSON.stringify(eventMap || {}));
+}
+
+function normalizeAeLuaFragText(value) {
+	return String(value || "").trim().toLowerCase().replace(/[^a-z0-9]+/g, " ").replace(/\s+/g, " ").trim();
+}
+
+function normalizeAeLuaFragSpecies(value) {
+	return normalizeAeLuaFragText(value).replace(/\s+/g, "");
+}
+
+function getAeLuaFragMonSpecies(mon) {
+	return mon && mon.species ? String(mon.species) : "";
+}
+
+function addAeLuaFragSetId(setIds, seenSetIds, setId) {
+	var normalizedSetId = String(setId || "").trim();
+	if (!normalizedSetId || seenSetIds[normalizedSetId]) return;
+	seenSetIds[normalizedSetId] = true;
+	setIds.push(normalizedSetId);
+}
+
+function getAeLuaFragPlayerSetIds() {
+	var setIds = [];
+	var seenSetIds = {};
+	addAeLuaFragSetId(setIds, seenSetIds, getSelectedSetIdForSide("p1"));
+	var layout = collectPlayerRosterLayout();
+	var zones = ["team", "box", "box2", "trash"];
+	for (var zoneIndex = 0; zoneIndex < zones.length; zoneIndex++) {
+		var zoneSetIds = layout[zones[zoneIndex]] || [];
+		for (var setIndex = 0; setIndex < zoneSetIds.length; setIndex++) {
+			addAeLuaFragSetId(setIds, seenSetIds, zoneSetIds[setIndex]);
+		}
+	}
+	return setIds;
+}
+
+function getAeLuaFragSetNickname(setId) {
+	var option = typeof getSetOptionById === "function" ? getSetOptionById(setId) : null;
+	if (option && option.nickname) return option.nickname;
+	return parseSetId(setId).label || "";
+}
+
+function findAeLuaFragKillerSetId(event) {
+	var killerSpecies = normalizeAeLuaFragSpecies(getAeLuaFragMonSpecies(event && event.killer));
+	if (!killerSpecies) return "";
+	var killerNickname = normalizeAeLuaFragText(event && event.killer ? event.killer.nickname : "");
+	var playerSetIds = getAeLuaFragPlayerSetIds();
+	var candidates = [];
+	for (var i = 0; i < playerSetIds.length; i++) {
+		var setId = playerSetIds[i];
+		if (normalizeAeLuaFragSpecies(parseSetId(setId).species) !== killerSpecies) continue;
+		candidates.push(setId);
+	}
+	if (!candidates.length) return "";
+	if (killerNickname) {
+		for (var nickIndex = 0; nickIndex < candidates.length; nickIndex++) {
+			if (normalizeAeLuaFragText(getAeLuaFragSetNickname(candidates[nickIndex])) === killerNickname) {
+				return candidates[nickIndex];
+			}
+		}
+	}
+	var selectedPlayerSetId = getSelectedSetIdForSide("p1");
+	for (var selectedIndex = 0; selectedIndex < candidates.length; selectedIndex++) {
+		if (candidates[selectedIndex] === selectedPlayerSetId) return candidates[selectedIndex];
+	}
+	return candidates[0];
+}
+
+function aeLuaFragTrainerMatchesEvent(entry, event) {
+	var eventLabel = normalizeAeLuaFragText(event && event.trainerLabel);
+	var eventName = normalizeAeLuaFragText(event && event.trainerName);
+	var entryLabel = normalizeAeLuaFragText(entry && entry.trainerLabel);
+	var entryName = normalizeAeLuaFragText(entry && entry.trainerName);
+	if (eventLabel && entryLabel === eventLabel) return true;
+	if (eventName && entryName === eventName) return true;
+	if (eventName && entryLabel.indexOf(eventName) === 0) return true;
+	return false;
+}
+
+function collectAeLuaFragVictimMatches(entries, event, victimSpecies) {
+	var matches = [];
+	if (!Array.isArray(entries)) return matches;
+	for (var i = 0; i < entries.length; i++) {
+		var entry = parseTrainerPartyEntry(entries[i]);
+		if (!entry || !entry.fullSetName) continue;
+		if (victimSpecies && normalizeAeLuaFragSpecies(entry.pokemonName) !== victimSpecies) continue;
+		if (!aeLuaFragTrainerMatchesEvent(entry, event)) continue;
+		matches.push({
+			setId: entry.fullSetName,
+			fightLabel: entry.trainerLabel,
+			level: entry.setData && entry.setData.level ? parseInt(entry.setData.level, 10) || 0 : 0
+		});
+	}
+	return matches;
+}
+
+function pickAeLuaFragVictimMatch(matches, event) {
+	if (!matches.length) return null;
+	var eventLevel = event && event.victim ? parseInt(event.victim.level, 10) || 0 : 0;
+	if (eventLevel) {
+		for (var i = 0; i < matches.length; i++) {
+			if (matches[i].level === eventLevel) return matches[i];
+		}
+	}
+	return matches[0];
+}
+
+function findAeLuaFragVictimMatch(event) {
+	var victimSpecies = normalizeAeLuaFragSpecies(getAeLuaFragMonSpecies(event && event.victim));
+	if (!victimSpecies) return null;
+	var currentMatches = collectAeLuaFragVictimMatches(CURRENT_TRAINER_POKS || [], event, victimSpecies);
+	var currentMatch = pickAeLuaFragVictimMatch(currentMatches, event);
+	if (currentMatch) return currentMatch;
+	var allMatches = collectAeLuaFragVictimMatches(typeof TR_NAMES === "undefined" ? [] : TR_NAMES, event, victimSpecies);
+	return pickAeLuaFragVictimMatch(allMatches, event);
+}
+
+function getAeLuaFragEventId(event, index) {
+	var rawId = event && event.id ? String(event.id) : "";
+	if (rawId) return rawId;
+	return [event && event.battleKey, event && event.frame, event && event.trainerSymbol, event && event.victim && event.victim.partyIndex, index].join(":");
+}
+
+function importAeLuaFragEventsFromPayload(exportPayload, sourceLabel) {
+	var payload = exportPayload && typeof exportPayload === "object" ? exportPayload : {};
+	var events = Array.isArray(payload.events)
+		? payload.events
+		: (Array.isArray(payload) ? payload : []);
+	if (!events.length) return 0;
+	var importedEvents = getAeLuaFragImportedEventMap();
+	var importedCount = 0;
+	for (var i = 0; i < events.length; i++) {
+		var event = events[i] || {};
+		var eventId = getAeLuaFragEventId(event, i);
+		if (!eventId || importedEvents[eventId]) continue;
+		var killerSetId = findAeLuaFragKillerSetId(event);
+		var victimMatch = findAeLuaFragVictimMatch(event);
+		if (!killerSetId || !victimMatch) continue;
+		addFragKill(killerSetId, victimMatch.setId, victimMatch.fightLabel);
+		importedEvents[eventId] = {
+			importedAt: new Date().toISOString(),
+			killerSetId: killerSetId,
+			victimSetId: victimMatch.setId,
+			fightLabel: victimMatch.fightLabel,
+			source: sourceLabel || "auto"
+		};
+		importedCount += 1;
+	}
+	if (importedCount) {
+		saveAeLuaFragImportedEventMap(importedEvents);
+		if (window.console && typeof window.console.info === "function") {
+			window.console.info("[AstralCalc] imported " + importedCount + " ae_lua frag event" + (importedCount === 1 ? "" : "s"));
+		}
+	}
+	return importedCount;
+}
+
+function importAeLuaFragEvents() {
+	var exportPayload = window.AE_LUA_FRAG_EXPORT && typeof window.AE_LUA_FRAG_EXPORT === "object" ? window.AE_LUA_FRAG_EXPORT : {};
+	if (!Array.isArray(exportPayload.events) && Array.isArray(window.AE_LUA_FRAG_EVENTS)) {
+		exportPayload = {events: window.AE_LUA_FRAG_EVENTS};
+	}
+	return importAeLuaFragEventsFromPayload(exportPayload, "auto");
+}
+
+function parseAeLuaFragExportText(text) {
+	var rawText = String(text || "").trim();
+	if (!rawText) return {events: []};
+	if (rawText.charAt(0) === "{" || rawText.charAt(0) === "[") {
+		return JSON.parse(extractAeLuaFragJsonText(rawText, 0));
+	}
+	var markerPattern = /(?:window\.)?AE_LUA_FRAG_EXPORT\s*=/g;
+	var markerMatch = null;
+	while ((markerMatch = markerPattern.exec(rawText))) {
+		var jsonStart = markerPattern.lastIndex;
+		while (jsonStart < rawText.length && /\s/.test(rawText.charAt(jsonStart))) jsonStart += 1;
+		var openingChar = rawText.charAt(jsonStart);
+		if (openingChar !== "{" && openingChar !== "[") continue;
+		return JSON.parse(extractAeLuaFragJsonText(rawText, jsonStart));
+	}
+	if (/aeFragConfig|aeFragState|outputFileName\s*=\s*"ae_lua_frags\.js"/.test(rawText)) {
+		throw new Error("That looks like ae_lua.lua. Choose the generated ae_lua_frags.js export from js/data or dist/js/data instead.");
+	}
+	throw new Error("Could not find an AE_LUA_FRAG_EXPORT JSON payload in that file.");
+}
+
+function extractAeLuaFragJsonText(rawText, jsonStart) {
+	var stack = [];
+	var inString = false;
+	var isEscaped = false;
+	for (var i = jsonStart; i < rawText.length; i++) {
+		var currentChar = rawText.charAt(i);
+		if (inString) {
+			if (isEscaped) {
+				isEscaped = false;
+			} else if (currentChar === "\\") {
+				isEscaped = true;
+			} else if (currentChar === "\"") {
+				inString = false;
+			}
+			continue;
+		}
+		if (currentChar === "\"") {
+			inString = true;
+		} else if (currentChar === "{" || currentChar === "[") {
+			stack.push(currentChar === "{" ? "}" : "]");
+		} else if (currentChar === "}" || currentChar === "]") {
+			if (!stack.length || stack[stack.length - 1] !== currentChar) {
+				throw new Error("Could not parse the AE_LUA_FRAG_EXPORT JSON payload.");
+			}
+			stack.pop();
+			if (!stack.length) return rawText.substring(jsonStart, i + 1);
+		}
+	}
+	throw new Error("Could not find the end of the AE_LUA_FRAG_EXPORT JSON payload.");
+}
+
+function createAeLuaFragImportButton(id) {
+	var importButton = document.createElement("button");
+	importButton.type = "button";
+	importButton.id = id;
+	importButton.className = "btn calc-side-btn ae-lua-frag-import-button";
+	importButton.textContent = "Import ae_lua";
+	importButton.style.margin = "6px auto 0";
+	importButton.style.display = "block";
+	return importButton;
+}
+
+function ensureAeLuaFragFileInput() {
+	var fileInput = document.getElementById("frags-import-ae-lua-file");
+	if (fileInput) return fileInput;
+	fileInput = document.createElement("input");
+	fileInput.type = "file";
+	fileInput.id = "frags-import-ae-lua-file";
+	fileInput.accept = ".js,.json,.txt,application/json,text/plain,text/javascript";
+	fileInput.hidden = true;
+	(document.body || document.documentElement).appendChild(fileInput);
+	return fileInput;
+}
+
+function ensureAeLuaFragImportControls() {
+	ensureAeLuaFragFileInput();
+	var toolbar = document.querySelector("#frags-side-panel .frags-toolbar");
+	if (toolbar && !document.getElementById("frags-import-ae-lua")) {
+		toolbar.appendChild(createAeLuaFragImportButton("frags-import-ae-lua"));
+	}
+	var importPanels = document.querySelectorAll(".poke-import");
+	for (var i = 0; i < importPanels.length; i++) {
+		var panel = importPanels[i];
+		if (panel.querySelector(".ae-lua-frag-import-button")) continue;
+		var panelButton = createAeLuaFragImportButton("main-import-ae-lua-" + i);
+		var wrapper = panel.querySelector(".dataTables_wrapper");
+		if (wrapper && wrapper.nextSibling) {
+			panel.insertBefore(panelButton, wrapper.nextSibling);
+		} else {
+			panel.appendChild(panelButton);
+		}
+	}
+}
+
+function bindAeLuaFragImportControls() {
+	ensureAeLuaFragImportControls();
+	$(document).off("click.aeluafragimport", ".ae-lua-frag-import-button").on("click.aeluafragimport", ".ae-lua-frag-import-button", function () {
+		var fileInput = ensureAeLuaFragFileInput();
+		if (fileInput) fileInput.click();
+	});
+	$(document).off("change.aeluafragimport", "#frags-import-ae-lua-file").on("change.aeluafragimport", "#frags-import-ae-lua-file", function () {
+		var file = this.files && this.files[0];
+		if (!file) return;
+		var reader = new FileReader();
+		reader.onload = function () {
+			try {
+				var payload = parseAeLuaFragExportText(reader.result || "");
+				var importedCount = importAeLuaFragEventsFromPayload(payload, "upload:" + file.name);
+				renderFragSheet();
+				alert("Imported " + importedCount + " ae_lua frag" + (importedCount === 1 ? "" : "s") + ".");
+			} catch (err) {
+				alert("Could not import ae_lua frags: " + (err && err.message ? err.message : err));
+			}
+		};
+		reader.onerror = function () {
+			alert("Could not read that ae_lua frag file.");
+		};
+		reader.readAsText(file);
+		this.value = "";
+	});
+}
+
+function reloadAeLuaFragExport() {
+	if (aeLuaFragImportBusy) return;
+	aeLuaFragImportBusy = true;
+	if (aeLuaFragImportScriptNode && aeLuaFragImportScriptNode.parentNode) {
+		aeLuaFragImportScriptNode.parentNode.removeChild(aeLuaFragImportScriptNode);
+	}
+	var scriptNode = document.createElement("script");
+	aeLuaFragImportScriptNode = scriptNode;
+	scriptNode.async = true;
+	scriptNode.onload = function () {
+		aeLuaFragImportBusy = false;
+		importAeLuaFragEvents();
+	};
+	scriptNode.onerror = function () {
+		aeLuaFragImportBusy = false;
+	};
+	scriptNode.src = "./js/data/ae_lua_frags.js?ae_lua_frag_ts=" + Date.now();
+	(document.head || document.documentElement).appendChild(scriptNode);
+}
+
+function startAeLuaFragImporter() {
+	if (aeLuaFragImportTimer) return;
+	reloadAeLuaFragExport();
+	aeLuaFragImportTimer = window.setInterval(reloadAeLuaFragExport, AE_LUA_FRAG_IMPORT_INTERVAL_MS);
 }
 
 function removeFragKill(killerSetId, preferredFight) {
@@ -8784,12 +9110,14 @@ $(document).ready(function () {
 	syncTrainerFieldLockButtonStyles();
 	bindPlayerRosterSearchInput();
 	ensureFragHistoryControls();
+	bindAeLuaFragImportControls();
 	bindFieldSideControlsToggle();
 	loadDefaultLists();
 	setupFragSheetAutoRefresh();
 	syncSettingsPanelUi();
 	syncFragRoster();
 	renderFragSheet();
+	startAeLuaFragImporter();
 	$("select.move-selector").select2({
 		dropdownAutoWidth: true,
 		matcher: function (term, text) {
