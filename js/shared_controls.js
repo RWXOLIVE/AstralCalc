@@ -3707,6 +3707,10 @@ function parseAeLuaFragExportText(text) {
 	if (rawText.charAt(0) === "{" || rawText.charAt(0) === "[") {
 		return JSON.parse(extractAeLuaFragJsonText(rawText, 0));
 	}
+	var luaJsonText = extractAeLuaFragLuaJsonText(rawText);
+	if (luaJsonText) {
+		return JSON.parse(luaJsonText);
+	}
 	var markerPattern = /(?:window\.)?AE_LUA_FRAG_EXPORT\s*=/g;
 	var markerMatch = null;
 	while ((markerMatch = markerPattern.exec(rawText))) {
@@ -3757,6 +3761,19 @@ function extractAeLuaFragJsonText(rawText, jsonStart) {
 	throw new Error("Could not find the end of the AE_LUA_FRAG_EXPORT JSON payload.");
 }
 
+function extractAeLuaFragLuaJsonText(rawText) {
+	var markerPattern = /AE_LUA_FRAG_EXPORT_JSON\s*=\s*\[(=*)\[/g;
+	var markerMatch = null;
+	while ((markerMatch = markerPattern.exec(rawText))) {
+		var closeMarker = "]" + markerMatch[1] + "]";
+		var jsonStart = markerPattern.lastIndex;
+		var jsonEnd = rawText.indexOf(closeMarker, jsonStart);
+		if (jsonEnd === -1) continue;
+		return rawText.substring(jsonStart, jsonEnd);
+	}
+	return "";
+}
+
 function createAeLuaFragImportButton(id) {
 	var importButton = document.createElement("button");
 	importButton.type = "button";
@@ -3798,9 +3815,41 @@ function ensureAeLuaFragImportControls() {
 	}
 }
 
+function importAeLuaFragFileText(fileName, fileText) {
+	var payload = parseAeLuaFragExportText(fileText || "");
+	var importedCount = importAeLuaFragEventsFromPayload(payload, "upload:" + fileName);
+	renderFragSheet();
+	alert("Imported " + importedCount + " ae_lua frag" + (importedCount === 1 ? "" : "s") + ".");
+}
+
+function openAeLuaFragNativeFilePicker() {
+	if (typeof window.showOpenFilePicker !== "function") return false;
+	window.showOpenFilePicker({
+		multiple: false,
+		types: [{
+			description: "ae_lua frag export",
+			accept: {"text/plain": [".lua"]}
+		}]
+	}).then(function (handles) {
+		var handle = handles && handles[0];
+		if (!handle || typeof handle.getFile !== "function") return;
+		return handle.getFile();
+	}).then(function (file) {
+		if (!file) return;
+		return file.text().then(function (fileText) {
+			importAeLuaFragFileText(file.name, fileText);
+		});
+	}).catch(function (err) {
+		if (err && err.name === "AbortError") return;
+		alert("Could not import ae_lua frags: " + (err && err.message ? err.message : err));
+	});
+	return true;
+}
+
 function bindAeLuaFragImportControls() {
 	ensureAeLuaFragImportControls();
 	$(document).off("click.aeluafragimport", ".ae-lua-frag-import-button").on("click.aeluafragimport", ".ae-lua-frag-import-button", function () {
+		if (openAeLuaFragNativeFilePicker()) return;
 		var fileInput = ensureAeLuaFragFileInput();
 		if (fileInput) fileInput.click();
 	});
@@ -3811,10 +3860,7 @@ function bindAeLuaFragImportControls() {
 		reader.onload = function () {
 			try {
 				var fileText = reader.result || "";
-				var payload = parseAeLuaFragExportText(fileText);
-				var importedCount = importAeLuaFragEventsFromPayload(payload, "upload:" + file.name);
-				renderFragSheet();
-				alert("Imported " + importedCount + " ae_lua frag" + (importedCount === 1 ? "" : "s") + ".");
+				importAeLuaFragFileText(file.name, fileText);
 			} catch (err) {
 				alert("Could not import ae_lua frags: " + (err && err.message ? err.message : err));
 			}
