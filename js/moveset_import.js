@@ -109,14 +109,17 @@ function normalizeCustomSetStorage(customsets) {
 	if (!customsets || typeof customsets !== "object") return normalized;
 	for (var pokemon in customsets) {
 		if (!Object.prototype.hasOwnProperty.call(customsets, pokemon)) continue;
-		var collapsedSpeciesSets = collapseSpeciesSetMapToSingleEntry(customsets[pokemon]);
-		var collapsedNames = Object.keys(collapsedSpeciesSets);
-		if (!collapsedNames.length) continue;
-		var keptSetName = collapsedNames[0];
-		var keptSet = collapsedSpeciesSets[keptSetName] || {};
-		keptSet.moves = normalizeSavedMoveList(keptSet.moves);
-		collapsedSpeciesSets[keptSetName] = keptSet;
-		normalized[pokemon] = collapsedSpeciesSets;
+		var speciesSets = customsets[pokemon];
+		if (!speciesSets || typeof speciesSets !== "object") continue;
+		var normalizedSpeciesSets = {};
+		for (var setName in speciesSets) {
+			if (!Object.prototype.hasOwnProperty.call(speciesSets, setName)) continue;
+			var normalizedSetName = String(setName || "").trim() || "Custom Set";
+			var normalizedSet = speciesSets[setName] || {};
+			normalizedSet.moves = normalizeSavedMoveList(normalizedSet.moves);
+			normalizedSpeciesSets[normalizedSetName] = normalizedSet;
+		}
+		if (Object.keys(normalizedSpeciesSets).length) normalized[pokemon] = normalizedSpeciesSets;
 	}
 	return normalized;
 }

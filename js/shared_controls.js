@@ -906,6 +906,7 @@ var FRAG_SHEET_STATES_STORAGE_KEY = "astralCalcFragSheetStates";
 var FRAG_SHEET_BACKUPS_STORAGE_KEY = "astralCalcFragSheetBackups";
 var AE_LUA_FRAG_IMPORTED_EVENTS_STORAGE_KEY = "astralCalcAeLuaFragImportedEvents";
 var AE_LUA_FRAG_IMPORT_INTERVAL_MS = 2500;
+var AE_LUA_POKEMON_SET_PREFIX = "ae_lua";
 var TRAINER_FIELD_LOCKS_STORAGE_KEY = "astralCalcTrainerFieldLocks";
 var FIELD_LOCK_GLOBAL_KEY = "global";
 var LAST_ENCOUNTER_STORAGE_KEY = "astralCalcLastEncounter";
@@ -982,6 +983,7 @@ var aeLuaFragWatchedFileHandle = null;
 var aeLuaFragWatchedFileTimer = null;
 var aeLuaFragWatchedFileSignature = "";
 var aeLuaFragLastPayload = null;
+var aeLuaPokemonImportSignature = "";
 var FRAG_UNKNOWN_VICTIM_KEY = "__unknown__";
 var deadOpposingSetMap = {};
 var opposingContextSourceSet = "";
@@ -3818,6 +3820,218 @@ function parseAeLuaFragExportText(text) {
 	throw new Error("Could not find an AE_LUA_FRAG_EXPORT JSON payload in that file.");
 }
 
+function isAeLuaPokemonSetName(setName) {
+	return String(setName || "").trim().toLowerCase().indexOf(AE_LUA_POKEMON_SET_PREFIX) === 0;
+}
+
+function isAeLuaPokemonSetId(setId) {
+	return isAeLuaPokemonSetName(parseSetId(setId).label);
+}
+
+function getAeLuaPokemonPayloadList(payload) {
+	var pokemonPayload = payload && payload.pokemon;
+	var pokemon = [];
+	function appendList(list, location) {
+		if (!Array.isArray(list)) return;
+		for (var i = 0; i < list.length; i++) {
+			var mon = list[i];
+			if (!mon || typeof mon !== "object") continue;
+			var nextMon = Object.assign({}, mon);
+			if (!nextMon.location) nextMon.location = location;
+			pokemon.push(nextMon);
+		}
+	}
+	if (Array.isArray(pokemonPayload)) {
+		appendList(pokemonPayload, "storage");
+	} else if (pokemonPayload && typeof pokemonPayload === "object") {
+		appendList(pokemonPayload.party, "party");
+		appendList(pokemonPayload.storage || pokemonPayload.box || pokemonPayload.pc, "storage");
+	}
+	return pokemon;
+}
+
+function normalizeAeLuaPokemonSpeciesName(mon) {
+	var speciesName = String(mon && (mon.species || mon.name) || "").trim();
+	if (!speciesName) return "";
+	if (typeof checkExeptions === "function") speciesName = checkExeptions(speciesName);
+	return speciesName;
+}
+
+function normalizeAeLuaPokemonSetName(mon, fallbackIndex) {
+	var setName = String(mon && mon.setName || "").trim();
+	if (!setName) {
+		var location = String(mon && mon.location || "").trim().toLowerCase() === "party" ? "Party" : "Box";
+		var slotNumber = parseInt(mon && mon.slotIndex, 10);
+		if (Number.isNaN(slotNumber)) slotNumber = fallbackIndex || 0;
+		setName = AE_LUA_POKEMON_SET_PREFIX + " " + location + " " + (slotNumber + 1);
+	}
+	if (!isAeLuaPokemonSetName(setName)) setName = AE_LUA_POKEMON_SET_PREFIX + " " + setName;
+	return setName;
+}
+
+function normalizeAeLuaPokemonMoves(moves) {
+	var normalized = [];
+	var moveList = Array.isArray(moves) ? moves : [];
+	for (var i = 0; i < 4; i++) {
+		var moveName = String(moveList[i] || "").trim();
+		normalized.push(moveName || "(No Move)");
+	}
+	return normalized;
+}
+
+function aeLuaPokemonNumber(value, fallbackValue) {
+	var parsed = parseInt(value, 10);
+	return Number.isNaN(parsed) ? fallbackValue : parsed;
+}
+
+function aeLuaPokemonStatsToLegacy(statsTable) {
+	var legacy = {};
+	if (!statsTable || typeof statsTable !== "object") return legacy;
+	var statMap = {
+		hp: "hp",
+		atk: "at",
+		attack: "at",
+		at: "at",
+		def: "df",
+		defense: "df",
+		df: "df",
+		spa: "sa",
+		spAttack: "sa",
+		sa: "sa",
+		spd: "sd",
+		spDefense: "sd",
+		sd: "sd",
+		spe: "sp",
+		speed: "sp",
+		sp: "sp"
+	};
+	for (var key in statsTable) {
+		if (!Object.prototype.hasOwnProperty.call(statsTable, key)) continue;
+		var mappedKey = statMap[key];
+		if (!mappedKey) continue;
+		var statValue = parseInt(statsTable[key], 10);
+		if (!Number.isNaN(statValue)) legacy[mappedKey] = statValue;
+	}
+	return legacy;
+}
+
+function buildAeLuaPokemonSet(mon) {
+	var level = aeLuaPokemonNumber(mon && mon.level, 1);
+	level = Math.max(1, Math.min(100, level));
+	var setData = {
+		level: level,
+		evs: aeLuaPokemonStatsToLegacy(mon && mon.evs),
+		ivs: aeLuaPokemonStatsToLegacy(mon && mon.ivs),
+		moves: normalizeAeLuaPokemonMoves(mon && mon.moves),
+		nature: String(mon && mon.nature || "").trim(),
+		item: String(mon && mon.item || "").trim(),
+		isCustomSet: true
+	};
+	var ability = String(mon && mon.ability || "").trim();
+	var nickname = String(mon && mon.nickname || "").trim();
+	if (ability) setData.ability = ability;
+	if (nickname) setData.nickname = nickname;
+	return setData;
+}
+
+function getAeLuaPokemonPayloadSignature(pokemon) {
+	return JSON.stringify((pokemon || []).map(function (mon) {
+		return {
+			location: mon.location || "",
+			slotIndex: aeLuaPokemonNumber(mon.slotIndex, 0),
+			species: normalizeAeLuaPokemonSpeciesName(mon),
+			setName: normalizeAeLuaPokemonSetName(mon, 0),
+			level: aeLuaPokemonNumber(mon.level, 1),
+			ability: String(mon.ability || ""),
+			item: String(mon.item || ""),
+			nature: String(mon.nature || ""),
+			moves: normalizeAeLuaPokemonMoves(mon.moves),
+			ivs: aeLuaPokemonStatsToLegacy(mon.ivs),
+			evs: aeLuaPokemonStatsToLegacy(mon.evs),
+			personality: mon.personality || 0,
+			otId: mon.otId || 0
+		};
+	}));
+}
+
+function removeAeLuaPokemonCustomSets(customsets) {
+	for (var speciesName in customsets) {
+		if (!Object.prototype.hasOwnProperty.call(customsets, speciesName)) continue;
+		var speciesSets = customsets[speciesName];
+		if (!speciesSets || typeof speciesSets !== "object") continue;
+		for (var setName in speciesSets) {
+			if (!Object.prototype.hasOwnProperty.call(speciesSets, setName)) continue;
+			if (isAeLuaPokemonSetName(setName)) delete speciesSets[setName];
+		}
+		if (!Object.keys(speciesSets).length) delete customsets[speciesName];
+	}
+}
+
+function removeAeLuaPokemonSetIds(setIds) {
+	var source = Array.isArray(setIds) ? setIds : [];
+	return source.filter(function (setId) {
+		return !isAeLuaPokemonSetId(setId);
+	});
+}
+
+function importAeLuaPokemonFromPayload(payload) {
+	var pokemon = getAeLuaPokemonPayloadList(payload);
+	if (!pokemon.length) return 0;
+	var signature = getAeLuaPokemonPayloadSignature(pokemon);
+	if (signature === aeLuaPokemonImportSignature) return 0;
+	aeLuaPokemonImportSignature = signature;
+
+	var customsets = safeJsonParse(localStorage.getItem("customsets"), {});
+	if (!customsets || typeof customsets !== "object" || Array.isArray(customsets)) customsets = {};
+	removeAeLuaPokemonCustomSets(customsets);
+
+	var teamSetIds = [];
+	var boxSetIds = [];
+	var importedCount = 0;
+	for (var i = 0; i < pokemon.length; i++) {
+		var mon = pokemon[i];
+		var speciesName = normalizeAeLuaPokemonSpeciesName(mon);
+		if (!speciesName) continue;
+		var setName = normalizeAeLuaPokemonSetName(mon, i);
+		var setId = speciesName + " (" + setName + ")";
+		if (!customsets[speciesName] || typeof customsets[speciesName] !== "object") customsets[speciesName] = {};
+		customsets[speciesName][setName] = buildAeLuaPokemonSet(mon);
+		if (speciesName === "Aegislash-Blade") {
+			if (!customsets["Aegislash-Shield"] || typeof customsets["Aegislash-Shield"] !== "object") customsets["Aegislash-Shield"] = {};
+			customsets["Aegislash-Shield"][setName] = customsets[speciesName][setName];
+		}
+		if (String(mon.location || "").toLowerCase() === "party") {
+			teamSetIds.push(setId);
+		} else {
+			boxSetIds.push(setId);
+		}
+		importedCount += 1;
+	}
+
+	if (!importedCount) return 0;
+	if (typeof updateDex === "function") {
+		updateDex(customsets);
+	} else {
+		localStorage.setItem("customsets", JSON.stringify(customsets));
+	}
+
+	var currentLayout = normalizeRosterLayout(collectPlayerRosterLayout());
+	var nextLayout = {
+		team: teamSetIds.concat(removeAeLuaPokemonSetIds(currentLayout.team)),
+		box: boxSetIds.concat(removeAeLuaPokemonSetIds(currentLayout.box)),
+		box2: removeAeLuaPokemonSetIds(currentLayout.box2),
+		trash: removeAeLuaPokemonSetIds(currentLayout.trash)
+	};
+	applyPlayerRosterLayout(nextLayout);
+	applyPlayerRosterSearchFilter();
+	syncFragRoster({pruneMissing: true, allowEmptyPrune: true});
+	if (typeof performCalculations === "function") performCalculations();
+	if (typeof allPokemon === "function" && typeof $ === "function") {
+		$(allPokemon("#importedSetsOptions")).css("display", "inline");
+	}
+	return importedCount;
+}
+
 function isAeLuaFragSourceText(text) {
 	return /aeFragConfig|aeFragState|AE_LUA_SELF_EXPORT_START/.test(String(text || ""));
 }
@@ -3921,15 +4135,19 @@ function importAeLuaFragFileText(fileName, fileText, options) {
 	options = options || {};
 	var payload = parseAeLuaFragExportText(fileText || "");
 	var sourcePrefix = options.sourcePrefix || "upload:";
+	var pokemonCount = importAeLuaPokemonFromPayload(payload);
 	var importedCount = importAeLuaFragEventsFromPayload(payload, sourcePrefix + fileName);
 	renderFragSheet();
 	if (!options.silent) {
 		var suffix = options.watching
 			? " Watching ae_lua.lua for updates while this page stays open."
 			: (options.oneTime ? " This browser only allowed a one-time import, so it cannot auto-update this file." : "");
-		alert("Imported " + importedCount + " ae_lua update" + (importedCount === 1 ? "" : "s") + "." + suffix);
+		var importParts = [];
+		if (importedCount) importParts.push(importedCount + " frag update" + (importedCount === 1 ? "" : "s"));
+		if (pokemonCount) importParts.push(pokemonCount + " Pokemon");
+		alert("Imported " + (importParts.length ? importParts.join(" and ") : "0 ae_lua updates") + "." + suffix);
 	}
-	return importedCount;
+	return importedCount + pokemonCount;
 }
 
 function stopAeLuaFragWatchedFileImport() {
@@ -3939,6 +4157,7 @@ function stopAeLuaFragWatchedFileImport() {
 	}
 	aeLuaFragWatchedFileHandle = null;
 	aeLuaFragWatchedFileSignature = "";
+	aeLuaPokemonImportSignature = "";
 	setAeLuaFragWatchUi(false);
 }
 
