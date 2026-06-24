@@ -3910,9 +3910,9 @@ function ensureAeLuaFragImportControls() {
 function setAeLuaFragWatchUi(isWatching) {
 	var buttons = document.querySelectorAll(".ae-lua-frag-import-button");
 	for (var i = 0; i < buttons.length; i++) {
-		buttons[i].textContent = isWatching ? "Watching ae_lua" : "Import ae_lua";
+		buttons[i].textContent = isWatching ? "Imported! ae_lua" : "Import ae_lua";
 		buttons[i].title = isWatching
-			? "Watching the selected ae_lua.lua while this page stays open"
+			? "ae_lua.lua successfully imported"
 			: "Select ae_lua.lua";
 	}
 }
