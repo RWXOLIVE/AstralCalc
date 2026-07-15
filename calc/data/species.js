@@ -1340,7 +1340,7 @@ var GSC_PATCH = {
     },
     Phanpy: {
         types: ['Ground'],
-        bs: { hp: 90, at: 90, df: 90, sa: 30, sd: 60, sp: 45 },
+        bs: { hp: 90, at: 90, df: 90, sa: 30, sd: 40, sp: 45 },
         weightkg: 33.5,
         nfe: true
     },
@@ -5061,7 +5061,7 @@ var XY_PATCH = {
     Unfezant: { bs: { at: 115 } },
     Venusaur: { otherFormes: ['Venusaur-Mega'] },
     Starmie: { otherFormes: ['Starmie-Mega'] },
-    Victreebel: { bs: { sd: 100 }, otherFormes: ['Victreebel-Mega'] },
+    Victreebel: { bs: { sd: 70 }, otherFormes: ['Victreebel-Mega'] },
     Vileplume: { bs: { sa: 110 } },
     Whimsicott: { types: ['Grass', 'Fairy'] },
     Wigglytuff: { types: ['Normal', 'Fairy'], bs: { sa: 95 } },
