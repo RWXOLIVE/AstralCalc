@@ -908,6 +908,7 @@ var FRAG_SHEET_STATES_STORAGE_KEY = "astralCalcFragSheetStates";
 var FRAG_SHEET_BACKUPS_STORAGE_KEY = "astralCalcFragSheetBackups";
 var AE_LUA_FRAG_IMPORTED_EVENTS_STORAGE_KEY = "astralCalcAeLuaFragImportedEvents";
 var AE_LUA_FRAG_IMPORT_INTERVAL_MS = 2500;
+var AE_LUA_FRAG_LIVE_URL = "http://127.0.0.1:31124/frags";
 var AE_LUA_POKEMON_SET_PREFIX = "ae_lua";
 var TRAINER_FIELD_LOCKS_STORAGE_KEY = "astralCalcTrainerFieldLocks";
 var FIELD_LOCK_GLOBAL_KEY = "global";
@@ -986,6 +987,8 @@ var aeLuaFragWatchedFileTimer = null;
 var aeLuaFragWatchedFileSignature = "";
 var aeLuaFragLastPayload = null;
 var aeLuaPokemonImportSignature = "";
+var aeLuaFragLiveTimer = null;
+var aeLuaFragLiveConnected = false;
 var FRAG_UNKNOWN_VICTIM_KEY = "__unknown__";
 var deadOpposingSetMap = {};
 var opposingContextSourceSet = "";
@@ -3658,6 +3661,7 @@ function aeLuaFragTrainerMatchesEvent(entry, event) {
 	var eventName = normalizeAeLuaFragText(event && event.trainerName);
 	var entryLabel = normalizeAeLuaFragText(entry && entry.trainerLabel);
 	var entryName = normalizeAeLuaFragText(entry && entry.trainerName);
+	if (!eventLabel && !eventName) return true;
 	if (eventLabel && entryLabel === eventLabel) return true;
 	if (eventName && entryName === eventName) return true;
 	if (eventName && entryLabel.indexOf(eventName) === 0) return true;
@@ -3838,6 +3842,40 @@ function parseAeLuaFragExportText(text) {
 		throw new Error("That ae_lua.lua does not have a live export block yet. Load this same ae_lua.lua in the emulator once, then import it again.");
 	}
 	throw new Error("Could not find an AE_LUA_FRAG_EXPORT JSON payload in that file.");
+}
+
+function setAeLuaFragLiveUi(isConnected) {
+	aeLuaFragLiveConnected = !!isConnected;
+	var buttons = document.querySelectorAll(".ae-lua-frag-import-button");
+	for (var i = 0; i < buttons.length; i++) {
+		buttons[i].textContent = isConnected ? "ae_lua connected" : "Connect ae_lua";
+		buttons[i].title = isConnected
+			? "Live frag updates are arriving from mGBA"
+			: "Start ae_lua.lua in mGBA, then connect";
+	}
+}
+
+function pollAeLuaFragLiveLink(showError) {
+	return fetch(AE_LUA_FRAG_LIVE_URL, {cache: "no-store"}).then(function (response) {
+		if (!response.ok) throw new Error("HTTP " + response.status);
+		return response.json();
+	}).then(function (payload) {
+		setAeLuaFragLiveUi(true);
+		importAeLuaFragEventsFromPayload(payload, "live");
+		return true;
+	}).catch(function () {
+		setAeLuaFragLiveUi(false);
+		if (showError) alert("Could not connect to ae_lua. Start the script in mGBA with Astral Emerald loaded, then try again.");
+		return false;
+	});
+}
+
+function startAeLuaFragLiveLink(showError) {
+	if (aeLuaFragLiveTimer) window.clearInterval(aeLuaFragLiveTimer);
+	pollAeLuaFragLiveLink(!!showError);
+	aeLuaFragLiveTimer = window.setInterval(function () {
+		pollAeLuaFragLiveLink(false);
+	}, AE_LUA_FRAG_IMPORT_INTERVAL_MS);
 }
 
 function isAeLuaPokemonSetName(setName) {
@@ -4105,7 +4143,7 @@ function createAeLuaFragImportButton(id) {
 	importButton.type = "button";
 	importButton.id = id;
 	importButton.className = "btn calc-side-btn ae-lua-frag-import-button";
-	importButton.textContent = "Import ae_lua";
+	importButton.textContent = "Connect ae_lua";
 	return importButton;
 }
 
@@ -4238,9 +4276,7 @@ function openAeLuaFragNativeFilePicker() {
 function bindAeLuaFragImportControls() {
 	ensureAeLuaFragImportControls();
 	$(document).off("click.aeluafragimport", ".ae-lua-frag-import-button").on("click.aeluafragimport", ".ae-lua-frag-import-button", function () {
-		if (openAeLuaFragNativeFilePicker()) return;
-		var fileInput = ensureAeLuaFragFileInput();
-		if (fileInput) fileInput.click();
+		startAeLuaFragLiveLink(!aeLuaFragLiveConnected);
 	});
 	$(document).off("change.aeluafragimport", "#frags-import-ae-lua-file").on("change.aeluafragimport", "#frags-import-ae-lua-file", function () {
 		var file = this.files && this.files[0];
@@ -4261,6 +4297,7 @@ function bindAeLuaFragImportControls() {
 		reader.readAsText(file);
 		this.value = "";
 	});
+	startAeLuaFragLiveLink(false);
 }
 
 function removeFragKill(killerSetId, preferredFight) {
