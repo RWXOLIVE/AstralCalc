@@ -3663,8 +3663,13 @@ function aeLuaFragTrainerMatchesEvent(entry, event) {
 	var entryName = normalizeAeLuaFragText(entry && entry.trainerName);
 	if (!eventLabel && !eventName) return true;
 	if (eventLabel && entryLabel === eventLabel) return true;
+	// The game identifies trainers by class/name (for example "Youngster Josh"),
+	// while calc set labels add a location after " | ". Match that trainer-name
+	// portion without requiring the Lua to know the calc's route label.
+	if (eventLabel && entryName === eventLabel) return true;
+	if (eventLabel && entryLabel.indexOf(eventLabel + " | ") === 0) return true;
 	if (eventName && entryName === eventName) return true;
-	if (eventName && entryLabel.indexOf(eventName) === 0) return true;
+	if (eventName && entryLabel.indexOf(eventName + " | ") === 0) return true;
 	return false;
 }
 
