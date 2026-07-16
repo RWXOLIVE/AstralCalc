@@ -4040,6 +4040,45 @@ function removeAeLuaPokemonSetIds(setIds) {
 	});
 }
 
+function findAeLuaExistingRosterSetId(mon, layout, usedSetIds) {
+	var species = normalizeAeLuaFragSpecies(normalizeAeLuaPokemonSpeciesName(mon));
+	if (!species) return "";
+	var nickname = normalizeAeLuaFragText(mon && mon.nickname);
+	var candidates = [];
+	var zones = ["team", "box", "box2", "trash"];
+	for (var zoneIndex = 0; zoneIndex < zones.length; zoneIndex++) {
+		var zoneSetIds = layout && Array.isArray(layout[zones[zoneIndex]]) ? layout[zones[zoneIndex]] : [];
+		for (var setIndex = 0; setIndex < zoneSetIds.length; setIndex++) {
+			var setId = String(zoneSetIds[setIndex] || "").trim();
+			if (!setId || usedSetIds[setId] || isAeLuaPokemonSetId(setId)) continue;
+			if (normalizeAeLuaFragSpecies(parseSetId(setId).species) !== species) continue;
+			var option = typeof getSetOptionById === "function" ? getSetOptionById(setId) : null;
+			var candidateNickname = normalizeAeLuaFragText(option && option.nickname ? option.nickname : parseSetId(setId).label);
+			candidates.push({
+				setId: setId,
+				nicknameMatch: !!nickname && candidateNickname === nickname,
+				fragTotal: getFragTotalForSet(setId)
+			});
+		}
+	}
+	if (!candidates.length) return "";
+	candidates.sort(function (left, right) {
+		if (left.nicknameMatch !== right.nicknameMatch) return left.nicknameMatch ? -1 : 1;
+		if (left.fragTotal !== right.fragTotal) return right.fragTotal - left.fragTotal;
+		return left.setId.localeCompare(right.setId);
+	});
+	// A nickname uniquely identifies duplicate species. Without one, only reuse
+	// an existing identity when there is a single unambiguous species match.
+	if (nickname && candidates[0].nicknameMatch) return candidates[0].setId;
+	return candidates.length === 1 ? candidates[0].setId : "";
+}
+
+function removeImportedPokemonSetIds(setIds, importedSetIds) {
+	return removeAeLuaPokemonSetIds(setIds).filter(function (setId) {
+		return !importedSetIds[setId];
+	});
+}
+
 function importAeLuaPokemonFromPayload(payload) {
 	var pokemon = getAeLuaPokemonPayloadList(payload);
 	var hasPokemonPayload = !!(payload && Object.prototype.hasOwnProperty.call(payload, "pokemon"));
@@ -4051,6 +4090,9 @@ function importAeLuaPokemonFromPayload(payload) {
 	var customsets = safeJsonParse(localStorage.getItem("customsets"), {});
 	if (!customsets || typeof customsets !== "object" || Array.isArray(customsets)) customsets = {};
 	removeAeLuaPokemonCustomSets(customsets);
+	var currentLayout = normalizeRosterLayout(collectPlayerRosterLayout());
+	var usedExistingSetIds = {};
+	var importedSetIds = {};
 
 	var teamSetIds = [];
 	var boxSetIds = [];
@@ -4059,8 +4101,11 @@ function importAeLuaPokemonFromPayload(payload) {
 		var mon = pokemon[i];
 		var speciesName = normalizeAeLuaPokemonSpeciesName(mon);
 		if (!speciesName) continue;
-		var setName = normalizeAeLuaPokemonSetName(mon, i);
-		var setId = speciesName + " (" + setName + ")";
+		var existingSetId = findAeLuaExistingRosterSetId(mon, currentLayout, usedExistingSetIds);
+		var setName = existingSetId ? parseSetId(existingSetId).label : normalizeAeLuaPokemonSetName(mon, i);
+		var setId = existingSetId || (speciesName + " (" + setName + ")");
+		if (existingSetId) usedExistingSetIds[existingSetId] = true;
+		importedSetIds[setId] = true;
 		if (!customsets[speciesName] || typeof customsets[speciesName] !== "object") customsets[speciesName] = {};
 		customsets[speciesName][setName] = buildAeLuaPokemonSet(mon);
 		if (speciesName === "Aegislash-Blade") {
@@ -4081,12 +4126,11 @@ function importAeLuaPokemonFromPayload(payload) {
 		localStorage.setItem("customsets", JSON.stringify(customsets));
 	}
 
-	var currentLayout = normalizeRosterLayout(collectPlayerRosterLayout());
 	var nextLayout = {
-		team: teamSetIds.concat(removeAeLuaPokemonSetIds(currentLayout.team)),
-		box: boxSetIds.concat(removeAeLuaPokemonSetIds(currentLayout.box)),
-		box2: removeAeLuaPokemonSetIds(currentLayout.box2),
-		trash: removeAeLuaPokemonSetIds(currentLayout.trash)
+		team: teamSetIds.concat(removeImportedPokemonSetIds(currentLayout.team, importedSetIds)),
+		box: boxSetIds.concat(removeImportedPokemonSetIds(currentLayout.box, importedSetIds)),
+		box2: removeImportedPokemonSetIds(currentLayout.box2, importedSetIds),
+		trash: removeImportedPokemonSetIds(currentLayout.trash, importedSetIds)
 	};
 	applyPlayerRosterLayout(nextLayout);
 	applyPlayerRosterSearchFilter();

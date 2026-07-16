@@ -2179,6 +2179,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Extrasensory","Energy Ball","Sludge Bomb","Grassy Glide"]
+        },
+        "Parasol Lady Madeline | Route 113": {
+            "index": "0000000477",
+            "level": 58,
+            "ability": "Serene Grace",
+            "item": "Assault Vest",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sludge Bomb","Extrasensory","Petal Dance","Shadow Ball"]
         }
     },
     "Lickilicky": {
@@ -7389,19 +7400,6 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Body Press","Aqua Tail","Dragon Tail","Stealth Rock"]
-        }
-    },
-    "Roserade": {
-    "Parasol Lady Madeline | Route 113": {
-            "index": "0000000477",
-            "level": 58,
-            "ability": "Serene Grace",
-            "item": "Assault Vest",
-            "nature": "Modest",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Sludge Bomb","Extrasensory","Petal Dance","Shadow Ball"]
         }
     },
     "Archeops": {
