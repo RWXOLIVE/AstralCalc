@@ -8227,13 +8227,13 @@ function getSideResidualChipDisplay(pokeInfo, pokemon, opposingPokemon, field) {
 			hpDelta -= Math.floor((getSelectedPokeInfoToxicCounter(pokeInfo) * maxHP) / 16);
 			sources.push("toxic damage");
 		}
-	} else if (statusValue === "Burned") {
-		if (pokemon.hasAbility("Heatproof")) {
+	} else if (statusValue === "Burned" || statusValue === "Frostbite") {
+		if (statusValue === "Burned" && pokemon.hasAbility("Heatproof")) {
 			hpDelta -= Math.floor(maxHP / (gen > 6 ? 32 : 16));
 			sources.push("reduced burn damage");
 		} else if (!pokemon.hasAbility("Magic Guard")) {
 			hpDelta -= Math.floor(maxHP / (gen === 1 || gen > 6 ? 16 : 8));
-			sources.push("burn damage");
+			sources.push(statusValue === "Frostbite" ? "frostbite damage" : "burn damage");
 		}
 	}
 	if ((statusValue === "Asleep" || pokemon.hasAbility("Comatose")) &&
