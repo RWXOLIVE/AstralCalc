@@ -3863,6 +3863,7 @@ function pollAeLuaFragLiveLink(showError) {
 		return response.json();
 	}).then(function (payload) {
 		setAeLuaFragLiveUi(true);
+		importAeLuaPokemonFromPayload(payload);
 		importAeLuaFragEventsFromPayload(payload, "live");
 		return true;
 	}).catch(function () {
