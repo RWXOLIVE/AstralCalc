@@ -70,7 +70,8 @@ var CALC_STATUS = {
 	'Badly Poisoned': 'tox',
 	'Burned': 'brn',
 	'Asleep': 'slp',
-	'Frozen': 'frz'
+	'Frozen': 'frz',
+	'Frostbite': 'frb'
 };
 
 function legacyStatToStat(st) {
@@ -306,6 +307,7 @@ function normalizeSetStatusValue(value) {
 	if (normalized === "paralyze" || normalized === "paralyzed" || normalized === "par") return "Paralyzed";
 	if (normalized === "sleep" || normalized === "asleep" || normalized === "slp") return "Asleep";
 	if (normalized === "freeze" || normalized === "frozen" || normalized === "frz") return "Frozen";
+	if (normalized === "frostbite" || normalized === "frostbitten" || normalized === "frb") return "Frostbite";
 	return "";
 }
 function applySetStatus(poke, set) {

@@ -6626,7 +6626,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Fake Out","Icicle Spear","Glacial Assault","Acrobatics"]
+            "moves": ["Fake Out","Icicle Spear","Close Combat","Acrobatics"]
         },
     "Fisherman Claude | Route 114": {
             "index": "0000000508",
