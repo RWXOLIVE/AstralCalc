@@ -3046,7 +3046,25 @@ function getStoredFragSheetBackups() {
 }
 
 function saveStoredFragSheetBackups(backups) {
-	localStorage.setItem(FRAG_SHEET_BACKUPS_STORAGE_KEY, JSON.stringify(Array.isArray(backups) ? backups : []));
+	var pendingBackups = Array.isArray(backups) ? backups.slice() : [];
+	while (pendingBackups.length) {
+		try {
+			localStorage.setItem(FRAG_SHEET_BACKUPS_STORAGE_KEY, JSON.stringify(pendingBackups));
+			return true;
+		} catch (err) {
+			// Backups include custom sets and can exceed the browser's per-site
+			// quota. Prefer dropping the oldest backup to breaking the action
+			// which triggered this best-effort safety snapshot.
+			pendingBackups.pop();
+		}
+	}
+	try {
+		localStorage.removeItem(FRAG_SHEET_BACKUPS_STORAGE_KEY);
+	} catch (err) {}
+	if (window.console && typeof window.console.warn === "function") {
+		window.console.warn("[AstralCalc] Frag backup skipped because browser storage is full.");
+	}
+	return false;
 }
 
 function createFragSnapshotRecord(snapshotName, sourceLabel) {
@@ -3978,7 +3996,8 @@ function removeAeLuaPokemonSetIds(setIds) {
 
 function importAeLuaPokemonFromPayload(payload) {
 	var pokemon = getAeLuaPokemonPayloadList(payload);
-	if (!pokemon.length) return 0;
+	var hasPokemonPayload = !!(payload && Object.prototype.hasOwnProperty.call(payload, "pokemon"));
+	if (!hasPokemonPayload) return 0;
 	var signature = getAeLuaPokemonPayloadSignature(pokemon);
 	if (signature === aeLuaPokemonImportSignature) return 0;
 	aeLuaPokemonImportSignature = signature;
@@ -4010,7 +4029,6 @@ function importAeLuaPokemonFromPayload(payload) {
 		importedCount += 1;
 	}
 
-	if (!importedCount) return 0;
 	if (typeof updateDex === "function") {
 		updateDex(customsets);
 	} else {
