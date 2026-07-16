@@ -4267,7 +4267,10 @@ function openAeLuaFragNativeFilePicker() {
 	}).then(function (handles) {
 		var handle = handles && handles[0];
 		if (!handle || typeof handle.getFile !== "function") return;
-		startAeLuaFragWatchedFileImport(handle);
+		return handle.getFile().then(function (file) {
+			if (!file || !/\.lua$/i.test(file.name || "")) throw new Error("Please select ae_lua.lua.");
+			startAeLuaFragLiveLink(true);
+		});
 	}).catch(function (err) {
 		if (err && err.name === "AbortError") return;
 		alert("Could not import ae_lua: " + (err && err.message ? err.message : err));
@@ -4278,20 +4281,17 @@ function openAeLuaFragNativeFilePicker() {
 function bindAeLuaFragImportControls() {
 	ensureAeLuaFragImportControls();
 	$(document).off("click.aeluafragimport", ".ae-lua-frag-import-button").on("click.aeluafragimport", ".ae-lua-frag-import-button", function () {
-		startAeLuaFragLiveLink(!aeLuaFragLiveConnected);
+		if (aeLuaFragLiveConnected) return;
+		if (openAeLuaFragNativeFilePicker()) return;
+		var fileInput = ensureAeLuaFragFileInput();
+		if (fileInput) fileInput.click();
 	});
 	$(document).off("change.aeluafragimport", "#frags-import-ae-lua-file").on("change.aeluafragimport", "#frags-import-ae-lua-file", function () {
 		var file = this.files && this.files[0];
 		if (!file) return;
 		var reader = new FileReader();
 		reader.onload = function () {
-			try {
-				var fileText = reader.result || "";
-				importAeLuaFragFileText(file.name, fileText, {oneTime: true});
-				stopAeLuaFragWatchedFileImport();
-			} catch (err) {
-				alert("Could not import ae_lua: " + (err && err.message ? err.message : err));
-			}
+			startAeLuaFragLiveLink(true);
 		};
 		reader.onerror = function () {
 			alert("Could not read ae_lua.lua.");
@@ -4299,7 +4299,6 @@ function bindAeLuaFragImportControls() {
 		reader.readAsText(file);
 		this.value = "";
 	});
-	startAeLuaFragLiveLink(false);
 }
 
 function removeFragKill(killerSetId, preferredFight) {
