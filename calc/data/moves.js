@@ -1155,6 +1155,14 @@ var DPP_PATCH = {
         critRatio: 2,
         category: 'Physical'
     },
+    'Iron Cleave': {
+        bp: 70,
+        type: 'Steel',
+        makesContact: true,
+        critRatio: 2,
+        category: 'Physical',
+        secondaries: true
+    },
     'Poison Jab': {
         bp: 80,
         type: 'Poison',

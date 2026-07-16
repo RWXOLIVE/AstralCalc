@@ -2649,7 +2649,7 @@ var ADV_PATCH = {
     },
     Swellow: {
         types: ['Normal', 'Flying'],
-        bs: { hp: 60, at: 90, df: 60, sa: 75, sd: 50, sp: 125 },
+        bs: { hp: 60, at: 85, df: 60, sa: 75, sd: 50, sp: 125 },
         weightkg: 19.8,
         abilities: { 0: 'Guts' }
     },
@@ -4002,7 +4002,7 @@ var BW_PATCH = {
     },
     Ducklett: {
         types: ['Water', 'Flying'],
-        bs: { hp: 62, at: 54, df: 50, sa: 54, sd: 50, sp: 79 },
+        bs: { hp: 62, at: 54, df: 45, sa: 54, sd: 50, sp: 79 },
         weightkg: 5.5,
         nfe: true,
         abilities: { 0: 'Keen Eye' }
@@ -4733,7 +4733,7 @@ var BW_PATCH = {
     },
     Swanna: {
         types: ['Water', 'Flying'],
-        bs: { hp: 75, at: 87, df: 63, sa: 87, sd: 63, sp: 98 },
+        bs: { hp: 81, at: 103, df: 63, sa: 103, sd: 63, sp: 100 },
         weightkg: 24.2,
         abilities: { 0: 'Keen Eye' }
     },

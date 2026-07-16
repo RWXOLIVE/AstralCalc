@@ -6449,6 +6449,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Eruption","Flamethrower","Earthquake","Scald"]
+        },
+        "Parasol Lady Madeline | Route 113": {
+            "index": "0000000476",
+            "level": 59,
+            "ability": "Analytic",
+            "item": "Quick Claw",
+            "prehp": "150",
+            "nature": "Sassy",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Searing Shot","Steam Eruption","Earthquake","Explosion"]
         }
     },
     "Typhlosion": {
@@ -7377,20 +7389,6 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Body Press","Aqua Tail","Dragon Tail","Stealth Rock"]
-        }
-    },
-    "Camerupt": {
-    "Parasol Lady Madeline | Route 113": {
-            "index": "0000000476",
-            "level": 59,
-            "ability": "Analytic",
-            "item": "Quick Claw",
-            "prehp": "150",
-            "nature": "Sassy",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Searing Shot","Steam Eruption","Earthquake","Explosion"]
         }
     },
     "Roserade": {

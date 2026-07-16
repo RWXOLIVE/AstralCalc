@@ -84,6 +84,17 @@ describe('calc', function () {
                 expect(frostbitten.range()).toEqual(burned.range());
             });
         });
+        (0, helper_1.inGens)(5, 9, function (_a) {
+            var gen = _a.gen, calculate = _a.calculate, Pokemon = _a.Pokemon, Move = _a.Move;
+            test("Frostbite activates Facade and Guts (gen ".concat(gen, ")"), function () {
+                var defender = Pokemon('Blastoise');
+                var facade = calculate(Pokemon('Machamp', { ability: 'No Guard', status: 'frb' }), defender, Move('Facade'));
+                var plainFacade = calculate(Pokemon('Machamp', { ability: 'No Guard' }), Pokemon('Blastoise'), Move('Facade'));
+                var guts = calculate(Pokemon('Machamp', { ability: 'Guts', status: 'frb' }), Pokemon('Blastoise'), Move('Facade'));
+                expect(facade.range()[0]).toBeGreaterThan(plainFacade.range()[1]);
+                expect(guts.range()[0]).toBeGreaterThan(facade.range()[1]);
+            });
+        });
         (0, helper_1.inGens)(4, 9, function (_a) {
             var gen = _a.gen, calculate = _a.calculate, Pokemon = _a.Pokemon, Move = _a.Move, Field = _a.Field;
             test("Trick Room reverses move order checks (gen ".concat(gen, ")"), function () {

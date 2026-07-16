@@ -308,6 +308,7 @@
     "gigaimpact": {"accuracy": 90, "pp": 5},
     "gigatonhammer": {"accuracy": 100, "pp": 5},
     "gigavolthavoc": {"accuracy": 0, "pp": 1},
+    "glacialassault": {"accuracy": 100, "pp": 5},
     "glaciallance": {"accuracy": 100, "pp": 5},
     "glaciate": {"accuracy": 100, "pp": 10},
     "glaiverush": {"accuracy": 100, "pp": 5},
