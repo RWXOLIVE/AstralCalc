@@ -4154,6 +4154,9 @@ function setAeLuaFragWatchUi(isWatching) {
 function importAeLuaFragFileText(fileName, fileText, options) {
 	options = options || {};
 	var payload = parseAeLuaFragExportText(fileText || "");
+	if (payload && payload.uninitialized) {
+		throw new Error("This ae_lua.lua has not been initialized for your save yet. Load it in mGBA first, then import the same file again.");
+	}
 	var sourcePrefix = options.sourcePrefix || "upload:";
 	var pokemonCount = importAeLuaPokemonFromPayload(payload);
 	var importedCount = importAeLuaFragEventsFromPayload(payload, sourcePrefix + fileName);
