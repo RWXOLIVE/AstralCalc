@@ -3856,7 +3856,9 @@ function setAeLuaFragLiveUi(isConnected) {
 }
 
 function pollAeLuaFragLiveLink(showError) {
-	return fetch(AE_LUA_FRAG_LIVE_URL, {cache: "no-store"}).then(function (response) {
+	var trainerLabel = String(getCurrentFightLabel() || "Trainer");
+	var liveUrl = AE_LUA_FRAG_LIVE_URL + "?trainer=" + encodeURIComponent(trainerLabel);
+	return fetch(liveUrl, {cache: "no-store"}).then(function (response) {
 		if (!response.ok) throw new Error("HTTP " + response.status);
 		return response.json();
 	}).then(function (payload) {
