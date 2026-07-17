@@ -908,7 +908,8 @@ var FRAG_SHEET_STATES_STORAGE_KEY = "astralCalcFragSheetStates";
 var FRAG_SHEET_BACKUPS_STORAGE_KEY = "astralCalcFragSheetBackups";
 var AE_LUA_FRAG_IMPORTED_EVENTS_STORAGE_KEY = "astralCalcAeLuaFragImportedEvents";
 var AE_LUA_FRAG_IMPORT_INTERVAL_MS = 2500;
-var AE_LUA_FRAG_LIVE_URL = "http://127.0.0.1:31124/frags";
+var AE_LUA_FRAG_LIVE_URL = "http://127.0.0.1:31124/update";
+var AE_LUA_FRAG_ACK_URL = "http://127.0.0.1:31124/frag";
 var AE_LUA_POKEMON_SET_PREFIX = "ae_lua";
 var TRAINER_FIELD_LOCKS_STORAGE_KEY = "astralCalcTrainerFieldLocks";
 var FIELD_LOCK_GLOBAL_KEY = "global";
@@ -3605,8 +3606,6 @@ function getAeLuaFragSetNickname(setId) {
 }
 
 function findAeLuaFragKillerSetId(event) {
-	var killerSpecies = normalizeAeLuaFragSpecies(getAeLuaFragMonSpecies(event && event.killer));
-	if (!killerSpecies) return "";
 	var partyIndex = event && event.killer ? parseInt(event.killer.partyIndex, 10) : NaN;
 	if (!Number.isNaN(partyIndex)) {
 		var partyLayout = collectPlayerRosterLayout().team || [];
@@ -3614,6 +3613,8 @@ function findAeLuaFragKillerSetId(event) {
 		// differ from the calculator's base-species set while it is on the field.
 		if (partyLayout[partyIndex]) return partyLayout[partyIndex];
 	}
+	var killerSpecies = normalizeAeLuaFragSpecies(getAeLuaFragMonSpecies(event && event.killer));
+	if (!killerSpecies) return "";
 	var killerNickname = normalizeAeLuaFragText(event && event.killer ? event.killer.nickname : "");
 	var playerSetIds = getAeLuaFragPlayerSetIds();
 	var candidates = [];
@@ -3721,15 +3722,61 @@ function pickAeLuaFragVictimMatch(matches, event) {
 	return matches[0];
 }
 
-function findAeLuaFragVictimMatch(event) {
-	var victimSpecies = normalizeAeLuaFragSpecies(getAeLuaFragMonSpecies(event && event.victim));
-	if (!victimSpecies) return null;
-	var victimPartyIndex = event && event.victim ? parseInt(event.victim.partyIndex, 10) : NaN;
-	if (!Number.isNaN(victimPartyIndex)) {
-		var currentSlotMatches = collectAeLuaFragVictimMatches(CURRENT_TRAINER_POKS || [], event, "");
-		var currentSlotMatch = pickAeLuaFragVictimMatch(currentSlotMatches, event);
-		if (currentSlotMatch && currentSlotMatch.partyIndex === victimPartyIndex) return currentSlotMatch;
+function getAeLuaIndexedFightEntries(event) {
+	var eventLabel = normalizeAeLuaFragText(event && event.trainerLabel);
+	var eventFightIndex = parseInt(event && event.fightIndex, 10) || 0;
+	var allEntries = (typeof TR_NAMES === "undefined" ? [] : TR_NAMES).map(parseTrainerPartyEntry);
+	var anchor = null;
+	for (var i = 0; i < allEntries.length; i++) {
+		var entryIndex = getTrainerIndexFromSetData(allEntries[i].setData) || allEntries[i].sortIndex;
+		if (eventFightIndex && entryIndex === eventFightIndex) {
+			anchor = allEntries[i];
+			break;
+		}
 	}
+	if (!anchor && eventLabel) {
+		for (var labelIndex = 0; labelIndex < allEntries.length; labelIndex++) {
+			if (normalizeAeLuaFragText(allEntries[labelIndex].trainerLabel) === eventLabel) {
+				anchor = allEntries[labelIndex];
+				break;
+			}
+		}
+	}
+	if (!anchor) return [];
+	var groupId = getSetDoubleGroupId(anchor.setData);
+	return allEntries.filter(function (entry) {
+		if (!entry || !entry.setData) return false;
+		if (groupId) return getSetDoubleGroupId(entry.setData) === groupId;
+		return normalizeAeLuaFragText(entry.trainerLabel) === normalizeAeLuaFragText(anchor.trainerLabel);
+	}).sort(function (left, right) {
+		return (getTrainerIndexFromSetData(left.setData) || left.sortIndex) - (getTrainerIndexFromSetData(right.setData) || right.sortIndex);
+	});
+}
+
+function findAeLuaFragVictimMatch(event) {
+	var victim = event && event.victim ? event.victim : {};
+	var trainerPartyIndex = parseInt(victim.trainerPartyIndex, 10);
+	if (Number.isNaN(trainerPartyIndex)) trainerPartyIndex = parseInt(victim.partyIndex, 10);
+	if (!Number.isNaN(trainerPartyIndex)) {
+		var orderedEntries = getAeLuaIndexedFightEntries(event);
+		if (!orderedEntries.length) orderedEntries = (CURRENT_TRAINER_POKS || []).slice().sort(sortmons).map(parseTrainerPartyEntry);
+		var slotEntries = orderedEntries;
+		if (event && event.twoOpponents) {
+			var splitEntries = splitSetDoubleEntries(orderedEntries);
+			slotEntries = parseInt(event.trainerSide, 10) === 2 ? splitEntries.secondary : splitEntries.primary;
+		}
+		var slotEntry = slotEntries[trainerPartyIndex];
+		if (slotEntry && slotEntry.fullSetName) {
+			return {
+				setId: slotEntry.fullSetName,
+				fightLabel: slotEntry.trainerLabel,
+				partyIndex: trainerPartyIndex,
+				level: slotEntry.setData && slotEntry.setData.level ? parseInt(slotEntry.setData.level, 10) || 0 : 0
+			};
+		}
+	}
+	var victimSpecies = normalizeAeLuaFragSpecies(getAeLuaFragMonSpecies(victim));
+	if (!victimSpecies) return null;
 	var currentMatches = collectAeLuaFragVictimMatches(CURRENT_TRAINER_POKS || [], event, victimSpecies);
 	var currentMatch = pickAeLuaFragVictimMatch(currentMatches, event);
 	if (currentMatch) return currentMatch;
@@ -3769,7 +3816,17 @@ function importAeLuaFragEventsFromPayload(exportPayload, sourceLabel) {
 		if (!eventId || importedEvents[eventId]) continue;
 		var killerSetId = findAeLuaFragKillerSetId(event);
 		var victimMatch = findAeLuaFragVictimMatch(event);
-		if (!killerSetId || !victimMatch) continue;
+		if (!killerSetId || !victimMatch) {
+			if (window.console && typeof window.console.warn === "function") {
+				window.console.warn("[AstralCalc] ae_lua frag event could not be resolved", {
+					eventId: eventId,
+					killerResolved: !!killerSetId,
+					victimResolved: !!victimMatch,
+					event: event
+				});
+			}
+			continue;
+		}
 		addFragKill(killerSetId, victimMatch.setId, victimMatch.fightLabel);
 		importedEvents[eventId] = {
 			importedAt: new Date().toISOString(),
@@ -3888,23 +3945,50 @@ function setAeLuaFragLiveUi(isConnected) {
 
 function pollAeLuaFragLiveLink(showError) {
 	var trainerLabel = String(getCurrentFightLabel() || "Trainer");
-	var liveUrl = AE_LUA_FRAG_LIVE_URL + "?trainer=" + encodeURIComponent(trainerLabel);
+	var fightIndex = getCurrentFightIndex();
+	var liveUrl = AE_LUA_FRAG_LIVE_URL + "?trainer=" + encodeURIComponent(trainerLabel) + "&fightIndex=" + encodeURIComponent(fightIndex || 0);
 	return fetch(liveUrl, {cache: "no-store"}).then(function (response) {
 		if (!response.ok) throw new Error("HTTP " + response.status);
 		return response.json();
 	}).then(function (payload) {
 		setAeLuaFragLiveUi(true);
-		importAeLuaPokemonFromPayload(payload);
-		importAeLuaFragEventsFromPayload(payload, "live");
-		var importedEvents = getAeLuaFragImportedEventMap();
-		var acknowledgedIds = (Array.isArray(payload.events) ? payload.events : []).map(function (event, index) {
-			return getAeLuaFragEventId(event, index);
-		}).filter(function (eventId) {
-			return !!importedEvents[eventId];
-		});
-		if (acknowledgedIds.length) {
-			fetch(liveUrl + "&ack=" + encodeURIComponent(acknowledgedIds.join(",")), {cache: "no-store"}).catch(function () {});
+		try {
+			importAeLuaPokemonFromPayload(payload);
+		} catch (pokemonImportError) {
+			if (window.console && typeof window.console.warn === "function") {
+				window.console.warn("[AstralCalc] ae_lua roster import failed; continuing with frag import", pokemonImportError);
+			}
 		}
+		try {
+			importAeLuaFragEventsFromPayload(payload, "live");
+		} catch (fragImportError) {
+			if (window.console && typeof window.console.error === "function") {
+				window.console.error("[AstralCalc] ae_lua frag import failed", fragImportError);
+			}
+			throw fragImportError;
+		}
+		var importedEvents = getAeLuaFragImportedEventMap();
+		(Array.isArray(payload.events) ? payload.events : []).forEach(function (event, index) {
+			var eventId = getAeLuaFragEventId(event, index);
+			var imported = importedEvents[eventId];
+			if (!imported) return;
+			var victimEntry = parseTrainerPartyEntry(imported.victimSetId || "");
+			fetch(AE_LUA_FRAG_ACK_URL, {
+				method: "POST",
+				cache: "no-store",
+				headers: {"Content-Type": "application/json"},
+				body: JSON.stringify({
+					eventId: eventId,
+					playerPokemon: getAeLuaFragMonSpecies(event.killer),
+					trainerName: victimEntry.trainerName || event.trainerName || "Trainer",
+					trainerPokemon: victimEntry.pokemonName || getAeLuaFragMonSpecies(event.victim)
+				})
+			}).catch(function (ackError) {
+				if (window.console && typeof window.console.warn === "function") {
+					window.console.warn("[AstralCalc] could not acknowledge ae_lua frag " + eventId, ackError);
+				}
+			});
+		});
 		return true;
 	}).catch(function () {
 		setAeLuaFragLiveUi(false);
