@@ -3610,9 +3610,9 @@ function findAeLuaFragKillerSetId(event) {
 	var partyIndex = event && event.killer ? parseInt(event.killer.partyIndex, 10) : NaN;
 	if (!Number.isNaN(partyIndex)) {
 		var partyLayout = collectPlayerRosterLayout().team || [];
-		if (partyLayout[partyIndex] && normalizeAeLuaFragSpecies(parseSetId(partyLayout[partyIndex]).species) === killerSpecies) {
-			return partyLayout[partyIndex];
-		}
+		// The in-game party slot is the stable identity. Forms may legitimately
+		// differ from the calculator's base-species set while it is on the field.
+		if (partyLayout[partyIndex]) return partyLayout[partyIndex];
 	}
 	var killerNickname = normalizeAeLuaFragText(event && event.killer ? event.killer.nickname : "");
 	var playerSetIds = getAeLuaFragPlayerSetIds();
@@ -3724,6 +3724,12 @@ function pickAeLuaFragVictimMatch(matches, event) {
 function findAeLuaFragVictimMatch(event) {
 	var victimSpecies = normalizeAeLuaFragSpecies(getAeLuaFragMonSpecies(event && event.victim));
 	if (!victimSpecies) return null;
+	var victimPartyIndex = event && event.victim ? parseInt(event.victim.partyIndex, 10) : NaN;
+	if (!Number.isNaN(victimPartyIndex)) {
+		var currentSlotMatches = collectAeLuaFragVictimMatches(CURRENT_TRAINER_POKS || [], event, "");
+		var currentSlotMatch = pickAeLuaFragVictimMatch(currentSlotMatches, event);
+		if (currentSlotMatch && currentSlotMatch.partyIndex === victimPartyIndex) return currentSlotMatch;
+	}
 	var currentMatches = collectAeLuaFragVictimMatches(CURRENT_TRAINER_POKS || [], event, victimSpecies);
 	var currentMatch = pickAeLuaFragVictimMatch(currentMatches, event);
 	if (currentMatch) return currentMatch;
