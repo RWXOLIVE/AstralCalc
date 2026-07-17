@@ -3607,6 +3607,13 @@ function getAeLuaFragSetNickname(setId) {
 function findAeLuaFragKillerSetId(event) {
 	var killerSpecies = normalizeAeLuaFragSpecies(getAeLuaFragMonSpecies(event && event.killer));
 	if (!killerSpecies) return "";
+	var partyIndex = event && event.killer ? parseInt(event.killer.partyIndex, 10) : NaN;
+	if (!Number.isNaN(partyIndex)) {
+		var partyLayout = collectPlayerRosterLayout().team || [];
+		if (partyLayout[partyIndex] && normalizeAeLuaFragSpecies(parseSetId(partyLayout[partyIndex]).species) === killerSpecies) {
+			return partyLayout[partyIndex];
+		}
+	}
 	var killerNickname = normalizeAeLuaFragText(event && event.killer ? event.killer.nickname : "");
 	var playerSetIds = getAeLuaFragPlayerSetIds();
 	var candidates = [];
@@ -3676,6 +3683,12 @@ function aeLuaFragTrainerMatchesEvent(entry, event) {
 function collectAeLuaFragVictimMatches(entries, event, victimSpecies) {
 	var matches = [];
 	if (!Array.isArray(entries)) return matches;
+	var fightMinIndex = Infinity;
+	for (var fightIndex = 0; fightIndex < entries.length; fightIndex++) {
+		var fightEntry = parseTrainerPartyEntry(entries[fightIndex]);
+		if (!fightEntry || !fightEntry.fullSetName || !aeLuaFragTrainerMatchesEvent(fightEntry, event)) continue;
+		fightMinIndex = Math.min(fightMinIndex, fightEntry.sortIndex);
+	}
 	for (var i = 0; i < entries.length; i++) {
 		var entry = parseTrainerPartyEntry(entries[i]);
 		if (!entry || !entry.fullSetName) continue;
@@ -3684,6 +3697,7 @@ function collectAeLuaFragVictimMatches(entries, event, victimSpecies) {
 		matches.push({
 			setId: entry.fullSetName,
 			fightLabel: entry.trainerLabel,
+			partyIndex: Number.isFinite(fightMinIndex) ? entry.sortIndex - fightMinIndex : -1,
 			level: entry.setData && entry.setData.level ? parseInt(entry.setData.level, 10) || 0 : 0
 		});
 	}
@@ -3692,6 +3706,12 @@ function collectAeLuaFragVictimMatches(entries, event, victimSpecies) {
 
 function pickAeLuaFragVictimMatch(matches, event) {
 	if (!matches.length) return null;
+	var partyIndex = event && event.victim ? parseInt(event.victim.partyIndex, 10) : NaN;
+	if (!Number.isNaN(partyIndex)) {
+		for (var partyMatchIndex = 0; partyMatchIndex < matches.length; partyMatchIndex++) {
+			if (matches[partyMatchIndex].partyIndex === partyIndex) return matches[partyMatchIndex];
+		}
+	}
 	var eventLevel = event && event.victim ? parseInt(event.victim.level, 10) || 0 : 0;
 	if (eventLevel) {
 		for (var i = 0; i < matches.length; i++) {
@@ -3870,6 +3890,15 @@ function pollAeLuaFragLiveLink(showError) {
 		setAeLuaFragLiveUi(true);
 		importAeLuaPokemonFromPayload(payload);
 		importAeLuaFragEventsFromPayload(payload, "live");
+		var importedEvents = getAeLuaFragImportedEventMap();
+		var acknowledgedIds = (Array.isArray(payload.events) ? payload.events : []).map(function (event, index) {
+			return getAeLuaFragEventId(event, index);
+		}).filter(function (eventId) {
+			return !!importedEvents[eventId];
+		});
+		if (acknowledgedIds.length) {
+			fetch(liveUrl + "&ack=" + encodeURIComponent(acknowledgedIds.join(",")), {cache: "no-store"}).catch(function () {});
+		}
 		return true;
 	}).catch(function () {
 		setAeLuaFragLiveUi(false);

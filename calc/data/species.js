@@ -554,7 +554,7 @@ var RBY = {
     },
     Ninetales: {
         types: ['Fire', 'Fairy'],
-        bs: { hp: 73, at: 76, df: 75, sp: 100, sl: 81 },
+        bs: { hp: 78, at: 73, df: 76, sp: 100, sl: 81 },
         weightkg: 19.9
     },
     Oddish: {
@@ -976,7 +976,7 @@ var GSC_PATCH = {
     'Nidoran-M': { bs: { sa: 40, sd: 40 } },
     Nidorina: { bs: { sa: 62, sd: 55 } },
     Nidorino: { bs: { sa: 55, sd: 55 } },
-    Ninetales: { bs: { sa: 81, sd: 100 } },
+    Ninetales: { bs: { sa: 93, sd: 100 } },
     Oddish: { bs: { sa: 75, sd: 65 } },
     Omanyte: { bs: { sa: 90, sd: 55 } },
     Omastar: { bs: { sa: 115, sd: 70 } },
@@ -6894,7 +6894,7 @@ var SM_PATCH = {
     },
     'Ninetales-Alola': {
         types: ['Ice', 'Fairy'],
-        bs: { hp: 73, at: 67, df: 75, sa: 81, sd: 100, sp: 109 },
+        bs: { hp: 78, at: 65, df: 75, sa: 93, sd: 100, sp: 109 },
         weightkg: 19.9,
         abilities: { 0: 'Snow Cloak' },
         baseSpecies: 'Ninetales'

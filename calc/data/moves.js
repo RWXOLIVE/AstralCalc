@@ -539,6 +539,7 @@ var ADV_PATCH = {
     'Poison Fang': { bp: 85, type: 'Poison', makesContact: true },
     'Rock Tomb': { bp: 60, type: 'Rock' },
     'Will-O-Wisp': { bp: 0, category: 'Status', type: 'Fire' },
+    'Chill-O-Wisp': { bp: 0, category: 'Status', type: 'Ice' },
     'Frost-Wisp': { bp: 0, category: 'Status', type: 'Ice' },
     'Aqua Fangs': { bp: 85, category: 'Physical', type: 'Water', makesContact: true, secondaries: true },
     'Ice Ball': { bp: 40, type: 'Ice', makesContact: true },
