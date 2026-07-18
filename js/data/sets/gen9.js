@@ -1102,6 +1102,18 @@ var SETDEX_SV = {
         }
     },
     "Lanturn": {
+    "Leader Elesa | Mauville Gym": {
+            "index": "0000000356",
+            "level": 50,
+            "ability": "Volt Absorb",
+            "item": "Assault Vest",
+            "nature": "Bold",
+            "Terrain": "Electric",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Volt Switch","Flip Turn","Ice Beam","Muddy Water"]
+        },
     "Team Aqua Grunt | Rusturf Tunnel": {
             "index": "0000000076",
             "level": 23,
@@ -2222,6 +2234,18 @@ var SETDEX_SV = {
         }
     },
     "Sceptile": {
+    "Leader Elesa | Mauville Gym": {
+            "index": "0000000357",
+            "level": 50,
+            "ability": "Unburden",
+            "item": "Electric Seed",
+            "nature": "Naive",
+            "Terrain": "Electric",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Dragon Rush","Leaf Storm","Nature Power","Acrobatics"]
+        },
     "Tuber Chandler | Route 109": {
             "index": "0000000123",
             "level": 36,
@@ -4391,18 +4415,6 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Thunder Punch","Aqua Tail","U-turn","Giga Drain"]
-        },
-    "Leader Elesa | Mauville Gym": {
-            "index": "0000000356",
-            "level": 51,
-            "ability": "Levitate",
-            "item": "Eelektrossite",
-            "Terrain": "Electric",
-            "nature": "Adamant",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Wild Charge","Liquidation","Drain Punch","U-turn"]
         }
     },
     "Beartic": {
@@ -5060,6 +5072,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Electro Shot","Thunderbolt","Flash Cannon","Thunder Wave"]
+        },
+        "Rival Steven | Route 118": {
+            "index": "0000000612",
+            "level": 73,
+            "ability": "Stamina",
+            "item": "Grassy Seed",
+            "nature": "Modest",
+            "Weather": "Rain",
+            "Terrain": "Grassy",
+            "CritStatus": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Electro Shot","Dragon Pulse","Flash Cannon","Body Press"]
         }
     },
     "Hydreigon": {
@@ -5906,6 +5932,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Snarl","Thunderbolt","HP Ice","Flamethrower"]
+        },
+        "Leader Elesa | Mauville Gym": {
+            "index": "0000000359",
+            "level": 51,
+            "ability": "Intimidate",
+            "item": "Manectite",
+            "nature": "Hasty",
+            "Terrain": "Electric",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Rising Voltage","Magnet Rise","Signal Beam","Ice Beam"]
         }
     },
     "Galvantula": {
@@ -6030,32 +6068,32 @@ var SETDEX_SV = {
             "moves": ["Hyper Voice","Chatter","Tailwind","Roost"]
         }
     },
-    "Iron Hands": {
-    "Leader Elesa | Mauville Gym": {
-            "index": "0000000354",
-            "level": 49,
-            "ability": "Quark Drive",
-            "item": "Electric Seed",
-            "Terrain": "Electric",
-            "nature": "Impish",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Knock Off","Body Press","Thunder Punch","Fake Out"]
-        }
-    },
-    "Magnezone": {
+    "Iron Valiant": {
     "Leader Elesa | Mauville Gym": {
             "index": "0000000355",
             "level": 50,
-            "ability": "Sturdy",
-            "item": "Custap Berry",
+            "ability": "Quark Drive",
+            "item": "Expert Belt",
+            "nature": "Timid",
             "Terrain": "Electric",
-            "nature": "Quiet",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Flash Cannon","Thunderbolt","Explosion","HP Grass"]
+            "moves": ["Dazzling Gleam","Aura Sphere","Mystical Fire","Power Gem"]
+        }
+    },
+    "Cinderace": {
+    "Leader Elesa | Mauville Gym": {
+            "index": "0000000358",
+            "level": 50,
+            "ability": "Striker",
+            "item": "Fire Gem",
+            "nature": "Jolly",
+            "Terrain": "Electric",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Temper Flare","Volt Volley","Jump Kick","Trop Kick"]
         }
     },
     "Vikavolt": {
@@ -6069,18 +6107,6 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Thunderbolt","Bug Buzz","Thunder Wave","Baton Pass"]
-        },
-    "Leader Elesa | Mauville Gym": {
-            "index": "0000000357",
-            "level": 50,
-            "ability": "Speed Boost",
-            "item": "Power Herb",
-            "Terrain": "Electric",
-            "nature": "Timid",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Electro Shot","Discharge","Signal Beam","Energy Ball"]
         },
     "Hiker Trent | Route 112": {
             "index": "0000000404",
@@ -6096,30 +6122,16 @@ var SETDEX_SV = {
     },
     "Raichu-Alola": {
     "Leader Elesa | Mauville Gym": {
-            "index": "0000000358",
+            "index": "0000000354",
             "level": 49,
             "ability": "Surge Surfer",
-            "item": "Life Orb",
-            "Terrain": "Electric",
+            "item": "Kasib Berry",
             "nature": "Modest",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Rising Voltage","Psyshock","Grass Knot","Thunder Wave"]
-        }
-    },
-    "Dracozolt": {
-    "Leader Elesa | Mauville Gym": {
-            "index": "0000000359",
-            "level": 51,
-            "ability": "Hustle",
-            "item": "Wide Lens",
             "Terrain": "Electric",
-            "nature": "Jolly",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Iron Tail","Bolt Beak","Dragon Claw","Fire Fang"]
+            "moves": ["Endure","Endeavor","Electro Ball","Splishy Splash"]
         }
     },
     "Iron Crown": {
@@ -7579,6 +7591,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Ancient Power","Giga Drain","Earth Power","Infestation"]
+        },
+        "Rival Steven | Route 118": {
+            "index": "0000000609",
+            "level": 72,
+            "ability": "Storm Drain",
+            "item": "Chople Berry",
+            "nature": "Bold",
+            "Weather": "Rain",
+            "Terrain": "Grassy",
+            "CritStatus": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Cosmic Power","Giga Drain","Brine","Recover"]
         }
     },
     "Lumineon": {
@@ -8016,6 +8042,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Agility","Bullet Punch","Future Sight","Psychic Fangs"]
+        },
+        "Rival Steven | Route 118": {
+            "index": "0000000610",
+            "level": 73,
+            "ability": "Clear Body",
+            "item": "Leftovers",
+            "nature": "Hasty",
+            "Weather": "Rain",
+            "Terrain": "Grassy",
+            "CritStatus": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Meteor Mash","Knock Off","Psychic Fangs","Pursuit"]
         }
     },
     "Electrode": {
@@ -8315,6 +8355,54 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Earth Power","Magma Storm","Heat Wave","Solar Beam"]
+        }
+    },
+    "Genesect-Douse": {
+        "Rival Steven | Route 118": {
+            "index": "0000000608",
+            "level": 71,
+            "ability": "Download",
+            "item": "Douse Drive",
+            "nature": "Hasty",
+            "Weather": "Rain",
+            "Terrain": "Grassy",
+            "CritStatus": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Techno Blast","U-turn","Flash Cannon","Charge Beam"]
+        }
+    },
+    "Armaldo": {
+        "Rival Steven | Route 118": {
+            "index": "0000000611",
+            "level": 72,
+            "ability": "Swift Swim",
+            "item": "Scope Lens",
+            "nature": "Hasty",
+            "Weather": "Rain",
+            "Terrain": "Grassy",
+            "CritStatus": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Aqua Cutter","X-Scissor","Leaf Blade","Aqua Jet"]
+        }
+    },
+    "Golisopod-Mega": {
+        "Rival Steven | Route 118": {
+            "index": "0000000613",
+            "level": 74,
+            "ability": "Bulletproof",
+            "item": "Golisopite",
+            "nature": "Adamant",
+            "Weather": "Rain",
+            "Terrain": "Grassy",
+            "CritStatus": true,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["First Impression","Aqua Jet","Iron Head","Drill Run"]
         }
     },
  }
