@@ -114,6 +114,7 @@
     "charm": {"accuracy": 100, "pp": 20},
     "chatter": {"accuracy": 100, "pp": 20},
     "chillingwater": {"accuracy": 100, "pp": 20},
+    "chillowisp": {"accuracy": 85, "pp": 15},
     "chillyreception": {"accuracy": 0, "pp": 10},
     "chipaway": {"accuracy": 100, "pp": 20},
     "chloroblast": {"accuracy": 95, "pp": 5},

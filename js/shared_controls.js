@@ -910,7 +910,11 @@ var AE_LUA_FRAG_IMPORTED_EVENTS_STORAGE_KEY = "astralCalcAeLuaFragImportedEvents
 var AE_LUA_FRAG_IMPORT_INTERVAL_MS = 2500;
 var AE_LUA_FRAG_LIVE_URL = "http://127.0.0.1:31124/update";
 var AE_LUA_FRAG_ACK_URL = "http://127.0.0.1:31124/frag";
+var AE_LUA_POKEMON_URL = "http://127.0.0.1:31124/pokemon";
 var AE_LUA_POKEMON_SET_PREFIX = "ae_lua";
+var AE_LUA_TEAM_BINDINGS_STORAGE_KEY = "astralCalcAeLuaTeamBindings";
+var AE_LUA_FULL_ROSTER_INTERVAL_MS = 10000;
+var AE_LUA_FULL_ROSTER_PAGE_SIZE = 20;
 var TRAINER_FIELD_LOCKS_STORAGE_KEY = "astralCalcTrainerFieldLocks";
 var FIELD_LOCK_GLOBAL_KEY = "global";
 var LAST_ENCOUNTER_STORAGE_KEY = "astralCalcLastEncounter";
@@ -987,7 +991,10 @@ var aeLuaFragWatchedFileHandle = null;
 var aeLuaFragWatchedFileTimer = null;
 var aeLuaFragWatchedFileSignature = "";
 var aeLuaFragLastPayload = null;
-var aeLuaPokemonImportSignature = "";
+var aeLuaResolvedTrainerFight = null;
+var aeLuaPokemonImportSignatures = {};
+var aeLuaPokemonLastFullRosterAt = 0;
+var aeLuaPokemonFullRosterPromise = null;
 var aeLuaFragLiveTimer = null;
 var aeLuaFragLiveConnected = false;
 var FRAG_UNKNOWN_VICTIM_KEY = "__unknown__";
@@ -2755,15 +2762,39 @@ function normalizeFragEntryMap(rawEntries) {
 	return normalizedEntries;
 }
 
+function normalizeAeLuaImportedEventStorage(rawEvents) {
+	var normalizedEvents = {};
+	if (!rawEvents || typeof rawEvents !== "object" || Array.isArray(rawEvents)) return normalizedEvents;
+	for (var eventId in rawEvents) {
+		if (!Object.prototype.hasOwnProperty.call(rawEvents, eventId)) continue;
+		var record = rawEvents[eventId];
+		normalizedEvents[eventId] = record && typeof record === "object"
+			? Object.assign({}, record)
+			: {importedAt: String(record || "")};
+	}
+	return normalizedEvents;
+}
+
 function normalizeFragSheetStorage(rawState) {
 	var normalizedState = rawState && typeof rawState === "object" ? rawState : {};
 	var fragState = {
 		entries: normalizeFragEntryMap(normalizedState.entries),
-		archivedEntries: normalizeFragEntryMap(normalizedState.archivedEntries)
+		archivedEntries: normalizeFragEntryMap(normalizedState.archivedEntries),
+		aeLuaImportedEvents: normalizeAeLuaImportedEventStorage(normalizedState.aeLuaImportedEvents)
 	};
 	for (var activeSetId in fragState.entries) {
 		if (!Object.prototype.hasOwnProperty.call(fragState.entries, activeSetId)) continue;
 		if (Object.prototype.hasOwnProperty.call(fragState.archivedEntries, activeSetId)) {
+			// A previously created zero-value active placeholder must not erase an
+			// older exact-ID record which still contains the real frag history.
+			// Exact IDs represent the same logical Calc entry, so retain the copy
+			// with the larger normalized total before removing the duplicate.
+			var activeEntry = fragState.entries[activeSetId];
+			var archivedEntry = fragState.archivedEntries[activeSetId];
+			if ((parseInt(archivedEntry.totalKills, 10) || 0) >
+				(parseInt(activeEntry.totalKills, 10) || 0)) {
+				fragState.entries[activeSetId] = archivedEntry;
+			}
 			delete fragState.archivedEntries[activeSetId];
 		}
 	}
@@ -2787,7 +2818,17 @@ function getFragSheetState() {
 
 function saveFragSheetState() {
 	fragSheetState = normalizeFragSheetStorage(getFragSheetState());
+	var legacyImportedEvents = normalizeAeLuaImportedEventStorage(
+		safeJsonParse(localStorage.getItem(AE_LUA_FRAG_IMPORTED_EVENTS_STORAGE_KEY), {})
+	);
+	fragSheetState.aeLuaImportedEvents = Object.assign({}, legacyImportedEvents,
+		normalizeAeLuaImportedEventStorage(fragSheetState.aeLuaImportedEvents));
 	localStorage.setItem(FRAG_SHEET_STORAGE_KEY, JSON.stringify(fragSheetState));
+	// Keep the compatibility ledger byte-for-byte aligned with the authoritative
+	// event map embedded in the Frag Sheet state. This also makes set-ID
+	// migrations atomic from the next browser read onward.
+	localStorage.setItem(AE_LUA_FRAG_IMPORTED_EVENTS_STORAGE_KEY,
+		JSON.stringify(fragSheetState.aeLuaImportedEvents || {}));
 	captureFragBackupSnapshot("frag-update", false);
 }
 
@@ -2888,7 +2929,12 @@ function buildRosterLayoutFromCustomsets(customsets) {
 
 function filterRosterLayoutToAvailableSets(layout) {
 	var normalizedLayout = normalizeRosterLayout(layout);
-	if (typeof getSetOptionById !== "function") return normalizedLayout;
+	function isAvailableSetId(setId) {
+		if (typeof getSetOptionById === "function" && getSetOptionById(setId)) return true;
+		var parsed = parseSetId(setId);
+		return !!(parsed.species && parsed.label && typeof setdex !== "undefined" &&
+			setdex[parsed.species] && setdex[parsed.species][parsed.label]);
+	}
 	var filteredLayout = {
 		team: [],
 		box: [],
@@ -2900,7 +2946,7 @@ function filterRosterLayoutToAvailableSets(layout) {
 		var zoneKey = zoneKeys[i];
 		for (var j = 0; j < normalizedLayout[zoneKey].length; j++) {
 			var setId = normalizedLayout[zoneKey][j];
-			if (!setId || !getSetOptionById(setId)) continue;
+			if (!setId || !isAvailableSetId(setId)) continue;
 			filteredLayout[zoneKey].push(setId);
 		}
 	}
@@ -3190,7 +3236,8 @@ function getFragTotalForSet(setId) {
 	var normalizedSetId = String(setId || "");
 	if (!normalizedSetId) return 0;
 	var state = getFragSheetState();
-	var entry = getFragSheetStateEntryMap(state, "entries")[normalizedSetId];
+	var entry = getFragSheetStateEntryMap(state, "entries")[normalizedSetId] ||
+		getFragSheetStateEntryMap(state, "archivedEntries")[normalizedSetId];
 	if (!entry) return 0;
 	var totalKills = parseInt(entry.totalKills, 10);
 	if (Number.isNaN(totalKills) || totalKills < 0) return 0;
@@ -3225,15 +3272,15 @@ function mergeFragVictimBuckets(targetBuckets, sourceBuckets) {
 	}
 }
 
-function mergeFragEntriesFromEvolutionDrop(sourceSetId, targetSetId) {
-	if (!sourceSetId || !targetSetId || sourceSetId === targetSetId) return false;
-	var state = getFragSheetState();
+function mergeFragEntrySetIdsInState(state, sourceSetId, targetSetId) {
+	if (!state || !sourceSetId || !targetSetId || sourceSetId === targetSetId) return false;
 	var activeEntries = getFragSheetStateEntryMap(state, "entries");
 	var archivedEntries = getFragSheetStateEntryMap(state, "archivedEntries");
 	var sourceEntry = activeEntries[sourceSetId] || archivedEntries[sourceSetId];
 	if (!sourceEntry) return false;
-	var targetEntry = ensureFragEntryForSet(targetSetId);
-	if (!targetEntry) return false;
+	var targetEntry = normalizeFragEntry(targetSetId,
+		activeEntries[targetSetId] || archivedEntries[targetSetId] || {});
+	sourceEntry = normalizeFragEntry(sourceSetId, sourceEntry);
 
 	var sourceTotal = parseInt(sourceEntry.totalKills, 10);
 	if (!Number.isNaN(sourceTotal) && sourceTotal > 0) {
@@ -3258,6 +3305,42 @@ function mergeFragEntriesFromEvolutionDrop(sourceSetId, targetSetId) {
 	activeEntries[targetSetId] = normalizeFragEntry(targetSetId, targetEntry);
 	delete activeEntries[sourceSetId];
 	delete archivedEntries[sourceSetId];
+	delete archivedEntries[targetSetId];
+
+	// Keep the persisted ae_lua event ledger aligned with the canonical player
+	// set ID. Event IDs stay unchanged, so this is metadata migration only and
+	// cannot replay or duplicate a recorded frag.
+	// Older builds kept this ledger in a separate localStorage key. Pull those
+	// records into the authoritative state before rewriting IDs so a subsequent
+	// save cannot copy legacy-only metadata back under the stale set ID.
+	var legacyImportedEvents = {};
+	try {
+		legacyImportedEvents = normalizeAeLuaImportedEventStorage(
+			safeJsonParse(localStorage.getItem(AE_LUA_FRAG_IMPORTED_EVENTS_STORAGE_KEY), {})
+		);
+	} catch (err) {
+		legacyImportedEvents = {};
+	}
+	var importedEvents = Object.assign({}, legacyImportedEvents,
+		normalizeAeLuaImportedEventStorage(state.aeLuaImportedEvents));
+	for (var eventId in importedEvents) {
+		if (!Object.prototype.hasOwnProperty.call(importedEvents, eventId)) continue;
+		var importRecord = importedEvents[eventId];
+		if (!importRecord || typeof importRecord !== "object") continue;
+		if (String(importRecord.killerSetId || "") === sourceSetId) {
+			importRecord.killerSetId = targetSetId;
+		}
+		if (importRecord.type === "death" && String(importRecord.victimSetId || "") === sourceSetId) {
+			importRecord.victimSetId = targetSetId;
+		}
+	}
+	state.aeLuaImportedEvents = importedEvents;
+	return true;
+}
+
+function mergeFragEntriesFromEvolutionDrop(sourceSetId, targetSetId) {
+	var state = getFragSheetState();
+	if (!mergeFragEntrySetIdsInState(state, sourceSetId, targetSetId)) return false;
 	saveFragSheetState();
 	return true;
 }
@@ -3338,6 +3421,10 @@ function updateTrainerFragBorderTotals() {
 	if (!showTotalFrags) {
 		return hideTrainerFragBorderTotals();
 	}
+	// This function is also called directly by settings and drag/drop paths.
+	// Reconcile persisted records first rather than depending on the Frag Sheet
+	// panel itself having rendered beforehand.
+	syncFragRoster();
 	var spriteRows = [];
 	playerSprites.each(function () {
 		var spriteElement = this;
@@ -3475,6 +3562,146 @@ function bindPlayerRosterSearchInput() {
 		});
 }
 
+function getFragRosterSpeciesFamily(setId) {
+	var speciesName = parseSetId(setId).species;
+	if (typeof aeLuaTrainerNormalizeSpecies === "function") {
+		return aeLuaTrainerNormalizeSpecies(speciesName);
+	}
+	return normalizeAeLuaFragSpecies(speciesName);
+}
+
+function fragEntryHasSavedState(entry) {
+	if (!entry || typeof entry !== "object") return false;
+	var totalKills = parseInt(entry.totalKills, 10);
+	return (!Number.isNaN(totalKills) && totalKills > 0) || !!entry.isDead;
+}
+
+function reconcileFragEntriesWithRoster(state, rosterSetIds) {
+	if (!state || !Array.isArray(rosterSetIds) || !rosterSetIds.length) return false;
+	var activeEntries = getFragSheetStateEntryMap(state, "entries");
+	var archivedEntries = getFragSheetStateEntryMap(state, "archivedEntries");
+	var rosterLookup = {};
+	var rosterByFamily = {};
+	var teamBindings = typeof getAeLuaTeamBindings === "function"
+		? getAeLuaTeamBindings()
+		: {version: 1, bySetId: {}};
+	var didChangeBindings = false;
+	for (var rosterIndex = 0; rosterIndex < rosterSetIds.length; rosterIndex++) {
+		var rosterSetId = rosterSetIds[rosterIndex];
+		rosterLookup[rosterSetId] = true;
+		var rosterFamily = getFragRosterSpeciesFamily(rosterSetId);
+		if (!rosterByFamily[rosterFamily]) rosterByFamily[rosterFamily] = [];
+		rosterByFamily[rosterFamily].push(rosterSetId);
+	}
+
+	function collectCandidates(targetSetId) {
+		var targetFamily = getFragRosterSpeciesFamily(targetSetId);
+		var candidates = [];
+		var seen = {};
+		function appendMap(entryMap) {
+			for (var sourceSetId in entryMap) {
+				if (!Object.prototype.hasOwnProperty.call(entryMap, sourceSetId) ||
+					sourceSetId === targetSetId || rosterLookup[sourceSetId] || seen[sourceSetId]) continue;
+				var sourceEntry = entryMap[sourceSetId];
+				if (!fragEntryHasSavedState(sourceEntry) ||
+					getFragRosterSpeciesFamily(sourceSetId) !== targetFamily) continue;
+				seen[sourceSetId] = true;
+				candidates.push(sourceSetId);
+			}
+		}
+		appendMap(activeEntries);
+		appendMap(archivedEntries);
+		return candidates;
+	}
+
+	function bindingsAllowMigration(sourceSetId, targetSetId) {
+		var sourceBinding = teamBindings.bySetId && teamBindings.bySetId[sourceSetId];
+		var targetBinding = teamBindings.bySetId && teamBindings.bySetId[targetSetId];
+		if (sourceBinding && targetBinding &&
+			typeof aeLuaPokemonIdentitiesMatch === "function" &&
+			!aeLuaPokemonIdentitiesMatch(getAeLuaPokemonIdentity(sourceBinding),
+				getAeLuaPokemonIdentity(targetBinding))) {
+			return false;
+		}
+		if (!sourceBinding || typeof aeLuaPokemonIdentitiesMatch !== "function") return true;
+		for (var boundRosterIndex = 0; boundRosterIndex < rosterSetIds.length; boundRosterIndex++) {
+			var boundRosterSetId = rosterSetIds[boundRosterIndex];
+			if (boundRosterSetId === targetSetId) continue;
+			var otherBinding = teamBindings.bySetId[boundRosterSetId];
+			if (otherBinding && aeLuaPokemonIdentitiesMatch(getAeLuaPokemonIdentity(sourceBinding),
+				getAeLuaPokemonIdentity(otherBinding))) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	function findIdentityMatchedCandidate(targetSetId, candidates) {
+		if (!teamBindings.bySetId || typeof aeLuaPokemonIdentitiesMatch !== "function" ||
+			typeof getAeLuaPokemonIdentity !== "function") return "";
+		var targetIdentity = getAeLuaPokemonIdentity(teamBindings.bySetId[targetSetId]);
+		if (!targetIdentity) return "";
+		var matchingSources = candidates.filter(function (sourceSetId) {
+			return aeLuaPokemonIdentitiesMatch(
+				getAeLuaPokemonIdentity(teamBindings.bySetId[sourceSetId]), targetIdentity);
+		});
+		if (matchingSources.length !== 1) return "";
+
+		// A personality/OT identity must point to exactly one current roster row.
+		// This lets duplicate species reconcile safely while refusing malformed or
+		// ambiguous binding data.
+		var matchingRosterCount = rosterSetIds.filter(function (boundRosterSetId) {
+			return aeLuaPokemonIdentitiesMatch(
+				getAeLuaPokemonIdentity(teamBindings.bySetId[boundRosterSetId]), targetIdentity);
+		}).length;
+		return matchingRosterCount === 1 ? matchingSources[0] : "";
+	}
+
+	var didChange = false;
+	for (rosterIndex = 0; rosterIndex < rosterSetIds.length; rosterIndex++) {
+		rosterSetId = rosterSetIds[rosterIndex];
+		var targetEntry = activeEntries[rosterSetId] || archivedEntries[rosterSetId];
+		var targetHasKills = !!(targetEntry && (parseInt(targetEntry.totalKills, 10) || 0) > 0);
+		var candidates = collectCandidates(rosterSetId);
+		if (!candidates.length) continue;
+
+		var sourceSetId = findIdentityMatchedCandidate(rosterSetId, candidates);
+		var identityProven = !!sourceSetId;
+		// A non-empty current record is merged only when identity metadata proves
+		// both set IDs refer to the same individual. This safely repairs split
+		// history without combining two copies of the same species.
+		if (targetHasKills && !identityProven) continue;
+		var targetLabel = normalizeAeLuaFragText(parseSetId(rosterSetId).label);
+		var matchingLabels = targetLabel ? candidates.filter(function (sourceSetId) {
+			return normalizeAeLuaFragText(parseSetId(sourceSetId).label) === targetLabel;
+		}) : [];
+		if (!sourceSetId && matchingLabels.length === 1) sourceSetId = matchingLabels[0];
+		var family = getFragRosterSpeciesFamily(rosterSetId);
+		if (!sourceSetId && matchingLabels.length === 0 &&
+			(rosterByFamily[family] || []).length === 1 && candidates.length === 1) {
+			sourceSetId = candidates[0];
+		}
+		// Never guess between multiple copies of the same species. Exact label or
+		// one-roster/one-history is required for an automatic legacy migration.
+		if (!sourceSetId || !bindingsAllowMigration(sourceSetId, rosterSetId)) continue;
+		if (mergeFragEntrySetIdsInState(state, sourceSetId, rosterSetId)) {
+			var sourceBinding = teamBindings.bySetId && teamBindings.bySetId[sourceSetId];
+			if (sourceBinding) {
+				if (!teamBindings.bySetId[rosterSetId]) {
+					teamBindings.bySetId[rosterSetId] = sourceBinding;
+				}
+				delete teamBindings.bySetId[sourceSetId];
+				didChangeBindings = true;
+			}
+			didChange = true;
+		}
+	}
+	if (didChangeBindings && typeof saveAeLuaTeamBindings === "function") {
+		saveAeLuaTeamBindings(teamBindings);
+	}
+	return didChange;
+}
+
 function syncFragRoster(options) {
 	var syncOptions = options || {};
 	var pruneMissing = !!syncOptions.pruneMissing;
@@ -3497,6 +3724,7 @@ function syncFragRoster(options) {
 			didChange = true;
 		}
 	}
+	if (reconcileFragEntriesWithRoster(state, rosterSetIds)) didChange = true;
 	if (pruneMissing && !allowEmptyPrune && !rosterSetIds.length) {
 		pruneMissing = false;
 	}
@@ -3542,7 +3770,7 @@ function setupFragSheetAutoRefresh() {
 
 function addFragKill(killerSetId, victimSetId, fightLabel) {
 	var entry = ensureFragEntryForSet(killerSetId);
-	if (!entry) return;
+	if (!entry) return false;
 	var fight = String(fightLabel || getCurrentFightLabel() || "Unknown Fight");
 	var split = String(getCurrentSplitNumber(fight));
 	var victimKey = normalizeFragVictimKey(victimSetId);
@@ -3554,15 +3782,22 @@ function addFragKill(killerSetId, victimSetId, fightLabel) {
 	entry.lastVictim = getFragVictimDisplayName(victimKey);
 	saveFragSheetState();
 	renderFragSheet();
+	return true;
 }
 
 function getAeLuaFragImportedEventMap() {
-	var parsed = safeJsonParse(localStorage.getItem(AE_LUA_FRAG_IMPORTED_EVENTS_STORAGE_KEY), {});
-	return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? parsed : {};
+	var legacyEvents = normalizeAeLuaImportedEventStorage(
+		safeJsonParse(localStorage.getItem(AE_LUA_FRAG_IMPORTED_EVENTS_STORAGE_KEY), {})
+	);
+	return Object.assign({}, legacyEvents,
+		normalizeAeLuaImportedEventStorage(getFragSheetState().aeLuaImportedEvents));
 }
 
 function saveAeLuaFragImportedEventMap(eventMap) {
-	localStorage.setItem(AE_LUA_FRAG_IMPORTED_EVENTS_STORAGE_KEY, JSON.stringify(eventMap || {}));
+	var normalizedEvents = normalizeAeLuaImportedEventStorage(eventMap);
+	getFragSheetState().aeLuaImportedEvents = normalizedEvents;
+	localStorage.setItem(AE_LUA_FRAG_IMPORTED_EVENTS_STORAGE_KEY, JSON.stringify(normalizedEvents));
+	saveFragSheetState();
 }
 
 function normalizeAeLuaFragText(value) {
@@ -3584,17 +3819,106 @@ function addAeLuaFragSetId(setIds, seenSetIds, setId) {
 	setIds.push(normalizedSetId);
 }
 
+function normalizeAeLuaPokemonIdentityPart(value) {
+	if (typeof value === "undefined" || value === null || value === "") return "";
+	var parsed = Number(value);
+	if (!Number.isFinite(parsed) || parsed < 0) return "";
+	return String(Math.floor(parsed));
+}
+
+function getAeLuaPokemonIdentity(mon) {
+	var personality = normalizeAeLuaPokemonIdentityPart(mon && mon.personality);
+	if (personality === "") return null;
+	return {
+		personality: personality,
+		otId: normalizeAeLuaPokemonIdentityPart(mon && mon.otId),
+		key: personality + ":" + normalizeAeLuaPokemonIdentityPart(mon && mon.otId)
+	};
+}
+
+function aeLuaPokemonIdentitiesMatch(left, right) {
+	if (!left || !right || left.personality !== right.personality) return false;
+	if (left.otId && left.otId !== "0" && right.otId && right.otId !== "0") {
+		return left.otId === right.otId;
+	}
+	return true;
+}
+
+function normalizeAeLuaTeamBindings(rawBindings) {
+	var source = rawBindings && typeof rawBindings === "object" && !Array.isArray(rawBindings)
+		? (rawBindings.bySetId && typeof rawBindings.bySetId === "object" ? rawBindings.bySetId : rawBindings)
+		: {};
+	var bySetId = {};
+	for (var setId in source) {
+		if (!Object.prototype.hasOwnProperty.call(source, setId) || setId === "version") continue;
+		var rawBinding = source[setId];
+		var identity = getAeLuaPokemonIdentity(rawBinding);
+		if (!identity) continue;
+		bySetId[String(setId)] = {
+			personality: identity.personality,
+			otId: identity.otId,
+			species: String(rawBinding.species || ""),
+			nickname: String(rawBinding.nickname || "")
+		};
+	}
+	return {version: 1, bySetId: bySetId};
+}
+
+function getAeLuaTeamBindings() {
+	return normalizeAeLuaTeamBindings(
+		safeJsonParse(localStorage.getItem(AE_LUA_TEAM_BINDINGS_STORAGE_KEY), {})
+	);
+}
+
+function saveAeLuaTeamBindings(bindings) {
+	var normalized = normalizeAeLuaTeamBindings(bindings);
+	localStorage.setItem(AE_LUA_TEAM_BINDINGS_STORAGE_KEY, JSON.stringify(normalized));
+	return normalized;
+}
+
+function setAeLuaTeamBinding(bindings, setId, mon) {
+	var identity = getAeLuaPokemonIdentity(mon);
+	var normalizedSetId = String(setId || "").trim();
+	if (!identity || !normalizedSetId) return false;
+	var normalizedBindings = normalizeAeLuaTeamBindings(bindings);
+	bindings.version = normalizedBindings.version;
+	bindings.bySetId = normalizedBindings.bySetId;
+	for (var existingSetId in bindings.bySetId) {
+		if (!Object.prototype.hasOwnProperty.call(bindings.bySetId, existingSetId)) continue;
+		if (existingSetId === normalizedSetId) continue;
+		if (aeLuaPokemonIdentitiesMatch(getAeLuaPokemonIdentity(bindings.bySetId[existingSetId]), identity)) {
+			delete bindings.bySetId[existingSetId];
+		}
+	}
+	bindings.bySetId[normalizedSetId] = {
+		personality: identity.personality,
+		otId: identity.otId,
+		species: normalizeAeLuaPokemonSpeciesName(mon),
+		nickname: String(mon && mon.nickname || "")
+	};
+	return true;
+}
+
+function findAeLuaBoundTeamSetId(mon, teamSetIds, bindings) {
+	var identity = getAeLuaPokemonIdentity(mon);
+	if (!identity) return "";
+	var sourceBindings = normalizeAeLuaTeamBindings(bindings).bySetId;
+	for (var i = 0; i < teamSetIds.length; i++) {
+		var setId = teamSetIds[i];
+		if (aeLuaPokemonIdentitiesMatch(getAeLuaPokemonIdentity(sourceBindings[setId]), identity)) {
+			return setId;
+		}
+	}
+	return "";
+}
+
 function getAeLuaFragPlayerSetIds() {
 	var setIds = [];
 	var seenSetIds = {};
-	addAeLuaFragSetId(setIds, seenSetIds, getSelectedSetIdForSide("p1"));
 	var layout = collectPlayerRosterLayout();
-	var zones = ["team", "box", "box2", "trash"];
-	for (var zoneIndex = 0; zoneIndex < zones.length; zoneIndex++) {
-		var zoneSetIds = layout[zones[zoneIndex]] || [];
-		for (var setIndex = 0; setIndex < zoneSetIds.length; setIndex++) {
-			addAeLuaFragSetId(setIds, seenSetIds, zoneSetIds[setIndex]);
-		}
+	var teamSetIds = layout.team || [];
+	for (var setIndex = 0; setIndex < teamSetIds.length; setIndex++) {
+		addAeLuaFragSetId(setIds, seenSetIds, teamSetIds[setIndex]);
 	}
 	return setIds;
 }
@@ -3606,21 +3930,17 @@ function getAeLuaFragSetNickname(setId) {
 }
 
 function findAeLuaFragKillerSetId(event) {
-	var partyIndex = event && event.killer ? parseInt(event.killer.partyIndex, 10) : NaN;
-	if (!Number.isNaN(partyIndex)) {
-		var partyLayout = collectPlayerRosterLayout().team || [];
-		// The in-game party slot is the stable identity. Forms may legitimately
-		// differ from the calculator's base-species set while it is on the field.
-		if (partyLayout[partyIndex]) return partyLayout[partyIndex];
-	}
-	var killerSpecies = normalizeAeLuaFragSpecies(getAeLuaFragMonSpecies(event && event.killer));
+	var killer = event && event.killer ? event.killer : {};
+	var playerSetIds = getAeLuaFragPlayerSetIds();
+	var boundSetId = findAeLuaBoundTeamSetId(killer, playerSetIds, getAeLuaTeamBindings());
+	if (boundSetId) return boundSetId;
+	var killerSpecies = aeLuaTrainerNormalizeSpecies(getAeLuaFragMonSpecies(event && event.killer));
 	if (!killerSpecies) return "";
 	var killerNickname = normalizeAeLuaFragText(event && event.killer ? event.killer.nickname : "");
-	var playerSetIds = getAeLuaFragPlayerSetIds();
 	var candidates = [];
 	for (var i = 0; i < playerSetIds.length; i++) {
 		var setId = playerSetIds[i];
-		if (normalizeAeLuaFragSpecies(parseSetId(setId).species) !== killerSpecies) continue;
+		if (aeLuaTrainerNormalizeSpecies(parseSetId(setId).species) !== killerSpecies) continue;
 		candidates.push(setId);
 	}
 	if (!candidates.length) return "";
@@ -3631,22 +3951,20 @@ function findAeLuaFragKillerSetId(event) {
 			}
 		}
 	}
-	var selectedPlayerSetId = getSelectedSetIdForSide("p1");
-	for (var selectedIndex = 0; selectedIndex < candidates.length; selectedIndex++) {
-		if (candidates[selectedIndex] === selectedPlayerSetId) return candidates[selectedIndex];
-	}
-	return candidates[0];
+	return candidates.length === 1 ? candidates[0] : "";
 }
 
 function findAeLuaFragPlayerSetIdForMon(mon) {
-	var monSpecies = normalizeAeLuaFragSpecies(getAeLuaFragMonSpecies(mon));
+	var playerSetIds = getAeLuaFragPlayerSetIds();
+	var boundSetId = findAeLuaBoundTeamSetId(mon, playerSetIds, getAeLuaTeamBindings());
+	if (boundSetId) return boundSetId;
+	var monSpecies = aeLuaTrainerNormalizeSpecies(getAeLuaFragMonSpecies(mon));
 	if (!monSpecies) return "";
 	var monNickname = normalizeAeLuaFragText(mon && mon.nickname);
-	var playerSetIds = getAeLuaFragPlayerSetIds();
 	var candidates = [];
 	for (var i = 0; i < playerSetIds.length; i++) {
 		var setId = playerSetIds[i];
-		if (normalizeAeLuaFragSpecies(parseSetId(setId).species) !== monSpecies) continue;
+		if (aeLuaTrainerNormalizeSpecies(parseSetId(setId).species) !== monSpecies) continue;
 		candidates.push(setId);
 	}
 	if (!candidates.length) return "";
@@ -3657,131 +3975,788 @@ function findAeLuaFragPlayerSetIdForMon(mon) {
 			}
 		}
 	}
-	var selectedPlayerSetId = getSelectedSetIdForSide("p1");
-	for (var selectedIndex = 0; selectedIndex < candidates.length; selectedIndex++) {
-		if (candidates[selectedIndex] === selectedPlayerSetId) return candidates[selectedIndex];
-	}
-	return candidates[0];
+	return candidates.length === 1 ? candidates[0] : "";
 }
 
-function aeLuaFragTrainerMatchesEvent(entry, event) {
-	var eventLabel = normalizeAeLuaFragText(event && event.trainerLabel);
-	var eventName = normalizeAeLuaFragText(event && event.trainerName);
-	var entryLabel = normalizeAeLuaFragText(entry && entry.trainerLabel);
-	var entryName = normalizeAeLuaFragText(entry && entry.trainerName);
-	if (!eventLabel && !eventName) return true;
-	if (eventLabel && entryLabel === eventLabel) return true;
-	// The game identifies trainers by class/name (for example "Youngster Josh"),
-	// while calc set labels add a location after " | ". Match that trainer-name
-	// portion without requiring the Lua to know the calc's route label.
-	if (eventLabel && entryName === eventLabel) return true;
-	if (eventLabel && entryLabel.indexOf(eventLabel + " | ") === 0) return true;
-	if (eventName && entryName === eventName) return true;
-	if (eventName && entryLabel.indexOf(eventName + " | ") === 0) return true;
-	return false;
+/*
+ * AstralCalc dynamic trainer/fight resolution helpers.
+ *
+ * This block does not create a second trainer
+ * database: every registry rebuild is derived from the SETDEX_SV object which
+ * the calculator already loaded from js/data/sets/gen9.js. The lightweight
+ * fingerprint also means a runtime mutation/addition to SETDEX_SV invalidates
+ * the cache automatically.
+ *
+ * Expected existing AstralCalc helpers are used when available, but fallbacks
+ * are included so this block can be tested in isolation:
+ *   normalizeAeLuaFragText, normalizeAeLuaFragSpecies,
+ *   parseTrainerSetName, getTrainerIndexFromSetData,
+ *   getSetDoubleGroupId, getSetDoubleSide.
+ */
+
+var aeLuaTrainerRegistryCache = null;
+var aeLuaTrainerRegistryFingerprint = "";
+var AE_LUA_TRAINER_SPECIES_ALIASES = {
+	aegislashblade: "aegislash",
+	aegislashshield: "aegislash",
+	castformnormal: "castform",
+	castformsunny: "castform",
+	castformrainy: "castform",
+	castformsnowy: "castform",
+	cramorantgulping: "cramorant",
+	cramorantgorging: "cramorant",
+	darmanitanstandardmode: "darmanitan",
+	darmanitanzen: "darmanitan",
+	darmanitanzenmode: "darmanitan",
+	darmanitangalarstandardmode: "darmanitangalar",
+	darmanitangalarzenmode: "darmanitangalar",
+	eeveestarter: "eevee",
+	eiscueiceface: "eiscue",
+	eiscuenoiceface: "eiscue",
+	florgeswhiteflower: "florgeswhite",
+	florgesblueflower: "florges",
+	florgesorangeflower: "florges",
+	florgesredflower: "florges",
+	florgesyellowflower: "florges",
+	furfroulareinetrim: "furfroulareine",
+	indeedeefemale: "indeedeef",
+	mausholdfamilyoffour: "mausholdfour",
+	mausholdfamilyofthree: "mausholdthree",
+	mimikyudisguised: "mimikyu",
+	mimikyubusted: "mimikyu",
+	morpekofullbelly: "morpeko",
+	morpekohangry: "morpeko",
+	palafinzero: "palafin",
+	palafinhero: "palafin",
+	pikachupartnercap: "pikachupartner",
+	pikachualolacap: "pikachualola",
+	pikachuhoenncap: "pikachuhoenn",
+	pikachukaloscap: "pikachukalos",
+	pikachuoriginalcap: "pikachuoriginal",
+	pikachusinnohcap: "pikachusinnoh",
+	pikachuunovacap: "pikachuunova",
+	pikachuworldcap: "pikachuworld",
+	polteageistphony: "polteageist",
+	polteageistantique: "polteageist",
+	sinisteaphony: "sinistea",
+	sinisteaantique: "sinistea",
+	terapagosnormal: "terapagos",
+	terapagosterastal: "terapagos",
+	terapagosstellar: "terapagos",
+	toxtricitylowkey: "toxtricity",
+	unownc2: "unownc",
+	urshifusinglestrikestyle: "urshifu",
+	wishiwashischool: "wishiwashi",
+	xerneasneutral: "xerneas",
+	xerneasactive: "xerneas"
+};
+
+function aeLuaTrainerNormalizeText(value) {
+	if (typeof normalizeAeLuaFragText === "function") {
+		return normalizeAeLuaFragText(value);
+	}
+	return String(value || "")
+		.trim()
+		.toLowerCase()
+		.replace(/[^a-z0-9]+/g, " ")
+		.replace(/\s+/g, " ")
+		.trim();
 }
 
-function collectAeLuaFragVictimMatches(entries, event, victimSpecies) {
-	var matches = [];
-	if (!Array.isArray(entries)) return matches;
-	var fightMinIndex = Infinity;
-	for (var fightIndex = 0; fightIndex < entries.length; fightIndex++) {
-		var fightEntry = parseTrainerPartyEntry(entries[fightIndex]);
-		if (!fightEntry || !fightEntry.fullSetName || !aeLuaFragTrainerMatchesEvent(fightEntry, event)) continue;
-		fightMinIndex = Math.min(fightMinIndex, fightEntry.sortIndex);
+function aeLuaTrainerNormalizeSpecies(value) {
+	var speciesName = String(value || "").trim();
+	var speciesId = typeof normalizeAeLuaFragSpecies === "function"
+		? normalizeAeLuaFragSpecies(speciesName)
+		: aeLuaTrainerNormalizeText(speciesName).replace(/\s+/g, "");
+	// Trainer parties store the pre-transformation species. Calculator sets use
+	// the battle form for Megas/Primals, so compare both through the base form.
+	speciesId = speciesId.replace(/mega(?:x|y|z)?$/, "").replace(/primal$/, "");
+	if (speciesId.indexOf("minior") === 0) speciesId = "minior";
+	return AE_LUA_TRAINER_SPECIES_ALIASES[speciesId] || speciesId;
+}
+
+function aeLuaTrainerNormalizeItem(value) {
+	var itemId = aeLuaTrainerNormalizeText(value).replace(/\s+/g, "");
+	return itemId === "none" || itemId === "noitem" ? "" : itemId;
+}
+
+function aeLuaTrainerInteger(value, fallbackValue) {
+	var parsed = parseInt(value, 10);
+	return Number.isNaN(parsed) ? fallbackValue : parsed;
+}
+
+function aeLuaTrainerIndexFromSet(setData, fallbackValue) {
+	if (typeof getTrainerIndexFromSetData === "function") {
+		var helperIndex = getTrainerIndexFromSetData(setData);
+		if (helperIndex > 0) return helperIndex;
 	}
+	if (!setData || typeof setData.index === "undefined" || setData.index === null) {
+		return fallbackValue || 0;
+	}
+	return aeLuaTrainerInteger(setData.index, fallbackValue || 0);
+}
+
+function aeLuaTrainerDoubleGroup(setData) {
+	if (typeof getSetDoubleGroupId === "function") {
+		return String(getSetDoubleGroupId(setData) || "").trim();
+	}
+	if (!setData) return "";
+	var rawGroup = setData.setdoubleGroup;
+	if (typeof rawGroup === "undefined") rawGroup = setData.setdoublegroup;
+	if (typeof rawGroup === "undefined") rawGroup = setData.setdoubleId;
+	if (typeof rawGroup === "undefined") rawGroup = setData.setdoubleid;
+	return rawGroup === null || typeof rawGroup === "undefined"
+		? ""
+		: String(rawGroup).trim();
+}
+
+function aeLuaTrainerDoubleSide(setData) {
+	if (typeof getSetDoubleSide === "function") {
+		return getSetDoubleSide(setData) || 0;
+	}
+	if (!setData) return 0;
+	var rawSide = setData.setdoubleSide;
+	if (typeof rawSide === "undefined") rawSide = setData.setdoubleside;
+	var normalizedSide = String(rawSide === null || typeof rawSide === "undefined" ? "" : rawSide)
+		.trim()
+		.toLowerCase();
+	if (normalizedSide === "1" || normalizedSide === "top" || normalizedSide === "primary") return 1;
+	if (normalizedSide === "2" || normalizedSide === "bottom" || normalizedSide === "secondary") return 2;
+	return 0;
+}
+
+function aeLuaTrainerParseLabel(label) {
+	if (typeof parseTrainerSetName === "function") return parseTrainerSetName(label);
+	var normalizedLabel = String(label || "").trim();
+	var separatorIndex = normalizedLabel.indexOf("|");
+	if (separatorIndex < 0) {
+		return {trainerName: normalizedLabel, battleKey: normalizedLabel};
+	}
+	var trainerName = normalizedLabel.substring(0, separatorIndex).trim();
+	var battleKey = normalizedLabel.substring(separatorIndex + 1).trim();
+	return {
+		trainerName: trainerName || normalizedLabel,
+		battleKey: battleKey || normalizedLabel
+	};
+}
+
+function aeLuaTrainerMakeSourceEntry(speciesName, trainerLabel, setData, sourceOrder, fallbackIndex) {
+	var labelParts = aeLuaTrainerParseLabel(trainerLabel);
+	var sortIndex = aeLuaTrainerIndexFromSet(setData, fallbackIndex || 0);
+	return {
+		pokemonName: String(speciesName || "").trim(),
+		speciesId: aeLuaTrainerNormalizeSpecies(speciesName),
+		trainerLabel: String(trainerLabel || "").trim(),
+		normalizedTrainerLabel: aeLuaTrainerNormalizeText(trainerLabel),
+		trainerName: labelParts.trainerName,
+		trainerBattleKey: labelParts.battleKey,
+		setData: setData || {},
+		sortIndex: sortIndex,
+		sourceOrder: sourceOrder,
+		level: aeLuaTrainerInteger(setData && setData.level, 0),
+		itemId: aeLuaTrainerNormalizeItem(setData && setData.item),
+		groupId: aeLuaTrainerDoubleGroup(setData),
+		explicitSide: aeLuaTrainerDoubleSide(setData),
+		fullSetName: String(speciesName || "").trim() + " (" + String(trainerLabel || "").trim() + ")"
+	};
+}
+
+function aeLuaTrainerParseNameEntry(entryText, sourceOrder) {
+	var rawEntry = String(entryText || "");
+	var closeBracket = rawEntry.indexOf("]");
+	var indexText = closeBracket >= 0 ? rawEntry.substring(1, closeBracket) : "0";
+	var fullSetName = closeBracket >= 0 ? rawEntry.substring(closeBracket + 1) : rawEntry;
+	var openLabel = fullSetName.indexOf(" (");
+	var closeLabel = fullSetName.lastIndexOf(")");
+	if (openLabel < 0 || closeLabel <= openLabel) return null;
+	var speciesName = fullSetName.substring(0, openLabel);
+	var trainerLabel = fullSetName.substring(openLabel + 2, closeLabel);
+	var activeSetdex = typeof SETDEX_SV !== "undefined" && SETDEX_SV
+		? SETDEX_SV
+		: (typeof setdex !== "undefined" ? setdex : null);
+	var setData = activeSetdex && activeSetdex[speciesName]
+		? activeSetdex[speciesName][trainerLabel]
+		: null;
+	if (!setData) setData = {index: indexText};
+	return aeLuaTrainerMakeSourceEntry(
+		speciesName,
+		trainerLabel,
+		setData,
+		sourceOrder,
+		aeLuaTrainerInteger(indexText, 0)
+	);
+}
+
+function collectAeLuaTrainerRegistrySourceEntries() {
+	var entries = [];
+	var sourceOrder = 0;
+	if (typeof SETDEX_SV !== "undefined" && SETDEX_SV && typeof SETDEX_SV === "object") {
+		for (var speciesName in SETDEX_SV) {
+			if (!Object.prototype.hasOwnProperty.call(SETDEX_SV, speciesName)) continue;
+			var speciesSets = SETDEX_SV[speciesName];
+			if (!speciesSets || typeof speciesSets !== "object") continue;
+			for (var trainerLabel in speciesSets) {
+				if (!Object.prototype.hasOwnProperty.call(speciesSets, trainerLabel)) continue;
+				var setData = speciesSets[trainerLabel];
+				if (!setData || typeof setData !== "object") continue;
+				entries.push(aeLuaTrainerMakeSourceEntry(
+					speciesName,
+					trainerLabel,
+					setData,
+					sourceOrder,
+					0
+				));
+				sourceOrder += 1;
+			}
+		}
+		return entries;
+	}
+
+	// Compatibility fallback for a build which exposes only get_trainer_names
+	// or its already-materialized TR_NAMES array.
+	var trainerNames = [];
+	if (typeof get_trainer_names === "function") {
+		try {
+			trainerNames = get_trainer_names() || [];
+		} catch (err) {}
+	}
+	if (!trainerNames.length && typeof TR_NAMES !== "undefined" && Array.isArray(TR_NAMES)) {
+		trainerNames = TR_NAMES;
+	}
+	for (var entryIndex = 0; entryIndex < trainerNames.length; entryIndex++) {
+		var parsedEntry = aeLuaTrainerParseNameEntry(trainerNames[entryIndex], sourceOrder);
+		if (!parsedEntry) continue;
+		entries.push(parsedEntry);
+		sourceOrder += 1;
+	}
+	return entries;
+}
+
+function getAeLuaTrainerRegistrySourceFingerprint(entries) {
+	var parts = [String(entries.length)];
 	for (var i = 0; i < entries.length; i++) {
-		var entry = parseTrainerPartyEntry(entries[i]);
-		if (!entry || !entry.fullSetName) continue;
-		if (victimSpecies && normalizeAeLuaFragSpecies(entry.pokemonName) !== victimSpecies) continue;
-		if (!aeLuaFragTrainerMatchesEvent(entry, event)) continue;
-		matches.push({
-			setId: entry.fullSetName,
-			fightLabel: entry.trainerLabel,
-			partyIndex: Number.isFinite(fightMinIndex) ? entry.sortIndex - fightMinIndex : -1,
-			level: entry.setData && entry.setData.level ? parseInt(entry.setData.level, 10) || 0 : 0
+		var entry = entries[i];
+		parts.push([
+			entry.speciesId,
+			entry.normalizedTrainerLabel,
+			entry.sortIndex,
+			entry.level,
+			entry.itemId,
+			aeLuaTrainerNormalizeText(entry.groupId),
+			entry.explicitSide
+		].join("~"));
+	}
+	return parts.join("|");
+}
+
+function aeLuaTrainerCompareEntries(left, right) {
+	var leftHasIndex = left.sortIndex > 0;
+	var rightHasIndex = right.sortIndex > 0;
+	if (leftHasIndex !== rightHasIndex) return leftHasIndex ? -1 : 1;
+	if (left.sortIndex !== right.sortIndex) return left.sortIndex - right.sortIndex;
+	return left.sourceOrder - right.sourceOrder;
+}
+
+function aeLuaTrainerAddUnique(array, value) {
+	if (array.indexOf(value) === -1) array.push(value);
+}
+
+function aeLuaTrainerAssignFightSides(fight) {
+	var primary = [];
+	var secondary = [];
+	var unassigned = [];
+	var hasExplicitSide = false;
+	for (var i = 0; i < fight.entries.length; i++) {
+		var entry = fight.entries[i];
+		if (entry.explicitSide === 1) {
+			primary.push(entry);
+			hasExplicitSide = true;
+		} else if (entry.explicitSide === 2) {
+			secondary.push(entry);
+			hasExplicitSide = true;
+		} else {
+			unassigned.push(entry);
+		}
+	}
+
+	if (hasExplicitSide) {
+		// This is the same compatibility policy used by splitSetDoubleEntries:
+		// retain explicit metadata and balance any legacy unassigned entries.
+		for (var unassignedIndex = 0; unassignedIndex < unassigned.length; unassignedIndex++) {
+			if (primary.length <= secondary.length) primary.push(unassigned[unassignedIndex]);
+			else secondary.push(unassigned[unassignedIndex]);
+		}
+	} else if (fight.groupId && fight.labels.length > 1) {
+		// Legacy paired-trainer groups without setdoubleSide metadata are split
+		// by trainer label. Their first-index ordering makes this deterministic.
+		var entriesByLabel = {};
+		var labelOrder = [];
+		for (var groupEntryIndex = 0; groupEntryIndex < unassigned.length; groupEntryIndex++) {
+			var groupEntry = unassigned[groupEntryIndex];
+			var labelKey = groupEntry.normalizedTrainerLabel;
+			if (!entriesByLabel[labelKey]) {
+				entriesByLabel[labelKey] = [];
+				labelOrder.push(labelKey);
+			}
+			entriesByLabel[labelKey].push(groupEntry);
+		}
+		if (labelOrder.length > 1) {
+			primary = entriesByLabel[labelOrder[0]].slice();
+			for (var labelIndex = 1; labelIndex < labelOrder.length; labelIndex++) {
+				secondary = secondary.concat(entriesByLabel[labelOrder[labelIndex]]);
+			}
+		} else {
+			primary = unassigned.slice();
+		}
+	} else {
+		// An ordinary singles or one-trainer doubles party is one trainer side.
+		primary = unassigned.slice();
+	}
+
+	primary.sort(aeLuaTrainerCompareEntries);
+	secondary.sort(aeLuaTrainerCompareEntries);
+	for (var primarySlot = 0; primarySlot < primary.length; primarySlot++) {
+		primary[primarySlot].trainerSide = 1;
+		primary[primarySlot].trainerPartyIndex = primarySlot;
+	}
+	for (var secondarySlot = 0; secondarySlot < secondary.length; secondarySlot++) {
+		secondary[secondarySlot].trainerSide = 2;
+		secondary[secondarySlot].trainerPartyIndex = secondarySlot;
+	}
+	fight.sides = {1: primary, 2: secondary};
+	fight.partyEntries = primary.concat(secondary);
+}
+
+function aeLuaTrainerBuildFightSignature(fight, includeLevels) {
+	var signatureRows = [];
+	for (var side = 1; side <= 2; side++) {
+		var sideEntries = fight.sides[side] || [];
+		for (var slot = 0; slot < sideEntries.length; slot++) {
+			var entry = sideEntries[slot];
+			signatureRows.push([
+				side,
+				slot,
+				entry.speciesId,
+				includeLevels ? entry.level : "*"
+			].join(":"));
+		}
+	}
+	return signatureRows.join("|");
+}
+
+function buildAeLuaTrainerFightRegistry(sourceEntries) {
+	var entries = Array.isArray(sourceEntries)
+		? sourceEntries
+		: collectAeLuaTrainerRegistrySourceEntries();
+	var fightsByKey = {};
+	var fights = [];
+	for (var i = 0; i < entries.length; i++) {
+		var entry = entries[i];
+		var normalizedGroup = aeLuaTrainerNormalizeText(entry.groupId);
+		var fightKey = normalizedGroup
+			? "group:" + normalizedGroup
+			: "label:" + entry.normalizedTrainerLabel;
+		var fight = fightsByKey[fightKey];
+		if (!fight) {
+			fight = {
+				key: fightKey,
+				groupId: entry.groupId || "",
+				labels: [],
+				normalizedLabels: [],
+				entries: [],
+				indexValues: [],
+				anchorIndex: 0,
+				maxIndex: 0,
+				canonicalLabel: "",
+				sides: {1: [], 2: []},
+				partyEntries: []
+			};
+			fightsByKey[fightKey] = fight;
+			fights.push(fight);
+		}
+		fight.entries.push(entry);
+		aeLuaTrainerAddUnique(fight.labels, entry.trainerLabel);
+		aeLuaTrainerAddUnique(fight.normalizedLabels, entry.normalizedTrainerLabel);
+		if (entry.sortIndex > 0) aeLuaTrainerAddUnique(fight.indexValues, entry.sortIndex);
+	}
+
+	var byLabel = {};
+	var byIndex = {};
+	var bySignature = {};
+	for (var fightIndex = 0; fightIndex < fights.length; fightIndex++) {
+		var currentFight = fights[fightIndex];
+		currentFight.entries.sort(aeLuaTrainerCompareEntries);
+		currentFight.indexValues.sort(function (left, right) { return left - right; });
+		currentFight.anchorIndex = currentFight.indexValues.length ? currentFight.indexValues[0] : 0;
+		currentFight.maxIndex = currentFight.indexValues.length
+			? currentFight.indexValues[currentFight.indexValues.length - 1]
+			: 0;
+		currentFight.canonicalLabel = currentFight.entries.length
+			? currentFight.entries[0].trainerLabel
+			: (currentFight.labels[0] || "Unknown Fight");
+		aeLuaTrainerAssignFightSides(currentFight);
+		currentFight.signature = aeLuaTrainerBuildFightSignature(currentFight, true);
+		currentFight.speciesSignature = aeLuaTrainerBuildFightSignature(currentFight, false);
+
+		for (var labelIndex = 0; labelIndex < currentFight.normalizedLabels.length; labelIndex++) {
+			var normalizedLabel = currentFight.normalizedLabels[labelIndex];
+			if (!byLabel[normalizedLabel]) byLabel[normalizedLabel] = [];
+			byLabel[normalizedLabel].push(currentFight);
+		}
+		for (var indexIndex = 0; indexIndex < currentFight.indexValues.length; indexIndex++) {
+			var numericIndex = String(currentFight.indexValues[indexIndex]);
+			if (!byIndex[numericIndex]) byIndex[numericIndex] = [];
+			byIndex[numericIndex].push(currentFight);
+		}
+		if (!bySignature[currentFight.signature]) bySignature[currentFight.signature] = [];
+		bySignature[currentFight.signature].push(currentFight);
+	}
+
+	return {
+		fights: fights,
+		byKey: fightsByKey,
+		byLabel: byLabel,
+		byIndex: byIndex,
+		bySignature: bySignature,
+		sourceEntryCount: entries.length
+	};
+}
+
+function getAeLuaTrainerFightRegistry() {
+	var sourceEntries = collectAeLuaTrainerRegistrySourceEntries();
+	var fingerprint = getAeLuaTrainerRegistrySourceFingerprint(sourceEntries);
+	if (!aeLuaTrainerRegistryCache || fingerprint !== aeLuaTrainerRegistryFingerprint) {
+		aeLuaTrainerRegistryCache = buildAeLuaTrainerFightRegistry(sourceEntries);
+		aeLuaTrainerRegistryFingerprint = fingerprint;
+	}
+	return aeLuaTrainerRegistryCache;
+}
+
+function invalidateAeLuaTrainerFightRegistry() {
+	aeLuaTrainerRegistryCache = null;
+	aeLuaTrainerRegistryFingerprint = "";
+}
+
+function normalizeAeLuaLiveTrainerParty(rawParty) {
+	var normalized = [];
+	var party = Array.isArray(rawParty) ? rawParty : [];
+	for (var i = 0; i < party.length; i++) {
+		var mon = party[i];
+		if (!mon || typeof mon !== "object") continue;
+		var speciesId = aeLuaTrainerNormalizeSpecies(mon.species || mon.name);
+		if (!speciesId) continue;
+		var side = aeLuaTrainerInteger(mon.trainerSide, 1);
+		if (side !== 2) side = 1;
+		var globalPartyIndex = aeLuaTrainerInteger(mon.partyIndex, i);
+		var trainerPartyIndex = aeLuaTrainerInteger(mon.trainerPartyIndex, NaN);
+		if (Number.isNaN(trainerPartyIndex)) {
+			trainerPartyIndex = side === 2 && globalPartyIndex >= 3
+				? globalPartyIndex - 3
+				: globalPartyIndex;
+		}
+		normalized.push({
+			trainerSide: side,
+			trainerPartyIndex: trainerPartyIndex,
+			partyIndex: globalPartyIndex,
+			species: String(mon.species || mon.name || ""),
+			speciesId: speciesId,
+			level: aeLuaTrainerInteger(mon.level, 0),
+			itemId: aeLuaTrainerNormalizeItem(mon.item),
+			raw: mon
 		});
 	}
+	normalized.sort(function (left, right) {
+		if (left.trainerSide !== right.trainerSide) return left.trainerSide - right.trainerSide;
+		if (left.trainerPartyIndex !== right.trainerPartyIndex) {
+			return left.trainerPartyIndex - right.trainerPartyIndex;
+		}
+		return left.partyIndex - right.partyIndex;
+	});
+	return normalized;
+}
+
+function scoreAeLuaLivePartyAgainstFight(fight, rawLiveParty) {
+	if (!fight) return null;
+	var liveParty = Array.isArray(rawLiveParty) && rawLiveParty.length && rawLiveParty[0].speciesId
+		? rawLiveParty
+		: normalizeAeLuaLiveTrainerParty(rawLiveParty);
+	if (!liveParty.length || liveParty.length !== fight.partyEntries.length) return null;
+
+	var expectedRows = fight.partyEntries.slice().sort(function (left, right) {
+		if (left.trainerSide !== right.trainerSide) return left.trainerSide - right.trainerSide;
+		return left.trainerPartyIndex - right.trainerPartyIndex;
+	});
+	var levelMatches = 0;
+	var levelWildcards = 0;
+	var itemMatches = 0;
+	for (var i = 0; i < expectedRows.length; i++) {
+		var expected = expectedRows[i];
+		var actual = liveParty[i];
+		if (expected.trainerSide !== actual.trainerSide ||
+			expected.trainerPartyIndex !== actual.trainerPartyIndex ||
+			expected.speciesId !== actual.speciesId) {
+			return null;
+		}
+		// Non-positive set levels are treated as dynamic/wildcard levels. A zero
+		// live level is likewise unknown rather than a mismatch.
+		if (expected.level > 0 && actual.level > 0) {
+			if (expected.level !== actual.level) return null;
+			levelMatches += 1;
+		} else {
+			levelWildcards += 1;
+		}
+		if (expected.itemId && actual.itemId) {
+			if (expected.itemId !== actual.itemId) return null;
+			itemMatches += 1;
+		}
+	}
+	return {
+		fight: fight,
+		score: 100000 + levelMatches * 100 + itemMatches * 10 - levelWildcards,
+		levelMatches: levelMatches,
+		levelWildcards: levelWildcards,
+		itemMatches: itemMatches
+	};
+}
+
+function findAeLuaTrainerFightsByLiveParty(rawLiveParty, registry) {
+	var activeRegistry = registry || getAeLuaTrainerFightRegistry();
+	var normalizedParty = normalizeAeLuaLiveTrainerParty(rawLiveParty);
+	if (!normalizedParty.length) return [];
+	var matches = [];
+	for (var i = 0; i < activeRegistry.fights.length; i++) {
+		var scored = scoreAeLuaLivePartyAgainstFight(activeRegistry.fights[i], normalizedParty);
+		if (scored) matches.push(scored);
+	}
+	matches.sort(function (left, right) {
+		if (left.score !== right.score) return right.score - left.score;
+		return left.fight.anchorIndex - right.fight.anchorIndex;
+	});
 	return matches;
 }
 
-function pickAeLuaFragVictimMatch(matches, event) {
-	if (!matches.length) return null;
-	var partyIndex = event && event.victim ? parseInt(event.victim.partyIndex, 10) : NaN;
-	if (!Number.isNaN(partyIndex)) {
-		for (var partyMatchIndex = 0; partyMatchIndex < matches.length; partyMatchIndex++) {
-			if (matches[partyMatchIndex].partyIndex === partyIndex) return matches[partyMatchIndex];
-		}
-	}
-	var eventLevel = event && event.victim ? parseInt(event.victim.level, 10) || 0 : 0;
-	if (eventLevel) {
-		for (var i = 0; i < matches.length; i++) {
-			if (matches[i].level === eventLevel) return matches[i];
-		}
-	}
-	return matches[0];
+function aeLuaTrainerFightArrayIntersection(left, right) {
+	if (!left.length || !right.length) return [];
+	var rightKeys = {};
+	for (var i = 0; i < right.length; i++) rightKeys[right[i].key] = true;
+	return left.filter(function (fight) { return !!rightKeys[fight.key]; });
 }
 
-function getAeLuaIndexedFightEntries(event) {
-	var eventLabel = normalizeAeLuaFragText(event && event.trainerLabel);
-	var eventFightIndex = parseInt(event && event.fightIndex, 10) || 0;
-	var allEntries = (typeof TR_NAMES === "undefined" ? [] : TR_NAMES).map(parseTrainerPartyEntry);
-	var anchor = null;
-	for (var i = 0; i < allEntries.length; i++) {
-		var entryIndex = getTrainerIndexFromSetData(allEntries[i].setData) || allEntries[i].sortIndex;
-		if (eventFightIndex && entryIndex === eventFightIndex) {
-			anchor = allEntries[i];
+function aeLuaTrainerResolutionResult(fight, trainerLabelHint, matchType, details) {
+	var normalizedHint = aeLuaTrainerNormalizeText(trainerLabelHint);
+	var resolvedLabel = fight.canonicalLabel;
+	for (var i = 0; i < fight.labels.length; i++) {
+		if (aeLuaTrainerNormalizeText(fight.labels[i]) === normalizedHint) {
+			resolvedLabel = fight.labels[i];
 			break;
 		}
 	}
-	if (!anchor && eventLabel) {
-		for (var labelIndex = 0; labelIndex < allEntries.length; labelIndex++) {
-			if (normalizeAeLuaFragText(allEntries[labelIndex].trainerLabel) === eventLabel) {
-				anchor = allEntries[labelIndex];
-				break;
-			}
+	return {
+		ok: true,
+		ambiguous: false,
+		matchType: matchType,
+		fight: fight,
+		fightKey: fight.key,
+		fightLabel: resolvedLabel,
+		fightIndex: fight.anchorIndex,
+		partyEntries: fight.partyEntries,
+		details: details || {}
+	};
+}
+
+function aeLuaTrainerUnresolvedResult(reason, candidates, details) {
+	return {
+		ok: false,
+		ambiguous: reason === "ambiguous",
+		matchType: "unresolved",
+		reason: reason,
+		fight: null,
+		fightKey: "",
+		fightLabel: "",
+		fightIndex: 0,
+		partyEntries: [],
+		candidates: (candidates || []).map(function (fight) {
+			return {
+				fightKey: fight.key,
+				fightLabel: fight.canonicalLabel,
+				fightIndex: fight.anchorIndex
+			};
+		}),
+		details: details || {}
+	};
+}
+
+/*
+ * Resolution order:
+ *   1. A unique live trainer-party signature identifies the live fight.
+ *      If a label hint agrees, it is retained as the display label.
+ *   2. Without a usable live signature, an exact full trainer label wins.
+ *   3. Numeric set index is a final fallback and is accepted only when it is
+ *      unambiguous (or narrows an already exact-label candidate).
+ *
+ * This deliberately prevents shared rival indexes from selecting the first
+ * starter variant merely because of SETDEX_SV object iteration order.
+ */
+function resolveAeLuaTrainerFight(options) {
+	var resolveOptions = options || {};
+	var registry = resolveOptions.registry || getAeLuaTrainerFightRegistry();
+	var labelHint = String(resolveOptions.trainerLabel || resolveOptions.fightLabel || "").trim();
+	var normalizedLabel = aeLuaTrainerNormalizeText(labelHint);
+	var numericIndex = aeLuaTrainerInteger(
+		resolveOptions.fightIndex || resolveOptions.trainerIndex || 0,
+		0
+	);
+	var labelMatches = normalizedLabel && registry.byLabel[normalizedLabel]
+		? registry.byLabel[normalizedLabel].slice()
+		: [];
+	var indexMatches = numericIndex > 0 && registry.byIndex[String(numericIndex)]
+		? registry.byIndex[String(numericIndex)].slice()
+		: [];
+	var liveMatches = findAeLuaTrainerFightsByLiveParty(
+		resolveOptions.trainerParty || resolveOptions.liveParty || [],
+		registry
+	);
+	var bestLiveScore = liveMatches.length ? liveMatches[0].score : 0;
+	var bestLiveFights = liveMatches
+		.filter(function (match) { return match.score === bestLiveScore; })
+		.map(function (match) { return match.fight; });
+
+	if (bestLiveFights.length) {
+		var liveLabelMatches = aeLuaTrainerFightArrayIntersection(bestLiveFights, labelMatches);
+		if (liveLabelMatches.length === 1) {
+			return aeLuaTrainerResolutionResult(liveLabelMatches[0], labelHint, "live-party+label", {
+				liveMatchCount: bestLiveFights.length
+			});
 		}
+		if (bestLiveFights.length === 1) {
+			return aeLuaTrainerResolutionResult(bestLiveFights[0], labelHint, "live-party", {
+				labelMismatch: !!labelMatches.length && !liveLabelMatches.length
+			});
+		}
+		var liveIndexMatches = aeLuaTrainerFightArrayIntersection(bestLiveFights, indexMatches);
+		if (liveIndexMatches.length === 1) {
+			return aeLuaTrainerResolutionResult(liveIndexMatches[0], labelHint, "live-party+index", {
+				liveMatchCount: bestLiveFights.length
+			});
+		}
+		return aeLuaTrainerUnresolvedResult("ambiguous", bestLiveFights, {
+			source: "live-party"
+		});
 	}
-	if (!anchor) return [];
-	var groupId = getSetDoubleGroupId(anchor.setData);
-	return allEntries.filter(function (entry) {
-		if (!entry || !entry.setData) return false;
-		if (groupId) return getSetDoubleGroupId(entry.setData) === groupId;
-		return normalizeAeLuaFragText(entry.trainerLabel) === normalizeAeLuaFragText(anchor.trainerLabel);
-	}).sort(function (left, right) {
-		return (getTrainerIndexFromSetData(left.setData) || left.sortIndex) - (getTrainerIndexFromSetData(right.setData) || right.sortIndex);
+
+	// The exact label is intentionally tested before the numeric index. An
+	// exact label can safely disambiguate indexes shared by rival variants.
+	if (labelMatches.length === 1) {
+		return aeLuaTrainerResolutionResult(labelMatches[0], labelHint, "label", {
+			indexMismatch: !!indexMatches.length && indexMatches[0].key !== labelMatches[0].key
+		});
+	}
+	if (labelMatches.length > 1) {
+		var labelIndexMatches = aeLuaTrainerFightArrayIntersection(labelMatches, indexMatches);
+		if (labelIndexMatches.length === 1) {
+			return aeLuaTrainerResolutionResult(labelIndexMatches[0], labelHint, "label+index", {});
+		}
+		return aeLuaTrainerUnresolvedResult("ambiguous", labelMatches, {source: "label"});
+	}
+	if (indexMatches.length === 1) {
+		return aeLuaTrainerResolutionResult(indexMatches[0], labelHint, "index", {});
+	}
+	if (indexMatches.length > 1) {
+		return aeLuaTrainerUnresolvedResult("ambiguous", indexMatches, {source: "index"});
+	}
+	return aeLuaTrainerUnresolvedResult("not-found", [], {});
+}
+
+function getAeLuaResolvedFightEntries(resolution, trainerSide) {
+	if (!resolution || !resolution.ok || !resolution.fight) return [];
+	var side = aeLuaTrainerInteger(trainerSide, 0);
+	if (side === 1 || side === 2) return (resolution.fight.sides[side] || []).slice();
+	return resolution.fight.partyEntries.slice();
+}
+
+function getAeLuaTrainerPartyFromLastPayload() {
+	return aeLuaFragLastPayload && aeLuaFragLastPayload.pokemon
+		&& Array.isArray(aeLuaFragLastPayload.pokemon.trainerParty)
+		? aeLuaFragLastPayload.pokemon.trainerParty
+		: [];
+}
+
+function resolveAeLuaTrainerFightForEvent(event) {
+	var payloadBattleSerial = aeLuaFragLastPayload && aeLuaFragLastPayload.battle
+		? parseInt(aeLuaFragLastPayload.battle.battleSerial, 10) || 0
+		: 0;
+	var eventBattleSerial = parseInt(event && event.battleSerial, 10) || 0;
+	var sameLiveBattle = !eventBattleSerial || eventBattleSerial === payloadBattleSerial;
+	var resolution = resolveAeLuaTrainerFight({
+		trainerParty: sameLiveBattle ? getAeLuaTrainerPartyFromLastPayload() : [],
+		trainerLabel: event && event.trainerLabel,
+		fightIndex: event && event.fightIndex
 	});
+	if (!resolution.ok && sameLiveBattle && aeLuaResolvedTrainerFight &&
+		aeLuaResolvedTrainerFight.ok && (!eventBattleSerial ||
+			eventBattleSerial === aeLuaResolvedTrainerFight.battleSerial)) {
+		resolution = aeLuaResolvedTrainerFight;
+	}
+	return resolution;
+}
+
+function getAeLuaIndexedFightEntries(event) {
+	var resolution = resolveAeLuaTrainerFightForEvent(event);
+	return resolution.ok ? resolution.fight.entries.slice() : [];
+}
+
+function aeLuaFragVictimMatchesEntry(entry, victim) {
+	if (!entry || !victim) return false;
+	var entrySpecies = aeLuaTrainerNormalizeSpecies(entry.pokemonName);
+	var battleSpecies = aeLuaTrainerNormalizeSpecies(victim.species);
+	var partySpecies = aeLuaTrainerNormalizeSpecies(victim.partySpecies);
+	if (battleSpecies && entrySpecies !== battleSpecies &&
+		(!partySpecies || entrySpecies !== partySpecies)) {
+		return false;
+	}
+	var eventLevel = parseInt(victim.level, 10) || 0;
+	var entryLevel = parseInt(entry.level || (entry.setData && entry.setData.level), 10) || 0;
+	return !eventLevel || !entryLevel || eventLevel === entryLevel;
+}
+
+function aeLuaFragVictimMatchFromEntry(entry) {
+	return {
+		setId: entry.fullSetName,
+		fightLabel: entry.trainerLabel,
+		partyIndex: entry.trainerPartyIndex,
+		level: entry.level || (entry.setData && parseInt(entry.setData.level, 10)) || 0
+	};
 }
 
 function findAeLuaFragVictimMatch(event) {
 	var victim = event && event.victim ? event.victim : {};
+	var resolution = resolveAeLuaTrainerFightForEvent(event);
+	if (!resolution.ok || !resolution.fight) return null;
+	var trainerSide = parseInt(event && event.trainerSide, 10);
+	if (trainerSide !== 2) trainerSide = 1;
+	var sideEntries = getAeLuaResolvedFightEntries(resolution, trainerSide);
 	var trainerPartyIndex = parseInt(victim.trainerPartyIndex, 10);
-	if (Number.isNaN(trainerPartyIndex)) trainerPartyIndex = parseInt(victim.partyIndex, 10);
-	if (!Number.isNaN(trainerPartyIndex)) {
-		var orderedEntries = getAeLuaIndexedFightEntries(event);
-		if (!orderedEntries.length) orderedEntries = (CURRENT_TRAINER_POKS || []).slice().sort(sortmons).map(parseTrainerPartyEntry);
-		var slotEntries = orderedEntries;
-		if (event && event.twoOpponents) {
-			var splitEntries = splitSetDoubleEntries(orderedEntries);
-			slotEntries = parseInt(event.trainerSide, 10) === 2 ? splitEntries.secondary : splitEntries.primary;
-		}
-		var slotEntry = slotEntries[trainerPartyIndex];
-		if (slotEntry && slotEntry.fullSetName) {
-			return {
-				setId: slotEntry.fullSetName,
-				fightLabel: slotEntry.trainerLabel,
-				partyIndex: trainerPartyIndex,
-				level: slotEntry.setData && slotEntry.setData.level ? parseInt(slotEntry.setData.level, 10) || 0 : 0
-			};
+	if (Number.isNaN(trainerPartyIndex)) {
+		var globalPartyIndex = parseInt(victim.partyIndex, 10);
+		if (!Number.isNaN(globalPartyIndex)) {
+			trainerPartyIndex = trainerSide === 2 && globalPartyIndex >= 3
+				? globalPartyIndex - 3
+				: globalPartyIndex;
 		}
 	}
-	var victimSpecies = normalizeAeLuaFragSpecies(getAeLuaFragMonSpecies(victim));
-	if (!victimSpecies) return null;
-	var currentMatches = collectAeLuaFragVictimMatches(CURRENT_TRAINER_POKS || [], event, victimSpecies);
-	var currentMatch = pickAeLuaFragVictimMatch(currentMatches, event);
-	if (currentMatch) return currentMatch;
-	var allMatches = collectAeLuaFragVictimMatches(typeof TR_NAMES === "undefined" ? [] : TR_NAMES, event, victimSpecies);
-	return pickAeLuaFragVictimMatch(allMatches, event);
+	if (!Number.isNaN(trainerPartyIndex)) {
+		var slotEntry = sideEntries[trainerPartyIndex];
+		if (slotEntry && slotEntry.fullSetName && aeLuaFragVictimMatchesEntry(slotEntry, victim)) {
+			return aeLuaFragVictimMatchFromEntry(slotEntry);
+		}
+		// A supplied party slot is a unique identifier. Never silently redirect
+		// it to another copy of the same species if the slot data disagrees.
+		return null;
+	}
+	var matches = sideEntries.filter(function (entry) {
+		return entry && entry.fullSetName && aeLuaFragVictimMatchesEntry(entry, victim);
+	});
+	return matches.length === 1 ? aeLuaFragVictimMatchFromEntry(matches[0]) : null;
 }
 
 function getAeLuaFragEventId(event, index) {
@@ -3827,14 +4802,22 @@ function importAeLuaFragEventsFromPayload(exportPayload, sourceLabel) {
 			}
 			continue;
 		}
-		addFragKill(killerSetId, victimMatch.setId, victimMatch.fightLabel);
-		importedEvents[eventId] = {
+		var importRecord = {
 			importedAt: new Date().toISOString(),
 			killerSetId: killerSetId,
 			victimSetId: victimMatch.setId,
 			fightLabel: victimMatch.fightLabel,
 			source: sourceLabel || "auto"
 		};
+		// Store the event ID in the same frag-sheet payload before addFragKill's
+		// save. A refresh can therefore never replay a persisted +1 frag merely
+		// because the older separate event-ledger write had not happened yet.
+		getFragSheetState().aeLuaImportedEvents[eventId] = importRecord;
+		if (!addFragKill(killerSetId, victimMatch.setId, victimMatch.fightLabel)) {
+			delete getFragSheetState().aeLuaImportedEvents[eventId];
+			continue;
+		}
+		importedEvents[eventId] = importRecord;
 		importedCount += 1;
 	}
 	for (var deathIndex = 0; deathIndex < deaths.length; deathIndex++) {
@@ -3943,15 +4926,135 @@ function setAeLuaFragLiveUi(isConnected) {
 	}
 }
 
+function resolveAeLuaTrainerFightFromPayload(payload) {
+	var battle = payload && payload.battle ? payload.battle : {};
+	var trainerParty = payload && payload.pokemon && Array.isArray(payload.pokemon.trainerParty)
+		? payload.pokemon.trainerParty
+		: [];
+	var normalizedParty = normalizeAeLuaLiveTrainerParty(trainerParty);
+	var resolution = resolveAeLuaTrainerFight({
+		trainerParty: trainerParty,
+		trainerLabel: battle.trainerLabel,
+		fightIndex: battle.fightIndex
+	});
+	if (battle.active && (!normalizedParty.length || !resolution.ok ||
+		String(resolution.matchType || "").indexOf("live-party") !== 0)) {
+		return aeLuaTrainerUnresolvedResult("not-found", [], {source: "live-battle-party"});
+	}
+	if (resolution.ok) resolution.battleSerial = parseInt(battle.battleSerial, 10) || 0;
+	return resolution;
+}
+
+function getAeLuaResolvedVictimEntry(resolution, event) {
+	if (!resolution || !resolution.ok || !event || !event.victim) return null;
+	var trainerSide = parseInt(event.trainerSide, 10);
+	if (trainerSide !== 2) trainerSide = 1;
+	var partyIndex = parseInt(event.victim.trainerPartyIndex, 10);
+	if (Number.isNaN(partyIndex)) {
+		partyIndex = parseInt(event.victim.partyIndex, 10);
+		if (trainerSide === 2 && partyIndex >= 3) partyIndex -= 3;
+	}
+	if (Number.isNaN(partyIndex)) return null;
+	return getAeLuaResolvedFightEntries(resolution, trainerSide)[partyIndex] || null;
+}
+
+function applyAeLuaTrainerFightToPayload(payload, resolution) {
+	if (!payload || !resolution || !resolution.ok) return payload;
+	if (!payload.battle || typeof payload.battle !== "object") payload.battle = {};
+	payload.battle.fightIndex = resolution.fightIndex;
+	payload.battle.trainerLabel = resolution.fightLabel;
+	var events = Array.isArray(payload.events) ? payload.events : [];
+	for (var i = 0; i < events.length; i++) {
+		var event = events[i];
+		var eventBattleSerial = parseInt(event && event.battleSerial, 10) || 0;
+		if (eventBattleSerial && resolution.battleSerial &&
+			eventBattleSerial !== resolution.battleSerial) continue;
+		var victimEntry = getAeLuaResolvedVictimEntry(resolution, event);
+		event.fightIndex = resolution.fightIndex;
+		event.trainerLabel = victimEntry ? victimEntry.trainerLabel : resolution.fightLabel;
+		event.trainerName = victimEntry
+			? victimEntry.trainerName
+			: aeLuaTrainerParseLabel(resolution.fightLabel).trainerName;
+	}
+	return payload;
+}
+
+function fetchAeLuaFullRosterPage(offset, collectedPokemon) {
+	var pageOffset = Math.max(0, parseInt(offset, 10) || 0);
+	var pokemon = Array.isArray(collectedPokemon) ? collectedPokemon : [];
+	var pageUrl = AE_LUA_POKEMON_URL + "?offset=" + encodeURIComponent(pageOffset) +
+		"&limit=" + encodeURIComponent(AE_LUA_FULL_ROSTER_PAGE_SIZE);
+	return fetch(pageUrl, {cache: "no-store"}).then(function (response) {
+		if (!response.ok) throw new Error("HTTP " + response.status + " while reading save Pokemon");
+		return response.json();
+	}).then(function (payload) {
+		var storagePage = payload && payload.pokemon && Array.isArray(payload.pokemon.storage)
+			? payload.pokemon.storage
+			: null;
+		var page = payload && payload.page;
+		if (!storagePage || !page || typeof page !== "object") {
+			throw new Error("ae_lua returned an invalid Pokemon page");
+		}
+		for (var index = 0; index < storagePage.length; index++) pokemon.push(storagePage[index]);
+		if (page.done === true) return pokemon;
+		var nextOffset = parseInt(page.nextOffset, 10);
+		if (Number.isNaN(nextOffset) || nextOffset <= pageOffset) {
+			throw new Error("ae_lua Pokemon pagination did not advance");
+		}
+		return fetchAeLuaFullRosterPage(nextOffset, pokemon);
+	});
+}
+
+function refreshAeLuaFullRoster() {
+	if (aeLuaPokemonFullRosterPromise) return aeLuaPokemonFullRosterPromise;
+	var scanPromise = fetchAeLuaFullRosterPage(0, []).then(function (storagePokemon) {
+		var importedCount = importAeLuaPokemonFromPayload({pokemon: {storage: storagePokemon}});
+		aeLuaPokemonLastFullRosterAt = Date.now();
+		if (window.console && typeof window.console.info === "function") {
+			window.console.info("[AstralCalc] save scan complete: " + storagePokemon.length +
+				" PC Pokemon found, " + importedCount + " imported/updated");
+		}
+		return importedCount;
+	});
+	aeLuaPokemonFullRosterPromise = scanPromise.then(function (importedCount) {
+		aeLuaPokemonFullRosterPromise = null;
+		return importedCount;
+	}, function (error) {
+		aeLuaPokemonFullRosterPromise = null;
+		if (window.console && typeof window.console.warn === "function") {
+			window.console.warn("[AstralCalc] full-save Pokemon scan failed; it will retry", error);
+		}
+		return 0;
+	});
+	return aeLuaPokemonFullRosterPromise;
+}
+
 function pollAeLuaFragLiveLink(showError) {
-	var trainerLabel = String(getCurrentFightLabel() || "Trainer");
-	var fightIndex = getCurrentFightIndex();
-	var liveUrl = AE_LUA_FRAG_LIVE_URL + "?trainer=" + encodeURIComponent(trainerLabel) + "&fightIndex=" + encodeURIComponent(fightIndex || 0);
+	var requestFullRoster = !aeLuaPokemonLastFullRosterAt ||
+		Date.now() - aeLuaPokemonLastFullRosterAt >= AE_LUA_FULL_ROSTER_INTERVAL_MS;
+	var knownFight = aeLuaResolvedTrainerFight && aeLuaResolvedTrainerFight.ok
+		? aeLuaResolvedTrainerFight
+		: null;
+	var trainerLabel = knownFight ? knownFight.fightLabel : "";
+	var fightIndex = knownFight ? knownFight.fightIndex : 0;
+	var battleSerial = knownFight ? knownFight.battleSerial : 0;
+	var liveUrl = AE_LUA_FRAG_LIVE_URL + "?trainer=" + encodeURIComponent(trainerLabel) +
+		"&fightIndex=" + encodeURIComponent(fightIndex || 0) +
+		"&battleSerial=" + encodeURIComponent(battleSerial || 0);
 	return fetch(liveUrl, {cache: "no-store"}).then(function (response) {
 		if (!response.ok) throw new Error("HTTP " + response.status);
 		return response.json();
 	}).then(function (payload) {
 		setAeLuaFragLiveUi(true);
+		var resolution = resolveAeLuaTrainerFightFromPayload(payload);
+		if (payload && payload.battle && payload.battle.active) {
+			aeLuaResolvedTrainerFight = resolution.ok ? resolution : null;
+		} else if (resolution.ok) {
+			aeLuaResolvedTrainerFight = resolution;
+		}
+		if (aeLuaResolvedTrainerFight && aeLuaResolvedTrainerFight.ok) {
+			applyAeLuaTrainerFightToPayload(payload, aeLuaResolvedTrainerFight);
+		}
 		try {
 			importAeLuaPokemonFromPayload(payload);
 		} catch (pokemonImportError) {
@@ -3959,8 +5062,14 @@ function pollAeLuaFragLiveLink(showError) {
 				window.console.warn("[AstralCalc] ae_lua roster import failed; continuing with frag import", pokemonImportError);
 			}
 		}
+		if (requestFullRoster) refreshAeLuaFullRoster();
 		try {
-			importAeLuaFragEventsFromPayload(payload, "live");
+			if (aeLuaResolvedTrainerFight && aeLuaResolvedTrainerFight.ok) {
+				importAeLuaFragEventsFromPayload(payload, "live");
+			} else if (Array.isArray(payload.events) && payload.events.length &&
+				window.console && typeof window.console.warn === "function") {
+				window.console.warn("[AstralCalc] live trainer fight could not be resolved; frag left pending", resolution);
+			}
 		} catch (fragImportError) {
 			if (window.console && typeof window.console.error === "function") {
 				window.console.error("[AstralCalc] ae_lua frag import failed", fragImportError);
@@ -3990,8 +5099,11 @@ function pollAeLuaFragLiveLink(showError) {
 			});
 		});
 		return true;
-	}).catch(function () {
+	}).catch(function (error) {
 		setAeLuaFragLiveUi(false);
+		if (window.console && typeof window.console.warn === "function") {
+			window.console.warn("[AstralCalc] ae_lua live connection failed", error);
+		}
 		if (showError) alert("Could not connect to ae_lua. Start the script in mGBA with Astral Emerald loaded, then try again.");
 		return false;
 	});
@@ -3999,6 +5111,7 @@ function pollAeLuaFragLiveLink(showError) {
 
 function startAeLuaFragLiveLink(showError) {
 	if (aeLuaFragLiveTimer) window.clearInterval(aeLuaFragLiveTimer);
+	if (showError) aeLuaPokemonLastFullRosterAt = 0;
 	pollAeLuaFragLiveLink(!!showError);
 	aeLuaFragLiveTimer = window.setInterval(function () {
 		pollAeLuaFragLiveLink(false);
@@ -4035,11 +5148,96 @@ function getAeLuaPokemonPayloadList(payload) {
 	return pokemon;
 }
 
+var aeLuaPokemonSpeciesKeyCache = {};
+
+function getAeLuaLoadedSpeciesMaps() {
+	var speciesMaps = [];
+	function appendSpeciesMap(speciesMap) {
+		if (!speciesMap || typeof speciesMap !== "object" || Array.isArray(speciesMap)) return;
+		if (speciesMaps.indexOf(speciesMap) === -1) speciesMaps.push(speciesMap);
+	}
+	if (typeof pokedex !== "undefined") appendSpeciesMap(pokedex);
+	if (typeof calc !== "undefined" && calc && calc.SPECIES) {
+		appendSpeciesMap(calc.SPECIES[9]);
+		if (typeof gen !== "undefined") appendSpeciesMap(calc.SPECIES[gen]);
+	}
+	if (typeof setdex !== "undefined") appendSpeciesMap(setdex);
+	if (typeof SETDEX_SV !== "undefined") appendSpeciesMap(SETDEX_SV);
+	return speciesMaps;
+}
+
+function isAeLuaLoadedSpeciesKey(speciesName, speciesMaps) {
+	var candidate = String(speciesName || "").trim();
+	if (!candidate) return false;
+	var maps = speciesMaps || getAeLuaLoadedSpeciesMaps();
+	for (var mapIndex = 0; mapIndex < maps.length; mapIndex++) {
+		if (Object.prototype.hasOwnProperty.call(maps[mapIndex], candidate)) return true;
+	}
+	return false;
+}
+
+function findAeLuaLoadedSpeciesKey(speciesName) {
+	var rawSpecies = String(speciesName || "").trim();
+	if (!rawSpecies) return "";
+	var speciesMaps = getAeLuaLoadedSpeciesMaps();
+	// Preserve a form whenever AstralCalc already knows its exact key. The
+	// legacy Showdown importer intentionally collapses several forms and is not
+	// safe for identity-bound live Team updates.
+	if (isAeLuaLoadedSpeciesKey(rawSpecies, speciesMaps)) return rawSpecies;
+	var cachedSpecies = aeLuaPokemonSpeciesKeyCache[rawSpecies];
+	if (cachedSpecies && isAeLuaLoadedSpeciesKey(cachedSpecies, speciesMaps)) return cachedSpecies;
+
+	var normalizedSpecies = aeLuaTrainerNormalizeSpecies(rawSpecies);
+	var matches = [];
+	var seenMatches = {};
+	for (var mapIndex = 0; mapIndex < speciesMaps.length; mapIndex++) {
+		var speciesMap = speciesMaps[mapIndex];
+		for (var candidate in speciesMap) {
+			if (!Object.prototype.hasOwnProperty.call(speciesMap, candidate) || seenMatches[candidate]) continue;
+			if (aeLuaTrainerNormalizeSpecies(candidate) !== normalizedSpecies) continue;
+			seenMatches[candidate] = true;
+			matches.push(candidate);
+		}
+	}
+	if (matches.length === 1) {
+		aeLuaPokemonSpeciesKeyCache[rawSpecies] = matches[0];
+		return matches[0];
+	}
+
+	// Keep the old importer as a final compatibility fallback, but only when
+	// its collapsed result is an actual loaded Calc species and the live form
+	// could not be resolved uniquely above.
+	if (typeof checkExeptions === "function") {
+		var legacySpecies = String(checkExeptions(rawSpecies) || "").trim();
+		if (legacySpecies && isAeLuaLoadedSpeciesKey(legacySpecies, speciesMaps)) {
+			aeLuaPokemonSpeciesKeyCache[rawSpecies] = legacySpecies;
+			return legacySpecies;
+		}
+	}
+	return rawSpecies;
+}
+
 function normalizeAeLuaPokemonSpeciesName(mon) {
-	var speciesName = String(mon && (mon.species || mon.name) || "").trim();
-	if (!speciesName) return "";
-	if (typeof checkExeptions === "function") speciesName = checkExeptions(speciesName);
-	return speciesName;
+	return findAeLuaLoadedSpeciesKey(mon && (mon.species || mon.name));
+}
+
+function getAeLuaPokemonSpeciesNameForTeamSet(mon, setId) {
+	var resolvedSpecies = normalizeAeLuaPokemonSpeciesName(mon);
+	var existingSpecies = parseSetId(setId).species;
+	var rawSpecies = String(mon && (mon.species || mon.name) || "").trim();
+	// Battle/form aliases (Aegislash stances, Castform weather, cap Pikachu,
+	// etc.) are the same persistent Pokémon, not evolutions. Keep the exact
+	// species key already chosen for this Calc Team entry when both names are
+	// equivalent; a real evolution has a different normalized species ID.
+	if (existingSpecies && rawSpecies &&
+		aeLuaTrainerNormalizeSpecies(existingSpecies) === aeLuaTrainerNormalizeSpecies(rawSpecies)) {
+		return existingSpecies;
+	}
+	if (existingSpecies && resolvedSpecies &&
+		aeLuaTrainerNormalizeSpecies(existingSpecies) === aeLuaTrainerNormalizeSpecies(resolvedSpecies)) {
+		return existingSpecies;
+	}
+	return resolvedSpecies;
 }
 
 function normalizeAeLuaPokemonSetName(mon, fallbackIndex) {
@@ -4100,22 +5298,47 @@ function aeLuaPokemonStatsToLegacy(statsTable) {
 	return legacy;
 }
 
-function buildAeLuaPokemonSet(mon) {
-	var level = aeLuaPokemonNumber(mon && mon.level, 1);
-	level = Math.max(1, Math.min(100, level));
-	var setData = {
-		level: level,
-		evs: aeLuaPokemonStatsToLegacy(mon && mon.evs),
-		ivs: aeLuaPokemonStatsToLegacy(mon && mon.ivs),
-		moves: normalizeAeLuaPokemonMoves(mon && mon.moves),
-		nature: String(mon && mon.nature || "").trim(),
-		item: String(mon && mon.item || "").trim(),
-		isCustomSet: true
-	};
-	var ability = String(mon && mon.ability || "").trim();
-	var nickname = String(mon && mon.nickname || "").trim();
-	if (ability) setData.ability = ability;
-	if (nickname) setData.nickname = nickname;
+function buildAeLuaPokemonSet(mon, existingSetData) {
+	var setData = existingSetData && typeof existingSetData === "object"
+		? Object.assign({}, existingSetData)
+		: {};
+	if (mon && typeof mon.level !== "undefined" && mon.level !== null) {
+		var level = aeLuaPokemonNumber(mon.level, 1);
+		setData.level = Math.max(1, Math.min(100, level));
+	}
+	if (mon && mon.evs && typeof mon.evs === "object") {
+		var evs = aeLuaPokemonStatsToLegacy(mon.evs);
+		if (Object.keys(evs).length) setData.evs = evs;
+	}
+	if (mon && mon.ivs && typeof mon.ivs === "object") {
+		var ivs = aeLuaPokemonStatsToLegacy(mon.ivs);
+		if (Object.keys(ivs).length) setData.ivs = ivs;
+	}
+	if (mon && Array.isArray(mon.moves)) setData.moves = normalizeAeLuaPokemonMoves(mon.moves);
+	if (mon && Object.prototype.hasOwnProperty.call(mon, "nature")) {
+		setData.nature = String(mon.nature || "").trim();
+	}
+	if (mon && Object.prototype.hasOwnProperty.call(mon, "item")) {
+		setData.item = String(mon.item || "").trim();
+	}
+	if (mon && Object.prototype.hasOwnProperty.call(mon, "ability")) {
+		var ability = String(mon.ability || "").trim();
+		if (ability) setData.ability = ability;
+	}
+	if (mon && Object.prototype.hasOwnProperty.call(mon, "nickname")) {
+		var nickname = String(mon.nickname || "").trim();
+		if (nickname) setData.nickname = nickname;
+		else delete setData.nickname;
+	}
+	var identity = getAeLuaPokemonIdentity(mon);
+	if (identity) {
+		// Persist the portable Pokémon identity with the custom set so a saved
+		// Calc roster can be rebound after a refresh without using its game box
+		// position as identity.
+		setData.aeLuaPersonality = identity.personality;
+		setData.aeLuaOtId = identity.otId;
+	}
+	setData.isCustomSet = true;
 	return setData;
 }
 
@@ -4139,122 +5362,374 @@ function getAeLuaPokemonPayloadSignature(pokemon) {
 	}));
 }
 
-function removeAeLuaPokemonCustomSets(customsets) {
-	for (var speciesName in customsets) {
-		if (!Object.prototype.hasOwnProperty.call(customsets, speciesName)) continue;
-		var speciesSets = customsets[speciesName];
-		if (!speciesSets || typeof speciesSets !== "object") continue;
-		for (var setName in speciesSets) {
-			if (!Object.prototype.hasOwnProperty.call(speciesSets, setName)) continue;
-			if (isAeLuaPokemonSetName(setName)) delete speciesSets[setName];
-		}
-		if (!Object.keys(speciesSets).length) delete customsets[speciesName];
+function getAeLuaPokemonPayloadSignatureScope(payload) {
+	var pokemonPayload = payload && payload.pokemon;
+	if (Array.isArray(pokemonPayload)) return "legacy";
+	if (!pokemonPayload || typeof pokemonPayload !== "object") return "none";
+	var hasParty = Array.isArray(pokemonPayload.party);
+	var hasStorage = Array.isArray(pokemonPayload.storage) ||
+		Array.isArray(pokemonPayload.box) || Array.isArray(pokemonPayload.pc);
+	if (hasParty && hasStorage) return "combined";
+	if (hasStorage) return "storage";
+	if (hasParty) return "party";
+	return "other";
+}
+
+function getAeLuaExistingPokemonSetData(setId, customsets) {
+	var parsedSet = parseSetId(setId);
+	var customSet = customsets && customsets[parsedSet.species]
+		? customsets[parsedSet.species][parsedSet.label]
+		: null;
+	if (customSet && typeof customSet === "object") return customSet;
+	var dexSet = setdex && setdex[parsedSet.species]
+		? setdex[parsedSet.species][parsedSet.label]
+		: null;
+	return dexSet && typeof dexSet === "object" ? dexSet : {};
+}
+
+function getAeLuaTeamSetNicknameForBinding(setId) {
+	var option = typeof getSetOptionById === "function" ? getSetOptionById(setId) : null;
+	return normalizeAeLuaFragText(option && option.nickname ? option.nickname : "");
+}
+
+function findAeLuaLivePokemonIndexForBinding(binding, pokemon, usedPokemonIndexes) {
+	var bindingIdentity = getAeLuaPokemonIdentity(binding);
+	if (!bindingIdentity) return -1;
+	for (var i = 0; i < pokemon.length; i++) {
+		if (usedPokemonIndexes[i]) continue;
+		if (aeLuaPokemonIdentitiesMatch(bindingIdentity, getAeLuaPokemonIdentity(pokemon[i]))) return i;
 	}
+	return -1;
 }
 
-function removeAeLuaPokemonSetIds(setIds) {
-	var source = Array.isArray(setIds) ? setIds : [];
-	return source.filter(function (setId) {
-		return !isAeLuaPokemonSetId(setId);
+function findAeLuaLivePokemonIndexForUnboundSet(setId, teamIndex, pokemon, usedPokemonIndexes) {
+	var setSpecies = aeLuaTrainerNormalizeSpecies(parseSetId(setId).species);
+	if (!setSpecies) return -1;
+	var setNickname = getAeLuaTeamSetNicknameForBinding(setId);
+	var speciesMatches = [];
+	var nicknameMatches = [];
+	for (var i = 0; i < pokemon.length; i++) {
+		if (usedPokemonIndexes[i] || !getAeLuaPokemonIdentity(pokemon[i])) continue;
+		if (aeLuaTrainerNormalizeSpecies(normalizeAeLuaPokemonSpeciesName(pokemon[i])) !== setSpecies) continue;
+		speciesMatches.push(i);
+		if (setNickname && normalizeAeLuaFragText(pokemon[i].nickname) === setNickname) {
+			nicknameMatches.push(i);
+		}
+	}
+	if (nicknameMatches.length === 1) return nicknameMatches[0];
+	if (speciesMatches.length === 1) return speciesMatches[0];
+	// Duplicate species need a one-time association before personality + OT ID
+	// can take over. Use party position only when that Calc Team position has
+	// the same species; subsequent switches and boxing use the persisted binding.
+	var partySlotMatches = speciesMatches.filter(function (pokemonIndex) {
+		var mon = pokemon[pokemonIndex];
+		return String(mon.location || "party").toLowerCase() === "party" &&
+			parseInt(mon.slotIndex, 10) === teamIndex;
 	});
+	return partySlotMatches.length === 1 ? partySlotMatches[0] : -1;
 }
 
-function findAeLuaExistingRosterSetId(mon, layout, usedSetIds) {
-	var species = normalizeAeLuaFragSpecies(normalizeAeLuaPokemonSpeciesName(mon));
-	if (!species) return "";
-	var nickname = normalizeAeLuaFragText(mon && mon.nickname);
-	var candidates = [];
-	var zones = ["team", "box", "box2", "trash"];
-	for (var zoneIndex = 0; zoneIndex < zones.length; zoneIndex++) {
-		var zoneSetIds = layout && Array.isArray(layout[zones[zoneIndex]]) ? layout[zones[zoneIndex]] : [];
+function getAeLuaUniqueEvolvedSetId(oldSetId, newSpecies, customsets, layout) {
+	var oldParsed = parseSetId(oldSetId);
+	if (oldParsed.species === newSpecies) return oldSetId;
+	var baseLabel = oldParsed.label || (AE_LUA_POKEMON_SET_PREFIX + " Team");
+	var occupiedSetIds = {};
+	var zoneNames = ["team", "box", "box2", "trash"];
+	for (var zoneIndex = 0; zoneIndex < zoneNames.length; zoneIndex++) {
+		var zoneSetIds = layout[zoneNames[zoneIndex]] || [];
 		for (var setIndex = 0; setIndex < zoneSetIds.length; setIndex++) {
-			var setId = String(zoneSetIds[setIndex] || "").trim();
-			if (!setId || usedSetIds[setId] || isAeLuaPokemonSetId(setId)) continue;
-			if (normalizeAeLuaFragSpecies(parseSetId(setId).species) !== species) continue;
-			var option = typeof getSetOptionById === "function" ? getSetOptionById(setId) : null;
-			var candidateNickname = normalizeAeLuaFragText(option && option.nickname ? option.nickname : parseSetId(setId).label);
-			candidates.push({
-				setId: setId,
-				nicknameMatch: !!nickname && candidateNickname === nickname,
-				fragTotal: getFragTotalForSet(setId)
-			});
+			if (zoneSetIds[setIndex] !== oldSetId) occupiedSetIds[zoneSetIds[setIndex]] = true;
 		}
 	}
-	if (!candidates.length) return "";
-	candidates.sort(function (left, right) {
-		if (left.nicknameMatch !== right.nicknameMatch) return left.nicknameMatch ? -1 : 1;
-		if (left.fragTotal !== right.fragTotal) return right.fragTotal - left.fragTotal;
-		return left.setId.localeCompare(right.setId);
-	});
-	// A nickname uniquely identifies duplicate species. Without one, only reuse
-	// an existing identity when there is a single unambiguous species match.
-	if (nickname && candidates[0].nicknameMatch) return candidates[0].setId;
-	return candidates.length === 1 ? candidates[0].setId : "";
+	var label = baseLabel;
+	var suffix = 2;
+	var setId = newSpecies + " (" + label + ")";
+	while (occupiedSetIds[setId] || (customsets[newSpecies] && customsets[newSpecies][label])) {
+		label = baseLabel + " " + suffix;
+		suffix += 1;
+		setId = newSpecies + " (" + label + ")";
+	}
+	return setId;
 }
 
-function removeImportedPokemonSetIds(setIds, importedSetIds) {
-	return removeAeLuaPokemonSetIds(setIds).filter(function (setId) {
-		return !importedSetIds[setId];
+function removeAeLuaEvolvedSourceCustomSet(customsets, oldSetId, layout) {
+	var preservedZones = ["box", "box2", "trash"];
+	for (var zoneIndex = 0; zoneIndex < preservedZones.length; zoneIndex++) {
+		var zoneSetIds = layout[preservedZones[zoneIndex]] || [];
+		if (zoneSetIds.indexOf(oldSetId) !== -1) return;
+	}
+	var parsedSet = parseSetId(oldSetId);
+	var speciesSets = customsets[parsedSet.species];
+	if (!speciesSets || !Object.prototype.hasOwnProperty.call(speciesSets, parsedSet.label)) return;
+	delete speciesSets[parsedSet.label];
+	if (!Object.keys(speciesSets).length) delete customsets[parsedSet.species];
+}
+
+function applyAeLuaTeamSetRename(oldSetId, newSetId) {
+	var teamContainer = document.getElementById("team-poke-list");
+	if (!teamContainer) return false;
+	var sprites = teamContainer.querySelectorAll(".trainer-pok.left-side");
+	for (var i = 0; i < sprites.length; i++) {
+		if (String(sprites[i].getAttribute("data-id") || "") !== oldSetId) continue;
+		sprites[i].setAttribute("data-id", newSetId);
+		var speciesName = parseSetId(newSetId).species;
+		setTrainerSpriteImage(sprites[i], speciesName);
+		applyPrimaryIconSheetIfNeeded(sprites[i], speciesName);
+		return true;
+	}
+	return false;
+}
+
+function getAeLuaRosterSetLookup(layout) {
+	var lookup = {};
+	var zoneNames = ["team", "box", "box2", "trash"];
+	for (var zoneIndex = 0; zoneIndex < zoneNames.length; zoneIndex++) {
+		var setIds = layout[zoneNames[zoneIndex]] || [];
+		for (var setIndex = 0; setIndex < setIds.length; setIndex++) {
+			lookup[setIds[setIndex]] = true;
+		}
+	}
+	return lookup;
+}
+
+function getAeLuaBoundSetIdForPokemon(mon, bindings) {
+	var identity = getAeLuaPokemonIdentity(mon);
+	var sourceBindings = bindings && bindings.bySetId ? bindings.bySetId : {};
+	if (!identity) return "";
+	var matches = [];
+	for (var setId in sourceBindings) {
+		if (!Object.prototype.hasOwnProperty.call(sourceBindings, setId)) continue;
+		if (aeLuaPokemonIdentitiesMatch(getAeLuaPokemonIdentity(sourceBindings[setId]), identity)) {
+			matches.push(setId);
+		}
+	}
+	return matches.length === 1 ? matches[0] : "";
+}
+
+function getAeLuaCustomSetIdentity(setId, customsets) {
+	var parsedSet = parseSetId(setId);
+	var setData = customsets && customsets[parsedSet.species]
+		? customsets[parsedSet.species][parsedSet.label]
+		: null;
+	if (!setData || typeof setData !== "object") return null;
+	return getAeLuaPokemonIdentity({
+		personality: setData.aeLuaPersonality,
+		otId: setData.aeLuaOtId
 	});
+}
+
+function hasAeLuaCustomSet(setId, customsets) {
+	var parsedSet = parseSetId(setId);
+	return !!(customsets && customsets[parsedSet.species] &&
+		Object.prototype.hasOwnProperty.call(customsets[parsedSet.species], parsedSet.label));
+}
+
+function getAeLuaDiscoveredSetId(mon, pokemonIndex, speciesName, customsets, layoutLookup, bindings) {
+	var identity = getAeLuaPokemonIdentity(mon);
+	var baseLabel = normalizeAeLuaPokemonSetName(mon, pokemonIndex);
+	var label = baseLabel;
+	var suffix = 2;
+	while (true) {
+		var setId = speciesName + " (" + label + ")";
+		var isOccupied = !!layoutLookup[setId] || hasAeLuaCustomSet(setId, customsets);
+		if (!isOccupied) return {setId: setId, isExisting: false};
+		var boundIdentity = getAeLuaPokemonIdentity(bindings.bySetId && bindings.bySetId[setId]);
+		var storedIdentity = getAeLuaCustomSetIdentity(setId, customsets);
+		if (identity && ((boundIdentity && aeLuaPokemonIdentitiesMatch(boundIdentity, identity)) ||
+			(storedIdentity && aeLuaPokemonIdentitiesMatch(storedIdentity, identity)))) {
+			return {setId: setId, isExisting: true};
+		}
+		label = baseLabel + " " + suffix;
+		suffix += 1;
+	}
+}
+
+function appendAeLuaDiscoveredSetIdsToBox(setIds) {
+	var targetContainer = document.getElementById("box-poke-list");
+	if (!targetContainer || !Array.isArray(setIds) || !setIds.length) return 0;
+	var appendedCount = 0;
+	for (var setIndex = 0; setIndex < setIds.length; setIndex++) {
+		var setId = setIds[setIndex];
+		var existingSprite = $(PLAYER_ROSTER_SPRITE_SELECTOR).filter(function () {
+			return String($(this).attr("data-id") || "") === setId;
+		}).get(0);
+		if (existingSprite) continue;
+		var spriteNode = createRosterSpriteFromSetId(setId);
+		if (!spriteNode) continue;
+		targetContainer.appendChild(spriteNode);
+		applyPrimaryIconSheetIfNeeded(spriteNode, parseSetId(setId).species);
+		appendedCount += 1;
+	}
+	if (appendedCount) saveCurrentPlayerRosterLayout();
+	return appendedCount;
 }
 
 function importAeLuaPokemonFromPayload(payload) {
 	var pokemon = getAeLuaPokemonPayloadList(payload);
 	var hasPokemonPayload = !!(payload && Object.prototype.hasOwnProperty.call(payload, "pokemon"));
 	if (!hasPokemonPayload) return 0;
-	var signature = getAeLuaPokemonPayloadSignature(pokemon);
-	if (signature === aeLuaPokemonImportSignature) return 0;
-	aeLuaPokemonImportSignature = signature;
+	var currentLayout = normalizeRosterLayout(collectPlayerRosterLayout());
+	var signature = getAeLuaPokemonPayloadSignature(pokemon) + "|" + JSON.stringify(currentLayout.team);
+	var signatureScope = getAeLuaPokemonPayloadSignatureScope(payload);
+	if (signature === aeLuaPokemonImportSignatures[signatureScope]) return 0;
 
 	var customsets = safeJsonParse(localStorage.getItem("customsets"), {});
 	if (!customsets || typeof customsets !== "object" || Array.isArray(customsets)) customsets = {};
-	removeAeLuaPokemonCustomSets(customsets);
-	var currentLayout = normalizeRosterLayout(collectPlayerRosterLayout());
-	var usedExistingSetIds = {};
-	var importedSetIds = {};
+	var bindings = getAeLuaTeamBindings();
+	var teamSetIds = currentLayout.team.slice();
+	var usedPokemonIndexes = {};
+	var matchedPokemonIndexes = [];
+	var renameRecords = [];
+	var updatedSetIds = {};
+	var discoveredBoxSetIds = [];
+	var didChangeCustomsets = false;
+	var didChangeBindings = false;
 
-	var teamSetIds = [];
-	var boxSetIds = [];
+	for (var teamIndex = 0; teamIndex < teamSetIds.length; teamIndex++) {
+		var boundPokemonIndex = findAeLuaLivePokemonIndexForBinding(
+			bindings.bySetId[teamSetIds[teamIndex]],
+			pokemon,
+			usedPokemonIndexes
+		);
+		if (boundPokemonIndex < 0) continue;
+		matchedPokemonIndexes[teamIndex] = boundPokemonIndex;
+		usedPokemonIndexes[boundPokemonIndex] = true;
+	}
+	for (teamIndex = 0; teamIndex < teamSetIds.length; teamIndex++) {
+		if (typeof matchedPokemonIndexes[teamIndex] !== "undefined") continue;
+		if (bindings.bySetId[teamSetIds[teamIndex]]) continue;
+		var unboundPokemonIndex = findAeLuaLivePokemonIndexForUnboundSet(
+			teamSetIds[teamIndex],
+			teamIndex,
+			pokemon,
+			usedPokemonIndexes
+		);
+		if (unboundPokemonIndex < 0) continue;
+		matchedPokemonIndexes[teamIndex] = unboundPokemonIndex;
+		usedPokemonIndexes[unboundPokemonIndex] = true;
+	}
+
 	var importedCount = 0;
-	for (var i = 0; i < pokemon.length; i++) {
-		var mon = pokemon[i];
-		var speciesName = normalizeAeLuaPokemonSpeciesName(mon);
+	for (teamIndex = 0; teamIndex < teamSetIds.length; teamIndex++) {
+		var matchedPokemonIndex = matchedPokemonIndexes[teamIndex];
+		if (typeof matchedPokemonIndex === "undefined") continue;
+		var mon = pokemon[matchedPokemonIndex];
+		var speciesName = getAeLuaPokemonSpeciesNameForTeamSet(mon, teamSetIds[teamIndex]);
 		if (!speciesName) continue;
-		var existingSetId = findAeLuaExistingRosterSetId(mon, currentLayout, usedExistingSetIds);
-		var setName = existingSetId ? parseSetId(existingSetId).label : normalizeAeLuaPokemonSetName(mon, i);
-		var setId = existingSetId || (speciesName + " (" + setName + ")");
-		if (existingSetId) usedExistingSetIds[existingSetId] = true;
-		importedSetIds[setId] = true;
+		var oldSetId = teamSetIds[teamIndex];
+		var existingSetData = getAeLuaExistingPokemonSetData(oldSetId, customsets);
+		var setId = getAeLuaUniqueEvolvedSetId(oldSetId, speciesName, customsets, currentLayout);
+		var setName = parseSetId(setId).label;
+		if (setId !== oldSetId) removeAeLuaEvolvedSourceCustomSet(customsets, oldSetId, currentLayout);
 		if (!customsets[speciesName] || typeof customsets[speciesName] !== "object") customsets[speciesName] = {};
-		customsets[speciesName][setName] = buildAeLuaPokemonSet(mon);
+		customsets[speciesName][setName] = buildAeLuaPokemonSet(mon, existingSetData);
+		didChangeCustomsets = true;
 		if (speciesName === "Aegislash-Blade") {
 			if (!customsets["Aegislash-Shield"] || typeof customsets["Aegislash-Shield"] !== "object") customsets["Aegislash-Shield"] = {};
 			customsets["Aegislash-Shield"][setName] = customsets[speciesName][setName];
 		}
-		if (String(mon.location || "").toLowerCase() === "party") {
-			teamSetIds.push(setId);
-		} else {
-			boxSetIds.push(setId);
+		if (setId !== oldSetId) {
+			renameRecords.push({oldSetId: oldSetId, newSetId: setId});
+			teamSetIds[teamIndex] = setId;
+			currentLayout.team[teamIndex] = setId;
 		}
+		if (setAeLuaTeamBinding(bindings, setId, mon)) didChangeBindings = true;
+		updatedSetIds[setId] = true;
 		importedCount += 1;
 	}
 
-	if (typeof updateDex === "function") {
-		updateDex(customsets);
-	} else {
-		localStorage.setItem("customsets", JSON.stringify(customsets));
+	// The full-save snapshot is discovery-only outside Calc's Team. Every
+	// previously unseen identity is appended to the Calc Box once, but an
+	// existing Team/Box/Trash location is never changed to mirror the game.
+	var layoutLookup = getAeLuaRosterSetLookup(currentLayout);
+	for (var pokemonIndex = 0; pokemonIndex < pokemon.length; pokemonIndex++) {
+		mon = pokemon[pokemonIndex];
+		var identity = getAeLuaPokemonIdentity(mon);
+		if (!identity) continue;
+		var boundSetId = getAeLuaBoundSetIdForPokemon(mon, bindings);
+		if (boundSetId && layoutLookup[boundSetId]) continue;
+		if (boundSetId && hasAeLuaCustomSet(boundSetId, customsets)) {
+			currentLayout.box.push(boundSetId);
+			layoutLookup[boundSetId] = true;
+			discoveredBoxSetIds.push(boundSetId);
+			importedCount += 1;
+			continue;
+		}
+		if (boundSetId && bindings.bySetId) {
+			delete bindings.bySetId[boundSetId];
+			didChangeBindings = true;
+		}
+
+		speciesName = normalizeAeLuaPokemonSpeciesName(mon);
+		if (!speciesName) continue;
+		var discovery = getAeLuaDiscoveredSetId(mon, pokemonIndex, speciesName,
+			customsets, layoutLookup, bindings);
+		setId = discovery.setId;
+		if (discovery.isExisting) {
+			if (!layoutLookup[setId]) {
+				currentLayout.box.push(setId);
+				layoutLookup[setId] = true;
+				discoveredBoxSetIds.push(setId);
+				importedCount += 1;
+			}
+			if (setAeLuaTeamBinding(bindings, setId, mon)) didChangeBindings = true;
+			continue;
+		}
+
+		setName = parseSetId(setId).label;
+		if (!customsets[speciesName] || typeof customsets[speciesName] !== "object") {
+			customsets[speciesName] = {};
+		}
+		customsets[speciesName][setName] = buildAeLuaPokemonSet(mon, {});
+		if (speciesName === "Aegislash-Blade") {
+			if (!customsets["Aegislash-Shield"] || typeof customsets["Aegislash-Shield"] !== "object") {
+				customsets["Aegislash-Shield"] = {};
+			}
+			customsets["Aegislash-Shield"][setName] = customsets[speciesName][setName];
+		}
+		currentLayout.box.push(setId);
+		layoutLookup[setId] = true;
+		discoveredBoxSetIds.push(setId);
+		if (setAeLuaTeamBinding(bindings, setId, mon)) didChangeBindings = true;
+		didChangeCustomsets = true;
+		importedCount += 1;
 	}
 
-	var nextLayout = {
-		team: teamSetIds.concat(removeImportedPokemonSetIds(currentLayout.team, importedSetIds)),
-		box: boxSetIds.concat(removeImportedPokemonSetIds(currentLayout.box, importedSetIds)),
-		box2: removeImportedPokemonSetIds(currentLayout.box2, importedSetIds),
-		trash: removeImportedPokemonSetIds(currentLayout.trash, importedSetIds)
-	};
-	applyPlayerRosterLayout(nextLayout);
+	if (!importedCount) {
+		if (didChangeBindings) saveAeLuaTeamBindings(bindings);
+		aeLuaPokemonImportSignatures[signatureScope] = signature;
+		return 0;
+	}
+
+	if (didChangeCustomsets) {
+		if (typeof updateDex === "function") {
+			updateDex(customsets);
+		} else {
+			localStorage.setItem("customsets", JSON.stringify(customsets));
+		}
+	}
+
+	var selectedPlayerSetId = getSelectedSetIdForSide("p1");
+	for (var renameIndex = 0; renameIndex < renameRecords.length; renameIndex++) {
+		var renameRecord = renameRecords[renameIndex];
+		applyAeLuaTeamSetRename(renameRecord.oldSetId, renameRecord.newSetId);
+		mergeFragEntriesFromEvolutionDrop(renameRecord.oldSetId, renameRecord.newSetId);
+		if (selectedPlayerSetId === renameRecord.oldSetId) selectedPlayerSetId = renameRecord.newSetId;
+	}
+	appendAeLuaDiscoveredSetIdsToBox(discoveredBoxSetIds);
+	if (renameRecords.length) saveCurrentPlayerRosterLayout();
+	if (didChangeBindings) bindings = saveAeLuaTeamBindings(bindings);
+	aeLuaPokemonImportSignatures[signatureScope] = signature;
 	applyPlayerRosterSearchFilter();
-	syncFragRoster({pruneMissing: true, allowEmptyPrune: true});
-	if (typeof performCalculations === "function") performCalculations();
+	syncFragRoster();
+	if (selectedPlayerSetId && updatedSetIds[selectedPlayerSetId]) {
+		topPokemonIcon(selectedPlayerSetId, $("#p1mon")[0]);
+		$(".player").val(selectedPlayerSetId).change();
+		$(".player .select2-chosen").text(formatSetNameForDisplay(selectedPlayerSetId));
+	} else if (typeof performCalculations === "function") {
+		performCalculations();
+	}
+	if (renameRecords.length || discoveredBoxSetIds.length) renderFragSheet();
 	if (typeof allPokemon === "function" && typeof $ === "function") {
 		$(allPokemon("#importedSetsOptions")).css("display", "inline");
 	}
@@ -4389,7 +5864,7 @@ function stopAeLuaFragWatchedFileImport() {
 	}
 	aeLuaFragWatchedFileHandle = null;
 	aeLuaFragWatchedFileSignature = "";
-	aeLuaPokemonImportSignature = "";
+	aeLuaPokemonImportSignatures = {};
 	setAeLuaFragWatchUi(false);
 }
 
@@ -4451,9 +5926,7 @@ function bindAeLuaFragImportControls() {
 	ensureAeLuaFragImportControls();
 	$(document).off("click.aeluafragimport", ".ae-lua-frag-import-button").on("click.aeluafragimport", ".ae-lua-frag-import-button", function () {
 		if (aeLuaFragLiveConnected) return;
-		if (openAeLuaFragNativeFilePicker()) return;
-		var fileInput = ensureAeLuaFragFileInput();
-		if (fileInput) fileInput.click();
+		startAeLuaFragLiveLink(true);
 	});
 	$(document).off("change.aeluafragimport", "#frags-import-ae-lua-file").on("change.aeluafragimport", "#frags-import-ae-lua-file", function () {
 		var file = this.files && this.files[0];
@@ -4933,6 +6406,7 @@ function setFragHistoryControlsVisibility(isVisible) {
 
 function renderFragSheet() {
 	syncFragRoster();
+	updateTrainerFragBorderTotals();
 	var container = document.getElementById("frags-table-wrap");
 	var summaryText = document.getElementById("frags-summary-text");
 	var currentFightLabelNode = document.getElementById("frags-current-fight-label");
@@ -4948,7 +6422,6 @@ function renderFragSheet() {
 	if (!entries.length) {
 		summaryText.textContent = "Import sets or add sprites to start tracking frags.";
 		container.innerHTML = "";
-		updateTrainerFragBorderTotals();
 		return;
 	}
 
@@ -5010,7 +6483,6 @@ function renderFragSheet() {
 		"<thead><tr><th>#</th><th>Pokemon</th><th>Status</th><th>Total</th><th class=\"frag-percent-head\">Overall %</th>" + splitHeaders + "<th>This Fight</th><th>Actions</th></tr></thead>" +
 		"<tbody>" + rowsHtml + "</tbody>" +
 		"</table>";
-	updateTrainerFragBorderTotals();
 }
 
 function setCalcSideDockedWidth(widthPx) {
@@ -9178,27 +10650,24 @@ function addBoxed(poke) {
 	if (!speciesName) return;
 	var setLabel = String(poke && poke.nameProp || "").trim() || "Custom Set";
 	var setId = speciesName + " (" + setLabel + ")";
-	var spriteId = speciesName + setLabel;
-	var existingSpeciesSprites = $(".trainer-pok.left-side").filter(function () {
-		return String($(this).attr("data-species") || "").trim().toLowerCase() === speciesName.toLowerCase();
-	}).toArray();
-	if (existingSpeciesSprites.length) {
-		var keepSprite = existingSpeciesSprites[0];
-		for (var dupIndex = 1; dupIndex < existingSpeciesSprites.length; dupIndex++) {
-			var duplicateRoot = getTrainerPokRootNode(existingSpeciesSprites[dupIndex]);
-			if (duplicateRoot && duplicateRoot.parentNode) duplicateRoot.parentNode.removeChild(duplicateRoot);
-		}
-		keepSprite.id = spriteId;
+	var existingSetSprite = $(".trainer-pok.left-side").filter(function () {
+		return String($(this).attr("data-id") || "").trim() === setId;
+	}).get(0);
+	if (existingSetSprite) {
+		var keepSprite = existingSetSprite;
+		if (!keepSprite.id) keepSprite.id = buildRosterSpriteNodeId(setId);
 		keepSprite.dataset.id = setId;
+		keepSprite.dataset.species = speciesName;
 		setTrainerSpriteImage(keepSprite, speciesName);
 		applyPrimaryIconSheetIfNeeded(keepSprite, speciesName);
 		scheduleFragSheetRefresh();
 		applyPlayerRosterSearchFilter();
 		return;
 	}
-	if (document.getElementById(spriteId)) {
-		return;
-	}
+	// Different sets (and different individual Pokemon) of the same species
+	// are distinct frag owners. Never repurpose a same-species sprite by
+	// silently replacing its data-id.
+	var spriteId = buildRosterSpriteNodeId(setId);
 	var newPoke = document.createElement("img");
 	newPoke.id = spriteId;
 	newPoke.className = "trainer-pok left-side";
@@ -9206,6 +10675,7 @@ function addBoxed(poke) {
 	newPoke.decoding = "async";
 	setTrainerSpriteImage(newPoke, speciesName);
 	newPoke.dataset.id = setId;
+	newPoke.dataset.species = speciesName;
 	newPoke.addEventListener("dragstart", dragstart_handler);
 	$('#box-poke-list')[0].appendChild(newPoke)
 	applyPrimaryIconSheetIfNeeded(newPoke, speciesName);
