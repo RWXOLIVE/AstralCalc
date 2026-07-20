@@ -2225,8 +2225,6 @@ var SETDEX_SV = {
             "Weather": "Rain",
             "nature": "Relaxed",
             "setdouble": "True",
-            "setdoubleGroup": "route-114-sr-jr-tyra-ivy",
-            "setdoubleSide": 2,
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -2946,8 +2944,6 @@ var SETDEX_SV = {
             "Weather": "Rain",
             "nature": "Impish",
             "setdouble": "True",
-            "setdoubleGroup": "route-114-sr-jr-tyra-ivy",
-            "setdoubleSide": 1,
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 21, "sp": 31
             },
@@ -3010,8 +3006,6 @@ var SETDEX_SV = {
             "Weather": "Rain",
             "nature": "Jolly",
             "setdouble": "True",
-            "setdoubleGroup": "route-114-sr-jr-tyra-ivy",
-            "setdoubleSide": 1,
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -5572,6 +5566,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Magnet Rise","Tri Attack","Flash Cannon","Thunderbolt"]
+        },
+        "Parasol Lady Madeline | Route 113": {
+            "index": "0000000480",
+            "level": 58,
+            "ability": "Analytic",
+            "item": "Eviolite",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Thunderbolt","Flash Cannon","HP Grass","Magnet Rise"]
         }
     },
     "Unown-C": {
@@ -5952,7 +5957,6 @@ var SETDEX_SV = {
             "level": 48,
             "ability": "Compound Eyes",
             "item": "Focus Sash",
-            "Terrain": "Misty",
             "nature": "Timid",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -7440,19 +7444,6 @@ var SETDEX_SV = {
             "moves": ["Last Respects","Play Rough","Protect","Sandstorm"]
         }
     },
-    "Magneton": {
-    "Parasol Lady Madeline | Route 113": {
-            "index": "0000000480",
-            "level": 58,
-            "ability": "Analytic",
-            "item": "Eviolite",
-            "nature": "Modest",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Thunderbolt","Flash Cannon","HP Grass","Magnet Rise"]
-        }
-    },
     "Florges-White": {
     "Youngster Dillon | Route 113": {
             "index": "0000000483",
@@ -7745,8 +7736,6 @@ var SETDEX_SV = {
             "Weather": "Rain",
             "nature": "Calm",
             "setdouble": "True",
-            "setdoubleGroup": "route-114-sr-jr-tyra-ivy",
-            "setdoubleSide": 2,
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -7767,8 +7756,6 @@ var SETDEX_SV = {
                 "spa": 1
             },
             "setdouble": "True",
-            "setdoubleGroup": "route-114-sr-jr-tyra-ivy",
-            "setdoubleSide": 1,
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -7785,8 +7772,6 @@ var SETDEX_SV = {
             "nature": "Relaxed",
             "teraType": "Water",
             "setdouble": "True",
-            "setdoubleGroup": "route-114-sr-jr-tyra-ivy",
-            "setdoubleSide": 2,
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -7903,7 +7888,7 @@ var SETDEX_SV = {
             "index": "0000000534",
             "level": 61,
             "ability": "Mold Breaker",
-            "item": "Loaded Dice",
+            "item": "White Herb",
             "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -7915,7 +7900,7 @@ var SETDEX_SV = {
     "Hiker Lucas | Route 114": {
             "index": "0000000535",
             "level": 60,
-            "ability": "Clear Body",
+            "ability": "Sturdy",
             "item": "Fighting Gem",
             "nature": "Impish",
             "ivs": {

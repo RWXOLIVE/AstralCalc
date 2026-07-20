@@ -1244,7 +1244,7 @@ var BW_PATCH = {
     'Double-Edge': { recoil: [33, 100] },
     Protect: { priority: 4 },
     'Fire Blast': { secondaries: true },
-    'Fire Spin': { bp: 45 },
+    'Fire Spin': { bp: 60 },
     Flamethrower: { secondaries: true },
     'Fury Cutter': { bp: 40 },
     'Future Sight': { bp: 100, type: 'Psychic' },
@@ -2503,6 +2503,7 @@ var SM_PATCH = {
         type: 'Dragon',
         makesContact: true,
         category: 'Physical',
+        secondaries: true,
         zp: 175
     },
     'Extreme Evoboost': { bp: 0, type: 'Normal', isZ: true },
@@ -3555,7 +3556,7 @@ var SS_PATCH = {
         maxPower: 130
     },
     'Scale Chomp': {
-        bp: 75,
+        bp: 80,
         type: 'Dragon',
         category: 'Physical',
         secondaries: true
