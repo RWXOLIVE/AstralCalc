@@ -9469,7 +9469,7 @@ function createPokemon(pokeInfo) {
 		}
 
 		return new calc.Pokemon(gen, name, {
-			level: set.level,
+			level: resolveSetLevelFlag(set.level, getLevelCap()),
 			ability: set.ability,
 			abilityOn: true,
 			item: set.item && typeof set.item !== "undefined" && (set.item === "Eviolite" || set.item.indexOf("ite") < 0) ? set.item : "",

@@ -6389,13 +6389,15 @@ var SM_PATCH = {
         types: ['Fighting', 'Ice'],
         bs: { hp: 97, at: 132, df: 77, sa: 62, sd: 67, sp: 43 },
         weightkg: 180,
-        abilities: { 0: 'Hyper Cutter' }
+        abilities: { 0: 'Hyper Cutter' },
+        otherFormes: ['Crabominable-Mega']
     },
     'Crabominable-Mega': {
         types: ['Fighting', 'Ice'],
         bs: { hp: 97, at: 157, df: 122, sa: 62, sd: 107, sp: 33 },
         weightkg: 252.8,
-        abilities: { 0: 'Hyper Cutter' }
+        abilities: { 0: 'Hyper Cutter' },
+        baseSpecies: 'Crabominable'
     },
     Crabrawler: {
         types: ['Fighting'],
