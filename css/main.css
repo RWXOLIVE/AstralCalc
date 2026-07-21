@@ -1621,6 +1621,92 @@ table.field {
     display: inline;
 }
 
+.opponent-plan {
+    clear: both;
+    width: 27.5em;
+    margin-top: 0.65em;
+    box-sizing: border-box;
+    text-align: center;
+}
+
+.opponent-plan-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 5px;
+}
+
+#opponent-plan-context {
+    min-width: 0;
+    overflow: hidden;
+    color: var(--text, #616977);
+    font-size: 0.86em;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+#opponent-plan-clear {
+    flex: 0 0 auto;
+    width: auto;
+    padding: 2px 8px;
+}
+
+.opponent-plan-list {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    align-items: center;
+    min-height: 68px;
+    padding: 6px;
+    border: 1px dashed #8d97a5;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.38);
+    box-sizing: border-box;
+    text-align: left;
+    transition: border-color 100ms ease, background-color 100ms ease;
+}
+
+.opponent-plan-list.opponent-plan-over {
+    border-color: #1abc9c;
+    background: rgba(26, 188, 156, 0.12);
+}
+
+.opponent-plan-list .opponent-plan-pok {
+    display: inline-block;
+    flex: 0 0 auto;
+    width: 40px;
+    height: 30px;
+    margin: 2px 7px 2px 0;
+    cursor: grab;
+    image-rendering: pixelated;
+}
+
+.opponent-plan-list .opponent-plan-pok:active {
+    cursor: grabbing;
+}
+
+.opponent-plan-list .opponent-plan-pok.opponent-plan-dragging {
+    opacity: 0.45;
+}
+
+.opponent-plan-empty {
+    width: 100%;
+    align-self: center;
+    color: var(--text, #737b87);
+    font-size: 0.86em;
+    text-align: center;
+    pointer-events: none;
+}
+
+.opponent-plan-hint {
+    margin-top: 4px;
+    color: var(--text, #737b87);
+    font-size: 0.75em;
+}
+
 .hpbar {
     height: 4px;
     border-style: solid;

@@ -1001,6 +1001,48 @@ var FRAG_UNKNOWN_VICTIM_KEY = "__unknown__";
 var deadOpposingSetMap = {};
 var opposingContextSourceSet = "";
 var CURRENT_TRAINER_POKS = [];
+var OPPONENT_PLAN_STORAGE_KEY = "astralCalcOpponentPlansV1";
+var OPPONENT_PLAN_GENERAL_KEY = "general";
+var opponentPlanStateCache = null;
+var opponentPlanActiveKey = OPPONENT_PLAN_GENERAL_KEY;
+var opponentPlanDragState = null;
+var OPPONENT_PLAN_RANGES = [
+	{
+		id: "abandoned-ship-b2b",
+		type: "B2B",
+		label: "Team Plasma #3 1/3 \u2192 Team Plasma #5 3/3",
+		startTrainers: ["Team Plasma #3 1/3 | Abandoned Ship"],
+		endTrainers: ["Team Plasma #5 3/3 | Abandoned Ship"]
+	},
+	{
+		id: "route-103-gauntlet",
+		type: "Gauntlet",
+		label: "Fisherman Andrew \u2192 Black Belt Rhett",
+		startTrainers: ["Fisherman Andrew | Route 103"],
+		endTrainers: ["Black Belt Rhett | Route 103"]
+	},
+	{
+		id: "route-111-wilton-gauntlet",
+		type: "Gauntlet",
+		label: "Cool Trainer Wilton \u2192 Ruin Maniac Dusty",
+		startTrainers: ["Cool Trainer Wilton | Route 111"],
+		endTrainers: ["Ruin Maniac Dusty | Route 111"]
+	},
+	{
+		id: "route-111-drew-bryan-gauntlet",
+		type: "Gauntlet",
+		label: "Camper Drew & Ruin Maniac Bryan \u2192 Picnicker Celia",
+		startTrainers: ["Drew & Bryan | Route 111", "Camper Drew & Ruin Maniac Bryan | Route 111"],
+		endTrainers: ["Picnicker Celia | Route 111"]
+	},
+	{
+		id: "lavaridge-gym-gauntlet",
+		type: "Gauntlet",
+		label: "Kindler Jace \u2192 Kindler Jeff",
+		startTrainers: ["Kindler Jace | Lavaridge Gym"],
+		endTrainers: ["Kindler Jeff | Lavaridge Gym"]
+	}
+];
 var isRestoringLastEncounterSelection = false;
 var isBootstrappingLastEncounterSelection = true;
 var calcSidePanelResizeState = null;
@@ -8924,6 +8966,266 @@ function isTrainerPartySideFullyMarkedDead(entries) {
 	return true;
 }
 
+function getOpponentPlanTrainerBounds(trainerLabels) {
+	var labels = Array.isArray(trainerLabels) ? trainerLabels : [trainerLabels];
+	var activeSetdex = gen === 9 && typeof SETDEX_SV !== "undefined" ? SETDEX_SV : setdex;
+	var minIndex = Infinity;
+	var maxIndex = -Infinity;
+	if (!activeSetdex) return null;
+	for (var speciesName in activeSetdex) {
+		if (!Object.prototype.hasOwnProperty.call(activeSetdex, speciesName)) continue;
+		var speciesSets = activeSetdex[speciesName];
+		for (var i = 0; i < labels.length; i++) {
+			var trainerLabel = labels[i];
+			if (!speciesSets || !Object.prototype.hasOwnProperty.call(speciesSets, trainerLabel)) continue;
+			var trainerIndex = getTrainerIndexFromSetData(speciesSets[trainerLabel]);
+			if (!trainerIndex || trainerIndex <= 0) continue;
+			if (trainerIndex < minIndex) minIndex = trainerIndex;
+			if (trainerIndex > maxIndex) maxIndex = trainerIndex;
+		}
+	}
+	if (!Number.isFinite(minIndex) || !Number.isFinite(maxIndex)) return null;
+	return {min: minIndex, max: maxIndex};
+}
+
+function resolveOpponentPlanRange(range) {
+	if (!range) return null;
+	var startBounds = getOpponentPlanTrainerBounds(range.startTrainers);
+	var endBounds = getOpponentPlanTrainerBounds(range.endTrainers);
+	if (!startBounds || !endBounds) return null;
+	return Object.assign({}, range, {min: startBounds.min, max: endBounds.max});
+}
+
+function getCurrentOpponentPlanRange() {
+	var currentBounds = getCurrentTrainerIndexBounds();
+	if (!currentBounds) return null;
+	for (var i = 0; i < OPPONENT_PLAN_RANGES.length; i++) {
+		var resolvedRange = resolveOpponentPlanRange(OPPONENT_PLAN_RANGES[i]);
+		if (!resolvedRange) continue;
+		if (currentBounds.max >= resolvedRange.min && currentBounds.min <= resolvedRange.max) {
+			return resolvedRange;
+		}
+	}
+	return null;
+}
+
+function getOpponentPlanState() {
+	if (opponentPlanStateCache) return opponentPlanStateCache;
+	var rawState = {};
+	try {
+		rawState = safeJsonParse(localStorage.getItem(OPPONENT_PLAN_STORAGE_KEY), {});
+	} catch (err) {
+		rawState = {};
+	}
+	if (!rawState || typeof rawState !== "object" || Array.isArray(rawState)) rawState = {};
+	var normalizedState = {};
+	for (var key in rawState) {
+		if (!Object.prototype.hasOwnProperty.call(rawState, key) || !Array.isArray(rawState[key])) continue;
+		normalizedState[key] = [];
+		for (var i = 0; i < rawState[key].length; i++) {
+			var rawEntry = rawState[key][i];
+			var setId = typeof rawEntry === "string" ? rawEntry : String(rawEntry && rawEntry.setId || "").trim();
+			if (!setId) continue;
+			var species = typeof rawEntry === "object" && rawEntry
+				? String(rawEntry.species || "").trim()
+				: "";
+			if (!species) species = parseSetId(setId).species || setId.split(" (")[0];
+			normalizedState[key].push({setId: setId, species: species});
+		}
+	}
+	opponentPlanStateCache = normalizedState;
+	return opponentPlanStateCache;
+}
+
+function getActiveOpponentPlan() {
+	var state = getOpponentPlanState();
+	if (!Array.isArray(state[opponentPlanActiveKey])) state[opponentPlanActiveKey] = [];
+	return state[opponentPlanActiveKey];
+}
+
+function saveOpponentPlanState() {
+	try {
+		localStorage.setItem(OPPONENT_PLAN_STORAGE_KEY, JSON.stringify(getOpponentPlanState()));
+	} catch (err) {
+		if (window.console && typeof window.console.warn === "function") {
+			window.console.warn("[AstralCalc] could not save opponent planner", err);
+		}
+	}
+}
+
+function createOpponentPlanPokemon(entry, index) {
+	var node = document.createElement("img");
+	node.className = "trainer-pok opponent-plan-pok";
+	node.draggable = true;
+	node.loading = "lazy";
+	node.decoding = "async";
+	node.tabIndex = 0;
+	node.setAttribute("role", "listitem");
+	node.setAttribute("data-plan-index", String(index));
+	node.setAttribute("data-id", entry.setId);
+	node.setAttribute("data-species", entry.species);
+	node.setAttribute("aria-label", entry.species + "; click to load, drag to reorder, right-click to remove");
+	node.title = entry.species + " \u2014 click to load, drag to reorder, right-click to remove";
+	setTrainerSpriteImage(node, entry.species);
+	applyPrimaryIconSheetIfNeeded(node, entry.species);
+	return node;
+}
+
+function renderOpponentPlan() {
+	var list = document.getElementById("opponent-plan-list");
+	if (!list) return;
+	var plan = getActiveOpponentPlan();
+	list.innerHTML = "";
+	if (!plan.length) {
+		var empty = document.createElement("span");
+		empty.className = "opponent-plan-empty";
+		empty.textContent = "Drag opposing team icons here";
+		list.appendChild(empty);
+		return;
+	}
+	for (var i = 0; i < plan.length; i++) {
+		list.appendChild(createOpponentPlanPokemon(plan[i], i));
+	}
+}
+
+function updateOpponentPlanContext() {
+	if (!document.getElementById("opponent-plan-list")) return;
+	var activeRange = getCurrentOpponentPlanRange();
+	opponentPlanActiveKey = activeRange ? activeRange.id : OPPONENT_PLAN_GENERAL_KEY;
+	$("#opponent-plan-title").text(activeRange ? (activeRange.type + " Planner") : "Opponent Planner");
+	$("#opponent-plan-context").text(activeRange ? activeRange.label : "Free planning tray");
+	renderOpponentPlan();
+}
+
+function removeOpponentPlanItem(index) {
+	var plan = getActiveOpponentPlan();
+	if (index < 0 || index >= plan.length) return;
+	plan.splice(index, 1);
+	saveOpponentPlanState();
+	renderOpponentPlan();
+}
+
+function selectOpponentPlanSet(setId) {
+	if (!setId) return;
+	topPokemonIcon(setId, $("#p2mon")[0]);
+	$(".opposing").val(setId).change();
+	$(".opposing .select2-chosen").text(formatSetNameForDisplay(setId));
+	renderFragSheet();
+}
+
+function getOpponentPlanDropIndex(ev) {
+	var list = document.getElementById("opponent-plan-list");
+	var plan = getActiveOpponentPlan();
+	if (!list) return plan.length;
+	var target = $(ev.target).closest(".opponent-plan-pok").get(0);
+	if (!target || target.parentNode !== list) return plan.length;
+	var targetIndex = parseInt(target.getAttribute("data-plan-index"), 10);
+	if (Number.isNaN(targetIndex)) return plan.length;
+	var rect = target.getBoundingClientRect();
+	return ev.clientX < rect.left + rect.width / 2 ? targetIndex : targetIndex + 1;
+}
+
+function dropIntoOpponentPlan(ev) {
+	ev.preventDefault();
+	if (!opponentPlanDragState) return;
+	var plan = getActiveOpponentPlan();
+	var insertIndex = getOpponentPlanDropIndex(ev);
+	if (opponentPlanDragState.type === "move") {
+		var sourceIndex = opponentPlanDragState.index;
+		if (sourceIndex < 0 || sourceIndex >= plan.length) return;
+		var movedEntry = plan.splice(sourceIndex, 1)[0];
+		if (insertIndex > sourceIndex) insertIndex -= 1;
+		insertIndex = Math.max(0, Math.min(insertIndex, plan.length));
+		plan.splice(insertIndex, 0, movedEntry);
+	} else {
+		insertIndex = Math.max(0, Math.min(insertIndex, plan.length));
+		plan.splice(insertIndex, 0, {
+			setId: opponentPlanDragState.setId,
+			species: opponentPlanDragState.species
+		});
+	}
+	saveOpponentPlanState();
+	renderOpponentPlan();
+	$("#opponent-plan-list").removeClass("opponent-plan-over");
+	opponentPlanDragState = null;
+}
+
+function bindOpponentPlan() {
+	if (!document.getElementById("opponent-plan-list")) return;
+	$(document).off("dragstart.opponentplan", ".trainer-pok.right-side, .opponent-plan-pok")
+		.on("dragstart.opponentplan", ".trainer-pok.right-side, .opponent-plan-pok", function (ev) {
+			var node = this;
+			var setId = String(node.getAttribute("data-id") || "").trim();
+			var species = String(node.getAttribute("data-species") || "").trim();
+			if (!setId || !species) {
+				ev.preventDefault();
+				return;
+			}
+			var isPlanPokemon = node.classList.contains("opponent-plan-pok");
+			opponentPlanDragState = {
+				type: isPlanPokemon ? "move" : "copy",
+				index: isPlanPokemon ? parseInt(node.getAttribute("data-plan-index"), 10) : -1,
+				setId: setId,
+				species: species
+			};
+			if (isPlanPokemon) node.classList.add("opponent-plan-dragging");
+			var dataTransfer = ev.originalEvent && ev.originalEvent.dataTransfer;
+			if (dataTransfer) {
+				dataTransfer.effectAllowed = isPlanPokemon ? "move" : "copy";
+				try { dataTransfer.setData("text/plain", setId); } catch (err) {}
+			}
+		});
+	$(document).off("dragend.opponentplan", ".trainer-pok.right-side, .opponent-plan-pok")
+		.on("dragend.opponentplan", ".trainer-pok.right-side, .opponent-plan-pok", function () {
+			$(".opponent-plan-pok").removeClass("opponent-plan-dragging");
+			$("#opponent-plan-list").removeClass("opponent-plan-over");
+			opponentPlanDragState = null;
+		});
+	$("#opponent-plan-list").off("dragover.opponentplan drop.opponentplan dragleave.opponentplan")
+		.on("dragover.opponentplan", function (ev) {
+			if (!opponentPlanDragState) return;
+			ev.preventDefault();
+			$(this).addClass("opponent-plan-over");
+			var dataTransfer = ev.originalEvent && ev.originalEvent.dataTransfer;
+			if (dataTransfer) dataTransfer.dropEffect = opponentPlanDragState.type === "move" ? "move" : "copy";
+		})
+		.on("dragleave.opponentplan", function (ev) {
+			var relatedTarget = ev.originalEvent && ev.originalEvent.relatedTarget;
+			if (!relatedTarget || !this.contains(relatedTarget)) $(this).removeClass("opponent-plan-over");
+		})
+		.on("drop.opponentplan", function (ev) {
+			dropIntoOpponentPlan(ev.originalEvent || ev);
+		});
+	$(document).off("click.opponentplan", ".opponent-plan-pok")
+		.on("click.opponentplan", ".opponent-plan-pok", function () {
+			selectOpponentPlanSet(String(this.getAttribute("data-id") || ""));
+		});
+	$(document).off("contextmenu.opponentplan", ".opponent-plan-pok")
+		.on("contextmenu.opponentplan", ".opponent-plan-pok", function (ev) {
+			ev.preventDefault();
+			removeOpponentPlanItem(parseInt(this.getAttribute("data-plan-index"), 10));
+		});
+	$(document).off("keydown.opponentplan", ".opponent-plan-pok")
+		.on("keydown.opponentplan", ".opponent-plan-pok", function (ev) {
+			if (ev.key === "Delete" || ev.key === "Backspace") {
+				ev.preventDefault();
+				removeOpponentPlanItem(parseInt(this.getAttribute("data-plan-index"), 10));
+			} else if (ev.key === "Enter" || ev.key === " ") {
+				ev.preventDefault();
+				selectOpponentPlanSet(String(this.getAttribute("data-id") || ""));
+			}
+		});
+	$("#opponent-plan-clear").off("click.opponentplan").on("click.opponentplan", function () {
+		var plan = getActiveOpponentPlan();
+		if (!plan.length) return;
+		if (!confirm("Clear this opponent plan?")) return;
+		plan.splice(0, plan.length);
+		saveOpponentPlanState();
+		renderOpponentPlan();
+	});
+	updateOpponentPlanContext();
+}
+
 function getCurrentOpposingTrainerSideSplitEntries() {
 	var sortedEntries = (CURRENT_TRAINER_POKS || []).slice().sort(sortmons).map(parseTrainerPartyEntry);
 	if (!sortedEntries.length || !isSetDoubleEncounter(sortedEntries) || !shouldUseSetDoubleLayout(sortedEntries)) return null;
@@ -8950,7 +9252,7 @@ function getFieldWithSingleTargetSpreadDamageOverride(field, useSingleTargetSpre
 
 function trainerPartyMonHtml(entry) {
 	var label = "[" + entry.indexText + "]" + entry.fullSetName;
-	return '<img class="trainer-pok right-side" src="' + escapeHtml(getInitialTrainerSpriteUrlByName(entry.pokemonName)) + '" data-id="' + escapeHtml(entry.fullSetName) + '" data-species="' + escapeHtml(entry.pokemonName) + '" title="' + escapeHtml(label + ", " + label + " BP") + '" loading="lazy" decoding="async"' + getPrimaryIconSheetLoadAttr(entry.pokemonName) + ' onerror="applyIconSheetFallbackImage(this, this.getAttribute(\'data-species\'))">';
+	return '<img class="trainer-pok right-side" draggable="true" src="' + escapeHtml(getInitialTrainerSpriteUrlByName(entry.pokemonName)) + '" data-id="' + escapeHtml(entry.fullSetName) + '" data-species="' + escapeHtml(entry.pokemonName) + '" title="' + escapeHtml(label + ", " + label + " BP") + '" loading="lazy" decoding="async"' + getPrimaryIconSheetLoadAttr(entry.pokemonName) + ' onerror="applyIconSheetFallbackImage(this, this.getAttribute(\'data-species\'))">';
 }
 
 function renderOpposingTrainerParties(selectedSetName) {
@@ -8978,6 +9280,7 @@ function renderOpposingTrainerParties(selectedSetName) {
 		applyPrimaryIconSheetIfNeeded(this, this.getAttribute("data-species"));
 	});
 	applyOpposingDeadMarks();
+	updateOpponentPlanContext();
 }
 
 // auto-update set details on select
@@ -11221,6 +11524,7 @@ $(document).ready(function () {
 	ensureFragHistoryControls();
 	bindAeLuaFragImportControls();
 	bindFieldSideControlsToggle();
+	bindOpponentPlan();
 	loadDefaultLists();
 	setupFragSheetAutoRefresh();
 	syncSettingsPanelUi();
