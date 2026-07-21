@@ -6,7 +6,7 @@
     <link rel="icon" type="image/gif" href="img/totodile.gif"  >
     <title>Astral Emerald Damage Calculator</title>
     <link type="text/css" rel="stylesheet" href="./js/vendor/select2/select2.css" />
-    <link type="text/css" rel="stylesheet" href="./css/main.css?8cbae3ce" />
+    <link type="text/css" rel="stylesheet" href="./css/main.css?b7043aad" />
     <link type="text/css" rel="stylesheet" href="./css/vendor/bootstrap.css" />
     <link type="text/css" rel="stylesheet" href="./css/dark-theme.css" id="dark-theme-styles">
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -801,9 +801,12 @@
         <div aria-label="trainer-poks" role="region" id="player-roster-region">
             <fieldset class="poke-info" id="trainer-mons-player">
                 <legend align="center">Team/Box</legend>
-                <span id="search-inline" class="search-inline">
+                <div class="roster-top-controls">
+                    <button type="button" id="box-current-team" class="btn" title="Move the current Team to Box 1">Team &rarr; Box 1</button>
+                    <span id="search-inline" class="search-inline">
                         <input type="text" id="search" placeholder="Search - Pokemon/Moves" />
                     </span>
+                </div>
                 <div>
                     <legend align="center">Team</legend>
                     <div id="team-poke-list" class="box-poke dropzone">
@@ -1253,17 +1256,6 @@
                         <!--<button style='position:absolute' class='bs-btn bs-btn-default'>Import</button>-->
                     </form>
                 </div>
-            </fieldset>
-            <fieldset class="opponent-plan" id="opponent-plan">
-                <legend align="center"><span id="opponent-plan-title">Opponent Planner</span></legend>
-                <div class="opponent-plan-toolbar">
-                    <span id="opponent-plan-context">Free planning tray</span>
-                    <button type="button" id="opponent-plan-clear">Clear</button>
-                </div>
-                <div id="opponent-plan-list" class="opponent-plan-list" role="list" aria-label="Opponent planning tray">
-                    <span class="opponent-plan-empty">Drag opposing team icons here</span>
-                </div>
-                <div class="opponent-plan-hint">Drag to copy &bull; drag again to reorder &bull; right-click to remove</div>
             </fieldset>
         </div>
     </div>
@@ -1850,9 +1842,16 @@
                 <!--hr>
                 <button id="set-double-opp">Set in doubles</button-->
                 <hr>
-                <button type="button" id="previous-trainer"> Previous Trainer</button>
-                <button type="button" id="next-trainer"> Next Trainer</button>
-                <button type="button" id="reset-trainer">Reset</button>
+                <div class="trainer-navigation-controls">
+                    <button type="button" id="previous-trainer">Previous Trainer</button>
+                    <button type="button" id="next-trainer">Next Trainer</button>
+                    <strong id="trainer-sequence-type" class="trainer-sequence-type" hidden></strong>
+                    <button type="button" id="reset-trainer">Reset</button>
+                </div>
+                <div id="trainer-sequence" class="trainer-sequence" hidden>
+                    <hr>
+                    <div id="trainer-sequence-list" class="trainer-sequence-list" role="list" aria-label="Back-to-back and gauntlet fights"></div>
+                </div>
             </fieldset>
         </div>
     </div>
@@ -2038,7 +2037,7 @@
     <script type="text/javascript" src="./js/spritedata.js?e6979aa2"></script>
     <script type="text/javascript" src="./js/data/frags_splits.js?01f4e1ca"></script>
     <script type="text/javascript" src="./js/data/move_info_lookup.js?12b8d14e"></script>
-    <script type="text/javascript" src="./js/shared_controls.js?aa72980e"></script>
+<script type="text/javascript" src="./js/shared_controls.js?75db3383"></script>
     <script type="text/javascript" src="./js/index_randoms_controls.js?b3faedad"></script>
     <script type="text/javascript" src="./js/moveset_import.js?d74d69a4"></script>
 </div>

@@ -1621,90 +1621,70 @@ table.field {
     display: inline;
 }
 
-.opponent-plan {
-    clear: both;
-    width: 27.5em;
-    margin-top: 0.65em;
-    box-sizing: border-box;
-    text-align: center;
-}
-
-.opponent-plan-toolbar {
+.trainer-navigation-controls {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     gap: 8px;
-    margin-bottom: 5px;
+    min-height: 28px;
 }
 
-#opponent-plan-context {
-    min-width: 0;
-    overflow: hidden;
-    color: var(--text, #616977);
-    font-size: 0.86em;
-    text-align: left;
-    text-overflow: ellipsis;
+.trainer-navigation-controls button {
     white-space: nowrap;
 }
 
-#opponent-plan-clear {
-    flex: 0 0 auto;
-    width: auto;
-    padding: 2px 8px;
+.trainer-navigation-controls #reset-trainer {
+    margin-left: auto;
 }
 
-.opponent-plan-list {
-    position: relative;
+.trainer-sequence-type {
+    flex: 0 0 auto;
+    font-size: 1.05em;
+    white-space: nowrap;
+}
+
+.trainer-sequence > hr {
+    margin: 8px 0 6px;
+}
+
+.trainer-sequence-list {
     display: flex;
-    flex-wrap: wrap;
-    align-content: flex-start;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.trainer-sequence-row {
+    display: flex;
     align-items: center;
-    min-height: 68px;
-    padding: 6px;
-    border: 1px dashed #8d97a5;
-    border-radius: 5px;
-    background: rgba(255, 255, 255, 0.38);
+    width: 100%;
+    min-height: 36px;
+    padding: 2px 6px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    background: rgba(120, 130, 145, 0.08);
     box-sizing: border-box;
-    text-align: left;
+    cursor: pointer;
     transition: border-color 100ms ease, background-color 100ms ease;
 }
 
-.opponent-plan-list.opponent-plan-over {
-    border-color: #1abc9c;
-    background: rgba(26, 188, 156, 0.12);
+.trainer-sequence-row:hover,
+.trainer-sequence-row:focus {
+    border-color: rgba(26, 188, 156, 0.55);
+    background: rgba(26, 188, 156, 0.1);
+    outline: none;
 }
 
-.opponent-plan-list .opponent-plan-pok {
+.trainer-sequence-row.is-current {
+    border-color: rgba(26, 188, 156, 0.75);
+    background: rgba(26, 188, 156, 0.18);
+}
+
+.trainer-sequence-row .trainer-sequence-pok {
     display: inline-block;
     flex: 0 0 auto;
     width: 40px;
-    height: 30px;
-    margin: 2px 7px 2px 0;
-    cursor: grab;
+    height: 32px;
+    margin: 0 8px 0 0;
     image-rendering: pixelated;
-}
-
-.opponent-plan-list .opponent-plan-pok:active {
-    cursor: grabbing;
-}
-
-.opponent-plan-list .opponent-plan-pok.opponent-plan-dragging {
-    opacity: 0.45;
-}
-
-.opponent-plan-empty {
-    width: 100%;
-    align-self: center;
-    color: var(--text, #737b87);
-    font-size: 0.86em;
-    text-align: center;
-    pointer-events: none;
-}
-
-.opponent-plan-hint {
-    margin-top: 4px;
-    color: var(--text, #737b87);
-    font-size: 0.75em;
 }
 
 .hpbar {
@@ -1955,8 +1935,25 @@ nav .nav {
     gap: 0px;
 }
 
+.roster-top-controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.6em;
+    margin-bottom: 4px;
+}
+
+.roster-top-controls #box-current-team {
+    width: 7.5em;
+    margin: 0;
+    padding: 3px 6px;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
 #search-inline {
-    margin-left: 8em;
+    display: inline-block;
+    margin-left: 0;
     flex-shrink: 0;
 }
 
@@ -1966,6 +1963,7 @@ nav .nav {
     border-radius: 4px;
     border: 1px solid #AAAAAA;
 }
+
 .team-legend {
     display: flex;
     align-items: center;

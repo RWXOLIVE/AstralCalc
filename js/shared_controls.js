@@ -3604,6 +3604,27 @@ function bindPlayerRosterSearchInput() {
 		});
 }
 
+function moveCurrentTeamToBox() {
+	var teamContainer = document.getElementById("team-poke-list");
+	var boxContainer = document.getElementById("box-poke-list");
+	if (!teamContainer || !boxContainer || !teamContainer.children.length) return;
+	var teamEntries = Array.prototype.slice.call(teamContainer.children);
+	var rosterFragment = document.createDocumentFragment();
+	for (var i = 0; i < teamEntries.length; i++) {
+		rosterFragment.appendChild(teamEntries[i]);
+	}
+	boxContainer.appendChild(rosterFragment);
+	scheduleFragSheetRefresh();
+	updateTrainerFragBorderTotals();
+	applyPlayerRosterSearchFilter();
+}
+
+function bindPlayerRosterBoxTeamButton() {
+	$("#box-current-team")
+		.off("click.boxteam")
+		.on("click.boxteam", moveCurrentTeamToBox);
+}
+
 function getFragRosterSpeciesFamily(setId) {
 	var speciesName = parseSetId(setId).species;
 	if (typeof aeLuaTrainerNormalizeSpecies === "function") {
@@ -9089,11 +9110,14 @@ function renderOpponentPlan() {
 }
 
 function updateOpponentPlanContext() {
-	if (!document.getElementById("opponent-plan-list")) return;
+	var planner = document.getElementById("opponent-plan");
+	if (!planner || !document.getElementById("opponent-plan-list")) return;
 	var activeRange = getCurrentOpponentPlanRange();
 	opponentPlanActiveKey = activeRange ? activeRange.id : OPPONENT_PLAN_GENERAL_KEY;
-	$("#opponent-plan-title").text(activeRange ? (activeRange.type + " Planner") : "Opponent Planner");
-	$("#opponent-plan-context").text(activeRange ? activeRange.label : "Free planning tray");
+	planner.hidden = !activeRange;
+	if (!activeRange) return;
+	$("#opponent-plan-title").text(activeRange.type + " Planner");
+	$("#opponent-plan-context").text(activeRange.label);
 	renderOpponentPlan();
 }
 
@@ -9226,6 +9250,105 @@ function bindOpponentPlan() {
 	updateOpponentPlanContext();
 }
 
+function getTrainerSequenceRows(range) {
+	var resolvedRange = range && typeof range.min === "number" ? range : resolveOpponentPlanRange(range);
+	var activeSetdex = gen === 9 && typeof SETDEX_SV !== "undefined" ? SETDEX_SV : setdex;
+	if (!resolvedRange || !activeSetdex) return [];
+	var rowsByTrainer = {};
+	for (var pokemonName in activeSetdex) {
+		if (!Object.prototype.hasOwnProperty.call(activeSetdex, pokemonName)) continue;
+		var pokemonSets = activeSetdex[pokemonName];
+		if (!pokemonSets || typeof pokemonSets !== "object") continue;
+		for (var trainerLabel in pokemonSets) {
+			if (!Object.prototype.hasOwnProperty.call(pokemonSets, trainerLabel)) continue;
+			var setData = pokemonSets[trainerLabel];
+			var trainerIndex = getTrainerIndexFromSetData(setData);
+			if (trainerIndex < resolvedRange.min || trainerIndex > resolvedRange.max) continue;
+			if (!doesSetMatchStarterChoice(pokemonName, trainerLabel, setData)) continue;
+			if (!rowsByTrainer[trainerLabel]) {
+				rowsByTrainer[trainerLabel] = {
+					trainerLabel: trainerLabel,
+					minIndex: trainerIndex,
+					entries: []
+				};
+			}
+			var row = rowsByTrainer[trainerLabel];
+			if (trainerIndex < row.minIndex) row.minIndex = trainerIndex;
+			row.entries.push({
+				indexText: String(trainerIndex),
+				sortIndex: trainerIndex,
+				fullSetName: pokemonName + " (" + trainerLabel + ")",
+				pokemonName: pokemonName,
+				trainerLabel: trainerLabel,
+				setData: setData
+			});
+		}
+	}
+	var rows = Object.keys(rowsByTrainer).map(function (trainerLabel) {
+		var row = rowsByTrainer[trainerLabel];
+		row.entries.sort(function (leftEntry, rightEntry) {
+			if (leftEntry.sortIndex !== rightEntry.sortIndex) return leftEntry.sortIndex - rightEntry.sortIndex;
+			return leftEntry.fullSetName.localeCompare(rightEntry.fullSetName);
+		});
+		return row;
+	});
+	rows.sort(function (leftRow, rightRow) {
+		if (leftRow.minIndex !== rightRow.minIndex) return leftRow.minIndex - rightRow.minIndex;
+		return leftRow.trainerLabel.localeCompare(rightRow.trainerLabel);
+	});
+	return rows;
+}
+
+function trainerSequenceMonHtml(entry) {
+	var label = "[" + entry.indexText + "]" + entry.fullSetName;
+	return '<img class="trainer-pok right-side trainer-sequence-pok" draggable="false" src="' + escapeHtml(getInitialTrainerSpriteUrlByName(entry.pokemonName)) + '" data-id="' + escapeHtml(entry.fullSetName) + '" data-species="' + escapeHtml(entry.pokemonName) + '" title="' + escapeHtml(label) + '" loading="lazy" decoding="async"' + getPrimaryIconSheetLoadAttr(entry.pokemonName) + ' onerror="applyIconSheetFallbackImage(this, this.getAttribute(\'data-species\'))">';
+}
+
+function renderTrainerSequence() {
+	var sequence = document.getElementById("trainer-sequence");
+	var list = document.getElementById("trainer-sequence-list");
+	var typeLabel = document.getElementById("trainer-sequence-type");
+	if (!sequence || !list || !typeLabel) return;
+	var activeRange = getCurrentOpponentPlanRange();
+	var rows = activeRange ? getTrainerSequenceRows(activeRange) : [];
+	if (!activeRange || !rows.length) {
+		sequence.hidden = true;
+		typeLabel.hidden = true;
+		list.innerHTML = "";
+		return;
+	}
+	var selectedSetId = String($(".opposing").val() || "").trim();
+	var selectedTrainerLabel = selectedSetId ? parseTrainerPartyEntry(selectedSetId).trainerLabel : "";
+	var rowsHtml = rows.map(function (row) {
+		var isCurrent = row.trainerLabel === selectedTrainerLabel;
+		return '<div class="trainer-sequence-row' + (isCurrent ? ' is-current' : '') + '" role="listitem" tabindex="0" data-trainer-label="' + escapeHtml(row.trainerLabel) + '" aria-label="' + escapeHtml(row.trainerLabel + "; click to select this fight") + '"' + (isCurrent ? ' aria-current="true"' : '') + '>' + row.entries.map(trainerSequenceMonHtml).join("") + '</div>';
+	}).join("");
+	typeLabel.textContent = activeRange.type;
+	typeLabel.title = activeRange.label;
+	typeLabel.hidden = false;
+	sequence.title = activeRange.label;
+	sequence.hidden = false;
+	list.innerHTML = rowsHtml;
+	$(list).find(".trainer-sequence-pok").each(function () {
+		applyPrimaryIconSheetIfNeeded(this, this.getAttribute("data-species"));
+	});
+	applyOpposingDeadMarks();
+}
+
+function bindTrainerSequence() {
+	$(document).off("click.trainersequence", ".trainer-sequence-row")
+		.on("click.trainersequence", ".trainer-sequence-row", function (ev) {
+			if ($(ev.target).closest(".trainer-sequence-pok").length) return;
+			selectTrainerFightByLabel(String(this.getAttribute("data-trainer-label") || ""));
+		});
+	$(document).off("keydown.trainersequence", ".trainer-sequence-row")
+		.on("keydown.trainersequence", ".trainer-sequence-row", function (ev) {
+			if (ev.key !== "Enter" && ev.key !== " ") return;
+			ev.preventDefault();
+			selectTrainerFightByLabel(String(this.getAttribute("data-trainer-label") || ""));
+		});
+}
+
 function getCurrentOpposingTrainerSideSplitEntries() {
 	var sortedEntries = (CURRENT_TRAINER_POKS || []).slice().sort(sortmons).map(parseTrainerPartyEntry);
 	if (!sortedEntries.length || !isSetDoubleEncounter(sortedEntries) || !shouldUseSetDoubleLayout(sortedEntries)) return null;
@@ -9280,7 +9403,7 @@ function renderOpposingTrainerParties(selectedSetName) {
 		applyPrimaryIconSheetIfNeeded(this, this.getAttribute("data-species"));
 	});
 	applyOpposingDeadMarks();
-	updateOpponentPlanContext();
+	renderTrainerSequence();
 }
 
 // auto-update set details on select
@@ -11521,10 +11644,11 @@ $(document).ready(function () {
 	trainerFieldLockActiveTrainerKey = getCurrentTrainerFieldLockKey();
 	syncTrainerFieldLockButtonStyles();
 	bindPlayerRosterSearchInput();
+	bindPlayerRosterBoxTeamButton();
 	ensureFragHistoryControls();
 	bindAeLuaFragImportControls();
 	bindFieldSideControlsToggle();
-	bindOpponentPlan();
+	bindTrainerSequence();
 	loadDefaultLists();
 	setupFragSheetAutoRefresh();
 	syncSettingsPanelUi();
