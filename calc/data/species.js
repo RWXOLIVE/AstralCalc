@@ -6531,13 +6531,15 @@ var SM_PATCH = {
         types: ['Bug', 'Water'],
         bs: { hp: 75, at: 125, df: 140, sa: 60, sd: 90, sp: 40 },
         weightkg: 108,
-        abilities: { 0: 'Emergency Exit' }
+        abilities: { 0: 'Emergency Exit' },
+        otherFormes: ['Golisopod-Mega']
     },
     'Golisopod-Mega': {
         types: ['Bug', 'Steel'],
         bs: { hp: 75, at: 150, df: 175, sa: 70, sd: 120, sp: 40 },
         weightkg: 148,
-        abilities: { 0: 'Emergency Exit' }
+        abilities: { 0: 'Emergency Exit' },
+        baseSpecies: 'Golisopod'
     },
     'Graveler-Alola': {
         types: ['Rock', 'Electric'],
