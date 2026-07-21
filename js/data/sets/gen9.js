@@ -1188,7 +1188,7 @@ var SETDEX_SV = {
             "moves": ["Tailwind","Hurricane","Surf","Protect"]
         },
         "Captain Dawson | Giant Chasm": {
-            "index": "0000000640",
+            "index": "0000000645",
             "level": 72,
             "ability": "Drizzle",
             "item": "Focus Sash",
@@ -1299,7 +1299,7 @@ var SETDEX_SV = {
             "moves": ["Fake Out","Close Combat","Headlong Rush","Knock Off"]
         },
         "Battle Girl Isabel | Giant Chasm": {
-            "index": "0000000626",
+            "index": "0000000631",
             "level": 70,
             "ability": "Guts",
             "item": "Leftovers",
@@ -1420,7 +1420,7 @@ var SETDEX_SV = {
             "moves": ["Curse","Leech Seed","Egg Bomb","Psycho Cut"]
         },
     "Magma Leader Maxie | Mt Chimney": {
-            "index": "0000000572",
+            "index": "0000000577",
             "level": 61,
             "ability": "Chlorophyll",
             "item": "Ability Shield",
@@ -1431,7 +1431,7 @@ var SETDEX_SV = {
             "moves": ["Weather Ball","Mind Reader","Leaf Storm","Ancient Power"]
         },
     "Leaders Blaine & Flannery | Lavaridge Gym": {
-            "index": "0000000604",
+            "index": "0000000609",
             "level": 60,
             "ability": "Chlorophyll",
             "item": "Leftovers",
@@ -1538,7 +1538,7 @@ var SETDEX_SV = {
             "moves": ["Nuzzle","Thunderbolt","Psychic Fangs","Fire Fang"]
         },
     "Cool Trainer Gerald | Lavaridge Gym": {
-            "index": "0000000584",
+            "index": "0000000589",
             "level": 60,
             "ability": "Strong Jaw",
             "item": "Muscle Band",
@@ -1775,7 +1775,7 @@ var SETDEX_SV = {
             "moves": ["Counter","Tickle","Encore","Mirror Coat"]
         },
     "Cool Trainer Gerald | Lavaridge Gym": {
-            "index": "0000000585",
+            "index": "0000000590",
             "level": 60,
             "ability": "Shadow Tag",
             "item": "Leftovers",
@@ -2019,7 +2019,7 @@ var SETDEX_SV = {
             "moves": ["Aurora Veil","Blizzard","Flash Cannon","Water Pulse"]
         },
         "School Kid Frostine | Giant Chasm": {
-            "index": "0000000618",
+            "index": "0000000623",
             "Weather": "Hail",
             "level": 70,
             "ability": "Ice Body",
@@ -2103,7 +2103,7 @@ var SETDEX_SV = {
             "moves": ["Fake Out","Knock Off","Screech","Yawn"]
         },
     "Kindler Jeff | Lavaridge Gym": {
-            "index": "0000000599",
+            "index": "0000000604",
             "level": 60,
             "ability": "Unburden",
             "item": "Misty Seed",
@@ -2331,7 +2331,7 @@ var SETDEX_SV = {
             "moves": ["Freeze-Dry","Blizzard","Ancient Power","Reflect"]
         },
         "Battle Girl Isabel | Giant Chasm": {
-            "index": "0000000623",
+            "index": "0000000628",
             "level": 71,
             "ability": "Levitate",
             "item": "Focus Sash",
@@ -2476,7 +2476,7 @@ var SETDEX_SV = {
             "moves": ["Earthquake","X-Scissor","Cross Poison","Rock Slide"]
         },
     "Kindler Cole | Lavaridge Gym": {
-            "index": "0000000582",
+            "index": "0000000587",
             "level": 60,
             "ability": "Speed Boost",
             "item": "Scope Lens",
@@ -2674,7 +2674,7 @@ var SETDEX_SV = {
             "moves": ["Calm Mind","Flamethrower","Psyshock","Confuse Ray"]
         },
         "Dragon Tamer Lawrence | Giant Chasm": {
-            "index": "0000000621",
+            "index": "0000000626",
             "level": 70,
             "ability": "Magic Guard",
             "item": "Wise Glasses",
@@ -2699,7 +2699,7 @@ var SETDEX_SV = {
             "moves": ["Sucker Punch","Seed Bomb","Close Combat","Spore"]
         },
     "Kindler Keegan | Lavaridge Gym": {
-            "index": "0000000588",
+            "index": "0000000593",
             "level": 60,
             "ability": "Protosynthesis",
             "item": "Black Glasses",
@@ -2709,7 +2709,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Sucker Punch","Trailblaze","Knock Off","Spore"]
+            "moves": ["Sucker Punch","Trailblaze","Knock Off","Leaf Blade"]
         }
     },
     "Volbeat": {
@@ -3010,7 +3010,7 @@ var SETDEX_SV = {
             "moves": ["Seismic Toss","Zen Headbutt","Spirit Break","Thunder Wave"]
         },
     "Kindler Jeff | Lavaridge Gym": {
-            "index": "0000000600",
+            "index": "0000000605",
             "level": 60,
             "ability": "Protosynthesis",
             "item": "Fairy Gem",
@@ -3122,6 +3122,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Leech Life","Close Combat","Flare Blitz","Reflect Type"]
+        },
+        "Magma Admin Tabitha | Mt Chimney": {
+            "index": "0000000571",
+            "level": 60,
+            "ability": "Protosynthesis",
+            "item": "Bug Gem",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["First Impression","Close Combat","Lunge","Flame Charge"]
         }
     },
     "Pikachu-Partner": {
@@ -3771,7 +3782,7 @@ var SETDEX_SV = {
             "moves": ["Grass Knot","Sludge Bomb","Fire Lash","Flamethrower"]
         },
     "Kindler Jace | Lavaridge Gym": {
-            "index": "0000000577",
+            "index": "0000000582",
             "level": 60,
             "ability": "Corrosion",
             "item": "Life Orb",
@@ -3820,7 +3831,7 @@ var SETDEX_SV = {
             "moves": ["Fake Out","Icicle Spear","Feint Attack","Covet"]
         },
         "Battle Girl Isabel | Giant Chasm": {
-            "index": "0000000625",
+            "index": "0000000630",
             "level": 70,
             "ability": "Technician",
             "item": "Loaded Dice",
@@ -3959,7 +3970,7 @@ var SETDEX_SV = {
             "moves": ["Solar Blade","Fire Spin","Rock Slide","Psycho Cut"]
         },
     "Cool Trainer Gerald | Lavaridge Gym": {
-            "index": "0000000583",
+            "index": "0000000588",
             "level": 60,
             "ability": "Solar Veil",
             "item": "Fire Gem",
@@ -4305,7 +4316,7 @@ var SETDEX_SV = {
             "moves": ["Solar Beam","Flamethrower","Scorching Sands","Acid Spray"]
         },
         "Wyatt & Jacob | Giant Chasm": {
-            "index": "0000000629",
+            "index": "0000000634",
             "level": 71,
             "ability": "Flame Body",
             "item": "Safety Goggles",
@@ -4472,7 +4483,7 @@ var SETDEX_SV = {
             "moves": ["Strange Steam","Sludge Wave","Misty Explosion","Fire Blast"]
         },
     "Kindler Keegan | Lavaridge Gym": {
-            "index": "0000000589",
+            "index": "0000000594",
             "level": 60,
             "ability": "Neutralizing Gas",
             "item": "Choice Specs",
@@ -4546,7 +4557,7 @@ var SETDEX_SV = {
             "moves": ["Agility","Bolt Beak","Blizzard","Stomping Tantrum"]
         },
         "School Kid Frostine | Giant Chasm": {
-            "index": "0000000615",
+            "index": "0000000620",
             "Weather": "Hail",
             "level": 70,
             "ability": "Slush Rush",
@@ -4738,7 +4749,7 @@ var SETDEX_SV = {
             "moves": ["Fake Out","Dark Pulse","Flare Blitz","Will-O-Wisp"]
         },
     "Kindler Jeff | Lavaridge Gym": {
-            "index": "0000000601",
+            "index": "0000000606",
             "level": 60,
             "ability": "Intimidate",
             "item": "Leftovers",
@@ -4813,7 +4824,7 @@ var SETDEX_SV = {
             "moves": ["Close Combat","Acrobatics","Vacuum Wave","Stone Edge"]
         },
     "Kindler Keegan | Lavaridge Gym": {
-            "index": "0000000590",
+            "index": "0000000595",
             "level": 60,
             "ability": "Reckless",
             "item": "White Herb",
@@ -4839,7 +4850,7 @@ var SETDEX_SV = {
             "moves": ["Defense Curl","Ice Ball","Aqua Tail","Body Press"]
         },
         "Battle Girl Isabel | Giant Chasm": {
-            "index": "0000000624",
+            "index": "0000000629",
             "level": 73,
             "ability": "Ice Body",
             "item": "Chople Berry",
@@ -4928,7 +4939,7 @@ var SETDEX_SV = {
             "moves": ["Toxic Thread","Barb Barrage","Leech Life","First Impression"]
         },
         "Pokefan Kaleb | Giant Chasm": {
-            "index": "0000000636",
+            "index": "0000000641",
             "Weather": "Hail",
             "level": "+1",
             "ability": "Shadow Tag",
@@ -4992,7 +5003,7 @@ var SETDEX_SV = {
             "moves": ["Flamethrower","Future Sight","Protect","Muddy Water"]
         },
         "Pokefan Kaleb | Giant Chasm": {
-            "index": "0000000634",
+            "index": "0000000639",
             "Weather": "Hail",
             "level": "-1",
             "ability": "Regenerator",
@@ -5203,7 +5214,7 @@ var SETDEX_SV = {
             "moves": ["Electro Shot","Thunderbolt","Flash Cannon","Thunder Wave"]
         },
         "Rival Steven | Route 118": {
-            "index": "0000000612",
+            "index": "0000000617",
             "level": 73,
             "ability": "Stamina",
             "item": "Grassy Seed",
@@ -5274,7 +5285,7 @@ var SETDEX_SV = {
             "moves": ["Liquidation","Meteor Mash","Knock Off","Protect"]
         },
     "Kindler Cole | Lavaridge Gym": {
-            "index": "0000000581",
+            "index": "0000000586",
             "level": 60,
             "ability": "Sheer Force",
             "item": "Utility Umbrella",
@@ -5313,7 +5324,7 @@ var SETDEX_SV = {
             "moves": ["Dragon Hammer","Waterfall","Iron Head","Focus Energy"]
         },
         "Dragon Tamer Lawrence | Giant Chasm": {
-            "index": "0000000622",
+            "index": "0000000627",
             "level": 71,
             "ability": "Sniper",
             "item": "Scope Lens",
@@ -5586,7 +5597,7 @@ var SETDEX_SV = {
             "moves": ["Vacuum Wave","Dragon Pulse","Body Press","Iron Head"]
         },
         "Wyatt & Jacob | Giant Chasm": {
-            "index": "0000000633",
+            "index": "0000000638",
             "level": 71,
             "ability": "Overcoat",
             "item": "Throat Spray",
@@ -5639,7 +5650,7 @@ var SETDEX_SV = {
             "moves": ["Crabhammer","Ice Hammer","Hammer Arm","Drain Punch"]
         },
         "Battle Girl Isabel | Giant Chasm": {
-            "index": "0000000627",
+            "index": "0000000632",
             "level": 72,
             "ability": "Hyper Cutter",
             "item": "Choice Band",
@@ -6069,7 +6080,7 @@ var SETDEX_SV = {
             "moves": ["Close Combat","Flare Blitz","Head Smash","Wild Charge"]
         },
     "Battle Girl Danielle | Lavaridge Gym": {
-            "index": "0000000591",
+            "index": "0000000596",
             "level": 60,
             "ability": "Heated Rush",
             "item": "Choice Band",
@@ -6390,7 +6401,7 @@ var SETDEX_SV = {
             "moves": ["First Impression","Liquidation","Leech Life","Stone Edge"]
         },
         "Captain Dawson | Giant Chasm": {
-            "index": "0000000641",
+            "index": "0000000646",
             "level": 70,
             "ability": "Emergency Exit",
             "item": "Bug Gem",
@@ -6465,7 +6476,7 @@ var SETDEX_SV = {
             "moves": ["Order Up","Earthquake","Waterfall","Body Press"]
         },
         "School Kid Frostine | Giant Chasm": {
-            "index": "0000000617",
+            "index": "0000000622",
             "Weather": "Hail",
             "level": 70,
             "ability": "Unaware",
@@ -6622,7 +6633,7 @@ var SETDEX_SV = {
             "moves": ["Burn Up","Baton Pass","Energy Ball","Calm Mind"]
         },
     "Magma Leader Maxie | Mt Chimney": {
-            "index": "0000000571",
+            "index": "0000000576",
             "level": 61,
             "ability": "Drought",
             "Weather": "Sun",
@@ -6866,7 +6877,7 @@ var SETDEX_SV = {
             "moves": ["Coaching","Dire Claw","Close Combat","Fake Out"]
         },
         "Wyatt & Jacob | Giant Chasm": {
-            "index": "0000000632",
+            "index": "0000000637",
             "level": 70,
             "ability": "Unburden",
             "item": "White Herb",
@@ -6995,7 +7006,7 @@ var SETDEX_SV = {
             "moves": ["Swords Dance","Scale Shot","Earthquake","Iron Head"]
         },
     "Cool Trainer Gerald | Lavaridge Gym": {
-            "index": "0000000586",
+            "index": "0000000591",
             "level": 60,
             "ability": "Rough Skin",
             "item": "Loaded Dice",
@@ -7100,7 +7111,7 @@ var SETDEX_SV = {
             "moves": ["Shell Trap","Body Press","Dragon Tail","Fire Lash"]
         },
     "Kindler Cole | Lavaridge Gym": {
-            "index": "0000000579",
+            "index": "0000000584",
             "level": 60,
             "ability": "Shell Armor",
             "item": "Binding Band",
@@ -7154,7 +7165,7 @@ var SETDEX_SV = {
             "moves": ["Flamethrower","Explosion","Solar Beam","Earth Power"]
         },
     "Kindler Keegan | Lavaridge Gym": {
-            "index": "0000000587",
+            "index": "0000000592",
             "level": 60,
             "ability": "Drought",
             "item": "Quick Claw",
@@ -7239,7 +7250,7 @@ var SETDEX_SV = {
             "moves": ["Dragon Dance","Acrobatics","Fire Punch","Thunder Punch"]
         },
     "Kindler Cole | Lavaridge Gym": {
-            "index": "0000000580",
+            "index": "0000000585",
             "level": 60,
             "ability": "Solar Power",
             "item": "Focus Band",
@@ -7374,11 +7385,10 @@ var SETDEX_SV = {
             "moves": ["Terrain Pulse","Water Pulse","Flash Cannon","Aqua Jet"]
         },
     "Hiker Eli | Lavaridge Gym": {
-            "index": "0000000594",
+            "index": "0000000599",
             "level": 60,
             "ability": "Mega Launcher",
             "item": "Assault Vest",
-            "Weather": "Sun",
             "Terrain": "Misty",
             "nature": "Modest",
             "setdouble": "True",
@@ -7496,7 +7506,7 @@ var SETDEX_SV = {
             "moves": ["Zen Headbutt","Ice Beam","Shell Side Arm","Slack Off"]
         },
     "Kindler Axle | Lavaridge Gym": {
-            "index": "0000000597",
+            "index": "0000000602",
             "level": 60,
             "ability": "Quick Draw",
             "item": "Quick Claw",
@@ -7630,7 +7640,7 @@ var SETDEX_SV = {
             "moves": ["Body Press","Aqua Tail","Dragon Tail","Stealth Rock"]
         },
         "Pokefan Kaleb | Giant Chasm": {
-            "index": "0000000635",
+            "index": "0000000640",
             "Weather": "Hail",
             "level": 0,
             "ability": "Sturdy",
@@ -7808,7 +7818,7 @@ var SETDEX_SV = {
             "moves": ["Ancient Power","Giga Drain","Earth Power","Infestation"]
         },
         "Rival Steven | Route 118": {
-            "index": "0000000609",
+            "index": "0000000614",
             "level": 72,
             "ability": "Storm Drain",
             "item": "Chople Berry",
@@ -8069,7 +8079,7 @@ var SETDEX_SV = {
             "moves": ["Stealth Rock","Sucker Punch","Blaze Kick","Drain Punch"]
         },
         "Blaine & Flannery | Lavaridge Gym": {
-            "index": "0000000606",
+            "index": "0000000611",
             "level": 60,
             "ability": "Iron Fist",
             "item": "Focus Sash",
@@ -8253,7 +8263,7 @@ var SETDEX_SV = {
             "moves": ["Agility","Bullet Punch","Future Sight","Psychic Fangs"]
         },
         "Rival Steven | Route 118": {
-            "index": "0000000610",
+            "index": "0000000615",
             "level": 73,
             "ability": "Clear Body",
             "item": "Leftovers",
@@ -8349,9 +8359,62 @@ var SETDEX_SV = {
             "moves": ["Fire Blast","Dark Pulse","Solar Beam","Destiny Bond"]
         }
     },
+    "Pyroar-Mega": {
+        "Magma Admin Tabitha | Mt Chimney": {
+            "index": "0000000570",
+            "level": 61,
+            "ability": "Drought",
+            "Weather": "Sun",
+            "item": "Pyroarite",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Hyper Voice","Solar Beam","Flamethrower","Stealth Rock"]
+        }
+    },
+    "Rhyperior": {
+        "Magma Admin Tabitha | Mt Chimney": {
+            "index": "0000000572",
+            "level": 60,
+            "ability": "Solid Rock",
+            "item": "Weakness Policy",
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Rock Polish","Rock Slide","Earthquake","Thunder Punch"]
+        }
+    },
+    "Chi-Yu": {
+        "Magma Admin Tabitha | Mt Chimney": {
+            "index": "0000000573",
+            "level": 60,
+            "ability": "Beads of Ruin",
+            "item": "Focus Sash",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Dark Pulse","Psychic","Flamethrower","Will-O-Wisp"]
+        }
+    },
+    "Slaking": {
+        "Magma Admin Tabitha | Mt Chimney": {
+            "index": "0000000574",
+            "level": 60,
+            "ability": "Guts",
+            "item": "White Herb",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fire Punch","Knock Off","Play Rough","Slam"]
+        }
+    },
     "Groudon-Primal": {
     "Magma Leader Maxie | Mt Chimney": {
-            "index": "0000000570",
+            "index": "0000000575",
             "level": 62,
             "ability": "Drought",
             "Weather": "Sun",
@@ -8365,7 +8428,7 @@ var SETDEX_SV = {
     },
     "Nidoqueen": {
     "Magma Leader Maxie | Mt Chimney": {
-            "index": "0000000573",
+            "index": "0000000578",
             "level": 60,
             "ability": "Sheer Force",
             "item": "Life Orb",
@@ -8378,7 +8441,7 @@ var SETDEX_SV = {
     },
     "Raging Bolt": {
     "Magma Leader Maxie | Mt Chimney": {
-            "index": "0000000574",
+            "index": "0000000579",
             "level": 60,
             "ability": "Protosynthesis",
             "item": "Lum Berry",
@@ -8391,7 +8454,7 @@ var SETDEX_SV = {
     },
     "Heatran-Mega": {
     "Magma Leader Maxie | Mt Chimney": {
-            "index": "0000000575",
+            "index": "0000000580",
             "level": 61,
             "ability": "Heatproof",
             "item": "Heatranite",
@@ -8404,7 +8467,7 @@ var SETDEX_SV = {
     },
     "Druddigon": {
     "Kindler Jace | Lavaridge Gym": {
-            "index": "0000000576",
+            "index": "0000000581",
             "level": 60,
             "ability": "Rough Skin",
             "item": "Misty Seed",
@@ -8418,7 +8481,7 @@ var SETDEX_SV = {
     },
     "Crawdaunt": {
     "Kindler Jace | Lavaridge Gym": {
-            "index": "0000000578",
+            "index": "0000000583",
             "level": 60,
             "ability": "Adaptability",
             "item": "Water Gem",
@@ -8432,7 +8495,7 @@ var SETDEX_SV = {
     },
     "Pangoro": {
     "Battle Girl Danielle | Lavaridge Gym": {
-            "index": "0000000592",
+            "index": "0000000597",
             "level": 60,
             "ability": "Iron Fist",
             "item": "Roseli Berry",
@@ -8446,7 +8509,7 @@ var SETDEX_SV = {
     },
     "Landorus-Therian": {
     "Battle Girl Danielle | Lavaridge Gym": {
-            "index": "0000000593",
+            "index": "0000000598",
             "level": 60,
             "ability": "Intimidate",
             "item": "Yache Berry",
@@ -8460,11 +8523,10 @@ var SETDEX_SV = {
     },
     "Diancie-Mega": {
     "Hiker Eli | Lavaridge Gym": {
-            "index": "0000000595",
+            "index": "0000000600",
             "level": 61,
             "ability": "Clear Body",
             "item": "Diancite",
-            "Weather": "Sun",
             "Terrain": "Misty",
             "nature": "Timid",
             "setdouble": "True",
@@ -8476,7 +8538,7 @@ var SETDEX_SV = {
     },
     "Armarouge": {
     "Kindler Axle | Lavaridge Gym": {
-            "index": "0000000596",
+            "index": "0000000601",
             "level": 60,
             "ability": "Weak Armor",
             "item": "Weakness Policy",
@@ -8490,7 +8552,7 @@ var SETDEX_SV = {
     },
     "Salamence": {
     "Kindler Axle | Lavaridge Gym": {
-            "index": "0000000598",
+            "index": "0000000603",
             "level": 60,
             "ability": "Moxie",
             "item": "Psychic Seed",
@@ -8502,7 +8564,7 @@ var SETDEX_SV = {
             "moves": ["Fire Blast","Dragon Claw","Dual Wingbeat","Fire Spin"]
         },
         "School Kid Frostine | Giant Chasm": {
-            "index": "0000000616",
+            "index": "0000000621",
             "Weather": "Hail",
             "level": 72,
             "ability": "Intimidate",
@@ -8516,7 +8578,7 @@ var SETDEX_SV = {
     },
     "Entei": {
     "Leaders Blaine & Flannery | Lavaridge Gym": {
-        "index": "0000000602",
+        "index": "0000000607",
         "level": 62,
         "ability": "Inner Focus",
         "item": "Lum Berry",
@@ -8532,7 +8594,7 @@ var SETDEX_SV = {
     },
     "Charizard-Mega-X": {
         "Blaine & Flannery | Lavaridge Gym": {
-            "index": "0000000603",
+            "index": "0000000608",
             "level": 61,
             "ability": "Tough Claws",
             "item": "Charizardite X",
@@ -8548,7 +8610,7 @@ var SETDEX_SV = {
     },
     "Scovillain-Mega": {
         "Blaine & Flannery | Lavaridge Gym": {
-            "index": "0000000605",
+            "index": "0000000610",
             "level": 61,
             "ability": "Spicy Spray",
             "item": "Scovillainite",
@@ -8564,7 +8626,7 @@ var SETDEX_SV = {
     },
     "Heatran": {
         "Blaine & Flannery | Lavaridge Gym": {
-            "index": "0000000607",
+            "index": "0000000612",
             "level": 62,
             "ability": "Flash Fire",
             "item": "Air Balloon",
@@ -8580,7 +8642,7 @@ var SETDEX_SV = {
     },
     "Genesect-Douse": {
         "Rival Steven | Route 118": {
-            "index": "0000000608",
+            "index": "0000000613",
             "level": 71,
             "ability": "Download",
             "item": "Douse Drive",
@@ -8596,7 +8658,7 @@ var SETDEX_SV = {
     },
     "Armaldo": {
         "Rival Steven | Route 118": {
-            "index": "0000000611",
+            "index": "0000000616",
             "level": 72,
             "ability": "Swift Swim",
             "item": "Scope Lens",
@@ -8612,7 +8674,7 @@ var SETDEX_SV = {
     },
     "Golisopod-Mega": {
         "Rival Steven | Route 118": {
-            "index": "0000000613",
+            "index": "0000000618",
             "level": 74,
             "ability": "Bulletproof",
             "item": "Golisopite",
@@ -8628,7 +8690,7 @@ var SETDEX_SV = {
     },
     "Piloswine": {
         "School Kid Frostine | Giant Chasm": {
-            "index": "0000000614",
+            "index": "0000000619",
             "Weather": "Hail",
             "level": 71,
             "ability": "Thick Fat",
@@ -8642,7 +8704,7 @@ var SETDEX_SV = {
     },
     "Sandslash-Alola": {
         "Dragon Tamer Lawrence | Giant Chasm": {
-            "index": "0000000619",
+            "index": "0000000624",
             "level": 71,
             "ability": "Snow Cloak",
             "item": "Light Clay",
@@ -8656,7 +8718,7 @@ var SETDEX_SV = {
     },
     "Cyclizar": {
         "Dragon Tamer Lawrence | Giant Chasm": {
-            "index": "0000000620",
+            "index": "0000000625",
             "level": 72,
             "ability": "Regenerator",
             "item": "Life Orb",
@@ -8670,7 +8732,7 @@ var SETDEX_SV = {
     },
     "Alcremie": {
         "Wyatt & Jacob | Giant Chasm": {
-            "index": "0000000628",
+            "index": "0000000633",
             "level": 71,
             "ability": "Aroma Veil",
             "item": "Red Card",
@@ -8687,7 +8749,7 @@ var SETDEX_SV = {
     },
     "Appletun": {
         "Wyatt & Jacob | Giant Chasm": {
-            "index": "0000000630",
+            "index": "0000000635",
             "level": 71,
             "ability": "Thick Fat",
             "item": "Lum Berry",
@@ -8704,7 +8766,7 @@ var SETDEX_SV = {
     },
     "Hitmontop": {
         "Wyatt & Jacob | Giant Chasm": {
-            "index": "0000000631",
+            "index": "0000000636",
             "level": 71,
             "ability": "Intimidate",
             "item": "Covert Cloak",
@@ -8721,7 +8783,7 @@ var SETDEX_SV = {
     },
     "Skeledirge": {
         "Pokefan Kaleb | Giant Chasm": {
-            "index": "0000000637",
+            "index": "0000000642",
             "Weather": "Hail",
             "level": 0,
             "ability": "Blaze",
@@ -8735,7 +8797,7 @@ var SETDEX_SV = {
     },
     "Sigilyph": {
         "Pokefan Kaleb | Giant Chasm": {
-            "index": "0000000638",
+            "index": "0000000643",
             "Weather": "Hail",
             "level": "+1",
             "ability": "Tinted Lens",
@@ -8749,7 +8811,7 @@ var SETDEX_SV = {
     },
     "Crabominable-Mega": {
         "Pokefan Kaleb | Giant Chasm": {
-            "index": "0000000639",
+            "index": "0000000644",
             "Weather": "Hail",
             "level": 0,
             "ability": "Sheer Force",
@@ -8763,7 +8825,7 @@ var SETDEX_SV = {
     },
     "Starmie": {
         "Captain Dawson | Giant Chasm": {
-            "index": "0000000642",
+            "index": "0000000647",
             "level": 72,
             "ability": "Illuminate",
             "item": "Iapapa Berry",
@@ -8776,7 +8838,7 @@ var SETDEX_SV = {
     },
     "Tentacruel": {
         "Captain Dawson | Giant Chasm": {
-            "index": "0000000643",
+            "index": "0000000648",
             "level": 73,
             "ability": "Rain Dish",
             "item": "Shuca Berry",
@@ -8789,7 +8851,7 @@ var SETDEX_SV = {
     },
     "Sharpedo": {
         "Captain Dawson | Giant Chasm": {
-            "index": "0000000644",
+            "index": "0000000649",
             "level": 70,
             "ability": "Speed Boost",
             "item": "Liechi Berry",

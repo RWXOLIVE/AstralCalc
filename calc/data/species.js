@@ -4625,7 +4625,8 @@ var BW_PATCH = {
         types: ['Dark', 'Fighting'],
         bs: { hp: 65, at: 90, df: 115, sa: 45, sd: 115, sp: 58 },
         weightkg: 30,
-        abilities: { 0: 'Shed Skin' }
+        abilities: { 0: 'Shed Skin' },
+        otherFormes: ['Scrafty-Mega']
     },
     'Scrafty-Mega': {
         types: ['Dark', 'Fighting'],
@@ -9789,13 +9790,15 @@ var SV_PATCH = {
         types: ['Grass', 'Fire'],
         bs: { hp: 65, at: 108, df: 65, sa: 108, sd: 65, sp: 75 },
         weightkg: 15,
-        abilities: { 0: 'Chlorophyll' }
+        abilities: { 0: 'Chlorophyll' },
+        otherFormes: ['Scovillain-Mega']
     },
     'Scovillain-Mega': {
         types: ['Grass', 'Fire'],
         bs: { hp: 65, at: 138, df: 85, sa: 138, sd: 85, sp: 75 },
         weightkg: 22,
-        abilities: { 0: 'Chlorophyll' }
+        abilities: { 0: 'Chlorophyll' },
+        baseSpecies: 'Scovillain'
     },
     'Scream Tail': {
         types: ['Fairy', 'Psychic'],
