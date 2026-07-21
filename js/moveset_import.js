@@ -151,7 +151,7 @@ function getMoveNamesFromSelectors(pokeInfo, fallbackMoves) {
 function SavePokemonSet(pokeInfo) {
 	var pokemon = createPokemon(pokeInfo);
 	if (!pokemon || !pokemon.name) return;
-	var selectedSet = pokeInfo.find(".set-selector").val() || "";
+	var selectedSet = pokeInfo.find("input.set-selector").val() || "";
 	var parsedSet = typeof parseSetId === "function" ? parseSetId(selectedSet) : null;
 	var baseSetName = (parsedSet && parsedSet.label) || getSetNameFromSelection(selectedSet) || "Custom Set";
 	pokemon.nameProp = baseSetName;
@@ -160,7 +160,7 @@ function SavePokemonSet(pokeInfo) {
 	addToDex(pokemon);
 	$(allPokemon("#importedSetsOptions")).css("display", "inline");
 	var fullSetName = pokemon.name + " (" + baseSetName + ")";
-	var selector = pokeInfo.find(".set-selector");
+	var selector = pokeInfo.find("input.set-selector");
 	selector.val(fullSetName).change();
 	if (pokeInfo.prop("id") === "p1") {
 		$(".player .select2-chosen").text(fullSetName);
@@ -668,13 +668,13 @@ $(document).ready(function () {
 		if (!restoredSelection) {
 			var activePlayerSet = typeof getSelectedSetIdForSide === "function"
 				? getSelectedSetIdForSide("p1")
-				: String($(".player").val() || "").trim();
+				: String($("input.player").val() || "").trim();
 			if (!activePlayerSet) {
 				selectFirstMon();
 			}
 		}
 		$(allPokemon("#importedSetsOptions")).css("display", "inline");
-	} else if (!$(".set-selector").first().data("select2")) {
+	} else if (!$("input.set-selector").first().data("select2")) {
 		loadDefaultLists();
 	}
 	//adjust the side buttons that collapse the data wished to be hidden

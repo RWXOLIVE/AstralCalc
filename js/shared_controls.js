@@ -1992,8 +1992,8 @@ function ensureDittoTransformButtonPlacement() {
 
 function syncDittoTransformButtons() {
 	ensureDittoTransformButtonPlacement();
-	var p1SetId = $("#p1 .set-selector").val();
-	var p2SetId = $("#p2 .set-selector").val();
+	var p1SetId = $("#p1 input.set-selector").val();
+	var p2SetId = $("#p2 input.set-selector").val();
 	var showLeft = isDittoSetId(p1SetId);
 	var showRight = isDittoSetId(p2SetId);
 	var transformL = $("#transformL");
@@ -2038,7 +2038,7 @@ function resolveInlineSpriteSpeciesForPokeInfo(pokeInfo) {
 	if (transformedSpecies) return transformedSpecies;
 	var formeSpecies = getSelectedFormeNameIfVisible(pokeInfo);
 	if (formeSpecies) return formeSpecies;
-	var setSpecies = parseSetId(pokeInfo.find(".set-selector").val()).species || "";
+	var setSpecies = parseSetId(pokeInfo.find("input.set-selector").val()).species || "";
 	return String(setSpecies || "").trim();
 }
 
@@ -2065,7 +2065,7 @@ function getDisplayedSpeciesForTransform(pokeInfo) {
 	var spriteNode = getTopSpriteNodeForPokeInfo(pokeInfo);
 	var spriteSpecies = spriteNode ? String(spriteNode.getAttribute("data-species") || "").trim() : "";
 	if (spriteSpecies && toDexPokemonId(spriteSpecies) !== "ditto") return spriteSpecies;
-	var parsedSet = parseSetId(pokeInfo.find(".set-selector").val());
+	var parsedSet = parseSetId(pokeInfo.find("input.set-selector").val());
 	return String(parsedSet.species || "").trim();
 }
 
@@ -2096,7 +2096,7 @@ function transformDittoFromOpposing(targetSideSelector, sourceSideSelector) {
 	var targetPokeInfo = $(targetSideSelector);
 	var sourcePokeInfo = $(sourceSideSelector);
 	if (!targetPokeInfo.length || !sourcePokeInfo.length) return;
-	var targetSetSelector = targetPokeInfo.find(".set-selector");
+	var targetSetSelector = targetPokeInfo.find("input.set-selector");
 	if (!targetSetSelector.length || !isDittoSetId(targetSetSelector.val())) return;
 
 	var preservedLevel = targetPokeInfo.find(".level").val();
@@ -2281,7 +2281,7 @@ function astralDexUrl(pokemonName) {
 function getSelectedPokemonNameForAnalysis(linkElement) {
 	var link = $(linkElement);
 	var pokeInfo = link.closest(".poke-info");
-	var fullSetName = pokeInfo.find(".set-selector").val() || "";
+	var fullSetName = pokeInfo.find("input.set-selector").val() || "";
 	if (fullSetName.indexOf(" (") > 0) {
 		return fullSetName.substring(0, fullSetName.indexOf(" ("));
 	}
@@ -2363,7 +2363,7 @@ function bindAstralDexLinks() {
 function getCurrentFightLabel() {
 	var trainerLabel = String(window.CURRENT_TRAINER || "").trim();
 	if (trainerLabel) return trainerLabel;
-	var opposingSet = $(".opposing").val() || "";
+	var opposingSet = $("input.opposing").val() || "";
 	if (!opposingSet) return "Unknown Fight";
 	var start = opposingSet.indexOf("(");
 	var end = opposingSet.lastIndexOf(")");
@@ -2378,7 +2378,7 @@ function getTrainerIndexFromSetData(setData) {
 }
 
 function getCurrentFightIndex() {
-	var opposingSet = $(".opposing").val();
+	var opposingSet = $("input.opposing").val();
 	if (opposingSet) {
 		var selectedEntry = parseTrainerPartyEntry(opposingSet);
 		var selectedIndex = getTrainerIndexFromSetData(selectedEntry.setData);
@@ -5787,7 +5787,7 @@ function importAeLuaPokemonFromPayload(payload) {
 	syncFragRoster();
 	if (selectedPlayerSetId && updatedSetIds[selectedPlayerSetId]) {
 		topPokemonIcon(selectedPlayerSetId, $("#p1mon")[0]);
-		$(".player").val(selectedPlayerSetId).change();
+		$("input.player").val(selectedPlayerSetId).change();
 		$(".player .select2-chosen").text(formatSetNameForDisplay(selectedPlayerSetId));
 	} else if (typeof performCalculations === "function") {
 		performCalculations();
@@ -6817,7 +6817,7 @@ function ensureNotesSetOption(options, setId) {
 
 function getNotesPlayerSetOptions() {
 	var options = collectPlayerRosterSetIds();
-	var activePlayerSet = $(".player").val();
+	var activePlayerSet = $("input.player").val();
 	ensureNotesSetOption(options, activePlayerSet);
 	if (options.length) return options;
 	var customsets = safeJsonParse(localStorage.getItem("customsets"), {});
@@ -6835,7 +6835,7 @@ function getNotesPlayerSetOptions() {
 
 function getNotesOpposingSetOptions() {
 	var options = collectOpposingTargetSetIds();
-	var activeOpposingSet = $(".opposing").val();
+	var activeOpposingSet = $("input.opposing").val();
 	ensureNotesSetOption(options, activeOpposingSet);
 	return options;
 }
@@ -7088,7 +7088,7 @@ function collectOpposingTargetSetIds() {
 		if (!setId) return;
 		if (opposingSetIds.indexOf(setId) < 0) opposingSetIds.push(setId);
 	});
-	var activeOpposingSet = $(".opposing").val();
+	var activeOpposingSet = $("input.opposing").val();
 	if (activeOpposingSet && opposingSetIds.indexOf(activeOpposingSet) < 0) {
 		opposingSetIds.unshift(activeOpposingSet);
 	}
@@ -7105,7 +7105,7 @@ function updateFragContextTitle() {
 function populateFragContextTargets() {
 	var targetSelect = $("#frag-context-target");
 	var targetSetIds = collectOpposingTargetSetIds();
-	var activeOpposingSet = $(".opposing").val() || "";
+	var activeOpposingSet = $("input.opposing").val() || "";
 	var previousTargetSet = targetSelect.val() || "";
 	targetSelect.empty();
 	if (!targetSetIds.length) {
@@ -7205,8 +7205,8 @@ function hotSwapSetToPlayerContainer(setId, sourceElement, containerId) {
 	targetContainer.appendChild(moveNode);
 	if (containerId !== "trash-box") {
 		topPokemonIcon(setId, $("#p1mon")[0]);
-		$(".player").val(setId);
-		$(".player").change();
+		$("input.player").val(setId);
+		$("input.player").change();
 		$(".player .select2-chosen").text(formatSetNameForDisplay(setId));
 	}
 	saveCurrentPlayerRosterLayout();
@@ -7275,7 +7275,7 @@ function getCustomSetOptionById(setId, options) {
 }
 
 function getSelectedSetIdForSide(sideId) {
-	var selector = $("#" + sideId + " .set-selector").first();
+	var selector = $("#" + sideId + " input.set-selector").first();
 	if (!selector.length) return "";
 	return String(selector.val() || "").trim();
 }
@@ -7300,7 +7300,7 @@ function setSelectedSetIdForSide(sideId, setId) {
 		}
 		return false;
 	}
-	var selector = $("#" + sideId + " .set-selector").first();
+	var selector = $("#" + sideId + " input.set-selector").first();
 	if (!selector.length) return false;
 	function syncSetSelectorDisplayText() {
 		var select2Container = selector.next(".select2-container");
@@ -7398,8 +7398,7 @@ function restoreLastEncounterSelection() {
 			}
 			var trainerIndex = parseInt(trainerIndexRaw, 10);
 			if (!Number.isNaN(trainerIndex) && trainerIndex > 0) {
-				selectTrainer(trainerIndex);
-				restoredOpposing = true;
+				restoredOpposing = selectTrainer(trainerIndex);
 			}
 		}
 
@@ -7422,30 +7421,30 @@ function restoreLastEncounterSelection() {
 }
 
 function refreshSetSelectorsForStarterChoice() {
-	var playerSet = $(".player").val();
-	var opposingSet = $(".opposing").val();
+	var playerSet = $("input.player").val();
+	var opposingSet = $("input.opposing").val();
 	loadDefaultLists();
 	var firstValidSet = getFirstValidSetOption();
 
 	if (playerSet && isSetOptionAvailable(playerSet)) {
-		$(".player").val(playerSet).change();
+		$("input.player").val(playerSet).change();
 		$(".player .select2-chosen").text(formatSetNameForDisplay(playerSet));
 	} else if (firstValidSet) {
-		$(".player").val(firstValidSet.id).change();
+		$("input.player").val(firstValidSet.id).change();
 		$(".player .select2-chosen").text(formatSetNameForDisplay(firstValidSet.id));
 	}
 
 	if (opposingSet && isSetOptionAvailable(opposingSet)) {
-		$(".opposing").val(opposingSet).change();
+		$("input.opposing").val(opposingSet).change();
 		$(".opposing .select2-chosen").text(formatSetNameForDisplay(opposingSet));
 	} else if (firstValidSet) {
-		$(".opposing").val(firstValidSet.id).change();
+		$("input.opposing").val(firstValidSet.id).change();
 		$(".opposing .select2-chosen").text(formatSetNameForDisplay(firstValidSet.id));
 	}
 }
 
 function refreshBattleLayoutForCurrentSelection() {
-	var selectedOpposing = $(".opposing").val();
+	var selectedOpposing = $("input.opposing").val();
 	if (!selectedOpposing) return;
 	CURRENT_TRAINER_POKS = get_trainer_poks(selectedOpposing);
 	syncBattleFormatForSelection(selectedOpposing, CURRENT_TRAINER_POKS);
@@ -7539,7 +7538,7 @@ function bindCalcToolEvents() {
 	syncTrainerFieldLockButtonStyles();
 
 	$("#open-pokedex-panel").off("click").on("click", function () {
-		var selectedSet = $(".player").val() || "";
+		var selectedSet = $("input.player").val() || "";
 		var selectedSpecies = parseSetId(selectedSet).species;
 		openAstralDexSidePanel(astralDexUrl(selectedSpecies), selectedSpecies);
 	});
@@ -7683,13 +7682,13 @@ function bindCalcToolEvents() {
 	});
 	$(document).off("change.trainerfieldlocks", ".field-info input.calc-trigger").on("change.trainerfieldlocks", ".field-info input.calc-trigger", handleTrainerFieldInputChangeForLocks);
 
-	$(document).off("change.fragopposing", ".opposing").on("change.fragopposing", ".opposing", function () {
+	$(document).off("change.fragopposing", "input.opposing").on("change.fragopposing", "input.opposing", function () {
 		renderFragSheet();
 		if (!$("#frag-context-menu").prop("hidden")) populateFragContextTargets();
 		refreshNotesPanelIfOpen();
 	});
 
-	$(document).off("change.notesactivesets", ".player, .opposing").on("change.notesactivesets", ".player, .opposing", function () {
+	$(document).off("change.notesactivesets", "input.player, input.opposing").on("change.notesactivesets", "input.player, input.opposing", function () {
 		refreshNotesPanelIfOpen();
 	});
 
@@ -7880,7 +7879,7 @@ function bindCalcToolEvents() {
 			applySingleTypeSelectColour(this, !!getAppSettings().moreColour);
 		});
 
-	$(document).off("change.morecoloursets", ".set-selector").on("change.morecoloursets", ".set-selector", function () {
+	$(document).off("change.morecoloursets", "input.set-selector").on("change.morecoloursets", "input.set-selector", function () {
 		if (!getAppSettings().moreColour) return;
 		window.setTimeout(function () {
 			applyMoreColourSetting(true);
@@ -9132,7 +9131,7 @@ function removeOpponentPlanItem(index) {
 function selectOpponentPlanSet(setId) {
 	if (!setId) return;
 	topPokemonIcon(setId, $("#p2mon")[0]);
-	$(".opposing").val(setId).change();
+	$("input.opposing").val(setId).change();
 	$(".opposing .select2-chosen").text(formatSetNameForDisplay(setId));
 	renderFragSheet();
 }
@@ -9317,7 +9316,7 @@ function renderTrainerSequence() {
 		list.innerHTML = "";
 		return;
 	}
-	var selectedSetId = String($(".opposing").val() || "").trim();
+	var selectedSetId = String($("input.opposing").val() || "").trim();
 	var selectedTrainerLabel = selectedSetId ? parseTrainerPartyEntry(selectedSetId).trainerLabel : "";
 	var rowsHtml = rows.map(function (row) {
 		var isCurrent = row.trainerLabel === selectedTrainerLabel;
@@ -9407,7 +9406,7 @@ function renderOpposingTrainerParties(selectedSetName) {
 }
 
 // auto-update set details on select
-$(".set-selector").change(function () {
+$("input.set-selector").change(function () {
 	window.NO_CALC = true;
 	var currentPokeInfo = $(this).closest(".poke-info");
 	currentPokeInfo.removeAttr("data-transform-species");
@@ -10108,7 +10107,7 @@ function getCritStatusForTrainerEntries(trainerEntries) {
 function isCritStatusActive() {
 	var currentTrainerStatus = getCritStatusForTrainerEntries(CURRENT_TRAINER_POKS || []);
 	if (currentTrainerStatus.hasCritStatus) return currentTrainerStatus.critStatus;
-	var selectedOpposing = String($(".opposing").val() || "");
+	var selectedOpposing = String($("input.opposing").val() || "");
 	if (selectedOpposing) {
 		var selectedEntry = parseTrainerPartyEntry(selectedOpposing);
 		var selectedStatus = getCritStatusFromSetData(selectedEntry.setData);
@@ -10707,8 +10706,8 @@ $(".gen").change(function () {
 				firstValidSet: firstValidSet.id
 			});
 		}
-		$(".set-selector").val(firstValidSet.id);
-		$(".set-selector").change();
+		$("input.set-selector").val(firstValidSet.id);
+		$("input.set-selector").change();
 	}
 });
 
@@ -10969,7 +10968,7 @@ function doesSetOptionMatchSearchTerms(option, terms) {
 function loadDefaultLists() {
 	var initialOptions = getSetOptions();
 	var initialDefaultOption = getFirstValidSetOptionFromOptions(initialOptions);
-	$(".set-selector").select2({
+	$("input.set-selector").select2({
 		formatResult: function (object) {
 			if ($("#randoms").prop("checked")) {
 				return getDisplaySpeciesName(object.pokemon);
@@ -11024,7 +11023,7 @@ function allPokemon(selector) {
 
 function loadCustomList(id) {
 	var customOptions = getSetOptions();
-	$("#" + id + " .set-selector").select2({
+	$("#" + id + " input.set-selector").select2({
 		formatResult: function (set) {
 			if (set.nickname) return getDisplaySpeciesName(set.pokemon) + " (" + set.nickname + ")";
 			return formatSetNameForDisplay(set.id);
@@ -11164,8 +11163,8 @@ function topPokemonIcon(fullname, node) {
 $(document).on('click', '.right-side', function () {
 	var set = $(this).attr('data-id');
 	topPokemonIcon(set, $("#p2mon")[0])
-	$('.opposing').val(set);
-	$('.opposing').change();
+	$('input.opposing').val(set);
+	$('input.opposing').change();
 	$('.opposing .select2-chosen').text(formatSetNameForDisplay(set));
 	renderFragSheet();
 })
@@ -11182,8 +11181,8 @@ $(document).on("contextmenu", ".trainer-pok.right-side", function (ev) {
 $(document).on('click', '.left-side', function () {
 	var set = $(this).attr('data-id');
 	topPokemonIcon(set, $("#p1mon")[0])
-	$('.player').val(set);
-	$('.player').change();
+	$('input.player').val(set);
+	$('input.player').change();
 	$('.player .select2-chosen').text(formatSetNameForDisplay(set));
 	renderFragSheet();
 })
@@ -11203,13 +11202,12 @@ function selectFirstMon() {
 	if (!set) {
 		return;
 	}
-	$('.player').val(set);
-	$('.player').change();
+	$('input.player').val(set);
+	$('input.player').change();
 	$('.player .select2-chosen').text(formatSetNameForDisplay(set));
 }
 
 function selectTrainer(value) {
-	localStorage.setItem("lasttimetrainer", value);
 	all_poks = SETDEX_SV
 	for (const [pok_name, poks] of Object.entries(all_poks)) {
 		var pok_tr_names = Object.keys(poks)
@@ -11218,15 +11216,17 @@ function selectTrainer(value) {
 			if (!doesSetMatchStarterChoice(pok_name, pok_tr_names[i], poks[pok_tr_names[i]])) continue;
 			if (index == value) {
 				var set = `${pok_name} (${pok_tr_names[i]})`;
-				$('.opposing').val(set);
-				$('.opposing').change();
+				localStorage.setItem("lasttimetrainer", String(value));
+				$('input.opposing').val(set);
+				$('input.opposing').change();
 				$('.opposing .select2-chosen').text(formatSetNameForDisplay(set));
 				renderFragSheet();
-				return;
+				return true;
 			}
 
 		}
 	}
+	return false;
 }
 
 function nextTrainer() {
@@ -11247,7 +11247,7 @@ function previousTrainer() {
 }
 
 function getCurrentTrainerIndexBounds() {
-	var selectedOpposing = String($(".opposing").val() || "").trim();
+	var selectedOpposing = String($("input.opposing").val() || "").trim();
 	var trainerEntries = selectedOpposing ? get_trainer_poks(selectedOpposing) : [];
 	if ((!trainerEntries || !trainerEntries.length) && CURRENT_TRAINER_POKS && CURRENT_TRAINER_POKS.length) {
 		trainerEntries = CURRENT_TRAINER_POKS.slice();
@@ -11292,7 +11292,7 @@ function resetTrainer() {
 }
 
 function refreshCurrentTrainerEncounter() {
-	var selectedOpposing = $(".opposing").val();
+	var selectedOpposing = $("input.opposing").val();
 	if (!selectedOpposing) return;
 	CURRENT_TRAINER_POKS = get_trainer_poks(selectedOpposing);
 	handleTrainerFieldLockTrainerTransition();
@@ -11671,8 +11671,8 @@ $(document).ready(function () {
 						firstValidSet: firstValidSet.id
 					});
 				}
-				$(".set-selector").val(firstValidSet.id);
-				$(".set-selector").change();
+				$("input.set-selector").val(firstValidSet.id);
+				$("input.set-selector").change();
 			}
 		}
 	} finally {

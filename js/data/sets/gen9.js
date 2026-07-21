@@ -1192,6 +1192,7 @@ var SETDEX_SV = {
             "level": 72,
             "ability": "Drizzle",
             "item": "Focus Sash",
+            "Weather": "Rain",
             "nature": "Timid",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -6404,6 +6405,7 @@ var SETDEX_SV = {
             "index": "0000000646",
             "level": 70,
             "ability": "Emergency Exit",
+            "Weather": "Rain",
             "item": "Bug Gem",
             "nature": "Adamant",
             "ivs": {
@@ -8828,6 +8830,7 @@ var SETDEX_SV = {
             "index": "0000000647",
             "level": 72,
             "ability": "Illuminate",
+            "Weather": "Rain",
             "item": "Iapapa Berry",
             "nature": "Timid",
             "ivs": {
@@ -8841,6 +8844,7 @@ var SETDEX_SV = {
             "index": "0000000648",
             "level": 73,
             "ability": "Rain Dish",
+            "Weather": "Rain",
             "item": "Shuca Berry",
             "nature": "Serious",
             "ivs": {
@@ -8854,12 +8858,13 @@ var SETDEX_SV = {
             "index": "0000000649",
             "level": 70,
             "ability": "Speed Boost",
+            "Weather": "Rain",
             "item": "Liechi Berry",
             "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Endure","Reversal","Aqua Fang","Crunch"]
+            "moves": ["Endure","Reversal","Aqua Fangs","Crunch"]
         }
     },
  }

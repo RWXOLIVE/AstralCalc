@@ -7612,7 +7612,7 @@ var SS_PATCH = {
     Zapdos: { otherFormes: ['Zapdos-Galar'] },
     Zigzagoon: { otherFormes: ['Zigzagoon-Galar'] },
     Alcremie: {
-        types: ['Fire'],
+        types: ['Fairy'],
         bs: { hp: 65, at: 60, df: 75, sa: 110, sd: 121, sp: 64 },
         weightkg: 0.5,
         abilities: { 0: 'Sweet Veil' },

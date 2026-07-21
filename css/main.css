@@ -562,8 +562,10 @@ th {
     width: 3.5em;
     margin-left: 0.4em;
 }
-.level-cap-text {
+.poke-info .level-cap-text {
+    width: auto;
     margin-left: 0.4em;
+    white-space: nowrap;
 }
 
 /* header */
