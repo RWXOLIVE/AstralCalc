@@ -994,7 +994,7 @@ export function calculateBPModsSMSSSV(
     resistedKnockOffDamage = !!item.megaEvolves && defenderName.includes(item.megaEvolves);
   }
 
-  if ((move.named('Facade') && attacker.hasStatus('brn', 'par', 'psn', 'tox')) ||
+  if ((move.named('Facade') && attacker.hasStatus('brn', 'par', 'psn', 'tox', 'frb')) ||
     (move.named('Brine') && defender.curHP() <= defender.maxHP() / 2) ||
     (move.named('Venoshock') && defender.hasStatus('psn', 'tox')) ||
     (move.named('Lash Out') && (countBoosts(gen, attacker.boosts) < 0))
@@ -1209,6 +1209,9 @@ export function calculateBPModsSMSSSV(
     (attacker.hasItem('Vile Vial') &&
      attacker.named('Venomicon-Epilogue') &&
      move.hasType('Poison', 'Flying')) ||
+    (attacker.hasItem('Soul Dew') &&
+     attacker.named('Latios', 'Latias', 'Latios-Mega', 'Latias-Mega') &&
+     move.hasType('Psychic', 'Dragon')) ||
      attackerItem && move.hasType(getItemBoostType(attackerItem)) ||
     (attackerName.includes('Ogerpon-Cornerstone') && attacker.hasItem('Cornerstone Mask')) ||
     (attackerName.includes('Ogerpon-Hearthflame') && attacker.hasItem('Hearthflame Mask')) ||
@@ -1423,8 +1426,7 @@ export function calculateAtModsSMSSSV(
     // Choice Band/Scarf/Specs move lock and stat boosts are ignored during Dynamax (Anubis)
   } else if (!move.isZ && !move.isMax &&
     ((attacker.hasItem('Choice Band') && move.category === 'Physical') ||
-      (attacker.hasItem('Choice Specs') && move.category === 'Special') ||
-      attacker.hasItem("Soul Dew") && move.category === 'Special' && attacker.named('Latios', 'Latias', 'Latios-Mega', 'Latias-Mega'))
+      (attacker.hasItem('Choice Specs') && move.category === 'Special'))
   ) {
     atMods.push(6144);
     desc.attackerItem = attacker.item;
@@ -1552,8 +1554,7 @@ export function calculateDfModsSMSSSV(
 
   if ((defender.hasItem('Eviolite') &&
       (defender.name === 'Dipplin' || gen.species.get(toID(defender.name))?.nfe)) ||
-      (!hitsPhysical && defender.hasItem('Assault Vest') )||
-      (defender.hasItem("Soul Dew") && move.category === 'Special' && defender.named('Latios', 'Latias', 'Latios-Mega', 'Latias-Mega'))) {
+      (!hitsPhysical && defender.hasItem('Assault Vest'))) {
     dfMods.push(6144);
     desc.defenderItem = defender.item;
   } else if (

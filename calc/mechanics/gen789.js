@@ -900,6 +900,9 @@ function calculateBPModsSMSSSV(gen, attacker, defender, move, field, desc, baseP
         (attacker.hasItem('Vile Vial') &&
             attacker.named('Venomicon-Epilogue') &&
             move.hasType('Poison', 'Flying')) ||
+        (attacker.hasItem('Soul Dew') &&
+            attacker.named('Latios', 'Latias', 'Latios-Mega', 'Latias-Mega') &&
+            move.hasType('Psychic', 'Dragon')) ||
         attackerItem && move.hasType((0, items_1.getItemBoostType)(attackerItem)) ||
         (attackerName.includes('Ogerpon-Cornerstone') && attacker.hasItem('Cornerstone Mask')) ||
         (attackerName.includes('Ogerpon-Hearthflame') && attacker.hasItem('Hearthflame Mask')) ||
@@ -1061,8 +1064,7 @@ function calculateAtModsSMSSSV(gen, attacker, defender, move, field, desc) {
     }
     else if (!move.isZ && !move.isMax &&
         ((attacker.hasItem('Choice Band') && move.category === 'Physical') ||
-            (attacker.hasItem('Choice Specs') && move.category === 'Special') ||
-            attacker.hasItem("Soul Dew") && move.category === 'Special' && attacker.named('Latios', 'Latias', 'Latios-Mega', 'Latias-Mega'))) {
+            (attacker.hasItem('Choice Specs') && move.category === 'Special'))) {
         atMods.push(6144);
         desc.attackerItem = attacker.item;
     }
@@ -1158,8 +1160,7 @@ function calculateDfModsSMSSSV(gen, attacker, defender, move, field, desc, isCri
     }
     if ((defender.hasItem('Eviolite') &&
         (defender.name === 'Dipplin' || ((_a = gen.species.get((0, util_1.toID)(defender.name))) === null || _a === void 0 ? void 0 : _a.nfe))) ||
-        (!hitsPhysical && defender.hasItem('Assault Vest')) ||
-        (defender.hasItem("Soul Dew") && move.category === 'Special' && defender.named('Latios', 'Latias', 'Latios-Mega', 'Latias-Mega'))) {
+        (!hitsPhysical && defender.hasItem('Assault Vest'))) {
         dfMods.push(6144);
         desc.defenderItem = defender.item;
     }

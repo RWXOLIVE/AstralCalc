@@ -6,6 +6,7 @@ const fs = require('fs');
 const crypto = require('crypto');
 
 const rootDir = __dirname;
+// Sync to the deployment checkout by default; allow callers to override it.
 const DIST_SYNC_TARGET = process.env.ASTRALCALC_DIST_SYNC_TARGET || 'R:\\Users\\linkp\\Desktop\\AstralCalc\\AstralCalc';
 
 function normalizeExternalPath(rawPath) {

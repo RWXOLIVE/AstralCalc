@@ -1,5 +1,20 @@
 # EEcalc
 
+## Live frag sheet link (mGBA)
+
+1. Open Astral Emerald in mGBA 0.10 or newer.
+2. Load the updated `ae_lua.lua` from the Astral Emerald project in mGBA's scripting window.
+3. Open the calculator and press **Connect ae_lua**. The button changes to **ae_lua connected** when the local HTTP link is ready; no file picker is required.
+4. Leave the Lua script and calculator open while playing. When one of your Pokemon defeats a trainer's Pokemon, the matching frag-sheet entry receives +1 automatically.
+
+mGBA's scripting window also gains a **Frag Tracking** section. Each confirmed kill is printed there as, for example, `Marshtomp has fragged Roxanne's Nosepass! +1 frag for Marshtomp`.
+
+On the first connection, the live link discovers every Pokemon in the current save's party and PC and adds previously unseen identities to AstralCalc's **Box**. It never mirrors or rearranges the in-game party and PC layout afterward. Only Pokemon that you place in AstralCalc's **Team** section are updated from the live game (identity, evolution/form, level, moves, ability, item, nature, and IVs). Calc Box entries and Team order stay where you put them.
+
+Trainer fights and party slots are resolved from the calculator's current `src/js/data/sets/gen9.js`; adding trainer sets there and rebuilding/refreshing the calculator updates the resolver without maintaining another trainer list.
+
+The link uses `http://127.0.0.1:31124` and does not depend on an installation path. If it cannot connect, make sure only one mGBA instance is running the script and allow mGBA through local firewall prompts. Wild Pokemon and enemy-on-enemy knockouts are ignored.
+
 This is a fork of the damage calculator that contains all the Existential Emerald stat changes, and has every trainer pre imported.
 Additionally some bugs are fixed, weather doesn't auto toggle off, and there are clickable icons for Pokemon to navigate.
 The working version can be seen at ![Calc](https://galaxeeh.github.io/EE_Calc/)

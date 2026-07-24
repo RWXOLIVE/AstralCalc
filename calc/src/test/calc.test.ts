@@ -73,6 +73,30 @@ describe('calc', () => {
       });
     });
 
+    inGens(5, 9, ({gen, calculate, Pokemon, Move}) => {
+      test(`Frostbite activates Facade and Guts (gen ${gen})`, () => {
+        const defender = Pokemon('Blastoise');
+        const facade = calculate(
+          Pokemon('Machamp', {ability: 'No Guard', status: 'frb'}),
+          defender,
+          Move('Facade')
+        );
+        const plainFacade = calculate(
+          Pokemon('Machamp', {ability: 'No Guard'}),
+          Pokemon('Blastoise'),
+          Move('Facade')
+        );
+        const guts = calculate(
+          Pokemon('Machamp', {ability: 'Guts', status: 'frb'}),
+          Pokemon('Blastoise'),
+          Move('Facade')
+        );
+
+        expect(facade.range()[0]).toBeGreaterThan(plainFacade.range()[1]);
+        expect(guts.range()[0]).toBeGreaterThan(facade.range()[1]);
+      });
+    });
+
     inGens(4, 9, ({gen, calculate, Pokemon, Move, Field}) => {
       test(`Trick Room reverses move order checks (gen ${gen})`, () => {
         const normal = calculate(

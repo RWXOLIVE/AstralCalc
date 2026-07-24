@@ -562,8 +562,10 @@ th {
     width: 3.5em;
     margin-left: 0.4em;
 }
-.level-cap-text {
+.poke-info .level-cap-text {
+    width: auto;
     margin-left: 0.4em;
+    white-space: nowrap;
 }
 
 /* header */
@@ -1621,6 +1623,72 @@ table.field {
     display: inline;
 }
 
+.trainer-navigation-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 28px;
+}
+
+.trainer-navigation-controls button {
+    white-space: nowrap;
+}
+
+.trainer-navigation-controls #reset-trainer {
+    margin-left: auto;
+}
+
+.trainer-sequence-type {
+    flex: 0 0 auto;
+    font-size: 1.05em;
+    white-space: nowrap;
+}
+
+.trainer-sequence > hr {
+    margin: 8px 0 6px;
+}
+
+.trainer-sequence-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.trainer-sequence-row {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 36px;
+    padding: 2px 6px;
+    border: 1px solid transparent;
+    border-radius: 3px;
+    background: rgba(120, 130, 145, 0.08);
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: border-color 100ms ease, background-color 100ms ease;
+}
+
+.trainer-sequence-row:hover,
+.trainer-sequence-row:focus {
+    border-color: rgba(26, 188, 156, 0.55);
+    background: rgba(26, 188, 156, 0.1);
+    outline: none;
+}
+
+.trainer-sequence-row.is-current {
+    border-color: rgba(26, 188, 156, 0.75);
+    background: rgba(26, 188, 156, 0.18);
+}
+
+.trainer-sequence-row .trainer-sequence-pok {
+    display: inline-block;
+    flex: 0 0 auto;
+    width: 40px;
+    height: 32px;
+    margin: 0 8px 0 0;
+    image-rendering: pixelated;
+}
+
 .hpbar {
     height: 4px;
     border-style: solid;
@@ -1869,8 +1937,25 @@ nav .nav {
     gap: 0px;
 }
 
+.roster-top-controls {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.6em;
+    margin-bottom: 4px;
+}
+
+.roster-top-controls #box-current-team {
+    width: 7.5em;
+    margin: 0;
+    padding: 3px 6px;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
 #search-inline {
-    margin-left: 8em;
+    display: inline-block;
+    margin-left: 0;
     flex-shrink: 0;
 }
 
@@ -1880,6 +1965,7 @@ nav .nav {
     border-radius: 4px;
     border: 1px solid #AAAAAA;
 }
+
 .team-legend {
     display: flex;
     align-items: center;
@@ -2061,12 +2147,36 @@ body.calc-side-resizing .credits {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 8px;
+    column-gap: 8px;
+    row-gap: 6px;
 }
 
 #frags-current-fight-label {
+    flex: 1 1 220px;
     font-weight: bold;
-    margin-right: auto;
+    min-width: 0;
+}
+
+.frags-toolbar .calc-side-btn {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    white-space: nowrap;
+}
+
+.calc-side-panel.fullscreen .frags-toolbar {
+    flex-wrap: nowrap;
+}
+
+.calc-side-panel.fullscreen #frags-current-fight-label {
+    flex-basis: auto;
+}
+
+.poke-import .ae-lua-frag-import-button {
+    display: block;
+    margin: 6px auto 0;
 }
 
 .frags-summary-text {

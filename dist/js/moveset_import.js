@@ -109,14 +109,17 @@ function normalizeCustomSetStorage(customsets) {
 	if (!customsets || typeof customsets !== "object") return normalized;
 	for (var pokemon in customsets) {
 		if (!Object.prototype.hasOwnProperty.call(customsets, pokemon)) continue;
-		var collapsedSpeciesSets = collapseSpeciesSetMapToSingleEntry(customsets[pokemon]);
-		var collapsedNames = Object.keys(collapsedSpeciesSets);
-		if (!collapsedNames.length) continue;
-		var keptSetName = collapsedNames[0];
-		var keptSet = collapsedSpeciesSets[keptSetName] || {};
-		keptSet.moves = normalizeSavedMoveList(keptSet.moves);
-		collapsedSpeciesSets[keptSetName] = keptSet;
-		normalized[pokemon] = collapsedSpeciesSets;
+		var speciesSets = customsets[pokemon];
+		if (!speciesSets || typeof speciesSets !== "object") continue;
+		var normalizedSpeciesSets = {};
+		for (var setName in speciesSets) {
+			if (!Object.prototype.hasOwnProperty.call(speciesSets, setName)) continue;
+			var normalizedSetName = String(setName || "").trim() || "Custom Set";
+			var normalizedSet = speciesSets[setName] || {};
+			normalizedSet.moves = normalizeSavedMoveList(normalizedSet.moves);
+			normalizedSpeciesSets[normalizedSetName] = normalizedSet;
+		}
+		if (Object.keys(normalizedSpeciesSets).length) normalized[pokemon] = normalizedSpeciesSets;
 	}
 	return normalized;
 }
@@ -148,7 +151,7 @@ function getMoveNamesFromSelectors(pokeInfo, fallbackMoves) {
 function SavePokemonSet(pokeInfo) {
 	var pokemon = createPokemon(pokeInfo);
 	if (!pokemon || !pokemon.name) return;
-	var selectedSet = pokeInfo.find(".set-selector").val() || "";
+	var selectedSet = pokeInfo.find("input.set-selector").val() || "";
 	var parsedSet = typeof parseSetId === "function" ? parseSetId(selectedSet) : null;
 	var baseSetName = (parsedSet && parsedSet.label) || getSetNameFromSelection(selectedSet) || "Custom Set";
 	pokemon.nameProp = baseSetName;
@@ -157,7 +160,7 @@ function SavePokemonSet(pokeInfo) {
 	addToDex(pokemon);
 	$(allPokemon("#importedSetsOptions")).css("display", "inline");
 	var fullSetName = pokemon.name + " (" + baseSetName + ")";
-	var selector = pokeInfo.find(".set-selector");
+	var selector = pokeInfo.find("input.set-selector");
 	selector.val(fullSetName).change();
 	if (pokeInfo.prop("id") === "p1") {
 		$(".player .select2-chosen").text(fullSetName);
@@ -665,13 +668,13 @@ $(document).ready(function () {
 		if (!restoredSelection) {
 			var activePlayerSet = typeof getSelectedSetIdForSide === "function"
 				? getSelectedSetIdForSide("p1")
-				: String($(".player").val() || "").trim();
+				: String($("input.player").val() || "").trim();
 			if (!activePlayerSet) {
 				selectFirstMon();
 			}
 		}
 		$(allPokemon("#importedSetsOptions")).css("display", "inline");
-	} else if (!$(".set-selector").first().data("select2")) {
+	} else if (!$("input.set-selector").first().data("select2")) {
 		loadDefaultLists();
 	}
 	//adjust the side buttons that collapse the data wished to be hidden

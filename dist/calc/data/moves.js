@@ -539,6 +539,7 @@ var ADV_PATCH = {
     'Poison Fang': { bp: 85, type: 'Poison', makesContact: true },
     'Rock Tomb': { bp: 60, type: 'Rock' },
     'Will-O-Wisp': { bp: 0, category: 'Status', type: 'Fire' },
+    'Chill-O-Wisp': { bp: 0, category: 'Status', type: 'Ice' },
     'Frost-Wisp': { bp: 0, category: 'Status', type: 'Ice' },
     'Aqua Fangs': { bp: 85, category: 'Physical', type: 'Water', makesContact: true, secondaries: true },
     'Ice Ball': { bp: 40, type: 'Ice', makesContact: true },
@@ -931,7 +932,7 @@ var DPP_PATCH = {
     },
     'Lucky Chant': { bp: 0, type: 'Normal' },
     'Lunar Dance': { bp: 0, type: 'Psychic' },
-    'Magma Storm': { bp: 100, type: 'Fire', category: 'Special' },
+    'Magma Storm': { bp: 120, type: 'Fire', category: 'Special' },
     'Magnet Rise': { bp: 0, type: 'Electric' },
     'Me First': { bp: 0, type: 'Normal' },
     'Metal Burst': { bp: 0, type: 'Steel', category: 'Physical' },
@@ -1155,6 +1156,14 @@ var DPP_PATCH = {
         critRatio: 2,
         category: 'Physical'
     },
+    'Iron Cleave': {
+        bp: 70,
+        type: 'Steel',
+        makesContact: true,
+        critRatio: 2,
+        category: 'Physical',
+        secondaries: true
+    },
     'Poison Jab': {
         bp: 80,
         type: 'Poison',
@@ -1235,7 +1244,7 @@ var BW_PATCH = {
     'Double-Edge': { recoil: [33, 100] },
     Protect: { priority: 4 },
     'Fire Blast': { secondaries: true },
-    'Fire Spin': { bp: 45 },
+    'Fire Spin': { bp: 60 },
     Flamethrower: { secondaries: true },
     'Fury Cutter': { bp: 40 },
     'Future Sight': { bp: 100, type: 'Psychic' },
@@ -1745,7 +1754,7 @@ var XY_PATCH = {
     'Hidden Power Rock': { bp: 70 },
     'Hidden Power Steel': { bp: 70 },
     'Hidden Power Water': { bp: 70 },
-    'Magma Storm': { bp: 100 },
+    'Magma Storm': { bp: 120 },
     'Magnet Bomb': { isBullet: true },
     'Mist Ball': { isBullet: true },
     Moonlight: { type: 'Fairy' },
@@ -2447,7 +2456,7 @@ var SM_PATCH = {
     },
     'Breakneck Blitz': { bp: 1, type: 'Normal', category: 'Physical', isZ: true },
     'Buzzy Buzz': {
-        bp: 30,
+        bp: 60,
         type: 'Electric',
         category: 'Special',
         secondaries: true,
@@ -2494,6 +2503,7 @@ var SM_PATCH = {
         type: 'Dragon',
         makesContact: true,
         category: 'Physical',
+        secondaries: true,
         zp: 175
     },
     'Extreme Evoboost': { bp: 0, type: 'Normal', isZ: true },
@@ -2596,7 +2606,7 @@ var SM_PATCH = {
     'Shore Up': { bp: 0, type: 'Ground' },
     'Sinister Arrow Raid': { bp: 180, type: 'Ghost', category: 'Physical', isZ: true },
     'Sizzly Slide': {
-        bp: 30,
+        bp: 60,
         type: 'Fire',
         makesContact: true,
         category: 'Physical',
@@ -3494,7 +3504,7 @@ var SS_PATCH = {
         maxPower: 140
     },
     'Misty Explosion': {
-        bp: 200,
+        bp: 100,
         type: 'Fairy',
         category: 'Special',
         target: 'allAdjacent',
@@ -3546,7 +3556,7 @@ var SS_PATCH = {
         maxPower: 130
     },
     'Scale Chomp': {
-        bp: 75,
+        bp: 80,
         type: 'Dragon',
         category: 'Physical',
         secondaries: true
