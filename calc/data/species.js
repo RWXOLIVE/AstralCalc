@@ -4715,7 +4715,7 @@ var BW_PATCH = {
     },
     Stoutland: {
         types: ['Normal', 'Ground'],
-        bs: { hp: 85, at: 110, df: 90, sa: 45, sd: 90, sp: 80 },
+        bs: { hp: 95, at: 125, df: 90, sa: 25, sd: 90, sp: 80 },
         weightkg: 61,
         abilities: { 0: 'Intimidate' }
     },

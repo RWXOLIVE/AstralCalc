@@ -2456,7 +2456,7 @@ var SM_PATCH = {
     },
     'Breakneck Blitz': { bp: 1, type: 'Normal', category: 'Physical', isZ: true },
     'Buzzy Buzz': {
-        bp: 30,
+        bp: 60,
         type: 'Electric',
         category: 'Special',
         secondaries: true,
@@ -2606,7 +2606,7 @@ var SM_PATCH = {
     'Shore Up': { bp: 0, type: 'Ground' },
     'Sinister Arrow Raid': { bp: 180, type: 'Ghost', category: 'Physical', isZ: true },
     'Sizzly Slide': {
-        bp: 30,
+        bp: 60,
         type: 'Fire',
         makesContact: true,
         category: 'Physical',

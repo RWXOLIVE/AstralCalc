@@ -1212,6 +1212,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Bubble Beam","Charge Beam","Night Shade","Will-O-Wisp"]
+        },
+    "Leader Jasmine | Mauville Gym": {
+            "index": "0000000362",
+            "level": 50,
+            "ability": "Levitate",
+            "item": "Light Clay",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Scald","Volt Switch","Light Screen","Reflect"]
         }
     },
     "Gligar": {
@@ -3110,6 +3121,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Recover","Will-O-Wisp","Foul Play","Seismic Toss"]
+        },
+    "Leader Jasmine | Mauville Gym": {
+            "index": "0000000360",
+            "level": 49,
+            "ability": "Prankster",
+            "item": "Iapapa Berry",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Parting Shot","Taunt","Knock Off","Play Rough"]
         }
     },
     "Slither Wing": {
@@ -4708,6 +4730,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Sucker Punch","Kowtow Cleave","Iron Head","Low Kick"]
+        },
+    "Leader Jasmine | Mauville Gym": {
+            "index": "0000000365",
+            "level": 50,
+            "ability": "Supreme Overlord",
+            "item": "Dark Gem",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sucker Punch","Pursuit","Iron Head","Swords Dance"]
         }
     },
     "Mandibuzz": {
@@ -6151,6 +6184,17 @@ var SETDEX_SV = {
         }
     },
     "Steelix": {
+    "Leader Jasmine | Mauville Gym": {
+            "index": "0000000361",
+            "level": 50,
+            "ability": "Rock Head",
+            "item": "Assault Vest",
+            "nature": "Sassy",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Head Smash","Iron Tail","Stomping Tantrum","Dragon Tail"]
+        },
     "Ruin Maniac Dusty | Route 111": {
             "index": "0000000430",
             "level": 54,
@@ -6324,45 +6368,20 @@ var SETDEX_SV = {
             "moves": ["Endure","Endeavor","Electro Ball","Splishy Splash"]
         }
     },
-    "Iron Crown": {
+    "Kleavor": {
     "Leader Jasmine | Mauville Gym": {
-            "index": "0000000360",
-            "level": 49,
-            "ability": "Quark Drive",
-            "item": "Booster Energy",
-            "nature": "Relaxed",
-            "Terrain": "None",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Tachyon Cutter","Future Sight","Focus Blast","Agility"]
-        }
-    },
-    "Bisharp": {
-    "Leader Jasmine | Mauville Gym": {
-            "index": "0000000361",
-            "level": 49,
-            "ability": "Defiant",
-            "item": "Chople Berry",
+            "index": "0000000363",
+            "level": 50,
+            "ability": "Sturdy",
+            "item": "Eject Button",
             "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Iron Head","Psycho Cut","Sucker Punch","Low Kick"]
+            "moves": ["First Impression","Stone Axe","U-turn"]
         }
     },
     "Ampharos": {
-    "Leader Jasmine | Mauville Gym": {
-            "index": "0000000362",
-            "level": 51,
-            "ability": "Sheer Force",
-            "item": "Life Orb",
-            "nature": "Jolly",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Power Gem","Discharge","Energy Ball","Dragon Pulse"]
-        },
     "Rival Lyra | Union Cave": {
             "index": "0000000464",
             "level": 53,
@@ -6378,29 +6397,18 @@ var SETDEX_SV = {
     },
     "Skarmory-Mega": {
     "Leader Jasmine | Mauville Gym": {
-            "index": "0000000363",
-            "level": 50,
+            "index": "0000000364",
+            "level": 51,
             "ability": "Tough Claws",
             "item": "Skarmorite",
-            "nature": "Jolly",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Swords Dance","Drill Peck","Drill Run","Iron Head"]
-        }
-    },
-    "Golisopod": {
-    "Leader Jasmine | Mauville Gym": {
-            "index": "0000000364",
-            "level": 50,
-            "ability": "Emergency Exit",
-            "item": "Assault Vest",
             "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["First Impression","Liquidation","Leech Life","Stone Edge"]
-        },
+            "moves": ["Autotomize","Iron Head","Drill Peck","Drill Run"]
+        }
+    },
+    "Golisopod": {
         "Captain Dawson | Giant Chasm": {
             "index": "0000000646",
             "level": 70,
@@ -6415,17 +6423,6 @@ var SETDEX_SV = {
         }
     },
     "Scizor": {
-    "Leader Jasmine | Mauville Gym": {
-            "index": "0000000365",
-            "level": 50,
-            "ability": "Technician",
-            "item": "Occa Berry",
-            "nature": "Careful",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Knock Off","Bullet Punch","Bug Bite","U-turn"]
-        },
     "Cool Trainer Wilton | Route 111": {
             "index": "0000000417",
             "level": 53,
