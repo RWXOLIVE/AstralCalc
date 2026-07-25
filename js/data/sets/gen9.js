@@ -2218,11 +2218,24 @@ var SETDEX_SV = {
             "nature": "Adamant",
             "setdouble": "True",
             "setdoubleGroup": "route-111-celina-tyron",
-            "setdoubleSide": 1,
+            "setdoubleSide": 2,
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Fake Out","Grassy Glide","High Horsepower","Brutal Swing"]
+        },
+        "Team Plasma Grunt - Gauntlet 2/9": {
+            "index": "0000000656",
+            "level": 72,
+            "ability": "Punk Rock",
+            "item": "Safety Goggles",
+            "Weather": "Hail",
+            "Fog": true,
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Screech","Uproar","Drum Beating","Aerial Ace"]
         }
     },
     "Roserade": {
@@ -2234,7 +2247,7 @@ var SETDEX_SV = {
             "nature": "Timid",
             "setdouble": "True",
             "setdoubleGroup": "route-111-celina-tyron",
-            "setdoubleSide": 1,
+            "setdoubleSide": 2,
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -4894,6 +4907,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Blaze Kick","Fake Out","High Jump Kick","Poison Jab"]
+        },
+        "Team Plasma Grunt - Gauntlet 2/9": {
+            "index": "0000000654",
+            "level": 72,
+            "ability": "Inner Focus",
+            "item": "Eject Pack",
+            "Weather": "Hail",
+            "Fog": true,
+            "nature": "Hasty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Close Combat","Retaliate","Power Gem","Acrobatics"]
         }
     },
     "Walrein": {
@@ -5641,6 +5667,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Boomburst","Sludge Bomb","Psychic Noise","Overdrive"]
+        },
+        "Team Plasma Grunt - Gauntlet 2/9": {
+            "index": "0000000655",
+            "level": 73,
+            "ability": "Technician",
+            "item": "Air Balloon",
+            "Weather": "Hail",
+            "Fog": true,
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Shift Gear","Pursuit","Barb Barrage","Plasma Fists"]
         }
     },
     "Kommo-o": {
@@ -6589,7 +6628,7 @@ var SETDEX_SV = {
             "nature": "Timid",
             "setdouble": "True",
             "setdoubleGroup": "route-111-celina-tyron",
-            "setdoubleSide": 2,
+            "setdoubleSide": 1,
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -6605,7 +6644,7 @@ var SETDEX_SV = {
             "nature": "Relaxed",
             "setdouble": "True",
             "setdoubleGroup": "route-111-celina-tyron",
-            "setdoubleSide": 2,
+            "setdoubleSide": 1,
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -6621,7 +6660,7 @@ var SETDEX_SV = {
             "nature": "Adamant",
             "setdouble": "True",
             "setdoubleGroup": "route-111-celina-tyron",
-            "setdoubleSide": 2,
+            "setdoubleSide": 1,
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },

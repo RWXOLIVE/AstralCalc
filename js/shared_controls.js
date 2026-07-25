@@ -1041,6 +1041,13 @@ var OPPONENT_PLAN_RANGES = [
 		label: "Kindler Jace \u2192 Kindler Jeff",
 		startTrainers: ["Kindler Jace | Lavaridge Gym"],
 		endTrainers: ["Kindler Jeff | Lavaridge Gym"]
+	},
+	{
+		id: "giant-chasm-gauntlet",
+		type: "Gauntlet",
+		label: "Team Plasma Grunt - Gauntlet 1/9",
+		startTrainers: ["Team Plasma Grunt - Gauntlet 1/9"],
+		endTrainers: ["Team Plasma Grunt - Gauntlet 9/9"]
 	}
 ];
 var isRestoringLastEncounterSelection = false;
