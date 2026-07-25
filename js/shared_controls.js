@@ -9781,20 +9781,23 @@ $(".forme").change(function () {
 	var isRandoms = $("#randoms").prop("checked");
 	var pokemonSets = isRandoms ? randdex[pokemonName] : setdex[pokemonName];
 	var chosenSet = pokemonSets && pokemonSets[setName];
-	var greninjaSet = selectedForme.indexOf("Greninja") !== -1;
 	var isAltForme = selectedForme !== pokemonName;
-	if (isAltForme && abilities.indexOf(altForme.ab) !== -1 && !greninjaSet) {
-		container.find(".ability").val(altForme.ab);
-	} else if (greninjaSet) {
-		$(this).parent().find(".ability");
-	} else if (chosenSet) {
-		if (!isRandoms) {
-			container.find(".abilities").val(chosenSet.ability);
-		} else {
-			container.find(".ability").val(chosenSet.abilities[0]);
+	var isMegaFormeSwitch = selectedForme.indexOf("-Mega") !== -1 || pokemonName.indexOf("-Mega") !== -1;
+	var preserveGreninjaAbility = selectedForme.indexOf("Greninja") !== -1 && !isMegaFormeSwitch;
+	var altFormeAbility = altForme.abilities && altForme.abilities[0];
+	var abilityObj = container.find(".ability");
+	if (!preserveGreninjaAbility) {
+		if (isAltForme && abilities.indexOf(altFormeAbility) !== -1) {
+			abilityObj.val(altFormeAbility);
+		} else if (chosenSet) {
+			if (!isRandoms) {
+				abilityObj.val(chosenSet.ability);
+			} else {
+				abilityObj.val(chosenSet.abilities[0]);
+			}
 		}
 	}
-	container.find(".ability").keyup();
+	abilityObj.keyup();
 
 	if (selectedForme.indexOf("-Mega") !== -1 && selectedForme !== "Rayquaza-Mega") {
 		container.find(".item").val("").keyup();

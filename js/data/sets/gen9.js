@@ -2414,16 +2414,16 @@ var SETDEX_SV = {
             "moves": ["Hyper Voice","Dragon Breath","Hydro Pump","Calm Mind"]
         },
     "Tag Partner Norman": {
-            "index": "0000000282",
+            "index": "0000000280",
             "level": 46,
             "ability": "Berserk",
-            "item": "Drampanite",
-            "nature": "Modest",
+            "item": "Focus Sash",
+            "nature": "Timid",
             "setdouble": "True",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Thunder Wave","Dragon Pulse","Twister","Swift"]
+            "moves": ["Glare","Dragon Pulse","Hyper Voice","Blizzard"]
         }
     },
     "Swampert": {
@@ -3347,21 +3347,21 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Calm Mind","Heal Pulse","Alluring Voice","Hyper Voice"]
-        }
-    },
-    "Maushold-Four": {
+        },
     "Tag Partner Norman": {
-            "index": "0000000280",
+            "index": "0000000282",
             "level": 46,
-            "ability": "Friend Guard",
-            "item": "Sitrus Berry",
-            "nature": "Hasty",
+            "ability": "Fairy Aura",
+            "item": "Audinite",
+            "nature": "Naive",
             "setdouble": "True",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Follow Me","Hyper Voice","Population Bomb","Super Fang"]
-        },
+            "moves": ["Dazzling Gleam","Knock Off","Flamethrower","Heal Pulse"]
+        }
+    },
+    "Maushold-Four": {
     "Camper Beau | Route 111": {
             "index": "0000000425",
             "level": 52,
@@ -3373,20 +3373,6 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Follow Me","Helping Hand","Thunder Wave"]
-        }
-    },
-    "Oranguru": {
-    "Tag Partner Norman": {
-            "index": "0000000281",
-            "level": 46,
-            "ability": "Illuminate",
-            "item": "Life Orb",
-            "nature": "Bold",
-            "setdouble": "True",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Future Sight","Protect","Helping Hand","Instruct"]
         }
     },
     "Tauros": {
@@ -3689,6 +3675,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Snowscape","Ice Beam","Shadow Ball","Toxic"]
+        },
+        "Team Plasma Grunt - Gauntlet 1/9": {
+            "index": "0000000650",
+            "level": 71,
+            "ability": "Snow Cloak",
+            "item": "Clear Amulet",
+            "Weather": "Hail",
+            "Fog": true,
+            "nature": "Hasty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Aurora Veil","Blizzard","Poltergeist","Spikes"]
         }
     },
     "Greninja": {
@@ -3815,6 +3814,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Encore","Sludge Bomb","Fire Blast","Grass Knot"]
+        },
+        "Team Plasma Grunt - Gauntlet 1/9": {
+            "index": "0000000652",
+            "level": 73,
+            "ability": "Corrosion",
+            "item": "Bright Powder",
+            "Weather": "Hail",
+            "Fog": true,
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Toxic","Protect","Flamethrower","Fake Tears"]
         }
     },
     "Dodrio": {
@@ -4095,6 +4107,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Parabolic Charge","Chilling Water","Acid Spray","Soak"]
+        },
+        "Team Plasma Grunt - Gauntlet 1/9": {
+            "index": "0000000653",
+            "level": 73,
+            "ability": "Electromorphosis",
+            "item": "Zoom Lens",
+            "Weather": "Hail",
+            "Fog": true,
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Soak","Thunder","Slack Off","Muddy Water"]
         }
     },
     "Ambipom": {
@@ -4167,7 +4192,7 @@ var SETDEX_SV = {
             "index": "0000000225",
             "level": 45,
             "ability": "Water Absorb",
-            "item": "Shuca Berry",
+            "item": "Leftovers",
             "Weather": "Fog",
             "nature": "Impish",
             "ivs": {
@@ -7691,6 +7716,18 @@ var SETDEX_SV = {
         }
     },
     "Farigiraf": {
+    "Tag Partner Norman": {
+            "index": "0000000281",
+            "level": 46,
+            "ability": "Cud Chew",
+            "item": "Lum Berry",
+            "nature": "Timid",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Hyper Voice","Dazzling Gleam","Psychic","Wish"]
+        },
     "Ninja Boy Lao | Route 113": {
             "index": "0000000485",
             "level": 59,
@@ -8862,6 +8899,21 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Endure","Reversal","Aqua Fangs","Crunch"]
+        }
+    },
+    "Samurott-Hisui": {
+        "Team Plasma Grunt - Gauntlet 1/9": {
+            "index": "0000000651",
+            "level": 71,
+            "ability": "Sharpness",
+            "item": "Mystic Water",
+            "Weather": "Hail",
+            "Fog": true,
+            "nature": "Serious",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Swords Dance","Sucker Punch","Ceaseless Edge","Aqua Cutter"]
         }
     },
  }
