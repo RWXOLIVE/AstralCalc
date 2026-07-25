@@ -1180,6 +1180,7 @@ var SETDEX_SV = {
             "item": "Focus Sash",
             "nature": "Timid",
             "setdouble": "True",
+            "Weather": "Rain",
             "setdoubleGroup": "route-103-swimmer-isabelle-pete",
             "setdoubleSide": 1,
             "ivs": {
@@ -2069,6 +2070,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Scald","Roost","Icy Wind","Flash Cannon"]
+        },
+        "Team Plasma Grunt | Gauntlet 7/7": {
+            "index": "0000000669",
+            "level": 72,
+            "ability": "Slush Rush",
+            "item": "Water Gem",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Nasty Plot","Hydro Cannon","Flash Cannon","Aqua Jet"]
         }
     },
     "Arctovish": {
@@ -2097,6 +2111,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Glaciate","Freeze-Dry","Super Fang","Flip Turn"]
+        },
+        "Team Plasma Grunt | Gauntlet 3/7": {
+            "index": "0000000659",
+            "level": 72,
+            "ability": "Ice Body",
+            "item": "Scope Lens",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Sassy",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Fishious Rend","Freeze-Dry","Rock Slide","Super Fang"]
         }
     },
     "Liepard": {
@@ -2179,6 +2207,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Spore","Ceaseless Edge","Stone Axe","Sticky Web"]
+        },
+        "Team Plasma Grunt | Gauntlet 5/7": {
+            "index": "0000000663",
+            "level": 73,
+            "ability": "Moody",
+            "item": "Bright Powder",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Camouflage","Protect","Glacial Lance","Screech"]
         }
     },
     "Stoutland": {
@@ -2224,7 +2265,7 @@ var SETDEX_SV = {
             },
             "moves": ["Fake Out","Grassy Glide","High Horsepower","Brutal Swing"]
         },
-        "Team Plasma Grunt - Gauntlet 2/9": {
+        "Team Plasma Grunt | Gauntlet 2/7": {
             "index": "0000000656",
             "level": 72,
             "ability": "Punk Rock",
@@ -2598,6 +2639,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Swords Dance","Stone Edge","Close Combat","Acrobatics"]
+        },
+        "Team Plasma Grunt | Gauntlet 3/7": {
+            "index": "0000000660",
+            "level": 73,
+            "ability": "Mold Breaker",
+            "item": "Room Service",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Brave",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Close Combat","Acrobatics","Drain Punch","Triple Axel"]
         }
     },
     "Drowzee": {
@@ -2933,6 +2988,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Gravity","Counter","Teleport","Healing Wish"]
+        },
+        "Team Plasma Grunt | Gauntlet 4/7": {
+            "index": "0000000661",
+            "level": 73,
+            "ability": "Natural Cure",
+            "item": "Eviolite",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Toxic","Counter","Mirror Coat","Soft-Boiled"]
         }
     },
     "Shuckle": {
@@ -3689,7 +3757,7 @@ var SETDEX_SV = {
             },
             "moves": ["Snowscape","Ice Beam","Shadow Ball","Toxic"]
         },
-        "Team Plasma Grunt - Gauntlet 1/9": {
+        "Team Plasma Grunt | Gauntlet 1/7": {
             "index": "0000000650",
             "level": 71,
             "ability": "Snow Cloak",
@@ -3828,7 +3896,7 @@ var SETDEX_SV = {
             },
             "moves": ["Encore","Sludge Bomb","Fire Blast","Grass Knot"]
         },
-        "Team Plasma Grunt - Gauntlet 1/9": {
+        "Team Plasma Grunt | Gauntlet 1/7": {
             "index": "0000000652",
             "level": 73,
             "ability": "Corrosion",
@@ -3889,6 +3957,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Fake Out","Close Combat","Pursuit","Icicle Spear"]
+        },
+        "Team Plasma Grunt | Gauntlet 7/7": {
+            "index": "0000000668",
+            "level": 72,
+            "ability": "Technician",
+            "item": "Scope Lens",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Triple Axel","Feint Attack","Pursuit","Razor Wind"]
         }
     },
     "Zebstrika": {
@@ -4042,6 +4123,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Destiny Bond","Psychic Noise","Mystical Fire","Draining Kiss"]
+        },
+        "Team Plasma Grunt | Gauntlet 6/7": {
+            "index": "0000000666",
+            "level": 73,
+            "ability": "Trace",
+            "item": "Choice Specs",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Light of Ruin"]
         }
     },
     "Gallade": {
@@ -4121,7 +4215,7 @@ var SETDEX_SV = {
             },
             "moves": ["Parabolic Charge","Chilling Water","Acid Spray","Soak"]
         },
-        "Team Plasma Grunt - Gauntlet 1/9": {
+        "Team Plasma Grunt | Gauntlet 1/7": {
             "index": "0000000653",
             "level": 73,
             "ability": "Electromorphosis",
@@ -4654,6 +4748,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Thunderbolt","Hyper Fang","Psychic","Laser Focus"]
+        },
+        "Team Plasma Grunt | Gauntlet 7/7": {
+            "index": "0000000667",
+            "level": 72,
+            "ability": "Illuminate",
+            "item": "Chople Berry",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Substitute","Super Fang","Low Kick","Hypnosis"]
         }
     },
     "Drifblim": {
@@ -4908,7 +5015,7 @@ var SETDEX_SV = {
             },
             "moves": ["Blaze Kick","Fake Out","High Jump Kick","Poison Jab"]
         },
-        "Team Plasma Grunt - Gauntlet 2/9": {
+        "Team Plasma Grunt | Gauntlet 2/7": {
             "index": "0000000654",
             "level": 72,
             "ability": "Inner Focus",
@@ -5174,6 +5281,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Freeze-Dry","Psychic","Meteor Beam","Roar"]
+        },
+        "Team Plasma Grunt | Gauntlet 3/7": {
+            "index": "0000000657",
+            "level": 73,
+            "ability": "Armor Tail",
+            "item": "Ice Gem",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Quiet",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Blizzard","Power Gem","Calm Mind","Protect"]
         }
     },
     "Dracovish": {
@@ -5668,7 +5789,7 @@ var SETDEX_SV = {
             },
             "moves": ["Boomburst","Sludge Bomb","Psychic Noise","Overdrive"]
         },
-        "Team Plasma Grunt - Gauntlet 2/9": {
+        "Team Plasma Grunt | Gauntlet 2/7": {
             "index": "0000000655",
             "level": 73,
             "ability": "Technician",
@@ -8282,6 +8403,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Trailblaze","Earthquake","Rock Slide","Mountain Gale"]
+        },
+        "Team Plasma Grunt | Gauntlet 5/7": {
+            "index": "0000000662",
+            "level": 72,
+            "ability": "Ice Body",
+            "item": "Clear Amulet",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Trailblaze","Mountain Gale","Earthquake","Stealth Rock"]
         }
     },
     "Gabite": {
@@ -8941,18 +9075,64 @@ var SETDEX_SV = {
         }
     },
     "Samurott-Hisui": {
-        "Team Plasma Grunt - Gauntlet 1/9": {
+        "Team Plasma Grunt | Gauntlet 1/7": {
             "index": "0000000651",
             "level": 71,
             "ability": "Sharpness",
             "item": "Mystic Water",
             "Weather": "Hail",
             "Fog": true,
-            "nature": "Serious",
+            "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Swords Dance","Sucker Punch","Ceaseless Edge","Aqua Cutter"]
+        }
+    },
+    "Reuniclus": {
+        "Team Plasma Grunt | Gauntlet 3/7": {
+            "index": "0000000658",
+            "level": 72,
+            "ability": "Magic Guard",
+            "item": "Life Orb",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Relaxed",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Trick Room","Sludge Bomb","Psychic Noise","Dazzling Gleam"]
+        }
+    },
+    "Delibird": {
+        "Team Plasma Grunt | Gauntlet 5/7": {
+            "index": "0000000664",
+            "level": 72,
+            "ability": "Hustle",
+            "item": "Wide Lens",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Triple Axel","Drill Run","Ice Shard","Brave Bird"]
+        }
+    },
+    "Furfrou-Star": {
+        "Team Plasma Grunt | Gauntlet 6/7": {
+            "index": "0000000665",
+            "level": 70,
+            "ability": "Super Luck",
+            "item": "Scope Lens",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Retaliate","U-turn","Icicle Crash","Iron Tail"]
         }
     },
  }

@@ -1045,9 +1045,9 @@ var OPPONENT_PLAN_RANGES = [
 	{
 		id: "giant-chasm-gauntlet",
 		type: "Gauntlet",
-		label: "Team Plasma Grunt - Gauntlet 1/9",
-		startTrainers: ["Team Plasma Grunt - Gauntlet 1/9"],
-		endTrainers: ["Team Plasma Grunt - Gauntlet 9/9"]
+		label: "Team Plasma Grunt | Gauntlet 1/7",
+		startTrainers: ["Team Plasma Grunt | Gauntlet 1/7"],
+		endTrainers: ["Team Plasma Grunt | Gauntlet 7/7"]
 	}
 ];
 var isRestoringLastEncounterSelection = false;
