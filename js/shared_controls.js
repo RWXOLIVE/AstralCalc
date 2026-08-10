@@ -893,7 +893,7 @@ var FAQ_ENTRIES = [
 	},
 	{
 		question: "How do I merge frags with an evolution line?",
-		answer: "Drag the earlier evolution onto the later evolution in the same line. For example, drag Charmander onto Charmeleon or Charizard to move the earlier form's frags into the evolved form."
+		answer: "Drag the earlier evolution onto the later evolution in the same line. For example, drag Charmander onto Charmeleon or Charizard to move the earlier form's frags into the evolved form. For Rotom, you can also drag the base or any appliance form onto a different Rotom form."
 	},
 	{
 		question: "Why does Terrain keep disabling?",
@@ -1793,6 +1793,7 @@ function getDefaultAppSettings() {
 		moreColour: true,
 		moveColors: false,
 		moveMeta: true,
+		autoImportMegas: false,
 		totalFragsOnBorder: false
 	};
 }
@@ -1807,6 +1808,7 @@ function getAppSettings(forceReload) {
 		moreColour: typeof parsed.moreColour === "boolean" ? parsed.moreColour : defaults.moreColour,
 		moveColors: typeof parsed.moveColors === "boolean" ? parsed.moveColors : defaults.moveColors,
 		moveMeta: typeof parsed.moveMeta === "boolean" ? parsed.moveMeta : defaults.moveMeta,
+		autoImportMegas: typeof parsed.autoImportMegas === "boolean" ? parsed.autoImportMegas : defaults.autoImportMegas,
 		totalFragsOnBorder: typeof parsed.totalFragsOnBorder === "boolean" ? parsed.totalFragsOnBorder : defaults.totalFragsOnBorder
 	};
 	return appSettingsCache;
@@ -1819,6 +1821,7 @@ function saveAppSettings(nextSettings) {
 		moreColour: !!nextSettings.moreColour,
 		moveColors: !!nextSettings.moveColors,
 		moveMeta: !!nextSettings.moveMeta,
+		autoImportMegas: !!nextSettings.autoImportMegas,
 		totalFragsOnBorder: !!nextSettings.totalFragsOnBorder
 	};
 	localStorage.setItem(APP_SETTINGS_STORAGE_KEY, JSON.stringify(appSettingsCache));
@@ -1833,6 +1836,7 @@ function updateAppSettings(partial) {
 		moreColour: partial && typeof partial.moreColour !== "undefined" ? partial.moreColour : current.moreColour,
 		moveColors: partial && typeof partial.moveColors !== "undefined" ? partial.moveColors : current.moveColors,
 		moveMeta: partial && typeof partial.moveMeta !== "undefined" ? partial.moveMeta : current.moveMeta,
+		autoImportMegas: partial && typeof partial.autoImportMegas !== "undefined" ? partial.autoImportMegas : current.autoImportMegas,
 		totalFragsOnBorder: partial && typeof partial.totalFragsOnBorder !== "undefined" ? partial.totalFragsOnBorder : current.totalFragsOnBorder
 	});
 }
@@ -2223,6 +2227,10 @@ var SPECIES_NAME_ALIASES = {
 	"Florges-White-Flower": "Florges",
 };
 
+var FRAG_MERGEABLE_ALTERNATE_FORM_FAMILIES = {
+	rotom: true
+};
+
 function resolveSetSpeciesNameForDexLookup(pokemonName) {
 	var normalizedName = String(pokemonName || "").trim();
 	if (!normalizedName) return "";
@@ -2269,6 +2277,29 @@ function isPreEvolutionOfSpecies(sourceSpecies, targetSpecies) {
 		currentId = prevoId;
 	}
 	return false;
+}
+
+function resolveFragMergeableAlternateFormFamilyId(speciesName) {
+	var rawSpecies = String(speciesName || "").trim();
+	if (!rawSpecies) return "";
+	var resolvedSpecies = resolveSetSpeciesNameForDexLookup(rawSpecies);
+	var speciesData = pokedex && resolvedSpecies ? pokedex[resolvedSpecies] : null;
+	var baseSpecies = speciesData && speciesData.baseSpecies
+		? String(speciesData.baseSpecies)
+		: resolvedSpecies;
+	var familyId = toDexPokemonId(baseSpecies);
+	return FRAG_MERGEABLE_ALTERNATE_FORM_FAMILIES[familyId] ? familyId : "";
+}
+
+function shouldMergeFragsByAlternateFormDrop(sourceSetId, targetSetId) {
+	if (!sourceSetId || !targetSetId || sourceSetId === targetSetId) return false;
+	var sourceSpecies = parseSetId(sourceSetId).species;
+	var targetSpecies = parseSetId(targetSetId).species;
+	if (!sourceSpecies || !targetSpecies ||
+		toDexPokemonId(sourceSpecies) === toDexPokemonId(targetSpecies)) return false;
+	var sourceFamilyId = resolveFragMergeableAlternateFormFamilyId(sourceSpecies);
+	return !!sourceFamilyId &&
+		sourceFamilyId === resolveFragMergeableAlternateFormFamilyId(targetSpecies);
 }
 
 function shouldMergeFragsByEvolutionDrop(sourceSetId, targetSetId) {
@@ -3136,7 +3167,15 @@ function getStoredFragSheetStates() {
 }
 
 function saveStoredFragSheetStates(states) {
-	localStorage.setItem(FRAG_SHEET_STATES_STORAGE_KEY, JSON.stringify(Array.isArray(states) ? states : []));
+	try {
+		localStorage.setItem(FRAG_SHEET_STATES_STORAGE_KEY, JSON.stringify(Array.isArray(states) ? states : []));
+		return true;
+	} catch (err) {
+		if (window.console && typeof window.console.warn === "function") {
+			window.console.warn("[AstralCalc] Could not save Frag Sheet state.", err);
+		}
+		return false;
+	}
 }
 
 function getStoredFragSheetBackups() {
@@ -3179,12 +3218,39 @@ function createFragSnapshotRecord(snapshotName, sourceLabel) {
 	};
 }
 
+function makeRoomForFragSheetState(states) {
+	var backups = getStoredFragSheetBackups();
+	var removedBackupCount = 0;
+	while (backups.length) {
+		backups.pop();
+		removedBackupCount++;
+		try {
+			if (backups.length) {
+				localStorage.setItem(FRAG_SHEET_BACKUPS_STORAGE_KEY, JSON.stringify(backups));
+			} else {
+				localStorage.removeItem(FRAG_SHEET_BACKUPS_STORAGE_KEY);
+			}
+		} catch (err) {
+			continue;
+		}
+		if (saveStoredFragSheetStates(states)) return removedBackupCount;
+	}
+	return -1;
+}
+
 function saveNamedFragSheetState(snapshotName) {
 	var states = getStoredFragSheetStates();
 	var record = createFragSnapshotRecord(snapshotName || buildFragSnapshotDefaultName("State"), "state");
 	states.unshift(record);
 	if (states.length > FRAG_SHEET_STATES_LIMIT) states.length = FRAG_SHEET_STATES_LIMIT;
-	saveStoredFragSheetStates(states);
+	var saved = saveStoredFragSheetStates(states);
+	var removedBackupCount = 0;
+	if (!saved) {
+		removedBackupCount = makeRoomForFragSheetState(states);
+		saved = removedBackupCount >= 0;
+	}
+	if (!saved) return null;
+	record.removedBackupCount = removedBackupCount;
 	return record;
 }
 
@@ -3255,8 +3321,7 @@ function deleteFragStateById(stateId) {
 		return String(stateRecord.id) !== targetId;
 	});
 	if (filtered.length === states.length) return false;
-	saveStoredFragSheetStates(filtered);
-	return true;
+	return saveStoredFragSheetStates(filtered);
 }
 
 function saveManualFragBackup() {
@@ -7055,6 +7120,9 @@ function setOpposingSetDeadMark(setId, isDead) {
 	if (isDead) deadOpposingSetMap[key] = true;
 	else delete deadOpposingSetMap[key];
 	applyOpposingDeadMarks();
+	if (window.AstralSwitchIn && typeof window.AstralSwitchIn.scheduleRefresh === "function") {
+		window.AstralSwitchIn.scheduleRefresh();
+	}
 	if (wasDead !== !!isDead && typeof performCalculations === "function") performCalculations();
 }
 
@@ -7526,6 +7594,7 @@ function syncSettingsPanelUi() {
 	$("#settings-more-colour").prop("checked", !!settings.moreColour);
 	$("#settings-move-colors").prop("checked", !!settings.moveColors);
 	$("#settings-move-meta").prop("checked", !!settings.moveMeta);
+	$("#settings-auto-import-megas").prop("checked", !!settings.autoImportMegas);
 	$("#settings-total-frags-on-border").prop("checked", !!settings.totalFragsOnBorder);
 	setMoveMetaVisibility(!!settings.moveMeta);
 	applyMoreColourSetting(!!settings.moreColour);
@@ -7774,24 +7843,39 @@ function bindCalcToolEvents() {
 		clearFragsForCurrentFight();
 	});
 
-	$("#frags-history-toggle").off("click").on("click", function () {
+	$(document).off("click.fragshistorytoggle", "#frags-history-toggle").on("click.fragshistorytoggle", "#frags-history-toggle", function () {
 		setFragHistoryExpanded(!fragsHistoryExpanded);
 	});
 
-	$("#frags-history-info").off("click").on("click", function () {
+	$(document).off("click.fragshistoryinfo", "#frags-history-info").on("click.fragshistoryinfo", "#frags-history-info", function () {
 		showFragHistoryInfoDialog();
 	});
 
-	$("#frags-state-save").off("click").on("click", function () {
+	$(document).off("click.fragshistorysave", "#frags-state-save").on("click.fragshistorysave", "#frags-state-save", function () {
 		var stateNameInput = document.getElementById("frags-state-name");
 		var requestedName = stateNameInput ? stateNameInput.value : "";
-		var savedState = saveNamedFragSheetState(requestedName);
+		var savedState = null;
+		try {
+			savedState = saveNamedFragSheetState(requestedName);
+		} catch (err) {
+			if (window.console && typeof window.console.error === "function") {
+				window.console.error("[AstralCalc] Frag Sheet state save failed.", err);
+			}
+		}
+		if (!savedState) {
+			alert("Could not save this state because its snapshot is larger than the available browser storage. Delete an older saved state or reduce imported sets, then try again.");
+			return;
+		}
 		if (stateNameInput) stateNameInput.value = "";
 		refreshFragHistoryControls();
-		alert("Saved state: " + savedState.name);
+		var savedMessage = "Saved state: " + savedState.name;
+		if (savedState.removedBackupCount > 0) {
+			savedMessage += "\n\nBrowser storage was full, so " + savedState.removedBackupCount + " oldest rolling backup" + (savedState.removedBackupCount === 1 ? " was" : "s were") + " removed to make room.";
+		}
+		alert(savedMessage);
 	});
 
-	$("#frags-state-restore").off("click").on("click", function () {
+	$(document).off("click.fragshistoryrestore", "#frags-state-restore").on("click.fragshistoryrestore", "#frags-state-restore", function () {
 		var selectedStateId = $("#frags-state-list").val();
 		if (!selectedStateId) {
 			alert("Select a saved state first.");
@@ -7806,7 +7890,7 @@ function bindCalcToolEvents() {
 		refreshFragHistoryControls();
 	});
 
-	$("#frags-state-delete").off("click").on("click", function () {
+	$(document).off("click.fragshistorydelete", "#frags-state-delete").on("click.fragshistorydelete", "#frags-state-delete", function () {
 		var selectedStateId = $("#frags-state-list").val();
 		if (!selectedStateId) {
 			alert("Select a saved state first.");
@@ -7820,13 +7904,13 @@ function bindCalcToolEvents() {
 		refreshFragHistoryControls();
 	});
 
-	$("#frags-backup-save").off("click").on("click", function () {
+	$(document).off("click.fragshistorybackupsave", "#frags-backup-save").on("click.fragshistorybackupsave", "#frags-backup-save", function () {
 		saveManualFragBackup();
 		refreshFragHistoryControls();
 		alert("Backup saved.");
 	});
 
-	$("#frags-backup-restore").off("click").on("click", function () {
+	$(document).off("click.fragshistorybackuprestore", "#frags-backup-restore").on("click.fragshistorybackuprestore", "#frags-backup-restore", function () {
 		var selectedBackupId = $("#frags-backup-list").val();
 		if (!selectedBackupId) {
 			alert("Select a backup first.");
@@ -7873,6 +7957,9 @@ function bindCalcToolEvents() {
 		setMoveMetaVisibility(enabled);
 		updateAllMoveMetaDisplays();
 		if (typeof performCalculations === "function") performCalculations();
+	});
+	$("#settings-auto-import-megas").off("change").on("change", function () {
+		updateAppSettings({autoImportMegas: $(this).is(":checked")});
 	});
 
 	$("#settings-total-frags-on-border").off("change").on("change", function () {
@@ -8229,10 +8316,12 @@ function applyIconSheetFallbackImage(imgNode, speciesName) {
 		imgNode.classList.toggle("sprite-icon-expanded", false);
 	}
 	imgNode.src = POKEMON_ICON_FALLBACK_DATA_URL;
-	imgNode.style.backgroundImage = getPokemonIconSheetBackgroundImageValue(imgNode);
-	imgNode.style.backgroundRepeat = "no-repeat";
-	imgNode.style.backgroundPosition = "-" + (position.col * POKEMON_ICON_WIDTH) + "px -" + (position.row * POKEMON_ICON_HEIGHT) + "px";
-	imgNode.style.backgroundSize = "";
+	imgNode.style.backgroundImage = getPokemonIconSheetBackgroundImageValue(imgNode) +
+		", var(--trainer-pok-damage-layer, linear-gradient(transparent, transparent))";
+	imgNode.style.backgroundRepeat = "no-repeat, no-repeat";
+	imgNode.style.backgroundPosition = "-" + (position.col * POKEMON_ICON_WIDTH) + "px -" +
+		(position.row * POKEMON_ICON_HEIGHT) + "px, 0 0";
+	imgNode.style.backgroundSize = "auto, 100% 100%";
 	imgNode.style.width = POKEMON_ICON_WIDTH + "px";
 	imgNode.style.height = POKEMON_ICON_HEIGHT + "px";
 	imgNode.style.objectFit = "fill";
@@ -9379,13 +9468,15 @@ function getFieldWithSingleTargetSpreadDamageOverride(field, useSingleTargetSpre
 	return adjustedField;
 }
 
-function trainerPartyMonHtml(entry) {
+function trainerPartyMonHtml(entry, isTrainerLead) {
 	var label = "[" + entry.indexText + "]" + entry.fullSetName;
-	return '<img class="trainer-pok right-side" draggable="true" src="' + escapeHtml(getInitialTrainerSpriteUrlByName(entry.pokemonName)) + '" data-id="' + escapeHtml(entry.fullSetName) + '" data-species="' + escapeHtml(entry.pokemonName) + '" title="' + escapeHtml(label + ", " + label + " BP") + '" loading="lazy" decoding="async"' + getPrimaryIconSheetLoadAttr(entry.pokemonName) + ' onerror="applyIconSheetFallbackImage(this, this.getAttribute(\'data-species\'))">';
+	var leadClass = isTrainerLead ? " trainer-party-leading" : "";
+	return '<img class="trainer-pok right-side' + leadClass + '" draggable="true" src="' + escapeHtml(getInitialTrainerSpriteUrlByName(entry.pokemonName)) + '" data-id="' + escapeHtml(entry.fullSetName) + '" data-party-index="' + escapeHtml(entry.indexText) + '" data-species="' + escapeHtml(entry.pokemonName) + '" title="' + escapeHtml((isTrainerLead ? "Trainer lead. " : "") + label + ", " + label + " BP") + '" loading="lazy" decoding="async"' + getPrimaryIconSheetLoadAttr(entry.pokemonName) + ' onerror="applyIconSheetFallbackImage(this, this.getAttribute(\'data-species\'))">';
 }
 
 function renderOpposingTrainerParties(selectedSetName) {
 	var sortedEntries = (CURRENT_TRAINER_POKS || []).slice().sort(sortmons).map(parseTrainerPartyEntry);
+	var trainerLeadEntry = sortedEntries.length ? sortedEntries[0] : null;
 	var useSplitLayout = shouldUseSetDoubleLayout(sortedEntries);
 
 	var primaryEntries = [];
@@ -9398,8 +9489,12 @@ function renderOpposingTrainerParties(selectedSetName) {
 		primaryEntries = sortedEntries.slice();
 	}
 
-	var primaryHtml = primaryEntries.map(trainerPartyMonHtml).join("");
-	var secondaryHtml = secondaryEntries.map(trainerPartyMonHtml).join("");
+	var primaryHtml = primaryEntries.map(function (entry) {
+		return trainerPartyMonHtml(entry, entry === trainerLeadEntry);
+	}).join("");
+	var secondaryHtml = secondaryEntries.map(function (entry) {
+		return trainerPartyMonHtml(entry, entry === trainerLeadEntry);
+	}).join("");
 	var showSecondary = useSplitLayout && secondaryEntries.length > 0;
 
 	$(".trainer-pok-list-opposing").html(primaryHtml);
@@ -9410,6 +9505,9 @@ function renderOpposingTrainerParties(selectedSetName) {
 	});
 	applyOpposingDeadMarks();
 	renderTrainerSequence();
+	if (window.AstralSwitchIn && typeof window.AstralSwitchIn.scheduleRefresh === "function") {
+		window.AstralSwitchIn.scheduleRefresh();
+	}
 }
 
 // auto-update set details on select
@@ -11455,7 +11553,8 @@ function drop(ev) {
 			var targetRootSprite = getTrainerPokSpriteElement(targetRoot);
 			var draggedSetId = draggedSprite ? $(draggedSprite).attr("data-id") : "";
 			var targetSetId = targetRootSprite ? $(targetRootSprite).attr("data-id") : "";
-			if (shouldMergeFragsByEvolutionDrop(draggedSetId, targetSetId) &&
+			if ((shouldMergeFragsByEvolutionDrop(draggedSetId, targetSetId) ||
+				shouldMergeFragsByAlternateFormDrop(draggedSetId, targetSetId)) &&
 				mergeFragEntriesFromEvolutionDrop(draggedSetId, targetSetId)) {
 				if (pokeDragged.parentNode) pokeDragged.parentNode.removeChild(pokeDragged);
 				targetNode.classList.remove('over');

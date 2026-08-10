@@ -351,9 +351,15 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
         desc.hits = move.hits;
     }
     var turnOrder = (0, util_2.getTurnOrder)(attacker, defender, field);
-    var basePower = calculateBasePowerSMSSSV(gen, attacker, defender, move, field, hasAteAbilityTypeChange, desc);
-    if (basePower === 0) {
+    var basePowers = move.named('Triple Axel')
+        ? Array.from({ length: move.hits }, function (_, hit) { return calculateBasePowerSMSSSV(gen, attacker, defender, move, field, hasAteAbilityTypeChange, desc, 20 * (hit + 1)); })
+        : [calculateBasePowerSMSSSV(gen, attacker, defender, move, field, hasAteAbilityTypeChange, desc)];
+    if (basePowers.some(function (basePower) { return basePower === 0; })) {
         return result;
+    }
+    var basePower = basePowers[0];
+    if (move.named('Triple Axel')) {
+        desc.moveBP = Array.from({ length: move.hits }, function (_, hit) { return 20 * (hit + 1); }).join(' + ');
     }
     var attack = calculateAttackSMSSSV(gen, attacker, defender, move, field, desc, isCritical);
     var attackSource = move.named('Foul Play') ? defender : attacker;
@@ -373,36 +379,36 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
     var hitsPhysical = move.overrideDefensiveStat === 'def' || move.category === 'Physical' ||
         (move.named('Shell Side Arm') && (0, util_2.getShellSideArmCategory)(attacker, defender) === 'Physical');
     var defenseStat = hitsPhysical ? 'def' : 'spd';
-    var baseDamage = (0, util_2.getBaseDamage)(attacker.level, basePower, attack, defense);
+    var baseDamages = basePowers.map(function (bp) { return (0, util_2.getBaseDamage)(attacker.level, bp, attack, defense); });
     var isSpread = !field.ignoreSpreadDamageReduction && field.gameType !== 'Singles' &&
         ['allAdjacent', 'allAdjacentFoes'].includes(move.target);
     if (isSpread) {
-        baseDamage = (0, util_2.pokeRound)((0, util_2.OF32)(baseDamage * 3072) / 4096);
+        baseDamages = baseDamages.map(function (baseDamage) { return (0, util_2.pokeRound)((0, util_2.OF32)(baseDamage * 3072) / 4096); });
     }
     if (attacker.hasAbility('Parental Bond (Child)')) {
-        baseDamage = (0, util_2.pokeRound)((0, util_2.OF32)(baseDamage * 1024) / 4096);
+        baseDamages = baseDamages.map(function (baseDamage) { return (0, util_2.pokeRound)((0, util_2.OF32)(baseDamage * 1024) / 4096); });
     }
     var noWeatherBoost = defender.hasItem('Utility Umbrella');
     var noWeatherBoostAtk = attacker.hasItem('Utility Umbrella');
     var isMegaSolActive = attacker.hasAbility('Mega Sol');
     if (isMegaSolActive && move.hasType('Fire')) {
-        baseDamage = (0, util_2.pokeRound)((0, util_2.OF32)(baseDamage * 6144) / 4096);
+        baseDamages = baseDamages.map(function (baseDamage) { return (0, util_2.pokeRound)((0, util_2.OF32)(baseDamage * 6144) / 4096); });
         desc.attackerAbility = attacker.ability;
     }
     else if (isMegaSolActive && move.hasType('Water')) {
-        baseDamage = (0, util_2.pokeRound)((0, util_2.OF32)(baseDamage * 2048) / 4096);
+        baseDamages = baseDamages.map(function (baseDamage) { return (0, util_2.pokeRound)((0, util_2.OF32)(baseDamage * 2048) / 4096); });
         desc.attackerAbility = attacker.ability;
     }
     else if (!noWeatherBoost && !noWeatherBoostAtk &&
         ((field.hasWeather('Sun', 'Harsh Sunshine') && move.hasType('Fire')) ||
             (field.hasWeather('Rain', 'Heavy Rain') && move.hasType('Water')))) {
-        baseDamage = (0, util_2.pokeRound)((0, util_2.OF32)(baseDamage * 6144) / 4096);
+        baseDamages = baseDamages.map(function (baseDamage) { return (0, util_2.pokeRound)((0, util_2.OF32)(baseDamage * 6144) / 4096); });
         desc.weather = field.weather;
     }
     else if (!noWeatherBoost && !noWeatherBoostAtk &&
         ((field.hasWeather('Sun') && move.hasType('Water')) ||
             (field.hasWeather('Rain') && move.hasType('Fire')))) {
-        baseDamage = (0, util_2.pokeRound)((0, util_2.OF32)(baseDamage * 2048) / 4096);
+        baseDamages = baseDamages.map(function (baseDamage) { return (0, util_2.pokeRound)((0, util_2.OF32)(baseDamage * 2048) / 4096); });
         desc.weather = field.weather;
     }
     if (hasTerrainSeed(defender) &&
@@ -411,7 +417,7 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
         desc.defenderItem = defender.item;
     }
     if (isCritical) {
-        baseDamage = Math.floor((0, util_2.OF32)(baseDamage * 1.5));
+        baseDamages = baseDamages.map(function (baseDamage) { return Math.floor((0, util_2.OF32)(baseDamage * 1.5)); });
         desc.isCritical = isCritical;
     }
     var stabMod = 4096;
@@ -470,11 +476,14 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
         childDamage = calculateSMSSSV(gen, child, defender, move, field).damage;
         desc.attackerAbility = attacker.ability;
     }
-    var damage = [];
-    for (var i = 0; i < 16; i++) {
-        damage[i] =
-            (0, util_2.getFinalDamage)(baseDamage, i, typeEffectiveness, applyBurn, applyFrostbite, stabMod, finalMod, protect);
-    }
+    var damageByHit = baseDamages.map(function (baseDamage) {
+        var hitDamage = [];
+        for (var i = 0; i < 16; i++) {
+            hitDamage[i] = (0, util_2.getFinalDamage)(baseDamage, i, typeEffectiveness, applyBurn, applyFrostbite, stabMod, finalMod, protect);
+        }
+        return hitDamage;
+    });
+    var damage = damageByHit[0];
     if (move.dropsStats && move.timesUsed > 1) {
         var simpleMultiplier = attacker.hasAbility('Simple') ? 2 : 1;
         desc.moveTurns = "over ".concat(move.timesUsed, " turns");
@@ -515,14 +524,16 @@ function calculateSMSSSV(gen, attacker, defender, move, field) {
     }
     desc.attackBoost =
         move.named('Foul Play') ? defender.boosts[attackStat] : attacker.boosts[attackStat];
-    result.damage = childDamage ? [damage, childDamage] : damage;
+    result.damage =
+        damageByHit.length > 1 ? damageByHit : childDamage ? [damage, childDamage] : damage;
     desc.attackBoost =
         move.named('Fairful Play') ? defender.boosts[attackStat] : attacker.boosts[attackStat];
-    result.damage = childDamage ? [damage, childDamage] : damage;
+    result.damage =
+        damageByHit.length > 1 ? damageByHit : childDamage ? [damage, childDamage] : damage;
     return result;
 }
 exports.calculateSMSSSV = calculateSMSSSV;
-function calculateBasePowerSMSSSV(gen, attacker, defender, move, field, hasAteAbilityTypeChange, desc) {
+function calculateBasePowerSMSSSV(gen, attacker, defender, move, field, hasAteAbilityTypeChange, desc, basePowerOverride) {
     var _a;
     var turnOrder = (0, util_2.getTurnOrder)(attacker, defender, field);
     var basePower;
@@ -680,7 +691,7 @@ function calculateBasePowerSMSSSV(gen, attacker, defender, move, field, hasAteAb
             desc.moveBP = basePower;
             break;
         case 'Triple Axel':
-            basePower = move.hits === 2 ? 30 : move.hits === 3 ? 40 : 20;
+            basePower = basePowerOverride !== null && basePowerOverride !== void 0 ? basePowerOverride : (move.hits === 2 ? 30 : move.hits === 3 ? 40 : 20);
             desc.moveBP = basePower;
             break;
         case 'Triple Kick':

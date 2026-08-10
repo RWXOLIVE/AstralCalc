@@ -38,7 +38,7 @@ export interface RawDesc {
     isPowerSpot?: boolean;
     isWonderRoom?: boolean;
     isSwitching?: 'out' | 'in';
-    moveBP?: number;
+    moveBP?: number | string;
     moveName: string;
     moveTurns?: string;
     moveType?: TypeName;

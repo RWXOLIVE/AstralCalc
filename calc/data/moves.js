@@ -3570,7 +3570,7 @@ var SS_PATCH = {
         maxPower: 90
     },
     'Snap Trap': {
-        bp: 60,
+        bp: 80,
         type: 'Grass',
         makesContact: true,
         category: 'Physical',

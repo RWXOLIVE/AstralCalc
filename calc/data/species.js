@@ -83,7 +83,7 @@ var RBY = {
         bs: { hp: 55, at: 50, df: 45, sp: 120, sl: 135 },
         weightkg: 48
     },
-    Arbok: { types: ['Poison', 'Dragon'], bs: { hp: 60, at: 109, df: 69, sp: 100, sl: 65 }, weightkg: 65 },
+    Arbok: { types: ['Poison', 'Dragon'], bs: { hp: 75, at: 109, df: 69, sp: 100, sl: 65 }, weightkg: 65 },
     Arcanine: {
         types: ['Fire'],
         bs: { hp: 90, at: 110, df: 80, sp: 95, sl: 80 },
@@ -887,7 +887,7 @@ var GSC_PATCH = {
     Abra: { bs: { hp: 25, at: 20, df: 15, sa: 105, sd: 55, sp: 90 } },
     Aerodactyl: { bs: { sa: 60, sd: 75 } },
     Alakazam: { bs: { sa: 135, sd: 85 } },
-    Arbok: { bs: { sa: 65, sd: 79 } },
+    Arbok: { bs: { sa: 65, sd: 88 } },
     Arcanine: { bs: { sa: 100, sd: 80 } },
     Articuno: { bs: { sa: 95, sd: 125 }, gender: 'N' },
     Beedrill: { bs: { sa: 30, sd: 80 } },
@@ -2715,7 +2715,7 @@ var ADV_PATCH = {
     },
     Wailmer: {
         types: ['Water'],
-        bs: { hp: 130, at: 70, df: 35, sa: 70, sd: 35, sp: 60 },
+        bs: { hp: 130, at: 85, df: 55, sa: 85, sd: 55, sp: 60 },
         weightkg: 130,
         nfe: true,
         abilities: { 0: 'Water Veil' }
@@ -2734,7 +2734,7 @@ var ADV_PATCH = {
     },
     Whiscash: {
         types: ['Water', 'Ground'],
-        bs: { hp: 110, at: 78, df: 73, sa: 76, sd: 71, sp: 60 },
+        bs: { hp: 130, at: 99, df: 78, sa: 99, sd: 77, sp: 65 },
         weightkg: 23.6,
         abilities: { 0: 'Oblivious' }
     },
