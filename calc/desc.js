@@ -198,7 +198,7 @@ function getKOChance(gen, attacker, defender, move, field, damage, err) {
     if (damage[0] >= defender.maxHP() && move.timesUsed === 1 && move.timesUsedWithMetronome === 1) {
         return { chance: 1, n: 1, text: 'guaranteed OHKO' };
     }
-    var hazards = getHazards(gen, defender, field.defenderSide);
+    var hazards = getHazards(gen, defender, field);
     var eot = getEndOfTurn(gen, attacker, defender, move, field);
     var toxicCounter = defender.hasStatus('tox') && !defender.hasAbility('Magic Guard') ? defender.toxicCounter : 0;
     var qualifier = '';
@@ -364,9 +364,10 @@ var TRAPPING = [
     'Bind', 'Clamp', 'Fire Spin', 'Infestation', 'Magma Storm', 'Sand Tomb',
     'Thunder Cage', 'Whirlpool', 'Wrap', 'G-Max Sandblast', 'G-Max Centiferno',
 ];
-function getHazards(gen, defender, defenderSide) {
+function getHazards(gen, defender, field) {
     var damage = 0;
     var texts = [];
+    var defenderSide = field.defenderSide;
     if (defender.hasItem('Heavy-Duty Boots')) {
         return { damage: damage, texts: texts };
     }
@@ -384,9 +385,7 @@ function getHazards(gen, defender, defenderSide) {
         damage += Math.floor((effectiveness * defender.maxHP()) / 8);
         texts.push('Steelsurge');
     }
-    if (!defender.hasType('Flying') &&
-        !defender.hasAbility('Magic Guard', 'Levitate') &&
-        !defender.hasItem('Air Balloon')) {
+    if (!defender.hasAbility('Magic Guard') && (0, util_2.isGrounded)(defender, field, defenderSide)) {
         if (defenderSide.spikes === 1) {
             damage += Math.floor(defender.maxHP() / 8);
             if (gen.num === 2) {
@@ -486,7 +485,7 @@ function getEndOfTurn(gen, attacker, defender, move, field) {
         }
     }
     if (field.hasTerrain('Grassy')) {
-        if ((0, util_2.isGrounded)(defender, field)) {
+        if ((0, util_2.isGrounded)(defender, field, field.defenderSide)) {
             damage += Math.floor(defender.maxHP() / 16);
             texts.push('Grassy Terrain recovery');
         }

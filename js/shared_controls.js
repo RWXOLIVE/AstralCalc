@@ -7526,6 +7526,7 @@ function refreshBattleLayoutForCurrentSelection() {
 	renderOpposingTrainerParties(selectedOpposing);
 	syncWeatherForSelection(selectedOpposing, CURRENT_TRAINER_POKS);
 	syncTerrainForSelection(selectedOpposing, CURRENT_TRAINER_POKS);
+	syncTailwindForSelection(selectedOpposing, CURRENT_TRAINER_POKS);
 	renderFragSheet();
 }
 
@@ -9016,6 +9017,44 @@ function syncTerrainForSelection(fullSetName, trainerEntries) {
 	syncTrainerFieldLockButtonStyles();
 }
 
+function getTailwindFromSetData(setData) {
+	if (!setData) return {hasTailwind: false, tailwind: false};
+	var tailwindKeys = ["Tailwind", "tailwind", "isTailwind"];
+	for (var i = 0; i < tailwindKeys.length; i++) {
+		var key = tailwindKeys[i];
+		if (!Object.prototype.hasOwnProperty.call(setData, key)) continue;
+		return {
+			hasTailwind: true,
+			tailwind: isTruthySetFlag(setData[key])
+		};
+	}
+	return {hasTailwind: false, tailwind: false};
+}
+
+function resolveTailwindForSelection(fullSetName, trainerEntries) {
+	var selectedEntry = parseTrainerPartyEntry(fullSetName);
+	var selectedTailwind = getTailwindFromSetData(selectedEntry.setData);
+	if (selectedTailwind.hasTailwind) return selectedTailwind;
+	if (Array.isArray(trainerEntries)) {
+		for (var i = 0; i < trainerEntries.length; i++) {
+			var candidateEntry = parseTrainerPartyEntry(trainerEntries[i]);
+			var candidateTailwind = getTailwindFromSetData(candidateEntry.setData);
+			if (candidateTailwind.hasTailwind) return candidateTailwind;
+		}
+	}
+	return {hasTailwind: false, tailwind: false};
+}
+
+function syncTailwindForSelection(fullSetName, trainerEntries) {
+	var resolvedTailwind = resolveTailwindForSelection(fullSetName, trainerEntries);
+	var tailwindInput = $("#tailwindR");
+	if (!tailwindInput.length) return;
+	var shouldEnableTailwind = resolvedTailwind.hasTailwind && resolvedTailwind.tailwind;
+	var wasEnabled = tailwindInput.prop("checked");
+	tailwindInput.prop("checked", shouldEnableTailwind);
+	if (wasEnabled !== shouldEnableTailwind) tailwindInput.change();
+}
+
 function splitSetDoubleEntries(entries) {
 	var primaryFromSide = [];
 	var secondaryFromSide = [];
@@ -9724,6 +9763,7 @@ $("input.set-selector").change(function () {
 		if ($(this).hasClass('opposing')) {
 			syncWeatherForSelection(fullSetName, CURRENT_TRAINER_POKS);
 			syncTerrainForSelection(fullSetName, CURRENT_TRAINER_POKS);
+			syncTailwindForSelection(fullSetName, CURRENT_TRAINER_POKS);
 		}
 		if (pokemon.gender === "N") {
 			pokeObj.find(".gender").parent().hide();
@@ -10284,15 +10324,17 @@ function hasResidualDisplayType(pokemon) {
 	return pokemon.hasType ? pokemon.hasType.apply(pokemon, types) : false;
 }
 
-function isResidualDisplayGrounded(pokemon, field) {
+function isResidualDisplayGrounded(pokemon, field, side) {
 	if (!pokemon || !field) return false;
-	if (field.isGravity) return true;
+	if (side && side.isGrounded) return true;
+	var itemEffectsSuppressed = field.isMagicRoom || pokemon.hasAbility("Klutz");
+	if (field.isGravity || (!itemEffectsSuppressed && pokemon.hasItem("Iron Ball"))) return true;
 	if (pokemon.teraType) return pokemon.teraType !== "Flying" &&
-		!pokemon.hasAbility("Levitate") &&
-		!pokemon.hasItem("Air Balloon");
+		!pokemon.hasAbility("Levitate", "Eelevate") &&
+		(itemEffectsSuppressed || !pokemon.hasItem("Air Balloon"));
 	return !pokemon.hasType("Flying") &&
-		!pokemon.hasAbility("Levitate") &&
-		!pokemon.hasItem("Air Balloon");
+		!pokemon.hasAbility("Levitate", "Eelevate") &&
+		(itemEffectsSuppressed || !pokemon.hasItem("Air Balloon"));
 }
 
 function getMoveCritRateDisplay(pokemon, opposingPokemon, move, sideId) {
@@ -10440,7 +10482,7 @@ function getSideResidualChipDisplay(pokeInfo, pokemon, opposingPokemon, field) {
 			sources.push(hasBigRoot ? "Leech Seed recovery (Big Root)" : "Leech Seed recovery");
 		}
 	}
-	if (field.hasTerrain("Grassy") && isResidualDisplayGrounded(pokemon, field)) {
+	if (field.hasTerrain("Grassy") && isResidualDisplayGrounded(pokemon, field, field.attackerSide)) {
 		hpDelta += Math.floor(maxHP / 16);
 		sources.push("Grassy Terrain recovery");
 	}
@@ -10561,6 +10603,7 @@ function createField() {
 	var isWonderRoom = $("#wonderroom").prop("checked");
 	var isGravity = $("#gravity").prop("checked");
 	var isInverse = $("#inverse").prop("checked");
+	var isGrounded = [$("#groundedL").prop("checked"), $("#groundedR").prop("checked")];
 	var isSR = [$("#srL").prop("checked"), $("#srR").prop("checked")];
 	var weather;
 	var spikes;
@@ -10595,7 +10638,7 @@ function createField() {
 
 	var createSide = function (i) {
 		return new calc.Side({
-			spikes: spikes[i], isSR: isSR[i], steelsurge: steelsurge[i],
+			isGrounded: isGrounded[i], spikes: spikes[i], isSR: isSR[i], steelsurge: steelsurge[i],
 			vinelash: vinelash[i], wildfire: wildfire[i], cannonade: cannonade[i], volcalith: volcalith[i],
 			isReflect: isReflect[i], isLightScreen: isLightScreen[i],
 			isProtected: isProtected[i], isSeeded: isSeeded[i], isForesight: isForesight[i],
@@ -10840,6 +10883,8 @@ function clearField() {
 	$("#clear").prop("checked", true);
 	$("#gscClear").prop("checked", true);
 	$("#gravity").prop("checked", false);
+	$("#groundedL").prop("checked", false);
+	$("#groundedR").prop("checked", false);
 	$("#srL").prop("checked", false);
 	$("#srR").prop("checked", false);
 	$("#spikesL0").prop("checked", true);
@@ -10986,17 +11031,31 @@ var stickyMoves = (function () {
 
 function isPokeInfoGrounded(pokeInfo) {
 	var teraType = pokeInfo.find(".teraToggle").is(":checked") ? pokeInfo.find(".teraType").val() : undefined;
-	return $("#gravity").prop("checked") || (
-		teraType ? teraType !== "Flying" : pokeInfo.find(".type1").val() !== "Flying" &&
-			teraType ? teraType !== "Flying" : pokeInfo.find(".type2").val() !== "Flying" &&
-			pokeInfo.find(".ability").val() !== "Levitate" &&
-		getEffectiveItemFromPokeInfo(pokeInfo) !== "Air Balloon"
-	);
+	var ability = pokeInfo.find(".ability").val();
+	var itemSuppressed = $("#magicroom").prop("checked") || ability === "Klutz" ||
+		isIgnoreItemToggleChecked(pokeInfo);
+	var item = itemSuppressed ? "" : getEffectiveItemFromPokeInfo(pokeInfo);
+	var pokeInfoId = pokeInfo.prop("id");
+	var forcedGrounded = pokeInfoId === "p1" ? $("#groundedL").prop("checked") :
+		pokeInfoId === "p2" ? $("#groundedR").prop("checked") : false;
+	if (forcedGrounded || $("#gravity").prop("checked") || item === "Iron Ball") return true;
+	var hasFlyingType = teraType ? teraType === "Flying" :
+		pokeInfo.find(".type1").val() === "Flying" || pokeInfo.find(".type2").val() === "Flying";
+	return !hasFlyingType && ability !== "Levitate" && ability !== "Eelevate" && item !== "Air Balloon";
 }
 
 function getTerrainEffects() {
 	var className = String($(this).prop("className") || "").split(/\s+/)[0];
 	switch (className) {
+		case "grounded":
+			var id = $(this).prop("id") === "groundedL" ? "p1" : "p2";
+			var terrainValue = $("input:checkbox[name='terrain']:checked").val();
+			if (terrainValue === "Electric") {
+				$("#" + id).find("[value='Asleep']").prop("disabled", isPokeInfoGrounded($("#" + id)));
+			} else if (terrainValue === "Misty") {
+				$("#" + id).find(".status").prop("disabled", isPokeInfoGrounded($("#" + id)));
+			}
+			break;
 		case "type1":
 		case "type2":
 		case "teraType":
@@ -11408,6 +11467,7 @@ function refreshCurrentTrainerEncounter() {
 	renderOpposingTrainerParties(selectedOpposing);
 	syncWeatherForSelection(selectedOpposing, CURRENT_TRAINER_POKS);
 	syncTerrainForSelection(selectedOpposing, CURRENT_TRAINER_POKS);
+	syncTailwindForSelection(selectedOpposing, CURRENT_TRAINER_POKS);
 	renderFragSheet();
 	if (typeof performCalculations === "function") performCalculations();
 }

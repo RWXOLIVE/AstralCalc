@@ -660,6 +660,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Air Cutter","Revelation Dance","Alluring Voice"]
+        },
+    "Picnicker Ashley | Fortree Gym": {
+            "index": "0000000771",
+            "level": 75,
+            "ability": "Dancer",
+            "item": "Life Orb",
+            "nature": "Timid",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Revelation Dance","Feather Dance","Air Cutter","Quiver Dance"]
         }
     },
     "Oricorio-Sensu": {
@@ -673,6 +685,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Quiver Dance","Revelation Dance","Alluring Voice","Air Slash"]
+        },
+    "Picnicker Ashley | Fortree Gym": {
+            "index": "0000000773",
+            "level": 75,
+            "ability": "Dancer",
+            "item": "Sitrus Berry",
+            "nature": "Timid",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Revelation Dance","Quiver Dance","Air Slash","Follow Me"]
         }
     },
     "Sinistea": {
@@ -1249,6 +1273,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Protect","Whirlpool","Hurricane","Tailwind"]
+        },
+    "Bird Keeper Jared | Fortree City": {
+            "index": "0000000787",
+            "level": 76,
+            "ability": "Drizzle",
+            "item": "Focus Sash",
+            "Weather": "Rain",
+            "nature": "Timid",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Tailwind","Weather Ball","Hurricane","Wide Guard"]
         }
     },
     "Rotom-Wash": {
@@ -1534,6 +1571,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Hypnosis","Aqua Step","Recover","Zen Headbutt"]
+        },
+    "Bird Keeper Jared | Fortree City": {
+            "index": "0000000792",
+            "level": 75,
+            "ability": "Swift Swim",
+            "item": "Psychic Gem",
+            "Weather": "Rain",
+            "nature": "Modest",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Hypnosis","Dream Eater","Weather Ball","Aura Sphere"]
         }
     },
     "Quilladin": {
@@ -2849,6 +2899,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
             },
             "moves": ["Close Combat","Acrobatics","Drain Punch","Triple Axel"]
+        },
+    "Lass Darius | Fortress City": {
+            "index": "0000000784",
+            "level": 75,
+            "ability": "Unburden",
+            "item": "Power Herb",
+            "Weather": "Sun",
+            "nature": "Jolly",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sky Attack","Acrobatics","Close Combat","Coaching"]
         }
     },
     "Drowzee": {
@@ -3085,6 +3148,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Searing Shot","Acrobatics","U-turn","Upper Hand"]
+        },
+    "Expert Flint & Edwardo | Fortree Gym": {
+            "index": "0000000778",
+            "level": 75,
+            "ability": "Gale Wings",
+            "item": "Covert Cloak",
+            "nature": "Naive",
+            "setdouble": "True",
+            "setdoubleGroup": "fortree-gym-expert-flint-bird-keeper-edwardo",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Tailwind","Heat Wave","Dual Wingbeat","Upper Hand"]
         }
     },
     "Zoroark": {
@@ -5573,6 +5650,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Tailwind","Sucker Punch","Wicked Blow","Leaf Blade"]
+        },
+    "Expert Flint & Edwardo | Fortree Gym": {
+            "index": "0000000775",
+            "level": 75,
+            "ability": "Wind Rider",
+            "item": "White Herb",
+            "nature": "Adamant",
+            "setdouble": "True",
+            "setdoubleGroup": "fortree-gym-expert-flint-bird-keeper-edwardo",
+            "setdoubleSide": 2,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Leaf Blade","Throat Chop","Rock Slide","Fake Out"]
         }
     },
     "Centiskorch": {
@@ -6768,7 +6859,7 @@ var SETDEX_SV = {
     "Trainer Rival (Chikorita) | Route 110": {
             "index": "0000000337",
             "level": 51,
-            "ability": "Levitate",
+            "ability": "Serene Grace",
             "item": "Delphoxite",
             "nature": "Timid",
             "chosechikorita": true,
@@ -7213,6 +7304,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Autotomize","Iron Head","Drill Peck","Drill Run"]
+        },
+    "Bird Keeper Humberto | Fortree Gym": {
+            "index": "0000000768",
+            "level": 75,
+            "ability": "Tough Claws",
+            "item": "Skarmorite",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Swords Dance","Iron Head","Sky Attack","Drill Run"]
         }
     },
     "Golisopod": {
@@ -7266,6 +7368,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Bullet Punch","Bind","Fell Stinger","Close Combat"]
+        },
+    "Bird Keeper Jared | Fortree City": {
+            "index": "0000000789",
+            "level": 75,
+            "ability": "Technician",
+            "item": "Covert Cloak",
+            "Weather": "Rain",
+            "nature": "Jolly",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Swords Dance","Bug Bite","Bullet Punch","Dual Wingbeat"]
         }
     },
     "Dugtrio": {
@@ -7681,6 +7796,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Acrobatics","Close Combat","Throat Chop","U-turn"]
+        },
+    "Expert Flint & Edwardo | Fortree Gym": {
+            "index": "0000000779",
+            "level": 75,
+            "ability": "Costar",
+            "item": "Flying Gem",
+            "nature": "Jolly",
+            "setdouble": "True",
+            "setdoubleGroup": "fortree-gym-expert-flint-bird-keeper-edwardo",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Close Combat","Brave Bird","Tailwind","Protect"]
         }
     },
     "Great Tusk": {
@@ -7759,6 +7888,31 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Pursuit","Aqua Tail","Stone Edge","Dual Wingbeat"]
+        },
+    "Lass Darius | Fortress City": {
+            "index": "0000000786",
+            "level": 75,
+            "ability": "Rock Head",
+            "item": "Focus Sash",
+            "Weather": "Sun",
+            "nature": "Adamant",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fire Fang","Rock Slide","Dual Wingbeat","Pursuit"]
+        },
+    "Leader Winona | Fortree Gym": {
+            "index": "0000000797",
+            "level": 76,
+            "ability": "Tough Claws",
+            "item": "Choice Band",
+            "Tailwind": true,
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sky Attack","Head Smash"]
         }
     },
     "Copperajah": {
@@ -7876,6 +8030,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Swords Dance","Scale Shot","Rock Blast","Earthquake"]
+        },
+    "Bird Keeper Humberto | Fortree Gym": {
+            "index": "0000000766",
+            "level": 75,
+            "item": "Liechi Berry",
+            "nature": "Adamant",
+            "ability": "Rough Skin",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Swords Dance","Scale Shot","Tectonic Rage","Fire Fang"]
         }
     },
     "Scovillain": {
@@ -8120,6 +8285,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Solar Beam","Focus Blast","Flamethrower","Air Slash"]
+        },
+    "Bird Keeper Humberto | Fortree Gym": {
+            "index": "0000000765",
+            "level": 75,
+            "ability": "Blaze",
+            "item": "Grip Claw",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fire Spin","Protect","Roost","Substitute"]
         }
     },
     "Hatterene": {
@@ -8851,6 +9027,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Hurricane","Hydro Pump","Substitute","Signal Beam"]
+        },
+    "Bird Keeper Jared | Fortree City": {
+            "index": "0000000790",
+            "level": 75,
+            "ability": "Swift Swim",
+            "item": "Life Orb",
+            "Weather": "Rain",
+            "nature": "Timid",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bleakwind Storm","Earth Power","Muddy Water","Flip Turn"]
         }
     },
     "Overqwil": {
@@ -9621,6 +9810,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Fire Blast","Hurricane","Dragon Pulse","Hydro Pump"]
+        },
+        "Leader Winona | Fortree Gym": {
+            "index": "0000000796",
+            "level": 76,
+            "ability": "Intimidate",
+            "item": "Yache Berry",
+            "Tailwind": true,
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Temper Flare","Sky Attack","Dragon Claw","Dragon Dance"]
         }
     },
     "Entei": {
@@ -10461,6 +10662,13 @@ var SETDEX_SV = {
         "ability": "Swift Swim",
         "item": "Ability Shield",
         "nature": "Mild",
+        "boosts": {
+                "atk": 1,
+                "def": 1,
+                "spatk": 1,
+                "spd": 1,
+                "spe": 1,
+            },
         "ivs": {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
         },
@@ -10618,6 +10826,269 @@ var SETDEX_SV = {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
         },
         "moves": ["Liquidation","Rock Slide","Leech Life","Aqua Jet"]
+    }
+},
+"Heracross": {
+    "Bird Keeper Humberto | Fortree Gym": {
+        "index": "0000000767",
+        "level": 75,
+        "item": "Choice Scarf",
+        "nature": "Adamant",
+        "ability": "Moxie",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Close Combat","Megahorn"]
+    }
+},
+"Vivillon-Elegant": {
+    "Picnicker Ashley | Fortree Gym": {
+        "index": "0000000769",
+        "level": 75,
+        "ability": "Friend Guard",
+        "item": "Focus Sash",
+        "nature": "Timid",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Sleep Powder","Pollen Puff","Quiver Dance","Energy Ball"]
+    }
+},
+"Beautifly": {
+    "Picnicker Ashley | Fortree Gym": {
+        "index": "0000000770",
+        "level": 75,
+        "ability": "Shield Dust",
+        "item": "Focus Sash",
+        "shiny": "Yes",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Sleep Powder","Substitute","Giga Drain","Quiver Dance"]
+    }
+},
+"Oricorio-Pa'u": {
+    "Picnicker Ashley | Fortree Gym": {
+        "index": "0000000772",
+        "level": 75,
+        "ability": "Dancer",
+        "item": "Life Orb",
+        "nature": "Timid",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Quiver Dance","Revelation Dance","Hurricane","Air Slash"]
+    }
+},
+"Oricorio": {
+    "Picnicker Ashley | Fortree Gym": {
+        "index": "0000000774",
+        "level": 75,
+        "ability": "Dancer",
+        "item": "Fire Gem",
+        "nature": "Timid",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Revelation Dance","Teeter Dance","Roost","Energy Ball"]
+    }
+},
+"Brambleghast": {
+    "Expert Flint & Edwardo | Fortree Gym": {
+        "index": "0000000776",
+        "level": 75,
+        "ability": "Wind Rider",
+        "item": "Assault Vest",
+        "nature": "Jolly",
+        "setdouble": "True",
+        "setdoubleGroup": "fortree-gym-expert-flint-bird-keeper-edwardo",
+        "setdoubleSide": 2,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Power Whip","Poltergeist","Shadow Sneak","Leech Seed"]
+    }
+},
+"Drampa-Mega": {
+    "Expert Flint & Edwardo | Fortree Gym": {
+        "index": "0000000777",
+        "level": 75,
+        "ability": "Wind Rider",
+        "item": "Drampanite",
+        "nature": "Adamant",
+        "setdouble": "True",
+        "setdoubleGroup": "fortree-gym-expert-flint-bird-keeper-edwardo",
+        "setdoubleSide": 2,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Uproar","Breaking Swipe","Earthquake","Play Rough"]
+    }
+},
+"Pidgeot-Mega": {
+    "Expert Flint & Edwardo | Fortree Gym": {
+        "index": "0000000780",
+        "level": 75,
+        "ability": "No Guard",
+        "item": "Pidgeotite",
+        "nature": "Timid",
+        "setdouble": "True",
+        "setdoubleGroup": "fortree-gym-expert-flint-bird-keeper-edwardo",
+        "setdoubleSide": 1,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Tailwind","Hurricane","Heat Wave","Thunder"]
+    }
+},
+"Tropius": {
+    "Lass Darius | Fortress City": {
+        "index": "0000000781",
+        "level": 75,
+        "ability": "Thick Fat",
+        "item": "Clear Amulet",
+        "Weather": "Sun",
+        "nature": "Hasty",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Breaking Swipe","Solar Beam","Earthquake","Growth"]
+    }
+},
+"Charizard-Mega-Y": {
+    "Lass Darius | Fortress City": {
+        "index": "0000000782",
+        "level": 75,
+        "ability": "Drought",
+        "item": "Charizardite Y",
+        "Weather": "Sun",
+        "nature": "Timid",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Air Slash","Solar Beam","Flamethrower","Protect"]
+    }
+},
+"Jumpluff": {
+    "Lass Darius | Fortress City": {
+        "index": "0000000783",
+        "level": 75,
+        "ability": "Chlorophyll",
+        "item": "Flying Gem",
+        "Weather": "Sun",
+        "nature": "Adamant",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Spore","Solar Blade","Acrobatics","Light Screen"]
+    }
+},
+"Iron Moth": {
+    "Lass Darius | Fortress City": {
+        "index": "0000000785",
+        "level": 75,
+        "ability": "Quark Drive",
+        "item": "Air Balloon",
+        "Weather": "Sun",
+        "nature": "Modest",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Fiery Dance","Sludge Bomb","Solar Beam","Morning Sun"]
+    }
+},
+"Floatzel": {
+    "Bird Keeper Jared | Fortree City": {
+        "index": "0000000788",
+        "level": 75,
+        "ability": "Swift Swim",
+        "item": "Never-Melt Ice",
+        "Weather": "Rain",
+        "nature": "Adamant",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Fake Out","Crunch","Triple Dive","Triple Axel"]
+    }
+},
+"Decidueye": {
+    "Bird Keeper Jared | Fortree City": {
+        "index": "0000000791",
+        "level": 75,
+        "ability": "Tinted Lens",
+        "item": "Bright Powder",
+        "Weather": "Rain",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Tailwind","Spirit Shackle","Leaf Blade","Sky Attack"]
+    }
+},
+"Staraptor-Mega": {
+    "Leader Winona | Fortree Gym": {
+        "index": "0000000793",
+        "level": 77,
+        "ability": "Contrary",
+        "item": "Staraptite",
+        "Tailwind": true,
+        "nature": "Careful",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["U-turn","Close Combat","Brave Bird","Retaliate"]
+    }
+},
+"Golurk": {
+    "Leader Winona | Fortree Gym": {
+        "index": "0000000794",
+        "level": 76,
+        "ability": "No Guard",
+        "item": "Assault Vest",
+        "Tailwind": true,
+        "nature": "Adamant",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Dynamic Punch","Stone Edge","Headlong Rush","Poltergeist"]
+    }
+},
+"Thundurus-Therian": {
+    "Leader Winona | Fortree Gym": {
+        "index": "0000000795",
+        "level": 76,
+        "ability": "Volt Absorb",
+        "item": "Clear Amulet",
+        "Tailwind": true,
+        "nature": "Timid",
+        "ivs": {
+            "hp": 31, "at": 0, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Nasty Plot","Energy Ball","Wildbolt Storm","Aeroblast"]
+    }
+},
+"Yveltal": {
+    "Leader Winona | Fortree Gym": {
+        "index": "0000000798",
+        "level": 76,
+        "ability": "Dark Aura",
+        "item": "Weakness Policy",
+        "Tailwind": true,
+        "shiny": "Yes",
+        "nature": "Sassy",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Sucker Punch","Dark Pulse","Oblivion Wing","Focus Blast"]
     }
 },
 }

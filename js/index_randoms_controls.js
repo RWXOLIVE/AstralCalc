@@ -161,13 +161,21 @@ function applyMoveResultLabelColor(labelNode, typeName, enabled) {
 	});
 }
 
-function applyMoveResultColors(p1, p2) {
+function getCalculatedMoveType(results, sideIndex, moveIndex, fallbackPokemon) {
+	var sideResults = results && results[sideIndex];
+	var result = sideResults && sideResults[moveIndex];
+	if (result && result.move && result.move.type) return result.move.type;
+	var fallbackMove = fallbackPokemon && fallbackPokemon.moves && fallbackPokemon.moves[moveIndex];
+	return fallbackMove && fallbackMove.type ? fallbackMove.type : "";
+}
+
+function applyMoveResultColors(p1, p2, results) {
 	var enabled = typeof getAppSettings === "function" ? !!getAppSettings().moveColors : false;
 	for (var i = 0; i < 4; i++) {
 		var leftLabel = $(resultLocations[0][i].move + " + label");
 		var rightLabel = $(resultLocations[1][i].move + " + label");
-		var leftType = p1 && p1.moves && p1.moves[i] ? p1.moves[i].type : "";
-		var rightType = p2 && p2.moves && p2.moves[i] ? p2.moves[i].type : "";
+		var leftType = getCalculatedMoveType(results, 0, i, p1);
+		var rightType = getCalculatedMoveType(results, 1, i, p2);
 		applyMoveResultLabelColor(leftLabel, leftType, enabled);
 		applyMoveResultLabelColor(rightLabel, rightType, enabled);
 	}
@@ -838,7 +846,7 @@ function renderSimplifiedSideCard(sideSelector, sideIndex, attacker, defender) {
 		var moveRow = card.find('.simplified-side-move-row[data-move-index="' + moveIndex + '"]');
 		var move = attacker && attacker.moves ? attacker.moves[moveIndex] : null;
 		var moveName = move && move.name ? move.name : "";
-		var moveType = move && move.type ? move.type : "";
+		var moveType = getCalculatedMoveType(damageResults, sideIndex, moveIndex, attacker);
 		var sourceMoveRow = $(sideSelector + " .move" + (moveIndex + 1)).first();
 		refreshSourceMoveMeta(sourceMoveRow);
 		var moveNameNode = moveRow.find(".simplified-side-move-name");
@@ -1274,7 +1282,7 @@ function performCalculations() {
 		damageResults = calculateAllMoves(gen, p1, p1field, p2, p2field);
 	} catch (err) {
 		console.error("Damage calculation failed while updating results.", err);
-		applyMoveResultColors(p1, p2);
+		applyMoveResultColors(p1, p2, null);
 		return;
 	}
 	p1 = damageResults[0][0].attacker;
@@ -1332,7 +1340,7 @@ function performCalculations() {
 			bestResult = $(resultLocations[fastestSide][bestMove].move);
 		}
 	}
-	applyMoveResultColors(p1, p2);
+	applyMoveResultColors(p1, p2, damageResults);
 	renderSimplifiedSideCards(p1, p2);
 	if ($('.locked-move').length) {
 		bestResult = $('.locked-move');
@@ -1439,10 +1447,26 @@ $(".result-move[type='radio']").change(function () {
 			var desc = normalizePercentRangeText(result.fullDesc(notation, false));
 			if (desc.indexOf('--') === -1) desc += ' -- possibly the worst move ever';
 			$("#mainResult").text(desc);
-			$("#damageValues").html("Possible damage amounts: (" + displayDamageHits(result.damage) + ")");
+			$("#damageValues").html(buildDetailedDamageValuesHtml(result));
 		}
 	}
 });
+
+function buildDetailedDamageValuesHtml(result) {
+	var damageValues = "Possible damage amounts: (" + displayDamageHits(result.damage) + ")";
+	var hitCount = getDisplayedDamageHitCount(result);
+	if (hitCount <= 1) return damageValues;
+	var totalDamageRolls = getSimplifiedDamageRolls(result, result.move);
+	if (!totalDamageRolls.length) return damageValues;
+	return damageValues + "<br>Total for " + hitCount + " hits: (" + formatDamageRolls(totalDamageRolls) + ")";
+}
+
+function getDisplayedDamageHitCount(result) {
+	if (!result) return 1;
+	if (hasSeparatedHitDamage(result.damage)) return result.damage.length;
+	var hits = result.move ? Number(result.move.hits) : 1;
+	return isFinite(hits) && hits > 1 ? Math.floor(hits) : 1;
+}
 
 function displayDamageHits(damage) {
 	// Fixed Damage

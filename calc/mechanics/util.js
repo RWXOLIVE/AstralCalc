@@ -48,10 +48,10 @@ var EV_ITEMS = [
     'Power Lens',
     'Power Weight',
 ];
-function isGrounded(pokemon, field) {
-    return (field.isGravity || pokemon.hasItem('Iron Ball') ||
+function isGrounded(pokemon, field, side) {
+    return (!!(side === null || side === void 0 ? void 0 : side.isGrounded) || field.isGravity || pokemon.hasItem('Iron Ball') ||
         (!pokemon.hasType('Flying') &&
-            !pokemon.hasAbility('Levitate') &&
+            !pokemon.hasAbility('Levitate', 'Eelevate') &&
             !pokemon.hasItem('Air Balloon')));
 }
 exports.isGrounded = isGrounded;

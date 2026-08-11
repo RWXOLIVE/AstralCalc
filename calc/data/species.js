@@ -3373,7 +3373,7 @@ var DPP_PATCH = {
     },
     Luxray: {
         types: ['Electric'],
-        bs: { hp: 80, at: 120, df: 79, sa: 95, sd: 79, sp: 70 },
+        bs: { hp: 95, at: 120, df: 79, sa: 95, sd: 79, sp: 70 },
         weightkg: 42,
         abilities: { 0: 'Rivalry' }
     },

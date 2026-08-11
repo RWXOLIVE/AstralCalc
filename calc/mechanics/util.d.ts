@@ -3,7 +3,7 @@ import { Field, Side } from '../field';
 import { Move } from '../move';
 import { Pokemon } from '../pokemon';
 import { RawDesc } from '../desc';
-export declare function isGrounded(pokemon: Pokemon, field: Field): boolean;
+export declare function isGrounded(pokemon: Pokemon, field: Field, side?: Side): boolean;
 export declare function getModifiedStat(stat: number, mod: number, gen?: Generation): number;
 export declare function computeFinalStats(gen: Generation, attacker: Pokemon, defender: Pokemon, field: Field, ...stats: StatID[]): void;
 export declare function getFinalSpeed(gen: Generation, pokemon: Pokemon, field: Field, side: Side): number;

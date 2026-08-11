@@ -219,11 +219,13 @@
 		return !!field.isMagicRoom || pokemon.ability === "Klutz";
 	}
 
-	function isGrounded(pokemon, field) {
-		if (field.isGravity || pokemon.item === "Iron Ball") return true;
+	function isGrounded(pokemon, field, side) {
+		if ((side && side.isGrounded) || field.isGravity) return true;
+		var itemSuppressed = isItemSuppressed(pokemon, field);
+		if (!itemSuppressed && pokemon.item === "Iron Ball") return true;
 		if (pokemon.types.indexOf("Flying") >= 0) return false;
-		if (pokemon.ability === "Levitate") return false;
-		return pokemon.item !== "Air Balloon" || isItemSuppressed(pokemon, field);
+		if (pokemon.ability === "Levitate" || pokemon.ability === "Eelevate") return false;
+		return pokemon.item !== "Air Balloon" || itemSuppressed;
 	}
 
 	function fractionDamage(maxHp, denominator) {
@@ -239,7 +241,7 @@
 		var damage = 0;
 		if (side.isSR) damage += Math.floor(getTypeEffectiveness("Rock", candidate) * maxHp / 8);
 		if (side.steelsurge) damage += Math.floor(getTypeEffectiveness("Steel", candidate) * maxHp / 8);
-		if (side.spikes > 0 && isGrounded(candidate, field)) {
+		if (side.spikes > 0 && isGrounded(candidate, field, side)) {
 			damage += fractionDamage(maxHp, (5 - Math.min(3, side.spikes)) * 2);
 		}
 		return damage;

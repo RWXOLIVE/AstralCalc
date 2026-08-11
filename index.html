@@ -984,6 +984,17 @@
                     </thead>
                     <tbody>
                         <tr class="gen-specific g4 g5 g6 g7 g8 g9">
+                            <div hidden id="selectGroundedInstruction">Should the Pok&eacute;mon on this side be treated as grounded?</div>
+                            <td><div class="left" title="Treat the Pok&eacute;mon on this side as grounded.">
+                                <input aria-describedby="selectGroundedInstruction" class="grounded terrain-trigger visually-hidden calc-trigger" type="checkbox" id="groundedL" />
+                                <label class="btn btn-xwide" for="groundedL">Grounded</label>
+                            </div></td>
+                            <td><div class="right" title="Treat the Pok&eacute;mon on this side as grounded.">
+                                <input aria-describedby="selectGroundedInstruction" class="grounded terrain-trigger visually-hidden calc-trigger" type="checkbox" id="groundedR" />
+                                <label class="btn btn-xwide" for="groundedR">Grounded</label>
+                            </div></td>
+                        </tr>
+                        <tr class="gen-specific g4 g5 g6 g7 g8 g9">
                             <div hidden id="selectStealthRockInstruction">Is Stealth Rock affecting this side of the field?</div>
                             <td><div class="left" title="Is Stealth Rock affecting this side of the field?">
                                 <input aria-describedby="selectStealthRockInstruction" class="visually-hidden calc-trigger" type="checkbox" id="srL" />
@@ -2030,8 +2041,8 @@
     </script>
     <script type="text/javascript" src="./calc/util.js?51463f0d"></script>
     <script type="text/javascript" src="./calc/stats.js?a9e37d1a"></script>
-    <script type="text/javascript" src="./calc/data/species.js?12dfb7e8"></script>
-	<script type="text/javascript" src="./js/data/sets/gen9.js?697b42e6"></script>
+    <script type="text/javascript" src="./calc/data/species.js?1d23f380"></script>
+	<script type="text/javascript" src="./js/data/sets/gen9.js?199db49c"></script>
     <script type="text/javascript" src="./js/data/sets/gen8.js?ecf43658"></script>
     <script type="text/javascript" src="./js/data/sets/gen7.js?78168bde"></script>
     <script type="text/javascript" src="./js/data/sets/gen6.js?2219279f"></script>
@@ -2042,32 +2053,32 @@
     <script type="text/javascript" src="./js/data/sets/gen1.js?428f44e9"></script>
     <script type="text/javascript" src="./calc/data/types.js?a641e10b"></script>
     <script type="text/javascript" src="./calc/data/natures.js?28612810"></script>
-    <script type="text/javascript" src="./calc/data/abilities.js?71b22902"></script>
+    <script type="text/javascript" src="./calc/data/abilities.js?76d9976e"></script>
     <script type="text/javascript" src="./calc/data/moves.js?816d7699"></script>
-    <script type="text/javascript" src="./calc/data/items.js?56e951ca"></script>
+    <script type="text/javascript" src="./calc/data/items.js?1191d88b"></script>
     <script type="text/javascript" src="./calc/data/index.js?abecbd82"></script>
-    <script type="text/javascript" src="./calc/move.js?5a4ba07d"></script>
-    <script type="text/javascript" src="./calc/pokemon.js?a155eb0e"></script>
-    <script type="text/javascript" src="./calc/field.js?a92676e8"></script>
+    <script type="text/javascript" src="./calc/move.js?98dd4aa6"></script>
+    <script type="text/javascript" src="./calc/pokemon.js?85a517f2"></script>
+    <script type="text/javascript" src="./calc/field.js?46d54c9d"></script>
     <script type="text/javascript" src="./calc/items.js?067e42a4"></script>
-    <script type="text/javascript" src="./calc/mechanics/util.js?780ff471"></script>
-    <script type="text/javascript" src="./calc/mechanics/gen789.js?830ff36d"></script>
-    <script type="text/javascript" src="./calc/mechanics/gen56.js?8c0a3312"></script>
-    <script type="text/javascript" src="./calc/mechanics/gen4.js?6adeff08"></script>
+    <script type="text/javascript" src="./calc/mechanics/util.js?027f8d5f"></script>
+    <script type="text/javascript" src="./calc/mechanics/gen789.js?6ce4b32f"></script>
+    <script type="text/javascript" src="./calc/mechanics/gen56.js?fa50d241"></script>
+    <script type="text/javascript" src="./calc/mechanics/gen4.js?8bdfefdd"></script>
     <script type="text/javascript" src="./calc/mechanics/gen3.js?8bc6c1b7"></script>
     <script type="text/javascript" src="./calc/mechanics/gen12.js?637dd485"></script>
     <script type="text/javascript" src="./calc/calc.js?cd072314"></script>
-    <script type="text/javascript" src="./calc/desc.js?fe832f3c"></script>
+    <script type="text/javascript" src="./calc/desc.js?b9aeea69"></script>
     <script type="text/javascript" src="./calc/result.js?fdbd8da7"></script>
     <script type="text/javascript" src="./calc/adaptable.js?afeb3759"></script>
     <script type="text/javascript" src="./calc/index.js?0b1745b9"></script>
     <script type="text/javascript" src="./js/spritedata.js?e6979aa2"></script>
     <script type="text/javascript" src="./js/data/frags_splits.js?01f4e1ca"></script>
     <script type="text/javascript" src="./js/data/move_info_lookup.js?12b8d14e"></script>
-<script type="text/javascript" src="./js/shared_controls.js?b1467296"></script>
-    <script type="text/javascript" src="./js/switch_in_predictor.js?9af5477a"></script>
+<script type="text/javascript" src="./js/shared_controls.js?f9b15ced"></script>
+    <script type="text/javascript" src="./js/switch_in_predictor.js?1f8294d8"></script>
     <script type="text/javascript" src="./js/switch_in_gate.js?acd63663"></script>
-    <script type="text/javascript" src="./js/index_randoms_controls.js?98c18bee"></script>
+    <script type="text/javascript" src="./js/index_randoms_controls.js?e5d0c4e8"></script>
     <script type="text/javascript" src="./js/moveset_import.js?aefe0d1f"></script>
 </div>
 

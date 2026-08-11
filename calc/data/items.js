@@ -426,6 +426,7 @@ exports.MEGA_STONES = {
     Scraftinite: 'Scrafty',
     Skarmorite: 'Skarmory',
     Starminite: 'Starmie',
+    Staraptite: 'Staraptor',
     Victreebelite: 'Victreebel',
     Zygardite: 'Zygarde',
     Butterfrite: 'Butterfree',
