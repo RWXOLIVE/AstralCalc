@@ -873,6 +873,19 @@ describe('calc', function () {
                     expect(result.range()).toEqual([100, 118]);
                     expect(result.desc()).toBe('0 Atk Supreme Overlord 5 allies fainted Kingambit Iron Head vs. 0 HP / 0 Def Aggron: 100-118 (35.5 - 41.9%) -- guaranteed 3HKO');
                 });
+                test('Punching Glove only removes contact from punching moves', function () {
+                    var fluffy = function () { return Pokemon('Mew', { ability: 'Fluffy' }); };
+                    var regular = function () { return Pokemon('Mew', { ability: 'Synchronize' }); };
+                    var gloved = function () { return Pokemon('Mew', { item: 'Punching Glove' }); };
+                    var glovedBodySlam = calculate(gloved(), fluffy(), Move('Body Slam'));
+                    var unglovedBodySlam = calculate(Pokemon('Mew'), fluffy(), Move('Body Slam'));
+                    var nonFluffyBodySlam = calculate(gloved(), regular(), Move('Body Slam'));
+                    expect(glovedBodySlam.range()).toEqual(unglovedBodySlam.range());
+                    expect(glovedBodySlam.range()[1]).toBeLessThan(nonFluffyBodySlam.range()[0]);
+                    var glovedIcePunch = calculate(gloved(), fluffy(), Move('Ice Punch'));
+                    var nonFluffyIcePunch = calculate(gloved(), regular(), Move('Ice Punch'));
+                    expect(glovedIcePunch.range()).toEqual(nonFluffyIcePunch.range());
+                });
             });
         });
     });
