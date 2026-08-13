@@ -12,7 +12,7 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
         .baseSpeed     = 65,
         .baseSpAttack  = 40,
         .baseSpDefense = 40,
-        .types = { TYPE_NORMAL, TYPE_GRASS },
+        .types = { TYPE_GRASS, TYPE_NORMAL },
         .catchRate = 45,
         .expYield = 62,
         .genderRatio = PERCENT_FEMALE(12.5),
@@ -76,7 +76,7 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
         .baseSpeed     = 80,
         .baseSpAttack  = 55,
         .baseSpDefense = 60,
-        .types = { TYPE_NORMAL, TYPE_GRASS },
+        .types = { TYPE_GRASS, TYPE_NORMAL },
         .catchRate = 45,
         .expYield = 147,
         .genderRatio = PERCENT_FEMALE(12.5),
@@ -138,7 +138,7 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
         .baseSpeed     = 85,
         .baseSpAttack  = 65,
         .baseSpDefense = 70,
-        .types = { TYPE_NORMAL, TYPE_GRASS }, 
+        .types = { TYPE_GRASS, TYPE_NORMAL },
         .catchRate = 45,
         .expYield = 265,
         .genderRatio = PERCENT_FEMALE(12.5),
@@ -1606,7 +1606,7 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
         .friendship = STANDARD_FRIENDSHIP,
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroups = MON_EGG_GROUPS(EGG_GROUP_GRASS),
-        .abilities = { ABILITY_COTTON_DOWN, ABILITY_REGENERATOR, ABILITY_EFFECT_SPORE },
+        .abilities = { ABILITY_COTTON_DOWN, ABILITY_EFFECT_SPORE, ABILITY_REGENERATOR },
         .bodyColor = BODY_COLOR_GREEN,
         .speciesName = _("Eldegoss"),
         .cryId = CRY_ELDEGOSS,
@@ -1798,7 +1798,7 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
         .friendship = STANDARD_FRIENDSHIP,
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroups = MON_EGG_GROUPS(EGG_GROUP_MONSTER, EGG_GROUP_WATER_1),
-        .abilities = { ABILITY_STRONG_JAW, ABILITY_SHELL_ARMOR, ABILITY_SWIFT_SWIM },
+        .abilities = { ABILITY_STRONG_JAW, ABILITY_SWIFT_SWIM, ABILITY_SHELL_ARMOR },
         .bodyColor = BODY_COLOR_GREEN,
         .speciesName = _("Chewtle"),
         .cryId = CRY_CHEWTLE,
@@ -1865,7 +1865,7 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
         .friendship = STANDARD_FRIENDSHIP,
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroups = MON_EGG_GROUPS(EGG_GROUP_MONSTER, EGG_GROUP_WATER_1),
-        .abilities = { ABILITY_STRONG_JAW, ABILITY_SHELL_ARMOR, ABILITY_SWIFT_SWIM },
+        .abilities = { ABILITY_STRONG_JAW, ABILITY_SWIFT_SWIM, ABILITY_SHELL_ARMOR },
         .bodyColor = BODY_COLOR_GREEN,
         .speciesName = _("Drednaw"),
         .cryId = CRY_DREDNAW,
@@ -3654,7 +3654,7 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
         .levelUpLearnset = sSizzlipedeLevelUpLearnset,
         .teachableLearnset = sSizzlipedeTeachableLearnset,
         .eggMoveLearnset = sSizzlipedeEggMoveLearnset,
-        .evolutions = EVOLUTION({EVO_LEVEL, 28, SPECIES_CENTISKORCH}),
+        .evolutions = EVOLUTION({EVO_LEVEL, 20, SPECIES_CENTISKORCH}),
     },
 
     [SPECIES_CENTISKORCH] =
@@ -4231,7 +4231,7 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
         .levelUpLearnset = sHatennaLevelUpLearnset,
         .teachableLearnset = sHatennaTeachableLearnset,
         .eggMoveLearnset = sHatennaEggMoveLearnset,
-        .evolutions = EVOLUTION({EVO_LEVEL, 32, SPECIES_HATTREM}),
+        .evolutions = EVOLUTION({EVO_LEVEL, 16, SPECIES_HATTREM}),
     },
 
     [SPECIES_HATTREM] =
@@ -4968,7 +4968,7 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
         .palette = gMonPalette_Alcremie ##sweet##cream,                                         \
         .shinyPalette = gMonShinyPalette_Alcremie ##sweet,                                      \
         .iconSprite = gMonIcon_AlcremieStrawberryVanillaCream, /*AlcremieStrawberry##cream##*/  \
-        .iconPalIndex = 1,                                                                      \
+        .iconPalIndex = 0,                                                                      \
         .pokemonJumpType = PKMN_JUMP_TYPE_SLOW,                                                 \
         SHADOW(0, 5, SHADOW_SIZE_S)                                                             \
         FOOTPRINT(Alcremie)                                                                     \
@@ -5071,19 +5071,19 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
         .trainerOffset = 0,
         .frontPic = gMonFrontPic_AlcremieGmax,
         .frontPicSize = MON_COORDS_SIZE(64, 64),
-        .frontPicYOffset = 2,
+        .frontPicYOffset = 0,
         .frontAnimFrames = sAnims_SingleFramePlaceHolder,
         //.frontAnimId = ANIM_V_SQUISH_AND_BOUNCE,
         .backPic = gMonBackPic_AlcremieGmax,
         .backPicSize = MON_COORDS_SIZE(64, 64),
-        .backPicYOffset = 9,
+        .backPicYOffset = 8,
         //.backAnimId = BACK_ANIM_NONE,
         .palette = gMonPalette_AlcremieGmax,
         .shinyPalette = gMonShinyPalette_AlcremieGmax,
         .iconSprite = gMonIcon_AlcremieGmax,
         .iconPalIndex = 1,
         .pokemonJumpType = PKMN_JUMP_TYPE_NONE,
-        SHADOW(0, 10, SHADOW_SIZE_L)
+        SHADOW(-1, 12, SHADOW_SIZE_XL_BATTLE_ONLY)
         FOOTPRINT(Alcremie)
         .isGigantamax = TRUE,
         .levelUpLearnset = sAlcremieLevelUpLearnset,
@@ -5174,7 +5174,7 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
         .friendship = STANDARD_FRIENDSHIP,
         .growthRate = GROWTH_MEDIUM_FAST,
         .eggGroups = MON_EGG_GROUPS(EGG_GROUP_FAIRY, EGG_GROUP_MINERAL),
-        .abilities = { ABILITY_DEFIANT, ABILITY_DEFIANT, ABILITY_DEFIANT },
+        .abilities = { ABILITY_SHARPNESS, ABILITY_NONE, ABILITY_DEFIANT },
         .bodyColor = BODY_COLOR_YELLOW,
         .speciesName = _("Falinks"),
     #if P_MODIFIED_MEGA_CRIES
@@ -5194,7 +5194,7 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
         .frontPic = gMonFrontPic_FalinksMega,
         .frontPicSize = MON_COORDS_SIZE(64, 64),
         .frontPicYOffset = 1,
-        .frontAnimFrames = sAnims_TwoFramePlaceHolder,
+        .frontAnimFrames = sAnims_SingleFramePlaceHolder,
         //.frontAnimId = ANIM_V_SQUISH_AND_BOUNCE,
         .backPic = gMonBackPic_FalinksMega,
         .backPicSize = MON_COORDS_SIZE(64, 64),
@@ -5852,11 +5852,11 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
 #if P_FAMILY_CUFANT
     [SPECIES_CUFANT] =
     {
-        .baseHP        = 72,
+        .baseHP        = 105,
         .baseAttack    = 80,
-        .baseDefense   = 49,
+        .baseDefense   = 61,
         .baseSpeed     = 40,
-        .baseSpAttack  = 40,
+        .baseSpAttack  = 60,
         .baseSpDefense = 49,
         .types = MON_TYPES(TYPE_STEEL),
         .catchRate = 190,
@@ -6054,7 +6054,7 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
         .friendship = STANDARD_FRIENDSHIP,
         .growthRate = GROWTH_SLOW,
         .eggGroups = MON_EGG_GROUPS(EGG_GROUP_NO_EGGS_DISCOVERED),
-        .abilities = { ABILITY_HYPER_CUTTER, ABILITY_SAND_RUSH, ABILITY_VOLT_ABSORB },
+        .abilities = { ABILITY_HYPER_CUTTER, ABILITY_SAND_RUSH, ABILITY_HUSTLE },
         .bodyColor = BODY_COLOR_GREEN,
         .speciesName = _("Dracozolt"),
         .cryId = CRY_DRACOZOLT,
@@ -6181,7 +6181,7 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
         .friendship = STANDARD_FRIENDSHIP,
         .growthRate = GROWTH_SLOW,
         .eggGroups = MON_EGG_GROUPS(EGG_GROUP_NO_EGGS_DISCOVERED),
-        .abilities = { ABILITY_WATER_ABSORB, ABILITY_STRONG_JAW, ABILITY_SAND_RUSH },
+        .abilities = { ABILITY_SAND_RUSH, ABILITY_NONE, ABILITY_STRONG_JAW },
         .bodyColor = BODY_COLOR_GREEN,
         .speciesName = _("Dracovish"),
         .cryId = CRY_DRACOVISH,
@@ -7852,7 +7852,6 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
         )
         .isRestrictedLegendary = TRUE,
         .isFrontierBanned = TRUE,
-        .perfectIVCount = LEGENDARY_PERFECT_IV_COUNT,
         .levelUpLearnset = sCalyrexLevelUpLearnset,
         .teachableLearnset = sCalyrexTeachableLearnset,
         .formSpeciesIdTable = sCalyrexFormSpeciesIdTable,
@@ -8098,19 +8097,20 @@ const struct SpeciesInfo gSpeciesInfoGen8[] =
         .trainerOffset = 1,
         .frontPic = gMonFrontPic_EnamorusTherian,
         .frontPicSize = MON_COORDS_SIZE(64, 64),
-        .frontPicYOffset = 3,
+        .frontPicYOffset = 2,
         .frontAnimFrames = sAnims_SingleFramePlaceHolder,
         //.frontAnimId = ANIM_V_SQUISH_AND_BOUNCE,
+        .enemyMonElevation = 7,
         .backPic = gMonBackPic_EnamorusTherian,
         .backPicSize = MON_COORDS_SIZE(64, 64),
-        .backPicYOffset = 0,
+        .backPicYOffset = 6,
         //.backAnimId = BACK_ANIM_NONE,
         .palette = gMonPalette_EnamorusTherian,
         .shinyPalette = gMonShinyPalette_EnamorusTherian,
         .iconSprite = gMonIcon_EnamorusTherian,
         .iconPalIndex = 1,
         .pokemonJumpType = PKMN_JUMP_TYPE_NONE,
-        SHADOW(2, 8, SHADOW_SIZE_L)
+        SHADOW(2, 14, SHADOW_SIZE_L)
         FOOTPRINT(Enamorus)
         OVERWORLD(
             sPicTable_EnamorusTherian,

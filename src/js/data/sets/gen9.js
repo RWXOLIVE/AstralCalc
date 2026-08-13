@@ -374,6 +374,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Toxic","Giga Drain","Bug Buzz","Quiver Dance"]
+        },
+    "Bug Maniac Brent | Route 119": {
+            "index": "0000000715",
+            "level": 74,
+            "ability": "Multiscale",
+            "item": "Leftovers",
+            "Weather": "Rain",
+            "Terrain": "Grassy",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Quiver Dance","Bug Buzz","Giga Drain","Sludge Bomb"]
         }
     },
     "Anorith": {
@@ -399,7 +412,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Aqua Jet","Rock Tomb","Aerial Ace","Bug Bite"]
-        }
+        },
+    "Bug Catcher Greg | Route 119": {
+            "index": "0000000734",
+            "level": 76,
+            "ability": "Swift Swim",
+            "item": "Life Orb",
+            "nature": "Adamant",
+            "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Leech Life","Wave Crash","Stone Edge","Aqua Jet"]
+    }
     },
     "Dratini": {
     "Lass Emmie | Route 104": {
@@ -636,6 +660,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Air Cutter","Revelation Dance","Alluring Voice"]
+        },
+    "Picnicker Ashley | Fortree Gym": {
+            "index": "0000000771",
+            "level": 75,
+            "ability": "Dancer",
+            "item": "Life Orb",
+            "nature": "Timid",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Revelation Dance","Feather Dance","Air Cutter","Quiver Dance"]
         }
     },
     "Oricorio-Sensu": {
@@ -649,6 +685,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Quiver Dance","Revelation Dance","Alluring Voice","Air Slash"]
+        },
+    "Picnicker Ashley | Fortree Gym": {
+            "index": "0000000773",
+            "level": 75,
+            "ability": "Dancer",
+            "item": "Sitrus Berry",
+            "nature": "Timid",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Revelation Dance","Quiver Dance","Air Slash","Follow Me"]
         }
     },
     "Sinistea": {
@@ -818,7 +866,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Dragon Dance","Bug Bite","Sand Tomb","Crunch"]
-        }
+        },
+    "Bug Catcher Greg | Route 119": {
+            "index": "0000000735",
+            "level": 76,
+            "ability": "Arena Trap",
+            "item": "Focus Sash",
+            "nature": "Jolly",
+            "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["First Impression","Stomping Tantrum","Superpower","Crunch"]
+    }
     },
     "Bronzor": {
     "Hiker Marc | Rustboro Gym": {
@@ -1099,7 +1158,22 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Double Team","Jet Punch","Power-Up Punch","Earthquake"]
-        }
+        },
+        "Trainer Rival (Chikorita) | Route 119": {
+        "index": "0000000760",
+        "level": 75,
+        "ability": "Swift Swim",
+        "item": "Life Orb",
+        "nature": "Jolly",
+        "Weather": "Rain",
+        "Terrain": "Electric",
+        "setdouble": "True",
+        "chosechikorita": true,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Fake Out","Waterfall","Thunder Punch","Drain Punch"]
+    }
     },
     "Lanturn": {
     "Leader Elesa | Mauville Gym": {
@@ -1180,6 +1254,7 @@ var SETDEX_SV = {
             "item": "Focus Sash",
             "nature": "Timid",
             "setdouble": "True",
+            "Weather": "Rain",
             "setdoubleGroup": "route-103-swimmer-isabelle-pete",
             "setdoubleSide": 1,
             "ivs": {
@@ -1198,6 +1273,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Protect","Whirlpool","Hurricane","Tailwind"]
+        },
+    "Bird Keeper Jared | Fortree City": {
+            "index": "0000000787",
+            "level": 76,
+            "ability": "Drizzle",
+            "item": "Focus Sash",
+            "Weather": "Rain",
+            "nature": "Timid",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Tailwind","Weather Ball","Hurricane","Wide Guard"]
         }
     },
     "Rotom-Wash": {
@@ -1223,7 +1311,21 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Scald","Volt Switch","Light Screen","Reflect"]
-        }
+        },
+        "Parasol Lady Rachel | Route 119": {
+        "index": "0000000744",
+        "level": 74,
+        "ability": "Levitate",
+        "item": "Covert Cloak",
+        "nature": "Timid",
+        "Weather": "Rain",
+        "Terrain": "Grassy",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Will-O-Wisp","Dark Pulse","Thunderbolt","Hydro Pump"]
+    }
     },
     "Gligar": {
     "Trainer Rival (Chikorita) | Rustboro City": {
@@ -1432,7 +1534,7 @@ var SETDEX_SV = {
             "moves": ["Curse","Leech Seed","Egg Bomb","Psycho Cut"]
         },
     "Magma Leader Maxie | Mt Chimney": {
-            "index": "0000000577",
+            "index": "0000000578",
             "level": 61,
             "ability": "Chlorophyll",
             "item": "Ability Shield",
@@ -1469,6 +1571,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Hypnosis","Aqua Step","Recover","Zen Headbutt"]
+        },
+    "Bird Keeper Jared | Fortree City": {
+            "index": "0000000792",
+            "level": 75,
+            "ability": "Swift Swim",
+            "item": "Psychic Gem",
+            "Weather": "Rain",
+            "nature": "Modest",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Hypnosis","Dream Eater","Weather Ball","Aura Sphere"]
         }
     },
     "Quilladin": {
@@ -1636,7 +1751,21 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Brick Break","Aqua Jet","Waterfall","Ice Fang"]
-        }
+        },
+        "Parasol Lady Rachel | Route 119": {
+        "index": "0000000747",
+        "level": 74,
+        "ability": "Swift Swim",
+        "item": "Mystic Water",
+        "nature": "Adamant",
+        "Weather": "Rain",
+        "Terrain": "Grassy",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Close Combat","Liquidation","Aqua Jet","Psychic Fangs"]
+    }
     },
     "Throh": {
     "Sailor Brendan | Dewford Gym": {
@@ -1660,7 +1789,7 @@ var SETDEX_SV = {
             "nature": "Careful",
             "setdouble": "True",
             "setdoubleGroup": "dewford-gym-cristian-jocelyn",
-            "setdoubleSide": 1,
+            "setdoubleSide": 2,
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -1676,7 +1805,7 @@ var SETDEX_SV = {
             "nature": "Adamant",
             "setdouble": "True",
             "setdoubleGroup": "dewford-gym-cristian-jocelyn",
-            "setdoubleSide": 1,
+            "setdoubleSide": 2,
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -1703,7 +1832,7 @@ var SETDEX_SV = {
             "nature": "Relaxed",
             "setdouble": "True",
             "setdoubleGroup": "dewford-gym-cristian-jocelyn",
-            "setdoubleSide": 2,
+            "setdoubleSide": 1,
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -1719,7 +1848,7 @@ var SETDEX_SV = {
             "nature": "Careful",
             "setdouble": "True",
             "setdoubleGroup": "dewford-gym-cristian-jocelyn",
-            "setdoubleSide": 2,
+            "setdoubleSide": 1,
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -1761,6 +1890,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Psycho Cut","Low Kick","Recover","Light Screen"]
+        },
+        "Sinnoh Leader Candice | Giant Chasm": {
+            "index": "0000000699",
+            "level": 71,
+            "ability": "Pure Power",
+            "item": "Choice Scarf",
+            "Weather": "Snow",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Close Combat","Ice Punch","Psycho Cut","Poison Jab"]
         }
     },
     "Wobbuffet": {
@@ -1936,7 +2077,23 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Triple Arrows","Trailblaze","Thousand Arrows","Bulk Up"]
-        }
+        },
+        "Jackson & Takashi | Route 119": {
+        "index": "0000000755",
+        "level": 74,
+        "ability": "Scrappy",
+        "item": "Grassy Seed",
+        "nature": "Brave",
+        "Weather": "Rain",
+        "Terrain": "Grassy",
+        "setdouble": "True",
+        "setdoubleSide": 1,
+        "setdoubleGroup": "route-119-ninja-boy-takashi-camper-jackson",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Triple Arrows","Brave Bird","Seed Bomb","Feather Dance"]
+    }
     },
     "Glalie": {
     "Sailor Huey | Route 109": {
@@ -1975,6 +2132,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Dragon Dance","Extreme Speed","Waterfall","Breaking Swipe"]
+        },
+    "Certified Dumbass Zhi | Giant Chasm": {
+            "index": "0000000677",
+            "level": 72,
+            "ability": "Marvel Scale",
+            "item": "Eviolite",
+            "Weather": "Snow",
+            "nature": "Careful",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Dragon Tail","Thunder Wave","Weather Ball","Flamethrower"]
         }
     },
     "Abomasnow": {
@@ -2044,6 +2214,17 @@ var SETDEX_SV = {
         }
     },
     "Empoleon": {
+    "Captain Gary | Giant Chasm": {
+            "index": "0000000687",
+            "level": "-2",
+            "ability": "Intimidate",
+            "item": "Clear Amulet",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Victory Dance","Liquidation","Iron Tail","Earthquake"]
+        },
     "Sailor Edmond | Route 109": {
             "index": "0000000115",
             "level": 36,
@@ -2069,6 +2250,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Scald","Roost","Icy Wind","Flash Cannon"]
+        },
+        "Team Plasma Grunt | Gauntlet 7/7": {
+            "index": "0000000669",
+            "level": 72,
+            "ability": "Slush Rush",
+            "item": "Water Gem",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Nasty Plot","Hydro Cannon","Flash Cannon","Aqua Jet"]
         }
     },
     "Arctovish": {
@@ -2097,6 +2291,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Glaciate","Freeze-Dry","Super Fang","Flip Turn"]
+        },
+        "Team Plasma Grunt | Gauntlet 3/7": {
+            "index": "0000000659",
+            "level": 72,
+            "ability": "Ice Body",
+            "item": "Scope Lens",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Sassy",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Fishious Rend","Freeze-Dry","Rock Slide","Super Fang"]
         }
     },
     "Liepard": {
@@ -2179,6 +2387,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Spore","Ceaseless Edge","Stone Axe","Sticky Web"]
+        },
+        "Team Plasma Grunt | Gauntlet 5/7": {
+            "index": "0000000663",
+            "level": 73,
+            "ability": "Moody",
+            "item": "Bright Powder",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Camouflage","Protect","Glacial Lance","Screech"]
         }
     },
     "Stoutland": {
@@ -2218,11 +2439,24 @@ var SETDEX_SV = {
             "nature": "Adamant",
             "setdouble": "True",
             "setdoubleGroup": "route-111-celina-tyron",
-            "setdoubleSide": 1,
+            "setdoubleSide": 2,
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Fake Out","Grassy Glide","High Horsepower","Brutal Swing"]
+        },
+        "Team Plasma Grunt | Gauntlet 2/7": {
+            "index": "0000000656",
+            "level": 72,
+            "ability": "Punk Rock",
+            "item": "Safety Goggles",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Screech","Uproar","Drum Beating","Aerial Ace"]
         }
     },
     "Roserade": {
@@ -2234,7 +2468,7 @@ var SETDEX_SV = {
             "nature": "Timid",
             "setdouble": "True",
             "setdoubleGroup": "route-111-celina-tyron",
-            "setdoubleSide": 1,
+            "setdoubleSide": 2,
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -2250,7 +2484,21 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Sludge Bomb","Extrasensory","Petal Dance","Shadow Ball"]
-        }
+        },
+        "Parasol Lady Rachel | Route 119": {
+        "index": "0000000743",
+        "level": 74,
+        "ability": "Technician",
+        "item": "Wise Glasses",
+        "nature": "Modest",
+        "Weather": "Rain",
+        "Terrain": "Grassy",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Fake Out","Dazzling Gleam","Weather Ball","Mega Drain"]
+    }
     },
     "Lickilicky": {
     "Tuber Chandler | Route 109": {
@@ -2270,7 +2518,6 @@ var SETDEX_SV = {
             "level": 59,
             "ability": "Own Tempo",
             "item": "Assault Vest",
-            "Weather": "Rain",
             "nature": "Relaxed",
             "setdouble": "True",
             "ivs": {
@@ -2414,17 +2661,33 @@ var SETDEX_SV = {
             "moves": ["Hyper Voice","Dragon Breath","Hydro Pump","Calm Mind"]
         },
     "Tag Partner Norman": {
-            "index": "0000000282",
+            "index": "0000000280",
             "level": 46,
             "ability": "Berserk",
-            "item": "Drampanite",
-            "nature": "Modest",
+            "item": "Focus Sash",
+            "nature": "Timid",
             "setdouble": "True",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Thunder Wave","Dragon Pulse","Twister","Swift"]
-        }
+            "moves": ["Tailwind","Dragon Pulse","Hyper Voice","Blizzard"]
+        },
+        "Jackson & Takashi | Route 119": {
+        "index": "0000000754",
+        "level": 74,
+        "ability": "Berserk",
+        "item": "Yache Berry",
+        "nature": "Quiet",
+        "Weather": "Rain",
+        "Terrain": "Grassy",
+        "setdouble": "True",
+        "setdoubleSide": 1,
+        "setdoubleGroup": "route-119-ninja-boy-takashi-camper-jackson",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Hyper Beam","Hyper Voice","Thunder","Dragon Pulse"]
+    }
     },
     "Swampert": {
     "Aqua Grunt 1/2 | SP Museum": {
@@ -2498,7 +2761,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Protect","Earthquake","Megahorn","Cross Poison"]
-        }
+        },
+    "Bug Catcher Greg | Route 119": {
+            "index": "0000000733",
+            "level": 74,
+            "ability": "Speed Boost",
+            "item": "Clear Amulet",
+            "nature": "Adamant",
+            "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Swords Dance","Baton Pass","Stomping Tantrum","Poison Jab"]
+    }
     },
     "Whimsicott": {
     "Cool Trainer Randall | Petalburg Gym": {
@@ -2546,7 +2820,21 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Heat Wave","Boomburst","Air Slash","Nasty Plot"]
-        }
+        },
+        "Bird Keeper Phil  | Route 119": {
+        "index": "0000000749",
+        "level": 74,
+        "ability": "Scrappy",
+        "item": "Life Orb",
+        "nature": "Adamant",
+        "Weather": "Rain",
+        "Terrain": "Grassy",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Uproar","Brave Bird","Tailwind","Reversal"]
+    }
     },
     "Eiscue": {
     "Cool Trainer Randall | Petalburg Gym": {
@@ -2572,6 +2860,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Discharge","Earth Power","Tri Attack","Stealth Rock"]
+        },
+        "Magma Leader Maxie | Mt Chimney": {
+            "index": "0000000576",
+            "level": 61,
+            "ability": "Protosynthesis",
+            "item": "Fire Gem",
+            "Weather": "Sun",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Discharge","Earth Power","Weather Ball","Gravity"]
         }
     },
     "Hawlucha": {
@@ -2585,6 +2885,33 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Swords Dance","Stone Edge","Close Combat","Acrobatics"]
+        },
+        "Team Plasma Grunt | Gauntlet 3/7": {
+            "index": "0000000660",
+            "level": 73,
+            "ability": "Mold Breaker",
+            "item": "Room Service",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Brave",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Close Combat","Acrobatics","Drain Punch","Triple Axel"]
+        },
+    "Lass Darius | Fortress City": {
+            "index": "0000000784",
+            "level": 75,
+            "ability": "Unburden",
+            "item": "Power Herb",
+            "Weather": "Sun",
+            "nature": "Jolly",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sky Attack","Acrobatics","Close Combat","Coaching"]
         }
     },
     "Drowzee": {
@@ -2674,7 +3001,7 @@ var SETDEX_SV = {
             "moves": ["Future Sight","HP Water","Flamethrower","Trick Room"]
         },
     "Hex Maniac Jennifer | Union Cave": {
-            "index": "0000000434",
+            "index": "0000000435",
             "level": 54,
             "ability": "Magician",
             "item": "White Herb",
@@ -2821,6 +3148,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Searing Shot","Acrobatics","U-turn","Upper Hand"]
+        },
+    "Expert Flint & Edwardo | Fortree Gym": {
+            "index": "0000000778",
+            "level": 75,
+            "ability": "Gale Wings",
+            "item": "Covert Cloak",
+            "nature": "Naive",
+            "setdouble": "True",
+            "setdoubleGroup": "fortree-gym-expert-flint-bird-keeper-edwardo",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Tailwind","Heat Wave","Dual Wingbeat","Upper Hand"]
         }
     },
     "Zoroark": {
@@ -2920,6 +3261,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Gravity","Counter","Teleport","Healing Wish"]
+        },
+        "Team Plasma Grunt | Gauntlet 4/7": {
+            "index": "0000000661",
+            "level": 73,
+            "ability": "Natural Cure",
+            "item": "Eviolite",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Toxic","Counter","Mirror Coat","Soft-Boiled"]
         }
     },
     "Shuckle": {
@@ -3013,7 +3367,6 @@ var SETDEX_SV = {
             "level": 59,
             "ability": "Protosynthesis",
             "item": "Booster Energy",
-            "Weather": "Rain",
             "nature": "Impish",
             "setdouble": "True",
             "ivs": {
@@ -3075,14 +3428,26 @@ var SETDEX_SV = {
             "level": 60,
             "ability": "Scrappy",
             "item": "Silk Scarf",
-            "Weather": "Rain",
             "nature": "Jolly",
             "setdouble": "True",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Uproar","Ice Punch","Play Rough","Stealth Rock"]
-        }
+        },
+    "PKMN Ranger Catherine | Route 119": {
+            "index": "0000000726",
+            "level": 74,
+            "ability": "Thick Fat",
+            "item": "White Herb",
+            "Terrain": "Grassy",
+            "Weather": "Rain",
+            "nature": "Adamant",
+            "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Curse","Grassy Glide","Body Slam","High Horsepower"]
+        },
     },
     "Arboliva": {
     "Cool Trainer George | Petalburg Gym": {
@@ -3132,6 +3497,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Parting Shot","Taunt","Knock Off","Play Rough"]
+        },
+    "Hex Maniac Jennifer | Union Cave": {
+            "index": "0000000436",
+            "level": 54,
+            "ability": "Prankster",
+            "item": "Roseli Berry",
+            "Terrain": "Misty",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bulk Up","Knock Off","Poison Jab","Drain Punch"]
         }
     },
     "Slither Wing": {
@@ -3206,6 +3583,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Double Team","Freeze-Dry","Air Slash","Ice Shard"]
+        },
+    "Certified Dumbass Zhi | Giant Chasm": {
+            "index": "0000000675",
+            "level": 71,
+            "ability": "Pressure",
+            "item": "Focus Sash",
+            "Weather": "Snow",
+            "nature": "Timid",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Aurora Veil","Blizzard","Air Slash","Freeze-Dry"]
         }
     },
     "Luvdisc": {
@@ -3213,7 +3603,7 @@ var SETDEX_SV = {
             "index": "0000000165",
             "level": 39,
             "ability": "Heart Boost",
-            "item": "Toxic Orb",
+            "item": "Flame Orb",
             "nature": "Modest",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -3309,7 +3699,21 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Volt Switch","Discharge","Tailwind","Sky Attack"]
-        }
+        },
+    "Bug Catcher Doug | Route 119": {
+            "index": "0000000737",
+            "level": -2,
+            "ability": "Pressure",
+            "item": "Covert Cloak",
+            "nature": "Timid",
+            "setdouble": "True",
+            "Weather": "Rain",
+            "Terrain": "Grassy",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Thunder","Hurricane","Light Screen","Tailwind"]
+    }
     },
     "Palossand": {
     "Ex Champion Green | Petalburg Gym": {
@@ -3347,21 +3751,21 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Calm Mind","Heal Pulse","Alluring Voice","Hyper Voice"]
-        }
-    },
-    "Maushold-Four": {
+        },
     "Tag Partner Norman": {
-            "index": "0000000280",
+            "index": "0000000282",
             "level": 46,
-            "ability": "Friend Guard",
-            "item": "Sitrus Berry",
-            "nature": "Hasty",
+            "ability": "Fairy Aura",
+            "item": "Audinite",
+            "nature": "Naive",
             "setdouble": "True",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Follow Me","Hyper Voice","Population Bomb","Super Fang"]
-        },
+            "moves": ["Dazzling Gleam","Knock Off","Flamethrower","Heal Pulse"]
+        }
+    },
+    "Maushold-Four": {
     "Camper Beau | Route 111": {
             "index": "0000000425",
             "level": 52,
@@ -3373,20 +3777,6 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Follow Me","Helping Hand","Thunder Wave"]
-        }
-    },
-    "Oranguru": {
-    "Tag Partner Norman": {
-            "index": "0000000281",
-            "level": 46,
-            "ability": "Illuminate",
-            "item": "Life Orb",
-            "nature": "Bold",
-            "setdouble": "True",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Future Sight","Protect","Helping Hand","Instruct"]
         }
     },
     "Tauros": {
@@ -3549,6 +3939,21 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Cross Poison","Razor Wind","Giga Drain","Super Fang"]
+        },
+    "Bird Keeper Perry & Chester | Route 118": {
+            "index": "0000000710",
+            "level": 74,
+            "ability": "Inner Focus",
+            "item": "Lum Berry",
+            "Weather": "Rain",
+            "setdouble": "True",
+            "setdoubleGroup": "route-118-bird-keeper-perry-chester",
+            "setdoubleSide": 2,
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Tailwind","Super Fang","Hypnosis","Dual Wingbeat"]
         }
     },
     "Falinks-Mega": {
@@ -3676,7 +4081,22 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Grass Knot","Alluring Voice","Thunderbolt","Nuzzle"]
-        }
+        },
+        "Trainer Rival (Chikorita) | Route 119": {
+        "index": "0000000762",
+        "level": 75,
+        "ability": "Lightning Rod",
+        "item": "Focus Sash",
+        "nature": "Timid",
+        "Weather": "Rain",
+        "Terrain": "Electric",
+        "setdouble": "True",
+        "chosechikorita": true,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Thunder","Endeavor","Muddy Water","Focus Blast"]
+    }
     },
     "Froslass": {
     "Expert Timmy | Route 115": {
@@ -3689,6 +4109,31 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Snowscape","Ice Beam","Shadow Ball","Toxic"]
+        },
+        "Team Plasma Grunt | Gauntlet 1/7": {
+            "index": "0000000650",
+            "level": 71,
+            "ability": "Snow Cloak",
+            "item": "Clear Amulet",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Hasty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Aurora Veil","Blizzard","Poltergeist","Spikes"]
+        },
+        "Sinnoh Leader Candice | Giant Chasm": {
+            "index": "0000000698",
+            "level": 72,
+            "ability": "Snow Cloak",
+            "item": "Colbur Berry",
+            "Weather": "Snow",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Will-O-Wisp","Blizzard","Thunder Wave","Spikes"]
         }
     },
     "Greninja": {
@@ -3715,6 +4160,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Low Kick","Surf","Dark Pulse","Extrasensory"]
+        },
+    "Ninja Boy Shinobi | Giant Chasm": {
+            "index": "0000000670",
+            "level": 71,
+            "ability": "Protean",
+            "item": "Loaded Dice",
+            "Weather": "Snow",
+            "nature": "Naive",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fake Out","Water Shuriken","Low Kick","Dark Pulse"]
         }
     },
     "Drapion": {
@@ -3815,6 +4273,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Encore","Sludge Bomb","Fire Blast","Grass Knot"]
+        },
+        "Team Plasma Grunt | Gauntlet 1/7": {
+            "index": "0000000652",
+            "level": 73,
+            "ability": "Corrosion",
+            "item": "Bright Powder",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Toxic","Protect","Flamethrower","Fake Tears"]
         }
     },
     "Dodrio": {
@@ -3864,6 +4335,31 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Fake Out","Close Combat","Pursuit","Icicle Spear"]
+        },
+        "Team Plasma Grunt | Gauntlet 7/7": {
+            "index": "0000000668",
+            "level": 72,
+            "ability": "Technician",
+            "item": "Scope Lens",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Triple Axel","Feint Attack","Pursuit","Razor Wind"]
+        },
+        "Sinnoh Leader Candice | Giant Chasm": {
+            "index": "0000000700",
+            "level": 71,
+            "ability": "Technician",
+            "item": "Focus Sash",
+            "Weather": "Snow",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fake Out","Triple Axel","Pursuit","Bite"]
         }
     },
     "Zebstrika": {
@@ -4017,6 +4513,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Destiny Bond","Psychic Noise","Mystical Fire","Draining Kiss"]
+        },
+        "Team Plasma Grunt | Gauntlet 6/7": {
+            "index": "0000000666",
+            "level": 73,
+            "ability": "Trace",
+            "item": "Choice Specs",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Light of Ruin"]
         }
     },
     "Gallade": {
@@ -4095,6 +4604,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Parabolic Charge","Chilling Water","Acid Spray","Soak"]
+        },
+        "Team Plasma Grunt | Gauntlet 1/7": {
+            "index": "0000000653",
+            "level": 73,
+            "ability": "Electromorphosis",
+            "item": "Zoom Lens",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Soak","Thunder","Slack Off","Muddy Water"]
         }
     },
     "Ambipom": {
@@ -4211,6 +4733,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Close Combat","Wave Crash","Flip Turn"]
+        },
+        "Fisherman Chris | Route 118": {
+            "index": "0000000723",
+            "level": 74,
+            "ability": "Zero to Hero",
+            "item": "Choice Scarf",
+            "Terrain": "Grassy",
+            "Weather": "Rain",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Flip Turn","Wave Crash"]
         }
     },
     "Honchkrow": {
@@ -4365,7 +4900,22 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Follow Me","Thunderbolt","Psychic","Electroweb"]
-        }
+        },
+        "Trainer Rival (Tepig) | Route 119": {
+        "index": "0000000762",
+        "level": 75,
+        "ability": "Lightning Rod",
+        "item": "Magnet",
+        "nature": "Naive",
+        "Weather": "Rain",
+        "Terrain": "Electric",
+        "setdouble": "True",
+        "chosetepig": true,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Rising Voltage","Close Combat","Knock Off","Fake Out"]
+    }
     },
     "Grimmsnarl": {
     "Sis & Bro Lisa & Ray | Route 107": {
@@ -4436,7 +4986,36 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Shadow Ball","Thunderbolt","Psychic","Thunder Wave"]
-        }
+        },
+    "Ninja Boy Shinobi | Giant Chasm": {
+            "index": "0000000673",
+            "level": 71,
+            "ability": "Shadow Tag",
+            "item": "Tanga Berry",
+            "Weather": "Snow",
+            "nature": "Modest",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Focus Blast","Psychic","Shadow Ball","Signal Beam"]
+        },
+        "Jackson & Takashi | Route 119": {
+        "index": "0000000756",
+        "level": 74,
+        "ability": "Shadow Tag",
+        "item": "Wise Glasses",
+        "nature": "Quiet",
+        "Weather": "Rain",
+        "Terrain": "Grassy",
+        "setdouble": "True",
+        "setdoubleSide": 1,
+        "setdoubleGroup": "route-119-ninja-boy-takashi-camper-jackson",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Terrain Pulse","Psychic Noise","Thunderbolt","Calm Mind"]
+    }
     },
     "Pincurchin": {
     "Cool Trainer Caroline | Route 108": {
@@ -4530,6 +5109,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Thunder Punch","Aqua Tail","U-turn","Giga Drain"]
+        },
+    "Team Plasma Colress | Giant Chasm": {
+            "index": "0000000708",
+            "level": 76,
+            "ability": "Levitate",
+            "item": "Eelektrossite",
+            "Terrain": "Electric",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Giga Drain","Dragon Pulse","Flamethrower","Thunderbolt"]
         }
     },
     "Beartic": {
@@ -4616,6 +5207,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Thunderbolt","Hyper Fang","Psychic","Laser Focus"]
+        },
+        "Team Plasma Grunt | Gauntlet 7/7": {
+            "index": "0000000667",
+            "level": 72,
+            "ability": "Illuminate",
+            "item": "Chople Berry",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Substitute","Super Fang","Low Kick","Hypnosis"]
         }
     },
     "Drifblim": {
@@ -4669,6 +5273,18 @@ var SETDEX_SV = {
         }
     },
     "Duraludon": {
+    "Dragon Tamer Jacki | Giant Chasm": {
+            "index": "0000000684",
+            "level": 71,
+            "ability": "Clear Body",
+            "item": "Eviolite",
+            "Weather": "Rain",
+            "nature": "Calm",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Electro Shot","Draco Meteor","Flash Cannon","Iron Defense"]
+        },
     "Team Plasma Grunt #1 | Abandoned Ship": {
             "index": "0000000252",
             "level": 45,
@@ -4869,6 +5485,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Blaze Kick","Fake Out","High Jump Kick","Poison Jab"]
+        },
+        "Team Plasma Grunt | Gauntlet 2/7": {
+            "index": "0000000654",
+            "level": 72,
+            "ability": "Inner Focus",
+            "item": "Eject Pack",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Hasty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Close Combat","Retaliate","Power Gem","Acrobatics"]
         }
     },
     "Walrein": {
@@ -4945,6 +5574,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Shift Gear","Gear Grind","Supercell Slam","Frustration"]
+        },
+    "Team Plasma Colress | Giant Chasm": {
+            "index": "0000000705",
+            "level": 75,
+            "ability": "Clear Body",
+            "item": "Focus Sash",
+            "Terrain": "Electric",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Shift Gear","Gear Grind","Zing Zap","Explosion"]
         }
     },
     "Garbodor": {
@@ -5009,6 +5650,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Tailwind","Sucker Punch","Wicked Blow","Leaf Blade"]
+        },
+    "Expert Flint & Edwardo | Fortree Gym": {
+            "index": "0000000775",
+            "level": 75,
+            "ability": "Wind Rider",
+            "item": "White Herb",
+            "nature": "Adamant",
+            "setdouble": "True",
+            "setdoubleGroup": "fortree-gym-expert-flint-bird-keeper-edwardo",
+            "setdoubleSide": 2,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Leaf Blade","Throat Chop","Rock Slide","Fake Out"]
         }
     },
     "Centiskorch": {
@@ -5047,7 +5702,23 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
             },
             "moves": ["Trick Room","Teleport","Future Sight","Scald"]
-        }
+        },
+        "Jackson & Takashi | Route 119": {
+        "index": "0000000752",
+        "level": 74,
+        "ability": "Oblivious",
+        "item": "Grassy Seed",
+        "nature": "Relaxed",
+        "Weather": "Rain",
+        "Terrain": "Grassy",
+        "setdouble": "True",
+        "setdoubleSide": 2,
+        "setdoubleGroup": "route-119-ninja-boy-takashi-camper-jackson",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Trick Room","Scald","Future Sight","Power Gem"]
+    }
     },
     "Hippowdon": {
     "Team Plasma #7 | Abandoned Ship": {
@@ -5055,7 +5726,7 @@ var SETDEX_SV = {
             "level": 46,
             "ability": "Sand Stream",
             "item": "Leftovers",
-            "Weather": "Sandstorm",
+            "Weather": "Sand",
             "nature": "Relaxed",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -5068,7 +5739,7 @@ var SETDEX_SV = {
             "ability": "Sand Stream",
             "item": "Leftovers",
             "setdouble": "True",
-            "Weather": "Sandstorm",
+            "Weather": "Sand",
             "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -5097,7 +5768,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Wicked Blow","Sucker Punch","Giga Drain","Gunk Shot"]
+            "moves": ["Wicked Blow","Stone Edge","Giga Drain","Gunk Shot"]
         },
     "Picnicker Celia | Route 111": {
             "index": "0000000557",
@@ -5123,7 +5794,45 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Freeze-Dry","Psychic","Meteor Beam","Roar"]
-        }
+        },
+        "Team Plasma Grunt | Gauntlet 3/7": {
+            "index": "0000000657",
+            "level": 73,
+            "ability": "Armor Tail",
+            "item": "Ice Gem",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Quiet",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Blizzard","Power Gem","Calm Mind","Protect"]
+        },
+    "Ninja Boy Shinobi | Giant Chasm": {
+            "index": "0000000672",
+            "level": 72,
+            "ability": "Armor Tail",
+            "item": "Power Herb",
+            "Weather": "Snow",
+            "nature": "Timid",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Meteor Beam","Blizzard","Earth Power","Freeze-Dry"]
+        },
+        "Painter Algebraic": {
+        "index": "0000000758",
+        "level": 76,
+        "ability": "Snow Warning",
+        "item": "Quick Claw",
+        "nature": "Modest",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Psystrike","Power Gem","Blizzard","Terrain Pulse"]
+    }
     },
     "Dracovish": {
     "Team Plasma #8 | Abandoned Ship": {
@@ -5215,7 +5924,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Draco Meteor","Freeze-Dry","Earth Power","Protect"]
+            "moves": ["Draco Meteor","Ice Beam","Earth Power","Protect"]
         }
     },
     "Bouffalant": {
@@ -5260,7 +5969,22 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Electro Shot","Dragon Pulse","Flash Cannon","Body Press"]
-        }
+        },
+        "Trainer Rival (Tepig) | Route 119": {
+        "index": "0000000764",
+        "level": 75,
+        "ability": "Stalwart",
+        "item": "Lum Berry",
+        "nature": "Sassy",
+        "Weather": "Rain",
+        "Terrain": "Electric",
+        "setdouble": "True",
+        "chosetepig": true,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Breaking Swipe","Electro Shot","Flash Cannon","Dragon Pulse"]
+    }
     },
     "Hydreigon": {
     "Team Plasma N & Ghetsis | Abandoned Ship": {
@@ -5289,7 +6013,21 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Draco Meteor","Dark Pulse","Roost","Nasty Plot"]
-        }
+        },
+    "Bug Catcher Doug | Route 119": {
+            "index": "0000000741",
+            "level": 74,
+            "ability": "Intimidate",
+            "item": "Scope Lens",
+            "nature": "Timid",
+            "setdouble": "True",
+            "Weather": "Rain",
+            "Terrain": "Grassy",
+            "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Draco Meteor","Dark Pulse","Flash Cannon","Tailwind"]
+    }
     },
     "Lopunny-Mega": {
     "Old Man Ty | Route 109": {
@@ -5396,6 +6134,18 @@ var SETDEX_SV = {
         }
     },
     "Goodra": {
+    "Dragon Tamer Jacki | Giant Chasm": {
+            "index": "0000000681",
+            "level": 71,
+            "ability": "Drizzle",
+            "item": "Assault Vest",
+            "Weather": "Rain",
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Muddy Water","Dragon Pulse","Focus Blast","Counter"]
+        },
     "Swimmer Isabelle & Pete | Route 103": {
             "index": "0000000296",
             "level": 46,
@@ -5466,7 +6216,21 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Volt Tackle","Surf","Knock Off","Nuzzle"]
-        }
+        },
+        "Bird Keeper Phil  | Route 119": {
+        "index": "0000000748",
+        "level": 74,
+        "ability": "Lightning Rod",
+        "item": "Light Ball",
+        "nature": "Hasty",
+        "Weather": "Rain",
+        "Terrain": "Grassy",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Fake Out","Floaty Fall","Thunder","Grass Knot"]
+    }
     },
     "Mime Jr.": {
     "Pokefan Miguel | Route 103": {
@@ -5616,6 +6380,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Boomburst","Sludge Bomb","Psychic Noise","Overdrive"]
+        },
+        "Team Plasma Grunt | Gauntlet 2/7": {
+            "index": "0000000655",
+            "level": 73,
+            "ability": "Technician",
+            "item": "Air Balloon",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Shift Gear","Pursuit","Barb Barrage","Plasma Fists"]
         }
     },
     "Kommo-o": {
@@ -5851,6 +6628,18 @@ var SETDEX_SV = {
         }
     },
     "Orbeetle": {
+    "Dragon Tamer Jacki | Giant Chasm": {
+            "index": "0000000683",
+            "level": 71,
+            "ability": "Trace",
+            "item": "Binding Band",
+            "Weather": "Rain",
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bug Buzz","Protect","Infestation","Recover"]
+        },
     "Psychic Edward | Route 110": {
             "index": "0000000328",
             "level": 48,
@@ -5874,7 +6663,33 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Nasty Plot","Lovely Kiss","Psyshock","Ice Beam"]
-        }
+        },
+        "Elite Four Lorelei | Giant Chasm": {
+            "index": "0000000694",
+            "level": 70,
+            "ability": "Ice Body",
+            "item": "Life Orb",
+            "Weather": "Hail",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Chill-O-Wisp","Blizzard","Psycho Boost","Draining Kiss"]
+        },
+        "Parasol Lady Rachel | Route 119": {
+        "index": "0000000745",
+        "level": 74,
+        "ability": "Dry Skin",
+        "item": "Focus Sash",
+        "nature": "Timid",
+        "Weather": "Rain",
+        "Terrain": "Grassy",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Psychic","Icy Wind","Fake Out","Helping Hand"]
+    }
     },
     "Latias": {
     "Trainer Rival (Totodile) | Route 110": {
@@ -6044,7 +6859,7 @@ var SETDEX_SV = {
     "Trainer Rival (Chikorita) | Route 110": {
             "index": "0000000337",
             "level": 51,
-            "ability": "Levitate",
+            "ability": "Serene Grace",
             "item": "Delphoxite",
             "nature": "Timid",
             "chosechikorita": true,
@@ -6052,7 +6867,22 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Flamethrower","Psyshock","Dazzling Gleam","Will-O-Wisp"]
-        }
+        },
+        "Trainer Rival (Chikorita) | Route 119": {
+        "index": "0000000759",
+        "level": 77,
+        "ability": "Serene Grace",
+        "item": "Delphoxite",
+        "nature": "Timid",
+        "Weather": "Rain",
+        "Terrain": "Electric",
+        "setdouble": "True",
+        "chosechikorita": true,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Nasty Plot","Psychic Noise","Thunderbolt","Dazzling Gleam"]
+    }
     },
     "Chesnaught-Mega": {
     "Trainer Rival (Totodile) | Route 110": {
@@ -6066,7 +6896,22 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Bulk Up","Body Press","Wood Hammer","Leech Seed"]
-        }
+        },
+        "Trainer Rival (Totodile) | Route 119": {
+        "index": "0000000759",
+        "level": 77,
+        "ability": "Iron Barbs",
+        "item": "Chesnaughtite",
+        "nature": "Relaxed",
+        "Weather": "Rain",
+        "Terrain": "Electric",
+        "setdouble": "True",
+        "chosetotodile": true,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Body Press","Leech Seed","Wood Hammer","Thunder Punch"]
+    }
     },
     "Greninja-Mega": {
     "Trainer Rival (Tepig) | Route 110": {
@@ -6080,7 +6925,22 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Gunk Shot","Water Shuriken","Dark Pulse","Spikes"]
-        }
+        },
+        "Trainer Rival (Tepig) | Route 119": {
+        "index": "0000000759",
+        "level": 77,
+        "ability": "Protean",
+        "item": "Greninjite",
+        "nature": "Timid",
+        "Weather": "Rain",
+        "Terrain": "Electric",
+        "setdouble": "True",
+        "chosetepig": true,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Sludge Wave","Low Kick","Hydro Pump","Night Slash"]
+    }
     },
     "Medicham-Mega": {
     "Vivian & Kirk | Mauville Gym": {
@@ -6140,6 +7000,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Ominous Wind","Charge Beam","Signal Beam","Will-O-Wisp"]
+        },
+    "Ninja Boy Shinobi | Giant Chasm": {
+            "index": "0000000671",
+            "level": 71,
+            "ability": "Levitate",
+            "item": "Big Root",
+            "Weather": "Snow",
+            "nature": "Modest",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Parabolic Charge","Ominous Wind","Icy Wind","Will-O-Wisp"]
         }
     },
     "Manectric-Mega": {
@@ -6184,6 +7057,18 @@ var SETDEX_SV = {
         }
     },
     "Steelix": {
+    "Captain Gary | Giant Chasm": {
+            "index": "0000000685",
+            "level": "-1",
+            "ability": "Sand Stream",
+            "item": "Eject Button",
+            "nature": "Careful",
+            "Weather": "Sand",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Stealth Rock","Dragon Tail","Body Press","Protect"]
+        },
     "Leader Jasmine | Mauville Gym": {
             "index": "0000000361",
             "level": 50,
@@ -6352,7 +7237,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
             },
             "moves": ["Electro Shot","Signal Beam","Laser Focus","Thunderbolt"]
-        }
+        },
+    "Bug Maniac Taylor | Route 119": {
+            "index": "0000000731",
+            "level": 74,
+            "ability": "Speed Boost",
+            "item": "Grassy Seed",
+            "Terrain": "Grassy",
+            "Weather": "Rain",
+            "nature": "Timid",
+            "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Electro Shot","Energy Ball","Bug Buzz","Dark Pulse"]
+        },
     },
     "Raichu-Alola": {
     "Leader Elesa | Mauville Gym": {
@@ -6406,6 +7304,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Autotomize","Iron Head","Drill Peck","Drill Run"]
+        },
+    "Bird Keeper Humberto | Fortree Gym": {
+            "index": "0000000768",
+            "level": 75,
+            "ability": "Tough Claws",
+            "item": "Skarmorite",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Swords Dance","Iron Head","Sky Attack","Drill Run"]
         }
     },
     "Golisopod": {
@@ -6420,6 +7329,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["First Impression","Razor Shell","Payback","Ice Spinner"]
+        },
+        "Bug Maniac Donald | Route 119": {
+            "index": "0000000717",
+            "level": 74,
+            "ability": "Emergency Exit",
+            "item": "Rocky Helmet",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sticky Web","Leech Life","Aqua Jet","Liquidation"]
         }
     },
     "Scizor": {
@@ -6433,6 +7353,34 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Bullet Punch","Dual Wingbeat","Knock Off","U-turn"]
+        },
+    "Bird Keeper Perry & Chester | Route 118": {
+            "index": "0000000711",
+            "level": 74,
+            "ability": "Technician",
+            "item": "Razor Claw",
+            "Weather": "Rain",
+            "setdouble": "True",
+            "setdoubleGroup": "route-118-bird-keeper-perry-chester",
+            "setdoubleSide": 1,
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bullet Punch","Bind","Fell Stinger","Close Combat"]
+        },
+    "Bird Keeper Jared | Fortree City": {
+            "index": "0000000789",
+            "level": 75,
+            "ability": "Technician",
+            "item": "Covert Cloak",
+            "Weather": "Rain",
+            "nature": "Jolly",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Swords Dance","Bug Bite","Bullet Punch","Dual Wingbeat"]
         }
     },
     "Dugtrio": {
@@ -6564,7 +7512,7 @@ var SETDEX_SV = {
             "nature": "Timid",
             "setdouble": "True",
             "setdoubleGroup": "route-111-celina-tyron",
-            "setdoubleSide": 2,
+            "setdoubleSide": 1,
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -6580,7 +7528,7 @@ var SETDEX_SV = {
             "nature": "Relaxed",
             "setdouble": "True",
             "setdoubleGroup": "route-111-celina-tyron",
-            "setdoubleSide": 2,
+            "setdoubleSide": 1,
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -6596,7 +7544,7 @@ var SETDEX_SV = {
             "nature": "Adamant",
             "setdouble": "True",
             "setdoubleGroup": "route-111-celina-tyron",
-            "setdoubleSide": 2,
+            "setdoubleSide": 1,
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -6630,18 +7578,6 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Burn Up","Baton Pass","Energy Ball","Calm Mind"]
-        },
-    "Magma Leader Maxie | Mt Chimney": {
-            "index": "0000000576",
-            "level": 61,
-            "ability": "Drought",
-            "Weather": "Sun",
-            "item": "Grass Gem",
-            "nature": "Bold",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Solar Beam","Dazzling Gleam","Mystical Fire","Fake Tears"]
         }
     },
     "Dewgong": {
@@ -6656,6 +7592,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Blizzard","Fake Out","Whirlpool","Perish Song"]
+        },
+        "Elite Four Lorelei | Giant Chasm": {
+            "index": "0000000693",
+            "level": 71,
+            "ability": "Technician",
+            "item": "Leftovers",
+            "Weather": "Hail",
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Whirlpool","Perish Song","Toxic","Encore"]
         }
     },
     "Beedrill": {
@@ -6796,7 +7744,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Focus Punch","Double-Edge","U-turn","Power-Up Punch"]
-        }
+        },
+    "Bug Maniac Taylor | Route 119": {
+            "index": "0000000732",
+            "level": 74,
+            "ability": "Aerilate",
+            "item": "Punching Glove",
+            "Terrain": "Grassy",
+            "Weather": "Rain",
+            "nature": "Adamant",
+            "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Double-Edge","Drain Punch","Thunder Punch","Trop Kick"]
+        ,}
     },
     "Whiscash": {
     "Camper Irene | Route 111": {
@@ -6835,6 +7796,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Acrobatics","Close Combat","Throat Chop","U-turn"]
+        },
+    "Expert Flint & Edwardo | Fortree Gym": {
+            "index": "0000000779",
+            "level": 75,
+            "ability": "Costar",
+            "item": "Flying Gem",
+            "nature": "Jolly",
+            "setdouble": "True",
+            "setdoubleGroup": "fortree-gym-expert-flint-bird-keeper-edwardo",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Close Combat","Brave Bird","Tailwind","Protect"]
         }
     },
     "Great Tusk": {
@@ -6913,6 +7888,31 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Pursuit","Aqua Tail","Stone Edge","Dual Wingbeat"]
+        },
+    "Lass Darius | Fortress City": {
+            "index": "0000000786",
+            "level": 75,
+            "ability": "Rock Head",
+            "item": "Focus Sash",
+            "Weather": "Sun",
+            "nature": "Adamant",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fire Fang","Rock Slide","Dual Wingbeat","Pursuit"]
+        },
+    "Leader Winona | Fortree Gym": {
+            "index": "0000000797",
+            "level": 76,
+            "ability": "Tough Claws",
+            "item": "Choice Band",
+            "Tailwind": true,
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sky Attack","Head Smash"]
         }
     },
     "Copperajah": {
@@ -6966,6 +7966,21 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Swagger","Agility","Iron Head","Power Trip"]
+        },
+    "Bird Keeper Perry & Chester | Route 118": {
+            "index": "0000000709",
+            "level": 74,
+            "ability": "Mirror Armor",
+            "item": "Wacan Berry",
+            "Weather": "Rain",
+            "setdouble": "True",
+            "setdoubleGroup": "route-118-bird-keeper-perry-chester",
+            "setdoubleSide": 1,
+            "nature": "Impish",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Iron Defense","Body Press","Drill Peck","Drill Run"]
         }
     },
     "Lunatone": {
@@ -7015,6 +8030,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Swords Dance","Scale Shot","Rock Blast","Earthquake"]
+        },
+    "Bird Keeper Humberto | Fortree Gym": {
+            "index": "0000000766",
+            "level": 75,
+            "item": "Liechi Berry",
+            "nature": "Adamant",
+            "ability": "Rough Skin",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Swords Dance","Scale Shot","Tectonic Rage","Fire Fang"]
         }
     },
     "Scovillain": {
@@ -7181,7 +8207,7 @@ var SETDEX_SV = {
     "Bryant & Shayla | Route 112": {
             "index": "0000000413",
             "level": 53,
-            "ability": "Gluttony",
+            "ability": "Heated Rush",
             "item": "Shuca Berry",
             "setdouble": "True",
             "nature": "Hasty",
@@ -7259,34 +8285,31 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Solar Beam","Focus Blast","Flamethrower","Air Slash"]
-        }
-    },
-    "Lycanroc-Dusk": {
-    "Hex Maniac Jennifer | Union Cave": {
-            "index": "0000000435",
-            "level": 54,
-            "ability": "Tough Claws",
-            "item": "Ghost Gem",
-            "Terrain": "Misty",
-            "nature": "Jolly",
+        },
+    "Bird Keeper Humberto | Fortree Gym": {
+            "index": "0000000765",
+            "level": 75,
+            "ability": "Blaze",
+            "item": "Grip Claw",
+            "nature": "Timid",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Accelerock","Shadow Claw","Close Combat","Stone Edge"]
+            "moves": ["Fire Spin","Protect","Roost","Substitute"]
         }
     },
-    "Inteleon": {
+    "Hatterene": {
     "Hex Maniac Jennifer | Union Cave": {
-            "index": "0000000436",
+            "index": "0000000434",
             "level": 54,
-            "ability": "Sniper",
-            "item": "Scope Lens",
+            "ability": "Magic Bounce",
+            "item": "Custap Berry",
             "Terrain": "Misty",
             "nature": "Modest",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Snipe Shot","Dark Pulse","Ice Beam","Shadow Ball"]
+            "moves": ["Misty Explosion","Psychic Noise","Moonblast","Mystical Fire"]
         }
     },
     "Marowak": {
@@ -7421,6 +8444,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Morning Sun","Hyper Beam","Mystical Fire","Quick Attack"]
+        },
+    "Bug Catcher Doug | Route 119": {
+            "index": "0000000740",
+            "level": 74,
+            "ability": "Pixilate",
+            "item": "Fairy Feather",
+            "nature": "Modest",
+            "Weather": "Rain",
+            "setdouble": "True",
+            "Terrain": "Grassy",
+            "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Hyper Voice","Magical Leaf","Draining Kiss","Yawn"]
         }
     },
     "Slurpuff": {
@@ -7461,6 +8498,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Tri Attack","Foul Play","Thunderbolt","Recover"]
+        },
+    "Team Plasma Colress | Giant Chasm": {
+            "index": "0000000703",
+            "level": 73,
+            "ability": "Download",
+            "item": "Eviolite",
+            "Terrain": "Electric",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Tri Attack","Discharge","Ice Beam","Recover"]
         }
     },
     "Crustle": {
@@ -7475,6 +8524,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Shell Smash","Earthquake","Pin Missile","Rock Blast"]
+        },
+    "Bug Maniac Donald | Route 119": {
+            "index": "0000000718",
+            "level": 74,
+            "ability": "Sturdy",
+            "item": "Covert Cloak",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Shell Smash","Stone Edge","X-Scissor","Knock Off"]
         }
     },
     "Hydrapple": {
@@ -7624,6 +8684,17 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Retaliate","Trailblaze","Stomping Tantrum","Psychic Fangs"]
+        },
+    "Bug Maniac Donald | Route 119": {
+            "index": "0000000719",
+            "level": 74,
+            "ability": "Stakeout",
+            "item": "Red Card",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Retaliate","Body Slam","Crunch","Stomping Tantrum"]
         }
     },
     "Aggron": {
@@ -7662,8 +8733,21 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Acrobatics","Ancient Power","U-turn","Dragon Rush"]
+        },
+        "PKMN Ranger Catherine | Route 119": {
+            "index": "0000000725",
+            "level": 74,
+            "ability": "Dry Skin",
+            "item": "Flying Gem",
+            "Terrain": "Grassy",
+            "Weather": "Rain",
+            "nature": "Adamant",
+            "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["U-turn","Acrobatics","Stone Edge","Aqua Tail"]
         }
-    },
+    },  
     "Houndstone": {
     "Parasol Lady Madeline | Route 113": {
             "index": "0000000479",
@@ -7691,6 +8775,18 @@ var SETDEX_SV = {
         }
     },
     "Farigiraf": {
+    "Tag Partner Norman": {
+            "index": "0000000281",
+            "level": 46,
+            "ability": "Cud Chew",
+            "item": "Lum Berry",
+            "nature": "Timid",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Hyper Voice","Dazzling Gleam","Psychic","Wish"]
+        },
     "Ninja Boy Lao | Route 113": {
             "index": "0000000485",
             "level": 59,
@@ -7903,6 +8999,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Sticky Web","Liquidation","Leech Life","Mirror Coat"]
+        },
+    "Bug Catcher Doug | Route 119": {
+            "index": "0000000739",
+            "level": -1,
+            "ability": "Water Bubble",
+            "item": "Sitrus Berry",
+            "nature": "Relaxed",
+            "Weather": "Rain",
+            "setdouble": "True",
+            "Terrain": "Grassy",
+            "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Icy Wind","Chilling Water","Liquidation","Leech Life"]
         }
     },
     "Mantine": {
@@ -7917,6 +9027,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Hurricane","Hydro Pump","Substitute","Signal Beam"]
+        },
+    "Bird Keeper Jared | Fortree City": {
+            "index": "0000000790",
+            "level": 75,
+            "ability": "Swift Swim",
+            "item": "Life Orb",
+            "Weather": "Rain",
+            "nature": "Timid",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bleakwind Storm","Earth Power","Muddy Water","Flip Turn"]
         }
     },
     "Overqwil": {
@@ -7931,7 +9054,35 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Barb Barrage","Acupressure","Wave Crash","Explosion"]
-        }
+        },
+        "Fisherman Chris | Route 118": {
+            "index": "0000000721",
+            "level": 74,
+            "ability": "Swift Swim",
+            "item": "Clear Amulet",
+            "Terrain": "Grassy",
+            "Weather": "Rain",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Destiny Bond","Explosion","Aqua Tail","Crunch"]
+        },
+        "Trainer Rival (Totodile) | Route 119": {
+        "index": "0000000762",
+        "level": 75,
+        "ability": "Swift Swim",
+        "item": "Life Orb",
+        "nature": "Naive",
+        "Weather": "Rain",
+        "Terrain": "Electric",
+        "setdouble": "True",
+        "chosetotodile": true,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Liquidation","Lash Out","Gunk Shot","Icy Wind"]
+    }
     },
     "Furfrou-La Reine": {
     "Fisherman Kai | Route 114": {
@@ -7966,7 +9117,6 @@ var SETDEX_SV = {
             "level": 61,
             "ability": "Healer",
             "item": "Chople Berry",
-            "Weather": "Rain",
             "nature": "Calm",
             "setdouble": "True",
             "ivs": {
@@ -7981,7 +9131,6 @@ var SETDEX_SV = {
             "level": 61,
             "ability": "Friend Guard",
             "item": "Eviolite",
-            "Weather": "Rain",
             "nature": "Bold",
             "boosts": {
                 "def": 1,
@@ -8001,7 +9150,6 @@ var SETDEX_SV = {
             "level": 59,
             "ability": "Competitive",
             "item": "Adrenaline Orb",
-            "Weather": "Rain",
             "nature": "Relaxed",
             "teraType": "Water",
             "setdouble": "True",
@@ -8179,7 +9327,21 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Grav Apple","Dual Wingbeat","Dragon Claw","Leaf Storm"]
-        }
+        },
+        "Bird Keeper Phil  | Route 119": {
+        "index": "0000000750",
+        "level": 74,
+        "ability": "Hustle",
+        "item": "Wide Lens",
+        "nature": "Jolly",
+        "Weather": "Rain",
+        "Terrain": "Grassy",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Grav Apple","Grassy Glide","Dragon Claw","Dual Wingbeat"]
+    }
     },
     "Glaceon": {
     "Hiker Lenny | Route 114": {
@@ -8206,6 +9368,31 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Trailblaze","Earthquake","Rock Slide","Mountain Gale"]
+        },
+        "Team Plasma Grunt | Gauntlet 5/7": {
+            "index": "0000000662",
+            "level": 72,
+            "ability": "Ice Body",
+            "item": "Clear Amulet",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Trailblaze","Mountain Gale","Earthquake","Stealth Rock"]
+        },
+        "Sinnoh Leader Candice | Giant Chasm": {
+            "index": "0000000701",
+            "level": 72,
+            "ability": "Thick Fat",
+            "item": "Clear Amulet",
+            "Weather": "Snow",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bulk Up","Trailblaze","Icicle Spear","Earthquake"]
         }
     },
     "Gabite": {
@@ -8317,9 +9504,35 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Wild Charge","Acrobatics","Dazzling Gleam","Grass Knot"]
-        }
+        },
+        "Trainer Rival (Totodile) | Route 119": {
+        "index": "0000000761",
+        "level": 76,
+        "ability": "Telepathy",
+        "item": "Electric Gem",
+        "nature": "Timid",
+        "Weather": "Rain",
+        "Terrain": "Electric",
+        "setdouble": "True",
+        "chosetotodile": true,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Thunder","Dazzling Gleam","Roost","Grass Knot"]
+    }
     },
     "Flygon": {
+    "Captain Gary | Giant Chasm": {
+            "index": "0000000688",
+            "level": "-1",
+            "ability": "Tinted Lens",
+            "item": "Safety Goggles",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sandsear Storm","Dragon Pulse","Vacuum Wave","Bug Buzz"]
+        },
     "Magma Grunt Grunt #1 | Mt Chimney": {
             "index": "0000000567",
             "level": 60,
@@ -8343,6 +9556,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Sleep Powder","Solar Beam","Earth Power","Ancient Power"]
+        },
+        "PKMN Ranger Catherine | Route 119": {
+            "index": "0000000727",
+            "level": 74,
+            "ability": "Chlorophyll",
+            "item": "Assault Vest",
+            "Terrain": "Grassy",
+            "Weather": "Rain",
+            "nature": "Sassy",
+            "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Grassy Glide","Ancient Power","Knock Off","Sludge Bomb"]
         }
     },
     "Houndoom-Mega": {
@@ -8414,47 +9640,35 @@ var SETDEX_SV = {
     "Groudon-Primal": {
     "Magma Leader Maxie | Mt Chimney": {
             "index": "0000000575",
-            "level": 62,
-            "ability": "Drought",
-            "Weather": "Sun",
+            "level": 59,
+            "ability": "Desolate Land",
+            "Weather": "Harsh Sunshine",
             "item": "Red Orb",
             "nature": "Hasty",
+            "shiny": "Yes",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Fire Punch","Stomping Tantrum","Heavy Slam","Stealth Rock"]
         }
     },
-    "Nidoqueen": {
+    "Houndoom": {
     "Magma Leader Maxie | Mt Chimney": {
-            "index": "0000000578",
+            "index": "0000000577",
             "level": 60,
-            "ability": "Sheer Force",
-            "item": "Life Orb",
-            "nature": "Modest",
+            "ability": "No Guard",
+            "item": "Focus Sash",
+            "nature": "Timid",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Flamethrower","Ice Beam","Earth Power","Reflect"]
-        }
-    },
-    "Raging Bolt": {
-    "Magma Leader Maxie | Mt Chimney": {
-            "index": "0000000579",
-            "level": 60,
-            "ability": "Protosynthesis",
-            "item": "Lum Berry",
-            "nature": "Modest",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Thunderclap","Dragon Pulse","Solar Beam","Discharge"]
+            "moves": ["Inferno","Fiery Wrath","Solar Beam","Destiny Bond"]
         }
     },
     "Heatran-Mega": {
     "Magma Leader Maxie | Mt Chimney": {
             "index": "0000000580",
-            "level": 61,
+            "level": 62,
             "ability": "Heatproof",
             "item": "Heatranite",
             "nature": "Timid",
@@ -8465,6 +9679,18 @@ var SETDEX_SV = {
         }
     },
     "Druddigon": {
+    "Dragon Tamer Jacki | Giant Chasm": {
+            "index": "0000000682",
+            "level": 71,
+            "ability": "Rough Skin",
+            "item": "Rocky Helmet",
+            "Weather": "Rain",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Glare","Dragon Tail","Stealth Rock","Screech"]
+        },
     "Kindler Jace | Lavaridge Gym": {
             "index": "0000000581",
             "level": 60,
@@ -8475,7 +9701,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Dragon Tail","Earthquake","Glare","Stealth Rock"]
+            "moves": ["Dragon Tail","Earthquake","Fire Punch","Stealth Rock"]
         }
     },
     "Crawdaunt": {
@@ -8550,6 +9776,17 @@ var SETDEX_SV = {
         }
     },
     "Salamence": {
+    "Magma Leader Maxie | Mt Chimney": {
+            "index": "0000000579",
+            "level": 60,
+            "ability": "Arena Trap",
+            "item": "Metal Coat",
+            "nature": "Naughty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Dragon Pulse","Iron Head","Roost","Brave Bird"]
+        },
     "Kindler Axle | Lavaridge Gym": {
             "index": "0000000603",
             "level": 60,
@@ -8573,6 +9810,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Fire Blast","Hurricane","Dragon Pulse","Hydro Pump"]
+        },
+        "Leader Winona | Fortree Gym": {
+            "index": "0000000796",
+            "level": 76,
+            "ability": "Intimidate",
+            "item": "Yache Berry",
+            "Tailwind": true,
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Temper Flare","Sky Attack","Dragon Claw","Dragon Dance"]
         }
     },
     "Entei": {
@@ -8713,6 +9962,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Earthquake","Ice Spinner","Double Team","Aurora Veil"]
+        },
+        "Elite Four Lorelei | Giant Chasm": {
+            "index": "0000000692",
+            "level": 71,
+            "ability": "Slush Rush",
+            "item": "Fighting Gem",
+            "Weather": "Hail",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Endeavor","Close Combat","Icicle Crash","Iron Head"]
         }
     },
     "Cyclizar": {
@@ -8843,7 +10104,7 @@ var SETDEX_SV = {
             "ability": "Rain Dish",
             "Weather": "Rain",
             "item": "Shuca Berry",
-            "nature": "Serious",
+            "nature": "Bold",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -8864,4 +10125,970 @@ var SETDEX_SV = {
             "moves": ["Endure","Reversal","Aqua Fangs","Crunch"]
         }
     },
- }
+    "Samurott-Hisui": {
+        "Team Plasma Grunt | Gauntlet 1/7": {
+            "index": "0000000651",
+            "level": 71,
+            "ability": "Sharpness",
+            "item": "Mystic Water",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Swords Dance","Sucker Punch","Ceaseless Edge","Aqua Cutter"]
+        }
+    },
+    "Reuniclus": {
+        "Team Plasma Grunt | Gauntlet 3/7": {
+            "index": "0000000658",
+            "level": 72,
+            "ability": "Magic Guard",
+            "item": "Life Orb",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Relaxed",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Trick Room","Sludge Bomb","Psychic Noise","Dazzling Gleam"]
+        },
+        "Team Plasma Colress | Giant Chasm": {
+            "index": "0000000706",
+            "level": 74,
+            "ability": "Magic Guard",
+            "item": "Life Orb",
+            "Terrain": "Electric",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Psychic","Focus Blast","Energy Ball","Substitute"]
+        }
+    },
+    "Delibird": {
+        "Team Plasma Grunt | Gauntlet 5/7": {
+            "index": "0000000664",
+            "level": 72,
+            "ability": "Hustle",
+            "item": "Wide Lens",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Triple Axel","Drill Run","Ice Shard","Brave Bird"]
+        },
+        "Certified Dumbass Zhi | Giant Chasm": {
+            "index": "0000000678",
+            "level": 71,
+            "ability": "Hustle",
+            "item": "Life Orb",
+            "Weather": "Snow",
+            "nature": "Adamant",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Seed Bomb","Ice Spinner","Tailwind","Brave Bird"]
+        }
+    },
+    "Furfrou-Star": {
+        "Team Plasma Grunt | Gauntlet 6/7": {
+            "index": "0000000665",
+            "level": 70,
+            "ability": "Super Luck",
+            "item": "Scope Lens",
+            "Weather": "Snow",
+            "CritStatus": true,
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Retaliate","U-turn","Icicle Crash","Iron Tail"]
+        }
+    },
+    "Lilligant-Hisui": {
+        "Ninja Boy Shinobi | Giant Chasm": {
+            "index": "0000000674",
+            "level": 70,
+            "ability": "Hustle",
+            "item": "Wide Lens",
+            "Weather": "Snow",
+            "nature": "Jolly",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Seed Bomb","Close Combat","Ice Spinner","Sleep Powder"]
+        }
+    },
+    "Regigigas": {
+        "Certified Dumbass Zhi | Giant Chasm": {
+            "index": "0000000676",
+            "level": 70,
+            "ability": "Slow Start",
+            "item": "Leftovers",
+            "Weather": "Snow",
+            "nature": "Impish",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Body Slam","Drain Punch","Knock Off","Zen Headbutt"]
+        }
+    },
+    "Shedinja": {
+        "Certified Dumbass Zhi | Giant Chasm": {
+            "index": "0000000679",
+            "level": 1,
+            "ability": "Wonder Guard",
+            "item": "Ability Shield",
+            "Weather": "Snow",
+            "nature": "Careful",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Follow Me"]
+        }
+    },
+    "Scizor-Mega": {
+        "Certified Dumbass Zhi | Giant Chasm": {
+            "index": "0000000680",
+            "level": 71,
+            "ability": "Technician",
+            "item": "Scizorite",
+            "Weather": "Snow",
+            "nature": "Adamant",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Pounce","Bullet Punch","Pursuit","Swords Dance"]
+        },
+    "Bug Catcher Doug | Route 119": {
+            "index": "0000000742",
+            "level": 74,
+            "ability": "Technician",
+            "item": "Scizorite",
+            "nature": "Adamant",
+            "Weather": "Rain",
+            "setdouble": "True",
+            "Terrain": "Grassy",
+            "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Swords Dance","Bullet Punch","Pounce","Protect"]
+    }
+    },
+    "Maractus": {
+        "Captain Gary | Giant Chasm": {
+            "index": "0000000686",
+            "level": "-2",
+            "ability": "Storm Drain",
+            "item": "Quick Claw",
+            "nature": "Modest",
+            "shiny": "Yes",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Growth","Weather Ball","Giga Drain","Grass Whistle"]
+        }
+    },
+    "Kecleon": {
+        "Captain Gary | Giant Chasm": {
+            "index": "0000000689",
+            "level": 0,
+            "ability": "Protean",
+            "item": "Rocky Helmet",
+            "nature": "Relaxed",
+            "shiny": "Yes",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Knock Off","Ice Punch","Shed Tail","Drain Punch"]
+        }
+    },
+    "Excadrill": {
+        "Captain Gary | Giant Chasm": {
+            "index": "0000000690",
+            "level": "+1",
+            "ability": "Mold Breaker",
+            "item": "Excadrite",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Swords Dance","Earthquake","Iron Head","Rock Slide"]
+        }
+    },
+    "Ninetales-Alola": {
+        "Elite Four Lorelei | Giant Chasm": {
+            "index": "0000000691",
+            "level": 72,
+            "ability": "Refrigerate",
+            "item": "Light Clay",
+            "Weather": "Hail",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Aurora Veil","Tri Attack","Chilling Water","Moonblast"]
+        }
+    },
+    "Darmanitan-Galar": {
+        "Elite Four Lorelei | Giant Chasm": {
+            "index": "0000000695",
+            "level": 72,
+            "ability": "Zen Mode",
+            "item": "Focus Sash",
+            "Weather": "Hail",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fire Punch","Earthquake","Icicle Crash","U-turn"]
+        }
+    },
+    "Glastrier": {
+        "Elite Four Lorelei | Giant Chasm": {
+            "index": "0000000696",
+            "level": 73,
+            "ability": "Chilling Neigh",
+            "item": "Choice Band",
+            "Weather": "Hail",
+            "nature": "Brave",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Glacial Lance"]
+        }
+    },
+    "Abomasnow-Mega": {
+        "Sinnoh Leader Candice | Giant Chasm": {
+            "index": "0000000697",
+            "level": 73,
+            "ability": "Snow Warning",
+            "item": "Abomasite",
+            "Weather": "Snow",
+            "nature": "Hasty",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Earth Power","Wood Hammer","Blizzard","Trailblaze"]
+        }
+    },
+    "Regice": {
+        "Sinnoh Leader Candice | Giant Chasm": {
+            "index": "0000000702",
+            "level": 74,
+            "ability": "Ice Body",
+            "item": "Life Orb",
+            "Weather": "Snow",
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Blizzard","Psychic","Water Pulse","Zap Cannon"]
+        }
+    },
+    "Iron Hands": {
+        "Team Plasma Colress | Giant Chasm": {
+            "index": "0000000704",
+            "level": 73,
+            "ability": "Quark Drive",
+            "item": "Sitrus Berry",
+            "Terrain": "Electric",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Wild Charge","Ice Punch","Knock Off","Close Combat"]
+        }
+    },
+    "Miraidon": {
+        "Team Plasma Colress | Giant Chasm": {
+            "index": "0000000707",
+            "level": 75,
+            "ability": "Hadron Engine",
+            "item": "Lansat Berry",
+            "Terrain": "Electric",
+            "nature": "Bold",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Discharge","Draco Meteor","Dazzling Gleam","Aura Sphere"]
+        }
+    },
+    "Dragonite": {
+        "Bird Keeper Perry & Chester | Route 118": {
+            "index": "0000000712",
+            "level": 74,
+            "ability": "Multiscale",
+            "item": "Clear Amulet",
+            "Weather": "Rain",
+            "setdouble": "True",
+            "setdoubleGroup": "route-118-bird-keeper-perry-chester",
+            "setdoubleSide": 2,
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Tailwind","Hurricane","Hydro Pump","Dragon Pulse"]
+        },
+        "Fisherman Chris | Route 118": {
+            "index": "0000000724",
+            "level": 74,
+            "ability": "Multiscale",
+            "item": "Leftovers",
+            "Terrain": "Grassy",
+            "Weather": "Rain",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Whirlpool","Fly","Roost","Thunder Wave"]
+        }
+    },
+    "Gliscor": {
+        "Bird Keeper Perry & Chester | Route 118": {
+            "index": "0000000713",
+            "level": 74,
+            "ability": "Poison Heal",
+            "item": "Toxic Orb",
+            "Weather": "Rain",
+            "setdouble": "True",
+            "setdoubleGroup": "route-118-bird-keeper-perry-chester",
+            "setdoubleSide": 1,
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Earthquake","Crabhammer","Protect","Thunder Fang"]
+        }
+    },
+    "Masquerain": {
+        "Bug Maniac Brent | Route 119": {
+            "index": "0000000714",
+            "level": 74,
+            "ability": "Intimidate",
+            "item": "Focus Sash",
+            "Weather": "Rain",
+            "Terrain": "Grassy",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sticky Web","Hydro Pump","Hurricane","Sleep Powder"]
+        }
+    },
+    "Frosmoth": {
+        "Bug Maniac Brent | Route 119": {
+            "index": "0000000716",
+            "level": 74,
+            "ability": "Ice Scales",
+            "item": "Grassy Seed",
+            "Weather": "Rain",
+            "Terrain": "Grassy",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Substitute","Ice Beam","Weather Ball","Hurricane"]
+        }
+    },
+    "Leavanny": {
+        "Bug Maniac Donald | Route 119": {
+            "index": "0000000720",
+            "level": 74,
+            "ability": "Technician",
+            "item": "Loaded Dice",
+            "Terrain": "Grassy",
+            "Weather": "Rain",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bullet Seed","Pin Missile","Low Kick","Swords Dance"]
+        }
+    },
+    "Seaking": {
+        "Fisherman Chris | Route 118": {
+            "index": "0000000722",
+            "level": 74,
+            "ability": "Lightning Rod",
+            "item": "Grassy Seed",
+            "Terrain": "Grassy",
+            "Weather": "Rain",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Muddy Water","Ice Beam","Signal Beam","Acupressure"]
+        }
+    },
+    "Grapploct": {
+    "PKMN Ranger Catherine | Route 119": {
+        "index": "0000000728",
+        "level": 74,
+        "ability": "Technician",
+        "item": "Leftovers",
+        "Terrain": "Grassy",
+        "Weather": "Rain",
+        "nature": "Sassy",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Storm Throw","Sucker Punch","Ice Punch","Substitute"]
+        }
+    },
+    "Parasect": {
+    "Bug Maniac Taylor | Route 119": {
+        "index": "0000000729",
+        "level": 74,
+        "ability": "Dry Skin",
+        "item": "Quick Claw",
+        "Terrain": "Grassy",
+        "Weather": "Rain",
+        "nature": "Bold",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Spore","Curse","Sticky Web","Infestation"]
+        }
+    },
+    "Pinsir": {
+    "Bug Maniac Taylor | Route 119": {
+            "index": "0000000730",
+            "level": 74,
+            "ability": "Hyper Cutter",
+            "item": "Assault Vest",
+            "Terrain": "Grassy",
+            "Weather": "Rain",
+            "nature": "Jolly",
+            "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Megahorn","Throat Chop","Close Combat","Rock Slide"]
+        }
+    },
+    "Kricketot": {
+    "Bug Catcher Greg | Route 119": {
+        "index": "0000000736",
+        "level": 90,
+        "ability": "Infestate",
+        "item": "Metronome",
+        "nature": "Hasty",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Boomburst"]
+        }
+    },
+    "Torterra": {
+    "Bug Catcher Doug | Route 119": {
+        "index": "0000000738",
+        "level": -1,
+        "ability": "Shell Armor",
+        "item": "Yache Berry",
+        "nature": "Adamant",
+        "Weather": "Rain",
+        "setdouble": "True",
+        "Terrain": "Grassy",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Wood Hammer","Headlong Rush","Earthquake","Wide Guard"]
+        }
+    },
+    "Goodra-Hisui": {
+    "Parasol Lady Rachel | Route 119": {
+        "index": "0000000746",
+        "level": 74,
+        "ability": "Gooey",
+        "item": "Leftovers",
+        "nature": "Bold",
+        "Weather": "Rain",
+        "Terrain": "Grassy",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Dragon Pulse","Muddy Water","Flash Cannon","Life Dew"]
+    }
+},
+"Volcarona": {
+    "Bird Keeper Phil  | Route 119": {
+        "index": "0000000751",
+        "level": 74,
+        "ability": "Flame Body",
+        "item": "Utility Umbrella",
+        "nature": "Timid",
+        "Weather": "Rain",
+        "Terrain": "Grassy",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Fiery Dance","Bug Buzz","Giga Drain","Protect"]
+    }
+},
+"Aromatisse": {
+    "Jackson & Takashi | Route 119": {
+        "index": "0000000753",
+        "level": 74,
+        "ability": "Hospitality",
+        "item": "Covert Cloak",
+        "nature": "Sassy",
+        "Weather": "Rain",
+        "Terrain": "Grassy",
+        "setdouble": "True",
+        "setdoubleSide": 2,
+        "setdoubleGroup": "route-119-ninja-boy-takashi-camper-jackson",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Follow Me","Moonblast","Sludge Bomb","Trick Room"]
+    }
+},
+"Lotad": {
+    "Painter Algebraic": {
+        "index": "0000000757",
+        "level": 100,
+        "ability": "Swift Swim",
+        "item": "Ability Shield",
+        "nature": "Mild",
+        "boosts": {
+                "atk": 1,
+                "def": 1,
+                "spatk": 1,
+                "spd": 1,
+                "spe": 1,
+            },
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Surging Strikes","Giga Drain","Chilling Water","Leech Seed"]
+    }
+},
+"Moltres-Galar": {
+    "Trainer Rival (Chikorita) | Route 119": {
+        "index": "0000000761",
+        "level": 75,
+        "ability": "Berserk",
+        "item": "Iapapa Berry",
+        "nature": "Mild",
+        "Weather": "Rain",
+        "Terrain": "Electric",
+        "setdouble": "True",
+        "chosechikorita": true,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Roost","Fiery Wrath","Hurricane","Sucker Punch"]
+    }
+},
+"Iron Crown": {
+    "Trainer Rival (Chikorita) | Route 119": {
+        "index": "0000000763",
+        "level": 75,
+        "ability": "Quark Drive",
+        "item": "Colbur Berry",
+        "nature": "Timid",
+        "Weather": "Rain",
+        "Terrain": "Electric",
+        "setdouble": "True",
+        "chosechikorita": true,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Tachyon Cutter","Terrain Pulse","Psychic","Secret Sword"]
+    }
+},
+"Tapu Fini": {
+    "Trainer Rival (Chikorita) | Route 119": {
+        "index": "0000000764",
+        "level": 76,
+        "ability": "Telepathy",
+        "item": "Electric Seed",
+        "nature": "Timid",
+        "Weather": "Rain",
+        "Terrain": "Electric",
+        "setdouble": "True",
+        "chosechikorita": true,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Muddy Water","Icy Wind","Moonblast","Scald"]
+    }
+},
+"Tapu Lele": {
+    "Trainer Rival (Tepig) | Route 119": {
+        "index": "0000000760",
+        "level": 76,
+        "ability": "Telepathy",
+        "item": "Electric Seed",
+        "nature": "Modest",
+        "Weather": "Rain",
+        "Terrain": "Electric",
+        "setdouble": "True",
+        "chosetepig": true,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Ally Switch","Dazzling Gleam","Psychic","Helping Hand"]
+    }
+},
+"Zapdos-Galar": {
+    "Trainer Rival (Tepig) | Route 119": {
+        "index": "0000000761",
+        "level": 75,
+        "ability": "Defiant",
+        "item": "Flying Gem",
+        "nature": "Jolly",
+        "Weather": "Rain",
+        "Terrain": "Electric",
+        "setdouble": "True",
+        "chosetepig": true,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Thunderous Kick","Acrobatics","Hurricane","Throat Chop"]
+    }
+},
+"Iron Bundle": {
+    "Trainer Rival (Tepig) | Route 119": {
+        "index": "0000000763",
+        "level": 75,
+        "ability": "Quark Drive",
+        "item": "Life Orb",
+        "nature": "Modest",
+        "Weather": "Rain",
+        "Terrain": "Electric",
+        "setdouble": "True",
+        "chosetepig": true,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Hydro Pump","Icy Wind","Freeze-Dry","Ice Beam"]
+    }
+},
+"Articuno-Galar": {
+    "Trainer Rival (Totodile) | Route 119": {
+        "index": "0000000760",
+        "level": 75,
+        "ability": "Competitive",
+        "item": "Light Clay",
+        "nature": "Timid",
+        "Weather": "Rain",
+        "Terrain": "Electric",
+        "setdouble": "True",
+        "chosetotodile": true,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Tailwind","Freezing Glare","Hurricane","Light Screen"]
+    }
+},
+"Iron Treads": {
+    "Trainer Rival (Totodile) | Route 119": {
+        "index": "0000000763",
+        "level": 75,
+        "ability": "Quark Drive",
+        "item": "Steel Gem",
+        "nature": "Adamant",
+        "Weather": "Rain",
+        "Terrain": "Electric",
+        "setdouble": "True",
+        "chosetotodile": true,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Earthquake","Knock Off","Iron Head","Wild Charge"]
+    }
+},
+"Kabutops": {
+    "Trainer Rival (Totodile) | Route 119": {
+        "index": "0000000764",
+        "level": 75,
+        "ability": "Swift Swim",
+        "item": "Rindo Berry",
+        "nature": "Adamant",
+        "Weather": "Rain",
+        "Terrain": "Electric",
+        "setdouble": "True",
+        "chosetotodile": true,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Liquidation","Rock Slide","Leech Life","Aqua Jet"]
+    }
+},
+"Heracross": {
+    "Bird Keeper Humberto | Fortree Gym": {
+        "index": "0000000767",
+        "level": 75,
+        "item": "Choice Scarf",
+        "nature": "Adamant",
+        "ability": "Moxie",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Close Combat","Megahorn"]
+    }
+},
+"Vivillon-Elegant": {
+    "Picnicker Ashley | Fortree Gym": {
+        "index": "0000000769",
+        "level": 75,
+        "ability": "Friend Guard",
+        "item": "Focus Sash",
+        "nature": "Timid",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Sleep Powder","Pollen Puff","Quiver Dance","Energy Ball"]
+    }
+},
+"Beautifly": {
+    "Picnicker Ashley | Fortree Gym": {
+        "index": "0000000770",
+        "level": 75,
+        "ability": "Shield Dust",
+        "item": "Focus Sash",
+        "shiny": "Yes",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Sleep Powder","Substitute","Giga Drain","Quiver Dance"]
+    }
+},
+"Oricorio-Pa'u": {
+    "Picnicker Ashley | Fortree Gym": {
+        "index": "0000000772",
+        "level": 75,
+        "ability": "Dancer",
+        "item": "Life Orb",
+        "nature": "Timid",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Quiver Dance","Revelation Dance","Hurricane","Air Slash"]
+    }
+},
+"Oricorio": {
+    "Picnicker Ashley | Fortree Gym": {
+        "index": "0000000774",
+        "level": 75,
+        "ability": "Dancer",
+        "item": "Fire Gem",
+        "nature": "Timid",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Revelation Dance","Teeter Dance","Roost","Energy Ball"]
+    }
+},
+"Brambleghast": {
+    "Expert Flint & Edwardo | Fortree Gym": {
+        "index": "0000000776",
+        "level": 75,
+        "ability": "Wind Rider",
+        "item": "Assault Vest",
+        "nature": "Jolly",
+        "setdouble": "True",
+        "setdoubleGroup": "fortree-gym-expert-flint-bird-keeper-edwardo",
+        "setdoubleSide": 2,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Power Whip","Poltergeist","Shadow Sneak","Leech Seed"]
+    }
+},
+"Drampa-Mega": {
+    "Expert Flint & Edwardo | Fortree Gym": {
+        "index": "0000000777",
+        "level": 75,
+        "ability": "Wind Rider",
+        "item": "Drampanite",
+        "nature": "Adamant",
+        "setdouble": "True",
+        "setdoubleGroup": "fortree-gym-expert-flint-bird-keeper-edwardo",
+        "setdoubleSide": 2,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Uproar","Breaking Swipe","Earthquake","Play Rough"]
+    }
+},
+"Pidgeot-Mega": {
+    "Expert Flint & Edwardo | Fortree Gym": {
+        "index": "0000000780",
+        "level": 75,
+        "ability": "No Guard",
+        "item": "Pidgeotite",
+        "nature": "Timid",
+        "setdouble": "True",
+        "setdoubleGroup": "fortree-gym-expert-flint-bird-keeper-edwardo",
+        "setdoubleSide": 1,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Tailwind","Hurricane","Heat Wave","Thunder"]
+    }
+},
+"Tropius": {
+    "Lass Darius | Fortress City": {
+        "index": "0000000781",
+        "level": 75,
+        "ability": "Thick Fat",
+        "item": "Clear Amulet",
+        "Weather": "Sun",
+        "nature": "Hasty",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Breaking Swipe","Solar Beam","Earthquake","Growth"]
+    }
+},
+"Charizard-Mega-Y": {
+    "Lass Darius | Fortress City": {
+        "index": "0000000782",
+        "level": 75,
+        "ability": "Drought",
+        "item": "Charizardite Y",
+        "Weather": "Sun",
+        "nature": "Timid",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Air Slash","Solar Beam","Flamethrower","Protect"]
+    }
+},
+"Jumpluff": {
+    "Lass Darius | Fortress City": {
+        "index": "0000000783",
+        "level": 75,
+        "ability": "Chlorophyll",
+        "item": "Flying Gem",
+        "Weather": "Sun",
+        "nature": "Adamant",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Spore","Solar Blade","Acrobatics","Light Screen"]
+    }
+},
+"Iron Moth": {
+    "Lass Darius | Fortress City": {
+        "index": "0000000785",
+        "level": 75,
+        "ability": "Quark Drive",
+        "item": "Air Balloon",
+        "Weather": "Sun",
+        "nature": "Modest",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Fiery Dance","Sludge Bomb","Solar Beam","Morning Sun"]
+    }
+},
+"Floatzel": {
+    "Bird Keeper Jared | Fortree City": {
+        "index": "0000000788",
+        "level": 75,
+        "ability": "Swift Swim",
+        "item": "Never-Melt Ice",
+        "Weather": "Rain",
+        "nature": "Adamant",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Fake Out","Crunch","Triple Dive","Triple Axel"]
+    }
+},
+"Decidueye": {
+    "Bird Keeper Jared | Fortree City": {
+        "index": "0000000791",
+        "level": 75,
+        "ability": "Tinted Lens",
+        "item": "Bright Powder",
+        "Weather": "Rain",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Tailwind","Spirit Shackle","Leaf Blade","Sky Attack"]
+    }
+},
+"Staraptor-Mega": {
+    "Leader Winona | Fortree Gym": {
+        "index": "0000000793",
+        "level": 77,
+        "ability": "Contrary",
+        "item": "Staraptite",
+        "Tailwind": true,
+        "nature": "Careful",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["U-turn","Close Combat","Brave Bird","Retaliate"]
+    }
+},
+"Golurk": {
+    "Leader Winona | Fortree Gym": {
+        "index": "0000000794",
+        "level": 76,
+        "ability": "No Guard",
+        "item": "Assault Vest",
+        "Tailwind": true,
+        "nature": "Adamant",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Dynamic Punch","Stone Edge","Headlong Rush","Poltergeist"]
+    }
+},
+"Thundurus-Therian": {
+    "Leader Winona | Fortree Gym": {
+        "index": "0000000795",
+        "level": 76,
+        "ability": "Volt Absorb",
+        "item": "Clear Amulet",
+        "Tailwind": true,
+        "nature": "Timid",
+        "ivs": {
+            "hp": 31, "at": 0, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Nasty Plot","Energy Ball","Wildbolt Storm","Aeroblast"]
+    }
+},
+"Yveltal": {
+    "Leader Winona | Fortree Gym": {
+        "index": "0000000798",
+        "level": 76,
+        "ability": "Dark Aura",
+        "item": "Weakness Policy",
+        "Tailwind": true,
+        "shiny": "Yes",
+        "nature": "Sassy",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Sucker Punch","Dark Pulse","Oblivion Wing","Focus Blast"]
+    }
+},
+}

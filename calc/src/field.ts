@@ -81,6 +81,7 @@ export class Field implements State.Field {
 }
 
 export class Side implements State.Side {
+  isGrounded: boolean;
   spikes: number;
   steelsurge: boolean;
   vinelash: boolean;
@@ -104,6 +105,7 @@ export class Side implements State.Side {
   isSwitching?: 'out' | 'in';
 
   constructor(side: State.Side = {}) {
+    this.isGrounded = !!side.isGrounded;
     this.spikes = side.spikes || 0;
     this.steelsurge = !!side.steelsurge;
     this.vinelash = !!side.vinelash;

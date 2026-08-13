@@ -1,5 +1,5 @@
 import {Generation, Weather, Terrain, TypeName, ID} from './data/interface';
-import {Field, Side} from './field';
+import {Field} from './field';
 import {Move} from './move';
 import {Pokemon} from './pokemon';
 import {Damage, damageRange} from './result';
@@ -42,7 +42,7 @@ export interface RawDesc {
   isPowerSpot?: boolean;
   isWonderRoom?: boolean;
   isSwitching?: 'out' | 'in';
-  moveBP?: number;
+  moveBP?: number | string;
   moveName: string;
   moveTurns?: string;
   moveType?: TypeName;
@@ -64,8 +64,9 @@ export function display(
   err = true
 ) {
   const [minDamage, maxDamage] = damageRange(damage);
-  const min = (typeof minDamage === 'number' ? minDamage : minDamage[0] + minDamage[1]) * move.hits;
-  const max = (typeof maxDamage === 'number' ? maxDamage : maxDamage[0] + maxDamage[1]) * move.hits;
+  const hits = damageIncludesMultipleHits(damage) ? 1 : move.hits;
+  const min = (typeof minDamage === 'number' ? minDamage : minDamage[0] + minDamage[1]) * hits;
+  const max = (typeof maxDamage === 'number' ? maxDamage : maxDamage[0] + maxDamage[1]) * hits;
 
   const minDisplay = toDisplay(notation, min, defender.maxHP());
   const maxDisplay = toDisplay(notation, max, defender.maxHP());
@@ -87,8 +88,9 @@ export function displayMove(
   notation = '%'
 ) {
   const [minDamage, maxDamage] = damageRange(damage);
-  const min = (typeof minDamage === 'number' ? minDamage : minDamage[0] + minDamage[1]) * move.hits;
-  const max = (typeof maxDamage === 'number' ? maxDamage : maxDamage[0] + maxDamage[1]) * move.hits;
+  const hits = damageIncludesMultipleHits(damage) ? 1 : move.hits;
+  const min = (typeof minDamage === 'number' ? minDamage : minDamage[0] + minDamage[1]) * hits;
+  const max = (typeof maxDamage === 'number' ? maxDamage : maxDamage[0] + maxDamage[1]) * hits;
 
   const minDisplay = toDisplay(notation, min, defender.maxHP());
   const maxDisplay = toDisplay(notation, max, defender.maxHP());
@@ -111,6 +113,7 @@ export function getRecovery(
   const [minDamage, maxDamage] = damageRange(damage);
   const minD = typeof minDamage === 'number' ? [minDamage] : minDamage;
   const maxD = typeof maxDamage === 'number' ? [maxDamage] : maxDamage;
+  const hits = damageIncludesMultipleHits(damage) ? 1 : move.hits;
 
   const recovery = [0, 0] as [number, number];
   let text = '';
@@ -120,8 +123,8 @@ export function getRecovery(
   if (attacker.hasItem('Shell Bell') && !ignoresShellBell) {
     const max = Math.round(defender.maxHP() / 8);
     for (let i = 0; i < minD.length; i++) {
-      recovery[0] += Math.min(Math.round(minD[i] * move.hits / 8), max);
-      recovery[1] += Math.min(Math.round(maxD[i] * move.hits / 8), max);
+      recovery[0] += Math.min(Math.round(minD[i] * hits / 8), max);
+      recovery[1] += Math.min(Math.round(maxD[i] * hits / 8), max);
     }
   }
 
@@ -133,8 +136,8 @@ export function getRecovery(
     const percentHealed = move.drain[0] / move.drain[1];
     const max = Math.round(defender.maxHP() * percentHealed);
     for (let i = 0; i < minD.length; i++) {
-      recovery[0] += Math.min(Math.round(minD[i] * move.hits * percentHealed), max);
-      recovery[1] += Math.min(Math.round(maxD[i] * move.hits * percentHealed), max);
+      recovery[0] += Math.min(Math.round(minD[i] * hits * percentHealed), max);
+      recovery[1] += Math.min(Math.round(maxD[i] * hits * percentHealed), max);
     }
   }
 
@@ -157,8 +160,9 @@ export function getRecoil(
   notation = '%'
 ) {
   const [minDamage, maxDamage] = damageRange(damage);
-  const min = (typeof minDamage === 'number' ? minDamage : minDamage[0] + minDamage[1]) * move.hits;
-  const max = (typeof maxDamage === 'number' ? maxDamage : maxDamage[0] + maxDamage[1]) * move.hits;
+  const hits = damageIncludesMultipleHits(damage) ? 1 : move.hits;
+  const min = (typeof minDamage === 'number' ? minDamage : minDamage[0] + minDamage[1]) * hits;
+  const max = (typeof maxDamage === 'number' ? maxDamage : maxDamage[0] + maxDamage[1]) * hits;
 
   let recoil: [number, number] | number = [0, 0];
   let text = '';
@@ -249,6 +253,7 @@ export function getKOChance(
   damage: Damage,
   err = true
 ) {
+  const includesMultipleHits = damageIncludesMultipleHits(damage);
   damage = combine(damage);
   if (isNaN(damage[0])) {
     error(err, 'damage[0] must be a number.');
@@ -267,7 +272,7 @@ export function getKOChance(
     return {chance: 1, n: 1, text: 'guaranteed OHKO'};
   }
 
-  const hazards = getHazards(gen, defender, field.defenderSide);
+  const hazards = getHazards(gen, defender, field);
   const eot = getEndOfTurn(gen, attacker, defender, move, field);
   const toxicCounter =
      defender.hasStatus('tox') && !defender.hasAbility('Magic Guard') ? defender.toxicCounter : 0;
@@ -275,9 +280,11 @@ export function getKOChance(
   // multi-hit moves have too many possibilities for brute-forcing to work, so reduce it
   // to an approximate distribution
   let qualifier = '';
-  if (move.hits > 1) {
+  if (move.hits > 1 && !includesMultipleHits) {
     qualifier = 'approx. ';
     damage = squashMultihit(gen, damage, move.hits, err);
+  } else if (includesMultipleHits) {
+    qualifier = 'approx. ';
   }
 
   const hazardsText = hazards.texts.length > 0
@@ -406,6 +413,23 @@ export function getKOChance(
 function combine(damage: Damage) {
   // Fixed Damage
   if (typeof damage === 'number') return [damage];
+  // Variable-power multihit damage. Combine the separate hit rolls, then reduce
+  // them to representative quantiles so multi-turn KO calculations remain tractable.
+  if (damage.length > 2 && Array.isArray(damage[0])) {
+    let combined = [0];
+    for (const hit of damage as number[][]) {
+      const next: number[] = [];
+      for (const total of combined) {
+        for (const roll of hit) next.push(total + roll);
+      }
+      combined = next;
+    }
+    combined.sort((a, b) => a - b);
+    return Array.from(
+      {length: 16},
+      (_, i) => combined[Math.round((i * (combined.length - 1)) / 15)]
+    );
+  }
   // Standard Damage
   if (damage.length > 2) {
     if (damage[0] > damage[damage.length - 1]) damage = damage.slice().sort() as number[];
@@ -426,14 +450,19 @@ function combine(damage: Damage) {
   return combined.sort();
 }
 
+function damageIncludesMultipleHits(damage: Damage) {
+  return typeof damage !== 'number' && damage.length > 2 && Array.isArray(damage[0]);
+}
+
 const TRAPPING = [
   'Bind', 'Clamp', 'Fire Spin', 'Infestation', 'Magma Storm', 'Sand Tomb',
   'Thunder Cage', 'Whirlpool', 'Wrap', 'G-Max Sandblast', 'G-Max Centiferno',
 ];
 
-function getHazards(gen: Generation, defender: Pokemon, defenderSide: Side) {
+function getHazards(gen: Generation, defender: Pokemon, field: Field) {
   let damage = 0;
   const texts: string[] = [];
+  const defenderSide = field.defenderSide;
 
   if (defender.hasItem('Heavy-Duty Boots')) {
     return {damage, texts};
@@ -455,10 +484,7 @@ function getHazards(gen: Generation, defender: Pokemon, defenderSide: Side) {
     texts.push('Steelsurge');
   }
 
-  if (!defender.hasType('Flying') &&
-      !defender.hasAbility('Magic Guard', 'Levitate') &&
-      !defender.hasItem('Air Balloon')
-  ) {
+  if (!defender.hasAbility('Magic Guard') && isGrounded(defender, field, defenderSide)) {
     if (defenderSide.spikes === 1) {
       damage += Math.floor(defender.maxHP() / 8);
       if (gen.num === 2) {
@@ -565,7 +591,7 @@ function getEndOfTurn(
   }
 
   if (field.hasTerrain('Grassy')) {
-    if (isGrounded(defender, field)) {
+    if (isGrounded(defender, field, field.defenderSide)) {
       damage += Math.floor(defender.maxHP() / 16);
       texts.push('Grassy Terrain recovery');
     }

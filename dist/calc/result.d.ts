@@ -3,14 +3,14 @@ import { Generation } from './data/interface';
 import { Field } from './field';
 import { Move } from './move';
 import { Pokemon } from './pokemon';
-export type Damage = number | number[] | [number, number] | [number[], number[]];
+export type Damage = number | number[] | [number, number] | number[][];
 export declare class Result {
     gen: Generation;
     attacker: Pokemon;
     defender: Pokemon;
     move: Move;
     field: Field;
-    damage: number | number[] | [number[], number[]];
+    damage: number | number[] | number[][];
     rawDesc: RawDesc;
     constructor(gen: Generation, attacker: Pokemon, defender: Pokemon, move: Move, field: Field, damage: Damage, rawDesc: RawDesc);
     desc(): string;

@@ -263,6 +263,16 @@ img.trainer-pok-visual {
 	filter: saturate(1.4) brightness(0.72);
 }
 
+body.switch-in-enabled .trainer-pok.right-side.trainer-party-leading {
+    box-sizing: border-box;
+    border: 2px solid #9b59ff !important;
+    border-radius: 3px;
+}
+
+.trainer-pok.right-side.switch-in-ranked {
+    transition: border-color 120ms ease, box-shadow 120ms ease;
+}
+
 :root {
     --calc-side-panel-open-width: 0px;
 }
@@ -1638,6 +1648,130 @@ table.field {
     margin-left: auto;
 }
 
+.switch-in-guide {
+    box-sizing: border-box;
+    clear: both;
+    width: 30em;
+    margin-top: 7px;
+    padding: 7px 10px 9px;
+}
+
+.switch-in-guide[hidden] {
+    display: none;
+}
+
+.switch-in-guide-summary {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-bottom: 7px;
+    padding-bottom: 7px;
+    border-bottom: 1px solid rgba(90, 100, 115, 0.55);
+}
+
+.switch-in-guide-summary span {
+    font-size: 0.86em;
+    color: #596476;
+}
+
+.switch-in-guide-list {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.switch-in-guide-row {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    align-items: center;
+    column-gap: 7px;
+    padding: 4px 6px;
+    border: 1px solid rgba(110, 122, 140, 0.35);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.38);
+    cursor: pointer;
+}
+
+.switch-in-guide-row:hover,
+.switch-in-guide-row:focus-visible {
+    border-color: #9b59ff;
+    outline: none;
+}
+
+.switch-in-guide-sprite {
+    grid-row: 1 / 3;
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+    image-rendering: pixelated;
+}
+
+.switch-in-guide-name {
+    min-width: 0;
+    overflow: hidden;
+    font-weight: bold;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.switch-in-guide-rank {
+    margin-right: 5px;
+    color: #6f42a8;
+}
+
+.switch-in-guide-score {
+    color: #6f42a8;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.switch-in-guide-reason {
+    grid-column: 2 / 4;
+    margin-top: 2px;
+    font-size: 0.8em;
+    line-height: 1.35;
+    color: #4b5565;
+}
+
+.switch-in-guide-empty {
+    margin: 4px 0 0;
+    color: #596476;
+}
+
+.switch-in-guide-help {
+    margin-top: 8px;
+    padding-top: 7px;
+    border-top: 1px solid rgba(90, 100, 115, 0.55);
+}
+
+.switch-in-guide-help-button {
+    width: auto;
+    padding: 3px 8px;
+    cursor: pointer;
+}
+
+.switch-in-guide-help-text {
+    margin-top: 7px;
+    padding: 7px 8px;
+    border-left: 3px solid #9b59ff;
+    background: rgba(111, 66, 168, 0.08);
+    font-size: 0.82em;
+    line-height: 1.4;
+}
+
+.switch-in-guide-help-text[hidden] {
+    display: none;
+}
+
+.switch-in-guide-help-text p {
+    margin: 0 0 5px;
+}
+
+.switch-in-guide-help-text p:last-child {
+    margin-bottom: 0;
+}
+
 .trainer-sequence-type {
     flex: 0 0 auto;
     font-size: 1.05em;
@@ -1805,47 +1939,58 @@ table.field {
 }
 
 .mon-dmg-none{
+    --trainer-pok-damage-layer: linear-gradient(var(--fieldset-color), var(--fieldset-color));
     background: var(--fieldset-color) !important;
 }
 .mon-dmg-W{
     /* Is considerable a wall*/
+    --trainer-pok-damage-layer: linear-gradient(to right, #0f0bf3 50%, var(--fieldset-color) 0%);
     background: linear-gradient(to right, #0f0bf3 50%, var(--fieldset-color) 0%);
 }
 .mon-dmg-WMO{
     /* Is considerable a wall that may OHKO*/
+    --trainer-pok-damage-layer: linear-gradient(to right, #1295ec 50%, var(--fieldset-color) 0%);
     background: linear-gradient(to right, #1295ec 50%, var(--fieldset-color) 0%);
 }
 .mon-dmg-4{
     /*Gets OHKO*/
+    --trainer-pok-damage-layer: linear-gradient(to right, var(--fieldset-color) 50%, #dd0b0b 0%);
     background: linear-gradient(to right, var(--fieldset-color) 50%, #dd0b0b 0%);
 }
 .mon-dmg-3{
     /*maybe gets OHKO*/
+    --trainer-pok-damage-layer: linear-gradient(to right, var(--fieldset-color) 50%, #ff7f16 0%);
     background: linear-gradient(to right, var(--fieldset-color) 50%, #ff7f16 0%);
 }
 .mon-dmg-1{
     /*inflicts OHKO*/
+    --trainer-pok-damage-layer: linear-gradient(to right, #20d408 50%, var(--fieldset-color) 0%);
     background: linear-gradient(to right, #20d408 50%, var(--fieldset-color) 0%);
 }
 .mon-dmg-2{
     /*may inflicts OHKO*/
+    --trainer-pok-damage-layer: linear-gradient(to right, #daff08 50%, var(--fieldset-color) 0%);
     background: linear-gradient(to right, #daff08 50%, var(--fieldset-color) 0%);
 }
 
 .mon-dmg-14{
     /*both sides Gets OHKO*/
+    --trainer-pok-damage-layer: linear-gradient(to right, #20d408 50%, #dd0b0b 0%);
     background: linear-gradient(to right, #20d408 50%, #dd0b0b 0%);
 }
 .mon-dmg-23{
     /*both sides might inflict OHKO*/
+    --trainer-pok-damage-layer: linear-gradient(to right, #daff08 50%, #ff7f16 0%);
     background: linear-gradient(to right, #daff08 50%, #ff7f16 0%);
 }
 .mon-dmg-13{
     /*inflict OHKO but may Gets OHKO*/
+    --trainer-pok-damage-layer: linear-gradient(to right, #20d408 50%, #ff7f16 0%);
     background: linear-gradient(to right, #20d408 50%, #ff7f16 0%);
 }
 .mon-dmg-24{
     /*may inflict OHKO but Gets OHKO*/
+    --trainer-pok-damage-layer: linear-gradient(to right, #daff08 50%, #dd0b0b 0%);
     background: linear-gradient(to right, #daff08 50%, #dd0b0b 0%);
 }
 
@@ -2804,6 +2949,34 @@ body.calc-side-resizing .credits {
     gap: 7px;
     width: auto;
     margin-right: 10px;
+}
+
+.settings-switch-in-control {
+    display: grid;
+    gap: 7px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(125, 142, 166, 0.35);
+}
+
+.settings-switch-in-action-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+}
+
+.settings-switch-in-button {
+    min-width: 15.5em;
+}
+
+.settings-switch-in-status {
+    font-size: 0.88em;
+    color: #4a5667;
+}
+
+.settings-switch-in-note {
+    margin-bottom: 0;
 }
 
 .more-colour-type-select {

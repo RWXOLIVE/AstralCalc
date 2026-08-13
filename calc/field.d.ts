@@ -26,6 +26,7 @@ export declare class Field implements State.Field {
     clone(): Field;
 }
 export declare class Side implements State.Side {
+    isGrounded: boolean;
     spikes: number;
     steelsurge: boolean;
     vinelash: boolean;

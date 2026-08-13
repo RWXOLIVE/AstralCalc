@@ -105,10 +105,14 @@ export function calculateDPP(
   }
 
   const isGhostRevealed = attacker.hasAbility('Scrappy') || field.defenderSide.isForesight;
-  let type1Effectiveness =
-    getMoveEffectiveness(gen, move, defender.types[0], isGhostRevealed, field.isGravity);
+  const defenderIsGrounded = field.isGravity || field.defenderSide.isGrounded;
+  let type1Effectiveness = getMoveEffectiveness(
+    gen, move, defender.types[0], isGhostRevealed, undefined, defenderIsGrounded
+  );
   let type2Effectiveness = defender.types[1]
-    ? getMoveEffectiveness(gen, move, defender.types[1], isGhostRevealed, field.isGravity)
+    ? getMoveEffectiveness(
+      gen, move, defender.types[1], isGhostRevealed, undefined, defenderIsGrounded
+    )
     : 1;
 
   let typeEffectiveness = type1Effectiveness * type2Effectiveness;
@@ -132,7 +136,7 @@ export function calculateDPP(
       (move.hasType('Fire') && defender.hasAbility('Flash Fire')) ||
       (move.hasType('Water') && defender.hasAbility('Dry Skin', 'Water Absorb')) ||
       (move.hasType('Electric') && defender.hasAbility('Motor Drive', 'Volt Absorb')) ||
-      (move.hasType('Ground') && !field.isGravity &&
+      (move.hasType('Ground') && !defenderIsGrounded &&
         !defender.hasItem('Iron Ball') && defender.hasAbility('Levitate')) ||
       (move.flags.sound && defender.hasAbility('Soundproof'))
   ) {

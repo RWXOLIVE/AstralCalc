@@ -367,6 +367,7 @@ export const MEGA_STONES: {[species: string]: string} = {
   Scraftinite: 'Scrafty',
   Skarmorite: 'Skarmory',
   Starminite: 'Starmie',
+  Staraptite: 'Staraptor',
   Victreebelite: 'Victreebel',
   Zygardite: 'Zygarde',
   Butterfrite: 'Butterfree',

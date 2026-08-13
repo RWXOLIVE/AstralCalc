@@ -36,7 +36,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 exports.__esModule = true;
-
+exports.OF32 = exports.OF16 = exports.pokeRound = exports.handleFixedDamageMoves = exports.getEVDescriptionText = exports.countBoosts = exports.getWeightFactor = exports.getShellSideArmCategory = exports.getFinalDamage = exports.getProtoQuarkBoostedStat = exports.getMostProficientStat = exports.getBaseDamage = exports.chainMods = exports.checkMultihitBoost = exports.checkSeedBoost = exports.checkInfiltrator = exports.checkEmbody = exports.checkDauntlessShield = exports.checkIntrepidSword = exports.checkDownload = exports.checkIntimidate = exports.checkWonderRoom = exports.checkItem = exports.checkForecast = exports.checkTeraformZero = exports.checkAirLock = exports.getMoveEffectiveness = exports.getTurnOrder = exports.getFinalSpeed = exports.computeFinalStats = exports.getModifiedStat = exports.isGrounded = void 0;
 var util_1 = require("../util");
 var stats_1 = require("../stats");
 var EV_ITEMS = [
@@ -48,10 +48,10 @@ var EV_ITEMS = [
     'Power Lens',
     'Power Weight',
 ];
-function isGrounded(pokemon, field) {
-    return (field.isGravity || pokemon.hasItem('Iron Ball') ||
+function isGrounded(pokemon, field, side) {
+    return (!!(side === null || side === void 0 ? void 0 : side.isGrounded) || field.isGravity || pokemon.hasItem('Iron Ball') ||
         (!pokemon.hasType('Flying') &&
-            !pokemon.hasAbility('Levitate') &&
+            !pokemon.hasAbility('Levitate', 'Eelevate') &&
             !pokemon.hasItem('Air Balloon')));
 }
 exports.isGrounded = isGrounded;
@@ -137,8 +137,9 @@ function getFinalSpeed(gen, pokemon, field, side) {
         speedMods.push(8192);
     if ((pokemon.hasAbility('Unburden') && pokemon.abilityOn) ||
         (pokemon.hasAbility('Chlorophyll') && weather.includes('Sun')) ||
+        (pokemon.hasAbility('Heated Rush') && weather.includes('Sun')) ||
         (pokemon.hasAbility('Sand Rush') && weather === 'Sand') ||
-        (pokemon.hasAbility('Swift Swim') && weather.includes('Rain')) ||
+        (pokemon.hasAbility('Swift Swim', 'Surge Cutter') && weather.includes('Rain')) ||
         (pokemon.hasAbility('Slush Rush') && ['Hail', 'Snow'].includes(weather)) ||
         (pokemon.hasAbility('Surge Surfer') && terrain === 'Electric')) {
         speedMods.push(8192);
@@ -179,11 +180,14 @@ function getTurnOrder(attacker, defender, field) {
     return attackerMovesFirst ? 'first' : 'last';
 }
 exports.getTurnOrder = getTurnOrder;
-function getMoveEffectiveness(gen, move, type, isGhostRevealed, isGravity, isRingTarget) {
+function getMoveEffectiveness(gen, move, type, isGhostRevealed, isPoisonRevealed, isGravity, isRingTarget) {
     if ((isRingTarget || isGhostRevealed) && type === 'Ghost' && move.hasType('Normal', 'Fighting')) {
         return 1;
     }
     else if ((isRingTarget || isGravity) && type === 'Flying' && move.hasType('Ground')) {
+        return 1;
+    }
+    else if ((isRingTarget || isPoisonRevealed) && type === 'Steel' && move.hasType('Poison')) {
         return 1;
     }
     else if (move.named('Freeze-Dry') && type === 'Water') {
@@ -493,15 +497,18 @@ function getProtoQuarkBoostedStat(pokemon, field, gen) {
     return hasProtoQuarkBoost ? getMostProficientStat(pokemon, gen) : undefined;
 }
 exports.getProtoQuarkBoostedStat = getProtoQuarkBoostedStat;
-function getFinalDamage(baseAmount, i, effectiveness, isBurned, stabMod, finalMod, protect) {
+function getFinalDamage(baseAmount, i, effectiveness, isBurned, isFrostbite, stabMod, finalMod, protect) {
     var damageAmount = Math.floor(OF32(baseAmount * (85 + i)) / 100);
     if (stabMod !== 4096)
         damageAmount = OF32(damageAmount * stabMod) / 4096;
     damageAmount = Math.floor(OF32(pokeRound(damageAmount) * effectiveness));
     if (isBurned)
         damageAmount = Math.floor(damageAmount / 2);
+    if (isFrostbite)
+        damageAmount = Math.floor(damageAmount / 2);
     if (protect)
         damageAmount = pokeRound(OF32(damageAmount * 1024) / 4096);
+    return OF16(pokeRound(Math.max(1, OF32(damageAmount * finalMod) / 4096)));
 }
 exports.getFinalDamage = getFinalDamage;
 function getShellSideArmCategory(source, target) {

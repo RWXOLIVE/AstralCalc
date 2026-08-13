@@ -326,6 +326,31 @@ describe('calc', () => {
       });
     });
 
+    inGens(8, 9, ({calculate, Pokemon, Move}) => {
+      test('Triple Axel calculates its 20, 40, and 60 BP hits separately', () => {
+        const attacker = Pokemon('Weavile');
+        const defender = Pokemon('Mew');
+        const result = calculate(attacker, defender, Move('Triple Axel'));
+        const damageByHit = result.damage as number[][];
+
+        expect(damageByHit).toHaveLength(3);
+        for (let hit = 0; hit < 3; hit++) {
+          const expected = calculate(
+            attacker,
+            defender,
+            Move('Ice Punch', {overrides: {basePower: 20 * (hit + 1)}})
+          );
+          expect(damageByHit[hit]).toEqual(expected.damage);
+        }
+
+        const min = damageByHit.reduce((total, damage) => total + Math.min(...damage), 0);
+        const max = damageByHit.reduce((total, damage) => total + Math.max(...damage), 0);
+        expect(result.range()).toEqual([min, max]);
+        expect(result.fullDesc()).toContain('Triple Axel (20 + 40 + 60 BP) (3 hits)');
+        expect(result.fullDesc()).toContain(`${min}-${max}`);
+      });
+    });
+
     inGens(6, 9, ({gen, calculate, Pokemon, Move}) => {
       test(`Thousand Arrows and Ring Target Should negate damage nullfiers (gen ${gen})`, () => {
         const result = calculate(Pokemon('Zygarde'), Pokemon('Swellow'), Move('Thousand Arrows'));
@@ -1038,6 +1063,22 @@ describe('calc', () => {
           expect(result.desc()).toBe(
             '0 Atk Supreme Overlord 5 allies fainted Kingambit Iron Head vs. 0 HP / 0 Def Aggron: 100-118 (35.5 - 41.9%) -- guaranteed 3HKO'
           );
+        });
+
+        test('Punching Glove only removes contact from punching moves', () => {
+          const fluffy = () => Pokemon('Mew', {ability: 'Fluffy'});
+          const regular = () => Pokemon('Mew', {ability: 'Synchronize'});
+          const gloved = () => Pokemon('Mew', {item: 'Punching Glove'});
+
+          const glovedBodySlam = calculate(gloved(), fluffy(), Move('Body Slam'));
+          const unglovedBodySlam = calculate(Pokemon('Mew'), fluffy(), Move('Body Slam'));
+          const nonFluffyBodySlam = calculate(gloved(), regular(), Move('Body Slam'));
+          expect(glovedBodySlam.range()).toEqual(unglovedBodySlam.range());
+          expect(glovedBodySlam.range()[1]).toBeLessThan(nonFluffyBodySlam.range()[0]);
+
+          const glovedIcePunch = calculate(gloved(), fluffy(), Move('Ice Punch'));
+          const nonFluffyIcePunch = calculate(gloved(), regular(), Move('Ice Punch'));
+          expect(glovedIcePunch.range()).toEqual(nonFluffyIcePunch.range());
         });
       });
     });

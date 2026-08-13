@@ -15,6 +15,17 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
+var __values = (this && this.__values) || function(o) {
+    var s = typeof Symbol === "function" && Symbol.iterator, m = s && o[s], i = 0;
+    if (m) return m.call(o);
+    if (o && typeof o.length === "number") return {
+        next: function () {
+            if (o && i >= o.length) o = void 0;
+            return { value: o && o[i++], done: !o };
+        }
+    };
+    throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
+};
 exports.__esModule = true;
 
 var result_1 = require("./result");
@@ -24,8 +35,9 @@ function display(gen, attacker, defender, move, field, damage, rawDesc, notation
     if (notation === void 0) { notation = '%'; }
     if (err === void 0) { err = true; }
     var _a = __read((0, result_1.damageRange)(damage), 2), minDamage = _a[0], maxDamage = _a[1];
-    var min = (typeof minDamage === 'number' ? minDamage : minDamage[0] + minDamage[1]) * move.hits;
-    var max = (typeof maxDamage === 'number' ? maxDamage : maxDamage[0] + maxDamage[1]) * move.hits;
+    var hits = damageIncludesMultipleHits(damage) ? 1 : move.hits;
+    var min = (typeof minDamage === 'number' ? minDamage : minDamage[0] + minDamage[1]) * hits;
+    var max = (typeof maxDamage === 'number' ? maxDamage : maxDamage[0] + maxDamage[1]) * hits;
     var minDisplay = toDisplay(notation, min, defender.maxHP());
     var maxDisplay = toDisplay(notation, max, defender.maxHP());
     var desc = buildDescription(rawDesc, attacker, defender);
@@ -39,8 +51,9 @@ exports.display = display;
 function displayMove(gen, attacker, defender, move, damage, notation) {
     if (notation === void 0) { notation = '%'; }
     var _a = __read((0, result_1.damageRange)(damage), 2), minDamage = _a[0], maxDamage = _a[1];
-    var min = (typeof minDamage === 'number' ? minDamage : minDamage[0] + minDamage[1]) * move.hits;
-    var max = (typeof maxDamage === 'number' ? maxDamage : maxDamage[0] + maxDamage[1]) * move.hits;
+    var hits = damageIncludesMultipleHits(damage) ? 1 : move.hits;
+    var min = (typeof minDamage === 'number' ? minDamage : minDamage[0] + minDamage[1]) * hits;
+    var max = (typeof maxDamage === 'number' ? maxDamage : maxDamage[0] + maxDamage[1]) * hits;
     var minDisplay = toDisplay(notation, min, defender.maxHP());
     var maxDisplay = toDisplay(notation, max, defender.maxHP());
     var recoveryText = getRecovery(gen, attacker, defender, move, damage, notation).text;
@@ -54,14 +67,15 @@ function getRecovery(gen, attacker, defender, move, damage, notation) {
     var _a = __read((0, result_1.damageRange)(damage), 2), minDamage = _a[0], maxDamage = _a[1];
     var minD = typeof minDamage === 'number' ? [minDamage] : minDamage;
     var maxD = typeof maxDamage === 'number' ? [maxDamage] : maxDamage;
+    var hits = damageIncludesMultipleHits(damage) ? 1 : move.hits;
     var recovery = [0, 0];
     var text = '';
     var ignoresShellBell = gen.num === 3 && move.named('Doom Desire', 'Future Sight');
     if (attacker.hasItem('Shell Bell') && !ignoresShellBell) {
         var max = Math.round(defender.maxHP() / 8);
         for (var i = 0; i < minD.length; i++) {
-            recovery[0] += Math.min(Math.round(minD[i] * move.hits / 8), max);
-            recovery[1] += Math.min(Math.round(maxD[i] * move.hits / 8), max);
+            recovery[0] += Math.min(Math.round(minD[i] * hits / 8), max);
+            recovery[1] += Math.min(Math.round(maxD[i] * hits / 8), max);
         }
     }
     if (move.named('G-Max Finale')) {
@@ -71,8 +85,8 @@ function getRecovery(gen, attacker, defender, move, damage, notation) {
         var percentHealed = move.drain[0] / move.drain[1];
         var max = Math.round(defender.maxHP() * percentHealed);
         for (var i = 0; i < minD.length; i++) {
-            recovery[0] += Math.min(Math.round(minD[i] * move.hits * percentHealed), max);
-            recovery[1] += Math.min(Math.round(maxD[i] * move.hits * percentHealed), max);
+            recovery[0] += Math.min(Math.round(minD[i] * hits * percentHealed), max);
+            recovery[1] += Math.min(Math.round(maxD[i] * hits * percentHealed), max);
         }
     }
     if (recovery[1] === 0)
@@ -86,8 +100,9 @@ exports.getRecovery = getRecovery;
 function getRecoil(gen, attacker, defender, move, damage, notation) {
     if (notation === void 0) { notation = '%'; }
     var _a = __read((0, result_1.damageRange)(damage), 2), minDamage = _a[0], maxDamage = _a[1];
-    var min = (typeof minDamage === 'number' ? minDamage : minDamage[0] + minDamage[1]) * move.hits;
-    var max = (typeof maxDamage === 'number' ? maxDamage : maxDamage[0] + maxDamage[1]) * move.hits;
+    var hits = damageIncludesMultipleHits(damage) ? 1 : move.hits;
+    var min = (typeof minDamage === 'number' ? minDamage : minDamage[0] + minDamage[1]) * hits;
+    var max = (typeof maxDamage === 'number' ? maxDamage : maxDamage[0] + maxDamage[1]) * hits;
     var recoil = [0, 0];
     var text = '';
     var damageOverflow = minDamage > defender.curHP() || maxDamage > defender.curHP();
@@ -166,6 +181,7 @@ function getRecoil(gen, attacker, defender, move, damage, notation) {
 exports.getRecoil = getRecoil;
 function getKOChance(gen, attacker, defender, move, field, damage, err) {
     if (err === void 0) { err = true; }
+    var includesMultipleHits = damageIncludesMultipleHits(damage);
     damage = combine(damage);
     if (isNaN(damage[0])) {
         (0, util_1.error)(err, 'damage[0] must be a number.');
@@ -182,13 +198,16 @@ function getKOChance(gen, attacker, defender, move, field, damage, err) {
     if (damage[0] >= defender.maxHP() && move.timesUsed === 1 && move.timesUsedWithMetronome === 1) {
         return { chance: 1, n: 1, text: 'guaranteed OHKO' };
     }
-    var hazards = getHazards(gen, defender, field.defenderSide);
+    var hazards = getHazards(gen, defender, field);
     var eot = getEndOfTurn(gen, attacker, defender, move, field);
     var toxicCounter = defender.hasStatus('tox') && !defender.hasAbility('Magic Guard') ? defender.toxicCounter : 0;
     var qualifier = '';
-    if (move.hits > 1) {
+    if (move.hits > 1 && !includesMultipleHits) {
         qualifier = 'approx. ';
         damage = squashMultihit(gen, damage, move.hits, err);
+    }
+    else if (includesMultipleHits) {
+        qualifier = 'approx. ';
     }
     var hazardsText = hazards.texts.length > 0
         ? ' after ' + serializeText(hazards.texts)
@@ -274,8 +293,53 @@ function getKOChance(gen, attacker, defender, move, field, damage, err) {
 }
 exports.getKOChance = getKOChance;
 function combine(damage) {
+    var e_1, _a, e_2, _b, e_3, _c;
     if (typeof damage === 'number')
         return [damage];
+    if (damage.length > 2 && Array.isArray(damage[0])) {
+        var combined_2 = [0];
+        try {
+            for (var _d = __values(damage), _e = _d.next(); !_e.done; _e = _d.next()) {
+                var hit = _e.value;
+                var next = [];
+                try {
+                    for (var combined_1 = (e_2 = void 0, __values(combined_2)), combined_1_1 = combined_1.next(); !combined_1_1.done; combined_1_1 = combined_1.next()) {
+                        var total = combined_1_1.value;
+                        try {
+                            for (var hit_1 = (e_3 = void 0, __values(hit)), hit_1_1 = hit_1.next(); !hit_1_1.done; hit_1_1 = hit_1.next()) {
+                                var roll = hit_1_1.value;
+                                next.push(total + roll);
+                            }
+                        }
+                        catch (e_3_1) { e_3 = { error: e_3_1 }; }
+                        finally {
+                            try {
+                                if (hit_1_1 && !hit_1_1.done && (_c = hit_1["return"])) _c.call(hit_1);
+                            }
+                            finally { if (e_3) throw e_3.error; }
+                        }
+                    }
+                }
+                catch (e_2_1) { e_2 = { error: e_2_1 }; }
+                finally {
+                    try {
+                        if (combined_1_1 && !combined_1_1.done && (_b = combined_1["return"])) _b.call(combined_1);
+                    }
+                    finally { if (e_2) throw e_2.error; }
+                }
+                combined_2 = next;
+            }
+        }
+        catch (e_1_1) { e_1 = { error: e_1_1 }; }
+        finally {
+            try {
+                if (_e && !_e.done && (_a = _d["return"])) _a.call(_d);
+            }
+            finally { if (e_1) throw e_1.error; }
+        }
+        combined_2.sort(function (a, b) { return a - b; });
+        return Array.from({ length: 16 }, function (_, i) { return combined_2[Math.round((i * (combined_2.length - 1)) / 15)]; });
+    }
     if (damage.length > 2) {
         if (damage[0] > damage[damage.length - 1])
             damage = damage.slice().sort();
@@ -293,13 +357,17 @@ function combine(damage) {
     }
     return combined.sort();
 }
+function damageIncludesMultipleHits(damage) {
+    return typeof damage !== 'number' && damage.length > 2 && Array.isArray(damage[0]);
+}
 var TRAPPING = [
     'Bind', 'Clamp', 'Fire Spin', 'Infestation', 'Magma Storm', 'Sand Tomb',
     'Thunder Cage', 'Whirlpool', 'Wrap', 'G-Max Sandblast', 'G-Max Centiferno',
 ];
-function getHazards(gen, defender, defenderSide) {
+function getHazards(gen, defender, field) {
     var damage = 0;
     var texts = [];
+    var defenderSide = field.defenderSide;
     if (defender.hasItem('Heavy-Duty Boots')) {
         return { damage: damage, texts: texts };
     }
@@ -317,9 +385,7 @@ function getHazards(gen, defender, defenderSide) {
         damage += Math.floor((effectiveness * defender.maxHP()) / 8);
         texts.push('Steelsurge');
     }
-    if (!defender.hasType('Flying') &&
-        !defender.hasAbility('Magic Guard', 'Levitate') &&
-        !defender.hasItem('Air Balloon')) {
+    if (!defender.hasAbility('Magic Guard') && (0, util_2.isGrounded)(defender, field, defenderSide)) {
         if (defenderSide.spikes === 1) {
             damage += Math.floor(defender.maxHP() / 8);
             if (gen.num === 2) {
@@ -419,7 +485,7 @@ function getEndOfTurn(gen, attacker, defender, move, field) {
         }
     }
     if (field.hasTerrain('Grassy')) {
-        if ((0, util_2.isGrounded)(defender, field)) {
+        if ((0, util_2.isGrounded)(defender, field, field.defenderSide)) {
             damage += Math.floor(defender.maxHP() / 16);
             texts.push('Grassy Terrain recovery');
         }

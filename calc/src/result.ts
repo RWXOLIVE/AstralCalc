@@ -4,7 +4,7 @@ import {Field} from './field';
 import {Move} from './move';
 import {Pokemon} from './pokemon';
 
-export type Damage = number | number[] | [number, number] | [number[], number[]];
+export type Damage = number | number[] | [number, number] | number[][];
 
 export class Result {
   gen: Generation;
@@ -12,7 +12,7 @@ export class Result {
   defender: Pokemon;
   move: Move;
   field: Field;
-  damage: number | number[] | [number[], number[]];
+  damage: number | number[] | number[][];
   rawDesc: RawDesc;
 
   constructor(
@@ -88,6 +88,14 @@ export function damageRange(
 ): [number, number] | [[number, number], [number, number]] {
   // Fixed Damage
   if (typeof damage === 'number') return [damage, damage];
+  // Variable-power multihit damage
+  if (damage.length > 2 && Array.isArray(damage[0])) {
+    const hits = damage as number[][];
+    return [
+      hits.reduce((total, hit) => total + Math.min(...hit), 0),
+      hits.reduce((total, hit) => total + Math.max(...hit), 0),
+    ];
+  }
   // Standard Damage
   if (damage.length > 2) {
     const d = damage as number[];

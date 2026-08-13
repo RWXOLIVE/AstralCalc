@@ -1805,47 +1805,58 @@ table.field {
 }
 
 .mon-dmg-none{
+    --trainer-pok-damage-layer: linear-gradient(var(--fieldset-color), var(--fieldset-color));
     background: var(--fieldset-color) !important;
 }
 .mon-dmg-W{
     /* Is considerable a wall*/
+    --trainer-pok-damage-layer: linear-gradient(to right, #0f0bf3 50%, var(--fieldset-color) 0%);
     background: linear-gradient(to right, #0f0bf3 50%, var(--fieldset-color) 0%);
 }
 .mon-dmg-WMO{
     /* Is considerable a wall that may OHKO*/
+    --trainer-pok-damage-layer: linear-gradient(to right, #1295ec 50%, var(--fieldset-color) 0%);
     background: linear-gradient(to right, #1295ec 50%, var(--fieldset-color) 0%);
 }
 .mon-dmg-4{
     /*Gets OHKO*/
+    --trainer-pok-damage-layer: linear-gradient(to right, var(--fieldset-color) 50%, #dd0b0b 0%);
     background: linear-gradient(to right, var(--fieldset-color) 50%, #dd0b0b 0%);
 }
 .mon-dmg-3{
     /*maybe gets OHKO*/
+    --trainer-pok-damage-layer: linear-gradient(to right, var(--fieldset-color) 50%, #ff7f16 0%);
     background: linear-gradient(to right, var(--fieldset-color) 50%, #ff7f16 0%);
 }
 .mon-dmg-1{
     /*inflicts OHKO*/
+    --trainer-pok-damage-layer: linear-gradient(to right, #20d408 50%, var(--fieldset-color) 0%);
     background: linear-gradient(to right, #20d408 50%, var(--fieldset-color) 0%);
 }
 .mon-dmg-2{
     /*may inflicts OHKO*/
+    --trainer-pok-damage-layer: linear-gradient(to right, #daff08 50%, var(--fieldset-color) 0%);
     background: linear-gradient(to right, #daff08 50%, var(--fieldset-color) 0%);
 }
 
 .mon-dmg-14{
     /*both sides Gets OHKO*/
+    --trainer-pok-damage-layer: linear-gradient(to right, #20d408 50%, #dd0b0b 0%);
     background: linear-gradient(to right, #20d408 50%, #dd0b0b 0%);
 }
 .mon-dmg-23{
     /*both sides might inflict OHKO*/
+    --trainer-pok-damage-layer: linear-gradient(to right, #daff08 50%, #ff7f16 0%);
     background: linear-gradient(to right, #daff08 50%, #ff7f16 0%);
 }
 .mon-dmg-13{
     /*inflict OHKO but may Gets OHKO*/
+    --trainer-pok-damage-layer: linear-gradient(to right, #20d408 50%, #ff7f16 0%);
     background: linear-gradient(to right, #20d408 50%, #ff7f16 0%);
 }
 .mon-dmg-24{
     /*may inflict OHKO but Gets OHKO*/
+    --trainer-pok-damage-layer: linear-gradient(to right, #daff08 50%, #dd0b0b 0%);
     background: linear-gradient(to right, #daff08 50%, #dd0b0b 0%);
 }
 

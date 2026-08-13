@@ -25,7 +25,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
     return to.concat(ar || Array.prototype.slice.call(from));
 };
 exports.__esModule = true;
-
+exports.calculateDPP = void 0;
 var items_1 = require("../items");
 var result_1 = require("../result");
 var util_1 = require("./util");
@@ -103,9 +103,10 @@ function calculateDPP(gen, attacker, defender, move, field) {
         desc.attackerAbility = attacker.ability;
     }
     var isGhostRevealed = attacker.hasAbility('Scrappy') || field.defenderSide.isForesight;
-    var type1Effectiveness = (0, util_1.getMoveEffectiveness)(gen, move, defender.types[0], isGhostRevealed, field.isGravity);
+    var defenderIsGrounded = field.isGravity || field.defenderSide.isGrounded;
+    var type1Effectiveness = (0, util_1.getMoveEffectiveness)(gen, move, defender.types[0], isGhostRevealed, undefined, defenderIsGrounded);
     var type2Effectiveness = defender.types[1]
-        ? (0, util_1.getMoveEffectiveness)(gen, move, defender.types[1], isGhostRevealed, field.isGravity)
+        ? (0, util_1.getMoveEffectiveness)(gen, move, defender.types[1], isGhostRevealed, undefined, defenderIsGrounded)
         : 1;
     var typeEffectiveness = type1Effectiveness * type2Effectiveness;
     if (typeEffectiveness === 0 && move.hasType('Ground') && defender.hasItem('Iron Ball')) {
@@ -125,7 +126,7 @@ function calculateDPP(gen, attacker, defender, move, field) {
         (move.hasType('Fire') && defender.hasAbility('Flash Fire')) ||
         (move.hasType('Water') && defender.hasAbility('Dry Skin', 'Water Absorb')) ||
         (move.hasType('Electric') && defender.hasAbility('Motor Drive', 'Volt Absorb')) ||
-        (move.hasType('Ground') && !field.isGravity &&
+        (move.hasType('Ground') && !defenderIsGrounded &&
             !defender.hasItem('Iron Ball') && defender.hasAbility('Levitate')) ||
         (move.flags.sound && defender.hasAbility('Soundproof'))) {
         desc.defenderAbility = defender.ability;
@@ -221,6 +222,10 @@ function calculateDPP(gen, attacker, defender, move, field) {
     if ((attacker.hasItem('Muscle Band') && isPhysical) ||
         (attacker.hasItem('Wise Glasses') && !isPhysical)) {
         basePower = Math.floor(basePower * 1.1);
+        desc.attackerItem = attacker.item;
+    }
+    else if (attacker.hasItem('Big Root') && move.drain) {
+        basePower = Math.floor(basePower * 1.3);
         desc.attackerItem = attacker.item;
     }
     else if (move.hasType((0, items_1.getItemBoostType)(attacker.item)) ||

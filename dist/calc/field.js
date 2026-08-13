@@ -86,6 +86,7 @@ exports.Field = Field;
 var Side = (function () {
     function Side(side) {
         if (side === void 0) { side = {}; }
+        this.isGrounded = !!side.isGrounded;
         this.spikes = side.spikes || 0;
         this.steelsurge = !!side.steelsurge;
         this.vinelash = !!side.vinelash;

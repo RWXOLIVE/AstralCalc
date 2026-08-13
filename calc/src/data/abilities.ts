@@ -353,6 +353,7 @@ const SV = SS.concat([
   'Luchador\'s Pride',
   'Echoing Alloy',
   'Dragonize',
+  'Eelevate',
   'Mega Sol',
   'Surge Cutter',
   'Spicy Spray',

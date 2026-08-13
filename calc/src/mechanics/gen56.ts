@@ -160,10 +160,15 @@ export function calculateBWXY(
   }
 
   const isGhostRevealed = attacker.hasAbility('Scrappy') || field.defenderSide.isForesight;
-  const type1Effectiveness =
-    getMoveEffectiveness(gen, move, defender.types[0], isGhostRevealed, field.isGravity);
+  const attackerIsGrounded = isGrounded(attacker, field, field.attackerSide);
+  const defenderIsGrounded = isGrounded(defender, field, field.defenderSide);
+  const type1Effectiveness = getMoveEffectiveness(
+    gen, move, defender.types[0], isGhostRevealed, undefined, defenderIsGrounded
+  );
   const type2Effectiveness = defender.types[1]
-    ? getMoveEffectiveness(gen, move, defender.types[1], isGhostRevealed, field.isGravity)
+    ? getMoveEffectiveness(
+      gen, move, defender.types[1], isGhostRevealed, undefined, defenderIsGrounded
+    )
     : 1;
   let typeEffectiveness = type1Effectiveness * type2Effectiveness;
 
@@ -201,7 +206,8 @@ export function calculateBWXY(
   }
 
   if ((move.named('Sky Drop') &&
-        (defender.hasType('Flying') || defender.weightkg >= 200 || field.isGravity)) ||
+        ((!defenderIsGrounded && defender.hasType('Flying')) ||
+          defender.weightkg >= 200 || field.isGravity)) ||
       (move.named('Synchronoise') && !defender.hasType(attacker.types[0]) &&
         (!attacker.types[1] || !defender.hasType(attacker.types[1]))) ||
       (move.named('Dream Eater') && !defender.hasStatus('slp'))
@@ -230,8 +236,8 @@ export function calculateBWXY(
       (move.hasType('Electric') &&
         defender.hasAbility('Lightning Rod', 'Motor Drive', 'Volt Absorb')) ||
       (move.hasType('Ground') &&
-        !field.isGravity && !move.named('Thousand Arrows') &&
-        !defender.hasItem('Iron Ball') && defender.hasAbility('Levitate')) ||
+        !defenderIsGrounded && !move.named('Thousand Arrows') &&
+        defender.hasAbility('Levitate')) ||
       (move.flags.bullet && defender.hasAbility('Bulletproof')) ||
       (move.flags.sound && defender.hasAbility('Soundproof'))
   ) {
@@ -240,12 +246,12 @@ export function calculateBWXY(
   }
 
   if (move.hasType('Ground') && !move.named('Thousand Arrows') &&
-      !field.isGravity && defender.hasItem('Air Balloon')) {
+      !defenderIsGrounded && defender.hasItem('Air Balloon')) {
     desc.defenderItem = defender.item;
     return result;
   }
 
-  if (move.priority > 0 && field.hasTerrain('Psychic') && isGrounded(defender, field)) {
+  if (move.priority > 0 && field.hasTerrain('Psychic') && defenderIsGrounded) {
     desc.terrain = field.terrain;
     return result;
   }
@@ -552,7 +558,7 @@ export function calculateBWXY(
 
   // It's not actually clear if the terrain modifiers are base damage mods like weather or are
   // base power mods like in Gen 7+, but the research doesn't exist for this yet so we match PS here
-  if (isGrounded(attacker, field)) {
+  if (attackerIsGrounded) {
     if ((field.hasTerrain('Electric') && move.hasType('Electric')) ||
         (field.hasTerrain('Grassy') && move.hasType('Grass'))
     ) {
@@ -560,7 +566,7 @@ export function calculateBWXY(
       desc.terrain = field.terrain;
     }
   }
-  if (isGrounded(defender, field)) {
+  if (defenderIsGrounded) {
     if ((field.hasTerrain('Misty') && move.hasType('Dragon')) ||
         (field.hasTerrain('Grassy') && move.named('Bulldoze', 'Earthquake'))
     ) {
@@ -816,7 +822,7 @@ desc.isFrostbite = applyFrostbite;
   }
 
   if (defender.hasAbility('Multiscale') && defender.curHP() === defender.maxHP() &&
-      !field.defenderSide.isSR && (!field.defenderSide.spikes || defender.hasType('Flying')) &&
+      !field.defenderSide.isSR && (!field.defenderSide.spikes || !defenderIsGrounded) &&
       !attacker.hasAbility('Parental Bond (Child)')) {
     finalMods.push(2048);
     desc.defenderAbility = defender.ability;

@@ -893,7 +893,7 @@ var FAQ_ENTRIES = [
 	},
 	{
 		question: "How do I merge frags with an evolution line?",
-		answer: "Drag the earlier evolution onto the later evolution in the same line. For example, drag Charmander onto Charmeleon or Charizard to move the earlier form's frags into the evolved form."
+		answer: "Drag the earlier evolution onto the later evolution in the same line. For example, drag Charmander onto Charmeleon or Charizard to move the earlier form's frags into the evolved form. For Rotom, you can also drag the base or any appliance form onto a different Rotom form."
 	},
 	{
 		question: "Why does Terrain keep disabling?",
@@ -1786,6 +1786,7 @@ function getDefaultAppSettings() {
 		moreColour: true,
 		moveColors: false,
 		moveMeta: true,
+		autoImportMegas: false,
 		totalFragsOnBorder: false
 	};
 }
@@ -1800,6 +1801,7 @@ function getAppSettings(forceReload) {
 		moreColour: typeof parsed.moreColour === "boolean" ? parsed.moreColour : defaults.moreColour,
 		moveColors: typeof parsed.moveColors === "boolean" ? parsed.moveColors : defaults.moveColors,
 		moveMeta: typeof parsed.moveMeta === "boolean" ? parsed.moveMeta : defaults.moveMeta,
+		autoImportMegas: typeof parsed.autoImportMegas === "boolean" ? parsed.autoImportMegas : defaults.autoImportMegas,
 		totalFragsOnBorder: typeof parsed.totalFragsOnBorder === "boolean" ? parsed.totalFragsOnBorder : defaults.totalFragsOnBorder
 	};
 	return appSettingsCache;
@@ -1812,6 +1814,7 @@ function saveAppSettings(nextSettings) {
 		moreColour: !!nextSettings.moreColour,
 		moveColors: !!nextSettings.moveColors,
 		moveMeta: !!nextSettings.moveMeta,
+		autoImportMegas: !!nextSettings.autoImportMegas,
 		totalFragsOnBorder: !!nextSettings.totalFragsOnBorder
 	};
 	localStorage.setItem(APP_SETTINGS_STORAGE_KEY, JSON.stringify(appSettingsCache));
@@ -1826,6 +1829,7 @@ function updateAppSettings(partial) {
 		moreColour: partial && typeof partial.moreColour !== "undefined" ? partial.moreColour : current.moreColour,
 		moveColors: partial && typeof partial.moveColors !== "undefined" ? partial.moveColors : current.moveColors,
 		moveMeta: partial && typeof partial.moveMeta !== "undefined" ? partial.moveMeta : current.moveMeta,
+		autoImportMegas: partial && typeof partial.autoImportMegas !== "undefined" ? partial.autoImportMegas : current.autoImportMegas,
 		totalFragsOnBorder: partial && typeof partial.totalFragsOnBorder !== "undefined" ? partial.totalFragsOnBorder : current.totalFragsOnBorder
 	});
 }
@@ -2216,6 +2220,10 @@ var SPECIES_NAME_ALIASES = {
 	"Florges-White-Flower": "Florges",
 };
 
+var FRAG_MERGEABLE_ALTERNATE_FORM_FAMILIES = {
+	rotom: true
+};
+
 function resolveSetSpeciesNameForDexLookup(pokemonName) {
 	var normalizedName = String(pokemonName || "").trim();
 	if (!normalizedName) return "";
@@ -2262,6 +2270,29 @@ function isPreEvolutionOfSpecies(sourceSpecies, targetSpecies) {
 		currentId = prevoId;
 	}
 	return false;
+}
+
+function resolveFragMergeableAlternateFormFamilyId(speciesName) {
+	var rawSpecies = String(speciesName || "").trim();
+	if (!rawSpecies) return "";
+	var resolvedSpecies = resolveSetSpeciesNameForDexLookup(rawSpecies);
+	var speciesData = pokedex && resolvedSpecies ? pokedex[resolvedSpecies] : null;
+	var baseSpecies = speciesData && speciesData.baseSpecies
+		? String(speciesData.baseSpecies)
+		: resolvedSpecies;
+	var familyId = toDexPokemonId(baseSpecies);
+	return FRAG_MERGEABLE_ALTERNATE_FORM_FAMILIES[familyId] ? familyId : "";
+}
+
+function shouldMergeFragsByAlternateFormDrop(sourceSetId, targetSetId) {
+	if (!sourceSetId || !targetSetId || sourceSetId === targetSetId) return false;
+	var sourceSpecies = parseSetId(sourceSetId).species;
+	var targetSpecies = parseSetId(targetSetId).species;
+	if (!sourceSpecies || !targetSpecies ||
+		toDexPokemonId(sourceSpecies) === toDexPokemonId(targetSpecies)) return false;
+	var sourceFamilyId = resolveFragMergeableAlternateFormFamilyId(sourceSpecies);
+	return !!sourceFamilyId &&
+		sourceFamilyId === resolveFragMergeableAlternateFormFamilyId(targetSpecies);
 }
 
 function shouldMergeFragsByEvolutionDrop(sourceSetId, targetSetId) {
@@ -3129,7 +3160,15 @@ function getStoredFragSheetStates() {
 }
 
 function saveStoredFragSheetStates(states) {
-	localStorage.setItem(FRAG_SHEET_STATES_STORAGE_KEY, JSON.stringify(Array.isArray(states) ? states : []));
+	try {
+		localStorage.setItem(FRAG_SHEET_STATES_STORAGE_KEY, JSON.stringify(Array.isArray(states) ? states : []));
+		return true;
+	} catch (err) {
+		if (window.console && typeof window.console.warn === "function") {
+			window.console.warn("[AstralCalc] Could not save Frag Sheet state.", err);
+		}
+		return false;
+	}
 }
 
 function getStoredFragSheetBackups() {
@@ -3172,12 +3211,39 @@ function createFragSnapshotRecord(snapshotName, sourceLabel) {
 	};
 }
 
+function makeRoomForFragSheetState(states) {
+	var backups = getStoredFragSheetBackups();
+	var removedBackupCount = 0;
+	while (backups.length) {
+		backups.pop();
+		removedBackupCount++;
+		try {
+			if (backups.length) {
+				localStorage.setItem(FRAG_SHEET_BACKUPS_STORAGE_KEY, JSON.stringify(backups));
+			} else {
+				localStorage.removeItem(FRAG_SHEET_BACKUPS_STORAGE_KEY);
+			}
+		} catch (err) {
+			continue;
+		}
+		if (saveStoredFragSheetStates(states)) return removedBackupCount;
+	}
+	return -1;
+}
+
 function saveNamedFragSheetState(snapshotName) {
 	var states = getStoredFragSheetStates();
 	var record = createFragSnapshotRecord(snapshotName || buildFragSnapshotDefaultName("State"), "state");
 	states.unshift(record);
 	if (states.length > FRAG_SHEET_STATES_LIMIT) states.length = FRAG_SHEET_STATES_LIMIT;
-	saveStoredFragSheetStates(states);
+	var saved = saveStoredFragSheetStates(states);
+	var removedBackupCount = 0;
+	if (!saved) {
+		removedBackupCount = makeRoomForFragSheetState(states);
+		saved = removedBackupCount >= 0;
+	}
+	if (!saved) return null;
+	record.removedBackupCount = removedBackupCount;
 	return record;
 }
 
@@ -3248,8 +3314,7 @@ function deleteFragStateById(stateId) {
 		return String(stateRecord.id) !== targetId;
 	});
 	if (filtered.length === states.length) return false;
-	saveStoredFragSheetStates(filtered);
-	return true;
+	return saveStoredFragSheetStates(filtered);
 }
 
 function saveManualFragBackup() {
@@ -7519,6 +7584,7 @@ function syncSettingsPanelUi() {
 	$("#settings-more-colour").prop("checked", !!settings.moreColour);
 	$("#settings-move-colors").prop("checked", !!settings.moveColors);
 	$("#settings-move-meta").prop("checked", !!settings.moveMeta);
+	$("#settings-auto-import-megas").prop("checked", !!settings.autoImportMegas);
 	$("#settings-total-frags-on-border").prop("checked", !!settings.totalFragsOnBorder);
 	setMoveMetaVisibility(!!settings.moveMeta);
 	applyMoreColourSetting(!!settings.moreColour);
@@ -7767,24 +7833,39 @@ function bindCalcToolEvents() {
 		clearFragsForCurrentFight();
 	});
 
-	$("#frags-history-toggle").off("click").on("click", function () {
+	$(document).off("click.fragshistorytoggle", "#frags-history-toggle").on("click.fragshistorytoggle", "#frags-history-toggle", function () {
 		setFragHistoryExpanded(!fragsHistoryExpanded);
 	});
 
-	$("#frags-history-info").off("click").on("click", function () {
+	$(document).off("click.fragshistoryinfo", "#frags-history-info").on("click.fragshistoryinfo", "#frags-history-info", function () {
 		showFragHistoryInfoDialog();
 	});
 
-	$("#frags-state-save").off("click").on("click", function () {
+	$(document).off("click.fragshistorysave", "#frags-state-save").on("click.fragshistorysave", "#frags-state-save", function () {
 		var stateNameInput = document.getElementById("frags-state-name");
 		var requestedName = stateNameInput ? stateNameInput.value : "";
-		var savedState = saveNamedFragSheetState(requestedName);
+		var savedState = null;
+		try {
+			savedState = saveNamedFragSheetState(requestedName);
+		} catch (err) {
+			if (window.console && typeof window.console.error === "function") {
+				window.console.error("[AstralCalc] Frag Sheet state save failed.", err);
+			}
+		}
+		if (!savedState) {
+			alert("Could not save this state because its snapshot is larger than the available browser storage. Delete an older saved state or reduce imported sets, then try again.");
+			return;
+		}
 		if (stateNameInput) stateNameInput.value = "";
 		refreshFragHistoryControls();
-		alert("Saved state: " + savedState.name);
+		var savedMessage = "Saved state: " + savedState.name;
+		if (savedState.removedBackupCount > 0) {
+			savedMessage += "\n\nBrowser storage was full, so " + savedState.removedBackupCount + " oldest rolling backup" + (savedState.removedBackupCount === 1 ? " was" : "s were") + " removed to make room.";
+		}
+		alert(savedMessage);
 	});
 
-	$("#frags-state-restore").off("click").on("click", function () {
+	$(document).off("click.fragshistoryrestore", "#frags-state-restore").on("click.fragshistoryrestore", "#frags-state-restore", function () {
 		var selectedStateId = $("#frags-state-list").val();
 		if (!selectedStateId) {
 			alert("Select a saved state first.");
@@ -7799,7 +7880,7 @@ function bindCalcToolEvents() {
 		refreshFragHistoryControls();
 	});
 
-	$("#frags-state-delete").off("click").on("click", function () {
+	$(document).off("click.fragshistorydelete", "#frags-state-delete").on("click.fragshistorydelete", "#frags-state-delete", function () {
 		var selectedStateId = $("#frags-state-list").val();
 		if (!selectedStateId) {
 			alert("Select a saved state first.");
@@ -7813,13 +7894,13 @@ function bindCalcToolEvents() {
 		refreshFragHistoryControls();
 	});
 
-	$("#frags-backup-save").off("click").on("click", function () {
+	$(document).off("click.fragshistorybackupsave", "#frags-backup-save").on("click.fragshistorybackupsave", "#frags-backup-save", function () {
 		saveManualFragBackup();
 		refreshFragHistoryControls();
 		alert("Backup saved.");
 	});
 
-	$("#frags-backup-restore").off("click").on("click", function () {
+	$(document).off("click.fragshistorybackuprestore", "#frags-backup-restore").on("click.fragshistorybackuprestore", "#frags-backup-restore", function () {
 		var selectedBackupId = $("#frags-backup-list").val();
 		if (!selectedBackupId) {
 			alert("Select a backup first.");
@@ -7866,6 +7947,9 @@ function bindCalcToolEvents() {
 		setMoveMetaVisibility(enabled);
 		updateAllMoveMetaDisplays();
 		if (typeof performCalculations === "function") performCalculations();
+	});
+	$("#settings-auto-import-megas").off("change").on("change", function () {
+		updateAppSettings({autoImportMegas: $(this).is(":checked")});
 	});
 
 	$("#settings-total-frags-on-border").off("change").on("change", function () {
@@ -8222,10 +8306,12 @@ function applyIconSheetFallbackImage(imgNode, speciesName) {
 		imgNode.classList.toggle("sprite-icon-expanded", false);
 	}
 	imgNode.src = POKEMON_ICON_FALLBACK_DATA_URL;
-	imgNode.style.backgroundImage = getPokemonIconSheetBackgroundImageValue(imgNode);
-	imgNode.style.backgroundRepeat = "no-repeat";
-	imgNode.style.backgroundPosition = "-" + (position.col * POKEMON_ICON_WIDTH) + "px -" + (position.row * POKEMON_ICON_HEIGHT) + "px";
-	imgNode.style.backgroundSize = "";
+	imgNode.style.backgroundImage = getPokemonIconSheetBackgroundImageValue(imgNode) +
+		", var(--trainer-pok-damage-layer, linear-gradient(transparent, transparent))";
+	imgNode.style.backgroundRepeat = "no-repeat, no-repeat";
+	imgNode.style.backgroundPosition = "-" + (position.col * POKEMON_ICON_WIDTH) + "px -" +
+		(position.row * POKEMON_ICON_HEIGHT) + "px, 0 0";
+	imgNode.style.backgroundSize = "auto, 100% 100%";
 	imgNode.style.width = POKEMON_ICON_WIDTH + "px";
 	imgNode.style.height = POKEMON_ICON_HEIGHT + "px";
 	imgNode.style.objectFit = "fill";
@@ -9781,20 +9867,23 @@ $(".forme").change(function () {
 	var isRandoms = $("#randoms").prop("checked");
 	var pokemonSets = isRandoms ? randdex[pokemonName] : setdex[pokemonName];
 	var chosenSet = pokemonSets && pokemonSets[setName];
-	var greninjaSet = selectedForme.indexOf("Greninja") !== -1;
 	var isAltForme = selectedForme !== pokemonName;
-	if (isAltForme && abilities.indexOf(altForme.ab) !== -1 && !greninjaSet) {
-		container.find(".ability").val(altForme.ab);
-	} else if (greninjaSet) {
-		$(this).parent().find(".ability");
-	} else if (chosenSet) {
-		if (!isRandoms) {
-			container.find(".abilities").val(chosenSet.ability);
-		} else {
-			container.find(".ability").val(chosenSet.abilities[0]);
+	var isMegaFormeSwitch = selectedForme.indexOf("-Mega") !== -1 || pokemonName.indexOf("-Mega") !== -1;
+	var preserveGreninjaAbility = selectedForme.indexOf("Greninja") !== -1 && !isMegaFormeSwitch;
+	var altFormeAbility = altForme.abilities && altForme.abilities[0];
+	var abilityObj = container.find(".ability");
+	if (!preserveGreninjaAbility) {
+		if (isAltForme && abilities.indexOf(altFormeAbility) !== -1) {
+			abilityObj.val(altFormeAbility);
+		} else if (chosenSet) {
+			if (!isRandoms) {
+				abilityObj.val(chosenSet.ability);
+			} else {
+				abilityObj.val(chosenSet.abilities[0]);
+			}
 		}
 	}
-	container.find(".ability").keyup();
+	abilityObj.keyup();
 
 	if (selectedForme.indexOf("-Mega") !== -1 && selectedForme !== "Rayquaza-Mega") {
 		container.find(".item").val("").keyup();
@@ -10176,15 +10265,17 @@ function hasResidualDisplayType(pokemon) {
 	return pokemon.hasType ? pokemon.hasType.apply(pokemon, types) : false;
 }
 
-function isResidualDisplayGrounded(pokemon, field) {
+function isResidualDisplayGrounded(pokemon, field, side) {
 	if (!pokemon || !field) return false;
-	if (field.isGravity) return true;
+	if (side && side.isGrounded) return true;
+	var itemEffectsSuppressed = field.isMagicRoom || pokemon.hasAbility("Klutz");
+	if (field.isGravity || (!itemEffectsSuppressed && pokemon.hasItem("Iron Ball"))) return true;
 	if (pokemon.teraType) return pokemon.teraType !== "Flying" &&
-		!pokemon.hasAbility("Levitate") &&
-		!pokemon.hasItem("Air Balloon");
+		!pokemon.hasAbility("Levitate", "Eelevate") &&
+		(itemEffectsSuppressed || !pokemon.hasItem("Air Balloon"));
 	return !pokemon.hasType("Flying") &&
-		!pokemon.hasAbility("Levitate") &&
-		!pokemon.hasItem("Air Balloon");
+		!pokemon.hasAbility("Levitate", "Eelevate") &&
+		(itemEffectsSuppressed || !pokemon.hasItem("Air Balloon"));
 }
 
 function getMoveCritRateDisplay(pokemon, opposingPokemon, move, sideId) {
@@ -10332,7 +10423,7 @@ function getSideResidualChipDisplay(pokeInfo, pokemon, opposingPokemon, field) {
 			sources.push(hasBigRoot ? "Leech Seed recovery (Big Root)" : "Leech Seed recovery");
 		}
 	}
-	if (field.hasTerrain("Grassy") && isResidualDisplayGrounded(pokemon, field)) {
+	if (field.hasTerrain("Grassy") && isResidualDisplayGrounded(pokemon, field, field.attackerSide)) {
 		hpDelta += Math.floor(maxHP / 16);
 		sources.push("Grassy Terrain recovery");
 	}
@@ -10453,6 +10544,7 @@ function createField() {
 	var isWonderRoom = $("#wonderroom").prop("checked");
 	var isGravity = $("#gravity").prop("checked");
 	var isInverse = $("#inverse").prop("checked");
+	var isGrounded = [$("#groundedL").prop("checked"), $("#groundedR").prop("checked")];
 	var isSR = [$("#srL").prop("checked"), $("#srR").prop("checked")];
 	var weather;
 	var spikes;
@@ -10487,7 +10579,7 @@ function createField() {
 
 	var createSide = function (i) {
 		return new calc.Side({
-			spikes: spikes[i], isSR: isSR[i], steelsurge: steelsurge[i],
+			isGrounded: isGrounded[i], spikes: spikes[i], isSR: isSR[i], steelsurge: steelsurge[i],
 			vinelash: vinelash[i], wildfire: wildfire[i], cannonade: cannonade[i], volcalith: volcalith[i],
 			isReflect: isReflect[i], isLightScreen: isLightScreen[i],
 			isProtected: isProtected[i], isSeeded: isSeeded[i], isForesight: isForesight[i],
@@ -10732,6 +10824,8 @@ function clearField() {
 	$("#clear").prop("checked", true);
 	$("#gscClear").prop("checked", true);
 	$("#gravity").prop("checked", false);
+	$("#groundedL").prop("checked", false);
+	$("#groundedR").prop("checked", false);
 	$("#srL").prop("checked", false);
 	$("#srR").prop("checked", false);
 	$("#spikesL0").prop("checked", true);
@@ -10878,17 +10972,31 @@ var stickyMoves = (function () {
 
 function isPokeInfoGrounded(pokeInfo) {
 	var teraType = pokeInfo.find(".teraToggle").is(":checked") ? pokeInfo.find(".teraType").val() : undefined;
-	return $("#gravity").prop("checked") || (
-		teraType ? teraType !== "Flying" : pokeInfo.find(".type1").val() !== "Flying" &&
-			teraType ? teraType !== "Flying" : pokeInfo.find(".type2").val() !== "Flying" &&
-			pokeInfo.find(".ability").val() !== "Levitate" &&
-		getEffectiveItemFromPokeInfo(pokeInfo) !== "Air Balloon"
-	);
+	var ability = pokeInfo.find(".ability").val();
+	var itemSuppressed = $("#magicroom").prop("checked") || ability === "Klutz" ||
+		isIgnoreItemToggleChecked(pokeInfo);
+	var item = itemSuppressed ? "" : getEffectiveItemFromPokeInfo(pokeInfo);
+	var pokeInfoId = pokeInfo.prop("id");
+	var forcedGrounded = pokeInfoId === "p1" ? $("#groundedL").prop("checked") :
+		pokeInfoId === "p2" ? $("#groundedR").prop("checked") : false;
+	if (forcedGrounded || $("#gravity").prop("checked") || item === "Iron Ball") return true;
+	var hasFlyingType = teraType ? teraType === "Flying" :
+		pokeInfo.find(".type1").val() === "Flying" || pokeInfo.find(".type2").val() === "Flying";
+	return !hasFlyingType && ability !== "Levitate" && ability !== "Eelevate" && item !== "Air Balloon";
 }
 
 function getTerrainEffects() {
 	var className = String($(this).prop("className") || "").split(/\s+/)[0];
 	switch (className) {
+		case "grounded":
+			var id = $(this).prop("id") === "groundedL" ? "p1" : "p2";
+			var terrainValue = $("input:checkbox[name='terrain']:checked").val();
+			if (terrainValue === "Electric") {
+				$("#" + id).find("[value='Asleep']").prop("disabled", isPokeInfoGrounded($("#" + id)));
+			} else if (terrainValue === "Misty") {
+				$("#" + id).find(".status").prop("disabled", isPokeInfoGrounded($("#" + id)));
+			}
+			break;
 		case "type1":
 		case "type2":
 		case "teraType":
@@ -11445,7 +11553,8 @@ function drop(ev) {
 			var targetRootSprite = getTrainerPokSpriteElement(targetRoot);
 			var draggedSetId = draggedSprite ? $(draggedSprite).attr("data-id") : "";
 			var targetSetId = targetRootSprite ? $(targetRootSprite).attr("data-id") : "";
-			if (shouldMergeFragsByEvolutionDrop(draggedSetId, targetSetId) &&
+			if ((shouldMergeFragsByEvolutionDrop(draggedSetId, targetSetId) ||
+				shouldMergeFragsByAlternateFormDrop(draggedSetId, targetSetId)) &&
 				mergeFragEntriesFromEvolutionDrop(draggedSetId, targetSetId)) {
 				if (pokeDragged.parentNode) pokeDragged.parentNode.removeChild(pokeDragged);
 				targetNode.classList.remove('over');

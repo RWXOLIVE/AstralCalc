@@ -39,7 +39,7 @@ var __values = (this && this.__values) || function(o) {
 };
 var e_1, _a, e_2, _b;
 exports.__esModule = true;
-
+exports.Abilities = exports.ABILITIES = void 0;
 var util_1 = require("../util");
 var RBY = [];
 var GSC = [];
@@ -205,7 +205,6 @@ var BW = DPP.concat([
     'Sand Rush',
     'Sap Sipper',
     'Sheer Force',
-    'Swarm',
     'Telepathy',
     'Teravolt',
     'Toxic Boost',
@@ -236,6 +235,7 @@ var XY = BW.concat([
     'Mega Launcher',
     'Parental Bond',
     'Pixilate',
+    'Swarm',
     'Primordial Sea',
     'Protean',
     'Refrigerate',
@@ -355,6 +355,7 @@ var SV = SS.concat([
     'Rocky Payload',
     'Seed Sower',
     'Sharpness',
+    'Surge Cutter',
     'Supersweet Syrup',
     'Supreme Overlord',
     'Sword of Ruin',
@@ -372,7 +373,22 @@ var SV = SS.concat([
     'Zero to Hero',
     'Floral Payload',
     'Heart Boost',
-    'Swarm Lash'
+    'Infestate',
+    'Lunar Veil',
+    'Solar Veil',
+    'Blazing Soul',
+    'Grit',
+    'Shroud',
+    'Lucid',
+    'Striker',
+    'Heated Rush',
+    'Luchador\'s Pride',
+    'Echoing Alloy',
+    'Dragonize',
+    'Eelevate',
+    'Mega Sol',
+    'Surge Cutter',
+    'Spicy Spray',
 ]);
 exports.ABILITIES = [[], RBY, GSC, ADV, DPP, BW, XY, SM, SS, SV];
 var Abilities = (function () {

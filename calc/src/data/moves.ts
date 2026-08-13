@@ -3589,7 +3589,7 @@ const SS_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     maxPower: 90,
   },
   'Snap Trap': {
-    bp: 60,
+    bp: 80,
     type: 'Grass',
     makesContact: true,
     category: 'Physical',

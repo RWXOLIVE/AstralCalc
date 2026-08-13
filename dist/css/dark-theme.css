@@ -207,6 +207,39 @@ body.calc-side-resizing .calc-side-resize-handle::after {
     border-color: #557cc1;
 }
 
+.settings-switch-in-status {
+    color: #aebbd0;
+}
+
+.switch-in-guide-summary {
+    border-bottom-color: #596474;
+}
+
+.switch-in-guide-summary span,
+.switch-in-guide-reason,
+.switch-in-guide-empty {
+    color: #b8c2d0;
+}
+
+.switch-in-guide-row {
+    border-color: #4b5666;
+    background: rgba(15, 20, 27, 0.44);
+}
+
+.switch-in-guide-rank,
+.switch-in-guide-score {
+    color: #c49aff;
+}
+
+.switch-in-guide-help {
+    border-top-color: #596474;
+}
+
+.switch-in-guide-help-text {
+    background: rgba(155, 89, 255, 0.1);
+    color: #d4dbe6;
+}
+
 .frag-context-menu {
     background: #11161d;
     border-color: #3f4957;

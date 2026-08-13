@@ -74,6 +74,13 @@ exports.Result = Result;
 function damageRange(damage) {
     if (typeof damage === 'number')
         return [damage, damage];
+    if (damage.length > 2 && Array.isArray(damage[0])) {
+        var hits = damage;
+        return [
+            hits.reduce(function (total, hit) { return total + Math.min.apply(Math, __spreadArray([], __read(hit), false)); }, 0),
+            hits.reduce(function (total, hit) { return total + Math.max.apply(Math, __spreadArray([], __read(hit), false)); }, 0),
+        ];
+    }
     if (damage.length > 2) {
         var d_1 = damage;
         if (d_1[0] > d_1[d_1.length - 1])

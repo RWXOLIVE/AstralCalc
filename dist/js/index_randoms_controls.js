@@ -161,13 +161,21 @@ function applyMoveResultLabelColor(labelNode, typeName, enabled) {
 	});
 }
 
-function applyMoveResultColors(p1, p2) {
+function getCalculatedMoveType(results, sideIndex, moveIndex, fallbackPokemon) {
+	var sideResults = results && results[sideIndex];
+	var result = sideResults && sideResults[moveIndex];
+	if (result && result.move && result.move.type) return result.move.type;
+	var fallbackMove = fallbackPokemon && fallbackPokemon.moves && fallbackPokemon.moves[moveIndex];
+	return fallbackMove && fallbackMove.type ? fallbackMove.type : "";
+}
+
+function applyMoveResultColors(p1, p2, results) {
 	var enabled = typeof getAppSettings === "function" ? !!getAppSettings().moveColors : false;
 	for (var i = 0; i < 4; i++) {
 		var leftLabel = $(resultLocations[0][i].move + " + label");
 		var rightLabel = $(resultLocations[1][i].move + " + label");
-		var leftType = p1 && p1.moves && p1.moves[i] ? p1.moves[i].type : "";
-		var rightType = p2 && p2.moves && p2.moves[i] ? p2.moves[i].type : "";
+		var leftType = getCalculatedMoveType(results, 0, i, p1);
+		var rightType = getCalculatedMoveType(results, 1, i, p2);
 		applyMoveResultLabelColor(leftLabel, leftType, enabled);
 		applyMoveResultLabelColor(rightLabel, rightType, enabled);
 	}
@@ -211,10 +219,25 @@ function getSimplifiedBarLevelClass(maxPercent) {
 
 function getSimplifiedDamageRolls(result, move) {
 	if (!result) return [];
-	var hits = move && move.hits ? +move.hits : 1;
+	var hits = getDamageHitMultiplier(result, move);
 	var damage = result.damage;
 	if (typeof damage === "number") return [damage * hits];
 	if (!Array.isArray(damage)) return [];
+	if (hasSeparatedHitDamage(damage)) {
+		var combinedRolls = [];
+		var rollCount = damage[0].length;
+		for (var hit = 1; hit < damage.length; hit++) {
+			rollCount = Math.min(rollCount, damage[hit].length);
+		}
+		for (var roll = 0; roll < rollCount; roll++) {
+			var combined = 0;
+			for (var hitIndex = 0; hitIndex < damage.length; hitIndex++) {
+				combined += damage[hitIndex][roll];
+			}
+			combinedRolls.push(combined);
+		}
+		return combinedRolls;
+	}
 	if (damage.length > 2) {
 		var flatRolls = [];
 		for (var i = 0; i < damage.length; i++) {
@@ -236,6 +259,14 @@ function getSimplifiedDamageRolls(result, move) {
 		return groupedRolls;
 	}
 	return [];
+}
+
+function hasSeparatedHitDamage(damage) {
+	return Array.isArray(damage) && damage.length > 2 && Array.isArray(damage[0]);
+}
+
+function getDamageHitMultiplier(result, move) {
+	return result && hasSeparatedHitDamage(result.damage) ? 1 : move && move.hits ? +move.hits : 1;
 }
 
 function buildSimplifiedRollTooltipHtml(result, move) {
@@ -284,7 +315,7 @@ function buildSimplifiedDamageChip(result, move, defender) {
 		};
 	}
 	var range = result.range();
-	var hits = move.hits || 1;
+	var hits = getDamageHitMultiplier(result, move);
 	var minDamage = range[0] * hits;
 	var maxDamage = range[1] * hits;
 	if (move.category === "Status" || maxDamage <= 0) {
@@ -815,7 +846,7 @@ function renderSimplifiedSideCard(sideSelector, sideIndex, attacker, defender) {
 		var moveRow = card.find('.simplified-side-move-row[data-move-index="' + moveIndex + '"]');
 		var move = attacker && attacker.moves ? attacker.moves[moveIndex] : null;
 		var moveName = move && move.name ? move.name : "";
-		var moveType = move && move.type ? move.type : "";
+		var moveType = getCalculatedMoveType(damageResults, sideIndex, moveIndex, attacker);
 		var sourceMoveRow = $(sideSelector + " .move" + (moveIndex + 1)).first();
 		refreshSourceMoveMeta(sourceMoveRow);
 		var moveNameNode = moveRow.find(".simplified-side-move-name");
@@ -1251,7 +1282,7 @@ function performCalculations() {
 		damageResults = calculateAllMoves(gen, p1, p1field, p2, p2field);
 	} catch (err) {
 		console.error("Damage calculation failed while updating results.", err);
-		applyMoveResultColors(p1, p2);
+		applyMoveResultColors(p1, p2, null);
 		return;
 	}
 	p1 = damageResults[0][0].attacker;
@@ -1270,7 +1301,7 @@ function performCalculations() {
 	for (var i = 0; i < 4; i++) {
 		// P1
 		result = damageResults[0][i];
-		maxDamage = result.range()[1] * p1.moves[i].hits;
+		maxDamage = result.range()[1] * getDamageHitMultiplier(result, p1.moves[i]);
 		if (!zProtectAlerted && maxDamage > 0 && p1.item.indexOf(" Z") === -1 && p1field.defenderSide.isProtected && p1.moves[i].isZ) {
 			alert('Although only possible while hacking, Z-Moves fully damage through protect without a Z-Crystal');
 			zProtectAlerted = true;
@@ -1284,7 +1315,7 @@ function performCalculations() {
 
 		// P2
 		result = damageResults[1][i];
-		maxDamage = result.range()[1] * p2.moves[i].hits;
+		maxDamage = result.range()[1] * getDamageHitMultiplier(result, p2.moves[i]);
 		if (!zProtectAlerted && maxDamage > 0 && p2.item.indexOf(" Z") === -1 && p2field.defenderSide.isProtected && p2.moves[i].isZ) {
 			alert('Although only possible while hacking, Z-Moves fully damage through protect without a Z-Crystal');
 			zProtectAlerted = true;
@@ -1309,7 +1340,7 @@ function performCalculations() {
 			bestResult = $(resultLocations[fastestSide][bestMove].move);
 		}
 	}
-	applyMoveResultColors(p1, p2);
+	applyMoveResultColors(p1, p2, damageResults);
 	renderSimplifiedSideCards(p1, p2);
 	if ($('.locked-move').length) {
 		bestResult = $('.locked-move');
@@ -1353,10 +1384,9 @@ function calculationsColors(p1info, p2) {
 		// P1
 		result = damageResults[0][i];
 		//lowest rolls in %
-		damage = result.damage[0] ? result.damage[0] : result.damage;
-		lowestRoll = damage * p1.moves[i].hits / p2.stats.hp * 100;
-		damage = result.damage[15] ? result.damage[15] : result.damage;
-		highestRoll = damage * p1.moves[i].hits / p2.stats.hp * 100;
+		damage = result.range();
+		lowestRoll = damage[0] * getDamageHitMultiplier(result, p1.moves[i]) / p2.stats.hp * 100;
+		highestRoll = damage[1] * getDamageHitMultiplier(result, p1.moves[i]) / p2.stats.hp * 100;
 		if (highestRoll > p1HD) {
 			p1HD = highestRoll;
 		}
@@ -1374,10 +1404,9 @@ function calculationsColors(p1info, p2) {
 		// P2
 		result = damageResults[1][i];
 		//some damage like sonic boom acts a bit weird.
-		damage = result.damage[0] ? result.damage[0] : result.damage;
-		lowestRoll = damage * p2.moves[i].hits / p1.stats.hp * 100;
-		damage = result.damage[15] ? result.damage[15] : result.damage;
-		highestRoll = damage * p2.moves[i].hits / p1.stats.hp * 100;
+		damage = result.range();
+		lowestRoll = damage[0] * getDamageHitMultiplier(result, p2.moves[i]) / p1.stats.hp * 100;
+		highestRoll = damage[1] * getDamageHitMultiplier(result, p2.moves[i]) / p1.stats.hp * 100;
 		if (highestRoll > p2HD) {
 			p2HD = highestRoll;
 		}
@@ -1418,14 +1447,38 @@ $(".result-move[type='radio']").change(function () {
 			var desc = normalizePercentRangeText(result.fullDesc(notation, false));
 			if (desc.indexOf('--') === -1) desc += ' -- possibly the worst move ever';
 			$("#mainResult").text(desc);
-			$("#damageValues").html("Possible damage amounts: (" + displayDamageHits(result.damage) + ")");
+			$("#damageValues").html(buildDetailedDamageValuesHtml(result));
 		}
 	}
 });
 
+function buildDetailedDamageValuesHtml(result) {
+	var damageValues = "Possible damage amounts: (" + displayDamageHits(result.damage) + ")";
+	var hitCount = getDisplayedDamageHitCount(result);
+	if (hitCount <= 1) return damageValues;
+	var totalDamageRolls = getSimplifiedDamageRolls(result, result.move);
+	if (!totalDamageRolls.length) return damageValues;
+	return damageValues + "<br>Total for " + hitCount + " hits: (" + formatDamageRolls(totalDamageRolls) + ")";
+}
+
+function getDisplayedDamageHitCount(result) {
+	if (!result) return 1;
+	if (hasSeparatedHitDamage(result.damage)) return result.damage.length;
+	var hits = result.move ? Number(result.move.hits) : 1;
+	return isFinite(hits) && hits > 1 ? Math.floor(hits) : 1;
+}
+
 function displayDamageHits(damage) {
 	// Fixed Damage
 	if (typeof damage === 'number') return escapeDamageRoll(damage);
+	// Variable-power multihit damage
+	if (hasSeparatedHitDamage(damage)) {
+		var hits = [];
+		for (var i = 0; i < damage.length; i++) {
+			hits.push((i + 1) + getOrdinalSuffix(i + 1) + ' Hit: ' + formatPlainDamageRolls(damage[i]));
+		}
+		return hits.join('; ');
+	}
 	// Standard Damage
 	if (damage.length > 2) return formatDamageRolls(damage);
 	// Fixed Parental Bond Damage
@@ -1528,6 +1581,11 @@ function calculateAllMoves(gen, p1, p1field, p2, p2field) {
 		results[1][i] = calc.calculate(gen, p2, p1, p2.moves[i], adjustedP2Field);
 	}
 	return results;
+}
+
+function getOrdinalSuffix(value) {
+	if (value % 100 >= 11 && value % 100 <= 13) return 'th';
+	return value % 10 === 1 ? 'st' : value % 10 === 2 ? 'nd' : value % 10 === 3 ? 'rd' : 'th';
 }
 
 $(document).on("click", ".commander-boost", function (ev) {

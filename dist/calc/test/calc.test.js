@@ -37,6 +37,15 @@ var __values = (this && this.__values) || function(o) {
     };
     throw new TypeError(s ? "Object is not iterable." : "Symbol.iterator is not defined.");
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 exports.__esModule = true;
 var helper_1 = require("./helper");
 describe('calc', function () {
@@ -305,6 +314,25 @@ describe('calc', function () {
                 expect(fogMax / clearMax).toBeGreaterThan(0.45);
                 expect(fogMax / clearMax).toBeLessThan(0.55);
                 expect(fog.desc()).toContain('in Fog');
+            });
+        });
+        (0, helper_1.inGens)(8, 9, function (_a) {
+            var calculate = _a.calculate, Pokemon = _a.Pokemon, Move = _a.Move;
+            test('Triple Axel calculates its 20, 40, and 60 BP hits separately', function () {
+                var attacker = Pokemon('Weavile');
+                var defender = Pokemon('Mew');
+                var result = calculate(attacker, defender, Move('Triple Axel'));
+                var damageByHit = result.damage;
+                expect(damageByHit).toHaveLength(3);
+                for (var hit = 0; hit < 3; hit++) {
+                    var expected = calculate(attacker, defender, Move('Ice Punch', { overrides: { basePower: 20 * (hit + 1) } }));
+                    expect(damageByHit[hit]).toEqual(expected.damage);
+                }
+                var min = damageByHit.reduce(function (total, damage) { return total + Math.min.apply(Math, __spreadArray([], __read(damage), false)); }, 0);
+                var max = damageByHit.reduce(function (total, damage) { return total + Math.max.apply(Math, __spreadArray([], __read(damage), false)); }, 0);
+                expect(result.range()).toEqual([min, max]);
+                expect(result.fullDesc()).toContain('Triple Axel (20 + 40 + 60 BP) (3 hits)');
+                expect(result.fullDesc()).toContain("".concat(min, "-").concat(max));
             });
         });
         (0, helper_1.inGens)(6, 9, function (_a) {
@@ -844,6 +872,19 @@ describe('calc', function () {
                     result = calculate(kingambit, aggron, Move('Iron Head'));
                     expect(result.range()).toEqual([100, 118]);
                     expect(result.desc()).toBe('0 Atk Supreme Overlord 5 allies fainted Kingambit Iron Head vs. 0 HP / 0 Def Aggron: 100-118 (35.5 - 41.9%) -- guaranteed 3HKO');
+                });
+                test('Punching Glove only removes contact from punching moves', function () {
+                    var fluffy = function () { return Pokemon('Mew', { ability: 'Fluffy' }); };
+                    var regular = function () { return Pokemon('Mew', { ability: 'Synchronize' }); };
+                    var gloved = function () { return Pokemon('Mew', { item: 'Punching Glove' }); };
+                    var glovedBodySlam = calculate(gloved(), fluffy(), Move('Body Slam'));
+                    var unglovedBodySlam = calculate(Pokemon('Mew'), fluffy(), Move('Body Slam'));
+                    var nonFluffyBodySlam = calculate(gloved(), regular(), Move('Body Slam'));
+                    expect(glovedBodySlam.range()).toEqual(unglovedBodySlam.range());
+                    expect(glovedBodySlam.range()[1]).toBeLessThan(nonFluffyBodySlam.range()[0]);
+                    var glovedIcePunch = calculate(gloved(), fluffy(), Move('Ice Punch'));
+                    var nonFluffyIcePunch = calculate(gloved(), regular(), Move('Ice Punch'));
+                    expect(glovedIcePunch.range()).toEqual(nonFluffyIcePunch.range());
                 });
             });
         });

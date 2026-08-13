@@ -35,6 +35,8 @@
     "terser": "^5.15.1"
   },
   "scripts": {
+    "start": "node server.js",
+    "test:switch-in": "node test/switch_in_predictor.test.js",
     "lint": "subpkg run lint && eslint --cache src --ext js",
     "fix": "subpkg run fix && eslint --fix src --ext js",
     "compile": "subpkg run compile && node build view",

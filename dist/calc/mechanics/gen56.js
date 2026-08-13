@@ -112,9 +112,11 @@ function calculateBWXY(gen, attacker, defender, move, field) {
         desc.attackerAbility = attacker.ability;
     }
     var isGhostRevealed = attacker.hasAbility('Scrappy') || field.defenderSide.isForesight;
-    var type1Effectiveness = (0, util_2.getMoveEffectiveness)(gen, move, defender.types[0], isGhostRevealed, field.isGravity);
+    var attackerIsGrounded = (0, util_2.isGrounded)(attacker, field, field.attackerSide);
+    var defenderIsGrounded = (0, util_2.isGrounded)(defender, field, field.defenderSide);
+    var type1Effectiveness = (0, util_2.getMoveEffectiveness)(gen, move, defender.types[0], isGhostRevealed, undefined, defenderIsGrounded);
     var type2Effectiveness = defender.types[1]
-        ? (0, util_2.getMoveEffectiveness)(gen, move, defender.types[1], isGhostRevealed, field.isGravity)
+        ? (0, util_2.getMoveEffectiveness)(gen, move, defender.types[1], isGhostRevealed, undefined, defenderIsGrounded)
         : 1;
     var typeEffectiveness = type1Effectiveness * type2Effectiveness;
     var resistedKnockOffDamage = !defender.item ||
@@ -147,7 +149,8 @@ function calculateBWXY(gen, attacker, defender, move, field) {
         return result;
     }
     if ((move.named('Sky Drop') &&
-        (defender.hasType('Flying') || defender.weightkg >= 200 || field.isGravity)) ||
+        ((!defenderIsGrounded && defender.hasType('Flying')) ||
+            defender.weightkg >= 200 || field.isGravity)) ||
         (move.named('Synchronoise') && !defender.hasType(attacker.types[0]) &&
             (!attacker.types[1] || !defender.hasType(attacker.types[1]))) ||
         (move.named('Dream Eater') && !defender.hasStatus('slp'))) {
@@ -170,19 +173,19 @@ function calculateBWXY(gen, attacker, defender, move, field) {
         (move.hasType('Electric') &&
             defender.hasAbility('Lightning Rod', 'Motor Drive', 'Volt Absorb')) ||
         (move.hasType('Ground') &&
-            !field.isGravity && !move.named('Thousand Arrows') &&
-            !defender.hasItem('Iron Ball') && defender.hasAbility('Levitate')) ||
+            !defenderIsGrounded && !move.named('Thousand Arrows') &&
+            defender.hasAbility('Levitate')) ||
         (move.flags.bullet && defender.hasAbility('Bulletproof')) ||
         (move.flags.sound && defender.hasAbility('Soundproof'))) {
         desc.defenderAbility = defender.ability;
         return result;
     }
     if (move.hasType('Ground') && !move.named('Thousand Arrows') &&
-        !field.isGravity && defender.hasItem('Air Balloon')) {
+        !defenderIsGrounded && defender.hasItem('Air Balloon')) {
         desc.defenderItem = defender.item;
         return result;
     }
-    if (move.priority > 0 && field.hasTerrain('Psychic') && (0, util_2.isGrounded)(defender, field)) {
+    if (move.priority > 0 && field.hasTerrain('Psychic') && defenderIsGrounded) {
         desc.terrain = field.terrain;
         return result;
     }
@@ -470,14 +473,14 @@ function calculateBWXY(gen, attacker, defender, move, field) {
                 desc.defenderAbility = defender.ability;
         }
     }
-    if ((0, util_2.isGrounded)(attacker, field)) {
+    if (attackerIsGrounded) {
         if ((field.hasTerrain('Electric') && move.hasType('Electric')) ||
             (field.hasTerrain('Grassy') && move.hasType('Grass'))) {
             bpMods.push(6144);
             desc.terrain = field.terrain;
         }
     }
-    if ((0, util_2.isGrounded)(defender, field)) {
+    if (defenderIsGrounded) {
         if ((field.hasTerrain('Misty') && move.hasType('Dragon')) ||
             (field.hasTerrain('Grassy') && move.named('Bulldoze', 'Earthquake'))) {
             bpMods.push(2048);
@@ -692,7 +695,7 @@ function calculateBWXY(gen, attacker, defender, move, field) {
         desc.isLightScreen = true;
     }
     if (defender.hasAbility('Multiscale') && defender.curHP() === defender.maxHP() &&
-        !field.defenderSide.isSR && (!field.defenderSide.spikes || defender.hasType('Flying')) &&
+        !field.defenderSide.isSR && (!field.defenderSide.spikes || !defenderIsGrounded) &&
         !attacker.hasAbility('Parental Bond (Child)')) {
         finalMods.push(2048);
         desc.defenderAbility = defender.ability;

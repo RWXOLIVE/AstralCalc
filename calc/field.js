@@ -16,7 +16,7 @@ var __read = (this && this.__read) || function (o, n) {
     return ar;
 };
 exports.__esModule = true;
-
+exports.Side = exports.Field = void 0;
 var Field = (function () {
     function Field(field) {
         if (field === void 0) { field = {}; }
@@ -86,6 +86,7 @@ exports.Field = Field;
 var Side = (function () {
     function Side(side) {
         if (side === void 0) { side = {}; }
+        this.isGrounded = !!side.isGrounded;
         this.spikes = side.spikes || 0;
         this.steelsurge = !!side.steelsurge;
         this.vinelash = !!side.vinelash;

@@ -57,6 +57,7 @@ export namespace State {
   }
 
   export interface Side {
+    isGrounded?: boolean;
     spikes?: number;
     steelsurge?: boolean;
     vinelash?: boolean;

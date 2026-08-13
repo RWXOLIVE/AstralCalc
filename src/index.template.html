@@ -984,6 +984,17 @@
                     </thead>
                     <tbody>
                         <tr class="gen-specific g4 g5 g6 g7 g8 g9">
+                            <div hidden id="selectGroundedInstruction">Should the Pok&eacute;mon on this side be treated as grounded?</div>
+                            <td><div class="left" title="Treat the Pok&eacute;mon on this side as grounded.">
+                                <input aria-describedby="selectGroundedInstruction" class="grounded terrain-trigger visually-hidden calc-trigger" type="checkbox" id="groundedL" />
+                                <label class="btn btn-xwide" for="groundedL">Grounded</label>
+                            </div></td>
+                            <td><div class="right" title="Treat the Pok&eacute;mon on this side as grounded.">
+                                <input aria-describedby="selectGroundedInstruction" class="grounded terrain-trigger visually-hidden calc-trigger" type="checkbox" id="groundedR" />
+                                <label class="btn btn-xwide" for="groundedR">Grounded</label>
+                            </div></td>
+                        </tr>
+                        <tr class="gen-specific g4 g5 g6 g7 g8 g9">
                             <div hidden id="selectStealthRockInstruction">Is Stealth Rock affecting this side of the field?</div>
                             <td><div class="left" title="Is Stealth Rock affecting this side of the field?">
                                 <input aria-describedby="selectStealthRockInstruction" class="visually-hidden calc-trigger" type="checkbox" id="srL" />
@@ -1853,6 +1864,22 @@
                     <div id="trainer-sequence-list" class="trainer-sequence-list" role="list" aria-label="Back-to-back and gauntlet fights"></div>
                 </div>
             </fieldset>
+            <fieldset class="switch-in-guide" id="switch-in-guide" hidden>
+                <legend align="center">Switch-in Guide</legend>
+                <div class="switch-in-guide-summary">
+                    <strong id="switch-in-guide-matchup"></strong>
+                    <span id="switch-in-guide-lead"></span>
+                </div>
+                <div id="switch-in-guide-list" class="switch-in-guide-list" role="list" aria-label="Astral switch-in rankings"></div>
+                <p id="switch-in-guide-empty" class="switch-in-guide-empty" hidden></p>
+                <div class="switch-in-guide-help">
+                    <button type="button" id="switch-in-guide-help-button" class="switch-in-guide-help-button" aria-expanded="false" aria-controls="switch-in-guide-help-text">Help?</button>
+                    <div id="switch-in-guide-help-text" class="switch-in-guide-help-text" hidden>
+                        <p>The purple Pokemon is the trainer's fixed lead. The remaining healthy team members are scored against your selected Pokemon and current field using Astral's Post Switch-In KO.</p>
+                        <p>Higher scores switch in first. Score ties keep the original party order, and Pokemon marked dead are excluded.</p>
+                    </div>
+                </div>
+            </fieldset>
         </div>
     </div>
     <div class="right-side-pannel side-pannel">
@@ -1957,10 +1984,21 @@
                     <input type="checkbox" id="settings-move-meta" />
                     Show Crit Rates, PP & ACC
                 </label>
+                <label class="settings-checkbox-row" title="In development: this saves the preference but does not change imports yet.">
+                    <input type="checkbox" id="settings-auto-import-megas" />
+                    Auto Import Megas
+                </label>
                 <label class="settings-checkbox-row">
                     <input type="checkbox" id="settings-total-frags-on-border" />
                     Total Frags on Border
                 </label>
+                <div class="settings-switch-in-control">
+                    <div class="settings-switch-in-action-row">
+                        <button type="button" class="btn settings-choice-btn settings-switch-in-button" id="settings-switch-in" aria-pressed="false">Switch In (EXPERIMENTAL)</button>
+                        <span id="settings-switch-in-status" class="settings-switch-in-status" aria-live="polite">Off</span>
+                    </div>
+                    <p class="settings-note settings-switch-in-note">Singles only.</p>
+                </div>
             </section>
         </div>
     </aside>
@@ -2038,6 +2076,8 @@
     <script type="text/javascript" src="./js/data/frags_splits.js?"></script>
     <script type="text/javascript" src="./js/data/move_info_lookup.js?"></script>
 <script type="text/javascript" src="./js/shared_controls.js?6003efc3"></script>
+    <script type="text/javascript" src="./js/switch_in_predictor.js?"></script>
+    <script type="text/javascript" src="./js/switch_in_gate.js?"></script>
     <script type="text/javascript" src="./js/index_randoms_controls.js?critmeta2"></script>
     <script type="text/javascript" src="./js/moveset_import.js?aefe0d1f"></script>
 </div>
