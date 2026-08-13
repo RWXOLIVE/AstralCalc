@@ -9558,6 +9558,85 @@ function getCurrentOpposingTrainerSideSplitEntries() {
 	return splitEntries;
 }
 
+function isTagPartnerTrainerLabel(trainerLabel) {
+	return /^tag\s+partner(?:\s|$)/i.test(String(trainerLabel || "").trim());
+}
+
+function getTagPartnerEntriesForBattle(opposingEntries) {
+	if (!Array.isArray(opposingEntries) || !opposingEntries.length || !isSetDoubleEncounter(opposingEntries)) return [];
+	var firstOpponentIndex = Infinity;
+	for (var opponentIndex = 0; opponentIndex < opposingEntries.length; opponentIndex++) {
+		var opposingEntry = opposingEntries[opponentIndex];
+		var opposingSortIndex = getTrainerIndexFromSetData(opposingEntry.setData) || opposingEntry.sortIndex || 0;
+		if (opposingSortIndex > 0 && opposingSortIndex < firstOpponentIndex) firstOpponentIndex = opposingSortIndex;
+	}
+	if (!Number.isFinite(firstOpponentIndex)) return [];
+
+	var activeSetdex = gen === 9 && typeof SETDEX_SV !== "undefined" ? SETDEX_SV : setdex;
+	if (!activeSetdex) return [];
+	var entriesByTrainer = {};
+	for (var speciesName in activeSetdex) {
+		if (!Object.prototype.hasOwnProperty.call(activeSetdex, speciesName)) continue;
+		var speciesSets = activeSetdex[speciesName];
+		if (!speciesSets) continue;
+		for (var trainerLabel in speciesSets) {
+			if (!Object.prototype.hasOwnProperty.call(speciesSets, trainerLabel) || !isTagPartnerTrainerLabel(trainerLabel)) continue;
+			var setData = speciesSets[trainerLabel];
+			if (!doesSetMatchStarterChoice(speciesName, trainerLabel, setData)) continue;
+			var trainerIndex = getTrainerIndexFromSetData(setData);
+			if (trainerIndex <= 0 || trainerIndex >= firstOpponentIndex) continue;
+			if (!entriesByTrainer[trainerLabel]) entriesByTrainer[trainerLabel] = [];
+			entriesByTrainer[trainerLabel].push(parseTrainerPartyEntry(
+				"[" + trainerIndex + "]" + speciesName + " (" + trainerLabel + ")"
+			));
+		}
+	}
+
+	var matchingEntries = [];
+	var matchingLastIndex = 0;
+	for (var partnerLabel in entriesByTrainer) {
+		if (!Object.prototype.hasOwnProperty.call(entriesByTrainer, partnerLabel)) continue;
+		var partnerEntries = entriesByTrainer[partnerLabel].sort(function (left, right) {
+			return left.sortIndex - right.sortIndex;
+		});
+		var lastEntry = partnerEntries[partnerEntries.length - 1];
+		var lastPartnerIndex = getTrainerIndexFromSetData(lastEntry.setData) || lastEntry.sortIndex || 0;
+		if (lastPartnerIndex + 1 !== firstOpponentIndex || lastPartnerIndex <= matchingLastIndex) continue;
+		matchingEntries = partnerEntries;
+		matchingLastIndex = lastPartnerIndex;
+	}
+	return matchingEntries;
+}
+
+function tagPartnerMonHtml(entry) {
+	var label = "[" + entry.indexText + "]" + entry.fullSetName;
+	var accessibleLabel = entry.pokemonName + " from " + entry.trainerLabel + "; click to load on the player side";
+	return '<img class="trainer-pok tag-partner-pok" role="listitem" tabindex="0" draggable="false" src="' + escapeHtml(getInitialTrainerSpriteUrlByName(entry.pokemonName)) + '" data-id="' + escapeHtml(entry.fullSetName) + '" data-species="' + escapeHtml(entry.pokemonName) + '" aria-label="' + escapeHtml(accessibleLabel) + '" title="' + escapeHtml("Tag partner. " + label) + '" loading="lazy" decoding="async"' + getPrimaryIconSheetLoadAttr(entry.pokemonName) + ' onerror="applyIconSheetFallbackImage(this, this.getAttribute(\'data-species\'))">';
+}
+
+function renderTagPartnerParty(opposingEntries) {
+	var section = document.getElementById("tag-partner-section");
+	var list = document.getElementById("tag-partner-poke-list");
+	var title = document.getElementById("tag-partner-title");
+	if (!section || !list || !title) return;
+	var partnerEntries = getTagPartnerEntriesForBattle(opposingEntries);
+	if (!partnerEntries.length) {
+		section.hidden = true;
+		list.innerHTML = "";
+		title.textContent = "Tag Partner";
+		return;
+	}
+	var partnerName = String(partnerEntries[0].trainerName || partnerEntries[0].trainerLabel || "")
+		.replace(/^tag\s+partner\s*/i, "")
+		.trim();
+	title.textContent = partnerName ? ("Tag Partner \u2014 " + partnerName) : "Tag Partner";
+	list.innerHTML = partnerEntries.map(tagPartnerMonHtml).join("");
+	section.hidden = false;
+	$(list).find(".tag-partner-pok").each(function () {
+		applyPrimaryIconSheetIfNeeded(this, this.getAttribute("data-species"));
+	});
+}
+
 function shouldUseSingleTargetSpreadDamageForCurrentTrainerBattle() {
 	if ($("input:radio[name='format']:checked").val() !== "Doubles") return false;
 	var splitEntries = getCurrentOpposingTrainerSideSplitEntries();
@@ -9606,6 +9685,7 @@ function renderOpposingTrainerParties(selectedSetName) {
 	$(".trainer-pok-list-opposing").html(primaryHtml);
 	$(".trainer-pok-list-opposing2").html(secondaryHtml).prop("hidden", !showSecondary);
 	$(".trainer-pok-divider").prop("hidden", !showSecondary);
+	renderTagPartnerParty(sortedEntries);
 	$(".trainer-pok.right-side").each(function () {
 		applyPrimaryIconSheetIfNeeded(this, this.getAttribute("data-species"));
 	});
@@ -11421,6 +11501,21 @@ $(document).on('click', '.left-side', function () {
 	$('.player .select2-chosen').text(formatSetNameForDisplay(set));
 	renderFragSheet();
 })
+
+$(document).on("click", ".tag-partner-pok", function () {
+	var set = String($(this).attr("data-id") || "").trim();
+	if (!set) return;
+	topPokemonIcon(set, $("#p1mon")[0]);
+	$("input.player").val(set).change();
+	$(".player .select2-chosen").text(formatSetNameForDisplay(set));
+	renderFragSheet();
+});
+
+$(document).on("keydown", ".tag-partner-pok", function (ev) {
+	if (ev.key !== "Enter" && ev.key !== " ") return;
+	ev.preventDefault();
+	$(this).trigger("click");
+});
 
 $(document).on("contextmenu", ".trainer-pok.left-side", function (ev) {
 	openFragContextMenu(ev, $(this).attr("data-id"), this);

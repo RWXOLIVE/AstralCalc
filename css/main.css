@@ -1998,6 +1998,18 @@ table.field {
     min-height: 30px;
 }
 
+.tag-partner-section {
+    margin-top: 8px;
+    padding-top: 6px;
+    border-top: 1px solid #8a8a8a;
+}
+
+.tag-partner-poke-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
 .deadzone:hover{
     background: #722323;
 }
