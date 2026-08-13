@@ -960,6 +960,12 @@ var TRAINER_FIELD_LOCK_EXCLUDED_IDS = {
 	"singles-format": true,
 	"doubles-format": true
 };
+var TRAINER_PERMANENT_FIELD_EFFECTS = {
+	"Leader Jasmine | Mauville Gym": ["steelsurgeL"]
+};
+var TRAINER_PERMANENT_FIELD_EFFECT_IDS = {
+	steelsurgeL: true
+};
 var STARTER_CHOICES = ["chikorita", "tepig", "totodile"];
 var RIVAL_STARTER_BY_CHOICE = {
 	chikorita: "tepig",
@@ -986,6 +992,8 @@ var fragLastAutoBackupAt = 0;
 var trainerFieldLocksCache = null;
 var trainerFieldLockActiveTrainerKey = "";
 var isApplyingTrainerFieldLocks = false;
+var trainerPermanentFieldPreviousValues = {};
+var isApplyingTrainerPermanentFieldEffects = false;
 var fragsHistoryExpanded = false;
 var aeLuaFragWatchedFileHandle = null;
 var aeLuaFragWatchedFileTimer = null;
@@ -7527,6 +7535,7 @@ function refreshBattleLayoutForCurrentSelection() {
 	syncWeatherForSelection(selectedOpposing, CURRENT_TRAINER_POKS);
 	syncTerrainForSelection(selectedOpposing, CURRENT_TRAINER_POKS);
 	syncTailwindForSelection(selectedOpposing, CURRENT_TRAINER_POKS);
+	syncPermanentFieldEffectsForSelection(selectedOpposing, CURRENT_TRAINER_POKS);
 	renderFragSheet();
 }
 
@@ -8726,6 +8735,16 @@ function handleTrainerFieldButtonContextMenu(ev, labelNode) {
 }
 
 function handleTrainerFieldInputChangeForLocks() {
+	if (!isApplyingTrainerPermanentFieldEffects &&
+		TRAINER_PERMANENT_FIELD_EFFECT_IDS[String(this && this.id || "")]) {
+		var selectedOpposing = String($("input.opposing").val() || "");
+		var trainerEntries = selectedOpposing ? get_trainer_poks(selectedOpposing) : [];
+		var activeEffectIds = getPermanentFieldEffectIdsForSelection(selectedOpposing, trainerEntries);
+		if (activeEffectIds.indexOf(this.id) !== -1 && !this.checked) {
+			setTrainerPermanentFieldInput(this.id, true);
+			return;
+		}
+	}
 	if (isApplyingTrainerFieldLocks) return;
 	var fieldId = String(this && this.id || "").trim();
 	if (!isTrainerFieldLockableId(fieldId)) return;
@@ -8738,6 +8757,53 @@ function handleTrainerFieldInputChangeForLocks() {
 	if (!lockGroup && isTrainerFieldLockEnabled(fieldId)) {
 		applyTrainerFieldLocksForCurrentTrainer({forceTrigger: true});
 		syncTrainerFieldLockButtonStyles();
+	}
+}
+
+function getPermanentFieldEffectIdsForSelection(fullSetName, trainerEntries) {
+	var effectIds = [];
+	var entries = [];
+	if (fullSetName) entries.push(fullSetName);
+	if (Array.isArray(trainerEntries)) entries = entries.concat(trainerEntries);
+	for (var i = 0; i < entries.length; i++) {
+		var trainerLabel = parseTrainerPartyEntry(String(entries[i] || "")).trainerLabel;
+		var trainerEffectIds = TRAINER_PERMANENT_FIELD_EFFECTS[trainerLabel];
+		if (!Array.isArray(trainerEffectIds)) continue;
+		for (var n = 0; n < trainerEffectIds.length; n++) {
+			if (effectIds.indexOf(trainerEffectIds[n]) === -1) effectIds.push(trainerEffectIds[n]);
+		}
+	}
+	return effectIds;
+}
+
+function setTrainerPermanentFieldInput(fieldId, shouldEnable) {
+	var input = document.getElementById(fieldId);
+	if (!input || input.checked === shouldEnable) return;
+	isApplyingTrainerPermanentFieldEffects = true;
+	try {
+		input.checked = shouldEnable;
+		$(input).change();
+	} finally {
+		isApplyingTrainerPermanentFieldEffects = false;
+	}
+}
+
+function syncPermanentFieldEffectsForSelection(fullSetName, trainerEntries) {
+	var activeEffectIds = getPermanentFieldEffectIdsForSelection(fullSetName, trainerEntries);
+	for (var fieldId in TRAINER_PERMANENT_FIELD_EFFECT_IDS) {
+		if (!Object.prototype.hasOwnProperty.call(TRAINER_PERMANENT_FIELD_EFFECT_IDS, fieldId)) continue;
+		var input = document.getElementById(fieldId);
+		if (!input) continue;
+		var shouldEnable = activeEffectIds.indexOf(fieldId) !== -1;
+		var hasPreviousValue = Object.prototype.hasOwnProperty.call(trainerPermanentFieldPreviousValues, fieldId);
+		if (shouldEnable) {
+			if (!hasPreviousValue) trainerPermanentFieldPreviousValues[fieldId] = !!input.checked;
+			setTrainerPermanentFieldInput(fieldId, true);
+		} else if (hasPreviousValue) {
+			var previousValue = trainerPermanentFieldPreviousValues[fieldId];
+			delete trainerPermanentFieldPreviousValues[fieldId];
+			setTrainerPermanentFieldInput(fieldId, previousValue);
+		}
 	}
 }
 
@@ -9049,7 +9115,8 @@ function syncTailwindForSelection(fullSetName, trainerEntries) {
 	var resolvedTailwind = resolveTailwindForSelection(fullSetName, trainerEntries);
 	var tailwindInput = $("#tailwindR");
 	if (!tailwindInput.length) return;
-	var shouldEnableTailwind = resolvedTailwind.hasTailwind && resolvedTailwind.tailwind;
+	if (!resolvedTailwind.hasTailwind) return;
+	var shouldEnableTailwind = resolvedTailwind.tailwind;
 	var wasEnabled = tailwindInput.prop("checked");
 	tailwindInput.prop("checked", shouldEnableTailwind);
 	if (wasEnabled !== shouldEnableTailwind) tailwindInput.change();
@@ -9764,6 +9831,7 @@ $("input.set-selector").change(function () {
 			syncWeatherForSelection(fullSetName, CURRENT_TRAINER_POKS);
 			syncTerrainForSelection(fullSetName, CURRENT_TRAINER_POKS);
 			syncTailwindForSelection(fullSetName, CURRENT_TRAINER_POKS);
+			syncPermanentFieldEffectsForSelection(fullSetName, CURRENT_TRAINER_POKS);
 		}
 		if (pokemon.gender === "N") {
 			pokeObj.find(".gender").parent().hide();
@@ -11468,6 +11536,7 @@ function refreshCurrentTrainerEncounter() {
 	syncWeatherForSelection(selectedOpposing, CURRENT_TRAINER_POKS);
 	syncTerrainForSelection(selectedOpposing, CURRENT_TRAINER_POKS);
 	syncTailwindForSelection(selectedOpposing, CURRENT_TRAINER_POKS);
+	syncPermanentFieldEffectsForSelection(selectedOpposing, CURRENT_TRAINER_POKS);
 	renderFragSheet();
 	if (typeof performCalculations === "function") performCalculations();
 }

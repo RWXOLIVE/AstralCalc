@@ -2670,7 +2670,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Glare","Dragon Pulse","Hyper Voice","Blizzard"]
+            "moves": ["Tailwind","Dragon Pulse","Hyper Voice","Blizzard"]
         },
         "Jackson & Takashi | Route 119": {
         "index": "0000000754",
@@ -5726,7 +5726,7 @@ var SETDEX_SV = {
             "level": 46,
             "ability": "Sand Stream",
             "item": "Leftovers",
-            "Weather": "Sandstorm",
+            "Weather": "Sand",
             "nature": "Relaxed",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -5739,7 +5739,7 @@ var SETDEX_SV = {
             "ability": "Sand Stream",
             "item": "Leftovers",
             "setdouble": "True",
-            "Weather": "Sandstorm",
+            "Weather": "Sand",
             "nature": "Adamant",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
@@ -5924,7 +5924,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Draco Meteor","Freeze-Dry","Earth Power","Protect"]
+            "moves": ["Draco Meteor","Ice Beam","Earth Power","Protect"]
         }
     },
     "Bouffalant": {

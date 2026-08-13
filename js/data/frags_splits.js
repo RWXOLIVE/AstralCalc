@@ -43,5 +43,12 @@ window.FRAG_SPLIT_RULES = {
 				"Blaine & Flannery | Lavaridge Gym",
 			]
 		},
+		{
+			split: 6,
+			endTrainers: [
+				"Leader Winona | Fortree Gym",
+				"Leader Winona DB | Fortree Gym"
+			]
+		},
 	]
 };
