@@ -1725,6 +1725,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Dragon Dance","Razor Wind","Waterfall","Stone Edge"]
+        },
+    "Leader Winona DB | Fortree Gym": {
+            "index": "0000000802",
+            "level": 76,
+            "ability": "Intimidate",
+            "item": "Wacan Berry",
+            "nature": "Adamant",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Waterfall","Dragon Ascent","Earthquake","Protect"]
         }
     },
     "Sawk": {
@@ -2263,6 +2275,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Nasty Plot","Hydro Cannon","Flash Cannon","Aqua Jet"]
+        },
+        "Leader Winona DB | Fortree Gym": {
+            "index": "0000000800",
+            "level": 76,
+            "ability": "Competitive",
+            "item": "Air Balloon",
+            "nature": "Modest",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Stealth Rock","Make It Rain","Hydro Pump","Blizzard"]
         }
     },
     "Arctovish": {
@@ -8296,6 +8320,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Fire Spin","Protect","Roost","Substitute"]
+        },
+    "Leader Winona DB | Fortree Gym": {
+            "index": "0000000803",
+            "level": 76,
+            "ability": "Blaze",
+            "item": "Focus Sash",
+            "nature": "Naive",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Tailwind","Air Slash","Heat Wave","Earthquake"]
         }
     },
     "Hatterene": {
@@ -9197,6 +9233,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Cosmic Power","Stored Power","Moonblast","Moonlight"]
+        },
+    "Leader Winona DB | Fortree Gym": {
+            "index": "0000000801",
+            "level": 77,
+            "ability": "Prankster",
+            "item": "Clefablite",
+            "nature": "Modest",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Tailwind","Follow Me","Springtide Storm","Earth Power"]
         }
     },
     "Perrserker": {
@@ -11089,6 +11137,34 @@ var SETDEX_SV = {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
         },
         "moves": ["Sucker Punch","Dark Pulse","Oblivion Wing","Focus Blast"]
+    }
+},
+"Thundurus": {
+    "Leader Winona DB | Fortree Gym": {
+        "index": "0000000799",
+        "level": 76,
+        "ability": "Prankster",
+        "item": "Covert Cloak",
+        "nature": "Modest",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Tailwind","Me First","Hurricane","Wildbolt Storm"]
+    }
+},
+"Rayquaza": {
+    "Leader Winona DB | Fortree Gym": {
+        "index": "0000000804",
+        "level": 76,
+        "ability": "Air Lock",
+        "item": "White Herb",
+        "nature": "Impish",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["V-create","Dragon Rush","Dragon Ascent","Earthquake"]
     }
 },
 }

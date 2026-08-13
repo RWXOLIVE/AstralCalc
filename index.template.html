@@ -1852,8 +1852,10 @@
                 <legend align="center"> OPPOSING TEAM</legend>
                 <div class="trainer-poks">
                     <div class="trainer-pok-list-opposing"></div>
-                    <div class="trainer-pok-divider" hidden></div>
-                    <div class="trainer-pok-list-opposing2" hidden></div>
+                    <div id="opposing-team-right-section" class="opposing-team-right-section" hidden>
+                        <legend id="opposing-team-right-title" align="center">Team (R)</legend>
+                        <div class="trainer-pok-list-opposing2"></div>
+                    </div>
                 </div>
                 <!--hr>
                 <button id="set-double-opp">Set in doubles</button-->
@@ -1989,7 +1991,7 @@
                     <input type="checkbox" id="settings-move-meta" />
                     Show Crit Rates, PP & ACC
                 </label>
-                <label class="settings-checkbox-row" title="In development: this saves the preference but does not change imports yet.">
+                <label class="settings-checkbox-row" title="Automatically add Mega forms for owned Pokemon to Box 2.">
                     <input type="checkbox" id="settings-auto-import-megas" />
                     Auto Import Megas
                 </label>

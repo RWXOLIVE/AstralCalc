@@ -169,14 +169,14 @@ html, body {
     align-items: center;
 }
 
-.trainer-pok-list-opposing2 {
-    margin-top: 6px;
+.opposing-team-right-section {
+    margin-top: 8px;
+    padding-top: 6px;
+    border-top: 1px solid #8a8a8a;
 }
 
-.trainer-pok-divider {
-    width: 100%;
-    border-top: 1px solid #8a8a8a;
-    margin: 8px 0;
+.opposing-team-right-section .trainer-pok-list-opposing2 {
+    margin-top: 6px;
 }
 
 .trainer-pok{

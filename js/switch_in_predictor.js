@@ -15,6 +15,19 @@
 		"Misty Explosion": true,
 		"Self-Destruct": true
 	};
+	var UNKNOWN_NO_OF_HITS = 0xFFFFFFFF;
+	var ABILITY_IGNORING_MOVES = {
+		"Moongeist Beam": true,
+		"Photon Geyser": true,
+		"Sunsteel Strike": true
+	};
+	var ENTRY_ONLY_ABILITIES = {
+		"Download": true,
+		"Embody Aspect (Cornerstone)": true,
+		"Embody Aspect (Hearthflame)": true,
+		"Embody Aspect (Teal)": true,
+		"Embody Aspect (Wellspring)": true
+	};
 
 	function scoreFromMetrics(metrics) {
 		var score;
@@ -52,7 +65,7 @@
 	}
 
 	function describeHitCount(attackerName, defenderName, hits) {
-		if (!hits || hits < 1) return attackerName + " has no damaging KO on " + defenderName;
+		if (!hits || hits < 1 || hits === UNKNOWN_NO_OF_HITS) return attackerName + " has no damaging KO on " + defenderName;
 		if (hits === 1) return attackerName + " can OHKO " + defenderName;
 		return attackerName + " needs " + hits + " hits to KO " + defenderName;
 	}
@@ -114,19 +127,52 @@
 		var level = typeof root.resolveSetLevelFlag === "function" ?
 			root.resolveSetLevelFlag(set.level, levelFallback) :
 			(parseInt(set.level) || levelFallback);
+		var statusMap = {
+			"Asleep": "slp",
+			"Badly Poisoned": "tox",
+			"Burned": "brn",
+			"Frozen": "frz",
+			"Frostbite": "frb",
+			"Paralyzed": "par",
+			"Poisoned": "psn"
+		};
 		return new root.calc.Pokemon(root.gen, payload.speciesName, {
 			level: level,
 			ability: ability,
-			abilityOn: true,
+			// InitializeSwitchinCandidate does not activate volatile ability state before scoring.
+			abilityOn: false,
 			item: item,
 			nature: set.nature,
 			ivs: ivs,
 			evs: evs,
+			status: set.status === "None" ? "" : (statusMap[set.status] || set.status || ""),
 			moves: pokemonMoves
 		});
 	}
 
-	function cloneFieldForSwitchIn(player, candidate) {
+	function applyWeatherSuppression(field, player, candidate) {
+		if ([player.ability, candidate.ability].some(function (activeAbility) {
+			return activeAbility === "Cloud Nine" || activeAbility === "Air Lock";
+		})) field.weather = undefined;
+	}
+
+	function applyRuinAbilities(field, player, candidate) {
+		field.isBeadsOfRuin = player.ability === "Beads of Ruin" || candidate.ability === "Beads of Ruin";
+		field.isSwordOfRuin = player.ability === "Sword of Ruin" || candidate.ability === "Sword of Ruin";
+		field.isTabletsOfRuin = player.ability === "Tablets of Ruin" || candidate.ability === "Tablets of Ruin";
+		field.isVesselOfRuin = player.ability === "Vessel of Ruin" || candidate.ability === "Vessel of Ruin";
+	}
+
+	function clearCandidateVolatiles(field) {
+		if (!field.defenderSide) return;
+		field.defenderSide.isGrounded = false;
+		field.defenderSide.isProtected = false;
+		field.defenderSide.isSeeded = false;
+		field.defenderSide.isForesight = false;
+		field.defenderSide.isSwitching = undefined;
+	}
+
+	function cloneFieldForSwitchInDamage(player, candidate) {
 		var field = root.createField();
 		var ability = String(candidate.ability || "");
 		switch (ability) {
@@ -140,22 +186,90 @@
 		case "Misty Surge": field.terrain = "Misty"; break;
 		case "Psychic Surge": field.terrain = "Psychic"; break;
 		}
-		if ([player.ability, candidate.ability].some(function (activeAbility) {
-			return activeAbility === "Cloud Nine" || activeAbility === "Air Lock";
-		})) field.weather = undefined;
-
-		field.isBeadsOfRuin = player.ability === "Beads of Ruin" || candidate.ability === "Beads of Ruin";
-		field.isSwordOfRuin = player.ability === "Sword of Ruin" || candidate.ability === "Sword of Ruin";
-		field.isTabletsOfRuin = player.ability === "Tablets of Ruin" || candidate.ability === "Tablets of Ruin";
-		field.isVesselOfRuin = player.ability === "Vessel of Ruin" || candidate.ability === "Vessel of Ruin";
+		applyWeatherSuppression(field, player, candidate);
+		applyRuinAbilities(field, player, candidate);
+		clearCandidateVolatiles(field);
 		return field;
 	}
 
-	function medianDamage(result) {
+	function cloneFieldForCurrentState(player, candidate) {
+		var field = root.createField();
+		// Astral only uses hypothetical switch-in weather/terrain for damage data.
+		applyWeatherSuppression(field, player, candidate);
+		applyRuinAbilities(field, player, candidate);
+		clearCandidateVolatiles(field);
+		return field;
+	}
+
+	function ninthRoll(damageRolls) {
+		if (!Array.isArray(damageRolls) || !damageRolls.length) return 0;
+		var sorted = damageRolls.slice().sort(function (left, right) { return left - right; });
+		return Number(sorted[Math.min(8, sorted.length - 1)]) || 0;
+	}
+
+	function medianDamage(result, move) {
 		if (!result) return 0;
-		var range = result.range();
-		if (!range || !Number.isFinite(range[0]) || !Number.isFinite(range[1])) return 0;
-		return Math.max(0, Math.floor((range[0] + range[1]) / 2));
+		var damage = result.damage;
+		if (typeof damage === "number") {
+			return Math.max(0, damage) * Math.max(1, Number(move && move.hits) || 1);
+		}
+		if (!Array.isArray(damage) || !damage.length) return 0;
+		if (damage.length > 2 && Array.isArray(damage[0])) {
+			return damage.reduce(function (total, hit) { return total + ninthRoll(hit); }, 0);
+		}
+		if (damage.length === 2) {
+			return damage.reduce(function (total, hit) {
+				return total + (Array.isArray(hit) ? ninthRoll(hit) : Number(hit) || 0);
+			}, 0);
+		}
+		var perHitDamage = ninthRoll(damage);
+		return perHitDamage * Math.max(1, Number(move && move.hits) || 1);
+	}
+
+	function getRawMoveData(move) {
+		if (!move) return null;
+		if (root.moves && root.moves[move.name]) return root.moves[move.name];
+		if (root.GENERATION && root.GENERATION.moves && typeof root.GENERATION.moves.get === "function") {
+			return root.GENERATION.moves.get(String(move.name || "").toLowerCase().replace(/[^a-z0-9]+/g, ""));
+		}
+		return null;
+	}
+
+	function prepareMoveForAiDamage(move, attacker, field, options) {
+		var prepared = move.clone();
+		var moveData = getRawMoveData(move);
+		if (moveData && Array.isArray(moveData.multihit) && attacker.item === "Loaded Dice" && !isItemSuppressed(attacker, field)) prepared.hits = 4;
+		if (options.postKoSwitchIn && prepared.name === "Retaliate") prepared.bp *= 2;
+		if (prepared.name === "Last Respects") {
+			var faintedAllies = Math.max(0, Math.min(100, Number(options.faintedAllies) || 0));
+			prepared.bp *= 1 + faintedAllies;
+		}
+		return prepared;
+	}
+
+	function preparePokemonForAiDamage(pokemon, isSwitchInCandidate, field) {
+		if (!pokemon) return;
+		if (isSwitchInCandidate) pokemon.abilityOn = false;
+		if (ENTRY_ONLY_ABILITIES[pokemon.ability]) pokemon.ability = "";
+		if (pokemon.ability === "Intimidate" || pokemon.ability === "Illuminate") pokemon.abilityOn = false;
+		if (isSwitchInCandidate) {
+			var seedStats = {
+				"Electric Seed": {terrain: "Electric", stat: "def"},
+				"Grassy Seed": {terrain: "Grassy", stat: "def"},
+				"Misty Seed": {terrain: "Misty", stat: "spd"},
+				"Psychic Seed": {terrain: "Psychic", stat: "spd"}
+			};
+			var seed = seedStats[pokemon.item];
+			if (seed && field.terrain === seed.terrain && !isItemSuppressed(pokemon, field)) {
+				// The damage calculator applies entry seeds; InitializeSwitchinCandidate does not.
+				pokemon.boosts[seed.stat] = pokemon.ability === "Contrary" ? 1 : -1;
+			}
+		}
+		if (isSwitchInCandidate && (pokemon.ability === "Protosynthesis" || pokemon.ability === "Quark Drive")) {
+			var weather = normalizeWeather(field);
+			var activeFromField = pokemon.ability === "Protosynthesis" ? weather === "Sun" : field.terrain === "Electric";
+			if (!activeFromField) pokemon.protoQuark = "inactive";
+		}
 	}
 
 	function getBestMedianDamage(attacker, defender, field, options) {
@@ -167,11 +281,16 @@
 			if (options.excludeFocusPunch && move.name === "Focus Punch") continue;
 			if (options.excludeExplosion && EXPLOSION_MOVES[move.name]) continue;
 			try {
-				var result = root.calc.calculate(root.gen, attacker.clone(), defender.clone(), move.clone(), field.clone());
-				var damage = medianDamage(result);
+				var attackerClone = attacker.clone();
+				var defenderClone = defender.clone();
+				preparePokemonForAiDamage(attackerClone, !!options.attackerIsSwitchIn, field);
+				preparePokemonForAiDamage(defenderClone, !!options.defenderIsSwitchIn, field);
+				var preparedMove = prepareMoveForAiDamage(move, attackerClone, field, options);
+				var result = root.calc.calculate(root.gen, attackerClone, defenderClone, preparedMove, field.clone());
+				var damage = medianDamage(result, preparedMove);
 				if (damage > bestDamage) {
 					bestDamage = damage;
-					bestMove = move;
+					bestMove = preparedMove;
 				}
 			} catch (err) {
 				if (root.console && typeof root.console.debug === "function") {
@@ -186,19 +305,26 @@
 		return pokemon && ["Mold Breaker", "Teravolt", "Turboblaze"].indexOf(pokemon.ability) >= 0;
 	}
 
-	function canEndureOneHit(attacker, defender, damage) {
-		if (!defender || damage <= 0 || damage < defender.curHP()) return false;
-		var atFullHp = defender.curHP() === defender.maxHP();
-		if (atFullHp && defender.item === "Focus Sash") return true;
-		if (!hasMoldBreakerAbility(attacker) && atFullHp && defender.ability === "Sturdy") return true;
-		return !hasMoldBreakerAbility(attacker) && defender.ability === "Disguise" &&
-			(defender.name === "Mimikyu" || defender.name === "Mimikyu-Busted");
+	function moveIgnoresTargetAbility(move) {
+		return !!(move && ABILITY_IGNORING_MOVES[move.name]);
 	}
 
-	function hitsToFaintFromDamage(attacker, defender, damage) {
-		if (damage <= 0) return 0;
+	function canEndureOneHit(attacker, defender, damage, move, field) {
+		if (!defender || damage <= 0 || damage < defender.curHP()) return false;
+		var atFullHp = defender.curHP() === defender.maxHP();
+		var bypassesEndureByHits = move && move.hits > 1 && move.name !== "Dragon Darts";
+		if (!atFullHp || bypassesEndureByHits || attacker.ability === "Parental Bond") return false;
+		if (atFullHp && defender.item === "Focus Sash" && (!field || !isItemSuppressed(defender, field))) return true;
+		if (hasMoldBreakerAbility(attacker) || moveIgnoresTargetAbility(move)) return false;
+		if (defender.ability === "Sturdy") return true;
+		if (defender.ability === "Disguise" && defender.name.indexOf("Mimikyu") === 0) return true;
+		return defender.ability === "Ice Face" && defender.name.indexOf("Eiscue") === 0 && move && move.category === "Physical";
+	}
+
+	function hitsToFaintFromDamage(attacker, defender, damage, move, field) {
+		if (damage <= 0) return UNKNOWN_NO_OF_HITS;
 		var hits = Math.ceil(defender.curHP() / damage);
-		if (hits === 1 && canEndureOneHit(attacker, defender, damage)) hits++;
+		if (hits === 1 && canEndureOneHit(attacker, defender, damage, move, field)) hits++;
 		return hits;
 	}
 
@@ -219,13 +345,14 @@
 		return !!field.isMagicRoom || pokemon.ability === "Klutz";
 	}
 
-	function isGrounded(pokemon, field, side) {
-		if ((side && side.isGrounded) || field.isGravity) return true;
+	function isGrounded(pokemon, field) {
 		var itemSuppressed = isItemSuppressed(pokemon, field);
-		if (!itemSuppressed && pokemon.item === "Iron Ball") return true;
-		if (pokemon.types.indexOf("Flying") >= 0) return false;
-		if (pokemon.ability === "Levitate" || pokemon.ability === "Eelevate") return false;
-		return pokemon.item !== "Air Balloon" || itemSuppressed;
+		var naturallyAirborne = pokemon.types.indexOf("Flying") >= 0 ||
+			pokemon.ability === "Levitate" || pokemon.ability === "Eelevate" ||
+			(pokemon.item === "Air Balloon" && !itemSuppressed);
+		if (!naturallyAirborne) return true;
+		// Mirrors IsMonGrounded, including its current Magic Room override.
+		return (!itemSuppressed && pokemon.item === "Iron Ball") || !!field.isGravity || !!field.isMagicRoom;
 	}
 
 	function fractionDamage(maxHp, denominator) {
@@ -234,21 +361,26 @@
 
 	function getSwitchInHazardDamage(candidate, field) {
 		var side = field.defenderSide;
-		if (!side || candidate.ability === "Magic Guard") return 0;
+		if (!side) return 0;
 		var itemActive = !isItemSuppressed(candidate, field);
-		if (itemActive && candidate.item === "Heavy-Duty Boots") return 0;
+		var hasActiveBoots = itemActive && candidate.item === "Heavy-Duty Boots";
+		// Mirrors GetSwitchinHazardsDamage exactly, including its Boots interaction with Spikes.
+		if (candidate.ability === "Magic Guard" && !hasActiveBoots) return 0;
 		var maxHp = candidate.maxHP();
 		var damage = 0;
-		if (side.isSR) damage += Math.floor(getTypeEffectiveness("Rock", candidate) * maxHp / 8);
-		if (side.steelsurge) damage += Math.floor(getTypeEffectiveness("Steel", candidate) * maxHp / 8);
-		if (side.spikes > 0 && isGrounded(candidate, field, side)) {
+		if (side.isSR && !hasActiveBoots) damage += Math.max(1, Math.floor(getTypeEffectiveness("Rock", candidate) * maxHp / 8));
+		if (side.steelsurge && !hasActiveBoots) damage += Math.max(1, Math.floor(getTypeEffectiveness("Steel", candidate) * maxHp / 8));
+		if (side.spikes > 0 && isGrounded(candidate, field)) {
 			damage += fractionDamage(maxHp, (5 - Math.min(3, side.spikes)) * 2);
 		}
 		return damage;
 	}
 
 	function normalizeWeather(field) {
-		return String(field.weather || "");
+		var weather = String(field.weather || "");
+		if (weather === "Harsh Sunshine") return "Sun";
+		if (weather === "Heavy Rain") return "Rain";
+		return weather;
 	}
 
 	function getWeatherImpact(candidate, field) {
@@ -256,8 +388,9 @@
 		if (!weather) return 0;
 		var maxHp = candidate.maxHP();
 		var ability = candidate.ability;
-		var itemBlockedWeather = candidate.item === "Utility Umbrella" && !isItemSuppressed(candidate, field);
-		var protectedFromChip = candidate.item === "Safety Goggles" || ability === "Magic Guard" || ability === "Overcoat";
+		var itemActive = !isItemSuppressed(candidate, field);
+		var itemBlockedWeather = itemActive && candidate.item === "Utility Umbrella";
+		var protectedFromChip = (itemActive && candidate.item === "Safety Goggles") || ability === "Magic Guard" || ability === "Overcoat";
 		var impact = 0;
 		if (!protectedFromChip) {
 			if (weather === "Hail" && candidate.types.indexOf("Ice") < 0 &&
@@ -283,12 +416,17 @@
 	}
 
 	function getRecurringHealing(candidate, field) {
-		if (isItemSuppressed(candidate, field)) return 0;
-		if (candidate.item === "Leftovers") return fractionDamage(candidate.maxHP(), 16);
-		if (candidate.item === "Black Sludge" && candidate.types.indexOf("Poison") >= 0) {
-			return fractionDamage(candidate.maxHP(), 16);
+		var healing = 0;
+		if (!isItemSuppressed(candidate, field)) {
+			if (candidate.item === "Leftovers") healing += fractionDamage(candidate.maxHP(), 16);
+			if (candidate.item === "Black Sludge" && candidate.types.indexOf("Poison") >= 0) {
+				healing += fractionDamage(candidate.maxHP(), 16);
+			}
 		}
-		return 0;
+		if (candidate.ability === "Poison Heal" && (candidate.status === "psn" || candidate.status === "tox")) {
+			healing += fractionDamage(candidate.maxHP(), 8);
+		}
+		return healing;
 	}
 
 	function getRecurringDamage(candidate, field) {
@@ -304,7 +442,9 @@
 	}
 
 	function getSingleUseHealing(candidate, currentHp, opponent, field) {
-		if (isItemSuppressed(candidate, field) || opponent.ability === "Unnerve") return 0;
+		if (candidate.ability === "Klutz") return 0;
+		var isBerry = ["Aguav Berry", "Figy Berry", "Iapapa Berry", "Mago Berry", "Oran Berry", "Sitrus Berry", "Wiki Berry"].indexOf(candidate.item) >= 0;
+		if (opponent.ability === "Unnerve" && isBerry) return 0;
 		var maxHp = candidate.maxHP();
 		if (currentHp >= maxHp / 2) return 0;
 		if (candidate.item === "Oran Berry") return 10;
@@ -312,6 +452,20 @@
 		if (candidate.item === "Sitrus Berry") return fractionDamage(maxHp, 4);
 		if (["Aguav Berry", "Figy Berry", "Iapapa Berry", "Mago Berry", "Wiki Berry"].indexOf(candidate.item) >= 0 && currentHp < maxHp / 4) {
 			return fractionDamage(maxHp, 3);
+		}
+		return 0;
+	}
+
+	function getStatusDamage(candidate, toxicCounter) {
+		if (!candidate.status || candidate.ability === "Magic Guard") return 0;
+		var maxHp = candidate.maxHP();
+		if (candidate.status === "brn" || candidate.status === "frb") {
+			var burnDamage = fractionDamage(maxHp, 16);
+			return candidate.status === "brn" && candidate.ability === "Heatproof" ? Math.max(1, Math.floor(burnDamage / 2)) : burnDamage;
+		}
+		if (candidate.status === "psn" && candidate.ability !== "Poison Heal") return fractionDamage(maxHp, 8);
+		if (candidate.status === "tox" && candidate.ability !== "Poison Heal") {
+			return fractionDamage(maxHp, 16) * Math.max(1, Math.min(15, toxicCounter));
 		}
 		return 0;
 	}
@@ -324,7 +478,9 @@
 		var weatherImpact = getWeatherImpact(candidate, field);
 		var recurringDamage = getRecurringDamage(candidate, field);
 		var recurringHealing = getRecurringHealing(candidate, field);
-		if (damageTaken + recurringDamage <= recurringHealing || damageTaken + recurringDamage === 0) return 0;
+		var toxicCounter = candidate.status === "tox" ? Math.min(15, (Number(candidate.toxicCounter) || 0) + 1) : 0;
+		var statusDamage = getStatusDamage(candidate, toxicCounter);
+		if (damageTaken + statusDamage + recurringDamage <= recurringHealing || damageTaken + statusDamage + recurringDamage === 0) return 0;
 
 		var hits = 0;
 		var usedSingleUseHealingItem = false;
@@ -343,15 +499,40 @@
 					usedSingleUseHealingItem = true;
 				}
 			}
-			if (currentHp > 0) currentHp += recurringHealing - recurringDamage;
+			if (currentHp > 0) currentHp += recurringHealing - recurringDamage - statusDamage;
+			if (candidate.status === "tox" && toxicCounter < 15) {
+				toxicCounter++;
+				statusDamage = getStatusDamage(candidate, toxicCounter);
+			}
 			hits++;
 		}
 		if (!opponentBreaksMold && candidate.ability === "Disguise" && candidate.name.indexOf("Mimikyu") === 0) hits++;
 		return hits;
 	}
 
-	function getEffectiveSpeed(pokemon, field, side) {
-		var speed = pokemon.stats.spe;
+	function getModifiedStatValue(pokemon, stat) {
+		var value = pokemon.rawStats && Number.isFinite(pokemon.rawStats[stat]) ? pokemon.rawStats[stat] : pokemon.stats[stat];
+		var stage = pokemon.boosts && Number.isFinite(pokemon.boosts[stat]) ? Math.max(-6, Math.min(6, pokemon.boosts[stat])) : 0;
+		if (stage > 0) return Math.floor(value * (2 + stage) / 2);
+		if (stage < 0) return Math.floor(value * 2 / (2 - stage));
+		return value;
+	}
+
+	function hasParadoxSpeedBoost(pokemon, field, isSwitchInCandidate) {
+		if (pokemon.protoQuark === "inactive") return false;
+		if (pokemon.protoQuark && pokemon.protoQuark !== "auto") return pokemon.protoQuark === "spe";
+		var weather = normalizeWeather(field);
+		var activeFromField = pokemon.ability === "Protosynthesis" ? weather === "Sun" : field.terrain === "Electric";
+		var activeFromBooster = !isSwitchInCandidate && pokemon.item === "Booster Energy" && pokemon.abilityOn;
+		if (!activeFromField && !activeFromBooster) return false;
+		var speed = getModifiedStatValue(pokemon, "spe");
+		return ["atk", "def", "spa", "spd"].every(function (stat) {
+			return speed > getModifiedStatValue(pokemon, stat);
+		});
+	}
+
+	function getEffectiveSpeed(pokemon, field, side, isSwitchInCandidate) {
+		var speed = getModifiedStatValue(pokemon, "spe");
 		var weather = normalizeWeather(field);
 		var ability = pokemon.ability;
 		var itemActive = !isItemSuppressed(pokemon, field);
@@ -361,22 +542,21 @@
 			(weather === "Sand" && ability === "Sand Rush") ||
 			((weather === "Hail" || weather === "Snow") && ability === "Slush Rush"))) speed *= 2;
 		if (field.terrain === "Electric" && ability === "Surge Surfer") speed *= 2;
-		if (ability === "Quick Feet" && pokemon.status) speed *= 1.5;
-		if (ability === "Slow Start" && pokemon.abilityOn) speed *= 0.5;
-		if (ability === "Unburden" && pokemon.abilityOn && !pokemon.item) speed *= 2;
-		if ((ability === "Protosynthesis" && (weather === "Sun" || pokemon.item === "Booster Energy")) ||
-			(ability === "Quark Drive" && (field.terrain === "Electric" || pokemon.item === "Booster Energy"))) {
-			var otherStats = [pokemon.rawStats.atk, pokemon.rawStats.def, pokemon.rawStats.spa, pokemon.rawStats.spd];
-			if (otherStats.every(function (stat) { return pokemon.rawStats.spe > stat; })) speed *= 1.5;
+		if (ability === "Quick Feet" && pokemon.status) speed = Math.floor(speed * 150 / 100);
+		if (ability === "Slow Start" && !isSwitchInCandidate && pokemon.abilityOn) speed = Math.floor(speed / 2);
+		if (ability === "Unburden" && !isSwitchInCandidate && pokemon.abilityOn && !pokemon.item) speed *= 2;
+		if ((ability === "Protosynthesis" || ability === "Quark Drive") && hasParadoxSpeedBoost(pokemon, field, isSwitchInCandidate)) {
+			speed = Math.floor(speed * 150 / 100);
 		}
-		if (pokemon.status === "par" && ability !== "Quick Feet") speed *= root.gen >= 7 ? 0.5 : 0.25;
-		if (side && side.isTailwind) speed *= 2;
 		if (itemActive) {
-			if (pokemon.item === "Choice Scarf") speed *= 1.5;
-			if (["Iron Ball", "Macho Brace", "Power Anklet", "Power Band", "Power Belt", "Power Bracer", "Power Lens", "Power Weight"].indexOf(pokemon.item) >= 0) speed *= 0.5;
-			if (pokemon.item === "Quick Powder" && pokemon.name === "Ditto") speed *= 2;
+			if (pokemon.item === "Choice Scarf" && !pokemon.isDynamaxed) speed = Math.floor(speed * 150 / 100);
+			else if (["Iron Ball", "Macho Brace", "Power Anklet", "Power Band", "Power Belt", "Power Bracer", "Power Lens", "Power Weight"].indexOf(pokemon.item) >= 0) speed = Math.floor(speed / 2);
+			else if (pokemon.item === "Quick Powder" && pokemon.name === "Ditto") speed *= 2;
 		}
-		return Math.floor(speed);
+		if (side && side.isTailwind) speed *= 2;
+		// Astral explicitly configures B_PARALYSIS_SPEED to GEN_6.
+		if (pokemon.status === "par" && ability !== "Quick Feet") speed = Math.floor(speed / 4);
+		return speed;
 	}
 
 	function switchInIsFaster(candidate, player, field) {
@@ -392,30 +572,35 @@
 		if (candidate.ability === "Quick Draw" && player.ability !== "Quick Draw") return true;
 		if (candidate.ability !== "Quick Draw" && player.ability === "Quick Draw") return false;
 
-		var candidateSpeed = getEffectiveSpeed(candidate, field, field.defenderSide);
-		var playerSpeed = getEffectiveSpeed(player, field, field.attackerSide);
+		var candidateSpeed = getEffectiveSpeed(candidate, field, field.defenderSide, true);
+		var playerSpeed = getEffectiveSpeed(player, field, field.attackerSide, false);
 		if (candidateSpeed === playerSpeed) return true;
 		return field.isTrickRoom ? candidateSpeed < playerSpeed : candidateSpeed > playerSpeed;
 	}
 
-	function scoreCandidate(setId, player) {
+	function scoreCandidate(setId, player, faintedAllies) {
 		var candidate = createPokemonFromSetId(setId);
 		if (!candidate) throw new Error("Missing set data for " + setId);
 		var playerClone = player.clone();
-		var field = cloneFieldForSwitchIn(playerClone, candidate);
-		if (typeof root.applyPowerSplitToPair === "function") root.applyPowerSplitToPair(playerClone, candidate);
-		var playerAttack = getBestMedianDamage(playerClone, candidate, field, {
+		var damageField = cloneFieldForSwitchInDamage(playerClone, candidate);
+		var currentStateField = cloneFieldForCurrentState(playerClone, candidate);
+		var playerAttack = getBestMedianDamage(playerClone, candidate, damageField, {
 			excludeFocusPunch: true,
-			excludeExplosion: false
+			excludeExplosion: false,
+			defenderIsSwitchIn: true,
+			faintedAllies: Number(playerClone.alliesFainted) || 0
 		});
-		var candidateAttack = getBestMedianDamage(candidate, playerClone, field.clone().swap(), {
+		var candidateAttack = getBestMedianDamage(candidate, playerClone, damageField.clone().swap(), {
 			excludeFocusPunch: false,
-			excludeExplosion: true
+			excludeExplosion: true,
+			attackerIsSwitchIn: true,
+			postKoSwitchIn: true,
+			faintedAllies: faintedAllies
 		});
 		var metrics = {
-			aiMonFaster: switchInIsFaster(candidate, playerClone, field),
-			hitsToFaintPlayer: hitsToFaintFromDamage(candidate, playerClone, candidateAttack.damage),
-			hitsToFaintAI: getSwitchInHitsToKO(candidate, playerClone, playerAttack.damage, field),
+			aiMonFaster: switchInIsFaster(candidate, playerClone, currentStateField),
+			hitsToFaintPlayer: hitsToFaintFromDamage(candidate, playerClone, candidateAttack.damage, candidateAttack.move, currentStateField),
+			hitsToFaintAI: getSwitchInHitsToKO(candidate, playerClone, playerAttack.damage, currentStateField),
 			isPalafinZero: candidate.name === "Palafin",
 			isWobbuffetFamily: candidate.name === "Wobbuffet" || candidate.name === "Wynaut",
 			isDitto: candidate.name === "Ditto"
@@ -625,6 +810,14 @@
 		var originalOrder = getOriginalPartyOrder();
 		// The selected P1 panel is the matchup source; the selected P2 panel never affects party ranking.
 		var player = root.createPokemon(root.jQuery("#p1"));
+		var faintedAllies = nodes.reduce(function (count, partyNode) {
+			return count + (partyNode.classList.contains("trainer-pok-dead") ? 1 : 0);
+		}, 0);
+		var presumedFaintedLead = nodes.find(function (partyNode) {
+			var partySetId = String(partyNode.getAttribute("data-id") || "").trim();
+			return partyNode.classList.contains("trainer-party-leading") || originalOrder[partySetId] === 0;
+		});
+		if (presumedFaintedLead && !presumedFaintedLead.classList.contains("trainer-pok-dead")) faintedAllies++;
 		var partyRows = [];
 		for (var i = 0; i < nodes.length; i++) {
 			var node = nodes[i];
@@ -647,7 +840,7 @@
 				continue;
 			}
 			try {
-				var result = scoreCandidate(setId, player);
+				var result = scoreCandidate(setId, player, faintedAllies);
 				row.score = result.score;
 				row.metrics = result.metrics;
 				row.reason = result.reason;
@@ -710,6 +903,10 @@
 		describeScore: describeScore,
 		describeMatchup: describeMatchup,
 		orderPartyRows: orderPartyRows,
-		getSwitchInHitsToKO: getSwitchInHitsToKO
+		getSwitchInHitsToKO: getSwitchInHitsToKO,
+		getEffectiveSpeed: getEffectiveSpeed,
+		hitsToFaintFromDamage: hitsToFaintFromDamage,
+		medianDamage: medianDamage,
+		UNKNOWN_NO_OF_HITS: UNKNOWN_NO_OF_HITS
 	};
 });
