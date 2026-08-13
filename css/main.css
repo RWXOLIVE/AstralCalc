@@ -187,8 +187,7 @@ html, body {
     box-sizing: border-box;
 }
 
-.trainer-pok.left-side,
-.trainer-pok.team-right-pok {
+.trainer-pok.left-side {
     display: inline-flex;
     align-items: center;
     justify-content: center;

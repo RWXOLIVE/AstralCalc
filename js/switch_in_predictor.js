@@ -565,19 +565,18 @@
 	function switchInIsFaster(candidate, player, field) {
 		var candidateItem = isItemSuppressed(candidate, field) ? "" : candidate.item;
 		var playerItem = isItemSuppressed(player, field) ? "" : player.item;
+		var candidateSpeed = getEffectiveSpeed(candidate, field, field.defenderSide, true);
+		var playerSpeed = getEffectiveSpeed(player, field, field.attackerSide, false);
+		// The switch-in AI favors itself on ties and whenever its own Quick Claw or Quick Draw can act.
+		if (candidateSpeed === playerSpeed || candidateItem === "Quick Claw" || candidate.ability === "Quick Draw") return true;
 		var laggingItems = ["Lagging Tail", "Full Incense"];
 		if (laggingItems.indexOf(candidateItem) >= 0 && laggingItems.indexOf(playerItem) < 0) return false;
 		if (laggingItems.indexOf(candidateItem) < 0 && laggingItems.indexOf(playerItem) >= 0) return true;
-		if (candidateItem === "Quick Claw" && playerItem !== "Quick Claw") return true;
 		if (candidateItem !== "Quick Claw" && playerItem === "Quick Claw") return false;
 		if (candidate.ability === "Stall" && player.ability !== "Stall") return false;
 		if (candidate.ability !== "Stall" && player.ability === "Stall") return true;
-		if (candidate.ability === "Quick Draw" && player.ability !== "Quick Draw") return true;
 		if (candidate.ability !== "Quick Draw" && player.ability === "Quick Draw") return false;
 
-		var candidateSpeed = getEffectiveSpeed(candidate, field, field.defenderSide, true);
-		var playerSpeed = getEffectiveSpeed(player, field, field.attackerSide, false);
-		if (candidateSpeed === playerSpeed) return true;
 		return field.isTrickRoom ? candidateSpeed < playerSpeed : candidateSpeed > playerSpeed;
 	}
 
@@ -906,6 +905,7 @@
 		orderPartyRows: orderPartyRows,
 		getSwitchInHitsToKO: getSwitchInHitsToKO,
 		getEffectiveSpeed: getEffectiveSpeed,
+		switchInIsFaster: switchInIsFaster,
 		hitsToFaintFromDamage: hitsToFaintFromDamage,
 		isDamagingMoveForSwitchIn: isDamagingMoveForSwitchIn,
 		medianDamage: medianDamage,
