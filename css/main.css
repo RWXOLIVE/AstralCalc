@@ -169,14 +169,14 @@ html, body {
     align-items: center;
 }
 
-.opposing-team-right-section {
-    margin-top: 8px;
-    padding-top: 6px;
-    border-top: 1px solid #8a8a8a;
+.trainer-pok-list-opposing2 {
+    margin-top: 6px;
 }
 
-.opposing-team-right-section .trainer-pok-list-opposing2 {
-    margin-top: 6px;
+.trainer-pok-divider {
+    width: 100%;
+    border-top: 1px solid #8a8a8a;
+    margin: 8px 0;
 }
 
 .trainer-pok{
@@ -187,7 +187,8 @@ html, body {
     box-sizing: border-box;
 }
 
-.trainer-pok.left-side {
+.trainer-pok.left-side,
+.trainer-pok.team-right-pok {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -1998,12 +1999,14 @@ table.field {
     min-height: 30px;
 }
 
+.team-right-section,
 .tag-partner-section {
     margin-top: 8px;
     padding-top: 6px;
     border-top: 1px solid #8a8a8a;
 }
 
+.team-right-poke-list,
 .tag-partner-poke-list {
     display: flex;
     flex-wrap: wrap;

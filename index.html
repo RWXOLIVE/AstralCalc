@@ -6,7 +6,7 @@
     <link rel="icon" type="image/gif" href="img/totodile.gif"  >
     <title>Astral Emerald Damage Calculator</title>
     <link type="text/css" rel="stylesheet" href="./js/vendor/select2/select2.css" />
-    <link type="text/css" rel="stylesheet" href="./css/main.css?bef984f0" />
+    <link type="text/css" rel="stylesheet" href="./css/main.css?c0c3c0a2" />
     <link type="text/css" rel="stylesheet" href="./css/vendor/bootstrap.css" />
     <link type="text/css" rel="stylesheet" href="./css/dark-theme.css" id="dark-theme-styles">
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -810,6 +810,11 @@
                 <div>
                     <legend align="center">Team</legend>
                     <div id="team-poke-list" class="box-poke dropzone">
+                    </div>
+                </div>
+                <div id="team-right-section" class="team-right-section" hidden>
+                    <legend id="team-right-title" align="center">Team (R)</legend>
+                    <div id="team-right-poke-list" class="box-poke team-right-poke-list" role="list" aria-labelledby="team-right-title">
                     </div>
                 </div>
                 <div id="tag-partner-section" class="tag-partner-section" hidden>
@@ -1852,10 +1857,8 @@
                 <legend align="center"> OPPOSING TEAM</legend>
                 <div class="trainer-poks">
                     <div class="trainer-pok-list-opposing"></div>
-                    <div id="opposing-team-right-section" class="opposing-team-right-section" hidden>
-                        <legend id="opposing-team-right-title" align="center">Team (R)</legend>
-                        <div class="trainer-pok-list-opposing2"></div>
-                    </div>
+                    <div class="trainer-pok-divider" hidden></div>
+                    <div class="trainer-pok-list-opposing2" hidden></div>
                 </div>
                 <!--hr>
                 <button id="set-double-opp">Set in doubles</button-->
@@ -2082,8 +2085,8 @@
     <script type="text/javascript" src="./js/spritedata.js?e6979aa2"></script>
     <script type="text/javascript" src="./js/data/frags_splits.js?507088b2"></script>
     <script type="text/javascript" src="./js/data/move_info_lookup.js?12b8d14e"></script>
-<script type="text/javascript" src="./js/shared_controls.js?9c8d5565"></script>
-    <script type="text/javascript" src="./js/switch_in_predictor.js?5c639ecf"></script>
+<script type="text/javascript" src="./js/shared_controls.js?aec616e1"></script>
+    <script type="text/javascript" src="./js/switch_in_predictor.js?e1d05ace"></script>
     <script type="text/javascript" src="./js/switch_in_gate.js?acd63663"></script>
     <script type="text/javascript" src="./js/index_randoms_controls.js?e5d0c4e8"></script>
     <script type="text/javascript" src="./js/moveset_import.js?aefe0d1f"></script>

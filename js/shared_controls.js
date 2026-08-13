@@ -176,6 +176,7 @@ $("input:radio[name='format']").change(function () {
 	});
 	$(".format-specific").not("." + gameType.toLowerCase()).hide();
 	setDoubleIconVisibility(gameType === "Doubles");
+	renderTeamRightParty();
 });
 
 // auto-calc stats and current HP on change
@@ -3661,6 +3662,7 @@ function applyPlayerRosterSearchFilter() {
 		var nextDisplay = isMatch ? "" : "none";
 		if (rootNode.style.display !== nextDisplay) rootNode.style.display = nextDisplay;
 	}
+	renderTeamRightParty();
 }
 
 function bindPlayerRosterSearchInput() {
@@ -3887,6 +3889,7 @@ function scheduleFragSheetRefresh() {
 	if (fragSheetRefreshTimer) return;
 	fragSheetRefreshTimer = window.setTimeout(function () {
 		fragSheetRefreshTimer = null;
+		renderTeamRightParty();
 		saveCurrentPlayerRosterLayout();
 		if (getAppSettings().autoImportMegas) autoImportMegasForCurrentRoster();
 		syncFragRoster({pruneMissing: true});
@@ -9793,6 +9796,45 @@ function tagPartnerMonHtml(entry) {
 	return '<img class="trainer-pok tag-partner-pok" role="listitem" tabindex="0" draggable="false" src="' + escapeHtml(getInitialTrainerSpriteUrlByName(entry.pokemonName)) + '" data-id="' + escapeHtml(entry.fullSetName) + '" data-species="' + escapeHtml(entry.pokemonName) + '" aria-label="' + escapeHtml(accessibleLabel) + '" title="' + escapeHtml("Tag partner. " + label) + '" loading="lazy" decoding="async"' + getPrimaryIconSheetLoadAttr(entry.pokemonName) + ' onerror="applyIconSheetFallbackImage(this, this.getAttribute(\'data-species\'))">';
 }
 
+function renderTeamRightParty() {
+	var section = document.getElementById("team-right-section");
+	var list = document.getElementById("team-right-poke-list");
+	if (!section || !list) return;
+	var isDoubles = $("input:radio[name='format']:checked").val() === "Doubles";
+	if (!isDoubles) {
+		section.hidden = true;
+		list.innerHTML = "";
+		return;
+	}
+
+	var source = document.getElementById("team-poke-list");
+	list.innerHTML = "";
+	if (source) {
+		var sourceEntries = Array.prototype.slice.call(source.children);
+		for (var i = 0; i < sourceEntries.length; i++) {
+			var clone = sourceEntries[i].cloneNode(true);
+			clone.removeAttribute("id");
+			clone.setAttribute("role", "listitem");
+			var idNodes = clone.querySelectorAll("[id]");
+			for (var idIndex = 0; idIndex < idNodes.length; idIndex++) idNodes[idIndex].removeAttribute("id");
+			var sprites = clone.matches && clone.matches(".trainer-pok.left-side")
+				? [clone]
+				: Array.prototype.slice.call(clone.querySelectorAll(".trainer-pok.left-side"));
+			for (var spriteIndex = 0; spriteIndex < sprites.length; spriteIndex++) {
+				var sprite = sprites[spriteIndex];
+				sprite.classList.remove("left-side");
+				sprite.classList.add("team-right-pok");
+				sprite.draggable = false;
+				sprite.tabIndex = 0;
+				var speciesName = String(sprite.getAttribute("data-species") || parseSetId(sprite.getAttribute("data-id") || "").species || "Pokemon");
+				sprite.setAttribute("aria-label", speciesName + "; click to load on the player side");
+			}
+			list.appendChild(clone);
+		}
+	}
+	section.hidden = false;
+}
+
 function renderTagPartnerParty(opposingEntries) {
 	var section = document.getElementById("tag-partner-section");
 	var list = document.getElementById("tag-partner-poke-list");
@@ -9862,8 +9904,8 @@ function renderOpposingTrainerParties(selectedSetName) {
 	var showSecondary = useSplitLayout && secondaryEntries.length > 0;
 
 	$(".trainer-pok-list-opposing").html(primaryHtml);
-	$(".trainer-pok-list-opposing2").html(secondaryHtml);
-	$("#opposing-team-right-section").prop("hidden", !showSecondary);
+	$(".trainer-pok-list-opposing2").html(secondaryHtml).prop("hidden", !showSecondary);
+	$(".trainer-pok-divider").prop("hidden", !showSecondary);
 	renderTagPartnerParty(sortedEntries);
 	$(".trainer-pok.right-side").each(function () {
 		applyPrimaryIconSheetIfNeeded(this, this.getAttribute("data-species"));
@@ -11691,6 +11733,21 @@ $(document).on("click", ".tag-partner-pok", function () {
 });
 
 $(document).on("keydown", ".tag-partner-pok", function (ev) {
+	if (ev.key !== "Enter" && ev.key !== " ") return;
+	ev.preventDefault();
+	$(this).trigger("click");
+});
+
+$(document).on("click", ".team-right-pok", function () {
+	var set = String($(this).attr("data-id") || "").trim();
+	if (!set) return;
+	topPokemonIcon(set, $("#p1mon")[0]);
+	$("input.player").val(set).change();
+	$(".player .select2-chosen").text(formatSetNameForDisplay(set));
+	renderFragSheet();
+});
+
+$(document).on("keydown", ".team-right-pok", function (ev) {
 	if (ev.key !== "Enter" && ev.key !== " ") return;
 	ev.preventDefault();
 	$(this).trigger("click");

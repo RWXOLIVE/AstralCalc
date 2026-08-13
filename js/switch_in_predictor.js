@@ -272,14 +272,17 @@
 		}
 	}
 
+	function isDamagingMoveForSwitchIn(move) {
+		return !!move && move.category !== "Status" && move.name !== "(No Move)" && !EXPLOSION_MOVES[move.name];
+	}
+
 	function getBestMedianDamage(attacker, defender, field, options) {
 		var bestDamage = 0;
 		var bestMove = null;
 		for (var i = 0; i < attacker.moves.length; i++) {
 			var move = attacker.moves[i];
-			if (!move || move.category === "Status" || move.name === "(No Move)") continue;
+			if (!isDamagingMoveForSwitchIn(move)) continue;
 			if (options.excludeFocusPunch && move.name === "Focus Punch") continue;
-			if (options.excludeExplosion && EXPLOSION_MOVES[move.name]) continue;
 			try {
 				var attackerClone = attacker.clone();
 				var defenderClone = defender.clone();
@@ -586,13 +589,11 @@
 		var currentStateField = cloneFieldForCurrentState(playerClone, candidate);
 		var playerAttack = getBestMedianDamage(playerClone, candidate, damageField, {
 			excludeFocusPunch: true,
-			excludeExplosion: false,
 			defenderIsSwitchIn: true,
 			faintedAllies: Number(playerClone.alliesFainted) || 0
 		});
 		var candidateAttack = getBestMedianDamage(candidate, playerClone, damageField.clone().swap(), {
 			excludeFocusPunch: false,
-			excludeExplosion: true,
 			attackerIsSwitchIn: true,
 			postKoSwitchIn: true,
 			faintedAllies: faintedAllies
@@ -906,6 +907,7 @@
 		getSwitchInHitsToKO: getSwitchInHitsToKO,
 		getEffectiveSpeed: getEffectiveSpeed,
 		hitsToFaintFromDamage: hitsToFaintFromDamage,
+		isDamagingMoveForSwitchIn: isDamagingMoveForSwitchIn,
 		medianDamage: medianDamage,
 		UNKNOWN_NO_OF_HITS: UNKNOWN_NO_OF_HITS
 	};
