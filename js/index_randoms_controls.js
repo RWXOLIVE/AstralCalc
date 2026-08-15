@@ -135,7 +135,7 @@ function getMoveLabelTextColor(backgroundHex) {
 function applyMoveResultLabelColor(labelNode, typeName, enabled) {
 	if (!labelNode || !labelNode.length) return;
 	if (!enabled) {
-		labelNode.removeClass("move-colour-btn");
+		labelNode.removeClass("move-colour-btn move-colour-btn--custom");
 		labelNode.css({
 			backgroundColor: "",
 			borderColor: "",
@@ -145,7 +145,7 @@ function applyMoveResultLabelColor(labelNode, typeName, enabled) {
 	}
 	var typeColor = getMoveTypeColor(typeName);
 	if (!typeColor) {
-		labelNode.removeClass("move-colour-btn");
+		labelNode.removeClass("move-colour-btn move-colour-btn--custom");
 		labelNode.css({
 			backgroundColor: "",
 			borderColor: "",
@@ -153,7 +153,7 @@ function applyMoveResultLabelColor(labelNode, typeName, enabled) {
 		});
 		return;
 	}
-	labelNode.addClass("move-colour-btn");
+	labelNode.addClass("move-colour-btn move-colour-btn--custom");
 	labelNode.css({
 		backgroundColor: typeColor,
 		borderColor: typeColor,

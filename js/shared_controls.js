@@ -1068,7 +1068,8 @@ var PLAYER_ROSTER_SEARCH_DEBOUNCE_MS = 90;
 var NOTES_NOTE_INPUT_DEBOUNCE_MS = 120;
 var SPECIES_DISPLAY_NAME_ALIASES = {
 	"Tauros-Paldea-Blaze": "Tauros-PB",
-	"Tauros-Paldea-Aqua": "Tauros-PA"
+	"Tauros-Paldea-Aqua": "Tauros-PA",
+	"Ursaluna-Bloodmoon": "Ursaluna-BM"
 };
 var TYPE_COLOR_MAP = {
 	normal: "#A8A77A",
@@ -1210,6 +1211,7 @@ var FRAG_PREVO_BY_SPECIES_ID = {
 	"delphox": "braixen",
 	"dewgong": "seel",
 	"dewott": "oshawott",
+	"dipplin": "applin",
 	"diggersby": "bunnelby",
 	"dodrio": "doduo",
 	"dolliv": "smoliv",
@@ -1336,6 +1338,7 @@ var FRAG_PREVO_BY_SPECIES_ID = {
 	"houndoom": "houndour",
 	"houndstone": "greavard",
 	"huntail": "clamperl",
+	"hydrapple": "dipplin",
 	"hydreigon": "zweilous",
 	"hypno": "drowzee",
 	"incineroar": "torracat",
@@ -7777,9 +7780,10 @@ function applyMoreColourSetting(enabled) {
 }
 
 function refreshThemeChoiceButtons() {
-	var isDark = typeof window.isDarkThemeEnabled === "function" ? window.isDarkThemeEnabled() : isDarkThemeStylesEnabled();
-	$("#settings-theme-dark").toggleClass("is-active", isDark);
-	$("#settings-theme-light").toggleClass("is-active", !isDark);
+	var themeMode = typeof window.getCurrentThemeMode === "function" ? window.getCurrentThemeMode() : (isDarkThemeStylesEnabled() ? "dark" : "light");
+	$("#settings-theme-dark").toggleClass("is-active", themeMode === "dark");
+	$("#settings-theme-light").toggleClass("is-active", themeMode === "light");
+	$("#settings-theme-dex").toggleClass("is-active", themeMode === "dex");
 }
 
 function syncSettingsPanelUi() {
@@ -8181,7 +8185,7 @@ function bindCalcToolEvents() {
 
 	$("#settings-theme-dark").off("click").on("click", function () {
 		if (typeof window.setThemeMode === "function") {
-			window.setThemeMode(true);
+			window.setThemeMode("dark");
 		} else {
 			var darkStyles = document.getElementById("dark-theme-styles");
 			if (darkStyles) darkStyles.disabled = false;
@@ -8192,11 +8196,23 @@ function bindCalcToolEvents() {
 
 	$("#settings-theme-light").off("click").on("click", function () {
 		if (typeof window.setThemeMode === "function") {
-			window.setThemeMode(false);
+			window.setThemeMode("light");
 		} else {
 			var darkStyles = document.getElementById("dark-theme-styles");
 			if (darkStyles) darkStyles.disabled = true;
 			localStorage.setItem("darkTheme", "false");
+		}
+		refreshThemeChoiceButtons();
+	});
+
+	$("#settings-theme-dex").off("click").on("click", function () {
+		if (typeof window.setThemeMode === "function") {
+			window.setThemeMode("dex");
+		} else {
+			var darkStyles = document.getElementById("dark-theme-styles");
+			if (darkStyles) darkStyles.disabled = false;
+			localStorage.setItem("darkTheme", "true");
+			localStorage.setItem("themeMode", "dex");
 		}
 		refreshThemeChoiceButtons();
 	});

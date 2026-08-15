@@ -277,13 +277,13 @@ body.calc-side-resizing .calc-side-resize-handle::after {
   color: #c6dbff !important;
 }
 
-.theme-dex .button:not(.move-colour-btn),
-.theme-dex .nav .button:not(.move-colour-btn),
-.theme-dex .tabbar .button:not(.move-colour-btn),
-.theme-dex .pfx-topbar .button:not(.move-colour-btn),
-.theme-dex .pfx-body .button:not(.move-colour-btn),
-.theme-dex .pfx-panel .button:not(.move-colour-btn),
-.theme-dex .utilichart .button:not(.move-colour-btn) {
+.theme-dex .button,
+.theme-dex .nav .button,
+.theme-dex .tabbar .button,
+.theme-dex .pfx-topbar .button,
+.theme-dex .pfx-body .button,
+.theme-dex .pfx-panel .button,
+.theme-dex .utilichart .button {
   background: linear-gradient(#2a3953, #1f2d44);
     border-color: #4b607f;
     color: #d7e0ec;
@@ -291,22 +291,22 @@ body.calc-side-resizing .calc-side-resize-handle::after {
   box-shadow: none !important;
 }
 
-.theme-dex .button:not(.move-colour-btn):hover,
-.theme-dex .nav .button:not(.move-colour-btn):hover,
-.theme-dex .tabbar .button:not(.move-colour-btn):hover,
-.theme-dex .pfx-topbar .button:not(.move-colour-btn):hover,
-.theme-dex .pfx-body .button:not(.move-colour-btn):hover,
-.theme-dex .pfx-panel .button:not(.move-colour-btn):hover,
-.theme-dex .utilichart .button:not(.move-colour-btn):hover {
+.theme-dex .button:hover,
+.theme-dex .nav .button:hover,
+.theme-dex .tabbar .button:hover,
+.theme-dex .pfx-topbar .button:hover,
+.theme-dex .pfx-body .button:hover,
+.theme-dex .pfx-panel .button:hover,
+.theme-dex .utilichart .button:hover {
   background: linear-gradient(#334764, #253853) !important;
   border-color: #6b86ae !important;
   color: #d7e0ec !important;
 }
 
-.theme-dex .button:not(.move-colour-btn).cur,
-.theme-dex .button:not(.move-colour-btn).cur:hover,
-.theme-dex .button:not(.move-colour-btn):disabled,
-.theme-dex .button:not(.move-colour-btn):disabled:hover {
+.theme-dex .button.cur,
+.theme-dex .button.cur:hover,
+.theme-dex .button:disabled,
+.theme-dex .button:disabled:hover {
   background: #253853 !important;
   border-color: #6b86ae !important;
   color: #9ab0d2 !important;
@@ -380,7 +380,7 @@ body.theme-dex .calc-top-action-btn,
 body.theme-dex .settings-choice-btn,
 body.theme-dex .notes-format-btn,
 body.theme-dex .calc-side-btn,
-body.theme-dex .btn:not(.move-colour-btn) {
+body.theme-dex .btn {
   background-color: #0f172a;
   color: #d7e0ec;
 }
@@ -391,10 +391,10 @@ body.theme-dex .header {
   box-shadow: none;
 }
 
-body.theme-dex .header .button:not(.move-colour-btn),
-body.theme-dex .nav .button:not(.move-colour-btn),
-body.theme-dex .button:not(.move-colour-btn),
-body.theme-dex .btn:not(.move-colour-btn) {
+body.theme-dex .header .button,
+body.theme-dex .nav .button,
+body.theme-dex .button,
+body.theme-dex .btn {
   background: linear-gradient(#2a3953, #1f2d44);
   border-color: #4b607f;
   color: #d7e0ec;
@@ -402,18 +402,18 @@ body.theme-dex .btn:not(.move-colour-btn) {
   box-shadow: none;
 }
 
-body.theme-dex .button:not(.move-colour-btn):hover,
-body.theme-dex .btn:not(.move-colour-btn):hover,
-body.theme-dex .nav .button:not(.move-colour-btn):hover,
+body.theme-dex .button:hover,
+body.theme-dex .btn:hover,
+body.theme-dex .nav .button:hover,
 body.theme-dex .calc-top-action-btn:hover {
   background: linear-gradient(#334764, #253853);
   border-color: #6b86ae;
   color: #d7e0ec;
 }
 
-body.theme-dex .button:not(.move-colour-btn).cur,
-body.theme-dex .button:not(.move-colour-btn).cur:hover,
-body.theme-dex .btn:not(.move-colour-btn).is-active,
+body.theme-dex .button.cur,
+body.theme-dex .button.cur:hover,
+body.theme-dex .btn.is-active,
 body.theme-dex .settings-choice-btn.is-active,
 body.theme-dex .notes-format-btn.is-active {
   background: #253853;
@@ -421,9 +421,14 @@ body.theme-dex .notes-format-btn.is-active {
   color: #d7e0ec;
 }
 
-/* Move colours are owned by the calculator move-colour system.
-   Dex mode deliberately does not set their background/text colours. */
-/* Dex mode may decorate selected/locked moves without replacing their type colour. */
+body.theme-dex .move-colour-btn:not(.move-colour-btn--custom),
+body.theme-dex .result-move + label:not(.move-colour-btn--custom),
+body.theme-dex .locked-move + label:not(.move-colour-btn--custom) {
+  background-color: #2b405b;
+  border-color: #5d7aa4;
+  color: #edf4ff;
+}
+
 body.theme-dex .result-move:checked + label.move-colour-btn,
 body.theme-dex .locked-move + label.move-colour-btn {
   border-color: #f0d37b;

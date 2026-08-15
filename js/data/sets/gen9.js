@@ -5039,6 +5039,20 @@ var SETDEX_SV = {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
         },
         "moves": ["Terrain Pulse","Psychic Noise","Thunderbolt","Calm Mind"]
+    },
+        "Hex Maniac Tammy & Cale | Route 121": {
+            "index": "0000000809",
+            "level": 77,
+            "ability": "Shadow Tag",
+            "item": "Lum Berry",
+            "nature": "Relaxed",
+            "setdouble": "True",
+            "setdoubleGroup": "route-121-hex-maniac-tammy-cale",
+            "setdoubleSide": 2,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Trick Room","Fake Out","Mystical Fire","Focus Blast"]
     }
     },
     "Pincurchin": {
@@ -7431,6 +7445,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Whirlpool","Protect","Perish Song","Knock Off"]
+        },
+        "Hex Maniac Tammy & Cale | Route 121": {
+            "index": "0000000807",
+            "level": 77,
+            "ability": "Huge Power",
+            "item": "Life Orb",
+            "nature": "Brave",
+            "setdouble": "True",
+            "setdoubleGroup": "route-121-hex-maniac-tammy-cale",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Liquidation","Play Rough","Perish Song","Substitute"]
         }
     },
     "Dondozo": {
@@ -9220,6 +9248,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Blood Moon","Earth Power","Protect","Calm Mind"]
+        },
+        "Hex Maniac Tammy & Cale | Route 121": {
+            "index": "0000000806",
+            "level": 78,
+            "ability": "Mind's Eye",
+            "item": "Normal Gem",
+            "nature": "Sassy",
+            "setdouble": "True",
+            "setdoubleGroup": "route-121-hex-maniac-tammy-cale",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Blood Moon","Hyper Beam","Earth Power","Protect"]
         }
     },
     "Clefable-Mega": {
@@ -11165,6 +11207,54 @@ var SETDEX_SV = {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
         },
         "moves": ["V-create","Dragon Rush","Dragon Ascent","Earthquake"]
+    }
+},
+"Cresselia": {
+    "Hex Maniac Tammy & Cale | Route 121": {
+        "index": "0000000805",
+        "level": 77,
+        "ability": "Levitate",
+        "item": "Covert Cloak",
+        "nature": "Quiet",
+        "setdouble": "True",
+        "setdoubleGroup": "route-121-hex-maniac-tammy-cale",
+        "setdoubleSide": 1,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Trick Room","Psychic","Lunar Blessing","Helping Hand"]
+    }
+},
+"Lycanroc-Midnight": {
+    "Hex Maniac Tammy & Cale | Route 121": {
+        "index": "0000000808",
+        "level": 77,
+        "ability": "No Guard",
+        "item": "Bright Powder",
+        "nature": "Brave",
+        "setdouble": "True",
+        "setdoubleGroup": "route-121-hex-maniac-tammy-cale",
+        "setdoubleSide": 2,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Stone Edge","Snarl","Lash Out","Bulk Up"]
+    }
+},
+"Golurk-Mega": {
+    "Hex Maniac Tammy & Cale | Route 121": {
+        "index": "0000000810",
+        "level": 78,
+        "ability": "Iron Fist",
+        "item": "Golurkite",
+        "nature": "Brave",
+        "setdouble": "True",
+        "setdoubleGroup": "route-121-hex-maniac-tammy-cale",
+        "setdoubleSide": 2,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Phantom Force","High Horsepower","Hammer Arm","Ice Punch"]
     }
 },
 }
