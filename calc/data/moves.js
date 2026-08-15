@@ -1157,7 +1157,7 @@ var DPP_PATCH = {
         category: 'Physical'
     },
     'Iron Cleave': {
-        bp: 70,
+        bp: 80,
         type: 'Steel',
         makesContact: true,
         critRatio: 2,

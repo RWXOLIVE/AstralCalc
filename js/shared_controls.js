@@ -1063,7 +1063,7 @@ var isRestoringLastEncounterSelection = false;
 var isBootstrappingLastEncounterSelection = true;
 var calcSidePanelResizeState = null;
 var calcSideResizeCaptureNode = null;
-var PLAYER_ROSTER_SPRITE_SELECTOR = "#team-poke-list .trainer-pok.left-side, #team-right-poke-list .trainer-pok.left-side, #box-poke-list .trainer-pok.left-side, #box-poke-list2 .trainer-pok.left-side, #trash-box .trainer-pok.left-side";
+var PLAYER_ROSTER_SPRITE_SELECTOR = "#team-poke-list .trainer-pok.left-side, #team-right-poke-list .trainer-pok.left-side, #box-poke-list .trainer-pok.left-side, #box-poke-list2 .trainer-pok.left-side, #box-poke-listmega .trainer-pok.left-side, #trash-box .trainer-pok.left-side";
 var PLAYER_ROSTER_SEARCH_DEBOUNCE_MS = 90;
 var NOTES_NOTE_INPUT_DEBOUNCE_MS = 120;
 var SPECIES_DISPLAY_NAME_ALIASES = {
@@ -2949,6 +2949,7 @@ function collectPlayerRosterLayout() {
 		teamRight: collectRosterSetIdsFromContainer("team-right-poke-list"),
 		box: collectRosterSetIdsFromContainer("box-poke-list"),
 		box2: collectRosterSetIdsFromContainer("box-poke-list2"),
+		boxmega: collectRosterSetIdsFromContainer("box-poke-listmega"),
 		trash: collectRosterSetIdsFromContainer("trash-box")
 	};
 }
@@ -3097,6 +3098,7 @@ function applyPlayerRosterLayout(layout) {
 		teamRight: document.getElementById("team-right-poke-list"),
 		box: document.getElementById("box-poke-list"),
 		box2: document.getElementById("box-poke-list2"),
+		boxmega: document.getElementById("box-poke-listmega"),
 		trash: document.getElementById("trash-box")
 	};
 	for (var zoneKey in containerMap) {
@@ -3513,6 +3515,7 @@ function getTrainerPokContainerElement(node) {
 			current.id === "team-right-poke-list" ||
 			current.id === "box-poke-list" ||
 			current.id === "box-poke-list2" ||
+			current.id === "box-poke-listmega" ||
 			current.id === "trash-box") {
 			return current;
 		}
@@ -3914,6 +3917,7 @@ function setupFragSheetAutoRefresh() {
 		document.getElementById("team-right-poke-list"),
 		document.getElementById("box-poke-list"),
 		document.getElementById("box-poke-list2"),
+		document.getElementById("box-poke-listmega"),
 		document.getElementById("trash-box")
 	];
 	fragSheetAutoObserver = new MutationObserver(function () {
@@ -5867,7 +5871,7 @@ function appendAeLuaDiscoveredSetIdsToBox(setIds) {
 }
 
 function appendAeLuaAutoMegaSetIdsToBox2(setIds) {
-	return appendAeLuaSetIdsToRosterContainer(setIds, "box-poke-list2");
+	return appendAeLuaSetIdsToRosterContainer(setIds, "box-poke-listmega");
 }
 
 function autoImportMegasForCurrentRoster() {
