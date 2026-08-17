@@ -361,7 +361,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Substitute","Reversal","Lunge","Rock Tomb"]
-        }
+        },
+        "Pkmn Breeder Myles": {
+        "index": "0000000829",
+        "level": 79,
+        "ability": "Stakeout",
+        "item": "Red Card",
+        "nature": "Brave",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Retaliate","Lunge","Storm Throw","Spikes"]
+    }
     },
     "Dustox": {
     "Bug Catcher James | Petalburg Woods": {
@@ -1650,7 +1661,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Stuff Cheeks","Body Press","Body Slam","Recycle"]
-        }
+        },
+        "Beauty Jessica | Route 121": {
+        "index": "0000000812",
+        "level": 77,
+        "ability": "Cheek Pouch",
+        "item": "Liechi Berry",
+        "nature": "Adamant",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Swords Dance","Psychic Fangs","Double-Edge","Earthquake"]
+    }
     },
     "Boltund": {
     "Battle Girl Lilith | Dewford Gym": {
@@ -3148,6 +3170,18 @@ var SETDEX_SV = {
             },
             "moves": ["Earthquake","Trailblaze","Stone Edge","Body Slam"]
         },
+        "Pokefan Vanessa | Route 121": {
+        "index": "0000000836",
+        "level": 77,
+        "ability": "Guts",
+        "item": "Flame Orb",
+        "nature": "Brave",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Facade","High Horsepower","Knock Off","Curse"]
+    }
     },
     "Talonflame": {
     "Gym Leader Norman | Petalburg Gym": {
@@ -3533,7 +3567,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Bulk Up","Knock Off","Poison Jab","Drain Punch"]
-        }
+        },
+        "Cool Trainer Cristin | Route 121": {
+        "index": "0000000844",
+        "level": 77,
+        "ability": "Prankster",
+        "item": "Leftovers",
+        "nature": "Relaxed",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Trick Room","Screech","Fake Tears","Knock Off"]
+    }
     },
     "Slither Wing": {
     "Cool Trainer George | Petalburg Gym": {
@@ -3594,7 +3639,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Burn Up","Close Combat","Extreme Speed","Scorching Sands"]
-        }
+        },
+        "Sr & Jr Kate & Joy | Route 121": {
+        "index": "0000000819",
+        "level": 77,
+        "ability": "Justified",
+        "setdouble": "True",
+        "item": "Life Orb",
+        "nature": "Brave",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Extreme Speed","Frustration","Superpower","Flare Blitz"]
+    }
     },
     "Articuno": {
     "Ex Champion Red | Petalburg Gym": {
@@ -4434,7 +4491,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Stealth Rock","Rage Fist","Close Combat","Stone Edge"]
-        }
+        },
+        "Sr & Jr Kate & Joy | Route 121": {
+        "index": "0000000816",
+        "level": 77,
+        "ability": "Defiant",
+        "item": "Room Service",
+        "setdouble": "True",
+        "nature": "Brave",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Protect","Rage Fist","Cross Chop","Stone Edge"]
+    }
     },
     "Gurdurr": {
     "Battle Girl Helene | Route 115": {
@@ -4604,7 +4673,31 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Weather Ball","Psyshock","Dazzling Gleam","Calm Mind"]
-        }
+        },
+        "Pokefan Vanessa | Route 121": {
+        "index": "0000000834",
+        "level": 77,
+        "ability": "Psychic Surge",
+        "item": "Terrain Extender",
+        "nature": "Quiet",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Trick Room","Alluring Voice","Hyper Beam","Expanding Force"]
+    },
+    "Pokefan Vanessa | Route 121": {
+        "index": "0000000835",
+        "level": 78,
+        "ability": "Download",
+        "item": "Eviolite",
+        "nature": "Quiet",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Tri Attack","Foul Play","Ice Beam","Tri Attack"]
+    }
     },
     "Bellibolt": {
     "Swimmer Imani | Route 105": {
@@ -4872,7 +4965,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Coaching","Power Whip","Triple Axel","High Jump Kick"]
-        }
+        },
+        "Pkmn Breeder Pat | Route 121": {
+        "index": "0000000822",
+        "level": 77,
+        "ability": "Queenly Majesty",
+        "item": "Assault Vest",
+        "nature": "Brave",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Zen Headbutt","Trop Kick","Low Kick","Triple Axel"]
+    }
     },
     "Magmortar": {
     "Sis & Bro Lisa & Ray | Route 107": {
@@ -4963,7 +5068,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Reflect","Light Screen","Swagger","Psycho Cut"]
-        }
+        },
+        "Pkmn Breeder Pat | Route 121": {
+        "index": "0000000821",
+        "level": 77,
+        "ability": "Prankster",
+        "item": "Light Clay",
+        "nature": "Impish",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Reflect","Light Screen","Trick Room","Fake Tears"]
+    }
     },
     "Politoed": {
     "Swimmer Beth & Cameron | Route 107": {
@@ -5662,7 +5779,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
             },
             "moves": ["Megahorn","Cross Poison","Sucker Punch","Stomping Tantrum"]
-        }
+        },
+        "Pkmn Breeder Myles": {
+        "index": "0000000828",
+        "level": 79,
+        "ability": "Shadow Tag",
+        "item": "Choice Band",
+        "nature": "Brave",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Megahorn"]
+    }
     },
     "Seismitoad": {
     "Team Plasma #5 3/3 | Abandoned Ship": {
@@ -5931,7 +6059,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Amnesia","Body Press","Power Whip","Gyro Ball"]
-        }
+        },
+        "Beauty Jessica | Route 121": {
+        "index": "0000000813",
+        "level": 78,
+        "ability": "Stamina",
+        "item": "Occa Berry",
+        "nature": "Sassy",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Body Press","Knock Off","Stealth Rock","Amnesia"]
+    }
     },
     "Zekrom": {
     "Team Plasma N & Ghetsis | Abandoned Ship": {
@@ -6688,7 +6827,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Sticky Web","Expanding Force","Infestation","Recover"]
-        }
+        },
+        "Pkmn Breeder Myles": {
+        "index": "0000000826",
+        "level": 79,
+        "ability": "Trace",
+        "item": "Colbur Berry",
+        "nature": "Quiet",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Trick Room","Body Press","Infestation","Bug Buzz"]
+    }
     },
     "Jynx": {
     "Psychic Edward | Route 110": {
@@ -6815,7 +6965,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Strength Sap","Scald","Night Shade","Power Gem"]
-        }
+        },
+        "Cool Trainer Marcel | Route 121": {
+        "index": "0000000839",
+        "level": 77,
+        "ability": "Weak Armor",
+        "item": "Eviolite",
+        "nature": "Relaxed",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Trick Room","Meteor Beam","Night Shade","Sandstorm"]
+    }
     },
     "Luxray": {
     "Trainer Rival (Chikorita) | Route 110": {
@@ -7329,7 +7490,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Focus Blast","Zap Cannon","Ice Beam","Laser Focus"]
-        }
+        },
+        "Pkmn Breeder Pat | Route 121": {
+        "index": "0000000824",
+        "level": 77,
+        "ability": "Sheer Force",
+        "item": "Life Orb",
+        "nature": "Quiet",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Power Gem","Fake Tears","Thunderbolt","Flash Cannon"]
+    }
     },
     "Skarmory-Mega": {
     "Leader Jasmine | Mauville Gym": {
@@ -8864,7 +9037,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 13
             },
             "moves": ["Future Sight","Psychic Noise","Hyper Voice","Dazzling Gleam"]
-        }
+        },
+        "Sr & Jr Kate & Joy | Route 121": {
+        "index": "0000000817",
+        "level": 77,
+        "ability": "Armor Tail",
+        "setdouble": "True",
+        "item": "Sitrus Berry",
+        "nature": "Relaxed",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Beat Up","Hyper Voice","Twin Beam","Trick Room"]
+    }
     },
     "Donphan": {
     "Old Man DLOW | Route 113": {
@@ -8989,7 +9174,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Cosmic Power","Giga Drain","Brine","Recover"]
-        }
+        },
+        "Cool Trainer Marcel | Route 121": {
+        "index": "0000000842",
+        "level": 77,
+        "ability": "Suction Cups",
+        "item": "Quick Claw",
+        "nature": "Quiet",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Meteor Beam","Giga Drain","Psychic","Recover"]
+    }
     },
     "Lumineon": {
     "Fisherman Nolan | Route 114": {
@@ -9077,7 +9273,18 @@ var SETDEX_SV = {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
         },
         "moves": ["Icy Wind","Chilling Water","Liquidation","Leech Life"]
-        }
+        },
+        "Pkmn Breeder Myles": {
+        "index": "0000000827",
+        "level": 79,
+        "ability": "Water Bubble",
+        "item": "Binding Band",
+        "nature": "Relaxed",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Iron Defense","Liquidation","Leech Life","Infestation"]
+    }
     },
     "Mantine": {
     "Fisherman Kai | Route 114": {
@@ -9378,7 +9585,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
             },
             "moves": ["Iron Defense","Body Press","Trick Room","Stealth Rock"]
-        }
+        },
+        "Gentleman Walter | Route 121": {
+        "index": "0000000830",
+        "level": 78,
+        "ability": "Clear Body",
+        "item": "Babiri Berry",
+        "nature": "Relaxed",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Trick Room","Body Press","Endeavor","Stealth Rock"]
+    }
     },
     "Garganacl": {
     "Hiker Lucas | Route 114": {
@@ -9699,7 +9917,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Rock Polish","Rock Slide","Earthquake","Thunder Punch"]
-        }
+        },
+        "Gentleman Walter | Route 121": {
+        "index": "0000000832",
+        "level": 78,
+        "ability": "Solid Rock",
+        "item": "Rindo Berry",
+        "nature": "Brave",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Swords Dance","Stone Edge","Earthquake","Ice Punch"]
+    }
     },
     "Chi-Yu": {
         "Magma Admin Tabitha | Mt Chimney": {
@@ -9863,7 +10092,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Psychic Terrain","Destiny Bond","Expanding Force","Armor Cannon"]
-        }
+        },
+        "Pokefan Vanessa | Route 121": {
+        "index": "0000000838",
+        "level": 77,
+        "ability": "Mega Launcher",
+        "item": "Weakness Policy",
+        "setdouble": "True",
+        "nature": "Quiet",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Flamethrower","Expanding Force","Flash Cannon","Mystical Fire"]
+    }
     },
     "Salamence": {
     "Magma Leader Maxie | Mt Chimney": {
@@ -10112,7 +10353,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Apple Acid","Dragon Pulse","Body Press","Iron Defense"]
-        }
+        },
+        "Cool Trainer Cristin | Route 121": {
+        "index": "0000000846",
+        "level": 78,
+        "ability": "Ripen",
+        "item": "Iapapa Berry",
+        "nature": "Quiet",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Apple Acid","Dragon Pulse","Leech Seed","Recycle"]
+    }
     },
     "Hitmontop": {
         "Wyatt & Jacob | Giant Chasm": {
@@ -10498,7 +10750,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Wild Charge","Ice Punch","Knock Off","Close Combat"]
-        }
+        },
+        "Cool Trainer Cristin | Route 121": {
+        "index": "0000000848",
+        "level": 78,
+        "ability": "Quark Drive",
+        "item": "Punching Glove",
+        "nature": "Adamant",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Substitute","Thunder Punch","Focus Punch","Ice Punch"]
+    }
     },
     "Miraidon": {
         "Team Plasma Colress | Giant Chasm": {
@@ -11255,6 +11518,208 @@ var SETDEX_SV = {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
         },
         "moves": ["Phantom Force","High Horsepower","Hammer Arm","Ice Punch"]
+    }
+},
+"Gourgeist-Super": {
+    "Beauty Jessica | Route 121": {
+        "index": "0000000811",
+        "level": 77,
+        "ability": "Insomnia",
+        "item": "Occa Berry",
+        "nature": "Sassy",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Trick Room","Power Whip","Leech Seed","Phantom Force"]
+    }
+},
+"Glalie-Mega": {
+    "Beauty Jessica | Route 121": {
+        "index": "0000000814",
+        "level": 77,
+        "ability": "Intimidate",
+        "item": "Glalitite",
+        "nature": "Brave",
+        "prehp": "208",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Explosion","Double-Edge","Spikes","Earth Power"]
+    }
+},
+"Enamorus-Therian": {
+    "Beauty Jessica | Route 121": {
+        "index": "0000000815",
+        "level": 78,
+        "ability": "Overcoat",
+        "item": "Weakness Policy",
+        "nature": "Brave",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Trick Room","Mystical Fire","Moonblast","Razor Wind"]
+    }
+},
+"Scrafty-Mega": {
+    "Sr & Jr Kate & Joy | Route 121": {
+        "index": "0000000818",
+        "level": 78,
+        "ability": "Justified",
+        "item": "Scraftinite",
+        "setdouble": "True",
+        "nature": "Sassy",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Super Fang","Fake Out","Knock Off","High Jump Kick"]
+    }
+},
+"Mimikyu": {
+    "Sr & Jr Kate & Joy | Route 121": {
+        "index": "0000000820",
+        "level": 77,
+        "ability": "Disguise",
+        "item": "Room Service",
+        "setdouble": "True",
+        "nature": "Brave",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Trick Room","Beat Up","Phantom Force","Play Rough"]
+    }
+},
+"Volcanion": {
+    "Pkmn Breeder Pat | Route 121": {
+        "index": "0000000823",
+        "level": 78,
+        "ability": "Water Absorb",
+        "item": "White Herb",
+        "nature": "Quiet",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Heat Wave","Steam Eruption","Overheat","Sludge Bomb"]
+    }
+},
+"Malamar-Mega": {
+    "Pkmn Breeder Pat | Route 121": {
+        "index": "0000000825",
+        "level": 78,
+        "ability": "Contrary",
+        "item": "Malamarite",
+        "nature": "Brave",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Psycho Boost","Superpower","Night Daze","Destiny Bond"]
+    }
+},
+"Marowak-Alola": {
+    "Gentleman Walter | Route 121": {
+        "index": "0000000831",
+        "level": 77,
+        "ability": "Rock Head",
+        "item": "Thick Club",
+        "nature": "Brave",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Temper Flare","Shadow Bone","Head Smash","Brick Break"]
+    }
+},
+"Aggron-Mega": {
+    "Gentleman Walter | Route 121": {
+        "index": "0000000833",
+        "level": 78,
+        "ability": "Filter",
+        "item": "Aggronite",
+        "nature": "Brave",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Heavy Slam","Body Press","Dragon Claw","Curse"]
+    }
+},
+"Scolipede-Mega": {
+    "Pokefan Vanessa | Route 121": {
+        "index": "0000000837",
+        "level": 78,
+        "ability": "Tinted Lens",
+        "item": "Scolipite",
+        "nature": "Brave",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Swords Dance","X-Scissor","Poison Jab","Pursuit"]
+    }
+},
+"Omastar": {
+    "Cool Trainer Marcel | Route 121": {
+        "index": "0000000840",
+        "level": 79,
+        "ability": "Shell Armor",
+        "item": "Life Orb",
+        "nature": "Quiet",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Meteor Beam","Ice Beam","Scald","Earth Power"]
+    }
+},
+
+"Gogoat": {
+    "Cool Trainer Marcel | Route 121": {
+        "index": "0000000841",
+        "level": 77,
+        "ability": "Sap Sipper",
+        "item": "Safety Goggles",
+        "nature": "Brave",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Bulk Up","Horn Leech","Earthquake","Rock Slide"]
+    }
+},
+"Tyranitar-Mega": {
+    "Cool Trainer Marcel | Route 121": {
+        "index": "0000000843",
+        "level": 78,
+        "ability": "Sand Stream",
+        "item": "Tyranitarite",
+        "nature": "Brave",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Protect","Knock Off","Rock Slide","Fire Punch"]
+    }
+},
+"Revavroom": {
+    "Cool Trainer Cristin | Route 121": {
+        "index": "0000000845",
+        "level": 78,
+        "ability": "Filter",
+        "item": "Shuca Berry",
+        "nature": "Brave",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Spin Out","Noxious Torque","Blazing Torque","High Horsepower"]
+    }
+},
+"Hatterene": {
+    "Cool Trainer Cristin | Route 121": {
+        "index": "0000000847",
+        "level": 77,
+        "ability": "Magic Bounce",
+        "item": "Kebia Berry",
+        "nature": "Quiet",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Calm Mind","Psychic","Draining Kiss","Mystical Fire"]
     }
 },
 }
