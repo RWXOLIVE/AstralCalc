@@ -1052,6 +1052,13 @@ var OPPONENT_PLAN_RANGES = [
 		endTrainers: ["Kindler Jeff | Lavaridge Gym"]
 	},
 	{
+		id: "magma-hideout-grunts-3-8-gauntlet",
+		type: "Gauntlet",
+		label: "Team Magma Grunt #3 \u2192 Team Magma Grunt #8",
+		startTrainers: ["Team Magma Grunt #3 | Magma Hideout"],
+		endTrainers: ["Team Magma Grunt #8 | Magma Hideout"]
+	},
+	{
 		id: "giant-chasm-gauntlet",
 		type: "Gauntlet",
 		label: "Team Plasma Grunt | Gauntlet 1/7",
@@ -1806,6 +1813,7 @@ function getDefaultAppSettings() {
 		moveColors: false,
 		moveMeta: true,
 		autoImportMegas: false,
+		displayFormes: false,
 		totalFragsOnBorder: false
 	};
 }
@@ -1821,6 +1829,7 @@ function getAppSettings(forceReload) {
 		moveColors: typeof parsed.moveColors === "boolean" ? parsed.moveColors : defaults.moveColors,
 		moveMeta: typeof parsed.moveMeta === "boolean" ? parsed.moveMeta : defaults.moveMeta,
 		autoImportMegas: typeof parsed.autoImportMegas === "boolean" ? parsed.autoImportMegas : defaults.autoImportMegas,
+		displayFormes: typeof parsed.displayFormes === "boolean" ? parsed.displayFormes : defaults.displayFormes,
 		totalFragsOnBorder: typeof parsed.totalFragsOnBorder === "boolean" ? parsed.totalFragsOnBorder : defaults.totalFragsOnBorder
 	};
 	return appSettingsCache;
@@ -1834,6 +1843,7 @@ function saveAppSettings(nextSettings) {
 		moveColors: !!nextSettings.moveColors,
 		moveMeta: !!nextSettings.moveMeta,
 		autoImportMegas: !!nextSettings.autoImportMegas,
+		displayFormes: !!nextSettings.displayFormes,
 		totalFragsOnBorder: !!nextSettings.totalFragsOnBorder
 	};
 	localStorage.setItem(APP_SETTINGS_STORAGE_KEY, JSON.stringify(appSettingsCache));
@@ -1849,6 +1859,7 @@ function updateAppSettings(partial) {
 		moveColors: partial && typeof partial.moveColors !== "undefined" ? partial.moveColors : current.moveColors,
 		moveMeta: partial && typeof partial.moveMeta !== "undefined" ? partial.moveMeta : current.moveMeta,
 		autoImportMegas: partial && typeof partial.autoImportMegas !== "undefined" ? partial.autoImportMegas : current.autoImportMegas,
+		displayFormes: partial && typeof partial.displayFormes !== "undefined" ? partial.displayFormes : current.displayFormes,
 		totalFragsOnBorder: partial && typeof partial.totalFragsOnBorder !== "undefined" ? partial.totalFragsOnBorder : current.totalFragsOnBorder
 	});
 }
@@ -7800,6 +7811,7 @@ function syncSettingsPanelUi() {
 	$("#settings-move-colors").prop("checked", !!settings.moveColors);
 	$("#settings-move-meta").prop("checked", !!settings.moveMeta);
 	$("#settings-auto-import-megas").prop("checked", !!settings.autoImportMegas);
+	$("#settings-display-formes").prop("checked", !!settings.displayFormes);
 	$("#settings-total-frags-on-border").prop("checked", !!settings.totalFragsOnBorder);
 	setMoveMetaVisibility(!!settings.moveMeta);
 	applyMoreColourSetting(!!settings.moreColour);
@@ -8167,6 +8179,10 @@ function bindCalcToolEvents() {
 		var enabled = $(this).is(":checked");
 		updateAppSettings({autoImportMegas: enabled});
 		if (enabled) autoImportMegasForCurrentRoster();
+	});
+	$("#settings-display-formes").off("change").on("change", function () {
+		updateAppSettings({displayFormes: $(this).is(":checked")});
+		renderOpposingTrainerParties();
 	});
 
 	$("#settings-total-frags-on-border").off("change").on("change", function () {
@@ -9869,10 +9885,50 @@ function getFieldWithSingleTargetSpreadDamageOverride(field, useSingleTargetSpre
 	return adjustedField;
 }
 
+function getTrainerPartyDisplayMegaFormName(entry) {
+	var itemName = String(entry && entry.setData && entry.setData.item || "").trim();
+	var megaStones = typeof calc !== "undefined" && calc && calc.MEGA_STONES;
+	var baseStoneName = itemName.replace(/ [xyz]$/i, "");
+	var megaStoneSpeciesName = megaStones && (megaStones[itemName] || megaStones[baseStoneName]);
+	if (!megaStoneSpeciesName) return "";
+	var resolvedPokemonName = resolveSetSpeciesNameForDexLookup(entry && entry.pokemonName);
+	var pokemon = pokedex && pokedex[resolvedPokemonName];
+	if (!pokemon || resolvedPokemonName !== String(pokemon.baseSpecies || resolvedPokemonName).trim()) return "";
+	var baseSpeciesName = String(pokemon.baseSpecies || resolvedPokemonName).trim();
+	if (baseSpeciesName !== megaStoneSpeciesName) return "";
+	var itemVariant = itemName.match(/ ([xyz])$/i);
+	var megaFormName = baseSpeciesName + "-Mega" + (itemVariant ? ("-" + itemVariant[1].toUpperCase()) : "");
+	var megaForm = pokedex[megaFormName];
+	return megaForm && String(megaForm.baseSpecies || "").trim() === baseSpeciesName ? megaFormName : "";
+}
+
+function isTrainerPartyRegionalFormName(pokemonName) {
+	return /-(?:alola|galar|hisui|paldea)(?:-|$)/i.test(String(pokemonName || ""));
+}
+
+function getTrainerPartyDisplayBaseFormName(entry) {
+	var resolvedPokemonName = resolveSetSpeciesNameForDexLookup(entry && entry.pokemonName);
+	var pokemon = pokedex && pokedex[resolvedPokemonName];
+	var baseSpeciesName = String(pokemon && pokemon.baseSpecies || "").trim();
+	if (!pokemon || !baseSpeciesName || resolvedPokemonName === baseSpeciesName || isTrainerPartyRegionalFormName(resolvedPokemonName) || /^Indeedee(?:-[FM])?$/i.test(resolvedPokemonName)) return "";
+	return pokedex[baseSpeciesName] ? baseSpeciesName : "";
+}
+
+function trainerPartyFormeHtml(entry, formeName, side) {
+	var label = "[" + entry.indexText + "]" + entry.fullSetName;
+	var tooltip = formeName + " forme of " + entry.pokemonName + ", " + label + " BP";
+	var sideClass = side === "left" ? " trainer-pok-forme-left" : " trainer-pok-forme-right";
+	return '<img class="trainer-pok right-side trainer-pok-forme' + sideClass + '" draggable="false" src="' + escapeHtml(getInitialTrainerSpriteUrlByName(formeName)) + '" data-id="' + escapeHtml(entry.fullSetName) + '" data-party-index="' + escapeHtml(entry.indexText) + '" data-species="' + escapeHtml(formeName) + '" alt="' + escapeHtml(tooltip) + '" title="' + escapeHtml(tooltip) + '" loading="lazy" decoding="async"' + getPrimaryIconSheetLoadAttr(formeName) + ' onerror="applyIconSheetFallbackImage(this, this.getAttribute(\'data-species\'))">';
+}
+
 function trainerPartyMonHtml(entry, isTrainerLead) {
 	var label = "[" + entry.indexText + "]" + entry.fullSetName;
 	var leadClass = isTrainerLead ? " trainer-party-leading" : "";
-	return '<img class="trainer-pok right-side' + leadClass + '" draggable="true" src="' + escapeHtml(getInitialTrainerSpriteUrlByName(entry.pokemonName)) + '" data-id="' + escapeHtml(entry.fullSetName) + '" data-party-index="' + escapeHtml(entry.indexText) + '" data-species="' + escapeHtml(entry.pokemonName) + '" title="' + escapeHtml((isTrainerLead ? "Trainer lead. " : "") + label + ", " + label + " BP") + '" loading="lazy" decoding="async"' + getPrimaryIconSheetLoadAttr(entry.pokemonName) + ' onerror="applyIconSheetFallbackImage(this, this.getAttribute(\'data-species\'))">';
+	var partyHtml = '<img class="trainer-pok right-side' + leadClass + '" draggable="true" src="' + escapeHtml(getInitialTrainerSpriteUrlByName(entry.pokemonName)) + '" data-id="' + escapeHtml(entry.fullSetName) + '" data-party-index="' + escapeHtml(entry.indexText) + '" data-species="' + escapeHtml(entry.pokemonName) + '" title="' + escapeHtml((isTrainerLead ? "Trainer lead. " : "") + label + ", " + label + " BP") + '" loading="lazy" decoding="async"' + getPrimaryIconSheetLoadAttr(entry.pokemonName) + ' onerror="applyIconSheetFallbackImage(this, this.getAttribute(\'data-species\'))">';
+	var shouldDisplayFormes = getAppSettings().displayFormes;
+	var baseFormName = shouldDisplayFormes ? getTrainerPartyDisplayBaseFormName(entry) : "";
+	var megaFormName = shouldDisplayFormes ? getTrainerPartyDisplayMegaFormName(entry) : "";
+	return (baseFormName ? trainerPartyFormeHtml(entry, baseFormName, "left") : "") + partyHtml + (megaFormName ? trainerPartyFormeHtml(entry, megaFormName, "right") : "");
 }
 
 function renderOpposingTrainerParties(selectedSetName) {
@@ -9902,7 +9958,7 @@ function renderOpposingTrainerParties(selectedSetName) {
 	$(".trainer-pok-list-opposing2").html(secondaryHtml).prop("hidden", !showSecondary);
 	$(".trainer-pok-divider").prop("hidden", !showSecondary);
 	renderTagPartnerParty(sortedEntries);
-	$(".trainer-pok.right-side").each(function () {
+	$(".trainer-pok.right-side, .trainer-pok-forme").each(function () {
 		applyPrimaryIconSheetIfNeeded(this, this.getAttribute("data-species"));
 	});
 	applyOpposingDeadMarks();
@@ -10473,6 +10529,8 @@ function createPokemon(pokeInfo) {
 			evs: evs,
 			isDynamaxed: isDynamaxed,
 			isSaltCure: pokeInfo.find(".saltcure").is(":checked"),
+			isMagmaStorm: pokeInfo.find(".magma-storm").is(":checked"),
+			isTrapped: pokeInfo.find(".trapped").is(":checked"),
 			alliesFainted: parseInt(pokeInfo.find(".alliesFainted").val()),
 			teraType: teraType,
 			boosts: boosts,
@@ -10885,6 +10943,13 @@ function getSideResidualChipDisplay(pokeInfo, pokemon, opposingPokemon, field) {
 		hpDelta -= Math.floor(maxHP / (hasResidualDisplayType(pokemon, "Water", "Steel") ? 4 : 8));
 		sources.push("Salt Cure");
 	}
+	if ((pokemon.isMagmaStorm || pokemon.isTrapped) && !pokemon.hasAbility("Magic Guard")) {
+		var trappingDamage = opposingPokemon && opposingPokemon.hasItem && opposingPokemon.hasItem("Binding Band")
+			? (gen > 5 ? Math.floor(maxHP / 6) : Math.floor(maxHP / 8))
+			: (gen > 5 ? Math.floor(maxHP / 8) : Math.floor(maxHP / 16));
+		hpDelta -= trappingDamage;
+		sources.push(pokemon.isMagmaStorm ? "Magma Storm damage" : "trapping damage");
+	}
 	if (!pokemon.hasAbility("Magic Guard") && field.attackerSide) {
 		if (!hasResidualDisplayType(pokemon, "Grass") && field.attackerSide.vinelash) {
 			hpDelta -= Math.floor(maxHP / 6);
@@ -11022,6 +11087,7 @@ function createField() {
 
 var FIELD_WEATHER_THEME_CLASSES = "field-weather-none field-weather-sun field-weather-rain field-weather-sand field-weather-snow field-weather-hail field-weather-fog";
 var FIELD_TERRAIN_THEME_CLASSES = "field-terrain-none field-terrain-electric field-terrain-grassy field-terrain-misty field-terrain-psychic";
+var FIELD_ENVIRONMENT_COMBINED_CLASS = "field-environment-combined";
 
 function getFieldWeatherThemeKey(weatherValue) {
 	var normalized = String(weatherValue || "").trim();
@@ -11068,9 +11134,10 @@ function applyFieldEnvironmentTheme(weatherValue, terrainValue) {
 	var weatherKey = getFieldWeatherThemeKey(weatherValue);
 	var terrainKey = getFieldTerrainThemeKey(terrainValue);
 	fieldInfo
-		.removeClass(FIELD_WEATHER_THEME_CLASSES + " " + FIELD_TERRAIN_THEME_CLASSES)
+		.removeClass(FIELD_WEATHER_THEME_CLASSES + " " + FIELD_TERRAIN_THEME_CLASSES + " " + FIELD_ENVIRONMENT_COMBINED_CLASS)
 		.addClass("field-weather-" + weatherKey)
-		.addClass("field-terrain-" + terrainKey);
+		.addClass("field-terrain-" + terrainKey)
+		.toggleClass(FIELD_ENVIRONMENT_COMBINED_CLASS, weatherKey !== "none" && terrainKey !== "none");
 }
 
 function applyFieldWeatherTheme(weatherValue) {
@@ -11273,6 +11340,12 @@ function clearField() {
 	$("#protectR").prop("checked", false);
 	$("#leechSeedL").prop("checked", false);
 	$("#leechSeedR").prop("checked", false);
+	$("#cureL").prop("checked", false);
+	$("#cureR").prop("checked", false);
+	$("#magmaStormL").prop("checked", false);
+	$("#magmaStormR").prop("checked", false);
+	$("#trappedL").prop("checked", false);
+	$("#trappedR").prop("checked", false);
 	$("#foresightL").prop("checked", false);
 	$("#foresightR").prop("checked", false);
 	$("#helpingHandL").prop("checked", false);
@@ -11326,6 +11399,19 @@ function getSetOptions(sets) {
 		} else {
 			if (pokeName in setdex) {
 				var setNames = Object.keys(setdex[pokeName]);
+				setNames.sort(function (leftSetName, rightSetName) {
+					var leftIndex = parseInt(setdex[pokeName][leftSetName].index, 10);
+					var rightIndex = parseInt(setdex[pokeName][rightSetName].index, 10);
+					var hasLeftIndex = !isNaN(leftIndex);
+					var hasRightIndex = !isNaN(rightIndex);
+
+					// Trainer sets are ordered by their in-game encounter index. Keep
+					// non-trainer sets, and sets sharing an index, in source order.
+					if (hasLeftIndex && hasRightIndex) return leftIndex - rightIndex;
+					if (hasLeftIndex) return -1;
+					if (hasRightIndex) return 1;
+					return 0;
+				});
 				for (var j = 0; j < setNames.length; j++) {
 					var setName = setNames[j];
 					var setData = setdex[pokeName][setName];
@@ -11691,11 +11777,29 @@ function topPokemonIcon(fullname, node) {
 	if (node && node.id === "p2mon") syncInlinePokeSprite($("#p2"));
 }
 
+function selectTrainerPartyCompanionForm(sprite) {
+	var companionSprite = $(sprite);
+	if (!companionSprite.hasClass("trainer-pok-forme")) return;
+	var displayedSpecies = String(companionSprite.attr("data-species") || "").trim();
+	if (!displayedSpecies) return;
+	var formeSelect = $("#p2 .forme").first();
+	var hasMatchingForme = formeSelect.find("option").filter(function () {
+		return String($(this).val() || "") === displayedSpecies;
+	}).length > 0;
+	if (hasMatchingForme) {
+		formeSelect.val(displayedSpecies).change();
+		return;
+	}
+	setTrainerSpriteImage($("#p2mon").get(0), displayedSpecies);
+	setTrainerSpriteImage($("#p2-inline-sprite").get(0), displayedSpecies);
+}
+
 $(document).on('click', '.right-side', function () {
 	var set = $(this).attr('data-id');
 	topPokemonIcon(set, $("#p2mon")[0])
 	$('input.opposing').val(set);
 	$('input.opposing').change();
+	selectTrainerPartyCompanionForm(this);
 	$('.opposing .select2-chosen').text(formatSetNameForDisplay(set));
 	renderFragSheet();
 })
@@ -11820,21 +11924,116 @@ function getCurrentTrainerIndexBounds() {
 	return {min: minIndex, max: maxIndex};
 }
 
-function resetTrainer() {
-	if (confirm(`Are you sure you want to reset? This will clear all imported sets and change your current trainer back to Younger Calvin. This cannot be undone.`)){
-		captureFragBackupSnapshot("before-reset-trainer", true);
-		selectTrainer(1);
-		localStorage.removeItem("customsets");
-		$(allPokemon("#importedSetsOptions")).hide();
-		loadDefaultLists();
-		for (let zone of document.getElementsByClassName("dropzone")){
-			zone.innerHTML="";
-		}
-		applyPlayerRosterSearchFilter();
-		syncFragRoster({pruneMissing: true, allowEmptyPrune: true});
-		renderFragSheet();
+var resetTrainerConfirmationOpener = null;
+
+function closeResetTrainerConfirmation() {
+	var confirmation = document.getElementById("reset-trainer-confirmation");
+	if (!confirmation || confirmation.hidden) return;
+	confirmation.hidden = true;
+	document.body.classList.remove("reset-trainer-confirmation-open");
+	var opener = resetTrainerConfirmationOpener;
+	resetTrainerConfirmationOpener = null;
+	if (opener && document.documentElement.contains(opener) && typeof opener.focus === "function") {
+		opener.focus();
 	}
-	
+}
+
+function performTrainerReset() {
+	captureFragBackupSnapshot("before-reset-trainer", true);
+	// updateDex removes the imported sets from the in-memory dex as well as
+	// browser storage. Removing only localStorage leaves stale selectable sets.
+	if (typeof updateDex === "function") updateDex({});
+	localStorage.removeItem("customsets");
+	$(allPokemon("#importedSetsOptions")).hide();
+	for (var i = 0; i < document.getElementsByClassName("dropzone").length; i++) {
+		document.getElementsByClassName("dropzone")[i].innerHTML = "";
+	}
+	loadDefaultLists();
+	var defaultPlayerSet = getFirstValidSetOption();
+	if (defaultPlayerSet && defaultPlayerSet.id) {
+		$("input.player").val(defaultPlayerSet.id).change();
+		$(".player .select2-chosen").text(formatSetNameForDisplay(defaultPlayerSet.id));
+	}
+	selectTrainer(1);
+	applyPlayerRosterSearchFilter();
+	syncFragRoster({pruneMissing: true, allowEmptyPrune: true});
+	renderFragSheet();
+}
+
+function getResetTrainerConfirmation() {
+	var existingConfirmation = document.getElementById("reset-trainer-confirmation");
+	if (existingConfirmation) return existingConfirmation;
+
+	var confirmation = document.createElement("div");
+	confirmation.id = "reset-trainer-confirmation";
+	confirmation.className = "reset-trainer-confirmation";
+	confirmation.hidden = true;
+
+	var dialog = document.createElement("div");
+	dialog.className = "reset-trainer-confirmation-dialog";
+	dialog.setAttribute("role", "alertdialog");
+	dialog.setAttribute("aria-modal", "true");
+	dialog.setAttribute("aria-labelledby", "reset-trainer-confirmation-title");
+	dialog.setAttribute("aria-describedby", "reset-trainer-confirmation-message");
+
+	var title = document.createElement("h2");
+	title.id = "reset-trainer-confirmation-title";
+	title.textContent = "Reset calculator?";
+	var message = document.createElement("p");
+	message.id = "reset-trainer-confirmation-message";
+	message.textContent = "This clears all imported sets and returns the current trainer to Younger Calvin. This cannot be undone.";
+	var actions = document.createElement("div");
+	actions.className = "reset-trainer-confirmation-actions";
+	var cancelButton = document.createElement("button");
+	cancelButton.type = "button";
+	cancelButton.className = "btn reset-trainer-confirmation-cancel";
+	cancelButton.textContent = "Cancel";
+	var confirmButton = document.createElement("button");
+	confirmButton.type = "button";
+	confirmButton.className = "btn reset-trainer-confirmation-confirm";
+	confirmButton.textContent = "Reset";
+
+	actions.appendChild(cancelButton);
+	actions.appendChild(confirmButton);
+	dialog.appendChild(title);
+	dialog.appendChild(message);
+	dialog.appendChild(actions);
+	confirmation.appendChild(dialog);
+	document.body.appendChild(confirmation);
+
+	confirmation.addEventListener("click", function (event) {
+		if (event.target === confirmation) closeResetTrainerConfirmation();
+	});
+	cancelButton.addEventListener("click", closeResetTrainerConfirmation);
+	confirmButton.addEventListener("click", function () {
+		closeResetTrainerConfirmation();
+		performTrainerReset();
+	});
+	document.addEventListener("keydown", function (event) {
+		if (confirmation.hidden) return;
+		if (event.key === "Escape") {
+			event.preventDefault();
+			closeResetTrainerConfirmation();
+			return;
+		}
+		if (event.key !== "Tab") return;
+		event.preventDefault();
+		if (event.shiftKey || document.activeElement === confirmButton) {
+			cancelButton.focus();
+		} else {
+			confirmButton.focus();
+		}
+	});
+	return confirmation;
+}
+
+function resetTrainer() {
+	var confirmation = getResetTrainerConfirmation();
+	if (!confirmation.hidden) return;
+	resetTrainerConfirmationOpener = document.activeElement;
+	confirmation.hidden = false;
+	document.body.classList.add("reset-trainer-confirmation-open");
+	confirmation.querySelector(".reset-trainer-confirmation-cancel").focus();
 }
 
 function refreshCurrentTrainerEncounter() {

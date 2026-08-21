@@ -187,6 +187,22 @@ html, body {
     box-sizing: border-box;
 }
 
+.trainer-pok-forme {
+	cursor: pointer;
+}
+
+.trainer-pok-forme-left {
+	margin-right: 4px;
+}
+
+.trainer-pok-forme-right {
+	margin-left: -6px;
+}
+
+.trainer-pok-forme:hover {
+    outline: none;
+}
+
 .trainer-pok.left-side {
     display: inline-flex;
     align-items: center;
@@ -451,6 +467,68 @@ th {
     background: rgba(59, 71, 90, 0.98);
     color: #ffffff;
 }
+
+.reset-trainer-confirmation[hidden] {
+    display: none;
+}
+
+.reset-trainer-confirmation {
+    position: fixed;
+    z-index: 10000;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.reset-trainer-confirmation-dialog {
+    width: min(420px, calc(100vw - 40px));
+    padding: 18px;
+    border: 1px solid #9aa4b1;
+    border-radius: 8px;
+    background: #f7f9fd;
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.38);
+}
+
+.reset-trainer-confirmation-dialog h2 {
+    margin: 0 0 10px;
+    font-size: 1.2em;
+}
+
+.reset-trainer-confirmation-dialog p {
+    margin: 0;
+    line-height: 1.45;
+}
+
+.reset-trainer-confirmation-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.reset-trainer-confirmation-actions .btn {
+    width: auto;
+    min-width: 5.5em;
+    margin: 0;
+    padding: 5px 10px;
+}
+
+.reset-trainer-confirmation-confirm {
+    color: #ffffff;
+    border-color: #b54444;
+    background: #bd4b4b;
+}
+
+.reset-trainer-confirmation-confirm:hover,
+.reset-trainer-confirmation-confirm:focus-visible {
+    color: #ffffff;
+    border-color: #8f2f2f;
+    background: #a93d3d;
+}
+
 .panel {
     float: left;
     display: inline-block; /* required for honkaculate to work */
@@ -1290,6 +1368,76 @@ body.layout-simplified .simplified-side-control-label select {
     }
 }
 
+/* Simplified layout: retain the original structure, with a denser quick view. */
+body.layout-simplified .simplified-side-card {
+    position: relative;
+}
+
+body.layout-simplified .simplified-side-header {
+    position: relative;
+    min-height: 52px;
+    margin-bottom: 7px;
+    padding-right: 58px;
+}
+
+body.layout-simplified .simplified-side-card.side-right .simplified-side-header {
+    padding-right: 0;
+    padding-left: 58px;
+}
+
+body.layout-simplified .simplified-side-form-wrap {
+    position: absolute;
+    top: 3px;
+    right: 0;
+    width: 52px;
+    height: 52px;
+    margin: 0;
+}
+
+body.layout-simplified .simplified-side-card.side-right .simplified-side-form-wrap {
+    right: auto;
+    left: 0;
+    margin: 0;
+}
+
+body.layout-simplified .simplified-side-form-sprite {
+    width: 58px;
+    height: 58px;
+}
+
+body.layout-simplified .simplified-side-meta {
+    gap: 5px 8px;
+    margin-bottom: 9px;
+}
+
+/* Base stats and IVs stay in Full Edit; the quick view prioritises battle totals and boosts. */
+body.layout-simplified .simplified-side-stat-head .simplified-side-stat-base,
+body.layout-simplified .simplified-side-stat-head .simplified-side-stat-iv,
+body.layout-simplified .simplified-side-stat-row .simplified-side-stat-base,
+body.layout-simplified .simplified-side-stat-row .simplified-side-stat-iv {
+    display: none;
+}
+
+body.layout-simplified .simplified-side-stat-head,
+body.layout-simplified .simplified-side-stat-row {
+    grid-template-columns: 3.3em minmax(3.1em, auto) auto minmax(3.6em, auto);
+    column-gap: 6px;
+}
+
+body.layout-simplified .simplified-side-card.side-right .simplified-side-stat-head,
+body.layout-simplified .simplified-side-card.side-right .simplified-side-stat-row {
+    grid-template-columns: minmax(3.6em, auto) auto minmax(3.1em, auto) 3.3em;
+}
+
+body.layout-simplified .simplified-side-moves {
+    gap: 2px;
+}
+
+body.layout-simplified .simplified-side-move-row {
+    padding: 4px 0;
+    column-gap: 9px;
+}
+
 /* pokemon info */
 .poke-info label {
     display: inline-block;
@@ -1493,6 +1641,10 @@ select.toxic-counter {
 .field-info {
     border-radius: 10px;
     transition: background-color 180ms ease, box-shadow 180ms ease;
+    --field-weather-top: var(--fieldset-color, #F1F4F9);
+    --field-weather-bottom: var(--fieldset-color, #F1F4F9);
+    --field-terrain-top: transparent;
+    --field-terrain-bottom: transparent;
 }
 
 .field-info.field-weather-none {
@@ -1501,42 +1653,69 @@ select.toxic-counter {
 
 .field-info.field-weather-sun {
     background: linear-gradient(180deg, rgba(96, 37, 24, 0.55), rgba(60, 24, 16, 0.62));
+    --field-weather-top: rgba(96, 37, 24, 0.55);
+    --field-weather-bottom: rgba(60, 24, 16, 0.62);
 }
 
 .field-info.field-weather-rain {
     background: linear-gradient(180deg, rgba(18, 45, 92, 0.5), rgba(14, 34, 72, 0.58));
+    --field-weather-top: rgba(18, 45, 92, 0.5);
+    --field-weather-bottom: rgba(14, 34, 72, 0.58);
 }
 
 .field-info.field-weather-sand {
     background: linear-gradient(180deg, rgba(92, 74, 24, 0.5), rgba(64, 52, 18, 0.58));
+    --field-weather-top: rgba(92, 74, 24, 0.5);
+    --field-weather-bottom: rgba(64, 52, 18, 0.58);
 }
 
 .field-info.field-weather-snow {
     background: linear-gradient(180deg, rgba(102, 146, 176, 0.38), rgba(64, 98, 132, 0.48));
+    --field-weather-top: rgba(102, 146, 176, 0.38);
+    --field-weather-bottom: rgba(64, 98, 132, 0.48);
 }
 
 .field-info.field-weather-hail {
     background: linear-gradient(180deg, rgba(196, 212, 226, 0.35), rgba(132, 152, 168, 0.46));
+    --field-weather-top: rgba(196, 212, 226, 0.35);
+    --field-weather-bottom: rgba(132, 152, 168, 0.46);
 }
 
 .field-info.field-weather-fog {
     background: linear-gradient(180deg, rgba(94, 98, 106, 0.42), rgba(66, 70, 78, 0.54));
+    --field-weather-top: rgba(94, 98, 106, 0.42);
+    --field-weather-bottom: rgba(66, 70, 78, 0.54);
 }
 
 .field-info.field-terrain-electric {
     background: linear-gradient(180deg, rgba(125, 106, 16, 0.5), rgba(84, 70, 10, 0.58));
+    --field-terrain-top: rgba(125, 106, 16, 0.68);
+    --field-terrain-bottom: rgba(84, 70, 10, 0.74);
 }
 
 .field-info.field-terrain-grassy {
     background: linear-gradient(180deg, rgba(28, 97, 38, 0.48), rgba(18, 64, 26, 0.58));
+    --field-terrain-top: rgba(28, 97, 38, 0.68);
+    --field-terrain-bottom: rgba(18, 64, 26, 0.76);
 }
 
 .field-info.field-terrain-misty {
     background: linear-gradient(180deg, rgba(96, 80, 108, 0.46), rgba(66, 52, 80, 0.56));
+    --field-terrain-top: rgba(96, 80, 108, 0.66);
+    --field-terrain-bottom: rgba(66, 52, 80, 0.74);
 }
 
 .field-info.field-terrain-psychic {
     background: linear-gradient(180deg, rgba(108, 46, 86, 0.5), rgba(74, 30, 60, 0.6));
+    --field-terrain-top: rgba(108, 46, 86, 0.68);
+    --field-terrain-bottom: rgba(74, 30, 60, 0.76);
+}
+
+/* When weather and terrain coexist, show each as a clearly separated layer. */
+.field-info.field-environment-combined {
+    background:
+        linear-gradient(135deg, transparent 0%, transparent 43%, rgba(255, 255, 255, 0.16) 43.5%, var(--field-terrain-top) 44.5%, var(--field-terrain-bottom) 100%),
+        linear-gradient(180deg, var(--field-weather-top), var(--field-weather-bottom));
 }
 
 table.field {

@@ -6676,10 +6676,10 @@ var SM_PATCH = {
     },
     Lurantis: {
         types: ['Grass'],
-        bs: { hp: 70, at: 105, df: 90, sa: 80, sd: 90, sp: 45 },
+        bs: { hp: 85, at: 115, df: 100, sa: 90, sd: 95, sp: 45 },
         weightkg: 18.5,
         otherFormes: ['Lurantis-Totem'],
-        abilities: { 0: 'Leaf Guard' }
+        abilities: { 0: 'Sharpness' }
     },
     'Lurantis-Totem': {
         types: ['Grass'],

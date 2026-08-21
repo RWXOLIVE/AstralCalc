@@ -430,8 +430,8 @@ body.theme-dex .locked-move + label.move-colour-btn {
   box-shadow: inset 0 0 0 1px rgba(16, 22, 34, 0.92), 0 0 0 1px rgba(240, 211, 123, 0.95);
 }
 
-body.theme-dex fieldset,
-body.theme-dex .field-info,
+/* Field weather and terrain backgrounds are defined in main.css. */
+body.theme-dex fieldset:not(.field-info),
 body.theme-dex .poke-import,
 body.theme-dex .calc-side-panel,
 body.theme-dex .notes-turn-card,
@@ -549,6 +549,12 @@ body.theme-dex body.calc-side-resizing .calc-side-resize-handle::after {
 .frag-context-menu {
     background: #11161d;
     border-color: #3f4957;
+}
+
+.reset-trainer-confirmation-dialog {
+    color: var(--text);
+    border-color: #3f4957;
+    background: #11161d;
 }
 
 tr.odd, tr.even {
