@@ -647,6 +647,7 @@
                     <input class="current-hp calc-trigger" id="currentHpL1" value="341" />/<span class="max-hp">341</span> (
                     <input class="percent-hp calc-trigger" value="100" />%)
                         <span class="side-residual-chip side-residual-chip-hp" hidden></span>
+                        <span class="trapping-residual-chip side-residual-chip side-residual-chip-hp" hidden></span>
                         <input class="visually-hidden max calc-trigger btn-input" type="checkbox" id="maxL" />
                         <label class="btn btn-xwide gen-specific g8 hide" for="maxL"
                         title="Use the corresponding Max Move?">Dynamax</label>
@@ -1129,6 +1130,16 @@
                             <td><div class="right" title="Has this Pok&eacute;mon been affected by Leech Seed?">
                                 <input aria-describedby="selectLeechSeedInstruction" class="visually-hidden calc-trigger" type="checkbox" id="leechSeedR" />
                                 <label class="btn btn-wide" for="leechSeedR">Leech Seed</label>
+                            </div></td>
+                        </tr>
+                        <tr class="gen-specific g4 g5 g6 g7 g8 g9">
+                            <td><div class="left" title="Is this side trapped by Magma Storm?">
+                                <input class="visually-hidden calc-trigger" type="checkbox" id="magmaStormL" />
+                                <label class="btn btn-wide" for="magmaStormL">Magma Storm</label>
+                            </div></td>
+                            <td><div class="right" title="Is this side trapped by Magma Storm?">
+                                <input class="visually-hidden calc-trigger" type="checkbox" id="magmaStormR" />
+                                <label class="btn btn-wide" for="magmaStormR">Magma Storm</label>
                             </div></td>
                         </tr>
                         <tr class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
@@ -1708,6 +1719,7 @@
                     <input class="current-hp calc-trigger" id="currentHpR1" value="341" />/<span class="max-hp">341</span> (
                     <input class="percent-hp calc-trigger" value="100" />%)
                         <span class="side-residual-chip side-residual-chip-hp" hidden></span>
+                        <span class="trapping-residual-chip side-residual-chip side-residual-chip-hp" hidden></span>
                         <input class="visually-hidden max calc-trigger btn-input" type="checkbox" id="maxR" />
                         <label class="btn btn-xwide gen-specific g8 hide" for="maxR"
                         title="Use the corresponding Max Move?">Dynamax</label>
@@ -2078,8 +2090,8 @@
     <script type="text/javascript" src="./calc/data/items.js?6595cf6c"></script>
     <script type="text/javascript" src="./calc/data/index.js?abecbd82"></script>
     <script type="text/javascript" src="./calc/move.js?5a4ba07d"></script>
-    <script type="text/javascript" src="./calc/pokemon.js?93b38f7a"></script>
-    <script type="text/javascript" src="./calc/field.js?8f901870"></script>
+    <script type="text/javascript" src="./calc/pokemon.js?magma-storm-field-v1"></script>
+    <script type="text/javascript" src="./calc/field.js?magma-storm-field-v1"></script>
     <script type="text/javascript" src="./calc/items.js?067e42a4"></script>
     <script type="text/javascript" src="./calc/mechanics/util.js?d79cb589"></script>
     <script type="text/javascript" src="./calc/mechanics/gen789.js?d1d9284e"></script>
@@ -2088,17 +2100,17 @@
     <script type="text/javascript" src="./calc/mechanics/gen3.js?f830b8d2"></script>
     <script type="text/javascript" src="./calc/mechanics/gen12.js?199f8ca6"></script>
     <script type="text/javascript" src="./calc/calc.js?40a2d9b1"></script>
-    <script type="text/javascript" src="./calc/desc.js?184c4a92"></script>
+    <script type="text/javascript" src="./calc/desc.js?magma-storm-field-v1"></script>
     <script type="text/javascript" src="./calc/result.js?ebd561a9"></script>
     <script type="text/javascript" src="./calc/adaptable.js?92e49194"></script>
     <script type="text/javascript" src="./calc/index.js?0b1745b9"></script>
     <script type="text/javascript" src="./js/spritedata.js?e6979aa2"></script>
     <script type="text/javascript" src="./js/data/frags_splits.js?507088b2"></script>
     <script type="text/javascript" src="./js/data/move_info_lookup.js?12b8d14e"></script>
-<script type="text/javascript" src="./js/shared_controls.js?6ee405a4"></script>
+<script type="text/javascript" src="./js/shared_controls.js?magma-storm-field-v1"></script>
     <script type="text/javascript" src="./js/switch_in_predictor.js?a2f49860"></script>
     <script type="text/javascript" src="./js/switch_in_gate.js?acd63663"></script>
-    <script type="text/javascript" src="./js/index_randoms_controls.js?e4ea95f2"></script>
+<script type="text/javascript" src="./js/index_randoms_controls.js?trapping-residual-v1"></script>
     <script type="text/javascript" src="./js/moveset_import.js?aefe0d1f"></script>
 </div>
 

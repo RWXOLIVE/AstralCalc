@@ -13,8 +13,6 @@ export declare class Pokemon implements State.Pokemon {
     protoQuark?: 'auto' | 'inactive' | 'atk' | 'def' | 'spa' | 'spd' | 'spe';
     isDynamaxed?: boolean;
     isSaltCure?: boolean;
-    isMagmaStorm?: boolean;
-    isTrapped?: boolean;
     alliesFainted?: number;
     item?: I.ItemName;
     teraType?: I.TypeName;

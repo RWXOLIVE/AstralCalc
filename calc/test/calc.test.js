@@ -94,11 +94,9 @@ describe('calc', function () {
             });
         });
         (0, helper_1.inGen)(9, function (_a) {
-            var calculate = _a.calculate, Pokemon = _a.Pokemon, Move = _a.Move;
-            test('manual trapping residual states', function () {
-                var trapped = calculate(Pokemon('Torkoal'), Pokemon('Blastoise', { isTrapped: true }), Move('Tackle'));
-                var magmaStorm = calculate(Pokemon('Torkoal'), Pokemon('Blastoise', { isMagmaStorm: true }), Move('Tackle'));
-                expect(trapped.desc()).toContain('trapping damage');
+            var calculate = _a.calculate, Pokemon = _a.Pokemon, Move = _a.Move, Field = _a.Field;
+            test('Magma Storm side effect', function () {
+                var magmaStorm = calculate(Pokemon('Torkoal'), Pokemon('Blastoise'), Move('Tackle'), Field({ defenderSide: { magmaStorm: true } }));
                 expect(magmaStorm.desc()).toContain('Magma Storm damage');
             });
         });

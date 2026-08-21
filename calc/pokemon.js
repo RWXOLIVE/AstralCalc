@@ -44,8 +44,6 @@ var Pokemon = (function () {
         this.protoQuark = options.protoQuark;
         this.isDynamaxed = !!options.isDynamaxed;
         this.isSaltCure = !!options.isSaltCure;
-        this.isMagmaStorm = !!options.isMagmaStorm;
-        this.isTrapped = !!options.isTrapped;
         this.alliesFainted = options.alliesFainted;
         this.teraType = options.teraType;
         this.item = options.item;
@@ -179,8 +177,6 @@ var Pokemon = (function () {
             protoQuark: this.protoQuark,
             isDynamaxed: this.isDynamaxed,
             isSaltCure: this.isSaltCure,
-            isMagmaStorm: this.isMagmaStorm,
-            isTrapped: this.isTrapped,
             alliesFainted: this.alliesFainted,
             item: this.item,
             gender: this.gender,

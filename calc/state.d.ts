@@ -8,8 +8,6 @@ export declare namespace State {
         protoQuark?: 'auto' | 'inactive' | 'atk' | 'def' | 'spa' | 'spd' | 'spe';
         isDynamaxed?: boolean;
         isSaltCure?: boolean;
-        isMagmaStorm?: boolean;
-        isTrapped?: boolean;
         alliesFainted?: number;
         item?: I.ItemName;
         gender?: I.GenderName;
@@ -67,6 +65,7 @@ export declare namespace State {
         isLightScreen?: boolean;
         isProtected?: boolean;
         isSeeded?: boolean;
+        magmaStorm?: boolean;
         isForesight?: boolean;
         isTailwind?: boolean;
         isHelpingHand?: boolean;

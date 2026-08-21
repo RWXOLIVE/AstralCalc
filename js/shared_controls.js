@@ -9902,6 +9902,12 @@ function getTrainerPartyDisplayMegaFormName(entry) {
 	return megaForm && String(megaForm.baseSpecies || "").trim() === baseSpeciesName ? megaFormName : "";
 }
 
+function getTrainerPartyDisplayExtraFormName(entry) {
+	var resolvedPokemonName = resolveSetSpeciesNameForDexLookup(entry && entry.pokemonName);
+	if (resolvedPokemonName === "Palafin" && pokedex && pokedex["Palafin-Hero"]) return "Palafin-Hero";
+	return getTrainerPartyDisplayMegaFormName(entry);
+}
+
 function isTrainerPartyRegionalFormName(pokemonName) {
 	return /-(?:alola|galar|hisui|paldea)(?:-|$)/i.test(String(pokemonName || ""));
 }
@@ -9910,7 +9916,7 @@ function getTrainerPartyDisplayBaseFormName(entry) {
 	var resolvedPokemonName = resolveSetSpeciesNameForDexLookup(entry && entry.pokemonName);
 	var pokemon = pokedex && pokedex[resolvedPokemonName];
 	var baseSpeciesName = String(pokemon && pokemon.baseSpecies || "").trim();
-	if (!pokemon || !baseSpeciesName || resolvedPokemonName === baseSpeciesName || isTrainerPartyRegionalFormName(resolvedPokemonName) || /^Indeedee(?:-[FM])?$/i.test(resolvedPokemonName)) return "";
+	if (!pokemon || !baseSpeciesName || resolvedPokemonName === baseSpeciesName || isTrainerPartyRegionalFormName(resolvedPokemonName) || /^Genesect(?:-|$)/i.test(resolvedPokemonName) || /^Indeedee(?:-[FM])?$/i.test(resolvedPokemonName)) return "";
 	return pokedex[baseSpeciesName] ? baseSpeciesName : "";
 }
 
@@ -9927,8 +9933,8 @@ function trainerPartyMonHtml(entry, isTrainerLead) {
 	var partyHtml = '<img class="trainer-pok right-side' + leadClass + '" draggable="true" src="' + escapeHtml(getInitialTrainerSpriteUrlByName(entry.pokemonName)) + '" data-id="' + escapeHtml(entry.fullSetName) + '" data-party-index="' + escapeHtml(entry.indexText) + '" data-species="' + escapeHtml(entry.pokemonName) + '" title="' + escapeHtml((isTrainerLead ? "Trainer lead. " : "") + label + ", " + label + " BP") + '" loading="lazy" decoding="async"' + getPrimaryIconSheetLoadAttr(entry.pokemonName) + ' onerror="applyIconSheetFallbackImage(this, this.getAttribute(\'data-species\'))">';
 	var shouldDisplayFormes = getAppSettings().displayFormes;
 	var baseFormName = shouldDisplayFormes ? getTrainerPartyDisplayBaseFormName(entry) : "";
-	var megaFormName = shouldDisplayFormes ? getTrainerPartyDisplayMegaFormName(entry) : "";
-	return (baseFormName ? trainerPartyFormeHtml(entry, baseFormName, "left") : "") + partyHtml + (megaFormName ? trainerPartyFormeHtml(entry, megaFormName, "right") : "");
+	var extraFormName = shouldDisplayFormes ? getTrainerPartyDisplayExtraFormName(entry) : "";
+	return (baseFormName ? trainerPartyFormeHtml(entry, baseFormName, "left") : "") + partyHtml + (extraFormName ? trainerPartyFormeHtml(entry, extraFormName, "right") : "");
 }
 
 function renderOpposingTrainerParties(selectedSetName) {
@@ -10529,8 +10535,6 @@ function createPokemon(pokeInfo) {
 			evs: evs,
 			isDynamaxed: isDynamaxed,
 			isSaltCure: pokeInfo.find(".saltcure").is(":checked"),
-			isMagmaStorm: pokeInfo.find(".magma-storm").is(":checked"),
-			isTrapped: pokeInfo.find(".trapped").is(":checked"),
 			alliesFainted: parseInt(pokeInfo.find(".alliesFainted").val()),
 			teraType: teraType,
 			boosts: boosts,
@@ -10943,13 +10947,6 @@ function getSideResidualChipDisplay(pokeInfo, pokemon, opposingPokemon, field) {
 		hpDelta -= Math.floor(maxHP / (hasResidualDisplayType(pokemon, "Water", "Steel") ? 4 : 8));
 		sources.push("Salt Cure");
 	}
-	if ((pokemon.isMagmaStorm || pokemon.isTrapped) && !pokemon.hasAbility("Magic Guard")) {
-		var trappingDamage = opposingPokemon && opposingPokemon.hasItem && opposingPokemon.hasItem("Binding Band")
-			? (gen > 5 ? Math.floor(maxHP / 6) : Math.floor(maxHP / 8))
-			: (gen > 5 ? Math.floor(maxHP / 8) : Math.floor(maxHP / 16));
-		hpDelta -= trappingDamage;
-		sources.push(pokemon.isMagmaStorm ? "Magma Storm damage" : "trapping damage");
-	}
 	if (!pokemon.hasAbility("Magic Guard") && field.attackerSide) {
 		if (!hasResidualDisplayType(pokemon, "Grass") && field.attackerSide.vinelash) {
 			hpDelta -= Math.floor(maxHP / 6);
@@ -10975,6 +10972,54 @@ function getSideResidualChipDisplay(pokeInfo, pokemon, opposingPokemon, field) {
 	};
 }
 
+var TRAPPING_RESIDUAL_MOVES = [
+	"Bind", "Clamp", "Fire Spin", "Infestation", "Magma Storm", "Sand Tomb",
+	"Thunder Cage", "Whirlpool", "Wrap", "G-Max Sandblast", "G-Max Centiferno"
+];
+
+function getDisplayedTrappingMoves(pokeInfo) {
+	if (!pokeInfo || !pokeInfo.length) return [];
+	var trappingMoves = [];
+	pokeInfo.find("select.move-selector").each(function () {
+		var moveName = String($(this).val() || "");
+		if (TRAPPING_RESIDUAL_MOVES.indexOf(moveName) !== -1 && trappingMoves.indexOf(moveName) === -1) {
+			trappingMoves.push(moveName);
+		}
+	});
+	return trappingMoves;
+}
+
+function getTrappingResidualChipDisplay(sideId, pokemon, opposingPokemon, field) {
+	if (!pokemon || typeof pokemon.maxHP !== "function" || pokemon.hasAbility("Magic Guard")) {
+		return {text: "", title: ""};
+	}
+	var opposingInfo = sideId === "p1" ? $("#p2") : $("#p1");
+	var trappingMoves = getDisplayedTrappingMoves(opposingInfo);
+	if (field && field.attackerSide && field.attackerSide.magmaStorm) trappingMoves.unshift("Magma Storm");
+	if (!trappingMoves.length) return {text: "", title: ""};
+	var maxHP = pokemon.maxHP();
+	var hasBindingBand = opposingPokemon && opposingPokemon.hasItem && opposingPokemon.hasItem("Binding Band");
+	var damage = hasBindingBand
+		? (gen > 5 ? Math.floor(maxHP / 6) : Math.floor(maxHP / 8))
+		: (gen > 5 ? Math.floor(maxHP / 8) : Math.floor(maxHP / 16));
+	return {
+		text: "-" + damage + " HP / turn",
+		title: trappingMoves.join(", ") + " trapping damage" + (hasBindingBand ? " (Binding Band)" : "")
+	};
+}
+
+function renderTrappingResidualChip(sideSelector, pokemon, opposingPokemon, field) {
+	var pokeInfo = $(sideSelector);
+	var trappingChips = pokeInfo.find(".trapping-residual-chip");
+	if (!trappingChips.length) return;
+	var chipDisplay = getTrappingResidualChipDisplay(String(pokeInfo.attr("id") || ""), pokemon, opposingPokemon, field);
+	if (chipDisplay.text) {
+		trappingChips.text(chipDisplay.text).attr("title", chipDisplay.title).prop("hidden", false).show();
+	} else {
+		trappingChips.text("").removeAttr("title").prop("hidden", true).hide();
+	}
+}
+
 function renderSideSupplementalDisplays(sideSelector, pokemon, opposingPokemon, field) {
 	var pokeInfo = $(sideSelector);
 	if (!pokeInfo.length) return;
@@ -10990,8 +11035,11 @@ function renderSideSupplementalDisplays(sideSelector, pokemon, opposingPokemon, 
 		);
 		critTargets.text(critDisplay.text).attr("title", critDisplay.title);
 	}
-	var residualChips = pokeInfo.find(".side-residual-chip");
-	if (!residualChips.length) return;
+	var residualChips = pokeInfo.find(".side-residual-chip").not(".trapping-residual-chip");
+	if (!residualChips.length) {
+		renderTrappingResidualChip(sideSelector, pokemon, opposingPokemon, field);
+		return;
+	}
 	var chipDisplay = getSideResidualChipDisplay(pokeInfo, pokemon, opposingPokemon, field);
 	if (chipDisplay.text) {
 		residualChips.text(chipDisplay.text);
@@ -11002,6 +11050,7 @@ function renderSideSupplementalDisplays(sideSelector, pokemon, opposingPokemon, 
 		residualChips.removeAttr("title");
 		residualChips.prop("hidden", true).hide();
 	}
+	renderTrappingResidualChip(sideSelector, pokemon, opposingPokemon, field);
 }
 
 function applyPowerSplitToPair(p1, p2) {
@@ -11054,6 +11103,7 @@ function createField() {
 	var isLightScreen = [$("#lightScreenL").prop("checked"), $("#lightScreenR").prop("checked")];
 	var isProtected = [$("#protectL").prop("checked"), $("#protectR").prop("checked")];
 	var isSeeded = [$("#leechSeedL").prop("checked"), $("#leechSeedR").prop("checked")];
+	var magmaStorm = [$("#magmaStormL").prop("checked"), $("#magmaStormR").prop("checked")];
 	var isForesight = [$("#foresightL").prop("checked"), $("#foresightR").prop("checked")];
 	var isHelpingHand = [$("#helpingHandL").prop("checked"), $("#helpingHandR").prop("checked")];
 	var isTailwind = [$("#tailwindL").prop("checked"), $("#tailwindR").prop("checked")];
@@ -11070,7 +11120,7 @@ function createField() {
 			isGrounded: isGrounded[i], spikes: spikes[i], isSR: isSR[i], steelsurge: steelsurge[i],
 			vinelash: vinelash[i], wildfire: wildfire[i], cannonade: cannonade[i], volcalith: volcalith[i],
 			isReflect: isReflect[i], isLightScreen: isLightScreen[i],
-			isProtected: isProtected[i], isSeeded: isSeeded[i], isForesight: isForesight[i],
+			isProtected: isProtected[i], isSeeded: isSeeded[i], magmaStorm: magmaStorm[i], isForesight: isForesight[i],
 			isTailwind: isTailwind[i], isHelpingHand: isHelpingHand[i], isFlowerGift: isFlowerGift[i], isFriendGuard: isFriendGuard[i],
 			isAuroraVeil: isAuroraVeil[i], isBattery: isBattery[i], isPowerSpot: isPowerSpot[i], isPlayer: i === 0,
 			isSwitching: isSwitchingOut[i] ? 'out' : undefined
@@ -11344,8 +11394,6 @@ function clearField() {
 	$("#cureR").prop("checked", false);
 	$("#magmaStormL").prop("checked", false);
 	$("#magmaStormR").prop("checked", false);
-	$("#trappedL").prop("checked", false);
-	$("#trappedR").prop("checked", false);
 	$("#foresightL").prop("checked", false);
 	$("#foresightR").prop("checked", false);
 	$("#helpingHandL").prop("checked", false);

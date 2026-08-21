@@ -98,6 +98,7 @@ var Side = (function () {
         this.isLightScreen = !!side.isLightScreen;
         this.isProtected = !!side.isProtected;
         this.isSeeded = !!side.isSeeded;
+        this.magmaStorm = !!side.magmaStorm;
         this.isForesight = !!side.isForesight;
         this.isTailwind = !!side.isTailwind;
         this.isHelpingHand = !!side.isHelpingHand;
