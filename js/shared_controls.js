@@ -10069,7 +10069,7 @@ function getTrainerPartyDisplayBaseFormName(entry) {
 	var resolvedPokemonName = resolveSetSpeciesNameForDexLookup(entry && entry.pokemonName);
 	var pokemon = pokedex && pokedex[resolvedPokemonName];
 	var baseSpeciesName = String(pokemon && pokemon.baseSpecies || "").trim();
-	if (!pokemon || !baseSpeciesName || resolvedPokemonName === baseSpeciesName || isTrainerPartyRegionalFormName(resolvedPokemonName) || isTrainerPartyIncarnateOrTherianFormName(resolvedPokemonName) || /^(?:Genesect|Rotom|Toxtricity)(?:-|$)/i.test(resolvedPokemonName) || /^Indeedee(?:-[FM])?$/i.test(resolvedPokemonName)) return "";
+	if (!pokemon || !baseSpeciesName || resolvedPokemonName === baseSpeciesName || isTrainerPartyRegionalFormName(resolvedPokemonName) || isTrainerPartyIncarnateOrTherianFormName(resolvedPokemonName) || /^(?:Genesect|Rotom|Furfrou|Toxtricity)(?:-|$)/i.test(resolvedPokemonName) || /^Indeedee(?:-[FM])?$/i.test(resolvedPokemonName)) return "";
 	return pokedex[baseSpeciesName] ? baseSpeciesName : "";
 }
 
