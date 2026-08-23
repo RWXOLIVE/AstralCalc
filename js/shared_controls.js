@@ -3138,7 +3138,7 @@ function createRosterSpriteFromSetId(setId) {
 }
 
 function applyPlayerRosterLayout(layout) {
-	var normalizedLayout = normalizeRosterLayout(layout);
+	var normalizedLayout = filterAeLuaAutoMegaPokemonLayout(layout);
 	var containerMap = {
 		team: document.getElementById("team-poke-list"),
 		teamRight: document.getElementById("team-right-poke-list"),
@@ -5663,6 +5663,43 @@ function buildAeLuaPokemonSet(mon, existingSetData) {
 	return setData;
 }
 
+// Mega forms that may be automatically added to the Mega Pokemon box.
+// Remove a base species from this list to prevent all of its Mega forms from
+// being imported. For example, removing "Charizard" hides both Mega X and Y.
+var AE_LUA_AUTO_MEGA_POKEMON = [
+	"Abomasnow", "Absol", "Aerodactyl", "Aggron", "Alakazam", "Altaria",
+	"Ampharos", "Audino", "Banette", "Barbaracle", "Beedrill", "Blastoise",
+	"Blaziken", "Butterfree", "Camerupt", "Chandelure", "Charizard",
+	"Chesnaught", "Chimecho", "Clefable", "Crabominable", "Delphox",
+	"Diancie", "Dragalge", "Dragonite", "Drampa", "Eelektross", "Emboar",
+	"Excadrill", "Falinks", "Feraligatr", "Floette-Eternal", "Froslass",
+	"Gallade", "Garchomp", "Gardevoir", "Gengar", "Glalie",
+	"Golisopod", "Greninja", "Gyarados", "Heatran", "Heracross", "Houndoom",
+	"Kangaskhan", "Kingler", "Lapras", "Latias", "Latios", "Lopunny",
+	"Lucario", "Machamp", "Malamar", "Manectric", "Mawile", "Medicham",
+	"Meganium", "Meowstic", "Metagross", "Mewtwo", "Pidgeot", "Pinsir",
+	"Pyroar", "Raichu", "Rayquaza", "Sableye", "Salamence",
+	"Sceptile", "Scizor", "Scolipede", "Scovillain", "Scrafty", "Sharpedo",
+	"Skarmory", "Slowbro", "Starmie", "Steelix", "Swampert",
+	"Tyranitar", "Venusaur", "Victreebel", "Zygarde"
+];
+
+function isAeLuaAutoMegaPokemonEnabled(speciesName) {
+	return AE_LUA_AUTO_MEGA_POKEMON.indexOf(String(speciesName || "").trim()) !== -1;
+}
+
+function filterAeLuaAutoMegaPokemonLayout(layout) {
+	var normalizedLayout = normalizeRosterLayout(layout);
+	normalizedLayout.boxmega = normalizedLayout.boxmega.filter(function (setId) {
+		var megaSpecies = parseSetId(setId).species;
+		if (!/-Mega(?:-|$)/i.test(megaSpecies)) return true;
+		var megaData = getAeLuaSpeciesData(megaSpecies);
+		var baseSpecies = String(megaData && megaData.baseSpecies || "").trim();
+		return !baseSpecies || isAeLuaAutoMegaPokemonEnabled(baseSpecies);
+	});
+	return normalizedLayout;
+}
+
 var AE_LUA_AUTO_MEGA_SET_FLAG = "aeLuaAutoImportedMega";
 var AE_LUA_AUTO_MEGA_SOURCE_SET_ID_KEY = "aeLuaAutoMegaSourceSetId";
 
@@ -5778,6 +5815,7 @@ function autoImportAeLuaMegaSets(customsets, layout) {
 	for (sourceIndex = 0; sourceIndex < sourceSetIds.length; sourceIndex++) {
 		sourceSetId = sourceSetIds[sourceIndex];
 		var sourceSpecies = parseSetId(sourceSetId).species;
+		if (!isAeLuaAutoMegaPokemonEnabled(sourceSpecies)) continue;
 		var megaFormes = getAeLuaMegaFormNames(sourceSpecies);
 		if (!megaFormes.length) continue;
 		var sourceSetData = getAeLuaExistingPokemonSetData(sourceSetId, customsets);
