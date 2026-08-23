@@ -1475,6 +1475,44 @@ body.layout-simplified .simplified-side-move-row {
 .poke-info .item-ignore-toggle {
     margin: 0;
 }
+.poke-info .info-selectors > div {
+    display: flex;
+    align-items: center;
+}
+.poke-info .info-selectors > div > label:first-child {
+    flex: 0 0 6em;
+}
+.poke-info .info-selectors > div > select:first-of-type {
+    margin-left: 0.25em;
+}
+.poke-info .item-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.poke-info .item-row > label:first-child {
+    flex: 0 0 6em;
+}
+.poke-info .item-row .item {
+    margin-left: 0.25em;
+}
+.poke-info .item-row .item-sprite {
+    position: absolute;
+    left: 2.7em;
+    top: 50%;
+    display: block;
+    width: 24px;
+    height: 24px;
+    margin: 0;
+    transform: translateY(-50%);
+    background-image: url('https://play.pokemonshowdown.com/sprites/itemicons-sheet.png');
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    pointer-events: none;
+}
+.poke-info .item-row .item-sprite.is-empty {
+    visibility: hidden;
+}
 .info-group.top > .gen-specific.g9 {
     display: inline-flex;
     align-items: center;
@@ -2279,8 +2317,15 @@ nav .nav {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 0.6em;
+    flex-wrap: nowrap;
+    gap: 0.25em;
+    min-width: 0;
     margin-bottom: 4px;
+}
+
+.roster-top-controls > .btn {
+    flex: 0 0 auto;
+    font-size: 0.8em;
 }
 
 .roster-top-controls #box-current-team {
@@ -2291,14 +2336,30 @@ nav .nav {
     white-space: nowrap;
 }
 
+.roster-top-controls .roster-sort-button {
+    box-sizing: border-box;
+    width: 7.5em;
+    min-width: 0;
+    margin: 0;
+    padding: 2px 3px;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
 #search-inline {
-    display: inline-block;
+    display: block;
     margin-left: 0;
-    flex-shrink: 0;
+    flex: 1 1 8em;
+    min-width: 6em;
+    max-width: 100%;
 }
 
 #search {
-    min-width: 14em;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    font-size: 0.8em;
     padding: 2px 6px;
     border-radius: 4px;
     border: 1px solid #AAAAAA;

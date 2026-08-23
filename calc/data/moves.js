@@ -1838,7 +1838,7 @@ var XY_PATCH = {
         category: 'Physical'
     },
     'Flying Press': {
-        bp: 80,
+        bp: 100,
         type: 'Fighting',
         makesContact: true,
         category: 'Physical'
@@ -1850,7 +1850,7 @@ var XY_PATCH = {
         category: 'Physical'
     },
     'Hyperspace Hole': {
-        bp: 80,
+        bp: 100,
         type: 'Psychic',
         breaksProtect: true,
         category: 'Special'
@@ -1864,7 +1864,7 @@ var XY_PATCH = {
         secondaries: true
     },
     'Parabolic Charge': {
-        bp: 75,
+        bp: 70,
         type: 'Electric',
         drain: [1, 2],
         target: 'allAdjacent',
@@ -2317,7 +2317,7 @@ var SM_PATCH = {
     Octazooka: { zp: 120 },
     Outrage: { zp: 190 },
     Overheat: { zp: 195 },
-    'Parabolic Charge': { bp: 75, zp: 120 },
+    'Parabolic Charge': { bp: 70, zp: 120 },
     Payback: { zp: 100 },
     'Pay Day': { zp: 100 },
     Peck: { zp: 100 },

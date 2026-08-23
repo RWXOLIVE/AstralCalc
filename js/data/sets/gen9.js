@@ -4142,6 +4142,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Tailwind","Super Fang","Hypnosis","Dual Wingbeat"]
+        },
+        "Team Magma Grunt #10 | Magma Hideout": {
+            "index": "0000000889",
+            "Weather": "Sun",
+            "level": 77,
+            "ability": "Inner Focus",
+            "item": "Leftovers",
+            "nature": "Jolly",
+            "teraType": "Poison",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Tailwind","Super Fang","Hypnosis","U-turn"]
         }
     },
     "Falinks-Mega": {
@@ -4737,7 +4750,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Ancient Power","Stored Power","Fire Spin","Cosmic Power"]
+            "moves": ["Ancient Power","Stored Power","Torch Song","Cosmic Power"]
         }
     },
     "Gardevoir": {
@@ -4791,6 +4804,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Agility","Sacred Sword","Triple Axel","Psycho Cut"]
+        },
+        "Team Magma Grunt #10 | Magma Hideout": {
+            "index": "0000000892",
+            "Weather": "Sun",
+            "level": 78,
+            "ability": "Sharpness",
+            "item": "Assault Vest",
+            "nature": "Jolly",
+            "teraType": "Psychic",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bulk Up","Aqua Cutter","Rock Slide","Sacred Sword"]
         }
     },
     "Gorebyss": {
@@ -6389,7 +6415,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Draco Meteor","Dark Pulse","Roost","Nasty Plot"]
+            "moves": ["Draco Meteor","Dark Pulse","Flash Cannon","Nasty Plot"]
         },
     "Bug Catcher Doug | Route 119": {
             "index": "0000000741",
@@ -6823,6 +6849,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Rock Tomb","Mach Punch","Bullet Seed","Arm Thrust"]
+        },
+        "Team Magma Grunt #12 | Magma Hideout": {
+            "index": "0000000901",
+            "Weather": "Sun",
+            "level": 78,
+            "ability": "Technician",
+            "item": "Grass Gem",
+            "nature": "Adamant",
+            "teraType": "Grass",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Mach Punch","Rock Tomb","Trailblaze","Seed Bomb"]
         }
     },
     "Crabominable": {
@@ -7703,6 +7742,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["First Impression","Stone Axe","U-turn"]
+        },
+        "Team Magma Grunt #12 | Magma Hideout": {
+            "index": "0000000900",
+            "Weather": "Sun",
+            "level": 78,
+            "ability": "Sharpness",
+            "item": "Focus Band",
+            "nature": "Jolly",
+            "teraType": "Bug",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Stone Axe","U-turn","Aerial Ace","Night Slash"]
         }
     },
     "Ampharos": {
@@ -8123,6 +8175,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Searing Shot","Steam Eruption","Earthquake","Explosion"]
+        },
+        "Team Magma Grunt #12 | Magma Hideout": {
+            "index": "0000000902",
+            "Weather": "Sun",
+            "level": 77,
+            "ability": "Magma Armor",
+            "item": "Quick Claw",
+            "nature": "Mild",
+            "teraType": "Fire",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Eruption","Explosion","Earth Power","Fire Blast"]
         }
     },
     "Typhlosion": {
@@ -8571,6 +8636,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Protect","Overheat","Leech Seed","Super Fang"]
+        },
+        "Team Magma Grunt #11 | Magma Hideout": {
+            "index": "0000000899",
+            "Weather": "Sun",
+            "level": 78,
+            "ability": "Moody",
+            "item": "White Herb",
+            "nature": "Timid",
+            "teraType": "Grass",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Solar Beam","Overheat","Protect","Growth"]
         }
     },
     "Claydol": {
@@ -8599,6 +8677,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Speed Swap","Future Sight","Earth Power","Ancient Power"]
+        },
+        "Team Magma Grunt #11 | Magma Hideout": {
+            "index": "0000000898",
+            "Weather": "Sun",
+            "level": 75,
+            "ability": "Levitate",
+            "item": "Quick Claw",
+            "nature": "Quiet",
+            "teraType": "Ground",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+            },
+            "moves": ["Earth Power","Extrasensory","Shadow Ball","Explosion"]
         }
     },
     "Stakataka": {
@@ -8851,6 +8942,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Tailwind","Air Slash","Heat Wave","Earthquake"]
+        },
+        "Team Magma Grunt #11 | Magma Hideout": {
+            "index": "0000000897",
+            "Weather": "Sun",
+            "level": 76,
+            "ability": "Solar Power",
+            "item": "Charti Berry",
+            "nature": "Timid",
+            "teraType": "Fire",
+            "ivs": {
+                "hp": 31, "at": 0, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Flamethrower","Hurricane","Ancient Power","Smokescreen"]
         }
     },
     "Hatterene": {
@@ -8865,7 +8969,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Misty Explosion","Psychic Noise","Moonblast","Mystical Fire"]
-        }
+        },
+        "Cool Trainer Cristin | Route 121": {
+        "index": "0000000847",
+        "level": 77,
+        "ability": "Magic Bounce",
+        "item": "Kebia Berry",
+        "nature": "Quiet",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
+        },
+        "moves": ["Calm Mind","Psychic","Draining Kiss","Mystical Fire"]
+    }
     },
     "Marowak": {
     "Hiker Phillip | Union Cave": {
@@ -9939,6 +10054,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Dragon Dance","Dragon Hammer","Poison Jab","Earthquake"]
+        },
+        "Team Magma Grunt #12 | Magma Hideout": {
+            "index": "0000000904",
+            "Weather": "Sun",
+            "level": 79,
+            "ability": "Unnerve",
+            "item": "Scope Lens",
+            "teraType": "Dragon",
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Dragon Dance","Dragon Claw","Iron Head","Aqua Tail"]
         }
     },
     "Carbink": {
@@ -10308,6 +10436,19 @@ var SETDEX_SV = {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
         },
         "moves": ["Swords Dance","Stone Edge","Earthquake","Ice Punch"]
+    },
+    "Team Magma Grunt #11 | Magma Hideout": {
+        "index": "0000000894",
+        "Weather": "Sun",
+        "level": 76,
+        "ability": "Solid Rock",
+        "item": "Rindo Berry",
+        "nature": "Adamant",
+        "teraType": "Ground",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Stealth Rock","Heat Crash","Earthquake","Stone Edge"]
     }
     },
     "Chi-Yu": {
@@ -10815,6 +10956,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
             },
             "moves": ["Torch Song","Shadow Ball","Snarl","Slack Off"]
+        },
+        "Team Magma Grunt #10 | Magma Hideout": {
+            "index": "0000000891",
+            "Weather": "Sun",
+            "level": 77,
+            "ability": "Blaze",
+            "item": "Throat Spray",
+            "nature": "Timid",
+            "teraType": "Fire",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Alluring Voice","Torch Song","Shadow Ball","Slack Off"]
         }
     },
     "Sigilyph": {
@@ -11787,6 +11941,19 @@ var SETDEX_SV = {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
         },
         "moves": ["Spore","Solar Blade","Acrobatics","Light Screen"]
+    },
+    "Team Magma Grunt #11 | Magma Hideout": {
+        "index": "0000000896",
+        "Weather": "Sun",
+        "level": 75,
+        "ability": "Chlorophyll",
+        "item": "Bright Powder",
+        "nature": "Naughty",
+        "teraType": "Grass",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Floaty Fall","Seed Flare","Strength Sap","Spore"]
     }
 },
 "Iron Moth": {
@@ -12155,19 +12322,6 @@ var SETDEX_SV = {
         "moves": ["Spin Out","Noxious Torque","Blazing Torque","High Horsepower"]
     }
 },
-"Hatterene": {
-    "Cool Trainer Cristin | Route 121": {
-        "index": "0000000847",
-        "level": 77,
-        "ability": "Magic Bounce",
-        "item": "Kebia Berry",
-        "nature": "Quiet",
-        "ivs": {
-            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
-        },
-        "moves": ["Calm Mind","Psychic","Draining Kiss","Mystical Fire"]
-    }
-},
 "Coalossal": {
     "Team Magma Grunt #2 | Magma Hideout" : {
         "index": "0000000856",
@@ -12252,6 +12406,66 @@ var SETDEX_SV = {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
         },
         "moves": ["Endure","Phantom Force","Shadow Sneak","Needle Arm"]
+    }
+},
+"Mightyena": {
+    "Team Magma Grunt #10 | Magma Hideout": {
+        "index": "0000000890",
+        "Weather": "Sun",
+        "level": 78,
+        "ability": "Moxie",
+        "item": "Focus Sash",
+        "nature": "Jolly",
+        "teraType": "Dark",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Crunch","Psychic Fangs","Sucker Punch","Iron Tail"]
+    }
+},
+"Golem-Alola": {
+    "Team Magma Grunt #10 | Magma Hideout": {
+        "index": "0000000893",
+        "Weather": "Sun",
+        "level": 78,
+        "ability": "Galvanize",
+        "item": "Quick Claw",
+        "nature": "Brave",
+        "teraType": "Rock",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Explosion","Ice Hammer","Stone Edge","Return"]
+    }
+},
+"Umbreon": {
+    "Team Magma Grunt #11 | Magma Hideout": {
+        "index": "0000000895",
+        "Weather": "Sun",
+        "level": 77,
+        "ability": "Synchronize",
+        "item": "Focus Band",
+        "nature": "Impish",
+        "teraType": "Dark",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Growth","Baton Pass","Knock Off","Moonlight"]
+    }
+},
+"Zangoose": {
+    "Team Magma Grunt #12 | Magma Hideout": {
+        "index": "0000000903",
+        "Weather": "Sun",
+        "level": 77,
+        "ability": "Toxic Boost",
+        "item": "Toxic Orb",
+        "nature": "Jolly",
+        "teraType": "Normal",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Retaliate","Facade","Close Combat","Knock Off"]
     }
 },
 };

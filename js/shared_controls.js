@@ -496,6 +496,30 @@ function getEffectiveItemFromPokeInfo(pokeInfo) {
 	if (!info || !info.length) return "";
 	return isIgnoreItemToggleChecked(info) ? "" : (info.find(".item").val() || "");
 }
+var ITEM_SPRITE_TILE_SIZE = 24;
+var ITEM_SPRITE_SHEET_COLUMNS = 16;
+function getItemSpriteNumber(itemName) {
+	var itemId = String(itemName || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+	var spriteNumbers = window.ASTRAL_ITEM_SPRITE_NUMBERS || {};
+	return Object.prototype.hasOwnProperty.call(spriteNumbers, itemId) ? spriteNumbers[itemId] : null;
+}
+function syncPokeItemSprite(pokeInfo) {
+	var info = pokeInfo && pokeInfo.jquery ? pokeInfo : $(pokeInfo);
+	var sprite = info.find(".item-sprite").first();
+	if (!sprite.length) return;
+	var itemName = info.find(".item").first().val() || "";
+	var spriteNumber = getItemSpriteNumber(itemName);
+	if (spriteNumber === null) {
+		sprite.removeAttr("data-item-sprite-number").removeAttr("title").css("background-position", "").addClass("is-empty");
+		return;
+	}
+	if (sprite.attr("data-item-sprite-number") !== String(spriteNumber)) {
+		var x = -(spriteNumber % ITEM_SPRITE_SHEET_COLUMNS) * ITEM_SPRITE_TILE_SIZE;
+		var y = -Math.floor(spriteNumber / ITEM_SPRITE_SHEET_COLUMNS) * ITEM_SPRITE_TILE_SIZE;
+		sprite.attr("data-item-sprite-number", spriteNumber).css("background-position", x + "px " + y + "px");
+	}
+	sprite.removeClass("is-empty").attr("title", itemName);
+}
 function updatePokeMoveHitsFromAbilityItem(pokeInfo) {
 	var info = pokeInfo && pokeInfo.jquery ? pokeInfo : $(pokeInfo);
 	if (!info || !info.length) return;
@@ -852,6 +876,7 @@ $(".item").change(function () {
 	var pokeInfo = $(this).closest(".poke-info");
 	var pokeId = String(pokeInfo.attr("id") || "");
 	var itemName = getEffectiveItemFromPokeInfo(pokeInfo);
+	syncPokeItemSprite(pokeInfo);
 	updatePokeMetronomeVisibilityFromItem(pokeInfo);
 	updatePokeMoveHitsFromAbilityItem(pokeInfo);
 	if (pokeId === "p1" || pokeId === "p2") {
@@ -962,10 +987,14 @@ var TRAINER_FIELD_LOCK_EXCLUDED_IDS = {
 	"doubles-format": true
 };
 var TRAINER_PERMANENT_FIELD_EFFECTS = {
-	"Leader Jasmine | Mauville Gym": ["steelsurgeL"]
+	"Leader Jasmine | Mauville Gym": ["steelsurgeL"],
+	"Team Magma Grunt #9 | Magma Hideout": ["magmaStormL"],
+	"Team Magma Grunt #10 | Magma Hideout": ["magmaStormL"],
+	"Team Magma Grunt #11 | Magma Hideout": ["magmaStormL"]
 };
 var TRAINER_PERMANENT_FIELD_EFFECT_IDS = {
-	steelsurgeL: true
+	steelsurgeL: true,
+	magmaStormL: true
 };
 var STARTER_CHOICES = ["chikorita", "tepig", "totodile"];
 var RIVAL_STARTER_BY_CHOICE = {
@@ -1071,6 +1100,9 @@ var isBootstrappingLastEncounterSelection = true;
 var calcSidePanelResizeState = null;
 var calcSideResizeCaptureNode = null;
 var PLAYER_ROSTER_SPRITE_SELECTOR = "#team-poke-list .trainer-pok.left-side, #team-right-poke-list .trainer-pok.left-side, #box-poke-list .trainer-pok.left-side, #box-poke-list2 .trainer-pok.left-side, #box-poke-listmega .trainer-pok.left-side, #trash-box .trainer-pok.left-side";
+var PLAYER_ROSTER_SORTABLE_CONTAINER_IDS = [
+	"team-poke-list", "team-right-poke-list", "box-poke-list", "box-poke-list2", "box-poke-listmega", "trash-box"
+];
 var PLAYER_ROSTER_SEARCH_DEBOUNCE_MS = 90;
 var NOTES_NOTE_INPUT_DEBOUNCE_MS = 120;
 var SPECIES_DISPLAY_NAME_ALIASES = {
@@ -2972,9 +3004,10 @@ function normalizeRosterLayout(rawLayout) {
 		teamRight: [],
 		box: [],
 		box2: [],
+		boxmega: [],
 		trash: []
 	};
-	var keys = ["team", "teamRight", "box", "box2", "trash"];
+	var keys = ["team", "teamRight", "box", "box2", "boxmega", "trash"];
 	for (var i = 0; i < keys.length; i++) {
 		var key = keys[i];
 		var source = Array.isArray(layout[key]) ? layout[key] : [];
@@ -3008,6 +3041,7 @@ function hasRosterLayoutEntries(layout) {
 		normalizedLayout.teamRight.length ||
 		normalizedLayout.box.length ||
 		normalizedLayout.box2.length ||
+		normalizedLayout.boxmega.length ||
 		normalizedLayout.trash.length
 	);
 }
@@ -3047,9 +3081,10 @@ function filterRosterLayoutToAvailableSets(layout) {
 		teamRight: [],
 		box: [],
 		box2: [],
+		boxmega: [],
 		trash: []
 	};
-	var zoneKeys = ["team", "teamRight", "box", "box2", "trash"];
+	var zoneKeys = ["team", "teamRight", "box", "box2", "boxmega", "trash"];
 	for (var i = 0; i < zoneKeys.length; i++) {
 		var zoneKey = zoneKeys[i];
 		for (var j = 0; j < normalizedLayout[zoneKey].length; j++) {
@@ -3709,16 +3744,43 @@ function bindPlayerRosterSearchInput() {
 		});
 }
 
+function isMegaPlayerRosterEntry(entry) {
+	var sprite = entry && entry.classList && entry.classList.contains("trainer-pok")
+		? entry
+		: entry && entry.querySelector
+			? entry.querySelector(".trainer-pok.left-side")
+			: null;
+	var setId = sprite ? String(sprite.getAttribute("data-id") || "").trim() : "";
+	return /-Mega(?:-|$)/i.test(String(parseSetId(setId).species || ""));
+}
+
 function moveCurrentTeamToBox() {
 	var teamContainer = document.getElementById("team-poke-list");
+	var teamRightSection = document.getElementById("team-right-section");
+	var teamRightContainer = document.getElementById("team-right-poke-list");
 	var boxContainer = document.getElementById("box-poke-list");
-	if (!teamContainer || !boxContainer || !teamContainer.children.length) return;
-	var teamEntries = Array.prototype.slice.call(teamContainer.children);
+	var megaBoxContainer = document.getElementById("box-poke-listmega");
+	if (!boxContainer) return;
+	var teamContainers = [teamContainer];
+	if (teamRightSection && !teamRightSection.hidden) teamContainers.push(teamRightContainer);
 	var rosterFragment = document.createDocumentFragment();
-	for (var i = 0; i < teamEntries.length; i++) {
-		rosterFragment.appendChild(teamEntries[i]);
+	var megaRosterFragment = document.createDocumentFragment();
+	var didMove = false;
+	for (var i = 0; i < teamContainers.length; i++) {
+		var teamContainerEntries = teamContainers[i]
+			? Array.prototype.slice.call(teamContainers[i].children)
+			: [];
+		for (var j = 0; j < teamContainerEntries.length; j++) {
+			var destination = isMegaPlayerRosterEntry(teamContainerEntries[j]) && megaBoxContainer
+				? megaRosterFragment
+				: rosterFragment;
+			destination.appendChild(teamContainerEntries[j]);
+			didMove = true;
+		}
 	}
+	if (!didMove) return;
 	boxContainer.appendChild(rosterFragment);
+	if (megaBoxContainer) megaBoxContainer.appendChild(megaRosterFragment);
 	scheduleFragSheetRefresh();
 	updateTrainerFragBorderTotals();
 	applyPlayerRosterSearchFilter();
@@ -3728,6 +3790,93 @@ function bindPlayerRosterBoxTeamButton() {
 	$("#box-current-team")
 		.off("click.boxteam")
 		.on("click.boxteam", moveCurrentTeamToBox);
+}
+
+function getPlayerRosterSetData(setId) {
+	var parsedSet = parseSetId(setId);
+	if (!parsedSet.species || !parsedSet.label || !setdex || !setdex[parsedSet.species]) return null;
+	return setdex[parsedSet.species][parsedSet.label] || null;
+}
+
+function getPlayerRosterSortName(setId) {
+	var parsedSet = parseSetId(setId);
+	return (String(getDisplaySpeciesName(parsedSet.species) || "") + "\u0000" + String(parsedSet.label || ""))
+		.toLocaleLowerCase();
+}
+
+function getPlayerRosterCalculatedSpeed(setId) {
+	var parsedSet = parseSetId(setId);
+	var setData = getPlayerRosterSetData(setId) || {};
+	var lookupSpecies = resolveSetSpeciesNameForDexLookup(parsedSet.species);
+	var speciesData = pokedex && (pokedex[lookupSpecies] || pokedex[parsedSet.species]);
+	var baseSpeed = speciesData && speciesData.bs ? Number(speciesData.bs.sp) : NaN;
+	if (isNaN(baseSpeed) || typeof calc === "undefined" || !calc.calcStat) return 0;
+	var level = resolveSetLevelFlag(setData.level, getLevelCap());
+	if (gen < 3) {
+		var speedDv = setData.dvs && setData.dvs.sp !== undefined ? Number(setData.dvs.sp) : 15;
+		return calc.calcStat(gen, "spe", baseSpeed, speedDv * 2, 252, level);
+	}
+	var speedIv = setData.ivs && setData.ivs.sp !== undefined ? Number(setData.ivs.sp) : 31;
+	var speedEv = setData.evs && setData.evs.sp !== undefined ? Number(setData.evs.sp) : 0;
+	return calc.calcStat(gen, "spe", baseSpeed, speedIv, speedEv, level, setData.nature || "Hardy");
+}
+
+function getPlayerRosterSortEntries(container) {
+	var entries = [];
+	var seenNodes = [];
+	if (!container) return entries;
+	var sprites = container.querySelectorAll(".trainer-pok.left-side");
+	for (var i = 0; i < sprites.length; i++) {
+		var rootNode = getTrainerPokRootNode(sprites[i]) || sprites[i];
+		if (rootNode.parentNode !== container || seenNodes.indexOf(rootNode) !== -1) continue;
+		seenNodes.push(rootNode);
+		var setId = String(sprites[i].getAttribute("data-id") || "").trim();
+		entries.push({
+			node: rootNode,
+			name: getPlayerRosterSortName(setId),
+			speed: getPlayerRosterCalculatedSpeed(setId),
+			originalIndex: i
+		});
+	}
+	return entries;
+}
+
+function sortPlayerRoster(sortMode) {
+	var shouldSortBySpeed = sortMode === "speed";
+	var didSort = false;
+	for (var i = 0; i < PLAYER_ROSTER_SORTABLE_CONTAINER_IDS.length; i++) {
+		var container = document.getElementById(PLAYER_ROSTER_SORTABLE_CONTAINER_IDS[i]);
+		var entries = getPlayerRosterSortEntries(container);
+		if (entries.length < 2) continue;
+		entries.sort(function (leftEntry, rightEntry) {
+			if (shouldSortBySpeed && leftEntry.speed !== rightEntry.speed) {
+				return rightEntry.speed - leftEntry.speed;
+			}
+			var nameCompare = leftEntry.name.localeCompare(rightEntry.name);
+			return nameCompare || (leftEntry.originalIndex - rightEntry.originalIndex);
+		});
+		var rosterFragment = document.createDocumentFragment();
+		for (var j = 0; j < entries.length; j++) rosterFragment.appendChild(entries[j].node);
+		container.appendChild(rosterFragment);
+		didSort = true;
+	}
+	if (!didSort) return;
+	saveCurrentPlayerRosterLayout();
+	applyPlayerRosterSearchFilter();
+	scheduleFragSheetRefresh();
+}
+
+function bindPlayerRosterSortButtons() {
+	$("#sort-player-roster-name")
+		.off("click.rostersort")
+		.on("click.rostersort", function () {
+			sortPlayerRoster("name");
+		});
+	$("#sort-player-roster-speed")
+		.off("click.rostersort")
+		.on("click.rostersort", function () {
+			sortPlayerRoster("speed");
+		});
 }
 
 function getFragRosterSpeciesFamily(setId) {
@@ -5615,7 +5764,7 @@ function autoImportAeLuaMegaSets(customsets, layout) {
 	var result = {addedSetIds: [], didChangeCustomsets: false};
 	var sourceSetIds = [];
 	var seenSourceSetIds = {};
-	var zoneNames = ["team", "teamRight", "box", "box2", "trash"];
+	var zoneNames = ["team", "teamRight", "box", "box2", "boxmega", "trash"];
 	for (var zoneIndex = 0; zoneIndex < zoneNames.length; zoneIndex++) {
 		var zoneSetIds = normalizedLayout[zoneNames[zoneIndex]] || [];
 		for (var sourceIndex = 0; sourceIndex < zoneSetIds.length; sourceIndex++) {
@@ -5747,7 +5896,7 @@ function getAeLuaUniqueEvolvedSetId(oldSetId, newSpecies, customsets, layout) {
 	if (oldParsed.species === newSpecies) return oldSetId;
 	var baseLabel = oldParsed.label || (AE_LUA_POKEMON_SET_PREFIX + " Team");
 	var occupiedSetIds = {};
-	var zoneNames = ["team", "teamRight", "box", "box2", "trash"];
+	var zoneNames = ["team", "teamRight", "box", "box2", "boxmega", "trash"];
 	for (var zoneIndex = 0; zoneIndex < zoneNames.length; zoneIndex++) {
 		var zoneSetIds = layout[zoneNames[zoneIndex]] || [];
 		for (var setIndex = 0; setIndex < zoneSetIds.length; setIndex++) {
@@ -5766,7 +5915,7 @@ function getAeLuaUniqueEvolvedSetId(oldSetId, newSpecies, customsets, layout) {
 }
 
 function removeAeLuaEvolvedSourceCustomSet(customsets, oldSetId, layout) {
-	var preservedZones = ["teamRight", "box", "box2", "trash"];
+	var preservedZones = ["teamRight", "box", "box2", "boxmega", "trash"];
 	for (var zoneIndex = 0; zoneIndex < preservedZones.length; zoneIndex++) {
 		var zoneSetIds = layout[preservedZones[zoneIndex]] || [];
 		if (zoneSetIds.indexOf(oldSetId) !== -1) return;
@@ -5795,7 +5944,7 @@ function applyAeLuaTeamSetRename(oldSetId, newSetId) {
 
 function getAeLuaRosterSetLookup(layout) {
 	var lookup = {};
-	var zoneNames = ["team", "teamRight", "box", "box2", "trash"];
+	var zoneNames = ["team", "teamRight", "box", "box2", "boxmega", "trash"];
 	for (var zoneIndex = 0; zoneIndex < zoneNames.length; zoneIndex++) {
 		var setIds = layout[zoneNames[zoneIndex]] || [];
 		for (var setIndex = 0; setIndex < setIds.length; setIndex++) {
@@ -9912,19 +10061,34 @@ function isTrainerPartyRegionalFormName(pokemonName) {
 	return /-(?:alola|galar|hisui|paldea)(?:-|$)/i.test(String(pokemonName || ""));
 }
 
+function isTrainerPartyIncarnateOrTherianFormName(pokemonName) {
+	return /-(?:incarnate|therian)(?:-|$)/i.test(String(pokemonName || ""));
+}
+
 function getTrainerPartyDisplayBaseFormName(entry) {
 	var resolvedPokemonName = resolveSetSpeciesNameForDexLookup(entry && entry.pokemonName);
 	var pokemon = pokedex && pokedex[resolvedPokemonName];
 	var baseSpeciesName = String(pokemon && pokemon.baseSpecies || "").trim();
-	if (!pokemon || !baseSpeciesName || resolvedPokemonName === baseSpeciesName || isTrainerPartyRegionalFormName(resolvedPokemonName) || /^Genesect(?:-|$)/i.test(resolvedPokemonName) || /^Indeedee(?:-[FM])?$/i.test(resolvedPokemonName)) return "";
+	if (!pokemon || !baseSpeciesName || resolvedPokemonName === baseSpeciesName || isTrainerPartyRegionalFormName(resolvedPokemonName) || isTrainerPartyIncarnateOrTherianFormName(resolvedPokemonName) || /^(?:Genesect|Rotom|Toxtricity)(?:-|$)/i.test(resolvedPokemonName) || /^Indeedee(?:-[FM])?$/i.test(resolvedPokemonName)) return "";
 	return pokedex[baseSpeciesName] ? baseSpeciesName : "";
+}
+
+function getTrainerPartyCompanionSetId(entry, formeName) {
+	var normalizedFormeName = String(formeName || "").trim();
+	var trainerLabel = String(entry && entry.trainerLabel || "").trim();
+	var formeSets = setdex && setdex[normalizedFormeName];
+	if (normalizedFormeName && trainerLabel && formeSets && Object.prototype.hasOwnProperty.call(formeSets, trainerLabel)) {
+		return normalizedFormeName + " (" + trainerLabel + ")";
+	}
+	return String(entry && entry.fullSetName || "");
 }
 
 function trainerPartyFormeHtml(entry, formeName, side) {
 	var label = "[" + entry.indexText + "]" + entry.fullSetName;
 	var tooltip = formeName + " forme of " + entry.pokemonName + ", " + label + " BP";
 	var sideClass = side === "left" ? " trainer-pok-forme-left" : " trainer-pok-forme-right";
-	return '<img class="trainer-pok right-side trainer-pok-forme' + sideClass + '" draggable="false" src="' + escapeHtml(getInitialTrainerSpriteUrlByName(formeName)) + '" data-id="' + escapeHtml(entry.fullSetName) + '" data-party-index="' + escapeHtml(entry.indexText) + '" data-species="' + escapeHtml(formeName) + '" alt="' + escapeHtml(tooltip) + '" title="' + escapeHtml(tooltip) + '" loading="lazy" decoding="async"' + getPrimaryIconSheetLoadAttr(formeName) + ' onerror="applyIconSheetFallbackImage(this, this.getAttribute(\'data-species\'))">';
+	var companionSetId = getTrainerPartyCompanionSetId(entry, formeName);
+	return '<img class="trainer-pok right-side trainer-pok-forme' + sideClass + '" draggable="false" src="' + escapeHtml(getInitialTrainerSpriteUrlByName(formeName)) + '" data-id="' + escapeHtml(companionSetId) + '" data-party-index="' + escapeHtml(entry.indexText) + '" data-species="' + escapeHtml(formeName) + '" alt="' + escapeHtml(tooltip) + '" title="' + escapeHtml(tooltip) + '" loading="lazy" decoding="async"' + getPrimaryIconSheetLoadAttr(formeName) + ' onerror="applyIconSheetFallbackImage(this, this.getAttribute(\'data-species\'))">';
 }
 
 function trainerPartyMonHtml(entry, isTrainerLead) {
@@ -12441,6 +12605,7 @@ $(document).ready(function () {
 	syncTrainerFieldLockButtonStyles();
 	bindPlayerRosterSearchInput();
 	bindPlayerRosterBoxTeamButton();
+	bindPlayerRosterSortButtons();
 	ensureFragHistoryControls();
 	bindAeLuaFragImportControls();
 	bindFieldSideControlsToggle();

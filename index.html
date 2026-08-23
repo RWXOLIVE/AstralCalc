@@ -6,7 +6,7 @@
     <link rel="icon" type="image/gif" href="img/totodile.gif"  >
     <title>Astral Emerald Damage Calculator</title>
     <link type="text/css" rel="stylesheet" href="./js/vendor/select2/select2.css" />
-    <link type="text/css" rel="stylesheet" href="./css/main.css?69829320" />
+    <link type="text/css" rel="stylesheet" href="./css/main.css?item-sprites-v4" />
     <link type="text/css" rel="stylesheet" href="./css/vendor/bootstrap.css" />
     <link type="text/css" rel="stylesheet" href="./css/dark-theme.css" id="dark-theme-styles">
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -594,8 +594,9 @@
                                     <option value="5">Five allies fainted</option>
                             </select>
                     </div>
-                    <div class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
+                    <div class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9 item-row">
                         <label for="itemL1">Item</label>
+                        <span class="item-sprite is-empty" id="item-spriteL1" aria-hidden="true"></span>
                         <select class="item terrain-trigger calc-trigger" id="itemL1"></select>
                         <label class="item-ignore-toggle-label" for="ignoreItemL1" title="When checked, this Pokemon is treated as if it has no held item, without clearing the selected item.">
                             <input type="checkbox" class="ignore-item-toggle terrain-trigger calc-trigger" id="ignoreItemL1" />
@@ -804,6 +805,8 @@
                 <legend align="center">Team/Box</legend>
                 <div class="roster-top-controls">
                     <button type="button" id="box-current-team" class="btn" title="Move the current Team to Box 1">Team &rarr; Box 1</button>
+                    <button type="button" id="sort-player-roster-name" class="btn roster-sort-button" title="Sort the player roster alphabetically by species name">Sort by name</button>
+                    <button type="button" id="sort-player-roster-speed" class="btn roster-sort-button" title="Sort the player roster by calculated Speed, highest first">Sort by speed</button>
                     <span id="search-inline" class="search-inline">
                         <input type="text" id="search" placeholder="Search - Pokemon/Moves" />
                     </span>
@@ -1666,8 +1669,9 @@
                                     <option value="5">Five allies fainted</option>
                             </select>
                     </div>
-                    <div class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
+                    <div class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9 item-row">
                         <label for="itemR1">Item</label>
+                        <span class="item-sprite is-empty" id="item-spriteR1" aria-hidden="true"></span>
                         <select class="item terrain-trigger calc-trigger" id="itemR1"></select>
                         <label class="item-ignore-toggle-label" for="ignoreItemR1" title="When checked, this Pokemon is treated as if it has no held item, without clearing the selected item.">
                             <input type="checkbox" class="ignore-item-toggle terrain-trigger calc-trigger" id="ignoreItemR1" />
@@ -2073,8 +2077,8 @@
     </script>
     <script type="text/javascript" src="./calc/util.js?51463f0d"></script>
     <script type="text/javascript" src="./calc/stats.js?a9e37d1a"></script>
-    <script type="text/javascript" src="./calc/data/species.js?ff4f3b1e"></script>
-	<script type="text/javascript" src="./js/data/sets/gen9.js?fde864da"></script>
+    <script type="text/javascript" src="./calc/data/species.js?5bd1e5b8"></script>
+	<script type="text/javascript" src="./js/data/sets/gen9.js?56bd2d48"></script>
     <script type="text/javascript" src="./js/data/sets/gen8.js?ecf43658"></script>
     <script type="text/javascript" src="./js/data/sets/gen7.js?78168bde"></script>
     <script type="text/javascript" src="./js/data/sets/gen6.js?2219279f"></script>
@@ -2086,7 +2090,7 @@
     <script type="text/javascript" src="./calc/data/types.js?a641e10b"></script>
     <script type="text/javascript" src="./calc/data/natures.js?28612810"></script>
     <script type="text/javascript" src="./calc/data/abilities.js?76d9976e"></script>
-    <script type="text/javascript" src="./calc/data/moves.js?f9bc5c2e"></script>
+    <script type="text/javascript" src="./calc/data/moves.js?d28f941e"></script>
     <script type="text/javascript" src="./calc/data/items.js?6595cf6c"></script>
     <script type="text/javascript" src="./calc/data/index.js?abecbd82"></script>
     <script type="text/javascript" src="./calc/move.js?5a4ba07d"></script>
@@ -2107,7 +2111,8 @@
     <script type="text/javascript" src="./js/spritedata.js?e6979aa2"></script>
     <script type="text/javascript" src="./js/data/frags_splits.js?507088b2"></script>
     <script type="text/javascript" src="./js/data/move_info_lookup.js?12b8d14e"></script>
-<script type="text/javascript" src="./js/shared_controls.js?magma-storm-field-v1"></script>
+    <script type="text/javascript" src="./js/item_sprites.js?item-sprites-v2"></script>
+    <script type="text/javascript" src="./js/shared_controls.js?item-sprites-v2"></script>
     <script type="text/javascript" src="./js/switch_in_predictor.js?a2f49860"></script>
     <script type="text/javascript" src="./js/switch_in_gate.js?acd63663"></script>
 <script type="text/javascript" src="./js/index_randoms_controls.js?trapping-residual-v1"></script>

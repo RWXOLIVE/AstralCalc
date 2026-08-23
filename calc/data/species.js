@@ -3425,7 +3425,7 @@ var DPP_PATCH = {
         abilities: { 0: 'Soundproof' }
     },
     Mismagius: {
-        types: ['Ghost'],
+        types: ['Ghost', 'Psychic'],
         bs: { hp: 55, at: 55, df: 55, sa: 110, sd: 110, sp: 110 },
         weightkg: 4.4,
         abilities: { 0: 'Levitate' }
