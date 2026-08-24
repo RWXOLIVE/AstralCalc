@@ -429,6 +429,7 @@ function ensureSimplifiedSideCard(sideSelector) {
 					'<select class="simplified-side-ability-input"></select>' +
 				"</label>" +
 				'<label class="simplified-side-control-label simplified-side-item-wrap">Item ' +
+					'<span class="item-sprite simplified-side-item-sprite is-empty" aria-hidden="true"></span>' +
 					'<select class="simplified-side-item-input"></select>' +
 				"</label>" +
 				'<label class="simplified-side-ignore-item-label" title="When checked, this Pokemon is treated as if it has no held item, without clearing the selected item.">' +
@@ -579,6 +580,23 @@ function isSimplifiedMoveSearchSelect(targetNode) {
 	return targetNode.hasClass("simplified-side-move-select");
 }
 
+function isSimplifiedAbilityItemSelect(targetNode) {
+	return targetNode.hasClass("simplified-side-ability-input") || targetNode.hasClass("simplified-side-item-input");
+}
+
+function ensureSimplifiedAbilityItemSearchSelect(targetNode) {
+	if (!targetNode || !targetNode.length) return;
+	if (typeof targetNode.select2 !== "function") return;
+	if (targetNode.data("select2")) return;
+	targetNode.select2({
+		width: "8.4em",
+		dropdownAutoWidth: true,
+		containerCssClass: "simplified-ability-item-search-select",
+		dropdownCssClass: "ability-item-search-dropdown",
+		matcher: simplifiedSelectSearchMatcher
+	});
+}
+
 function ensureSimplifiedMoveSearchSelect(targetNode) {
 	if (!targetNode || !targetNode.length) return;
 	if (typeof targetNode.select2 !== "function") return;
@@ -643,7 +661,9 @@ function syncSimplifiedSelectFromSource(sideSelector, sourceSelector, targetNode
 	var source = $(sideSelector + " " + sourceSelector).first();
 	var target = $(targetNode);
 	if (!source.length || !target.length) return;
+	var isAbilityItemSearchSelect = isSimplifiedAbilityItemSelect(target);
 	var isMoveSearchSelect = isSimplifiedMoveSearchSelect(target);
+	var isSearchSelect = isAbilityItemSearchSelect || isMoveSearchSelect;
 	var sourceHtml = source.html() || "";
 	var sourceValue = source.val();
 	if (sourceValue === null || typeof sourceValue === "undefined") {
@@ -665,7 +685,7 @@ function syncSimplifiedSelectFromSource(sideSelector, sourceSelector, targetNode
 		}
 	}
 	var sourceDisabled = source.prop("disabled");
-	if (isMoveSearchSelect && target.data("select2") && target.data("srcHtml") !== sourceHtml) {
+	if (isSearchSelect && target.data("select2") && target.data("srcHtml") !== sourceHtml) {
 		target.select2("destroy");
 		target.removeClass("select2-offscreen");
 	}
@@ -678,8 +698,12 @@ function syncSimplifiedSelectFromSource(sideSelector, sourceSelector, targetNode
 		target.data("lastValidMove", sourceValue);
 	}
 	target.prop("disabled", sourceDisabled);
-	if (!isMoveSearchSelect) return;
-	ensureSimplifiedMoveSearchSelect(target);
+	if (!isSearchSelect) return;
+	if (isAbilityItemSearchSelect) {
+		ensureSimplifiedAbilityItemSearchSelect(target);
+	} else if (isMoveSearchSelect) {
+		ensureSimplifiedMoveSearchSelect(target);
+	}
 	if (!target.data("select2")) return;
 	target.data("simplifiedSyncing", true);
 	try {
@@ -782,6 +806,7 @@ function renderSimplifiedSideCard(sideSelector, sideIndex, attacker, defender) {
 	syncSimplifiedSelectFromSource(sideSelector, ".nature", card.find(".simplified-side-nature-input"));
 	syncSimplifiedSelectFromSource(sideSelector, ".ability", card.find(".simplified-side-ability-input"));
 	syncSimplifiedSelectFromSource(sideSelector, ".item", card.find(".simplified-side-item-input"));
+	if (typeof syncPokeItemSprite === "function") syncPokeItemSprite($(sideSelector));
 	var sourceIgnoreItemToggle = $(sideSelector + " .ignore-item-toggle").first();
 	var simplifiedIgnoreItemToggle = card.find(".simplified-side-ignore-item-toggle").first();
 	if (simplifiedIgnoreItemToggle.length) {
@@ -1173,6 +1198,10 @@ $(document)
 	.on("change.simplifiedcontrols input.simplifiedcontrols", ".simplified-side-level-input, .simplified-side-level-cap-input, .simplified-side-status-input, .simplified-side-nature-input, .simplified-side-ability-input, .simplified-side-item-input, .simplified-side-ignore-item-toggle, .simplified-side-current-hp-input, .simplified-side-percent-hp-input, .simplified-side-stat-boost-input, .simplified-side-move-crit-input", function () {
 		var controlNode = $(this);
 		if (controlNode.data("simplifiedSyncing")) return;
+		if (controlNode.data("skipNextSimplifiedSelect2Change")) {
+			controlNode.removeData("skipNextSimplifiedSelect2Change");
+			return;
+		}
 		var pokeInfo = controlNode.closest(".poke-info");
 		if (!pokeInfo.length) return;
 		var sideSelector = "#" + pokeInfo.attr("id");
@@ -1225,6 +1254,20 @@ $(document)
 		}
 		if (!sourceNode.length) return;
 		sourceNode.trigger("change");
+	});
+
+$(document)
+	.off("select2-selected.simplifiedabilityitem", ".simplified-side-ability-input, .simplified-side-item-input")
+	.on("select2-selected.simplifiedabilityitem", ".simplified-side-ability-input, .simplified-side-item-input", function () {
+		var controlNode = $(this);
+		if (controlNode.data("simplifiedSyncing")) return;
+		// Select2's native change notification is not reliable for an off-screen
+		// proxy select, so forward the choice to the battle control explicitly.
+		controlNode.trigger("change");
+		controlNode.data("skipNextSimplifiedSelect2Change", true);
+		window.setTimeout(function () {
+			controlNode.removeData("skipNextSimplifiedSelect2Change");
+		}, 0);
 	});
 
 $(document)
@@ -1611,8 +1654,39 @@ $(".mode").change(function () {
 });
 
 $(".notation").change(function () {
-	performCalculations();
+	requestCalculationRefresh();
 });
+
+// A set update changes many calc controls at once. Those individual changes
+// occur while NO_CALC is set, so dropping them outright can leave the visible
+// result from the previous state. Queue one refresh and flush it once the
+// current control update has completed instead.
+var calculationRefreshPending = false;
+var calculationRefreshTimer = null;
+function requestCalculationRefresh() {
+	calculationRefreshPending = true;
+	if (calculationRefreshTimer !== null) return;
+	calculationRefreshTimer = window.setTimeout(flushCalculationRefresh, 0);
+}
+
+function flushCalculationRefresh() {
+	calculationRefreshTimer = null;
+	if (!calculationRefreshPending) return;
+	if (window.NO_CALC) {
+		// The set-loader will call requestCalculationRefresh after it clears
+		// NO_CALC. Keep the pending flag without spinning a zero-delay timer.
+		return;
+	}
+	calculationRefreshPending = false;
+	var autoRefreshColorCodes = document.getElementById("cc-auto-refr");
+	if (autoRefreshColorCodes && autoRefreshColorCodes.checked && typeof window.refreshColorCode === "function") {
+		window.refreshColorCode();
+	}
+	if (typeof updateAllMoveMetaDisplays === "function") {
+		updateAllMoveMetaDisplays();
+	}
+	performCalculations();
+}
 
 $(document).ready(function () {
 	var params = new URLSearchParams(window.location.search);
@@ -1632,23 +1706,9 @@ $(document).ready(function () {
 			}
 		}
 	}
-	$(".calc-trigger").bind("change keyup", function (ev) {
-		/*
-			This prevents like 8 performCalculations out of 8 that were useless
-			without causing bugs (so far)
-		*/
-		if (window.NO_CALC) {
-			return;
-		}
-		var autoRefreshColorCodes = document.getElementById("cc-auto-refr");
-		if (autoRefreshColorCodes && autoRefreshColorCodes.checked && typeof window.refreshColorCode === "function") {
-			window.refreshColorCode();
-		}
-		if (typeof updateAllMoveMetaDisplays === "function") {
-			updateAllMoveMetaDisplays();
-		}
-		performCalculations();
-	});
+	$(document)
+		.off("change.calculationrefresh keyup.calculationrefresh", ".calc-trigger")
+		.on("change.calculationrefresh keyup.calculationrefresh", ".calc-trigger", requestCalculationRefresh);
 	if (typeof updateAllMoveMetaDisplays === "function") {
 		updateAllMoveMetaDisplays();
 	}

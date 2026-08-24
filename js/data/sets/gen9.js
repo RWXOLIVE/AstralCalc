@@ -2635,6 +2635,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Dragon Rush","Leaf Storm","Nature Power","Acrobatics"]
+        },
+        "Team Magma Grintoul #13 | Magma Hideout": {
+            "index": "0000000907",
+            "Weather": "Sun",
+            "level": 77,
+            "ability": "Unburden",
+            "item": "Grass Gem",
+            "nature": "Naive",
+            "teraType": "Grass",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Solar Beam","Rock Slide","Endure","Endeavor"]
         }
     },
     "Farfetch\u2019d": {
@@ -3112,7 +3126,7 @@ var SETDEX_SV = {
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
-            "moves": ["Calm Mind","Flamethrower","Psyshock","Confuse Ray"]
+            "moves": ["Calm Mind","Flamethrower","Psyshock","Overheat"]
         },
         "Dragon Tamer Lawrence | Giant Chasm": {
             "index": "0000000626",
@@ -3289,6 +3303,21 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Swords Dance","Brave Bird","Flare Blitz","Roost"]
+        },
+        "Team Magma Grunt #15 | Magma Hideout": {
+            "index": "0000000912",
+            "Weather": "Sun",
+            "level": 79,
+            "ability": "Flame Body",
+            "item": "Covert Cloak",
+            "nature": "Adamant",
+            "setdouble": "True",
+            "setdoubleGroup": "magma-hideout-grunts-14-15",
+            "setdoubleSide": 2,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Dual Wingbeat","Overheat","Flare Blitz","Upper Hand"]
         }
     },
     "Zoroark": {
@@ -3835,6 +3864,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Sleep Powder","Solar Beam","Sludge Bomb","Synthesis"]
+        },
+        "Team Magma Scientist Blaine | Magma Hideout": {
+            "index": "0000000920",
+            "Weather": "Sun",
+            "level": 81,
+            "ability": "Chlorophyll",
+            "item": "Life Orb",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Sleep Powder","Solar Beam","Sludge Bomb","Weather Ball"]
         }
     },
     "Eevee-Starter": {
@@ -5424,6 +5465,23 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Misty Explosion"]
+        }
+    },
+    "Eelektross": {
+    "Team Magma Grunt #15 | Magma Hideout": {
+            "index": "0000000913",
+            "Weather": "Sun",
+            "level": 78,
+            "ability": "Levitate",
+            "item": "Water Gem",
+            "nature": "Quiet",
+            "setdouble": "True",
+            "setdoubleGroup": "magma-hideout-grunts-14-15",
+            "setdoubleSide": 2,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Aqua Tail","Thunderbolt","Flamethrower","Drain Punch"]
         }
     },
     "Eelektross-Mega": {
@@ -7435,6 +7493,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Flare Blitz","Close Combat","Head Smash","Wild Charge"]
+        },
+        "Team Magma Leader Maxie | Magma Hideout": {
+            "index": "0000000928",
+            "Weather": "Sun",
+            "level": 80,
+            "ability": "Heated Rush",
+            "item": "Leftovers",
+            "nature": "Jolly",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Bulk Up","Drain Punch","Head Smash","Flare Blitz"]
         }
     },
     "Rotom": {
@@ -8379,6 +8449,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Rapid Spin","Close Combat","Headlong Rush","Throat Chop"]
+        },
+        "Team Magma Scientist Blaine | Magma Hideout": {
+            "index": "0000000921",
+            "Weather": "Sun",
+            "level": 80,
+            "ability": "Protosynthesis",
+            "item": "Choice Scarf",
+            "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Headlong Rush","Close Combat","Head Smash"]
         }
     },
     "Sneasler": {
@@ -9312,6 +9394,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Reflect","Light Screen","U-turn","Psychic"]
+        },
+        "Team Magma Admin Tabitha | Magma Hideout": {
+            "index": "0000000917",
+            "Weather": "Sun",
+            "level": 81,
+            "ability": "Chlorophyll",
+            "item": "Life Orb",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Weather Ball","Ancient Power","Energy Ball","Psychic"]
         }
     },
     "Arcanine-Hisui": {
@@ -9546,6 +9640,20 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Protect","High Horsepower","Rock Slide","Seed Bomb"]
+        },
+        "Team Magma Grintoul #13 | Magma Hideout": {
+            "index": "0000000909",
+            "Weather": "Sun",
+            "level": 76,
+            "ability": "Sturdy",
+            "item": "Quick Claw",
+            "nature": "Brave",
+            "teraType": "Ground",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["High Horsepower","Knock Off","Fire Fang","Helping Hand"]
         }
     },
     "Bellossom": {
@@ -10017,6 +10125,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Flare Blitz","Throat Chop","High Jump Kick","Drain Punch"]
+        },
+        "Team Magma Grintoul #13 | Magma Hideout": {
+            "index": "0000000908",
+            "Weather": "Sun",
+            "level": 76,
+            "ability": "Iron Fist",
+            "item": "Bright Powder",
+            "nature": "Jolly",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Dynamic Punch","Fire Punch","Coaching","Substitute"]
         }
     },
     "Slowking-Galar": {
@@ -10359,6 +10480,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Sandsear Storm","Dragon Pulse","Vacuum Wave","Bug Buzz"]
+        },
+        "Team Magma Admin Tabitha | Magma Hideout": {
+            "index": "0000000915",
+            "Weather": "Sun",
+            "level": 80,
+            "ability": "Tinted Lens",
+            "item": "Roseli Berry",
+            "nature": "Careful",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Stealth Rock","Leech Life","Dragon Hammer","Stone Edge"]
         }
     },
     "Tangrowth": {
@@ -10529,6 +10662,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["First Impression","Flame Charge","Flash Cannon","Heat Wave"]
+        },
+        "Team Magma Leader Maxie | Magma Hideout": {
+            "index": "0000000929",
+            "Weather": "Sun",
+            "level": 82,
+            "ability": "Flame Body",
+            "item": "Heatranite",
+            "nature": "Timid",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Magma Storm","Flash Cannon","Earth Power","Flame Charge"]
         }
     },
     "Druddigon": {
@@ -11392,6 +11537,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Whirlpool","Fly","Roost","Thunder Wave"]
+        },
+        "Team Magma Leader Maxie | Magma Hideout": {
+            "index": "0000000925",
+            "Weather": "Sun",
+            "level": 80,
+            "ability": "Multiscale",
+            "item": "Choice Scarf",
+            "nature": "Modest",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Aeroblast","Flamethrower","Dragon Pulse","Flash Cannon"]
         }
     },
     "Gliscor": {
@@ -11926,6 +12083,18 @@ var SETDEX_SV = {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
         },
         "moves": ["Air Slash","Solar Beam","Flamethrower","Protect"]
+    },
+    "Team Magma Scientist Blaine | Magma Hideout": {
+        "index": "0000000918",
+        "Weather": "Sun",
+        "level": 82,
+        "ability": "Drought",
+        "item": "Charizardite Y",
+        "nature": "Timid",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Solar Beam","U-turn","Aeroblast","Scorching Sands"]
     }
 },
 "Jumpluff": {
@@ -12466,6 +12635,154 @@ var SETDEX_SV = {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
         },
         "moves": ["Retaliate","Facade","Close Combat","Knock Off"]
+    }
+},
+"Delcatty": {
+    "Team Magma Grintoul #13 | Magma Hideout": {
+        "index": "0000000905",
+        "Weather": "Sun",
+        "level": 79,
+        "ability": "Cute Charm",
+        "item": "Focus Sash",
+        "nature": "Jolly",
+        "teraType": "Normal",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Fake Out","Mega Kick","Iron Tail","Thunder Wave"]
+    }
+},
+"Aerodactyl-Mega": {
+    "Team Magma Grintoul #13 | Magma Hideout": {
+        "index": "0000000906",
+        "Weather": "Sun",
+        "level": 76,
+        "ability": "Tough Claws",
+        "item": "Aerodactylite",
+        "nature": "Jolly",
+        "teraType": "Rock",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Rock Slide","Fly","Stomping Tantrum","Fire Fang"]
+    }
+},
+"Flareon": {
+    "Team Magma Admin Tabitha | Magma Hideout": {
+        "index": "0000000914",
+        "Weather": "Sun",
+        "level": 80,
+        "ability": "Drought",
+        "item": "Quick Claw",
+        "nature": "Quiet",
+        "boosts": {
+            "atk": 1,
+            "spa": 1
+        },
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Explosion","Weather Ball","Solar Beam","Earthquake"]
+    }
+},
+"Gengar-Mega": {
+    "Team Magma Admin Tabitha | Magma Hideout": {
+        "index": "0000000916",
+        "Weather": "Sun",
+        "level": 80,
+        "ability": "Cursed Body",
+        "item": "Gengarite",
+        "nature": "Timid",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Shadow Ball","Sludge Bomb","Flamethrower","Destiny Bond"]
+    }
+},
+"Walking Wake": {
+    "Team Magma Scientist Blaine | Magma Hideout": {
+        "index": "0000000919",
+        "Weather": "Sun",
+        "level": 80,
+        "ability": "Protosynthesis",
+        "item": "Scope Lens",
+        "nature": "Timid",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Hydro Steam","Draco Meteor","Flamethrower","Flip Turn"]
+    }
+},
+"Roaring Moon": {
+    "Team Magma Scientist Blaine | Magma Hideout": {
+        "index": "0000000922",
+        "Weather": "Sun",
+        "level": 80,
+        "ability": "Protosynthesis",
+        "item": "Focus Band",
+        "nature": "Jolly",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Dragon Dance","Earthquake","Lash Out","Dragon Rush"]
+    }
+},
+"Mewtwo": {
+    "Team Magma Scientist Blaine | Magma Hideout": {
+        "index": "0000000923",
+        "Weather": "Sun",
+        "level": 81,
+        "ability": "Pressure",
+        "item": "Assault Vest",
+        "nature": "Timid",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Psystrike","Fire Blast","Aura Sphere","Energy Ball"]
+    }
+},
+"Groudon": {
+    "Team Magma Leader Maxie | Magma Hideout": {
+        "index": "0000000924",
+        "Weather": "Sun",
+        "level": 81,
+        "ability": "Drought",
+        "item": "Clear Amulet",
+        "nature": "Adamant",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Rock Polish","Precipice Blades","Temper Flare","Stone Edge"]
+    }
+},
+"Flutter Mane": {
+    "Team Magma Leader Maxie | Magma Hideout": {
+        "index": "0000000926",
+        "Weather": "Sun",
+        "level": 80,
+        "ability": "Protosynthesis",
+        "item": "Wise Glasses",
+        "nature": "Modest",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Calm Mind","Dazzling Gleam","Mystical Fire","Shadow Ball"]
+    }
+},
+"Hoopa-Unbound": {
+    "Team Magma Leader Maxie | Magma Hideout": {
+        "index": "0000000927",
+        "Weather": "Sun",
+        "level": 80,
+        "ability": "Magic Guard",
+        "item": "Focus Sash",
+        "nature": "Hasty",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Sucker Punch","Hyperspace Hole","Fire Punch","Dark Pulse"]
     }
 },
 };

@@ -505,20 +505,23 @@ function getItemSpriteNumber(itemName) {
 }
 function syncPokeItemSprite(pokeInfo) {
 	var info = pokeInfo && pokeInfo.jquery ? pokeInfo : $(pokeInfo);
-	var sprite = info.find(".item-sprite").first();
-	if (!sprite.length) return;
+	var sprites = info.find(".item-sprite");
+	if (!sprites.length) return;
 	var itemName = info.find(".item").first().val() || "";
 	var spriteNumber = getItemSpriteNumber(itemName);
 	if (spriteNumber === null) {
-		sprite.removeAttr("data-item-sprite-number").removeAttr("title").css("background-position", "").addClass("is-empty");
+		sprites.removeAttr("data-item-sprite-number").removeAttr("title").css("background-position", "").addClass("is-empty");
 		return;
 	}
-	if (sprite.attr("data-item-sprite-number") !== String(spriteNumber)) {
-		var x = -(spriteNumber % ITEM_SPRITE_SHEET_COLUMNS) * ITEM_SPRITE_TILE_SIZE;
-		var y = -Math.floor(spriteNumber / ITEM_SPRITE_SHEET_COLUMNS) * ITEM_SPRITE_TILE_SIZE;
-		sprite.attr("data-item-sprite-number", spriteNumber).css("background-position", x + "px " + y + "px");
-	}
-	sprite.removeClass("is-empty").attr("title", itemName);
+	var x = -(spriteNumber % ITEM_SPRITE_SHEET_COLUMNS) * ITEM_SPRITE_TILE_SIZE;
+	var y = -Math.floor(spriteNumber / ITEM_SPRITE_SHEET_COLUMNS) * ITEM_SPRITE_TILE_SIZE;
+	sprites.each(function () {
+		var sprite = $(this);
+		if (sprite.attr("data-item-sprite-number") !== String(spriteNumber)) {
+			sprite.attr("data-item-sprite-number", spriteNumber).css("background-position", x + "px " + y + "px");
+		}
+		sprite.removeClass("is-empty").attr("title", itemName);
+	});
 }
 function updatePokeMoveHitsFromAbilityItem(pokeInfo) {
 	var info = pokeInfo && pokeInfo.jquery ? pokeInfo : $(pokeInfo);
@@ -990,7 +993,8 @@ var TRAINER_PERMANENT_FIELD_EFFECTS = {
 	"Leader Jasmine | Mauville Gym": ["steelsurgeL"],
 	"Team Magma Grunt #9 | Magma Hideout": ["magmaStormL"],
 	"Team Magma Grunt #10 | Magma Hideout": ["magmaStormL"],
-	"Team Magma Grunt #11 | Magma Hideout": ["magmaStormL"]
+	"Team Magma Grunt #11 | Magma Hideout": ["magmaStormL"],
+	"Team Magma Grintoul #13 | Magma Hideout": ["magmaStormL"]
 };
 var TRAINER_PERMANENT_FIELD_EFFECT_IDS = {
 	steelsurgeL: true,
@@ -2203,7 +2207,7 @@ function transformDittoFromOpposing(targetSideSelector, sourceSideSelector) {
 	}
 
 	targetPokeInfo.find(".level").val(preservedLevel);
-	targetPokeInfo.find(".item").val(preservedItem);
+	setSelectValueIfValid(targetPokeInfo.find(".item"), preservedItem, "");
 	targetPokeInfo.find(".ignore-item-toggle").prop("checked", preservedIgnoreItem);
 	targetPokeInfo.find(".item").change();
 	targetPokeInfo.find(".ignore-item-toggle").change();
@@ -7755,6 +7759,69 @@ function getSelectedSetIdForSide(sideId) {
 	return String(selector.val() || "").trim();
 }
 
+var P2_SET_SELECTOR_TEXT_BUFFER_PX = 10;
+var p2SetSelectorFitTimer = null;
+
+function getSetSelectorSelect2Container(selector) {
+	var select2Container = selector.next(".select2-container");
+	if (!select2Container.length) {
+		select2Container = selector.siblings(".select2-container").first();
+	}
+	return select2Container;
+}
+
+function fitP2SetSelectorText() {
+	var selector = $("#p2 input.set-selector").first();
+	if (!selector.length) return;
+	var select2Container = getSetSelectorSelect2Container(selector);
+	var choice = select2Container.find(".select2-choice").first();
+	var chosen = choice.find(".select2-chosen").first();
+	if (!choice.length || !chosen.length) return;
+
+	// Start at the normal size again so shorter selections do not stay compact.
+	chosen.css("font-size", "");
+	var selectedText = chosen.text();
+	if (!selectedText) return;
+
+	var choiceStyle = window.getComputedStyle(choice[0]);
+	var chosenStyle = window.getComputedStyle(chosen[0]);
+	var arrowWidth = choice.find(".select2-arrow").outerWidth() || 0;
+	var horizontalPadding = (parseFloat(choiceStyle.paddingLeft) || 0) +
+		(parseFloat(choiceStyle.paddingRight) || 0);
+	// Reserve room before the arrow so text is reduced before it can visibly clip.
+	var availableWidth = choice.innerWidth() - horizontalPadding - arrowWidth - P2_SET_SELECTOR_TEXT_BUFFER_PX;
+	if (availableWidth <= 0) return;
+
+	var textMeasure = $("<span>").text(selectedText).css({
+		position: "fixed",
+		left: "-10000px",
+		top: "-10000px",
+		visibility: "hidden",
+		whiteSpace: "nowrap",
+		fontFamily: chosenStyle.fontFamily,
+		fontSize: chosenStyle.fontSize,
+		fontWeight: chosenStyle.fontWeight,
+		fontStyle: chosenStyle.fontStyle,
+		letterSpacing: chosenStyle.letterSpacing
+	}).appendTo("body");
+	var textWidth = textMeasure.outerWidth();
+	textMeasure.remove();
+	if (textWidth <= availableWidth) return;
+
+	var fontSize = parseFloat(chosenStyle.fontSize);
+	if (!fontSize) return;
+	var compactFontSize = Math.max(10, Math.floor((fontSize * availableWidth / textWidth) * 10) / 10);
+	chosen.css("font-size", compactFontSize + "px");
+}
+
+function scheduleP2SetSelectorTextFit() {
+	if (p2SetSelectorFitTimer !== null) window.clearTimeout(p2SetSelectorFitTimer);
+	p2SetSelectorFitTimer = window.setTimeout(function () {
+		p2SetSelectorFitTimer = null;
+		fitP2SetSelectorText();
+	}, 0);
+}
+
 function isSetIdKnownInSetdex(setId) {
 	var parsedSet = parseSetId(setId);
 	var speciesName = String(parsedSet.species || "").trim();
@@ -7778,11 +7845,9 @@ function setSelectedSetIdForSide(sideId, setId) {
 	var selector = $("#" + sideId + " input.set-selector").first();
 	if (!selector.length) return false;
 	function syncSetSelectorDisplayText() {
-		var select2Container = selector.next(".select2-container");
-		if (!select2Container.length) {
-			select2Container = selector.siblings(".select2-container").first();
-		}
+		var select2Container = getSetSelectorSelect2Container(selector);
 		select2Container.find(".select2-chosen").first().text(formatSetNameForDisplay(normalizedSetId));
+		if (sideId === "p2") scheduleP2SetSelectorTextFit();
 	}
 	var currentSetId = String(selector.val() || "").trim();
 	if (currentSetId === normalizedSetId) {
@@ -10180,6 +10245,7 @@ function renderOpposingTrainerParties(selectedSetName) {
 $("input.set-selector").change(function () {
 	window.NO_CALC = true;
 	var currentPokeInfo = $(this).closest(".poke-info");
+	try {
 	currentPokeInfo.removeAttr("data-transform-species");
 	var fullSetName = String($(this).val() || "");
 	var parsedSetName = parseSetId(fullSetName);
@@ -10346,7 +10412,7 @@ $("input.set-selector").change(function () {
 			}
 			pokeObj.find(".nature").val("Hardy");
 			setSelectValueIfValid(abilityObj, pokemon.ab, "");
-			itemObj.val("");
+			setSelectValueIfValid(itemObj, "", "");
 			for (i = 0; i < 4; i++) {
 				moveObj = pokeObj.find(".move" + (i + 1) + " select.move-selector");
 				moveObj.attr('data-prev', moveObj.val());
@@ -10401,7 +10467,24 @@ $("input.set-selector").change(function () {
 	syncDittoTransformButtons();
 	syncInlinePokeSprite(currentPokeInfo);
 	saveLastEncounterSelection();
-	window.NO_CALC = false;
+	} catch (err) {
+		// A malformed set must not leave the calculator permanently stale. The
+		// remaining calc-trigger handler will refresh the result after this
+		// handler returns, and these changes keep the item/ability UI in sync.
+		console.error("Failed to load the selected set; calculations were re-enabled.", err);
+		currentPokeInfo.find(".ability, .item").trigger("change");
+	} finally {
+		window.NO_CALC = false;
+		// Do not depend on the outer set-selector change event reaching a later
+		// handler. The update above intentionally suppresses its child control
+		// events while the set is being applied, so explicitly flush one result.
+		if (typeof requestCalculationRefresh === "function") {
+			requestCalculationRefresh();
+		} else if (typeof performCalculations === "function") {
+			performCalculations();
+		}
+		if ($(this).hasClass("opposing")) scheduleP2SetSelectorTextFit();
+	}
 });
 
 $(document).on("click", "#transformL", function (ev) {
@@ -10526,8 +10609,61 @@ function showFormes(formeObj, pokemonName, pokemon, baseFormeName) {
 	return true;
 }
 
+function syncEnhancedSelectValue(select, value) {
+	if (!select || !select.length) return;
+	// The native select remains the calculator's source of truth. Select2
+	// mirrors its value when callers dispatch the normal change event.
+	select.val(value);
+}
+
 function setSelectValueIfValid(select, value, fallback) {
-	select.val(!value ? fallback : select.children("option[value='" + value + "']").length ? value : fallback);
+	var selectedValue = !value ? fallback : select.children("option[value='" + value + "']").length ? value : fallback;
+	syncEnhancedSelectValue(select, selectedValue);
+	return selectedValue;
+}
+
+function initializeAbilityItemSearchSelects() {
+	$("select.ability, select.item").each(function () {
+		var select = $(this);
+		if (typeof select.select2 !== "function" || select.data("select2")) return;
+		var selectedValue = select.val();
+		select.select2({
+			width: "12em",
+			containerCssClass: "ability-item-search-select",
+			dropdownCssClass: "ability-item-search-dropdown",
+			// Do not copy `.ability`, `.item`, or `.calc-trigger` onto Select2's
+			// generated wrapper. Existing calculator selectors must keep finding
+			// the native <select>, never the decorative <div>.
+			adaptContainerCssClass: function () { return null; },
+			minimumResultsForSearch: 0
+		});
+		syncEnhancedSelectValue(select, selectedValue);
+	});
+}
+
+function bindAbilityItemSearchRefresh() {
+	$(document)
+		.off("change.abilityitemsearch", "select.ability, select.item")
+		.on("change.abilityitemsearch", "select.ability, select.item", function () {
+			if (typeof requestCalculationRefresh === "function") {
+				requestCalculationRefresh();
+			} else if (!window.NO_CALC && typeof performCalculations === "function") {
+				window.setTimeout(performCalculations, 0);
+			}
+		})
+		.off("select2-selected.abilityitemsearch select2-removed.abilityitemsearch", "select.ability, select.item")
+		.on("select2-selected.abilityitemsearch select2-removed.abilityitemsearch", "select.ability, select.item", function () {
+			// Select2 v3 normally emits change too. Triggering one deferred native
+			// change covers integrations that consume the plugin event first. Its
+			// public value API does not always update the underlying select, so
+			// mirror the plugin's selected id before dispatching that change.
+			var select = $(this);
+			window.setTimeout(function () {
+				var selected = select.select2("data");
+				if (selected && selected.id !== undefined) select.val(selected.id);
+				select.trigger("change");
+			}, 0);
+		});
 }
 
 $(".forme").change(function () {
@@ -10561,19 +10697,21 @@ $(".forme").change(function () {
 	var abilityObj = container.find(".ability");
 	if (!preserveGreninjaAbility) {
 		if (isAltForme && abilities.indexOf(altFormeAbility) !== -1) {
-			abilityObj.val(altFormeAbility);
+			setSelectValueIfValid(abilityObj, altFormeAbility, abilityObj.val());
 		} else if (chosenSet) {
 			if (!isRandoms) {
-				abilityObj.val(chosenSet.ability);
+				setSelectValueIfValid(abilityObj, chosenSet.ability, abilityObj.val());
 			} else {
-				abilityObj.val(chosenSet.abilities[0]);
+				setSelectValueIfValid(abilityObj, chosenSet.abilities[0], abilityObj.val());
 			}
 		}
 	}
-	abilityObj.keyup();
+	abilityObj.change();
 
 	if (selectedForme.indexOf("-Mega") !== -1 && selectedForme !== "Rayquaza-Mega") {
-		container.find(".item").val("").keyup();
+		var itemObj = container.find(".item");
+		setSelectValueIfValid(itemObj, "", "");
+		itemObj.change();
 	} else {
 		container.find(".item").prop("disabled", false);
 	}
@@ -12649,17 +12787,13 @@ $(document).ready(function () {
 	bindFieldSideControlsToggle();
 	bindTrainerSequence();
 	loadDefaultLists();
+	$(window).off("resize.p2setselector").on("resize.p2setselector", scheduleP2SetSelectorTextFit);
 	setupFragSheetAutoRefresh();
 	syncSettingsPanelUi();
 	syncFragRoster();
 	renderFragSheet();
-	$("select.ability, select.item").select2({
-		// Match the 12em width used by the other info selectors, while adding
-		// Select2's built-in searchable dropdown.
-		width: "12em",
-		containerCssClass: "ability-item-search-select",
-		minimumResultsForSearch: 0
-	});
+	initializeAbilityItemSearchSelects();
+	bindAbilityItemSearchRefresh();
 	$("select.move-selector").select2({
 		dropdownAutoWidth: true,
 		matcher: function (term, text) {

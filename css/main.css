@@ -874,6 +874,50 @@ body.layout-simplified .simplified-side-control-label select {
     min-width: 8.4em;
 }
 
+body.layout-simplified .simplified-ability-item-search-select.select2-container {
+    width: 8.4em !important;
+    min-width: 8.4em;
+    max-width: 11em;
+    font-size: 0.92em;
+}
+
+body.layout-simplified .simplified-ability-item-search-select.select2-container .select2-choice {
+    height: 18px;
+    padding: 0 20px 0 4px;
+    line-height: 18px;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+body.layout-simplified .simplified-ability-item-search-select.select2-container .select2-choice .select2-arrow {
+    width: 18px;
+    background: transparent;
+    border-left: none;
+}
+
+body.layout-simplified .simplified-ability-item-search-select.select2-container .select2-choice .select2-arrow b {
+    background-position: 0 -4px;
+}
+
+body.layout-simplified .simplified-ability-item-search-select.select2-dropdown-open .select2-choice .select2-arrow b {
+    background-position: -18px -4px;
+}
+
+body.layout-simplified .simplified-side-item-sprite {
+    display: inline-block;
+    flex: 0 0 24px;
+    width: 24px !important;
+    height: 24px;
+    margin: 0;
+    background-image: url('https://play.pokemonshowdown.com/sprites/itemicons-sheet.png');
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+}
+
+body.layout-simplified .simplified-side-item-sprite.is-empty {
+    visibility: hidden;
+}
+
 .simplified-side-control-label.simplified-side-nature-wrap select {
     min-width: 8.8em;
 }

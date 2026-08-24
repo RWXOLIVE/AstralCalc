@@ -131,6 +131,25 @@ function performCalculations() {
 	table.rows.add(dataSet).draw();
 }
 
+// Honkalculate has its own result table, so it needs the same deferred refresh
+// contract as the head-to-head calculator. This keeps Select2, set loading,
+// and normal input edits from rendering a result for an earlier state.
+var honkalculateRefreshReady = false;
+var honkalculateRefreshPending = false;
+var honkalculateRefreshTimer = null;
+function requestCalculationRefresh() {
+	honkalculateRefreshPending = true;
+	if (honkalculateRefreshTimer !== null) return;
+	honkalculateRefreshTimer = window.setTimeout(flushHonkalculateCalculationRefresh, 0);
+}
+
+function flushHonkalculateCalculationRefresh() {
+	honkalculateRefreshTimer = null;
+	if (!honkalculateRefreshPending || !honkalculateRefreshReady || window.NO_CALC) return;
+	honkalculateRefreshPending = false;
+	performCalculations();
+}
+
 function getSelectedTiers() {
 	var selectedTiers = $('.tiers input:checked').map(function () {
 		return this.id;
@@ -338,6 +357,11 @@ $(document).ready(function () {
 	calcDTDimensions();
 	constructDataTable();
 	placeBsBtn();
+	honkalculateRefreshReady = true;
+	$(document)
+		.off("change.honkalculatecalculation input.honkalculatecalculation", "#p1 input, #p1 select, .field-info input, .field-info select, .tiers input")
+		.on("change.honkalculatecalculation input.honkalculatecalculation", "#p1 input, #p1 select, .field-info input, .field-info select, .tiers input", requestCalculationRefresh);
+	requestCalculationRefresh();
 });
 
 function calcDTDimensions() {

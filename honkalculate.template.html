@@ -8,7 +8,7 @@
     <link type="text/css" rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css" />
     <link type="text/css" rel="stylesheet" href="https://cdn.datatables.net/colvis/1.1.1/css/dataTables.colVis.css" />
     <link type="text/css" rel="stylesheet" href="./js/vendor/select2/select2.css" />
-    <link type="text/css" rel="stylesheet" href="./css/main.css?" />
+    <link type="text/css" rel="stylesheet" href="./css/main.css?item-sprites-v4" />
     <link type="text/css" rel="stylesheet" href="./css/dark-theme.css" id="dark-theme-styles">
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-26211653-3"></script>
@@ -402,7 +402,7 @@
                         </div>
                         <div class="gen-specific g3 g4 g5 g6 g7 g8 g9">
                             <label>Ability</label>
-                            <select class="ability terrain-trigger"></select>
+                            <select class="ability terrain-trigger calc-trigger"></select>
                             <select aria-label="Protosynthesis/Quark Drive state" class="proto-quark-state calc-trigger hide">
                                 <option value="auto" selected="selected">Auto-Select</option>
                                 <option value="inactive">Inactive</option>
@@ -422,9 +422,10 @@
 										  <option value="5">Five allies fainted</option>
 									 </select>
                         </div>
-                        <div class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
+                        <div class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9 item-row">
                             <label>Item</label>
-                            <select class="item terrain-trigger"></select>
+                            <span class="item-sprite is-empty" aria-hidden="true"></span>
+                            <select class="item terrain-trigger calc-trigger"></select>
                         </div>
                         <div>
                             <label>Status</label>
@@ -943,8 +944,9 @@
     <script type="text/javascript" src="./calc/index.js?"></script>
     <script type="text/javascript" src="./js/spritedata.js?"></script>
     <script type="text/javascript" src="./js/data/move_info_lookup.js?"></script>
-    <script type="text/javascript" src="./js/shared_controls.js?6003efc3"></script>
-    <script type="text/javascript" src="./js/honkalculate_controls.js?"></script>
+    <script type="text/javascript" src="./js/item_sprites.js?item-sprites-v2"></script>
+    <script type="text/javascript" src="./js/shared_controls.js?ability-item-search-sync-v1"></script>
+    <script type="text/javascript" src="./js/honkalculate_controls.js?honkalculate-refresh-v1"></script>
 
     <div style="clear:both;padding:20px;text-align:left">Created by Honko, maintained by Austin and Kris
         <ul><li><a href="https://github.com/smogon/damage-calc/contributors" class="links-lighten" target="_blank">Contributors</a></li>

@@ -605,13 +605,15 @@ label:not(.btn) {
     background-image: none;
 }
 
-.ability-item-search-select.select2-container .select2-choice {
+.ability-item-search-select.select2-container .select2-choice,
+.simplified-ability-item-search-select.select2-container .select2-choice {
     background: var(--background);
     background-image: none;
     color: var(--text);
 }
 
-.ability-item-search-select.select2-dropdown-open .select2-choice {
+.ability-item-search-select.select2-dropdown-open .select2-choice,
+.simplified-ability-item-search-select.select2-dropdown-open .select2-choice {
     background-image: none;
 }
 
