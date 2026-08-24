@@ -1869,6 +1869,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Raging Bull","Trailblaze","Aqua Jet","Close Combat"]
+        },
+        "Team Aqua Grunt #1 | Seafloor Cavern": {
+            "index": "0000000938",
+            "Weather": "Fog",
+            "level": 79,
+            "ability": "Intimidate",
+            "item": "Assault Vest",
+            "nature": "Careful",
+            "teraType": "Fighting",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Earthquake","Raging Bull","Stone Edge","Close Combat"]
         }
     },
     "Riolu": {
@@ -2259,6 +2272,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Blizzard","Freeze-Dry"]
+        },
+        "Team Aqua Grunt #3 | Seafloor Cavern": {
+            "index": "0000000944",
+            "level": 78,
+            "ability": "Snow Warning",
+            "item": "Focus Band",
+            "nature": "Timid",
+            "teraType": "Ice",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Blizzard","Scald","Aura Sphere","Freeze-Dry"]
         }
     },
     "Empoleon": {
@@ -2531,6 +2556,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Screech","Uproar","Drum Beating","Aerial Ace"]
+        },
+        "Team Aqua Grunt #4 | Seafloor Cavern": {
+            "index": "0000000952",
+            "Weather": "Rain",
+            "level": 79,
+            "ability": "Punk Rock",
+            "item": "Assault Vest",
+            "nature": "Jolly",
+            "teraType": "Grass",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Uproar","Drum Beating","Wood Hammer","Low Kick"]
         }
     },
     "Roserade": {
@@ -2737,6 +2775,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Night Slash","Psycho Cut","Shadow Claw","Swords Dance"]
+        },
+        "Team Aqua Grunt #2 | Seafloor Cavern": {
+            "index": "0000000939",
+            "Weather": "Fog",
+            "level": 78,
+            "ability": "Super Luck",
+            "item": "Scope Lens",
+            "nature": "Adamant",
+            "teraType": "Dark",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Night Slash","Psycho Cut","Shadow Claw","Substitute"]
         }
     },
     "Drampa": {
@@ -2803,6 +2854,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Aqua Tail"]
+        },
+        "Team Aqua Grunt #1 | Seafloor Cavern": {
+            "index": "0000000935",
+            "Weather": "Fog",
+            "level": 78,
+            "ability": "Defiant",
+            "item": "Quick Claw",
+            "nature": "Adamant",
+            "teraType": "Water",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Curse","Ice Punch","Waterfall","Earthquake"]
         }
     },
     "Snorlax": {
@@ -2830,7 +2894,7 @@ var SETDEX_SV = {
         },
     "Picnicker Becky | Route 111": {
             "index": "0000000429",
-            "level": 53,
+            "level": 52,
             "ability": "Gluttony",
             "item": "Iapapa Berry",
             "nature": "Adamant",
@@ -3305,7 +3369,7 @@ var SETDEX_SV = {
             "moves": ["Swords Dance","Brave Bird","Flare Blitz","Roost"]
         },
         "Team Magma Grunt #15 | Magma Hideout": {
-            "index": "0000000912",
+            "index": "0000000915",
             "Weather": "Sun",
             "level": 79,
             "ability": "Flame Body",
@@ -3866,7 +3930,7 @@ var SETDEX_SV = {
             "moves": ["Sleep Powder","Solar Beam","Sludge Bomb","Synthesis"]
         },
         "Team Magma Scientist Blaine | Magma Hideout": {
-            "index": "0000000920",
+            "index": "0000000923",
             "Weather": "Sun",
             "level": 81,
             "ability": "Chlorophyll",
@@ -4092,6 +4156,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Dragon Dance","Icicle Spear","Hydro Pump","Megahorn"]
+        },
+        "Team Aqua Grunt #3 | Seafloor Cavern": {
+            "index": "0000000947",
+            "level": 79,
+            "ability": "Shell Armor",
+            "item": "Clear Amulet",
+            "nature": "Impish",
+            "teraType": "Water",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Dragon Dance","Liquidation","Icicle Crash","Zen Headbutt"]
         }
     },
     "Dusknoir": {
@@ -5311,6 +5387,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Protect","Perish Song","Helping Hand","Muddy Water"]
+        },
+        "Team Aqua Grunt #4 | Seafloor Cavern": {
+            "index": "0000000949",
+            "Weather": "Rain",
+            "level": 79,
+            "ability": "Drizzle",
+            "item": "Wacan Berry",
+            "nature": "Bold",
+            "teraType": "Water",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Icy Wind","Scald","Earth Power","Hypnosis"]
         }
     },
     "Gothitelle": {
@@ -5469,7 +5558,7 @@ var SETDEX_SV = {
     },
     "Eelektross": {
     "Team Magma Grunt #15 | Magma Hideout": {
-            "index": "0000000913",
+            "index": "0000000916",
             "Weather": "Sun",
             "level": 78,
             "ability": "Levitate",
@@ -5642,6 +5731,21 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Destiny Bond","Acrobatics","Strength Sap","Phantom Force"]
+        },
+        "Team Magma Grunt #14 | Magma Hideout": {
+            "index": "0000000914",
+            "Weather": "Sun",
+            "level": 78,
+            "ability": "Unburden",
+            "item": "Sitrus Berry",
+            "nature": "Hasty",
+            "setdouble": "True",
+            "setdoubleGroup": "magma-hideout-grunts-14-15",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Acrobatics","Shadow Ball","Strength Sap","Temper Flare"]
         }
     },
     "Wugtrio": {
@@ -6291,6 +6395,19 @@ var SETDEX_SV = {
             "ability": "Strong Jaw",
             "item": "Choice Scarf",
             "nature": "Adamant",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Fishious Rend"]
+        },
+        "Team Aqua Grunt #2 | Seafloor Cavern": {
+            "index": "0000000941",
+            "Weather": "Fog",
+            "level": 78,
+            "ability": "Water Absorb",
+            "item": "Choice Scarf",
+            "nature": "Jolly",
+            "teraType": "Water",
             "ivs": {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
@@ -7495,7 +7612,7 @@ var SETDEX_SV = {
             "moves": ["Flare Blitz","Close Combat","Head Smash","Wild Charge"]
         },
         "Team Magma Leader Maxie | Magma Hideout": {
-            "index": "0000000928",
+            "index": "0000000931",
             "Weather": "Sun",
             "level": 80,
             "ability": "Heated Rush",
@@ -7648,6 +7765,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Tailwind","Electro Ball","Volt Switch","Air Slash"]
+        },
+        "Team Aqua Grunt #4 | Seafloor Cavern": {
+            "index": "0000000951",
+            "Weather": "Rain",
+            "level": 78,
+            "ability": "Wind Power",
+            "item": "Wise Glasses",
+            "nature": "Timid",
+            "teraType": "Electric",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Nasty Plot","Weather Ball","Discharge","Hurricane"]
         }
     },
     "Durant": {
@@ -8451,7 +8581,7 @@ var SETDEX_SV = {
             "moves": ["Rapid Spin","Close Combat","Headlong Rush","Throat Chop"]
         },
         "Team Magma Scientist Blaine | Magma Hideout": {
-            "index": "0000000921",
+            "index": "0000000924",
             "Weather": "Sun",
             "level": 80,
             "ability": "Protosynthesis",
@@ -9396,7 +9526,7 @@ var SETDEX_SV = {
             "moves": ["Reflect","Light Screen","U-turn","Psychic"]
         },
         "Team Magma Admin Tabitha | Magma Hideout": {
-            "index": "0000000917",
+            "index": "0000000920",
             "Weather": "Sun",
             "level": 81,
             "ability": "Chlorophyll",
@@ -9654,6 +9784,21 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["High Horsepower","Knock Off","Fire Fang","Helping Hand"]
+        },
+        "Team Magma Grunt #14 | Magma Hideout": {
+            "index": "0000000913",
+            "Weather": "Sun",
+            "level": 78,
+            "ability": "Sturdy",
+            "item": "Custap Berry",
+            "nature": "Jolly",
+            "setdouble": "True",
+            "setdoubleGroup": "magma-hideout-grunts-14-15",
+            "setdoubleSide": 1,
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Earthquake","Stone Edge","Endeavor","Knock Off"]
         }
     },
     "Bellossom": {
@@ -9861,6 +10006,18 @@ var SETDEX_SV = {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
         },
         "moves": ["Iron Defense","Liquidation","Leech Life","Infestation"]
+    },
+    "Team Aqua Grunt #3 | Seafloor Cavern": {
+        "index": "0000000945",
+        "level": 79,
+        "ability": "Water Bubble",
+        "item": "Mystic Water",
+        "nature": "Relaxed",
+        "teraType": "Water",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Mirror Coat","Whirlpool","Liquidation","X-Scissor"]
     }
     },
     "Mantine": {
@@ -10330,6 +10487,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Bulk Up","Trailblaze","Icicle Spear","Earthquake"]
+        },
+        "Team Aqua Grunt #2 | Seafloor Cavern": {
+            "index": "0000000943",
+            "Weather": "Fog",
+            "level": 79,
+            "ability": "Thick Fat",
+            "item": "Focus Sash",
+            "nature": "Jolly",
+            "teraType": "Ice",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Earthquake","Ice Shard","Mountain Gale","Trailblaze"]
         }
     },
     "Gabite": {
@@ -10482,7 +10652,7 @@ var SETDEX_SV = {
             "moves": ["Sandsear Storm","Dragon Pulse","Vacuum Wave","Bug Buzz"]
         },
         "Team Magma Admin Tabitha | Magma Hideout": {
-            "index": "0000000915",
+            "index": "0000000918",
             "Weather": "Sun",
             "level": 80,
             "ability": "Tinted Lens",
@@ -10664,7 +10834,7 @@ var SETDEX_SV = {
             "moves": ["First Impression","Flame Charge","Flash Cannon","Heat Wave"]
         },
         "Team Magma Leader Maxie | Magma Hideout": {
-            "index": "0000000929",
+            "index": "0000000932",
             "Weather": "Sun",
             "level": 82,
             "ability": "Flame Body",
@@ -11170,6 +11340,19 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Protect","Muddy Water","Earth Power","Toxic"]
+        },
+        "Team Aqua Grunt #2 | Seafloor Cavern": {
+            "index": "0000000940",
+            "Weather": "Fog",
+            "level": 79,
+            "ability": "Clear Body",
+            "item": "Black Sludge",
+            "nature": "Timid",
+            "teraType": "Water",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Nasty Plot","Scald","Sludge Bomb","HP Ground"]
         }
     },
     "Sharpedo": {
@@ -11539,7 +11722,7 @@ var SETDEX_SV = {
             "moves": ["Whirlpool","Fly","Roost","Thunder Wave"]
         },
         "Team Magma Leader Maxie | Magma Hideout": {
-            "index": "0000000925",
+            "index": "0000000928",
             "Weather": "Sun",
             "level": 80,
             "ability": "Multiscale",
@@ -12085,7 +12268,7 @@ var SETDEX_SV = {
         "moves": ["Air Slash","Solar Beam","Flamethrower","Protect"]
     },
     "Team Magma Scientist Blaine | Magma Hideout": {
-        "index": "0000000918",
+        "index": "0000000921",
         "Weather": "Sun",
         "level": 82,
         "ability": "Drought",
@@ -12671,7 +12854,7 @@ var SETDEX_SV = {
 },
 "Flareon": {
     "Team Magma Admin Tabitha | Magma Hideout": {
-        "index": "0000000914",
+        "index": "0000000917",
         "Weather": "Sun",
         "level": 80,
         "ability": "Drought",
@@ -12689,7 +12872,7 @@ var SETDEX_SV = {
 },
 "Gengar-Mega": {
     "Team Magma Admin Tabitha | Magma Hideout": {
-        "index": "0000000916",
+        "index": "0000000919",
         "Weather": "Sun",
         "level": 80,
         "ability": "Cursed Body",
@@ -12703,7 +12886,7 @@ var SETDEX_SV = {
 },
 "Walking Wake": {
     "Team Magma Scientist Blaine | Magma Hideout": {
-        "index": "0000000919",
+        "index": "0000000922",
         "Weather": "Sun",
         "level": 80,
         "ability": "Protosynthesis",
@@ -12717,7 +12900,7 @@ var SETDEX_SV = {
 },
 "Roaring Moon": {
     "Team Magma Scientist Blaine | Magma Hideout": {
-        "index": "0000000922",
+        "index": "0000000925",
         "Weather": "Sun",
         "level": 80,
         "ability": "Protosynthesis",
@@ -12731,7 +12914,7 @@ var SETDEX_SV = {
 },
 "Mewtwo": {
     "Team Magma Scientist Blaine | Magma Hideout": {
-        "index": "0000000923",
+        "index": "0000000926",
         "Weather": "Sun",
         "level": 81,
         "ability": "Pressure",
@@ -12745,7 +12928,7 @@ var SETDEX_SV = {
 },
 "Groudon": {
     "Team Magma Leader Maxie | Magma Hideout": {
-        "index": "0000000924",
+        "index": "0000000927",
         "Weather": "Sun",
         "level": 81,
         "ability": "Drought",
@@ -12759,7 +12942,7 @@ var SETDEX_SV = {
 },
 "Flutter Mane": {
     "Team Magma Leader Maxie | Magma Hideout": {
-        "index": "0000000926",
+        "index": "0000000929",
         "Weather": "Sun",
         "level": 80,
         "ability": "Protosynthesis",
@@ -12773,7 +12956,7 @@ var SETDEX_SV = {
 },
 "Hoopa-Unbound": {
     "Team Magma Leader Maxie | Magma Hideout": {
-        "index": "0000000927",
+        "index": "0000000930",
         "Weather": "Sun",
         "level": 80,
         "ability": "Magic Guard",
@@ -12783,6 +12966,124 @@ var SETDEX_SV = {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
         },
         "moves": ["Sucker Punch","Hyperspace Hole","Fire Punch","Dark Pulse"]
+    }
+},
+"Porygon-Z": {
+    "Team Aqua Grunt #1 | Seafloor Cavern": {
+        "index": "0000000933",
+        "Weather": "Fog",
+        "level": 79,
+        "ability": "Analytic",
+        "item": "Normal Gem",
+        "nature": "Timid",
+        "teraType": "Normal",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Weather Ball","Shadow Ball","Psychic","Ice Beam"]
+    }
+},
+"Swanna": {
+    "Team Aqua Grunt #1 | Seafloor Cavern": {
+        "index": "0000000934",
+        "Weather": "Fog",
+        "level": 78,
+        "ability": "No Guard",
+        "item": "Wacan Berry",
+        "nature": "Modest",
+        "teraType": "Water",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Hurricane","Hydro Pump","Blizzard","Quiver Dance"]
+    }
+},
+"Baxcalibur": {
+    "Team Aqua Grunt #1 | Seafloor Cavern": {
+        "index": "0000000936",
+        "Weather": "Fog",
+        "level": 79,
+        "ability": "Thermal Exchange",
+        "item": "Loaded Dice",
+        "teraType": "Dragon",
+        "nature": "Adamant",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Swords Dance","Scale Shot","Icicle Spear","Iron Head"]
+    }
+},
+"Zoroark-Hisui": {
+    "Team Aqua Grunt #1 | Seafloor Cavern": {
+        "index": "0000000937",
+        "Weather": "Fog",
+        "level": 78,
+        "ability": "Illusion",
+        "item": "Focus Sash",
+        "nature": "Timid",
+        "teraType": "Normal",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Weather Ball","Bitter Malice","Sludge Bomb","Flamethrower"]
+    }
+},
+"Rapidash-Galar": {
+    "Team Aqua Grunt #2 | Seafloor Cavern": {
+        "index": "0000000942",
+        "Weather": "Fog",
+        "level": 78,
+        "ability": "Run Away",
+        "item": "Life Orb",
+        "nature": "Jolly",
+        "teraType": "Psychic",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Play Rough","Zen Headbutt","High Horsepower","Swords Dance"]
+    }
+},
+"Rotom-Frost": {
+    "Team Aqua Grunt #3 | Seafloor Cavern": {
+        "index": "0000000946",
+        "level": 78,
+        "ability": "Levitate",
+        "item": "Assault Vest",
+        "nature": "Bold",
+        "teraType": "Electric",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Blizzard","Thunderbolt","Icy Wind","Parabolic Charge"]
+    }
+},
+"Gholdengo": {
+    "Team Aqua Grunt #3 | Seafloor Cavern": {
+        "index": "0000000948",
+        "level": 78,
+        "ability": "Good as Gold",
+        "item": "Occa Berry",
+        "nature": "Timid",
+        "teraType": "Steel",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Nasty Plot","Dazzling Gleam","Make It Rain","Shadow Ball"]
+    }
+},
+"Qwilfish-Hisui": {
+    "Team Aqua Grunt #4 | Seafloor Cavern": {
+        "index": "0000000950",
+        "Weather": "Rain",
+        "level": 78,
+        "ability": "Swift Swim",
+        "item": "Eviolite",
+        "nature": "Jolly",
+        "teraType": "Dark",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Swords Dance","Barb Barrage","Wave Crash","Lash Out"]
     }
 },
 };
