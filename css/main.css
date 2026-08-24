@@ -1805,6 +1805,10 @@ table.field {
     background-position: -18px -4px;
 }
 
+.ability-item-search-select.select2-container {
+    margin-left: 0.25em;
+}
+
 .ability-item-search-select.select2-container .select2-choice {
     height: 18px;
     line-height: 18px;

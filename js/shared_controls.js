@@ -12653,6 +12653,13 @@ $(document).ready(function () {
 	syncSettingsPanelUi();
 	syncFragRoster();
 	renderFragSheet();
+	$("select.ability, select.item").select2({
+		// Match the 12em width used by the other info selectors, while adding
+		// Select2's built-in searchable dropdown.
+		width: "12em",
+		containerCssClass: "ability-item-search-select",
+		minimumResultsForSearch: 0
+	});
 	$("select.move-selector").select2({
 		dropdownAutoWidth: true,
 		matcher: function (term, text) {
