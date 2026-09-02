@@ -295,7 +295,7 @@ body.switch-in-enabled .trainer-pok.right-side.trainer-party-leading {
 
 .wrapper {
     padding: 0 1em;
-    max-width: 1285px;
+    max-width: 1360px;
     margin: 0 auto;
     box-sizing: border-box;
     transition: width 140ms ease-in-out;
@@ -1718,6 +1718,184 @@ select.toxic-counter {
 /* field info */
 .field-info .btn {
     font-size: 0.8em;
+}
+
+/* Make the three damage-reduction screens identifiable at a glance. */
+.field-info #reflectL:checked + label.btn,
+.field-info #reflectR:checked + label.btn {
+    color: #421520;
+    background: linear-gradient(135deg, #ffd6df, #ef7894);
+    border-color: #bd4562;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 0 0 1px rgba(189, 69, 98, 0.28);
+}
+
+.field-info #lightScreenL:checked + label.btn,
+.field-info #lightScreenR:checked + label.btn {
+    color: #4d3000;
+    background: linear-gradient(135deg, #fff0b8, #f2bb54);
+    border-color: #bd7d1d;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78), 0 0 0 1px rgba(189, 125, 29, 0.28);
+}
+
+.field-info #auroraVeilL:checked + label.btn,
+.field-info #auroraVeilR:checked + label.btn {
+    color: #172a57;
+    background: linear-gradient(135deg, #bff8f2, #b8abff 55%, #f0c9ff);
+    border-color: #6f70cc;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 0 1px rgba(111, 112, 204, 0.3);
+}
+
+.field-info #srL:checked + label.btn,
+.field-info #srR:checked + label.btn {
+    color: #332318;
+    background: linear-gradient(135deg, #ead4b1, #a9754b);
+    border-color: #775033;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62), 0 0 0 1px rgba(119, 80, 51, 0.28);
+}
+
+.field-info #gscSpikesL:checked + label.btn,
+.field-info #gscSpikesR:checked + label.btn,
+.field-info #spikesL1:checked + label.btn,
+.field-info #spikesR1:checked + label.btn {
+    color: #39250e;
+    background: linear-gradient(135deg, #f0dcaa, #c79a50);
+    border-color: #986f2f;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62), 0 0 0 1px rgba(152, 111, 47, 0.28);
+}
+
+.field-info #spikesL2:checked + label.btn,
+.field-info #spikesR2:checked + label.btn {
+    color: #ffffff;
+    background: linear-gradient(135deg, #d39d48, #925d25);
+    border-color: #70431b;
+    box-shadow: inset 0 1px 0 rgba(255, 239, 191, 0.28), 0 0 0 1px rgba(112, 67, 27, 0.34);
+}
+
+.field-info #spikesL3:checked + label.btn,
+.field-info #spikesR3:checked + label.btn {
+    color: #ffffff;
+    background: linear-gradient(135deg, #ae6828, #633617);
+    border-color: #4a2710;
+    box-shadow: inset 0 1px 0 rgba(255, 220, 160, 0.2), 0 0 0 1px rgba(74, 39, 16, 0.38);
+}
+
+.field-info #steelsurgeL:checked + label.btn,
+.field-info #steelsurgeR:checked + label.btn {
+    color: #162b37;
+    background: linear-gradient(135deg, #d7edf4, #7fa9b9);
+    border-color: #537b8b;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 0 0 1px rgba(83, 123, 139, 0.3);
+}
+
+.field-info #magmaStormL:checked + label.btn,
+.field-info #magmaStormR:checked + label.btn {
+    color: #ffffff;
+    background: linear-gradient(135deg, #f29b43, #c84624 56%, #741d1d);
+    border-color: #8e3021;
+    box-shadow: inset 0 1px 0 rgba(255, 231, 189, 0.45), 0 0 0 1px rgba(142, 48, 33, 0.36);
+}
+
+.field-info #leechSeedL:checked + label.btn,
+.field-info #leechSeedR:checked + label.btn {
+    color: #173519;
+    background: linear-gradient(135deg, #d3f0af, #75b65a);
+    border-color: #4e843d;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 0 0 1px rgba(78, 132, 61, 0.3);
+}
+
+.field-info #tailwindL:checked + label.btn,
+.field-info #tailwindR:checked + label.btn {
+    color: #14334b;
+    background: linear-gradient(135deg, #c9efff, #6ab9df);
+    border-color: #448eb6;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.76), 0 0 0 1px rgba(68, 142, 182, 0.3);
+}
+
+.field-info #magicroom:checked + label.btn {
+    color: #2d1749;
+    background: linear-gradient(135deg, #e4c9ff, #a875d1);
+    border-color: #75479f;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 0 0 1px rgba(117, 71, 159, 0.3);
+}
+
+.field-info #trickroom:checked + label.btn {
+    color: #4b1231;
+    background: linear-gradient(135deg, #ffc4df, #ed6ca9 56%, #c83d7d);
+    border-color: #a92e64;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.68), 0 0 0 1px rgba(169, 46, 100, 0.34);
+}
+
+.field-info #wonderroom:checked + label.btn {
+    color: #123d4b;
+    background: linear-gradient(135deg, #c5f5f2, #79c8cf 55%, #a7a5ef);
+    border-color: #548e9a;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.76), 0 0 0 1px rgba(84, 142, 154, 0.3);
+}
+
+.field-info #gravity:checked + label.btn {
+    color: #ffffff;
+    background: linear-gradient(135deg, #66778e, #343d52);
+    border-color: #252c3d;
+    box-shadow: inset 0 1px 0 rgba(218, 229, 245, 0.28), 0 0 0 1px rgba(37, 44, 61, 0.36);
+}
+
+/* Ally effects and side conditions use distinct, thematic active states. */
+.field-info #helpingHandL:checked + label.btn,
+.field-info #helpingHandR:checked + label.btn,
+.field-info #friendGuardL:checked + label.btn,
+.field-info #friendGuardR:checked + label.btn {
+    color: #263746;
+    background: linear-gradient(135deg, #ffffff, #d9e3eb);
+    border-color: #aabac8;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 0 0 1px rgba(115, 135, 152, 0.26);
+}
+
+.field-info #batteryL:checked + label.btn,
+.field-info #batteryR:checked + label.btn {
+    color: #4c3900;
+    background: linear-gradient(135deg, #fff9c9, #f2ce45);
+    border-color: #c79c21;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82), 0 0 0 1px rgba(199, 156, 33, 0.3);
+}
+
+.field-info #foresightL:checked + label.btn,
+.field-info #foresightR:checked + label.btn {
+    color: #352044;
+    background: linear-gradient(135deg, #e7dcf1, #9b76b4);
+    border-color: #74528e;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 0 0 1px rgba(116, 82, 142, 0.3);
+}
+
+.field-info #flowerGiftL:checked + label.btn,
+.field-info #flowerGiftR:checked + label.btn {
+    color: #493020;
+    background: linear-gradient(135deg, #fff2ad 0%, #ffd0c9 33%, #d6efc3 66%, #ffd8a6 100%);
+    border-color: #c98d6b;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.76), 0 0 0 1px rgba(201, 141, 107, 0.3);
+}
+
+.field-info #switchingL:checked + label.btn,
+.field-info #switchingR:checked + label.btn {
+    color: #ffffff;
+    background: linear-gradient(135deg, #727d89, #30363e);
+    border-color: #22282f;
+    box-shadow: inset 0 1px 0 rgba(225, 231, 237, 0.28), 0 0 0 1px rgba(34, 40, 47, 0.38);
+}
+
+.field-info #groundedL:checked + label.btn,
+.field-info #groundedR:checked + label.btn {
+    color: #39250e;
+    background: linear-gradient(135deg, #f0dcaa, #c79a50);
+    border-color: #986f2f;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62), 0 0 0 1px rgba(152, 111, 47, 0.28);
+}
+
+.field-info #powerSpotL:checked + label.btn,
+.field-info #powerSpotR:checked + label.btn {
+    color: #412b1a;
+    background: linear-gradient(135deg, #f1d8ad, #bd8755);
+    border-color: #8b6039;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.66), 0 0 0 1px rgba(139, 96, 57, 0.3);
 }
 
 .field-info {

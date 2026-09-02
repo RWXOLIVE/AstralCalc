@@ -783,7 +783,7 @@ function calculateBPModsSMSSSV(gen, attacker, defender, move, field, desc, baseP
         bpMods.push(6144);
         desc.moveBP = basePower * 1.5;
     }
-    else if (move.named('Solar Beam', 'Solar Blade') &&
+    else if (!attacker.hasAbility('Mega Sol') && move.named('Solar Beam', 'Solar Blade') &&
         field.hasWeather('Rain', 'Heavy Rain', 'Sand', 'Hail', 'Snow', 'Fog')) {
         bpMods.push(2048);
         desc.moveBP = basePower / 2;

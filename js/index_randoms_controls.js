@@ -73,14 +73,61 @@ function applyLayoutMode(layoutMode) {
 	}
 }
 
-function getFastestSide(p1, p2, field) {
-	if (p1.stats.spe === p2.stats.spe) {
+function getEffectiveTurnOrderSpeeds(p1, p2, field) {
+	var fallbackSpeeds = {
+		p1: p1 && p1.stats ? p1.stats.spe : 0,
+		p2: p2 && p2.stats ? p2.stats.spe : 0
+	};
+	if (!p1 || !p2 || !field || typeof calc === "undefined" ||
+		typeof calc.getFinalSpeed !== "function" || typeof GENERATION === "undefined" || !GENERATION ||
+		typeof p1.clone !== "function" || typeof p2.clone !== "function" || typeof field.clone !== "function") {
+		return fallbackSpeeds;
+	}
+
+	try {
+		// Final speed depends on field effects and a few pre-calculation checks.
+		// Work with clones so the display never mutates the actual battle state.
+		var speedP1 = p1.clone();
+		var speedP2 = p2.clone();
+		var speedField = field.clone();
+		if (typeof calc.checkAirLock === "function") {
+			calc.checkAirLock(speedP1, speedField);
+			calc.checkAirLock(speedP2, speedField);
+		}
+		if (typeof calc.checkTeraformZero === "function") {
+			calc.checkTeraformZero(speedP1, speedField);
+			calc.checkTeraformZero(speedP2, speedField);
+		}
+		if (typeof calc.checkItem === "function") {
+			calc.checkItem(speedP1, speedField.isMagicRoom);
+			calc.checkItem(speedP2, speedField.isMagicRoom);
+		}
+		return {
+			p1: calc.getFinalSpeed(GENERATION, speedP1, speedField, speedField.attackerSide),
+			p2: calc.getFinalSpeed(GENERATION, speedP2, speedField, speedField.defenderSide)
+		};
+	} catch (err) {
+		console.warn("Unable to calculate effective speeds for turn order.", err);
+		return fallbackSpeeds;
+	}
+}
+
+function syncDisplayedTurnOrderSpeeds(p1info, p2info, p1, p2, field) {
+	var speeds = getEffectiveTurnOrderSpeeds(p1, p2, field);
+	p1info.find(".sp .totalMod").text(speeds.p1);
+	p2info.find(".sp .totalMod").text(speeds.p2);
+	return speeds;
+}
+
+function getFastestSide(p1, p2, field, speeds) {
+	speeds = speeds || getEffectiveTurnOrderSpeeds(p1, p2, field);
+	if (speeds.p1 === speeds.p2) {
 		return "tie";
 	}
 	if (field.isTrickRoom) {
-		return p1.stats.spe < p2.stats.spe ? 0 : 1;
+		return speeds.p1 < speeds.p2 ? 0 : 1;
 	}
-	return p1.stats.spe > p2.stats.spe ? 0 : 1;
+	return speeds.p1 > speeds.p2 ? 0 : 1;
 }
 
 function getSpeedState(p1s, p2s, field) {
@@ -93,14 +140,14 @@ function getSpeedState(p1s, p2s, field) {
 	return p1s > p2s ? "F" : "S";
 }
 
-function updateSpeedClasses(p1info, p2info, p1, p2, field) {
+function updateSpeedClasses(p1info, p2info, p1, p2, field, speeds) {
 	var p1Speed = p1info.find(".sp .totalMod");
 	var p2Speed = p2info.find(".sp .totalMod");
 	var speedClasses = "speed-faster speed-slower speed-tie";
 	p1Speed.removeClass(speedClasses);
 	p2Speed.removeClass(speedClasses);
 
-	var fastestSide = getFastestSide(p1, p2, field);
+	var fastestSide = getFastestSide(p1, p2, field, speeds);
 	if (fastestSide === "tie") {
 		p1Speed.addClass("speed-tie");
 		p2Speed.addClass("speed-tie");
@@ -1317,7 +1364,8 @@ function performCalculations() {
 	// Keep displayed modified stats in sync even if damage calc fails.
 	syncDisplayedModifiedStats(p1info, p1, false);
 	syncDisplayedModifiedStats(p2info, p2, false);
-	updateSpeedClasses(p1info, p2info, p1, p2, p1field);
+	var turnOrderSpeeds = syncDisplayedTurnOrderSpeeds(p1info, p2info, p1, p2, p1field);
+	updateSpeedClasses(p1info, p2info, p1, p2, p1field, turnOrderSpeeds);
 	renderSideSupplementalDisplays("#p1", p1, p2, p1field);
 	renderSideSupplementalDisplays("#p2", p2, p1, p2field);
 
@@ -1335,8 +1383,9 @@ function performCalculations() {
 	p2.maxDamages = [];
 	syncDisplayedModifiedStats(p1info, p1, true);
 	syncDisplayedModifiedStats(p2info, p2, true);
-	updateSpeedClasses(p1info, p2info, p1, p2, p1field);
-	var fastestSide = getFastestSide(p1, p2, p1field);
+	turnOrderSpeeds = syncDisplayedTurnOrderSpeeds(p1info, p2info, p1, p2, p1field);
+	updateSpeedClasses(p1info, p2info, p1, p2, p1field, turnOrderSpeeds);
+	var fastestSide = getFastestSide(p1, p2, p1field, turnOrderSpeeds);
 
 	var result, maxDamage;
 	var bestResult;
@@ -1414,8 +1463,9 @@ function calculationsColors(p1info, p2) {
 	p2 = damageResults[1][0].attacker;
 	p1.maxDamages = [];
 	p2.maxDamages = [];
-	var p1s = p1.stats.spe;
-	var p2s = p2.stats.spe;
+	var turnOrderSpeeds = getEffectiveTurnOrderSpeeds(p1, p2, p1field);
+	var p1s = turnOrderSpeeds.p1;
+	var p2s = turnOrderSpeeds.p2;
 	//Faster Tied Slower
 	var fastest = getSpeedState(p1s, p2s, p1field);
 	var result, highestRoll, lowestRoll, damage = 0;

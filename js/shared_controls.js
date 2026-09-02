@@ -297,6 +297,15 @@ function applySetPreHp(poke, set) {
 	poke.find(".current-hp").val(prehp);
 	calcPercentHP(poke, max, prehp);
 }
+function applySetPreDamage(poke, set) {
+	if (!set || typeof set.PreDamage === "undefined" || set.PreDamage === null || set.PreDamage === "") return;
+	var max = parseInt(poke.find(".max-hp").text(), 10);
+	var preDamage = parseInt(set.PreDamage, 10);
+	if (Number.isNaN(max) || max <= 0 || Number.isNaN(preDamage)) return;
+	var currentHp = Math.max(0, Math.min(max, max - preDamage));
+	poke.find(".current-hp").val(currentHp);
+	calcPercentHP(poke, max, currentHp);
+}
 function normalizeSetStatusValue(value) {
 	if (typeof value === "undefined" || value === null) return "";
 	var normalized = String(value).trim().toLowerCase();
@@ -314,6 +323,7 @@ function normalizeSetStatusValue(value) {
 function applySetStatus(poke, set) {
 	if (!set) return;
 	var statusValue = normalizeSetStatusValue(set.status);
+	if (!statusValue) statusValue = normalizeSetStatusValue(set.PreStatus);
 	if (!statusValue) return;
 	poke.find(".status").val(statusValue);
 	poke.find(".status").change();
@@ -373,6 +383,7 @@ $(".ability").bind("keyup change", function () {
 
 	if (ability === "Supreme Overlord") {
 		pokeInfo.find(".alliesFainted").prop("hidden", false).show();
+		syncSupremeOverlordAlliesFainted(pokeInfo);
 	} else {
 		pokeInfo.find(".alliesFainted").val('0');
 		pokeInfo.find(".alliesFainted").prop("hidden", true).hide();
@@ -994,11 +1005,37 @@ var TRAINER_PERMANENT_FIELD_EFFECTS = {
 	"Team Magma Grunt #9 | Magma Hideout": ["magmaStormL"],
 	"Team Magma Grunt #10 | Magma Hideout": ["magmaStormL"],
 	"Team Magma Grunt #11 | Magma Hideout": ["magmaStormL"],
-	"Team Magma Grintoul #13 | Magma Hideout": ["magmaStormL"]
+	"Team Magma Grintoul #13 | Magma Hideout": ["magmaStormL"],
+	"Team Aqua Grunt #7 | Seafloor Cavern": ["auroraVeilR"],
+	"Team Aqua Grunt #8 | Seafloor Cavern": ["auroraVeilR"],
+	"Team Aqua Grunt #9 | Seafloor Cavern": ["auroraVeilR"],
+	"Team Aqua Grunt #10 | Seafloor Cavern": ["auroraVeilR"],
+	"Team Aqua Admin Shelly | Seafloor Cavern": ["auroraVeilR", "rain"],
+	"Team Aqua Grunt #11 | Seafloor Cavern": ["auroraVeilR", "rain"],
+	"Team Aqua Grunt #12 | Seafloor Cavern": ["auroraVeilR", "rain"],
+	"Team Aqua Grunt Lowrey #13 | Seafloor Cavern": ["rain"],
+	"Team Aqua Admin Matt | Seafloor Cavern": ["rain"],
+	"Team Aqua Leader Archie | Seafloor Cavern": ["rain"],
+	"Psychic Virgirl & Hex Maniac Sylvia | Mossdeep Gym": ["gravity"],
+	"Psychic Blake & Samantha | Mossdeep Gym": ["wonderroom"],
+	"Psychic Maura & Preston | Mossdeep Gym": ["psychic"],
+	"Psychic Hannah & Gentleman Nate | Mossdeep Gym": ["misty"],
+	"Leader Tate & Liza | Mossdeep Gym": ["psychic"]
 };
 var TRAINER_PERMANENT_FIELD_EFFECT_IDS = {
 	steelsurgeL: true,
-	magmaStormL: true
+	magmaStormL: true,
+	auroraVeilR: true,
+	rain: true,
+	gravity: true,
+	wonderroom: true,
+	psychic: true,
+	misty: true
+};
+// These effects are enabled when their trainer is selected, but may be
+// changed manually during the calculation.
+var TRAINER_TOGGLEABLE_FIELD_EFFECT_IDS = {
+	auroraVeilR: true
 };
 var STARTER_CHOICES = ["chikorita", "tepig", "totodile"];
 var RIVAL_STARTER_BY_CHOICE = {
@@ -1028,6 +1065,8 @@ var trainerFieldLockActiveTrainerKey = "";
 var isApplyingTrainerFieldLocks = false;
 var trainerPermanentFieldPreviousValues = {};
 var isApplyingTrainerPermanentFieldEffects = false;
+var trainerToggleableFieldEffectOverrides = {};
+var trainerToggleableFieldEffectTrainerKey = "";
 var fragsHistoryExpanded = false;
 var aeLuaFragWatchedFileHandle = null;
 var aeLuaFragWatchedFileTimer = null;
@@ -1049,6 +1088,13 @@ var opponentPlanStateCache = null;
 var opponentPlanActiveKey = OPPONENT_PLAN_GENERAL_KEY;
 var opponentPlanDragState = null;
 var OPPONENT_PLAN_RANGES = [
+	{
+		id: "mossdeep-leader-tate-liza-b2b",
+		type: "B2B",
+		label: "Leader Tate \u2192 Leader Liza",
+		startTrainers: ["Leader Tate | Mossdeep City"],
+		endTrainers: ["Leader Liza | Mossdeep Gym"]
+	},
 	{
 		id: "abandoned-ship-b2b",
 		type: "B2B",
@@ -4070,6 +4116,9 @@ function scheduleFragSheetRefresh() {
 		if (getAppSettings().autoImportMegas) autoImportMegasForCurrentRoster();
 		syncFragRoster({pruneMissing: true});
 		renderFragSheet();
+		if (syncAllSupremeOverlordAlliesFainted() && typeof performCalculations === "function") {
+			performCalculations();
+		}
 		refreshNotesPanelIfOpen();
 	}, 40);
 }
@@ -5673,7 +5722,7 @@ function buildAeLuaPokemonSet(mon, existingSetData) {
 var AE_LUA_AUTO_MEGA_POKEMON = [
 	"Abomasnow", "Absol", "Aerodactyl", "Aggron", "Alakazam", "Altaria",
 	"Ampharos", "Audino", "Banette", "Barbaracle", "Beedrill", "Blastoise",
-	"Blaziken", "Butterfree", "Camerupt", "Chandelure", "Charizard",
+	"Blaziken", "Camerupt", "Chandelure", "Charizard",
 	"Chesnaught", "Chimecho", "Clefable", "Crabominable", "Delphox",
 	"Diancie", "Dragalge", "Dragonite", "Drampa", "Eelektross", "Emboar",
 	"Excadrill", "Falinks", "Feraligatr", "Floette-Eternal", "Froslass",
@@ -5753,20 +5802,33 @@ function getAeLuaMegaFormAbility(megaSpecies, fallbackAbility) {
 	return String(ability || fallbackAbility || "").trim();
 }
 
-function findAeLuaAutoMegaSetLabel(customsets, megaSpecies, sourceSetId) {
+function isAeLuaAutoMegaSetForSource(setData, sourceSetId, sourceSetData) {
+	if (!setData || !setData[AE_LUA_AUTO_MEGA_SET_FLAG]) return false;
+	if (String(setData[AE_LUA_AUTO_MEGA_SOURCE_SET_ID_KEY] || "") === sourceSetId) return true;
+	// A live save Pokémon can retain its identity while its Calc set ID changes
+	// (for example after an evolution or a slot-label collision). Reuse its
+	// existing Mega in that case instead of creating a second copy.
+	var sourceIdentity = getAeLuaPokemonIdentity(sourceSetData);
+	var megaIdentity = getAeLuaPokemonIdentity({
+		personality: setData.aeLuaPersonality,
+		otId: setData.aeLuaOtId
+	});
+	return !!(sourceIdentity && megaIdentity && aeLuaPokemonIdentitiesMatch(sourceIdentity, megaIdentity));
+}
+
+function findAeLuaAutoMegaSetLabel(customsets, megaSpecies, sourceSetId, sourceSetData) {
 	var speciesSets = customsets && customsets[megaSpecies];
 	if (!speciesSets || typeof speciesSets !== "object") return "";
 	for (var setName in speciesSets) {
 		if (!Object.prototype.hasOwnProperty.call(speciesSets, setName)) continue;
 		var setData = speciesSets[setName];
-		if (!setData || !setData[AE_LUA_AUTO_MEGA_SET_FLAG]) continue;
-		if (String(setData[AE_LUA_AUTO_MEGA_SOURCE_SET_ID_KEY] || "") === sourceSetId) return setName;
+		if (isAeLuaAutoMegaSetForSource(setData, sourceSetId, sourceSetData)) return setName;
 	}
 	return "";
 }
 
-function getAeLuaAutoMegaSetLabel(customsets, megaSpecies, sourceSetId, layoutLookup) {
-	var existingLabel = findAeLuaAutoMegaSetLabel(customsets, megaSpecies, sourceSetId);
+function getAeLuaAutoMegaSetLabel(customsets, megaSpecies, sourceSetId, sourceSetData, layoutLookup) {
+	var existingLabel = findAeLuaAutoMegaSetLabel(customsets, megaSpecies, sourceSetId, sourceSetData);
 	if (existingLabel) return existingLabel;
 	var sourceLabel = parseSetId(sourceSetId).label || (AE_LUA_POKEMON_SET_PREFIX + " Mega");
 	var label = sourceLabel;
@@ -5778,6 +5840,32 @@ function getAeLuaAutoMegaSetLabel(customsets, megaSpecies, sourceSetId, layoutLo
 		suffix += 1;
 	}
 	return label;
+}
+
+function removeDuplicateAeLuaAutoMegaSetIdsFromMegaBox(layout, customsets, megaSpecies,
+	megaSetId, sourceSetId, sourceSetData) {
+	var normalizedLayout = normalizeRosterLayout(layout);
+	var removedSetIds = [];
+	var keptExpectedSet = false;
+	normalizedLayout.boxmega = normalizedLayout.boxmega.filter(function (existingSetId) {
+		if (existingSetId === megaSetId) {
+			if (!keptExpectedSet) {
+				keptExpectedSet = true;
+				return true;
+			}
+			removedSetIds.push(existingSetId);
+			return false;
+		}
+		var parsedSet = parseSetId(existingSetId);
+		if (parsedSet.species !== megaSpecies) return true;
+		var setData = customsets && customsets[megaSpecies]
+			? customsets[megaSpecies][parsedSet.label]
+			: null;
+		if (!isAeLuaAutoMegaSetForSource(setData, sourceSetId, sourceSetData)) return true;
+		removedSetIds.push(existingSetId);
+		return false;
+	});
+	return removedSetIds;
 }
 
 function buildAeLuaAutoMegaSet(sourceSetId, megaSpecies, sourceSetData) {
@@ -5799,10 +5887,40 @@ function buildAeLuaAutoMegaSet(sourceSetId, megaSpecies, sourceSetData) {
 	return megaSet;
 }
 
+// An automatically created Mega is a companion to the imported base set, not
+// a separate Pokemon. Keep the two set selectors linked so the player can
+// open and save either battle form without losing the underlying base set.
+function getAeLuaAutoMegaLinkedSetId(sourceSetId, targetSpecies) {
+	var parsedSourceSet = parseSetId(sourceSetId);
+	var sourceSpecies = String(parsedSourceSet.species || "").trim();
+	var requestedSpecies = String(targetSpecies || "").trim();
+	if (!sourceSpecies || !requestedSpecies || sourceSpecies === requestedSpecies) return "";
+
+	var sourceSetData = getAeLuaExistingPokemonSetData(sourceSetId,
+		safeJsonParse(localStorage.getItem("customsets"), {}));
+	if (sourceSetData && sourceSetData[AE_LUA_AUTO_MEGA_SET_FLAG]) {
+		var linkedSourceSetId = String(sourceSetData[AE_LUA_AUTO_MEGA_SOURCE_SET_ID_KEY] || "").trim();
+		if (linkedSourceSetId && parseSetId(linkedSourceSetId).species === requestedSpecies) {
+			return linkedSourceSetId;
+		}
+	}
+
+	var customsets = safeJsonParse(localStorage.getItem("customsets"), {});
+	if (!customsets || typeof customsets !== "object" || Array.isArray(customsets)) return "";
+	var targetSets = customsets[requestedSpecies];
+	if (!targetSets || typeof targetSets !== "object") return "";
+	for (var targetSetLabel in targetSets) {
+		if (!Object.prototype.hasOwnProperty.call(targetSets, targetSetLabel)) continue;
+		if (!isAeLuaAutoMegaSetForSource(targetSets[targetSetLabel], sourceSetId, sourceSetData)) continue;
+		return requestedSpecies + " (" + targetSetLabel + ")";
+	}
+	return "";
+}
+
 function autoImportAeLuaMegaSets(customsets, layout) {
 	var normalizedLayout = normalizeRosterLayout(layout);
 	var layoutLookup = getAeLuaRosterSetLookup(normalizedLayout);
-	var result = {addedSetIds: [], didChangeCustomsets: false};
+	var result = {addedSetIds: [], removedSetIds: [], didChangeCustomsets: false};
 	var sourceSetIds = [];
 	var seenSourceSetIds = {};
 	var zoneNames = ["team", "teamRight", "box", "box2", "boxmega", "trash"];
@@ -5825,7 +5943,8 @@ function autoImportAeLuaMegaSets(customsets, layout) {
 		var sourceSetData = getAeLuaExistingPokemonSetData(sourceSetId, customsets);
 		for (var megaIndex = 0; megaIndex < megaFormes.length; megaIndex++) {
 			var megaSpecies = megaFormes[megaIndex];
-			var megaSetLabel = getAeLuaAutoMegaSetLabel(customsets, megaSpecies, sourceSetId, layoutLookup);
+			var megaSetLabel = getAeLuaAutoMegaSetLabel(customsets, megaSpecies, sourceSetId,
+				sourceSetData, layoutLookup);
 			var megaSetId = megaSpecies + " (" + megaSetLabel + ")";
 			var megaSetData = buildAeLuaAutoMegaSet(sourceSetId, megaSpecies, sourceSetData);
 			if (!customsets[megaSpecies] || typeof customsets[megaSpecies] !== "object") {
@@ -5835,6 +5954,13 @@ function autoImportAeLuaMegaSets(customsets, layout) {
 			if (JSON.stringify(previousSetData || null) !== JSON.stringify(megaSetData)) {
 				customsets[megaSpecies][megaSetLabel] = megaSetData;
 				result.didChangeCustomsets = true;
+			}
+			var duplicateSetIds = removeDuplicateAeLuaAutoMegaSetIdsFromMegaBox(normalizedLayout,
+				customsets, megaSpecies, megaSetId, sourceSetId, sourceSetData);
+			for (var duplicateIndex = 0; duplicateIndex < duplicateSetIds.length; duplicateIndex++) {
+				var duplicateSetId = duplicateSetIds[duplicateIndex];
+				if (result.removedSetIds.indexOf(duplicateSetId) === -1) result.removedSetIds.push(duplicateSetId);
+				delete layoutLookup[duplicateSetId];
 			}
 			if (!layoutLookup[megaSetId]) {
 				normalizedLayout.box2.push(megaSetId);
@@ -6076,6 +6202,25 @@ function appendAeLuaAutoMegaSetIdsToBox2(setIds) {
 	return appendAeLuaSetIdsToRosterContainer(setIds, "box-poke-listmega");
 }
 
+function removeAeLuaAutoMegaSetIdsFromMegaBox(setIds) {
+	var megaBox = document.getElementById("box-poke-listmega");
+	if (!megaBox || !Array.isArray(setIds) || !setIds.length) return 0;
+	var removedCount = 0;
+	var seenSetIds = {};
+	for (var setIndex = 0; setIndex < setIds.length; setIndex++) {
+		var setId = String(setIds[setIndex] || "").trim();
+		if (!setId || seenSetIds[setId]) continue;
+		seenSetIds[setId] = true;
+		$(megaBox).find(".trainer-pok.left-side").filter(function () {
+			return String($(this).attr("data-id") || "") === setId;
+		}).remove().each(function () {
+			removedCount += 1;
+		});
+	}
+	if (removedCount) saveCurrentPlayerRosterLayout();
+	return removedCount;
+}
+
 function autoImportMegasForCurrentRoster() {
 	var customsets = safeJsonParse(localStorage.getItem("customsets"), {});
 	if (!customsets || typeof customsets !== "object" || Array.isArray(customsets)) customsets = {};
@@ -6084,8 +6229,9 @@ function autoImportMegasForCurrentRoster() {
 		if (typeof updateDex === "function") updateDex(customsets);
 		else localStorage.setItem("customsets", JSON.stringify(customsets));
 	}
+	var removedCount = removeAeLuaAutoMegaSetIdsFromMegaBox(result.removedSetIds);
 	appendAeLuaAutoMegaSetIdsToBox2(result.addedSetIds);
-	if (result.didChangeCustomsets || result.addedSetIds.length) {
+	if (result.didChangeCustomsets || result.addedSetIds.length || removedCount) {
 		applyPlayerRosterSearchFilter();
 		syncFragRoster();
 		renderFragSheet();
@@ -6226,14 +6372,14 @@ function importAeLuaPokemonFromPayload(payload) {
 		didChangeCustomsets = true;
 		importedCount += 1;
 	}
-	var autoMegaResult = {addedSetIds: [], didChangeCustomsets: false};
+	var autoMegaResult = {addedSetIds: [], removedSetIds: [], didChangeCustomsets: false};
 	if (autoImportMegas) {
 		autoMegaResult = autoImportAeLuaMegaSets(customsets, currentLayout);
 		if (autoMegaResult.didChangeCustomsets) didChangeCustomsets = true;
 		importedCount += autoMegaResult.addedSetIds.length;
 	}
 
-	if (!importedCount && !didChangeCustomsets) {
+	if (!importedCount && !didChangeCustomsets && !autoMegaResult.removedSetIds.length) {
 		if (didChangeBindings) saveAeLuaTeamBindings(bindings);
 		aeLuaPokemonImportSignatures[signatureScope] = signature;
 		return 0;
@@ -6255,8 +6401,9 @@ function importAeLuaPokemonFromPayload(payload) {
 		if (selectedPlayerSetId === renameRecord.oldSetId) selectedPlayerSetId = renameRecord.newSetId;
 	}
 	appendAeLuaDiscoveredSetIdsToBox(discoveredBoxSetIds);
+	var removedAutoMegaCount = removeAeLuaAutoMegaSetIdsFromMegaBox(autoMegaResult.removedSetIds);
 	appendAeLuaAutoMegaSetIdsToBox2(autoMegaResult.addedSetIds);
-	if (renameRecords.length || autoMegaResult.addedSetIds.length) saveCurrentPlayerRosterLayout();
+	if (renameRecords.length || autoMegaResult.addedSetIds.length || removedAutoMegaCount) saveCurrentPlayerRosterLayout();
 	if (didChangeBindings) bindings = saveAeLuaTeamBindings(bindings);
 	aeLuaPokemonImportSignatures[signatureScope] = signature;
 	applyPlayerRosterSearchFilter();
@@ -6268,7 +6415,7 @@ function importAeLuaPokemonFromPayload(payload) {
 	} else if (typeof performCalculations === "function") {
 		performCalculations();
 	}
-	if (renameRecords.length || discoveredBoxSetIds.length || autoMegaResult.addedSetIds.length) renderFragSheet();
+	if (renameRecords.length || discoveredBoxSetIds.length || autoMegaResult.addedSetIds.length || removedAutoMegaCount) renderFragSheet();
 	if (typeof allPokemon === "function" && typeof $ === "function") {
 		$(allPokemon("#importedSetsOptions")).css("display", "inline");
 	}
@@ -6827,6 +6974,84 @@ function getFragDeathInfo(entry) {
 	};
 }
 
+function getSupremeOverlordManualFaintedAllies(pokeInfo) {
+	var manualCount = parseInt(pokeInfo.find(".alliesFainted").val(), 10);
+	if (Number.isNaN(manualCount)) return 0;
+	return Math.max(0, Math.min(5, manualCount));
+}
+
+function collectSupremeOverlordPartySetIds(selector) {
+	var setIds = [];
+	var seenSetIds = {};
+	$(selector).each(function () {
+		var setId = String($(this).attr("data-id") || "").trim();
+		if (!setId || seenSetIds[setId]) return;
+		seenSetIds[setId] = true;
+		setIds.push(setId);
+	});
+	return setIds;
+}
+
+function isPlayerSetMarkedDead(setId) {
+	var normalizedSetId = String(setId || "").trim();
+	if (!normalizedSetId) return false;
+	if (isPlayerSetInTrash(normalizedSetId)) return true;
+	var state = getFragSheetState();
+	var entry = getFragSheetStateEntryMap(state, "entries")[normalizedSetId] ||
+		getFragSheetStateEntryMap(state, "archivedEntries")[normalizedSetId];
+	return !!(entry && entry.isDead);
+}
+
+function countSupremeOverlordFaintedAllies(activeSetId, partySetIds, isSetDead) {
+	var faintedAllies = 0;
+	for (var i = 0; i < partySetIds.length; i++) {
+		var setId = partySetIds[i];
+		if (setId === activeSetId || !isSetDead(setId)) continue;
+		faintedAllies += 1;
+	}
+	return Math.min(5, faintedAllies);
+}
+
+function getSupremeOverlordFaintedAllies(pokeInfo, ability) {
+	var manualCount = getSupremeOverlordManualFaintedAllies(pokeInfo);
+	if (ability !== "Supreme Overlord") return manualCount;
+
+	var activeSetId = String(pokeInfo.find("input.set-selector").val() || "").trim();
+	if (!activeSetId) return manualCount;
+
+	if (pokeInfo.find("input.opposing").length) {
+		var opposingPartySetIds = collectSupremeOverlordPartySetIds(
+			".trainer-pok.right-side:not(.trainer-pok-forme)"
+		);
+		if (opposingPartySetIds.indexOf(activeSetId) === -1) return manualCount;
+		return countSupremeOverlordFaintedAllies(activeSetId, opposingPartySetIds, isOpposingSetMarkedDead);
+	}
+
+	var playerPartySetIds = collectSupremeOverlordPartySetIds(
+		"#team-poke-list .trainer-pok.left-side, #team-right-poke-list .trainer-pok.left-side"
+	);
+	if (playerPartySetIds.indexOf(activeSetId) === -1) return manualCount;
+	return countSupremeOverlordFaintedAllies(activeSetId, playerPartySetIds, isPlayerSetMarkedDead);
+}
+
+function syncSupremeOverlordAlliesFainted(pokeInfo) {
+	var ability = pokeInfo.find(".ability").val() || "";
+	if (ability !== "Supreme Overlord") return false;
+	var faintedAllies = getSupremeOverlordFaintedAllies(pokeInfo, ability);
+	var faintedSelect = pokeInfo.find(".alliesFainted");
+	if (faintedSelect.val() === String(faintedAllies)) return false;
+	faintedSelect.val(String(faintedAllies));
+	return true;
+}
+
+function syncAllSupremeOverlordAlliesFainted() {
+	var didChange = false;
+	$("#p1, #p2").each(function () {
+		if (syncSupremeOverlordAlliesFainted($(this))) didChange = true;
+	});
+	return didChange;
+}
+
 function setFragSetDeadState(setId, shouldBeDead, fightLabel) {
 	var entry = ensureFragEntryForSet(setId);
 	if (!entry) return;
@@ -6834,6 +7059,9 @@ function setFragSetDeadState(setId, shouldBeDead, fightLabel) {
 	entry.deathFight = entry.isDead ? String(fightLabel || getCurrentFightLabel() || "Unknown Fight") : "";
 	saveFragSheetState();
 	renderFragSheet();
+	if (syncAllSupremeOverlordAlliesFainted() && typeof performCalculations === "function") {
+		performCalculations();
+	}
 }
 
 function formatFragSnapshotOptionLabel(record, fallbackPrefix) {
@@ -7527,6 +7755,7 @@ function setOpposingSetDeadMark(setId, isDead) {
 	if (window.AstralSwitchIn && typeof window.AstralSwitchIn.scheduleRefresh === "function") {
 		window.AstralSwitchIn.scheduleRefresh();
 	}
+	syncAllSupremeOverlordAlliesFainted();
 	if (wasDead !== !!isDead && typeof performCalculations === "function") performCalculations();
 }
 
@@ -9212,14 +9441,27 @@ function handleTrainerFieldButtonContextMenu(ev, labelNode) {
 }
 
 function handleTrainerFieldInputChangeForLocks() {
-	if (!isApplyingTrainerPermanentFieldEffects &&
-		TRAINER_PERMANENT_FIELD_EFFECT_IDS[String(this && this.id || "")]) {
+	if (!isApplyingTrainerPermanentFieldEffects) {
 		var selectedOpposing = String($("input.opposing").val() || "");
 		var trainerEntries = selectedOpposing ? get_trainer_poks(selectedOpposing) : [];
 		var activeEffectIds = getPermanentFieldEffectIdsForSelection(selectedOpposing, trainerEntries);
-		if (activeEffectIds.indexOf(this.id) !== -1 && !this.checked) {
-			setTrainerPermanentFieldInput(this.id, true);
-			return;
+		for (var i = 0; i < activeEffectIds.length; i++) {
+			var permanentFieldId = activeEffectIds[i];
+			if (TRAINER_TOGGLEABLE_FIELD_EFFECT_IDS[permanentFieldId]) {
+				if (permanentFieldId === this.id) trainerToggleableFieldEffectOverrides[permanentFieldId] = !!this.checked;
+				continue;
+			}
+			var permanentInput = document.getElementById(permanentFieldId);
+			if (!permanentInput) continue;
+			if (permanentFieldId === this.id && !this.checked) {
+				setTrainerPermanentFieldInput(permanentFieldId, true);
+				return;
+			}
+			if (permanentFieldId !== this.id && this.checked &&
+				permanentInput.name && permanentInput.name === this.name) {
+				setTrainerPermanentFieldInput(permanentFieldId, true);
+				return;
+			}
 		}
 	}
 	if (isApplyingTrainerFieldLocks) return;
@@ -9265,8 +9507,19 @@ function setTrainerPermanentFieldInput(fieldId, shouldEnable) {
 	}
 }
 
+function getTrainerPermanentFieldEffectSelectionKey(fullSetName, trainerEntries) {
+	var entry = String(fullSetName || "");
+	if (!entry && Array.isArray(trainerEntries) && trainerEntries.length) entry = String(trainerEntries[0] || "");
+	return parseTrainerPartyEntry(entry).trainerLabel || "";
+}
+
 function syncPermanentFieldEffectsForSelection(fullSetName, trainerEntries) {
 	var activeEffectIds = getPermanentFieldEffectIdsForSelection(fullSetName, trainerEntries);
+	var trainerKey = getTrainerPermanentFieldEffectSelectionKey(fullSetName, trainerEntries);
+	if (trainerToggleableFieldEffectTrainerKey !== trainerKey) {
+		trainerToggleableFieldEffectTrainerKey = trainerKey;
+		trainerToggleableFieldEffectOverrides = {};
+	}
 	for (var fieldId in TRAINER_PERMANENT_FIELD_EFFECT_IDS) {
 		if (!Object.prototype.hasOwnProperty.call(TRAINER_PERMANENT_FIELD_EFFECT_IDS, fieldId)) continue;
 		var input = document.getElementById(fieldId);
@@ -9275,10 +9528,13 @@ function syncPermanentFieldEffectsForSelection(fullSetName, trainerEntries) {
 		var hasPreviousValue = Object.prototype.hasOwnProperty.call(trainerPermanentFieldPreviousValues, fieldId);
 		if (shouldEnable) {
 			if (!hasPreviousValue) trainerPermanentFieldPreviousValues[fieldId] = !!input.checked;
-			setTrainerPermanentFieldInput(fieldId, true);
+			var hasToggleOverride = TRAINER_TOGGLEABLE_FIELD_EFFECT_IDS[fieldId] &&
+				Object.prototype.hasOwnProperty.call(trainerToggleableFieldEffectOverrides, fieldId);
+			if (!hasToggleOverride) setTrainerPermanentFieldInput(fieldId, true);
 		} else if (hasPreviousValue) {
 			var previousValue = trainerPermanentFieldPreviousValues[fieldId];
 			delete trainerPermanentFieldPreviousValues[fieldId];
+			delete trainerToggleableFieldEffectOverrides[fieldId];
 			setTrainerPermanentFieldInput(fieldId, previousValue);
 		}
 	}
@@ -10172,7 +10428,7 @@ function getTrainerPartyDisplayBaseFormName(entry) {
 	var resolvedPokemonName = resolveSetSpeciesNameForDexLookup(entry && entry.pokemonName);
 	var pokemon = pokedex && pokedex[resolvedPokemonName];
 	var baseSpeciesName = String(pokemon && pokemon.baseSpecies || "").trim();
-	if (!pokemon || !baseSpeciesName || resolvedPokemonName === baseSpeciesName || isTrainerPartyRegionalFormName(resolvedPokemonName) || isTrainerPartyIncarnateOrTherianFormName(resolvedPokemonName) || /^(?:Genesect|Rotom|Furfrou|Toxtricity)(?:-|$)/i.test(resolvedPokemonName) || /^Indeedee(?:-[FM])?$/i.test(resolvedPokemonName)) return "";
+	if (!pokemon || !baseSpeciesName || resolvedPokemonName === baseSpeciesName || isTrainerPartyRegionalFormName(resolvedPokemonName) || isTrainerPartyIncarnateOrTherianFormName(resolvedPokemonName) || /^(?:Genesect|Deoxys|Meowstic-F|Meowstic|Rotom|Furfrou|Kyogre|Groudon|Ogerpon|Hoopa|Gourgeist|Oricorio|Ursaluna|Lycanroc|Toxtricity)(?:-|$)/i.test(resolvedPokemonName) || /^Indeedee(?:-[FM])?$/i.test(resolvedPokemonName)) return "";
 	return pokedex[baseSpeciesName] ? baseSpeciesName : "";
 }
 
@@ -10449,6 +10705,7 @@ $("input.set-selector").change(function () {
 		calcHP(pokeObj);
 		calcStats(pokeObj);
 		refreshRelativeSetLevels();
+		applySetPreDamage(pokeObj, set);
 		applySetPreHp(pokeObj, set);
 		abilityObj.change();
 		itemObj.change();
@@ -10691,6 +10948,15 @@ $(".forme").change(function () {
 	var pokemonSets = isRandoms ? randdex[pokemonName] : setdex[pokemonName];
 	var chosenSet = pokemonSets && pokemonSets[setName];
 	var isAltForme = selectedForme !== pokemonName;
+	var linkedSetId = "";
+	if (pokeInfo.prop("id") === "p1" && getAppSettings().autoImportMegas) {
+		linkedSetId = getAeLuaAutoMegaLinkedSetId(fullSetName, selectedForme);
+	}
+	if (linkedSetId) {
+		container.find("input.set-selector").val(linkedSetId).change();
+		$(".player .select2-chosen").text(linkedSetId);
+		return;
+	}
 	var isMegaFormeSwitch = selectedForme.indexOf("-Mega") !== -1 || pokemonName.indexOf("-Mega") !== -1;
 	var preserveGreninjaAbility = selectedForme.indexOf("Greninja") !== -1 && !isMegaFormeSwitch;
 	var altFormeAbility = altForme.abilities && altForme.abilities[0];
@@ -10875,7 +11141,7 @@ function createPokemon(pokeInfo) {
 			evs: evs,
 			isDynamaxed: isDynamaxed,
 			isSaltCure: pokeInfo.find(".saltcure").is(":checked"),
-			alliesFainted: parseInt(pokeInfo.find(".alliesFainted").val()),
+			alliesFainted: getSupremeOverlordFaintedAllies(pokeInfo, ability),
 			teraType: teraType,
 			boosts: boosts,
 			curHP: curHP,

@@ -134,7 +134,7 @@ var RBY = {
     },
     Charizard: {
         types: ['Fire', 'Flying'],
-        bs: { hp: 78, at: 100, df: 76, sp: 100, sl: 100 },
+        bs: { hp: 78, at: 90, df: 72, sp: 100, sl: 100 },
         weightkg: 90.5
     },
     Charmander: {
@@ -897,7 +897,7 @@ var GSC_PATCH = {
     Butterfree: { bs: { sa: 95, sd: 85 } },
     Caterpie: { bs: { sa: 20, sd: 20 } },
     Chansey: { bs: { sa: 35, sd: 105 }, nfe: true },
-    Charizard: { bs: { sa: 100, sd: 81 } },
+    Charizard: { bs: { sa: 116, sd: 81 } },
     Charmander: { bs: { sa: 60, sd: 50 } },
     Charmeleon: { bs: { sa: 80, sd: 65 } },
     Clefable: { bs: { sa: 85, sd: 90 } },
@@ -1689,7 +1689,7 @@ var ADV_PATCH = {
     Paras: { abilities: { 0: 'Effect Spore' } },
     Parasect: { abilities: { 0: 'Effect Spore' } },
     Persian: { abilities: { 0: 'Limber' } },
-    Pidgeot: { abilities: { 0: 'Keen Eye' } },
+    Pidgeot: { abilities: { 0: 'Illuminate' } },
     Pidgeotto: { abilities: { 0: 'Keen Eye' } },
     Pidgey: { abilities: { 0: 'Keen Eye' } },
     Pikachu: { abilities: { 0: 'Static' } },
@@ -1761,7 +1761,7 @@ var ADV_PATCH = {
     Elekid: { abilities: { 0: 'Static' } },
     Entei: { abilities: { 0: 'Pressure' } },
     Espeon: { abilities: { 0: 'Synchronize' } },
-    Feraligatr: { otherFormes: ['Feraligatr-Mega'], abilities: { 0: 'Torrent' } },
+    Feraligatr: { otherFormes: ['Feraligatr-Mega'], abilities: { 0: 'Swift Swim' } },
     Flaaffy: { abilities: { 0: 'Static' } },
     Forretress: { abilities: { 0: 'Sturdy' } },
     Furret: { abilities: { 0: 'Run Away' } },

@@ -1044,7 +1044,7 @@ var DPP_PATCH = {
         makesContact: true,
         category: 'Physical'
     },
-    'Roar of Time': { bp: 150, type: 'Dragon', category: 'Special' },
+    'Roar of Time': { bp: 150, type: 'Dragon', category: 'Special', critRatio: 2 },
     'Rock Climb': {
         bp: 90,
         type: 'Rock',
@@ -1052,7 +1052,7 @@ var DPP_PATCH = {
         category: 'Physical'
     },
     'Seed Flare': { bp: 120, type: 'Grass', category: 'Special' },
-    'Spacial Rend': { bp: 100, type: 'Dragon', category: 'Special', critRatio: 2 },
+    'Spacial Rend': { bp: 110, type: 'Dragon', category: 'Special', critRatio: 2 },
     'Trump Card': {
         bp: 0,
         type: 'Normal',
