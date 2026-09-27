@@ -1,14 +1,4 @@
 window.FRAG_SPLIT_RULES = {
-	/*
-	 * Split boundaries are inclusive by index:
-	 * - Any fight with index <= endIndex (or <= the highest index found in endTrainers)
-	 *   will be counted in that split.
-	 * - Any fight after the last configured boundary falls into the next split.
-	 *
-	 * You can configure either:
-	 *   1) endIndex: number
-	 *   2) endTrainers: string or string[] of trainer labels from set data
-	 */
 	boundaries: [
 		{
 			split: 1,
@@ -48,6 +38,14 @@ window.FRAG_SPLIT_RULES = {
 			endTrainers: [
 				"Leader Winona | Fortree Gym",
 				"Leader Winona DB | Fortree Gym"
+			]
+		},
+		{
+			split: 7,
+			endTrainers: [
+				"Leader Tate & Liza | Mossdeep Gym",
+				"Leader Tate | Mossdeep Gym",
+				"Leader Liza | Mossdeep Gym",
 			]
 		},
 	]

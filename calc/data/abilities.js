@@ -328,6 +328,7 @@ var SS = SM.concat([
 var SV = SS.concat([
     'Anger Shell',
     'Armor Tail',
+    'Aura Guard',
     'Beads of Ruin',
     'Commander',
     'Costar',

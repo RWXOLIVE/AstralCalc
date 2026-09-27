@@ -893,6 +893,16 @@ describe('calc', function () {
                     var nonFluffyIcePunch = calculate(gloved(), regular(), Move('Ice Punch'));
                     expect(glovedIcePunch.range()).toEqual(nonFluffyIcePunch.range());
                 });
+                test('Aura Guard halves contact-move damage', function () {
+                    var auraGuard = function () { return Pokemon('Mew', { ability: 'Aura Guard' }); };
+                    var regular = function () { return Pokemon('Mew', { ability: 'Synchronize' }); };
+                    var guardedBodySlam = calculate(Pokemon('Mew'), auraGuard(), Move('Body Slam'));
+                    var regularBodySlam = calculate(Pokemon('Mew'), regular(), Move('Body Slam'));
+                    expect(guardedBodySlam.range()[1]).toBeLessThan(regularBodySlam.range()[0]);
+                    var guardedRockSlide = calculate(Pokemon('Mew'), auraGuard(), Move('Rock Slide'));
+                    var regularRockSlide = calculate(Pokemon('Mew'), regular(), Move('Rock Slide'));
+                    expect(guardedRockSlide.range()).toEqual(regularRockSlide.range());
+                });
             });
         });
     });

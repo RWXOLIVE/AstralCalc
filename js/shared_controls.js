@@ -1020,7 +1020,8 @@ var TRAINER_PERMANENT_FIELD_EFFECTS = {
 	"Psychic Blake & Samantha | Mossdeep Gym": ["wonderroom"],
 	"Psychic Maura & Preston | Mossdeep Gym": ["psychic"],
 	"Psychic Hannah & Gentleman Nate | Mossdeep Gym": ["misty"],
-	"Leader Tate & Liza | Mossdeep Gym": ["psychic"]
+	"Leader Tate & Liza | Mossdeep Gym": ["psychic"],
+	"Hex Maniac Drayano | Mt Pyre": ["psychic"]
 };
 var TRAINER_PERMANENT_FIELD_EFFECT_IDS = {
 	steelsurgeL: true,
@@ -3721,11 +3722,31 @@ function buildPlayerRosterSearchText(setId) {
 		? setdex[speciesName][setName]
 		: null;
 	if (setData && typeof setData === "object") {
-		if (typeof setData.ability === "string") searchParts.push(setData.ability);
-		if (Array.isArray(setData.abilities)) searchParts = searchParts.concat(setData.abilities);
+		appendPlayerRosterSearchAbilities(searchParts, setData.ability);
+		appendPlayerRosterSearchAbilities(searchParts, setData.abilities);
 		if (Array.isArray(setData.moves)) searchParts = searchParts.concat(setData.moves);
 	}
+	var lookupSpeciesName = typeof resolveSetSpeciesNameForDexLookup === "function"
+		? resolveSetSpeciesNameForDexLookup(speciesName)
+		: speciesName;
+	var speciesData = pokedex && pokedex[lookupSpeciesName];
+	if (speciesData && typeof speciesData === "object") {
+		appendPlayerRosterSearchAbilities(searchParts, speciesData.abilities);
+	}
 	return searchParts.join(" ").toLowerCase();
+}
+
+function appendPlayerRosterSearchAbilities(searchParts, abilityValues) {
+	if (typeof abilityValues === "string") {
+		searchParts.push(abilityValues);
+	} else if (Array.isArray(abilityValues)) {
+		searchParts.push.apply(searchParts, abilityValues);
+	} else if (abilityValues && typeof abilityValues === "object") {
+		for (var slot in abilityValues) {
+			if (!Object.prototype.hasOwnProperty.call(abilityValues, slot)) continue;
+			if (typeof abilityValues[slot] === "string") searchParts.push(abilityValues[slot]);
+		}
+	}
 }
 
 function toPlayerRosterSearchToken(value) {
@@ -7490,6 +7511,26 @@ function normalizeNotesTurn(rawTurn) {
 function normalizeNotesBoardState(rawState) {
 	var state = rawState && typeof rawState === "object" ? rawState : {};
 	var normalized = {
+		version: 2,
+		fights: {},
+		legacyBoard: null
+	};
+	var rawFights = state.fights && typeof state.fights === "object" ? state.fights : {};
+	for (var fightKey in rawFights) {
+		if (!Object.prototype.hasOwnProperty.call(rawFights, fightKey)) continue;
+		normalized.fights[String(fightKey)] = normalizeNotesFightBoard(rawFights[fightKey]);
+	}
+	// Versions before fight-specific notes stored a single board. Keep it until
+	// the panel is opened, then attach it to the fight the player is viewing.
+	if (!state.version && (Array.isArray(state.turns) || state.format)) {
+		normalized.legacyBoard = normalizeNotesFightBoard(state);
+	}
+	return normalized;
+}
+
+function normalizeNotesFightBoard(rawBoard) {
+	var state = rawBoard && typeof rawBoard === "object" ? rawBoard : {};
+	var normalized = {
 		format: state.format === "doubles" ? "doubles" : "singles",
 		turns: []
 	};
@@ -7510,6 +7551,21 @@ function getNotesBoardState(forceReload) {
 
 function saveNotesBoardState() {
 	localStorage.setItem(NOTES_BOARD_STORAGE_KEY, JSON.stringify(getNotesBoardState()));
+}
+
+function getNotesFightKey() {
+	return String(getCurrentFightLabel() || "Unknown Fight").trim() || "Unknown Fight";
+}
+
+function getNotesFightBoard(fightKey) {
+	var notesState = getNotesBoardState();
+	var key = String(fightKey || getNotesFightKey());
+	if (!notesState.fights[key]) {
+		notesState.fights[key] = notesState.legacyBoard || normalizeNotesFightBoard({});
+		notesState.legacyBoard = null;
+		saveNotesBoardState();
+	}
+	return notesState.fights[key];
 }
 
 function ensureNotesSetOption(options, setId) {
@@ -7557,7 +7613,7 @@ function renderNotesSetOptionsHtml(options, selectedSetId, emptyLabel) {
 	return html;
 }
 
-function getNotesMonSlotHtml(turnIndex, fieldKey, selectedSetId, options, emptyLabel) {
+function getNotesMonSlotHtml(turnIndex, fieldKey, selectedSetId, options, emptyLabel, fightKey) {
 	var selected = String(selectedSetId || "").trim();
 	var speciesName = parseSetId(selected).species || "";
 	var spriteSrc = speciesName
@@ -7567,28 +7623,28 @@ function getNotesMonSlotHtml(turnIndex, fieldKey, selectedSetId, options, emptyL
 	var spriteOnLoad = speciesName ? getPrimaryIconSheetLoadAttr(speciesName) : "";
 	var spriteOnError = speciesName ? " onerror=\"applyIconSheetFallbackImage(this, this.getAttribute('data-species'))\"" : "";
 	return "<div class=\"notes-mon-slot\">" +
-		"<select class=\"notes-set-select\" data-turn-index=\"" + turnIndex + "\" data-notes-field=\"" + escapeHtml(fieldKey) + "\">" +
+		"<select class=\"notes-set-select\" data-turn-index=\"" + turnIndex + "\" data-notes-field=\"" + escapeHtml(fieldKey) + "\" data-notes-fight-key=\"" + escapeHtml(fightKey) + "\">" +
 		renderNotesSetOptionsHtml(options, selected, emptyLabel) +
 		"</select>" +
 		"<img class=\"" + spriteClass + "\" src=\"" + spriteSrc + "\" data-species=\"" + escapeHtml(speciesName) + "\" alt=\"\" loading=\"lazy\" decoding=\"async\"" + spriteOnLoad + spriteOnError + ">" +
 		"</div>";
 }
 
-function getNotesTurnHtml(turnIndex, turnData, formatMode, playerOptions, opposingOptions) {
+function getNotesTurnHtml(turnIndex, turnData, formatMode, playerOptions, opposingOptions, fightKey) {
 	var isDoubles = formatMode === "doubles";
-	var playerSlotsHtml = getNotesMonSlotHtml(turnIndex, "left1", turnData.left1, playerOptions, "Player");
-	if (isDoubles) playerSlotsHtml += getNotesMonSlotHtml(turnIndex, "left2", turnData.left2, playerOptions, "Player 2");
-	var opposingSlotsHtml = getNotesMonSlotHtml(turnIndex, "right1", turnData.right1, opposingOptions, "Opponent");
-	if (isDoubles) opposingSlotsHtml += getNotesMonSlotHtml(turnIndex, "right2", turnData.right2, opposingOptions, "Opponent 2");
+	var playerSlotsHtml = getNotesMonSlotHtml(turnIndex, "left1", turnData.left1, playerOptions, "Player", fightKey);
+	if (isDoubles) playerSlotsHtml += getNotesMonSlotHtml(turnIndex, "left2", turnData.left2, playerOptions, "Player 2", fightKey);
+	var opposingSlotsHtml = getNotesMonSlotHtml(turnIndex, "right1", turnData.right1, opposingOptions, "Opponent", fightKey);
+	if (isDoubles) opposingSlotsHtml += getNotesMonSlotHtml(turnIndex, "right2", turnData.right2, opposingOptions, "Opponent 2", fightKey);
 	var removeBtn = "";
-	if (getNotesBoardState().turns.length > 1) {
+	if (getNotesFightBoard(fightKey).turns.length > 1) {
 		removeBtn = "<button type=\"button\" class=\"btn notes-turn-remove\" data-turn-index=\"" + turnIndex + "\">Remove</button>";
 	}
 	return "<section class=\"notes-turn-card\" data-turn-index=\"" + turnIndex + "\">" +
 		"<div class=\"notes-turn-head\"><strong class=\"notes-turn-label\">T" + (turnIndex + 1) + "</strong>" + removeBtn + "</div>" +
 		"<div class=\"notes-turn-grid" + (isDoubles ? " is-doubles" : "") + "\">" +
 		"<div class=\"notes-side-cell\"><div class=\"notes-side-title\">P</div><div class=\"notes-side-slots\">" + playerSlotsHtml + "</div></div>" +
-		"<div class=\"notes-note-cell\"><textarea class=\"notes-note-input\" data-turn-index=\"" + turnIndex + "\">" + escapeHtml(turnData.note || "") + "</textarea></div>" +
+		"<div class=\"notes-note-cell\"><textarea class=\"notes-note-input\" data-turn-index=\"" + turnIndex + "\" data-notes-fight-key=\"" + escapeHtml(fightKey) + "\">" + escapeHtml(turnData.note || "") + "</textarea></div>" +
 		"<div class=\"notes-side-cell\"><div class=\"notes-side-title\">P2</div><div class=\"notes-side-slots\">" + opposingSlotsHtml + "</div></div>" +
 		"</div>" +
 		"</section>";
@@ -7600,7 +7656,8 @@ function renderNotesPanel() {
 	var fightLabelNode = document.getElementById("notes-current-fight-label");
 	if (!notesPanel || !turnsWrap || !fightLabelNode) return;
 
-	var notesState = getNotesBoardState();
+	var fightKey = getNotesFightKey();
+	var notesState = getNotesFightBoard(fightKey);
 	if (!Array.isArray(notesState.turns) || !notesState.turns.length) {
 		notesState.turns = [createDefaultNotesTurn()];
 		saveNotesBoardState();
@@ -7614,7 +7671,7 @@ function renderNotesPanel() {
 	var opposingOptions = getNotesOpposingSetOptions();
 	var turnsHtmlParts = [];
 	for (var i = 0; i < notesState.turns.length; i++) {
-		turnsHtmlParts.push(getNotesTurnHtml(i, notesState.turns[i], notesState.format, playerOptions, opposingOptions));
+		turnsHtmlParts.push(getNotesTurnHtml(i, notesState.turns[i], notesState.format, playerOptions, opposingOptions, fightKey));
 	}
 	turnsWrap.innerHTML = turnsHtmlParts.join("");
 }
@@ -7634,7 +7691,7 @@ function refreshNotesPanelIfOpen() {
 }
 
 function setNotesFormat(formatMode) {
-	var notesState = getNotesBoardState();
+	var notesState = getNotesFightBoard();
 	var normalizedMode = formatMode === "doubles" ? "doubles" : "singles";
 	if (notesState.format !== normalizedMode) {
 		notesState.format = normalizedMode;
@@ -7644,14 +7701,14 @@ function setNotesFormat(formatMode) {
 }
 
 function addNotesTurn() {
-	var notesState = getNotesBoardState();
+	var notesState = getNotesFightBoard();
 	notesState.turns.push(createDefaultNotesTurn());
 	saveNotesBoardState();
 	renderNotesPanel();
 }
 
 function removeNotesTurnAt(turnIndex) {
-	var notesState = getNotesBoardState();
+	var notesState = getNotesFightBoard();
 	var index = parseInt(turnIndex, 10);
 	if (Number.isNaN(index) || index < 0 || index >= notesState.turns.length) return;
 	notesState.turns.splice(index, 1);
@@ -7660,8 +7717,8 @@ function removeNotesTurnAt(turnIndex) {
 	renderNotesPanel();
 }
 
-function updateNotesTurnField(turnIndex, fieldKey, fieldValue) {
-	var notesState = getNotesBoardState();
+function updateNotesTurnField(turnIndex, fieldKey, fieldValue, fightKey) {
+	var notesState = getNotesFightBoard(fightKey);
 	var index = parseInt(turnIndex, 10);
 	if (Number.isNaN(index) || index < 0 || index >= notesState.turns.length) return;
 	var allowedFields = {left1: true, left2: true, right1: true, right2: true, note: true};
@@ -7670,22 +7727,22 @@ function updateNotesTurnField(turnIndex, fieldKey, fieldValue) {
 	saveNotesBoardState();
 }
 
-function scheduleNotesTurnNoteUpdate(turnIndex, noteValue) {
-	var key = String(turnIndex || "");
+function scheduleNotesTurnNoteUpdate(turnIndex, noteValue, fightKey) {
+	var key = String(fightKey || getNotesFightKey()) + ":" + String(turnIndex || "");
 	if (notesNoteInputDebounceTimers[key]) window.clearTimeout(notesNoteInputDebounceTimers[key]);
 	notesNoteInputDebounceTimers[key] = window.setTimeout(function () {
 		delete notesNoteInputDebounceTimers[key];
-		updateNotesTurnField(turnIndex, "note", noteValue);
+		updateNotesTurnField(turnIndex, "note", noteValue, fightKey);
 	}, NOTES_NOTE_INPUT_DEBOUNCE_MS);
 }
 
-function flushScheduledNotesTurnNoteUpdate(turnIndex, noteValue) {
-	var key = String(turnIndex || "");
+function flushScheduledNotesTurnNoteUpdate(turnIndex, noteValue, fightKey) {
+	var key = String(fightKey || getNotesFightKey()) + ":" + String(turnIndex || "");
 	if (notesNoteInputDebounceTimers[key]) {
 		window.clearTimeout(notesNoteInputDebounceTimers[key]);
 		delete notesNoteInputDebounceTimers[key];
 	}
-	updateNotesTurnField(turnIndex, "note", noteValue);
+	updateNotesTurnField(turnIndex, "note", noteValue, fightKey);
 }
 
 function canScrollForWheelDelta(containerElement, deltaY) {
@@ -8378,7 +8435,7 @@ function bindCalcToolEvents() {
 		var fieldKey = $(this).attr("data-notes-field");
 		var selectedSet = $(this).val() || "";
 		var speciesName = parseSetId(selectedSet).species || "";
-		updateNotesTurnField(turnIndex, fieldKey, selectedSet);
+		updateNotesTurnField(turnIndex, fieldKey, selectedSet, $(this).attr("data-notes-fight-key"));
 		var spriteNode = $(this).siblings(".notes-mon-sprite").get(0);
 		if (!spriteNode) return;
 		if (!speciesName) {
@@ -8392,11 +8449,11 @@ function bindCalcToolEvents() {
 	});
 
 	$(document).off("input.notesnote", ".notes-note-input").on("input.notesnote", ".notes-note-input", function () {
-		scheduleNotesTurnNoteUpdate($(this).attr("data-turn-index"), this.value);
+		scheduleNotesTurnNoteUpdate($(this).attr("data-turn-index"), this.value, $(this).attr("data-notes-fight-key"));
 	});
 
 	$(document).off("change.notesnote blur.notesnote", ".notes-note-input").on("change.notesnote blur.notesnote", ".notes-note-input", function () {
-		flushScheduledNotesTurnNoteUpdate($(this).attr("data-turn-index"), this.value);
+		flushScheduledNotesTurnNoteUpdate($(this).attr("data-turn-index"), this.value, $(this).attr("data-notes-fight-key"));
 	});
 
 	$(document).off("mousedown.calcsideresize", ".calc-side-resize-handle").on("mousedown.calcsideresize", ".calc-side-resize-handle", function (ev) {
@@ -12724,7 +12781,7 @@ function colorCodeUpdate(){
 		console.error("Color coding is unavailable: calculationsColors is not defined.");
 		return;
 	}
-	var pMons = document.getElementsByClassName("trainer-pok left-side");
+	var pMons = document.querySelectorAll(".trainer-pok.left-side, .trainer-pok.tag-partner-pok");
 	// calculate opposing Pokemon once to reduce repeated work
 	var p2;
 	try {
@@ -12745,14 +12802,17 @@ function colorCodeUpdate(){
 			console.error(`Color coding skipped set "${set}" due to a calculation error.`, err);
 			continue;
 		}
+		var baseClass = pMons[i].classList.contains("tag-partner-pok")
+			? "trainer-pok tag-partner-pok"
+			: "trainer-pok left-side";
 		if (speCheck && ohkoCheck){
-			pMons[i].className = `trainer-pok left-side mon-speed-${idColor.speed} mon-dmg-${idColor.code}`;
+			pMons[i].className = `${baseClass} mon-speed-${idColor.speed} mon-dmg-${idColor.code}`;
 		}
 		else if (speCheck){
-			pMons[i].className = `trainer-pok left-side mon-speed-${idColor.speed}`;
+			pMons[i].className = `${baseClass} mon-speed-${idColor.speed}`;
 		}
 		else if (ohkoCheck){
-			pMons[i].className = `trainer-pok left-side mon-dmg-${idColor.code}`;
+			pMons[i].className = `${baseClass} mon-dmg-${idColor.code}`;
 		}
 		
 		
@@ -12768,9 +12828,11 @@ function refreshColorCode(){
 }
 
 function hideColorCodes(){
-	var pMons = document.getElementsByClassName("trainer-pok left-side");
+	var pMons = document.querySelectorAll(".trainer-pok.left-side, .trainer-pok.tag-partner-pok");
 	for (let i = 0; i < pMons.length; i++) {
-		pMons[i].className = "trainer-pok left-side";
+		pMons[i].className = pMons[i].classList.contains("tag-partner-pok")
+			? "trainer-pok tag-partner-pok"
+			: "trainer-pok left-side";
 	}
 	document.getElementById("cc-auto-refr").checked = false;
 	HideShowCCSettings();
@@ -12893,7 +12955,7 @@ function handleDragLeave(ev) {
 }
 
 function SpeedBorderSetsChange(ev){
-	var monImgs = document.getElementsByClassName("left-side");
+	var monImgs = document.querySelectorAll(".left-side, .tag-partner-pok");
 	if (ev.target.checked){
 		for (let monImg of monImgs){
 			monImg.classList.remove("mon-speed-none")
@@ -12906,7 +12968,7 @@ function SpeedBorderSetsChange(ev){
 }
 
 function ColorCodeSetsChange(ev){
-	var monImgs = document.getElementsByClassName("left-side");
+	var monImgs = document.querySelectorAll(".left-side, .tag-partner-pok");
 	if (ev.target.checked){
 		for (let monImg of monImgs){
 			monImg.classList.remove("mon-dmg-none")

@@ -1197,7 +1197,7 @@ var DPP_PATCH = {
         makesContact: true,
         category: 'Physical'
     },
-    'Stone Edge': { bp: 100, type: 'Rock', category: 'Physical', critRatio: 2 },
+    'Stone Edge': { bp: 110, type: 'Rock', category: 'Physical', critRatio: 2 },
     'Thunder Fang': {
         bp: 65,
         type: 'Electric',
@@ -3490,7 +3490,7 @@ var SS_PATCH = {
         maxPower: 1
     },
     'Meteor Assault': {
-        bp: 150,
+        bp: 170,
         type: 'Fighting',
         category: 'Physical',
         zp: 200,
@@ -4399,7 +4399,8 @@ var SV_PATCH = {
         category: 'Physical',
         zp: 190,
         maxPower: 140,
-        makesContact: true
+        makesContact: true,
+        isPunch: true
     },
     'Dire Claw': {
         bp: 80,
