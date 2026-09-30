@@ -1,4 +1,4 @@
-/* global AstralSync, gen, pokedex, moves, items, abilities, calc, setdex, buildAeLuaPokemonSet, setSelectedSetIdForSide, collectPlayerRosterLayout, applyPlayerRosterLayout, applyPlayerRosterSearchFilter, syncFragRoster, renderFragSheet, updateDex */
+/* global AstralSync, gen, pokedex, moves, items, abilities, calc, setdex, buildAeLuaPokemonSet, setSelectedSetIdForSide, collectPlayerRosterLayout, applyPlayerRosterLayout, applyPlayerRosterSearchFilter, syncFragRoster, renderFragSheet, updateDex, Promise */
 (function () {
 	"use strict";
 	var snapshot = {party: [], pc: [], battle: null};
@@ -172,13 +172,21 @@
 			holder.appendChild(details);
 		});
 	}
+	function fetchWhenReady(attempts) {
+		return AstralSync.fetchSnapshot(window).catch(function (error) {
+			if (error.code !== "ready" || attempts <= 1) throw error;
+			return new Promise(function (resolve) { setTimeout(resolve, 350); }).then(function () {
+				return fetchWhenReady(attempts - 1);
+			});
+		});
+	}
 	function sync() {
 		if (busy) return;
 		clearTimeout(resetTimer);
 		busy = true;
 		uiState("Connecting...", "Checking Astral Emerald...");
 		console.info("[Astral Sync] Checking " + AstralSync.url);
-		return AstralSync.fetchSnapshot(window).then(function (payload) {
+		return fetchWhenReady(7).then(function (payload) {
 			if (gen !== 9) throw new Error("Choose Astral generation 9 before syncing.");
 			var next = AstralSync.parseSnapshot(payload, {
 				species: names(pokedex), moves: names(moves), item: names(items), ability: names(abilities),

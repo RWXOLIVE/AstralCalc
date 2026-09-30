@@ -10,7 +10,7 @@
 	var ASTRAL_SYNC_URL = "http://127.0.0.1:31124";
 	var SUPPORTED_ASTRAL_SYNC_PROTOCOL = 1;
 	var messages = {
-		connection: "Could not connect to Astral Emerald. Make sure Astral Emerald is running in mGBA and AE_Lua.lua is loaded. Browser local-network permission must also be allowed.",
+		connection: "Could not connect to Astral Emerald. Make sure Astral Emerald is running in mGBA and Xtransceiver-v1/ae_lua.lua is loaded. Browser local-network permission must also be allowed.",
 		service: "The service on port 31124 is not Astral Emerald AE_Lua.",
 		protocol: "AstralCalc and AE_Lua use different sync protocol versions. Update AstralCalc or AE_Lua.",
 		invalid: "Astral Emerald returned invalid sync data.",
