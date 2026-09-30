@@ -948,9 +948,9 @@ var FRAG_SHEET_STATES_STORAGE_KEY = "astralCalcFragSheetStates";
 var FRAG_SHEET_BACKUPS_STORAGE_KEY = "astralCalcFragSheetBackups";
 var AE_LUA_FRAG_IMPORTED_EVENTS_STORAGE_KEY = "astralCalcAeLuaFragImportedEvents";
 var AE_LUA_FRAG_IMPORT_INTERVAL_MS = 2500;
-var AE_LUA_FRAG_LIVE_URL = "http://127.0.0.1:31124/update";
-var AE_LUA_FRAG_ACK_URL = "http://127.0.0.1:31124/frag";
-var AE_LUA_POKEMON_URL = "http://127.0.0.1:31124/pokemon";
+var AE_LUA_FRAG_LIVE_URL = window.AstralSync.url + "/update";
+var AE_LUA_FRAG_ACK_URL = window.AstralSync.url + "/frag";
+var AE_LUA_POKEMON_URL = window.AstralSync.url + "/pokemon";
 var AE_LUA_POKEMON_SET_PREFIX = "ae_lua";
 var AE_LUA_TEAM_BINDINGS_STORAGE_KEY = "astralCalcAeLuaTeamBindings";
 var AE_LUA_FULL_ROSTER_INTERVAL_MS = 10000;
@@ -6530,6 +6530,7 @@ function ensureAeLuaFragImportControls() {
 			panel.appendChild(panelButton);
 		}
 	}
+	if (window.AstralSyncUI) window.AstralSyncUI.ensureControls();
 }
 
 function setAeLuaFragWatchUi(isWatching) {
@@ -12085,6 +12086,7 @@ function clearField() {
 }
 
 function getSetOptions(sets) {
+	if (window.AstralSyncUI) window.AstralSyncUI.install();
 	var setsHolder = sets;
 	if (setsHolder === undefined) {
 		setsHolder = pokedex;
@@ -12126,6 +12128,7 @@ function getSetOptions(sets) {
 				for (var j = 0; j < setNames.length; j++) {
 					var setName = setNames[j];
 					var setData = setdex[pokeName][setName];
+					if (setData.astralSync) continue;
 					if (!doesSetMatchStarterChoice(pokeName, setName, setData)) continue;
 					setOptions.push({
 						pokemon: pokeName,
@@ -12145,7 +12148,7 @@ function getSetOptions(sets) {
 			});
 		}
 	}
-	return setOptions;
+	return window.AstralSyncUI ? window.AstralSyncUI.options().concat(setOptions) : setOptions;
 }
 
 function getSelectOptions(arr, sort, defaultOption) {

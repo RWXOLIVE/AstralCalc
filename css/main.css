@@ -3539,3 +3539,12 @@ body.calc-side-resizing .credits {
         margin-top: 8px;
     }
 }
+
+/* Manual Astral Emerald snapshot controls */
+.astral-sync-controls { margin: 6px 0; }
+.astral-sync-status { margin: 4px 0; font-size: 12px; overflow-wrap: anywhere; }
+.astral-sync-status:empty { display: none; }
+.astral-sync-collection { max-height: 280px; overflow-y: auto; }
+.astral-sync-collection .btn { margin: 3px 4px 3px 0; }
+.astral-sync-collection details { margin-top: 6px; }
+.astral-sync-collection summary { cursor: pointer; }
