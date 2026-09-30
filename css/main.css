@@ -2771,7 +2771,7 @@ body.calc-side-resizing .credits {
 .frags-toolbar {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    align-items: flex-start;
     column-gap: 8px;
     row-gap: 6px;
 }
@@ -2797,6 +2797,10 @@ body.calc-side-resizing .credits {
 
 .calc-side-panel.fullscreen #frags-current-fight-label {
     flex-basis: auto;
+}
+
+.ae-lua-frag-import-button {
+    display: none !important;
 }
 
 .poke-import .ae-lua-frag-import-button {
@@ -3542,6 +3546,7 @@ body.calc-side-resizing .credits {
 
 /* Manual Astral Emerald snapshot controls */
 .astral-sync-controls { margin: 6px 0; }
+.frags-toolbar .astral-sync-controls { margin: 0; }
 .astral-sync-status { margin: 4px 0; font-size: 12px; overflow-wrap: anywhere; }
 .astral-sync-status:empty { display: none; }
 .astral-sync-collection { max-height: 280px; overflow-y: auto; }
