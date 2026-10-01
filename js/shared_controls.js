@@ -2066,6 +2066,8 @@ function formatSetNameForDisplay(setId) {
 	var parsedSet = parseSetId(setId);
 	if (!parsedSet.species) return String(setId || "");
 	var displaySpecies = getDisplaySpeciesName(parsedSet.species);
+	var syncedName = window.AstralSyncUI && window.AstralSyncUI.displayNameForId(setId, displaySpecies);
+	if (syncedName) return syncedName;
 	return parsedSet.label ? (displaySpecies + " (" + parsedSet.label + ")") : displaySpecies;
 }
 
@@ -12301,6 +12303,7 @@ function loadDefaultLists() {
 	var initialDefaultOption = getFirstValidSetOptionFromOptions(initialOptions);
 	$("input.set-selector").select2({
 		formatResult: function (object) {
+			if (object.isSynced) return "&nbsp;&nbsp;&nbsp;" + escapeHtml(formatSetNameForDisplay(object.id));
 			if ($("#randoms").prop("checked")) {
 				return getDisplaySpeciesName(object.pokemon);
 			} else {
@@ -12311,6 +12314,7 @@ function loadDefaultLists() {
 		},
 		formatSelection: function (object) {
 			if (!object) return "";
+			if (object.isSynced) return escapeHtml(formatSetNameForDisplay(object.id));
 			return formatSetNameForDisplay(object.id || object.text || "");
 		},
 		query: function (query) {
@@ -12356,11 +12360,13 @@ function loadCustomList(id) {
 	var customOptions = getSetOptions();
 	$("#" + id + " input.set-selector").select2({
 		formatResult: function (set) {
+			if (set.isSynced) return escapeHtml(formatSetNameForDisplay(set.id));
 			if (set.nickname) return getDisplaySpeciesName(set.pokemon) + " (" + set.nickname + ")";
 			return formatSetNameForDisplay(set.id);
 		},
 		formatSelection: function (set) {
 			if (!set) return "";
+			if (set.isSynced) return escapeHtml(formatSetNameForDisplay(set.id));
 			return formatSetNameForDisplay(set.id || set.text || "");
 		},
 		query: function (query) {

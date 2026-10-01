@@ -49,6 +49,26 @@
 		return Array.isArray(data) ? data : Object.keys(data || {});
 	}
 	function entries() { return snapshot.party.concat(snapshot.pc); }
+	function displayName(entry, speciesName) {
+		var species = speciesName || entry.species;
+		var nickname = String(entry.set.nickname || "").trim();
+		var isDistinct = nickname && nickname.toLowerCase() !== entry.species.toLowerCase() &&
+			nickname.toLowerCase() !== species.toLowerCase();
+		return isDistinct ? nickname + " (" + species + ")" : species + " (Custom Set)";
+	}
+	function displayNameForId(setId, speciesName) {
+		var all = entries();
+		for (var i = 0; i < all.length; i++) {
+			if (all[i].id !== setId) continue;
+			var name = displayName(all[i], speciesName);
+			var duplicate = 0;
+			for (var j = 0; j < i; j++) {
+				if (displayName(all[j], all[j].species) === displayName(all[i], all[i].species)) duplicate++;
+			}
+			return duplicate ? name + " #" + (duplicate + 1) : name;
+		}
+		return "";
+	}
 	function install() {
 		if (gen !== 9 || !setdex) return;
 		Object.keys(setdex).forEach(function (species) {
@@ -70,7 +90,8 @@
 	function options() {
 		if (gen !== 9) return [];
 		return entries().map(function (entry) {
-			return {pokemon: entry.species, set: entry.label, text: entry.id, id: entry.id, isSynced: true};
+			return {pokemon: entry.species, set: entry.label, text: displayNameForId(entry.id),
+				id: entry.id, isSynced: true, isCustom: true, nickname: entry.set.nickname || ""};
 		});
 	}
 	function uiState(label, status) {
@@ -240,6 +261,7 @@
 	}
 	restoreSavedSnapshot();
 	window.AstralSyncUI = {ensureControls: ensureControls, install: install, options: options,
+		displayNameForId: displayNameForId,
 		getBattle: function () { return snapshot.battle; }};
 	$(ensureControls);
 })();
