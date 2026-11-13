@@ -8,7 +8,7 @@
     <link type="text/css" rel="stylesheet" href="https://cdn.datatables.net/1.10.4/css/jquery.dataTables.min.css" />
     <link type="text/css" rel="stylesheet" href="https://cdn.datatables.net/colvis/1.1.1/css/dataTables.colVis.css" />
     <link type="text/css" rel="stylesheet" href="./js/vendor/select2/select2.css" />
-    <link type="text/css" rel="stylesheet" href="./css/main.css?ae4dd59e" />
+    <link type="text/css" rel="stylesheet" href="./css/main.css?ede529a2" />
     <link type="text/css" rel="stylesheet" href="./css/dark-theme.css" id="dark-theme-styles">
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-26211653-3"></script>
@@ -402,7 +402,7 @@
                         </div>
                         <div class="gen-specific g3 g4 g5 g6 g7 g8 g9">
                             <label>Ability</label>
-                            <select class="ability terrain-trigger"></select>
+                            <select class="ability terrain-trigger calc-trigger"></select>
                             <select aria-label="Protosynthesis/Quark Drive state" class="proto-quark-state calc-trigger hide">
                                 <option value="auto" selected="selected">Auto-Select</option>
                                 <option value="inactive">Inactive</option>
@@ -422,9 +422,10 @@
 										  <option value="5">Five allies fainted</option>
 									 </select>
                         </div>
-                        <div class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
+                        <div class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9 item-row">
                             <label>Item</label>
-                            <select class="item terrain-trigger"></select>
+                            <span class="item-sprite is-empty" aria-hidden="true"></span>
+                            <select class="item terrain-trigger calc-trigger"></select>
                         </div>
                         <div>
                             <label>Status</label>
@@ -910,8 +911,8 @@
     </script>
     <script type="text/javascript" src="./calc/util.js?51463f0d"></script>
     <script type="text/javascript" src="./calc/stats.js?a9e37d1a"></script>
-    <script type="text/javascript" src="./calc/data/species.js?1d23f380"></script>
-    <script type="text/javascript" src="./js/data/sets/gen9.js?fd509401"></script>
+    <script type="text/javascript" src="./calc/data/species.js?1b461a56"></script>
+    <script type="text/javascript" src="./js/data/sets/gen9.js?3cbcde71"></script>
     <script type="text/javascript" src="./js/data/sets/gen8.js?ecf43658"></script>
     <script type="text/javascript" src="./js/data/sets/gen7.js?78168bde"></script>
     <script type="text/javascript" src="./js/data/sets/gen6.js?2219279f"></script>
@@ -922,36 +923,39 @@
     <script type="text/javascript" src="./js/data/sets/gen1.js?428f44e9"></script>
     <script type="text/javascript" src="./calc/data/types.js?a641e10b"></script>
     <script type="text/javascript" src="./calc/data/natures.js?28612810"></script>
-    <script type="text/javascript" src="./calc/data/abilities.js?76d9976e"></script>
-    <script type="text/javascript" src="./calc/data/moves.js?816d7699"></script>
-    <script type="text/javascript" src="./calc/data/items.js?1191d88b"></script>
+    <script type="text/javascript" src="./calc/data/abilities.js?2778f83f"></script>
+    <script type="text/javascript" src="./calc/data/moves.js?b60617fb"></script>
+    <script type="text/javascript" src="./calc/data/items.js?6595cf6c"></script>
     <script type="text/javascript" src="./calc/data/index.js?abecbd82"></script>
-    <script type="text/javascript" src="./calc/move.js?98dd4aa6"></script>
-    <script type="text/javascript" src="./calc/pokemon.js?85a517f2"></script>
-    <script type="text/javascript" src="./calc/field.js?46d54c9d"></script>
+    <script type="text/javascript" src="./calc/move.js?5a4ba07d"></script>
+    <script type="text/javascript" src="./calc/pokemon.js?a155eb0e"></script>
+    <script type="text/javascript" src="./calc/field.js?e383196b"></script>
     <script type="text/javascript" src="./calc/items.js?067e42a4"></script>
-    <script type="text/javascript" src="./calc/mechanics/util.js?027f8d5f"></script>
-    <script type="text/javascript" src="./calc/mechanics/gen789.js?d1d9284e"></script>
-    <script type="text/javascript" src="./calc/mechanics/gen56.js?fa50d241"></script>
-    <script type="text/javascript" src="./calc/mechanics/gen4.js?8bdfefdd"></script>
-    <script type="text/javascript" src="./calc/mechanics/gen3.js?8bc6c1b7"></script>
-    <script type="text/javascript" src="./calc/mechanics/gen12.js?637dd485"></script>
-    <script type="text/javascript" src="./calc/calc.js?cd072314"></script>
-    <script type="text/javascript" src="./calc/desc.js?b9aeea69"></script>
-    <script type="text/javascript" src="./calc/result.js?fdbd8da7"></script>
-    <script type="text/javascript" src="./calc/adaptable.js?afeb3759"></script>
+    <script type="text/javascript" src="./calc/mechanics/util.js?d79cb589"></script>
+    <script type="text/javascript" src="./calc/mechanics/gen789.js?95d7e903"></script>
+    <script type="text/javascript" src="./calc/mechanics/gen56.js?f8960a98"></script>
+    <script type="text/javascript" src="./calc/mechanics/gen4.js?a7cbdde2"></script>
+    <script type="text/javascript" src="./calc/mechanics/gen3.js?f830b8d2"></script>
+    <script type="text/javascript" src="./calc/mechanics/gen12.js?199f8ca6"></script>
+    <script type="text/javascript" src="./calc/calc.js?40a2d9b1"></script>
+    <script type="text/javascript" src="./calc/desc.js?2bdeb389"></script>
+    <script type="text/javascript" src="./calc/result.js?ebd561a9"></script>
+    <script type="text/javascript" src="./calc/adaptable.js?92e49194"></script>
     <script type="text/javascript" src="./calc/index.js?0b1745b9"></script>
     <script type="text/javascript" src="./js/spritedata.js?e6979aa2"></script>
     <script type="text/javascript" src="./js/data/move_info_lookup.js?12b8d14e"></script>
-    <script type="text/javascript" src="./js/shared_controls.js?850cdb99"></script>
-    <script type="text/javascript" src="./js/honkalculate_controls.js?65812221"></script>
+    <script type="text/javascript" src="./js/item_sprites.js?87fc8fb0"></script>
+    <script src="./js/astral_sync.js?90fe34a9"></script>
+    <script type="text/javascript" src="./js/shared_controls.js?17882b9b"></script>
+    <script src="./js/astral_sync_ui.js?b12ab7d8"></script>
+    <script type="text/javascript" src="./js/honkalculate_controls.js?f3b86d6c"></script>
 
     <div style="clear:both;padding:20px;text-align:left">Created by Honko, maintained by Austin and Kris
         <ul><li><a href="https://github.com/smogon/damage-calc/contributors" class="links-lighten" target="_blank">Contributors</a></li>
             <li><a href="https://www.smogon.com/forums/threads/pok%C3%A9mon-showdown-damage-calculator.3593546/" class="links-lighten" target="_blank">Bug Reports</a></li>
             <li><a href="https://github.com/smogon/damage-calc" class="links-lighten" target="_blank">GitHub repository</a></li></ul>
             <button type="button" id="dark-theme-toggle"></button>
-            <script type="text/javascript" src="./js/dark-theme-toggle.js?c2d63560"></script>
+            <script type="text/javascript" src="./js/dark-theme-toggle.js?14ae17c2"></script>
     </div>
 
 </body>

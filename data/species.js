@@ -5648,7 +5648,7 @@ var XY_PATCH = {
         types: ['Normal', 'Fairy'],
         bs: { hp: 103, at: 60, df: 126, sa: 80, sd: 126, sp: 50 },
         weightkg: 32,
-        abilities: { 0: 'Healer' },
+        abilities: { 0: 'Aura Guard' },
         baseSpecies: 'Audino'
     },
     'Banette-Mega': {
@@ -9918,6 +9918,18 @@ var SPECIES_ALIASES = [
     ['Florges-Orange-Flower', 'florges'],
     ['Florges-Blue-Flower', 'florges'],
     ['Florges-White-Flower', 'florges'],
+    ['Flabebe-Pink-Flower', 'flabebe'],
+    ['Flabebe-Purple-Flower', 'flabebe'],
+    ['Flabebe-Green-Flower', 'flabebe'],
+    ['Flabebe-Black-Flower', 'flabebe'],
+    ['Floette-Pink-Flower', 'floette'],
+    ['Floette-Black-Flower', 'floette'],
+    ['Floette-Purple-Flower', 'floette'],
+    ['Floette-Green-Flower', 'floette'],
+    ['Florges-Pink-Flower', 'florges'],
+    ['Florges-Purple-Flower', 'florges'],
+    ['Florges-Green-Flower', 'florges'],
+    ['Florges-Black-Flower', 'florges'],
 ];
 var SPECIES_BY_ID = [];
 var gen = 0;

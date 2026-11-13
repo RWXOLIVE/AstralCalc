@@ -158,6 +158,10 @@ function SavePokemonSet(pokeInfo) {
 	pokemon.isCustomSet = true;
 	pokemon.moves = getMoveNamesFromSelectors(pokeInfo, getExistingSetMovesForSave(selectedSet));
 	addToDex(pokemon);
+	if (typeof getAppSettings === "function" && getAppSettings().autoImportMegas &&
+		typeof autoImportMegasForCurrentRoster === "function") {
+		autoImportMegasForCurrentRoster();
+	}
 	$(allPokemon("#importedSetsOptions")).css("display", "inline");
 	var fullSetName = pokemon.name + " (" + baseSetName + ")";
 	var selector = pokeInfo.find("input.set-selector");

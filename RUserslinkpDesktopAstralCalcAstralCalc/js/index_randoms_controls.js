@@ -1234,6 +1234,8 @@ function performCalculations() {
 	p1info.find(".sp .totalMod").text(p1.stats.spe);
 	p2info.find(".sp .totalMod").text(p2.stats.spe);
 	updateSpeedClasses(p1info, p2info, p1, p2, p1field);
+	renderTrappingResidualChip("#p1", p1, p2, p1field);
+	renderTrappingResidualChip("#p2", p2, p1, p2field);
 
 	try {
 		damageResults = calculateAllMoves(gen, p1, p1field, p2, p2field);

@@ -68,6 +68,202 @@
 		assertEqual(switchIn.scoreFromMetrics(scoringCase[1]), scoringCase[2], scoringCase[0]);
 	}
 
+	assertEqual(
+		switchIn.scoreFromMetrics(metrics({aiMonFaster: true, hitsToFaintPlayer: switchIn.UNKNOWN_NO_OF_HITS})),
+		3,
+		"fast status-only candidate uses Astral's unknown-hit sentinel"
+	);
+	assertEqual(
+		switchIn.scoreFromMetrics(metrics({hitsToFaintPlayer: switchIn.UNKNOWN_NO_OF_HITS})),
+		2,
+		"slow status-only candidate uses Astral's default tier"
+	);
+
+	assertEqual(
+		switchIn.medianDamage({damage: [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100]}),
+		93,
+		"Astral AI sees the ninth damage roll"
+	);
+	assertEqual(
+		switchIn.medianDamage({damage: [[85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100], [17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32]]}),
+		118,
+		"ninth roll is combined across multiple damage parts"
+	);
+	assertEqual(
+		switchIn.medianDamage({damage: [85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100]}, {hits: 3}),
+		279,
+		"fixed-power multihit damage includes every AI-assumed strike"
+	);
+	["Explosion", "Misty Explosion", "Self-Destruct"].forEach(function (moveName) {
+		assertEqual(
+			switchIn.isDamagingMoveForSwitchIn({name: moveName, category: "Physical"}),
+			false,
+			moveName + " is not a damaging move for switch-in scoring"
+		);
+	});
+	assertEqual(
+		switchIn.isDamagingMoveForSwitchIn({name: "Tackle", category: "Physical"}),
+		true,
+		"ordinary attacks remain damaging moves for switch-in scoring"
+	);
+
+	function mockPokemon(overrides) {
+		var pokemon = Object.assign({
+			ability: "",
+			abilityOn: false,
+			boosts: {spe: 0},
+			isDynamaxed: false,
+			item: "",
+			name: "Testmon",
+			rawStats: {atk: 80, def: 80, spa: 80, spd: 80, spe: 100},
+			stats: {spe: 100},
+			status: "",
+			types: ["Normal"],
+			toxicCounter: 0,
+			curHP: function () { return 100; },
+			maxHP: function () { return 100; }
+		}, overrides || {});
+		return pokemon;
+	}
+
+	assertEqual(
+		switchIn.hitsToFaintFromDamage(mockPokemon(), mockPokemon(), 0, null),
+		switchIn.UNKNOWN_NO_OF_HITS,
+		"zero damage is not a zero-hit KO"
+	);
+	assertEqual(
+		switchIn.hitsToFaintFromDamage(mockPokemon(), mockPokemon({item: "Focus Sash"}), 100, {hits: 1, category: "Physical", name: "Tackle"}),
+		2,
+		"Focus Sash adds a hit to a single-hit KO"
+	);
+	assertEqual(
+		switchIn.hitsToFaintFromDamage(mockPokemon(), mockPokemon({item: "Focus Sash"}), 100, {hits: 2, category: "Physical", name: "Double Kick"}),
+		1,
+		"multi-hit attacks bypass Focus Sash in Astral's KO count"
+	);
+	assertEqual(
+		switchIn.hitsToFaintFromDamage(mockPokemon(), mockPokemon({item: "Focus Sash"}), 100, {hits: 2, category: "Physical", name: "Dragon Darts"}),
+		2,
+		"predictor mirrors Astral's singles Dragon Darts endurance exception"
+	);
+	assertEqual(
+		switchIn.hitsToFaintFromDamage(mockPokemon(), mockPokemon({item: "Focus Sash"}), 100, {hits: 1, category: "Physical", name: "Tackle"}, {isMagicRoom: true}),
+		1,
+		"Magic Room suppresses Focus Sash in Astral's endurance check"
+	);
+
+	var neutralField = {
+		weather: undefined,
+		terrain: undefined,
+		isMagicRoom: false,
+		attackerSide: {isTailwind: false},
+		defenderSide: {isTailwind: false}
+	};
+	assertEqual(
+		switchIn.getEffectiveSpeed(mockPokemon({boosts: {spe: 1}, status: "par"}), neutralField, neutralField.attackerSide, false),
+		37,
+		"speed stages and Astral's Gen 6 paralysis setting are applied in engine order"
+	);
+	assertEqual(
+		switchIn.getEffectiveSpeed(mockPokemon({ability: "Slow Start", abilityOn: true}), neutralField, neutralField.defenderSide, true),
+		100,
+		"fresh switch candidate has no simulated Slow Start volatile"
+	);
+	assertEqual(
+		switchIn.getEffectiveSpeed(mockPokemon({ability: "Slow Start", abilityOn: true}), neutralField, neutralField.attackerSide, false),
+		50,
+		"active Slow Start state is respected"
+	);
+	assertEqual(
+		switchIn.getEffectiveSpeed(mockPokemon({ability: "Unburden", abilityOn: true}), neutralField, neutralField.defenderSide, true),
+		100,
+		"fresh itemless switch candidate does not receive Unburden"
+	);
+	assertEqual(
+		switchIn.getEffectiveSpeed(mockPokemon({ability: "Protosynthesis", abilityOn: true, item: "Booster Energy"}), neutralField, neutralField.defenderSide, true),
+		100,
+		"fresh switch candidate has no simulated Booster Energy volatile"
+	);
+	assertEqual(
+		switchIn.getEffectiveSpeed(mockPokemon({ability: "Protosynthesis", abilityOn: true, item: "Booster Energy"}), neutralField, neutralField.attackerSide, false),
+		150,
+		"active player can represent an activated Booster Energy speed boost"
+	);
+	assertEqual(
+		switchIn.getEffectiveSpeed(mockPokemon({ability: "Quark Drive", protoQuark: "spe"}), neutralField, neutralField.attackerSide, false),
+		150,
+		"explicit Paradox speed state is respected"
+	);
+	assertEqual(
+		switchIn.switchInIsFaster(mockPokemon(), mockPokemon(), neutralField),
+		true,
+		"AI treats a speed tie as faster"
+	);
+	assertEqual(
+		switchIn.switchInIsFaster(mockPokemon({item: "Quick Claw", rawStats: {spe: 50}, stats: {spe: 50}}), mockPokemon(), neutralField),
+		true,
+		"AI sees its Quick Claw and treats itself as faster"
+	);
+	assertEqual(
+		switchIn.switchInIsFaster(mockPokemon({item: "Quick Claw", rawStats: {spe: 50}, stats: {spe: 50}}), mockPokemon({item: "Quick Claw"}), neutralField),
+		true,
+		"AI's Quick Claw still wins the predictor check when both sides hold one"
+	);
+	assertEqual(
+		switchIn.switchInIsFaster(mockPokemon({ability: "Quick Draw", item: "Lagging Tail", rawStats: {spe: 50}, stats: {spe: 50}}), mockPokemon({ability: "Quick Draw"}), neutralField),
+		true,
+		"AI's Quick Draw takes precedence even with matching Quick Draw and a lagging item"
+	);
+
+	var bootsField = {
+		weather: undefined,
+		terrain: undefined,
+		isGravity: false,
+		isMagicRoom: false,
+		attackerSide: {},
+		defenderSide: {isGrounded: false, isSR: false, spikes: 1, steelsurge: false}
+	};
+	assertEqual(
+		switchIn.getSwitchInHitsToKO(mockPokemon({item: "Heavy-Duty Boots"}), mockPokemon(), 30, bootsField),
+		3,
+		"predictor mirrors Astral AI's current Boots and Spikes interaction"
+	);
+
+	var magicRoomHazards = {
+		weather: undefined,
+		terrain: undefined,
+		isGravity: false,
+		isMagicRoom: true,
+		attackerSide: {},
+		defenderSide: {isGrounded: false, isSR: true, spikes: 1, steelsurge: false}
+	};
+	assertEqual(
+		switchIn.getSwitchInHitsToKO(mockPokemon({item: "Heavy-Duty Boots"}), mockPokemon(), 30, Object.assign({}, magicRoomHazards, {
+			defenderSide: {isGrounded: false, isSR: true, spikes: 0, steelsurge: false}
+		})),
+		3,
+		"Magic Room suppresses Boots against rocks in Astral's cached hold-effect data"
+	);
+	assertEqual(
+		switchIn.getSwitchInHitsToKO(mockPokemon({types: ["Flying"]}), mockPokemon(), 30, magicRoomHazards),
+		3,
+		"predictor mirrors Astral's current Magic Room grounding override"
+	);
+
+	var hailField = {
+		weather: "Hail",
+		terrain: undefined,
+		isGravity: false,
+		isMagicRoom: true,
+		attackerSide: {},
+		defenderSide: {isGrounded: false, isSR: false, spikes: 0, steelsurge: false}
+	};
+	assertEqual(
+		switchIn.getSwitchInHitsToKO(mockPokemon({item: "Safety Goggles"}), mockPokemon(), 20, hailField),
+		4,
+		"Magic Room suppresses Safety Goggles in Astral's cached hold-effect data"
+	);
+
 	var explanation = switchIn.describeMatchup(metrics({
 		aiMonFaster: true,
 		hitsToFaintPlayer: 1,

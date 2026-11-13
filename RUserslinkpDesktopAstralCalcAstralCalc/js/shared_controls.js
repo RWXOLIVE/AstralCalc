@@ -6503,6 +6503,49 @@ function createPokemon(pokeInfo) {
 	}
 }
 
+var TRAPPING_RESIDUAL_MOVES = [
+	"Bind", "Clamp", "Fire Spin", "Infestation", "Magma Storm", "Sand Tomb",
+	"Thunder Cage", "Whirlpool", "Wrap", "G-Max Sandblast", "G-Max Centiferno"
+];
+
+function getDisplayedTrappingMoves(pokeInfo) {
+	if (!pokeInfo || !pokeInfo.length) return [];
+	var trappingMoves = [];
+	pokeInfo.find("select.move-selector").each(function () {
+		var moveName = String($(this).val() || "");
+		if (TRAPPING_RESIDUAL_MOVES.indexOf(moveName) !== -1 && trappingMoves.indexOf(moveName) === -1) {
+			trappingMoves.push(moveName);
+		}
+	});
+	return trappingMoves;
+}
+
+function renderTrappingResidualChip(sideSelector, pokemon, opposingPokemon, field) {
+	var pokeInfo = $(sideSelector);
+	var trappingChips = pokeInfo.find(".trapping-residual-chip");
+	if (!trappingChips.length) return;
+	if (!pokemon || typeof pokemon.maxHP !== "function" || pokemon.hasAbility("Magic Guard")) {
+		trappingChips.text("").removeAttr("title").prop("hidden", true).hide();
+		return;
+	}
+	var opposingInfo = String(pokeInfo.attr("id") || "") === "p1" ? $("#p2") : $("#p1");
+	var trappingMoves = getDisplayedTrappingMoves(opposingInfo);
+	if (field && field.attackerSide && field.attackerSide.magmaStorm) trappingMoves.unshift("Magma Storm");
+	if (!trappingMoves.length) {
+		trappingChips.text("").removeAttr("title").prop("hidden", true).hide();
+		return;
+	}
+	var hasBindingBand = opposingPokemon && opposingPokemon.hasItem && opposingPokemon.hasItem("Binding Band");
+	var damage = hasBindingBand
+		? (gen > 5 ? Math.floor(pokemon.maxHP() / 6) : Math.floor(pokemon.maxHP() / 8))
+		: (gen > 5 ? Math.floor(pokemon.maxHP() / 8) : Math.floor(pokemon.maxHP() / 16));
+	trappingChips
+		.text("-" + damage + " HP / turn")
+		.attr("title", trappingMoves.join(", ") + " trapping damage" + (hasBindingBand ? " (Binding Band)" : ""))
+		.prop("hidden", false)
+		.show();
+}
+
 function getGender(gender) {
 	if (!gender || gender === 'genderless' || gender === 'N') return 'N';
 	if (gender.toLowerCase() === 'male' || gender === 'M') return 'M';
@@ -6584,6 +6627,7 @@ function createField() {
 	var isLightScreen = [$("#lightScreenL").prop("checked"), $("#lightScreenR").prop("checked")];
 	var isProtected = [$("#protectL").prop("checked"), $("#protectR").prop("checked")];
 	var isSeeded = [$("#leechSeedL").prop("checked"), $("#leechSeedR").prop("checked")];
+	var magmaStorm = [$("#magmaStormL").prop("checked"), $("#magmaStormR").prop("checked")];
 	var isForesight = [$("#foresightL").prop("checked"), $("#foresightR").prop("checked")];
 	var isHelpingHand = [$("#helpingHandL").prop("checked"), $("#helpingHandR").prop("checked")];
 	var isTailwind = [$("#tailwindL").prop("checked"), $("#tailwindR").prop("checked")];
@@ -6600,7 +6644,7 @@ function createField() {
 			spikes: spikes[i], isSR: isSR[i], steelsurge: steelsurge[i],
 			vinelash: vinelash[i], wildfire: wildfire[i], cannonade: cannonade[i], volcalith: volcalith[i],
 			isReflect: isReflect[i], isLightScreen: isLightScreen[i],
-			isProtected: isProtected[i], isSeeded: isSeeded[i], isForesight: isForesight[i],
+			isProtected: isProtected[i], isSeeded: isSeeded[i], magmaStorm: magmaStorm[i], isForesight: isForesight[i],
 			isTailwind: isTailwind[i], isHelpingHand: isHelpingHand[i], isFlowerGift: isFlowerGift[i], isFriendGuard: isFriendGuard[i],
 			isAuroraVeil: isAuroraVeil[i], isBattery: isBattery[i], isPowerSpot: isPowerSpot[i], isPlayer: i === 0,
 			isSwitching: isSwitchingOut[i] ? 'out' : undefined
@@ -6834,6 +6878,8 @@ function clearField() {
 	$("#clear").prop("checked", true);
 	$("#gscClear").prop("checked", true);
 	$("#gravity").prop("checked", false);
+	$("#magmaStormL").prop("checked", false);
+	$("#magmaStormR").prop("checked", false);
 	$("#srL").prop("checked", false);
 	$("#srR").prop("checked", false);
 	$("#spikesL0").prop("checked", true);

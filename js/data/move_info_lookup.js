@@ -427,6 +427,7 @@
     "ingrain": {"accuracy": 0, "pp": 20},
     "instruct": {"accuracy": 0, "pp": 15},
     "iondeluge": {"accuracy": 0, "pp": 25},
+    "ironcleave": {"accuracy": 100, "pp": 15},
     "irondefense": {"accuracy": 0, "pp": 15},
     "ironhead": {"accuracy": 100, "pp": 15},
     "irontail": {"accuracy": 95, "pp": 15},

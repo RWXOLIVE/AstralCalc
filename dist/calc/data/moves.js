@@ -1044,7 +1044,7 @@ var DPP_PATCH = {
         makesContact: true,
         category: 'Physical'
     },
-    'Roar of Time': { bp: 150, type: 'Dragon', category: 'Special' },
+    'Roar of Time': { bp: 150, type: 'Dragon', category: 'Special', critRatio: 2 },
     'Rock Climb': {
         bp: 90,
         type: 'Rock',
@@ -1052,7 +1052,7 @@ var DPP_PATCH = {
         category: 'Physical'
     },
     'Seed Flare': { bp: 120, type: 'Grass', category: 'Special' },
-    'Spacial Rend': { bp: 100, type: 'Dragon', category: 'Special', critRatio: 2 },
+    'Spacial Rend': { bp: 110, type: 'Dragon', category: 'Special', critRatio: 2 },
     'Trump Card': {
         bp: 0,
         type: 'Normal',
@@ -1157,7 +1157,7 @@ var DPP_PATCH = {
         category: 'Physical'
     },
     'Iron Cleave': {
-        bp: 70,
+        bp: 80,
         type: 'Steel',
         makesContact: true,
         critRatio: 2,
@@ -1197,7 +1197,7 @@ var DPP_PATCH = {
         makesContact: true,
         category: 'Physical'
     },
-    'Stone Edge': { bp: 100, type: 'Rock', category: 'Physical', critRatio: 2 },
+    'Stone Edge': { bp: 110, type: 'Rock', category: 'Physical', critRatio: 2 },
     'Thunder Fang': {
         bp: 65,
         type: 'Electric',
@@ -1838,7 +1838,7 @@ var XY_PATCH = {
         category: 'Physical'
     },
     'Flying Press': {
-        bp: 80,
+        bp: 100,
         type: 'Fighting',
         makesContact: true,
         category: 'Physical'
@@ -1850,7 +1850,7 @@ var XY_PATCH = {
         category: 'Physical'
     },
     'Hyperspace Hole': {
-        bp: 80,
+        bp: 100,
         type: 'Psychic',
         breaksProtect: true,
         category: 'Special'
@@ -1864,7 +1864,7 @@ var XY_PATCH = {
         secondaries: true
     },
     'Parabolic Charge': {
-        bp: 75,
+        bp: 70,
         type: 'Electric',
         drain: [1, 2],
         target: 'allAdjacent',
@@ -2317,7 +2317,7 @@ var SM_PATCH = {
     Octazooka: { zp: 120 },
     Outrage: { zp: 190 },
     Overheat: { zp: 195 },
-    'Parabolic Charge': { bp: 75, zp: 120 },
+    'Parabolic Charge': { bp: 70, zp: 120 },
     Payback: { zp: 100 },
     'Pay Day': { zp: 100 },
     Peck: { zp: 100 },
@@ -3490,7 +3490,7 @@ var SS_PATCH = {
         maxPower: 1
     },
     'Meteor Assault': {
-        bp: 150,
+        bp: 170,
         type: 'Fighting',
         category: 'Physical',
         zp: 200,
@@ -4399,7 +4399,8 @@ var SV_PATCH = {
         category: 'Physical',
         zp: 190,
         maxPower: 140,
-        makesContact: true
+        makesContact: true,
+        isPunch: true
     },
     'Dire Claw': {
         bp: 80,

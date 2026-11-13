@@ -1240,6 +1240,17 @@ body.layout-simplified .simplified-side-control-label select {
     display: inline-block;
     width: 2.5em;
 }
+.poke-info .trapping-residual-chip {
+    width: auto;
+    margin-left: 0.45em;
+    padding: 2px 7px;
+    border: 1px solid rgba(70, 112, 117, 0.55);
+    border-radius: 999px;
+    color: #ff9b9b;
+    font-size: 0.85em;
+    font-weight: bold;
+    white-space: nowrap;
+}
 .poke-info input[type="number"] {
     display: inline-block;
     width: 3em;

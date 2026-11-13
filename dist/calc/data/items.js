@@ -417,6 +417,7 @@ exports.MEGA_STONES = {
     Feraligite: 'Feraligatr',
     Floettite: 'Floette',
     Froslassite: 'Froslass',
+    Golurkite: 'Golurk',
     Greninjite: 'Greninja',
     Hawluchanite: 'Hawlucha',
     Malmarite: 'Malamar',

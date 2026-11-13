@@ -1,10 +1,18 @@
-# EEcalc
+# AEcalc
 
-## Live frag sheet link (mGBA)
+## Manual party and PC sync
+
+The **Sync** button reads a protocol-1 Astral Emerald API at `http://127.0.0.1:31124`, checks `/ping`, then requests `/update`. Party Pokemon are placed in Calc's **Team** in game order; supported PC Pokemon go to **Box**. Existing manual Team entries move to Box so they remain available. The synced set details are collapsible. **Apply HP** selects its Pokemon and applies its live HP explicitly. The legacy **Connect ae_lua** button is hidden.
+
+See [the sync integration and mGBA test guide](docs/astral-sync.md) for the wire format, changed files, errors, and validation limits. For sharing, use `\\wsl.localhost\Ubuntu\home\ruben\pokemon-astral-emerald-1.14.0\Xtransceiver-v1`. Load its lowercase `ae_lua.lua` alongside its `AE_Lua/` modules with a compatible sync-enabled ROM. Let its 420-slot PC scan finish for a complete Box snapshot.
+
+## Legacy live frag sheet link (hidden)
+
+These instructions describe the older interface if **Connect ae_lua** is re-enabled with a Lua server that supports its legacy routes. The `Xtransceiver-v1` public Sync server exposes `/ping` and `/update` only.
 
 1. Open Astral Emerald in mGBA 0.10 or newer.
-2. Load the updated `ae_lua.lua` from the Astral Emerald project in mGBA's scripting window.
-3. Open the calculator and press **Connect ae_lua**. The button changes to **ae_lua connected** when the local HTTP link is ready; no file picker is required.
+2. Load a Lua script that implements the legacy `/pokemon` and `/frag` routes in mGBA's scripting window.
+3. If re-enabled, open the calculator and press **Connect ae_lua**. The button changes to **ae_lua connected** when the legacy HTTP link is ready; no file picker is required.
 4. Leave the Lua script and calculator open while playing. When one of your Pokemon defeats a trainer's Pokemon, the matching frag-sheet entry receives +1 automatically.
 
 mGBA's scripting window also gains a **Frag Tracking** section. Each confirmed kill is printed there as, for example, `Marshtomp has fragged Roxanne's Nosepass! +1 frag for Marshtomp`.

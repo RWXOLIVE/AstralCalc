@@ -6,7 +6,7 @@
     <link rel="icon" type="image/gif" href="img/totodile.gif"  >
     <title>Astral Emerald Damage Calculator</title>
     <link type="text/css" rel="stylesheet" href="./js/vendor/select2/select2.css" />
-    <link type="text/css" rel="stylesheet" href="./css/main.css?f9cd983d" />
+    <link type="text/css" rel="stylesheet" href="./css/main.css?astral-sync-v5" />
     <link type="text/css" rel="stylesheet" href="./css/vendor/bootstrap.css" />
     <link type="text/css" rel="stylesheet" href="./css/dark-theme.css" id="dark-theme-styles">
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -647,6 +647,7 @@
                     <input class="current-hp calc-trigger" id="currentHpL1" value="341" />/<span class="max-hp">341</span> (
                     <input class="percent-hp calc-trigger" value="100" />%)
                         <span class="side-residual-chip side-residual-chip-hp" hidden></span>
+                        <span class="trapping-residual-chip side-residual-chip side-residual-chip-hp" hidden></span>
                         <input class="visually-hidden max calc-trigger btn-input" type="checkbox" id="maxL" />
                         <label class="btn btn-xwide gen-specific g8 hide" for="maxL"
                         title="Use the corresponding Max Move?">Dynamax</label>
@@ -804,12 +805,22 @@
                 <div class="roster-top-controls">
                     <button type="button" id="box-current-team" class="btn" title="Move the current Team to Box 1">Team &rarr; Box 1</button>
                     <span id="search-inline" class="search-inline">
-                        <input type="text" id="search" placeholder="Search - Pokemon/Moves" />
+                        <input type="text" id="search" placeholder="Search - Pokemon Info" />
                     </span>
                 </div>
                 <div>
                     <legend align="center">Team</legend>
                     <div id="team-poke-list" class="box-poke dropzone">
+                    </div>
+                </div>
+                <div id="team-right-section" class="team-right-section" hidden>
+                    <legend id="team-right-title" align="center">Team (R)</legend>
+                    <div id="team-right-poke-list" class="box-poke team-right-poke-list dropzone" role="list" aria-labelledby="team-right-title">
+                    </div>
+                </div>
+                <div id="tag-partner-section" class="tag-partner-section" hidden>
+                    <legend id="tag-partner-title" align="center">Tag Partner</legend>
+                    <div id="tag-partner-poke-list" class="box-poke tag-partner-poke-list" role="list" aria-labelledby="tag-partner-title">
                     </div>
                 </div>
                 <hr>
@@ -822,6 +833,11 @@
                     <legend align="center">Box 2</legend>
                     <div id="box-poke-list2" class="box-poke dropzone">
                     </div>
+                    <div>
+                    <legend align="center">Mega Pokemon</legend>
+                    <div id="box-poke-listmega" class="box-poke dropzone">
+                    </div>
+                </div>
                 </div>
                 <hr>
                 <div>
@@ -1114,6 +1130,16 @@
                             <td><div class="right" title="Has this Pok&eacute;mon been affected by Leech Seed?">
                                 <input aria-describedby="selectLeechSeedInstruction" class="visually-hidden calc-trigger" type="checkbox" id="leechSeedR" />
                                 <label class="btn btn-wide" for="leechSeedR">Leech Seed</label>
+                            </div></td>
+                        </tr>
+                        <tr class="gen-specific g4 g5 g6 g7 g8 g9">
+                            <td><div class="left" title="Is this side trapped by Magma Storm?">
+                                <input class="visually-hidden calc-trigger" type="checkbox" id="magmaStormL" />
+                                <label class="btn btn-wide" for="magmaStormL">Magma Storm</label>
+                            </div></td>
+                            <td><div class="right" title="Is this side trapped by Magma Storm?">
+                                <input class="visually-hidden calc-trigger" type="checkbox" id="magmaStormR" />
+                                <label class="btn btn-wide" for="magmaStormR">Magma Storm</label>
                             </div></td>
                         </tr>
                         <tr class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
@@ -1693,6 +1719,7 @@
                     <input class="current-hp calc-trigger" id="currentHpR1" value="341" />/<span class="max-hp">341</span> (
                     <input class="percent-hp calc-trigger" value="100" />%)
                         <span class="side-residual-chip side-residual-chip-hp" hidden></span>
+                        <span class="trapping-residual-chip side-residual-chip side-residual-chip-hp" hidden></span>
                         <input class="visually-hidden max calc-trigger btn-input" type="checkbox" id="maxR" />
                         <label class="btn btn-xwide gen-specific g8 hide" for="maxR"
                         title="Use the corresponding Max Move?">Dynamax</label>
@@ -1968,9 +1995,13 @@
                     <input type="checkbox" id="settings-move-meta" />
                     Show Crit Rates, PP & ACC
                 </label>
-                <label class="settings-checkbox-row" title="In development: this saves the preference but does not change imports yet.">
+                <label class="settings-checkbox-row" title="Automatically add Mega forms for owned Pokemon to Box 2.">
                     <input type="checkbox" id="settings-auto-import-megas" />
                     Auto Import Megas
+                </label>
+                <label class="settings-checkbox-row" title="Show an opposing alternate form's base form and the Mega unlocked by its matching Mega Stone.">
+                    <input type="checkbox" id="settings-display-formes" />
+                    Display Formes
                 </label>
                 <label class="settings-checkbox-row">
                     <input type="checkbox" id="settings-total-frags-on-border" />
@@ -1999,7 +2030,7 @@
         <button type="button" id="frag-context-add" class="btn frag-context-btn">Add Frag</button>
         <button type="button" id="frag-context-mark-dead" class="btn frag-context-btn">Did This Mon Die?</button>
         <button type="button" id="frag-context-swap-team1" class="btn frag-context-btn">Hot Swap To Team 1</button>
-        <button type="button" id="frag-context-swap-team2" class="btn frag-context-btn">Hot Swap To Team 2</button>
+        <button type="button" id="frag-context-swap-team2" class="btn frag-context-btn">Hot Swap To Team (R)</button>
         <button type="button" id="frag-context-swap-trash" class="btn frag-context-btn">Hot Swap To Trash</button>
         <button type="button" id="frag-context-cancel" class="btn frag-context-btn">Cancel</button>
     </div>
@@ -2035,8 +2066,8 @@
     <script type="text/javascript" src="./calc/data/items.js?"></script>
     <script type="text/javascript" src="./calc/data/index.js?"></script>
     <script type="text/javascript" src="./calc/move.js?"></script>
-    <script type="text/javascript" src="./calc/pokemon.js?"></script>
-    <script type="text/javascript" src="./calc/field.js?"></script>
+    <script type="text/javascript" src="./calc/pokemon.js?magma-storm-field-v1"></script>
+    <script type="text/javascript" src="./calc/field.js?magma-storm-field-v1"></script>
     <script type="text/javascript" src="./calc/items.js?"></script>
     <script type="text/javascript" src="./calc/mechanics/util.js?"></script>
     <script type="text/javascript" src="./calc/mechanics/gen789.js?"></script>
@@ -2045,15 +2076,17 @@
     <script type="text/javascript" src="./calc/mechanics/gen3.js?"></script>
     <script type="text/javascript" src="./calc/mechanics/gen12.js?"></script>
     <script type="text/javascript" src="./calc/calc.js?"></script>
-    <script type="text/javascript" src="./calc/desc.js?"></script>
+    <script type="text/javascript" src="./calc/desc.js?magma-storm-field-v1"></script>
     <script type="text/javascript" src="./calc/result.js?"></script>
     <script type="text/javascript" src="./calc/adaptable.js?"></script>
     <script type="text/javascript" src="./calc/index.js?"></script>
     <script type="text/javascript" src="./js/spritedata.js?spritefix2"></script>
     <script type="text/javascript" src="./js/data/frags_splits.js?"></script>
     <script type="text/javascript" src="./js/data/move_info_lookup.js?"></script>
-<script type="text/javascript" src="./js/shared_controls.js?6003efc3"></script>
-    <script type="text/javascript" src="./js/index_randoms_controls.js?critmeta2"></script>
+<script src="./js/astral_sync.js?astral-sync-v5"></script>
+<script type="text/javascript" src="./js/shared_controls.js?astral-sync-v2"></script>
+<script src="./js/astral_sync_ui.js?astral-sync-v7"></script>
+<script type="text/javascript" src="./js/index_randoms_controls.js?trapping-residual-v1"></script>
     <script type="text/javascript" src="./js/moveset_import.js?aefe0d1f"></script>
 </div>
 

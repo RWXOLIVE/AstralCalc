@@ -1,0 +1,142 @@
+{
+  "battle": {
+    "active": false,
+    "doubleBattle": false,
+    "fieldStatusFlags": 0,
+    "playerPartyIndexes": [],
+    "weatherFlags": 0
+  },
+  "boxes": [],
+  "frame": 945,
+  "game": "Astral Emerald",
+  "party": [
+    {
+      "ability": "Static",
+      "abilityId": 9,
+      "abilitySlot": 0,
+      "baseSpeciesId": 25,
+      "currentHP": 0,
+      "dynamaxLevel": 0,
+      "evs": {
+        "atk": 0,
+        "def": 0,
+        "hp": 0,
+        "spa": 0,
+        "spd": 0,
+        "spe": 0
+      },
+      "friendship": 50,
+      "gender": "F",
+      "gigantamax": false,
+      "hyperTrained": {
+        "atk": false,
+        "def": false,
+        "hp": false,
+        "spa": false,
+        "spd": false,
+        "spe": false
+      },
+      "isEgg": false,
+      "item": "",
+      "itemId": 0,
+      "ivs": {
+        "atk": 0,
+        "def": 0,
+        "hp": 0,
+        "spa": 0,
+        "spd": 0,
+        "spe": 0
+      },
+      "level": 25,
+      "maxHP": 0,
+      "moves": [],
+      "nature": "Calm",
+      "natureId": 20,
+      "nickname": "Pikachu",
+      "originalNature": "Calm",
+      "otId": 54321,
+      "personality": 12345,
+      "shiny": false,
+      "slot": 1,
+      "species": "Pikachu",
+      "speciesId": 25,
+      "speciesKey": "PIKACHU",
+      "stats": {
+        "atk": 0,
+        "def": 0,
+        "hp": 0,
+        "spa": 0,
+        "spd": 0,
+        "spe": 0
+      },
+      "status": 0,
+      "teraTypeId": 14
+    },
+    {
+      "ability": "Battle　Armor",
+      "abilityId": 4,
+      "abilitySlot": 1,
+      "baseSpeciesId": 160,
+      "currentHP": 0,
+      "dynamaxLevel": 0,
+      "evs": {
+        "atk": 0,
+        "def": 0,
+        "hp": 0,
+        "spa": 0,
+        "spd": 0,
+        "spe": 0
+      },
+      "friendship": 50,
+      "gender": "F",
+      "gigantamax": false,
+      "hyperTrained": {
+        "atk": false,
+        "def": false,
+        "hp": false,
+        "spa": false,
+        "spd": false,
+        "spe": false
+      },
+      "isEgg": false,
+      "item": "",
+      "itemId": 0,
+      "ivs": {
+        "atk": 0,
+        "def": 0,
+        "hp": 0,
+        "spa": 0,
+        "spd": 0,
+        "spe": 0
+      },
+      "level": 50,
+      "maxHP": 0,
+      "moves": [],
+      "nature": "Quiet",
+      "natureId": 17,
+      "nickname": "Feraligatr",
+      "originalNature": "Quiet",
+      "otId": 54321,
+      "personality": 34567,
+      "shiny": false,
+      "slot": 2,
+      "species": "Feraligatr",
+      "speciesId": 160,
+      "speciesKey": "FERALIGATR",
+      "stats": {
+        "atk": 0,
+        "def": 0,
+        "hp": 0,
+        "spa": 0,
+        "spd": 0,
+        "spe": 0
+      },
+      "status": 0,
+      "teraTypeId": 12
+    }
+  ],
+  "pcSupported": false,
+  "protocol": 1,
+  "sequence": 128,
+  "structure": 1
+}

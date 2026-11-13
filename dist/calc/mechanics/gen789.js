@@ -783,7 +783,7 @@ function calculateBPModsSMSSSV(gen, attacker, defender, move, field, desc, baseP
         bpMods.push(6144);
         desc.moveBP = basePower * 1.5;
     }
-    else if (move.named('Solar Beam', 'Solar Blade') &&
+    else if (!attacker.hasAbility('Mega Sol') && move.named('Solar Beam', 'Solar Blade') &&
         field.hasWeather('Rain', 'Heavy Rain', 'Sand', 'Hail', 'Snow', 'Fog')) {
         bpMods.push(2048);
         desc.moveBP = basePower / 2;
@@ -1259,7 +1259,7 @@ function calculateFinalModsSMSSSV(gen, attacker, defender, move, field, desc, is
         finalMods.push(2048);
         desc.defenderAbility = defender.ability;
     }
-    if (defender.hasAbility('Fluffy') && move.flags.contact &&
+    if (defender.hasAbility('Fluffy', 'Aura Guard') && move.flags.contact &&
         !attacker.hasAbility('Long Reach') &&
         !(attacker.hasItem('Punching Glove') && move.flags.punch)) {
         finalMods.push(2048);

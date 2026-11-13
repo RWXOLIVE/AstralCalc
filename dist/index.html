@@ -6,7 +6,7 @@
     <link rel="icon" type="image/gif" href="img/totodile.gif"  >
     <title>Astral Emerald Damage Calculator</title>
     <link type="text/css" rel="stylesheet" href="./js/vendor/select2/select2.css" />
-    <link type="text/css" rel="stylesheet" href="./css/main.css?ae4dd59e" />
+    <link type="text/css" rel="stylesheet" href="./css/main.css?ede529a2" />
     <link type="text/css" rel="stylesheet" href="./css/vendor/bootstrap.css" />
     <link type="text/css" rel="stylesheet" href="./css/dark-theme.css" id="dark-theme-styles">
     <!-- Global site tag (gtag.js) - Google Analytics -->
@@ -594,8 +594,9 @@
                                     <option value="5">Five allies fainted</option>
                             </select>
                     </div>
-                    <div class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
+                    <div class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9 item-row">
                         <label for="itemL1">Item</label>
+                        <span class="item-sprite is-empty" id="item-spriteL1" aria-hidden="true"></span>
                         <select class="item terrain-trigger calc-trigger" id="itemL1"></select>
                         <label class="item-ignore-toggle-label" for="ignoreItemL1" title="When checked, this Pokemon is treated as if it has no held item, without clearing the selected item.">
                             <input type="checkbox" class="ignore-item-toggle terrain-trigger calc-trigger" id="ignoreItemL1" />
@@ -647,6 +648,7 @@
                     <input class="current-hp calc-trigger" id="currentHpL1" value="341" />/<span class="max-hp">341</span> (
                     <input class="percent-hp calc-trigger" value="100" />%)
                         <span class="side-residual-chip side-residual-chip-hp" hidden></span>
+                        <span class="trapping-residual-chip side-residual-chip side-residual-chip-hp" hidden></span>
                         <input class="visually-hidden max calc-trigger btn-input" type="checkbox" id="maxL" />
                         <label class="btn btn-xwide gen-specific g8 hide" for="maxL"
                         title="Use the corresponding Max Move?">Dynamax</label>
@@ -803,13 +805,25 @@
                 <legend align="center">Team/Box</legend>
                 <div class="roster-top-controls">
                     <button type="button" id="box-current-team" class="btn" title="Move the current Team to Box 1">Team &rarr; Box 1</button>
+                    <button type="button" id="sort-player-roster-name" class="btn roster-sort-button" title="Sort the player roster alphabetically by species name">Sort by name</button>
+                    <button type="button" id="sort-player-roster-speed" class="btn roster-sort-button" title="Sort the player roster by calculated Speed, highest first">Sort by speed</button>
                     <span id="search-inline" class="search-inline">
-                        <input type="text" id="search" placeholder="Search - Pokemon/Moves" />
+                        <input type="text" id="search" placeholder="Search - Pokemon Info" />
                     </span>
                 </div>
                 <div>
                     <legend align="center">Team</legend>
                     <div id="team-poke-list" class="box-poke dropzone">
+                    </div>
+                </div>
+                <div id="team-right-section" class="team-right-section" hidden>
+                    <legend id="team-right-title" align="center">Team (R)</legend>
+                    <div id="team-right-poke-list" class="box-poke team-right-poke-list dropzone" role="list" aria-labelledby="team-right-title">
+                    </div>
+                </div>
+                <div id="tag-partner-section" class="tag-partner-section" hidden>
+                    <legend id="tag-partner-title" align="center">Tag Partner</legend>
+                    <div id="tag-partner-poke-list" class="box-poke tag-partner-poke-list" role="list" aria-labelledby="tag-partner-title">
                     </div>
                 </div>
                 <hr>
@@ -821,6 +835,11 @@
                 <div>
                     <legend align="center">Box 2</legend>
                     <div id="box-poke-list2" class="box-poke dropzone">
+                    </div>
+                </div>
+                <div>
+                    <legend align="center">Mega Pokemon</legend>
+                    <div id="box-poke-listmega" class="box-poke dropzone">
                     </div>
                 </div>
                 <hr>
@@ -1114,6 +1133,16 @@
                             <td><div class="right" title="Has this Pok&eacute;mon been affected by Leech Seed?">
                                 <input aria-describedby="selectLeechSeedInstruction" class="visually-hidden calc-trigger" type="checkbox" id="leechSeedR" />
                                 <label class="btn btn-wide" for="leechSeedR">Leech Seed</label>
+                            </div></td>
+                        </tr>
+                        <tr class="gen-specific g4 g5 g6 g7 g8 g9">
+                            <td><div class="left" title="Is this side trapped by Magma Storm?">
+                                <input class="visually-hidden calc-trigger" type="checkbox" id="magmaStormL" />
+                                <label class="btn btn-wide" for="magmaStormL">Magma Storm</label>
+                            </div></td>
+                            <td><div class="right" title="Is this side trapped by Magma Storm?">
+                                <input class="visually-hidden calc-trigger" type="checkbox" id="magmaStormR" />
+                                <label class="btn btn-wide" for="magmaStormR">Magma Storm</label>
                             </div></td>
                         </tr>
                         <tr class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
@@ -1640,8 +1669,9 @@
                                     <option value="5">Five allies fainted</option>
                             </select>
                     </div>
-                    <div class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
+                    <div class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9 item-row">
                         <label for="itemR1">Item</label>
+                        <span class="item-sprite is-empty" id="item-spriteR1" aria-hidden="true"></span>
                         <select class="item terrain-trigger calc-trigger" id="itemR1"></select>
                         <label class="item-ignore-toggle-label" for="ignoreItemR1" title="When checked, this Pokemon is treated as if it has no held item, without clearing the selected item.">
                             <input type="checkbox" class="ignore-item-toggle terrain-trigger calc-trigger" id="ignoreItemR1" />
@@ -1693,6 +1723,7 @@
                     <input class="current-hp calc-trigger" id="currentHpR1" value="341" />/<span class="max-hp">341</span> (
                     <input class="percent-hp calc-trigger" value="100" />%)
                         <span class="side-residual-chip side-residual-chip-hp" hidden></span>
+                        <span class="trapping-residual-chip side-residual-chip side-residual-chip-hp" hidden></span>
                         <input class="visually-hidden max calc-trigger btn-input" type="checkbox" id="maxR" />
                         <label class="btn btn-xwide gen-specific g8 hide" for="maxR"
                         title="Use the corresponding Max Move?">Dynamax</label>
@@ -1961,6 +1992,7 @@
                 <div class="settings-choice-row">
                     <button type="button" class="btn settings-choice-btn" id="settings-theme-dark">Dark</button>
                     <button type="button" class="btn settings-choice-btn" id="settings-theme-light">Light</button>
+                    <button type="button" class="btn settings-choice-btn" id="settings-theme-dex">Dex</button>
                 </div>
             </section>
             <section class="settings-section">
@@ -1984,9 +2016,13 @@
                     <input type="checkbox" id="settings-move-meta" />
                     Show Crit Rates, PP & ACC
                 </label>
-                <label class="settings-checkbox-row" title="In development: this saves the preference but does not change imports yet.">
+                <label class="settings-checkbox-row" title="Automatically add Mega forms for owned Pokemon to Box 2.">
                     <input type="checkbox" id="settings-auto-import-megas" />
                     Auto Import Megas
+                </label>
+                <label class="settings-checkbox-row" title="Show an opposing alternate form's base form and the Mega unlocked by its matching Mega Stone.">
+                    <input type="checkbox" id="settings-display-formes" />
+                    Display Formes
                 </label>
                 <label class="settings-checkbox-row">
                     <input type="checkbox" id="settings-total-frags-on-border" />
@@ -2022,7 +2058,7 @@
         <button type="button" id="frag-context-add" class="btn frag-context-btn">Add Frag</button>
         <button type="button" id="frag-context-mark-dead" class="btn frag-context-btn">Did This Mon Die?</button>
         <button type="button" id="frag-context-swap-team1" class="btn frag-context-btn">Hot Swap To Team 1</button>
-        <button type="button" id="frag-context-swap-team2" class="btn frag-context-btn">Hot Swap To Team 2</button>
+        <button type="button" id="frag-context-swap-team2" class="btn frag-context-btn">Hot Swap To Team (R)</button>
         <button type="button" id="frag-context-swap-trash" class="btn frag-context-btn">Hot Swap To Trash</button>
         <button type="button" id="frag-context-cancel" class="btn frag-context-btn">Cancel</button>
     </div>
@@ -2041,8 +2077,8 @@
     </script>
     <script type="text/javascript" src="./calc/util.js?51463f0d"></script>
     <script type="text/javascript" src="./calc/stats.js?a9e37d1a"></script>
-    <script type="text/javascript" src="./calc/data/species.js?1d23f380"></script>
-	<script type="text/javascript" src="./js/data/sets/gen9.js?fd509401"></script>
+    <script type="text/javascript" src="./calc/data/species.js?1b461a56"></script>
+	<script type="text/javascript" src="./js/data/sets/gen9.js?3cbcde71"></script>
     <script type="text/javascript" src="./js/data/sets/gen8.js?ecf43658"></script>
     <script type="text/javascript" src="./js/data/sets/gen7.js?78168bde"></script>
     <script type="text/javascript" src="./js/data/sets/gen6.js?2219279f"></script>
@@ -2053,33 +2089,36 @@
     <script type="text/javascript" src="./js/data/sets/gen1.js?428f44e9"></script>
     <script type="text/javascript" src="./calc/data/types.js?a641e10b"></script>
     <script type="text/javascript" src="./calc/data/natures.js?28612810"></script>
-    <script type="text/javascript" src="./calc/data/abilities.js?76d9976e"></script>
-    <script type="text/javascript" src="./calc/data/moves.js?816d7699"></script>
-    <script type="text/javascript" src="./calc/data/items.js?1191d88b"></script>
+    <script type="text/javascript" src="./calc/data/abilities.js?2778f83f"></script>
+    <script type="text/javascript" src="./calc/data/moves.js?b60617fb"></script>
+    <script type="text/javascript" src="./calc/data/items.js?6595cf6c"></script>
     <script type="text/javascript" src="./calc/data/index.js?abecbd82"></script>
-    <script type="text/javascript" src="./calc/move.js?98dd4aa6"></script>
-    <script type="text/javascript" src="./calc/pokemon.js?85a517f2"></script>
-    <script type="text/javascript" src="./calc/field.js?46d54c9d"></script>
+    <script type="text/javascript" src="./calc/move.js?5a4ba07d"></script>
+    <script type="text/javascript" src="./calc/pokemon.js?a155eb0e"></script>
+    <script type="text/javascript" src="./calc/field.js?e383196b"></script>
     <script type="text/javascript" src="./calc/items.js?067e42a4"></script>
-    <script type="text/javascript" src="./calc/mechanics/util.js?027f8d5f"></script>
-    <script type="text/javascript" src="./calc/mechanics/gen789.js?d1d9284e"></script>
-    <script type="text/javascript" src="./calc/mechanics/gen56.js?fa50d241"></script>
-    <script type="text/javascript" src="./calc/mechanics/gen4.js?8bdfefdd"></script>
-    <script type="text/javascript" src="./calc/mechanics/gen3.js?8bc6c1b7"></script>
-    <script type="text/javascript" src="./calc/mechanics/gen12.js?637dd485"></script>
-    <script type="text/javascript" src="./calc/calc.js?cd072314"></script>
-    <script type="text/javascript" src="./calc/desc.js?b9aeea69"></script>
-    <script type="text/javascript" src="./calc/result.js?fdbd8da7"></script>
-    <script type="text/javascript" src="./calc/adaptable.js?afeb3759"></script>
+    <script type="text/javascript" src="./calc/mechanics/util.js?d79cb589"></script>
+    <script type="text/javascript" src="./calc/mechanics/gen789.js?95d7e903"></script>
+    <script type="text/javascript" src="./calc/mechanics/gen56.js?f8960a98"></script>
+    <script type="text/javascript" src="./calc/mechanics/gen4.js?a7cbdde2"></script>
+    <script type="text/javascript" src="./calc/mechanics/gen3.js?f830b8d2"></script>
+    <script type="text/javascript" src="./calc/mechanics/gen12.js?199f8ca6"></script>
+    <script type="text/javascript" src="./calc/calc.js?40a2d9b1"></script>
+    <script type="text/javascript" src="./calc/desc.js?2bdeb389"></script>
+    <script type="text/javascript" src="./calc/result.js?ebd561a9"></script>
+    <script type="text/javascript" src="./calc/adaptable.js?92e49194"></script>
     <script type="text/javascript" src="./calc/index.js?0b1745b9"></script>
     <script type="text/javascript" src="./js/spritedata.js?e6979aa2"></script>
-    <script type="text/javascript" src="./js/data/frags_splits.js?507088b2"></script>
+    <script type="text/javascript" src="./js/data/frags_splits.js?7a18a17a"></script>
     <script type="text/javascript" src="./js/data/move_info_lookup.js?12b8d14e"></script>
-<script type="text/javascript" src="./js/shared_controls.js?850cdb99"></script>
-    <script type="text/javascript" src="./js/switch_in_predictor.js?1f8294d8"></script>
+    <script type="text/javascript" src="./js/item_sprites.js?87fc8fb0"></script>
+    <script src="./js/astral_sync.js?90fe34a9"></script>
+    <script type="text/javascript" src="./js/shared_controls.js?17882b9b"></script>
+    <script src="./js/astral_sync_ui.js?b12ab7d8"></script>
+    <script type="text/javascript" src="./js/switch_in_predictor.js?a2f49860"></script>
     <script type="text/javascript" src="./js/switch_in_gate.js?acd63663"></script>
-    <script type="text/javascript" src="./js/index_randoms_controls.js?e5d0c4e8"></script>
-    <script type="text/javascript" src="./js/moveset_import.js?aefe0d1f"></script>
+    <script type="text/javascript" src="./js/index_randoms_controls.js?732227f3"></script>
+    <script type="text/javascript" src="./js/moveset_import.js?9abe934f"></script>
 </div>
 
 <div class="credits">Modification by ForwardFeed Originaly Created by Honko, maintained by Austin and Kris, Special thanks to Hzla

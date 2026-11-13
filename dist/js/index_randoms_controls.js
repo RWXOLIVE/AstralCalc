@@ -73,14 +73,61 @@ function applyLayoutMode(layoutMode) {
 	}
 }
 
-function getFastestSide(p1, p2, field) {
-	if (p1.stats.spe === p2.stats.spe) {
+function getEffectiveTurnOrderSpeeds(p1, p2, field) {
+	var fallbackSpeeds = {
+		p1: p1 && p1.stats ? p1.stats.spe : 0,
+		p2: p2 && p2.stats ? p2.stats.spe : 0
+	};
+	if (!p1 || !p2 || !field || typeof calc === "undefined" ||
+		typeof calc.getFinalSpeed !== "function" || typeof GENERATION === "undefined" || !GENERATION ||
+		typeof p1.clone !== "function" || typeof p2.clone !== "function" || typeof field.clone !== "function") {
+		return fallbackSpeeds;
+	}
+
+	try {
+		// Final speed depends on field effects and a few pre-calculation checks.
+		// Work with clones so the display never mutates the actual battle state.
+		var speedP1 = p1.clone();
+		var speedP2 = p2.clone();
+		var speedField = field.clone();
+		if (typeof calc.checkAirLock === "function") {
+			calc.checkAirLock(speedP1, speedField);
+			calc.checkAirLock(speedP2, speedField);
+		}
+		if (typeof calc.checkTeraformZero === "function") {
+			calc.checkTeraformZero(speedP1, speedField);
+			calc.checkTeraformZero(speedP2, speedField);
+		}
+		if (typeof calc.checkItem === "function") {
+			calc.checkItem(speedP1, speedField.isMagicRoom);
+			calc.checkItem(speedP2, speedField.isMagicRoom);
+		}
+		return {
+			p1: calc.getFinalSpeed(GENERATION, speedP1, speedField, speedField.attackerSide),
+			p2: calc.getFinalSpeed(GENERATION, speedP2, speedField, speedField.defenderSide)
+		};
+	} catch (err) {
+		console.warn("Unable to calculate effective speeds for turn order.", err);
+		return fallbackSpeeds;
+	}
+}
+
+function syncDisplayedTurnOrderSpeeds(p1info, p2info, p1, p2, field) {
+	var speeds = getEffectiveTurnOrderSpeeds(p1, p2, field);
+	p1info.find(".sp .totalMod").text(speeds.p1);
+	p2info.find(".sp .totalMod").text(speeds.p2);
+	return speeds;
+}
+
+function getFastestSide(p1, p2, field, speeds) {
+	speeds = speeds || getEffectiveTurnOrderSpeeds(p1, p2, field);
+	if (speeds.p1 === speeds.p2) {
 		return "tie";
 	}
 	if (field.isTrickRoom) {
-		return p1.stats.spe < p2.stats.spe ? 0 : 1;
+		return speeds.p1 < speeds.p2 ? 0 : 1;
 	}
-	return p1.stats.spe > p2.stats.spe ? 0 : 1;
+	return speeds.p1 > speeds.p2 ? 0 : 1;
 }
 
 function getSpeedState(p1s, p2s, field) {
@@ -93,14 +140,14 @@ function getSpeedState(p1s, p2s, field) {
 	return p1s > p2s ? "F" : "S";
 }
 
-function updateSpeedClasses(p1info, p2info, p1, p2, field) {
+function updateSpeedClasses(p1info, p2info, p1, p2, field, speeds) {
 	var p1Speed = p1info.find(".sp .totalMod");
 	var p2Speed = p2info.find(".sp .totalMod");
 	var speedClasses = "speed-faster speed-slower speed-tie";
 	p1Speed.removeClass(speedClasses);
 	p2Speed.removeClass(speedClasses);
 
-	var fastestSide = getFastestSide(p1, p2, field);
+	var fastestSide = getFastestSide(p1, p2, field, speeds);
 	if (fastestSide === "tie") {
 		p1Speed.addClass("speed-tie");
 		p2Speed.addClass("speed-tie");
@@ -135,7 +182,7 @@ function getMoveLabelTextColor(backgroundHex) {
 function applyMoveResultLabelColor(labelNode, typeName, enabled) {
 	if (!labelNode || !labelNode.length) return;
 	if (!enabled) {
-		labelNode.removeClass("move-colour-btn");
+		labelNode.removeClass("move-colour-btn move-colour-btn--custom");
 		labelNode.css({
 			backgroundColor: "",
 			borderColor: "",
@@ -145,7 +192,7 @@ function applyMoveResultLabelColor(labelNode, typeName, enabled) {
 	}
 	var typeColor = getMoveTypeColor(typeName);
 	if (!typeColor) {
-		labelNode.removeClass("move-colour-btn");
+		labelNode.removeClass("move-colour-btn move-colour-btn--custom");
 		labelNode.css({
 			backgroundColor: "",
 			borderColor: "",
@@ -153,7 +200,7 @@ function applyMoveResultLabelColor(labelNode, typeName, enabled) {
 		});
 		return;
 	}
-	labelNode.addClass("move-colour-btn");
+	labelNode.addClass("move-colour-btn move-colour-btn--custom");
 	labelNode.css({
 		backgroundColor: typeColor,
 		borderColor: typeColor,
@@ -429,6 +476,7 @@ function ensureSimplifiedSideCard(sideSelector) {
 					'<select class="simplified-side-ability-input"></select>' +
 				"</label>" +
 				'<label class="simplified-side-control-label simplified-side-item-wrap">Item ' +
+					'<span class="item-sprite simplified-side-item-sprite is-empty" aria-hidden="true"></span>' +
 					'<select class="simplified-side-item-input"></select>' +
 				"</label>" +
 				'<label class="simplified-side-ignore-item-label" title="When checked, this Pokemon is treated as if it has no held item, without clearing the selected item.">' +
@@ -579,12 +627,33 @@ function isSimplifiedMoveSearchSelect(targetNode) {
 	return targetNode.hasClass("simplified-side-move-select");
 }
 
+function isSimplifiedAbilityItemSelect(targetNode) {
+	return targetNode.hasClass("simplified-side-ability-input") || targetNode.hasClass("simplified-side-item-input");
+}
+
+function ensureSimplifiedAbilityItemSearchSelect(targetNode) {
+	if (!targetNode || !targetNode.length) return;
+	if (typeof targetNode.select2 !== "function") return;
+	if (targetNode.data("select2")) return;
+	targetNode.select2({
+		width: "8.4em",
+		dropdownAutoWidth: true,
+		containerCssClass: "simplified-ability-item-search-select",
+		dropdownCssClass: "ability-item-search-dropdown",
+		// Keep proxy control classes on the native select. Copying them onto
+		// Select2's wrapper makes later syncs replace that wrapper with options.
+		adaptContainerCssClass: function () { return null; },
+		matcher: simplifiedSelectSearchMatcher
+	});
+}
+
 function ensureSimplifiedMoveSearchSelect(targetNode) {
 	if (!targetNode || !targetNode.length) return;
 	if (typeof targetNode.select2 !== "function") return;
 	if (targetNode.data("select2")) return;
 	targetNode.select2({
 		dropdownAutoWidth: true,
+		adaptContainerCssClass: function () { return null; },
 		matcher: simplifiedSelectSearchMatcher
 	});
 }
@@ -641,9 +710,11 @@ function syncSimplifiedDexLink(sideSelector, card) {
 
 function syncSimplifiedSelectFromSource(sideSelector, sourceSelector, targetNode) {
 	var source = $(sideSelector + " " + sourceSelector).first();
-	var target = $(targetNode);
+	var target = $(targetNode).filter("select");
 	if (!source.length || !target.length) return;
+	var isAbilityItemSearchSelect = isSimplifiedAbilityItemSelect(target);
 	var isMoveSearchSelect = isSimplifiedMoveSearchSelect(target);
+	var isSearchSelect = isAbilityItemSearchSelect || isMoveSearchSelect;
 	var sourceHtml = source.html() || "";
 	var sourceValue = source.val();
 	if (sourceValue === null || typeof sourceValue === "undefined") {
@@ -665,10 +736,8 @@ function syncSimplifiedSelectFromSource(sideSelector, sourceSelector, targetNode
 		}
 	}
 	var sourceDisabled = source.prop("disabled");
-	if (isMoveSearchSelect && target.data("select2") && target.data("srcHtml") !== sourceHtml) {
-		target.select2("destroy");
-		target.removeClass("select2-offscreen");
-	}
+	target.data("simplifiedSyncing", true);
+	try {
 	if (target.data("srcHtml") !== sourceHtml) {
 		target.html(sourceHtml);
 		target.data("srcHtml", sourceHtml);
@@ -678,13 +747,15 @@ function syncSimplifiedSelectFromSource(sideSelector, sourceSelector, targetNode
 		target.data("lastValidMove", sourceValue);
 	}
 	target.prop("disabled", sourceDisabled);
-	if (!isMoveSearchSelect) return;
-	ensureSimplifiedMoveSearchSelect(target);
-	if (!target.data("select2")) return;
-	target.data("simplifiedSyncing", true);
-	try {
+	if (isAbilityItemSearchSelect) {
+		ensureSimplifiedAbilityItemSearchSelect(target);
+	} else if (isMoveSearchSelect) {
+		ensureSimplifiedMoveSearchSelect(target);
+	}
+	if (isSearchSelect && target.data("select2")) {
 		target.select2("val", sourceValue, false);
 		target.select2("enable", !sourceDisabled);
+	}
 	} finally {
 		target.removeData("simplifiedSyncing");
 	}
@@ -782,6 +853,7 @@ function renderSimplifiedSideCard(sideSelector, sideIndex, attacker, defender) {
 	syncSimplifiedSelectFromSource(sideSelector, ".nature", card.find(".simplified-side-nature-input"));
 	syncSimplifiedSelectFromSource(sideSelector, ".ability", card.find(".simplified-side-ability-input"));
 	syncSimplifiedSelectFromSource(sideSelector, ".item", card.find(".simplified-side-item-input"));
+	if (typeof syncPokeItemSprite === "function") syncPokeItemSprite($(sideSelector));
 	var sourceIgnoreItemToggle = $(sideSelector + " .ignore-item-toggle").first();
 	var simplifiedIgnoreItemToggle = card.find(".simplified-side-ignore-item-toggle").first();
 	if (simplifiedIgnoreItemToggle.length) {
@@ -859,7 +931,9 @@ function renderSimplifiedSideCard(sideSelector, sideIndex, attacker, defender) {
 		}
 		moveRow.find(".simplified-side-move-meta").text(metaText);
 		moveRow.toggleClass("is-meta-hidden", !showMoveMeta || !metaText);
-		moveRow.find(".move-crit-rate-display").toggle(!!showMoveMeta);
+		var canCrit = !!move && move.category !== "Status" && move.name !== "(No Move)";
+		moveRow.find(".simplified-side-move-crit-wrap").toggle(canCrit);
+		moveRow.find(".move-crit-rate-display").toggle(canCrit && !!showMoveMeta);
 		var sourceCritToggle = sourceMoveRow.find(".move-crit").first();
 		var simplifiedCritToggle = moveRow.find(".simplified-side-move-crit-input").first();
 		if (simplifiedCritToggle.length) {
@@ -1158,14 +1232,7 @@ $(document)
 		if (!isSimplifiedLayoutEnabled()) return;
 		var pokeInfo = $(this).closest(".poke-info");
 		if (!pokeInfo.length) return;
-		var formeSelect = pokeInfo.find(".forme").first();
-		if (!formeSelect.length) return;
-		var formeOptions = formeSelect.find("option");
-		if (formeOptions.length <= 1) return;
-		var currentIndex = formeSelect.prop("selectedIndex");
-		if (currentIndex < 0) currentIndex = 0;
-		var nextIndex = (currentIndex + 1) % formeOptions.length;
-		formeSelect.prop("selectedIndex", nextIndex).change();
+		cyclePokemonForm(pokeInfo);
 	});
 
 $(document)
@@ -1173,6 +1240,10 @@ $(document)
 	.on("change.simplifiedcontrols input.simplifiedcontrols", ".simplified-side-level-input, .simplified-side-level-cap-input, .simplified-side-status-input, .simplified-side-nature-input, .simplified-side-ability-input, .simplified-side-item-input, .simplified-side-ignore-item-toggle, .simplified-side-current-hp-input, .simplified-side-percent-hp-input, .simplified-side-stat-boost-input, .simplified-side-move-crit-input", function () {
 		var controlNode = $(this);
 		if (controlNode.data("simplifiedSyncing")) return;
+		if (controlNode.data("skipNextSimplifiedSelect2Change")) {
+			controlNode.removeData("skipNextSimplifiedSelect2Change");
+			return;
+		}
 		var pokeInfo = controlNode.closest(".poke-info");
 		if (!pokeInfo.length) return;
 		var sideSelector = "#" + pokeInfo.attr("id");
@@ -1228,6 +1299,20 @@ $(document)
 	});
 
 $(document)
+	.off("select2-selected.simplifiedabilityitem", ".simplified-side-ability-input, .simplified-side-item-input")
+	.on("select2-selected.simplifiedabilityitem", ".simplified-side-ability-input, .simplified-side-item-input", function () {
+		var controlNode = $(this);
+		if (controlNode.data("simplifiedSyncing")) return;
+		// Select2's native change notification is not reliable for an off-screen
+		// proxy select, so forward the choice to the battle control explicitly.
+		controlNode.trigger("change");
+		controlNode.data("skipNextSimplifiedSelect2Change", true);
+		window.setTimeout(function () {
+			controlNode.removeData("skipNextSimplifiedSelect2Change");
+		}, 0);
+	});
+
+$(document)
 	.off("click.simplifiedbooststep", ".simplified-side-stat-step")
 	.on("click.simplifiedbooststep", ".simplified-side-stat-step", function (ev) {
 		ev.preventDefault();
@@ -1274,15 +1359,15 @@ function performCalculations() {
 	// Keep displayed modified stats in sync even if damage calc fails.
 	syncDisplayedModifiedStats(p1info, p1, false);
 	syncDisplayedModifiedStats(p2info, p2, false);
-	updateSpeedClasses(p1info, p2info, p1, p2, p1field);
-	renderSideSupplementalDisplays("#p1", p1, p2, p1field);
-	renderSideSupplementalDisplays("#p2", p2, p1, p2field);
+	var turnOrderSpeeds = syncDisplayedTurnOrderSpeeds(p1info, p2info, p1, p2, p1field);
+	updateSpeedClasses(p1info, p2info, p1, p2, p1field, turnOrderSpeeds);
 
 	try {
 		damageResults = calculateAllMoves(gen, p1, p1field, p2, p2field);
 	} catch (err) {
 		console.error("Damage calculation failed while updating results.", err);
 		applyMoveResultColors(p1, p2, null);
+		renderSimplifiedSideCards(p1, p2);
 		return;
 	}
 	p1 = damageResults[0][0].attacker;
@@ -1292,8 +1377,9 @@ function performCalculations() {
 	p2.maxDamages = [];
 	syncDisplayedModifiedStats(p1info, p1, true);
 	syncDisplayedModifiedStats(p2info, p2, true);
-	updateSpeedClasses(p1info, p2info, p1, p2, p1field);
-	var fastestSide = getFastestSide(p1, p2, p1field);
+	turnOrderSpeeds = syncDisplayedTurnOrderSpeeds(p1info, p2info, p1, p2, p1field);
+	updateSpeedClasses(p1info, p2info, p1, p2, p1field, turnOrderSpeeds);
+	var fastestSide = getFastestSide(p1, p2, p1field, turnOrderSpeeds);
 
 	var result, maxDamage;
 	var bestResult;
@@ -1342,6 +1428,12 @@ function performCalculations() {
 	}
 	applyMoveResultColors(p1, p2, damageResults);
 	renderSimplifiedSideCards(p1, p2);
+	try {
+		renderSideSupplementalDisplays("#p1", p1, p2, p1field);
+		renderSideSupplementalDisplays("#p2", p2, p1, p2field);
+	} catch (err) {
+		console.warn("Unable to refresh supplemental move displays.", err);
+	}
 	if ($('.locked-move').length) {
 		bestResult = $('.locked-move');
 	} else {
@@ -1371,8 +1463,9 @@ function calculationsColors(p1info, p2) {
 	p2 = damageResults[1][0].attacker;
 	p1.maxDamages = [];
 	p2.maxDamages = [];
-	var p1s = p1.stats.spe;
-	var p2s = p2.stats.spe;
+	var turnOrderSpeeds = getEffectiveTurnOrderSpeeds(p1, p2, p1field);
+	var p1s = turnOrderSpeeds.p1;
+	var p2s = turnOrderSpeeds.p2;
 	//Faster Tied Slower
 	var fastest = getSpeedState(p1s, p2s, p1field);
 	var result, highestRoll, lowestRoll, damage = 0;
@@ -1611,8 +1704,39 @@ $(".mode").change(function () {
 });
 
 $(".notation").change(function () {
-	performCalculations();
+	requestCalculationRefresh();
 });
+
+// A set update changes many calc controls at once. Those individual changes
+// occur while NO_CALC is set, so dropping them outright can leave the visible
+// result from the previous state. Queue one refresh and flush it once the
+// current control update has completed instead.
+var calculationRefreshPending = false;
+var calculationRefreshTimer = null;
+function requestCalculationRefresh() {
+	calculationRefreshPending = true;
+	if (calculationRefreshTimer !== null) return;
+	calculationRefreshTimer = window.setTimeout(flushCalculationRefresh, 0);
+}
+
+function flushCalculationRefresh() {
+	calculationRefreshTimer = null;
+	if (!calculationRefreshPending) return;
+	if (window.NO_CALC) {
+		// The set-loader will call requestCalculationRefresh after it clears
+		// NO_CALC. Keep the pending flag without spinning a zero-delay timer.
+		return;
+	}
+	calculationRefreshPending = false;
+	var autoRefreshColorCodes = document.getElementById("cc-auto-refr");
+	if (autoRefreshColorCodes && autoRefreshColorCodes.checked && typeof window.refreshColorCode === "function") {
+		window.refreshColorCode();
+	}
+	if (typeof updateAllMoveMetaDisplays === "function") {
+		updateAllMoveMetaDisplays();
+	}
+	performCalculations();
+}
 
 $(document).ready(function () {
 	var params = new URLSearchParams(window.location.search);
@@ -1632,23 +1756,9 @@ $(document).ready(function () {
 			}
 		}
 	}
-	$(".calc-trigger").bind("change keyup", function (ev) {
-		/*
-			This prevents like 8 performCalculations out of 8 that were useless
-			without causing bugs (so far)
-		*/
-		if (window.NO_CALC) {
-			return;
-		}
-		var autoRefreshColorCodes = document.getElementById("cc-auto-refr");
-		if (autoRefreshColorCodes && autoRefreshColorCodes.checked && typeof window.refreshColorCode === "function") {
-			window.refreshColorCode();
-		}
-		if (typeof updateAllMoveMetaDisplays === "function") {
-			updateAllMoveMetaDisplays();
-		}
-		performCalculations();
-	});
+	$(document)
+		.off("change.calculationrefresh keyup.calculationrefresh", ".calc-trigger")
+		.on("change.calculationrefresh keyup.calculationrefresh", ".calc-trigger", requestCalculationRefresh);
 	if (typeof updateAllMoveMetaDisplays === "function") {
 		updateAllMoveMetaDisplays();
 	}

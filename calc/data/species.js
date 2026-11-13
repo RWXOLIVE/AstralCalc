@@ -1711,7 +1711,7 @@ var ADV_PATCH = {
     Elekid: { abilities: { 0: 'Static' } },
     Entei: { abilities: { 0: 'Pressure' } },
     Espeon: { abilities: { 0: 'Synchronize' } },
-    Feraligatr: { abilities: { 0: 'Torrent' } },
+    Feraligatr: { abilities: { 0: 'Swift Swim' } },
     Flaaffy: { abilities: { 0: 'Static' } },
     Forretress: { abilities: { 0: 'Sturdy' } },
     Furret: { abilities: { 0: 'Run Away' } },
@@ -5409,7 +5409,7 @@ var XY_PATCH = {
         types: ['Normal', 'Fairy'],
         bs: { hp: 103, at: 60, df: 126, sa: 80, sd: 126, sp: 50 },
         weightkg: 32,
-        abilities: { 0: 'Healer' },
+        abilities: { 0: 'Aura Guard' },
         baseSpecies: 'Audino'
     },
     'Banette-Mega': {

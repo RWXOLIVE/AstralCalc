@@ -13,16 +13,41 @@
 * It will be truey and incorrectly cause the
 * dark theme to load.
 */
-var prefersDarkTheme = localStorage.getItem('darkTheme') ? localStorage.getItem('darkTheme') === 'true' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+var THEME_MODES = {
+	LIGHT: 'light',
+	DARK: 'dark',
+	DEX: 'dex'
+};
+
+function normalizeThemeMode(themeMode) {
+	var normalized = String(themeMode || '').toLowerCase();
+	if (normalized === THEME_MODES.LIGHT || normalized === THEME_MODES.DARK || normalized === THEME_MODES.DEX) {
+		return normalized;
+	}
+	return (localStorage.getItem('darkTheme') === 'true') ? THEME_MODES.DARK : THEME_MODES.LIGHT;
+}
+
+var currentThemeMode = normalizeThemeMode(localStorage.getItem('themeMode'));
+var prefersDarkTheme = currentThemeMode !== THEME_MODES.LIGHT;
 var darkThemeButton = document.getElementById('dark-theme-toggle');
 
 function getDarkStylesheet() {
 	return document.getElementById('dark-theme-styles');
 }
 
+function getCurrentThemeMode() {
+	return currentThemeMode;
+}
+
 function updateThemeButtonLabel() {
 	if (!darkThemeButton) return;
-	darkThemeButton.innerText = prefersDarkTheme ? 'Click for Light Theme' : 'Click for Dark Theme';
+	if (currentThemeMode === THEME_MODES.LIGHT) {
+		darkThemeButton.innerText = 'Click for Dark Theme';
+	} else if (currentThemeMode === THEME_MODES.DARK) {
+		darkThemeButton.innerText = 'Click for Dex Theme';
+	} else {
+		darkThemeButton.innerText = 'Click for Light Theme';
+	}
 }
 
 function emitThemeChange() {
@@ -32,14 +57,22 @@ function emitThemeChange() {
 }
 
 function applyThemeState() {
+	currentThemeMode = normalizeThemeMode(currentThemeMode);
+	prefersDarkTheme = currentThemeMode !== THEME_MODES.LIGHT;
+	if (document.body) {
+		document.body.classList.remove('dark-theme', 'theme-dex');
+		if (currentThemeMode === THEME_MODES.DARK || currentThemeMode === THEME_MODES.DEX) document.body.classList.add('dark-theme');
+		if (currentThemeMode === THEME_MODES.DEX) document.body.classList.add('theme-dex');
+	}
 	if (!prefersDarkTheme) {
 		document.documentElement.style.cssText = "--fieldset-color: white";
 	} else {
 		document.documentElement.style.cssText = "--fieldset-color: #2a2a2a";
 	}
 	var darkStyles = getDarkStylesheet();
-	if (darkStyles) darkStyles.disabled = !prefersDarkTheme;
-	localStorage.setItem('darkTheme', prefersDarkTheme);
+	if (darkStyles) darkStyles.disabled = currentThemeMode === THEME_MODES.LIGHT;
+	localStorage.setItem('darkTheme', String(prefersDarkTheme));
+	localStorage.setItem('themeMode', currentThemeMode);
 	updateThemeButtonLabel();
 	emitThemeChange();
 }
@@ -49,22 +82,33 @@ function applyThemeState() {
 * Doesn't use jQuery, probably could with some modification
 */
 function toggleTheme() {
-	prefersDarkTheme = !prefersDarkTheme;
+	if (currentThemeMode === THEME_MODES.LIGHT) {
+		currentThemeMode = THEME_MODES.DARK;
+	} else if (currentThemeMode === THEME_MODES.DARK) {
+		currentThemeMode = THEME_MODES.DEX;
+	} else {
+		currentThemeMode = THEME_MODES.LIGHT;
+	}
 	applyThemeState();
 }
 
-function setThemeMode(isDarkMode) {
-	prefersDarkTheme = !!isDarkMode;
+function setThemeMode(isDarkModeOrTheme) {
+	if (typeof isDarkModeOrTheme === 'string') {
+		currentThemeMode = normalizeThemeMode(isDarkModeOrTheme);
+	} else {
+		currentThemeMode = !!isDarkModeOrTheme ? THEME_MODES.DARK : THEME_MODES.LIGHT;
+	}
 	applyThemeState();
 }
 
 function isDarkThemeEnabled() {
-	return !!prefersDarkTheme;
+	return currentThemeMode !== THEME_MODES.LIGHT;
 }
 
 window.toggleTheme = toggleTheme;
 window.setThemeMode = setThemeMode;
 window.isDarkThemeEnabled = isDarkThemeEnabled;
+window.getCurrentThemeMode = getCurrentThemeMode;
 
 updateThemeButtonLabel();
 applyThemeState();

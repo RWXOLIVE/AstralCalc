@@ -187,6 +187,22 @@ html, body {
     box-sizing: border-box;
 }
 
+.trainer-pok-forme {
+	cursor: pointer;
+}
+
+.trainer-pok-forme-left {
+	margin-right: 4px;
+}
+
+.trainer-pok-forme-right {
+	margin-left: -6px;
+}
+
+.trainer-pok-forme:hover {
+    outline: none;
+}
+
 .trainer-pok.left-side {
     display: inline-flex;
     align-items: center;
@@ -279,7 +295,7 @@ body.switch-in-enabled .trainer-pok.right-side.trainer-party-leading {
 
 .wrapper {
     padding: 0 1em;
-    max-width: 1285px;
+    max-width: 1360px;
     margin: 0 auto;
     box-sizing: border-box;
     transition: width 140ms ease-in-out;
@@ -451,12 +467,75 @@ th {
     background: rgba(59, 71, 90, 0.98);
     color: #ffffff;
 }
+
+.reset-trainer-confirmation[hidden] {
+    display: none;
+}
+
+.reset-trainer-confirmation {
+    position: fixed;
+    z-index: 10000;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.55);
+}
+
+.reset-trainer-confirmation-dialog {
+    width: min(420px, calc(100vw - 40px));
+    padding: 18px;
+    border: 1px solid #9aa4b1;
+    border-radius: 8px;
+    background: #f7f9fd;
+    box-shadow: 0 12px 34px rgba(0, 0, 0, 0.38);
+}
+
+.reset-trainer-confirmation-dialog h2 {
+    margin: 0 0 10px;
+    font-size: 1.2em;
+}
+
+.reset-trainer-confirmation-dialog p {
+    margin: 0;
+    line-height: 1.45;
+}
+
+.reset-trainer-confirmation-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.reset-trainer-confirmation-actions .btn {
+    width: auto;
+    min-width: 5.5em;
+    margin: 0;
+    padding: 5px 10px;
+}
+
+.reset-trainer-confirmation-confirm {
+    color: #ffffff;
+    border-color: #b54444;
+    background: #bd4b4b;
+}
+
+.reset-trainer-confirmation-confirm:hover,
+.reset-trainer-confirmation-confirm:focus-visible {
+    color: #ffffff;
+    border-color: #8f2f2f;
+    background: #a93d3d;
+}
+
 .panel {
     float: left;
     display: inline-block; /* required for honkaculate to work */
 }
 .poke-info {
     width: 30em;
+    min-width: 0;
 }
 .field-info, .poke-import {
     text-align: center;
@@ -580,15 +659,57 @@ th {
 
 /* header */
 .move-result-group {
-    min-width: 50em;
-    margin: 1em 0 11.5em;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1em 2em;
+    margin: 1em 0;
 }
 .move-result-subgroup {
-    float: left;
-    width: 50%;
+    min-width: 0;
 }
-.move-result-group .btn {
-    margin-right: 1em;
+.move-result-subgroup > div:not(.result-move-header) {
+    display: grid;
+    grid-template-columns: minmax(0, 10.8em) max-content 3.8em;
+    align-items: center;
+    column-gap: 12px;
+    min-height: 25px;
+}
+.move-result-subgroup .result-move[type="radio"] + label {
+    grid-column: 1;
+    grid-row: 1;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    white-space: normal;
+}
+.move-result-subgroup [id^="resultDamage"] {
+    grid-column: 2;
+    grid-row: 1;
+    white-space: nowrap;
+}
+.move-result-subgroup .small-crit-btn {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: start;
+    margin: 0;
+}
+/* The opposing list mirrors the player list, with Crit before the move. */
+.move-result-subgroup[aria-labelledby="resultHeaderR"] > div:not(.result-move-header) {
+    grid-template-columns: 3.8em minmax(0, 10.8em) max-content;
+}
+.move-result-subgroup[aria-labelledby="resultHeaderR"] .small-crit-btn {
+    grid-column: 1;
+}
+.move-result-subgroup[aria-labelledby="resultHeaderR"] .result-move[type="radio"] + label {
+    grid-column: 2;
+}
+.move-result-subgroup[aria-labelledby="resultHeaderR"] [id^="resultDamage"] {
+    grid-column: 3;
+}
+@media (max-width: 900px) {
+    .move-result-group {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }
 .main-result-group {
     margin: 2em 0 1em;
@@ -652,7 +773,7 @@ body.layout-simplified #p2 > .select2-container {
     margin: 0 0 6px;
 }
 
-body.layout-simplified .simplified-side-card span {
+body.layout-simplified .simplified-side-card span:not(.select2-arrow) {
     width: auto !important;
 }
 
@@ -794,6 +915,50 @@ body.layout-simplified .simplified-side-control-label select {
 .simplified-side-control-label.simplified-side-item-wrap select,
 .simplified-side-control-label.simplified-side-ability-wrap select {
     min-width: 8.4em;
+}
+
+body.layout-simplified .simplified-ability-item-search-select.select2-container {
+    width: 13em !important;
+    min-width: 13em;
+    max-width: 13em;
+    font-size: 12px;
+}
+
+body.layout-simplified .simplified-ability-item-search-select.select2-container .select2-choice {
+    height: 18px;
+    padding: 0 20px 0 4px;
+    line-height: 18px;
+    border-radius: 0;
+    box-shadow: none;
+}
+
+body.layout-simplified .simplified-ability-item-search-select.select2-container .select2-choice .select2-arrow {
+    width: 18px;
+    background: transparent;
+    border-left: none;
+}
+
+body.layout-simplified .simplified-ability-item-search-select.select2-container .select2-choice .select2-arrow b {
+    background-position: 0 -4px;
+}
+
+body.layout-simplified .simplified-ability-item-search-select.select2-dropdown-open .select2-choice .select2-arrow b {
+    background-position: -18px -4px;
+}
+
+body.layout-simplified .simplified-side-item-sprite {
+    display: inline-block;
+    flex: 0 0 24px;
+    width: 24px !important;
+    height: 24px;
+    margin: 0;
+    background-image: url('https://play.pokemonshowdown.com/sprites/itemicons-sheet.png');
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+}
+
+body.layout-simplified .simplified-side-item-sprite.is-empty {
+    visibility: hidden;
 }
 
 .simplified-side-control-label.simplified-side-nature-wrap select {
@@ -938,7 +1103,7 @@ body.layout-simplified .simplified-side-control-label select {
 
 .simplified-side-stat-value {
     font-size: 1.06em;
-    color: #eef3ff;
+    color: inherit;
     font-weight: bold;
 }
 
@@ -1053,13 +1218,13 @@ body.layout-simplified .simplified-side-control-label select {
 
 .simplified-side-move-row {
     display: grid;
-    grid-template-columns: minmax(8.4em, 1fr) auto minmax(11.6em, 1fr);
+    grid-template-columns: minmax(8.4em, 1fr) 7.2em minmax(11.6em, 1fr);
     align-items: start;
     column-gap: 10px;
 }
 
 .simplified-side-card.side-right .simplified-side-move-row {
-    grid-template-columns: minmax(11.6em, 1fr) auto minmax(8.4em, 1fr);
+    grid-template-columns: minmax(11.6em, 1fr) 7.2em minmax(8.4em, 1fr);
 }
 
 .simplified-side-move-crit-wrap {
@@ -1116,7 +1281,7 @@ body.layout-simplified .simplified-side-control-label select {
     display: inline-block;
     width: auto;
     font-size: 0.78em;
-    color: #d2d9e1;
+    color: inherit;
     line-height: 1.1;
 }
 
@@ -1268,6 +1433,26 @@ body.layout-simplified .simplified-side-control-label select {
     color: rgba(214, 219, 227, 0.55);
 }
 
+@media (min-width: 901px) {
+    .simplified-side-move-info {
+        grid-column: 1;
+        grid-row: 1;
+    }
+    .simplified-side-move-crit-wrap {
+        grid-column: 2;
+        grid-row: 1;
+    }
+    .simplified-side-move-damage {
+        grid-column: 3;
+        grid-row: 1;
+    }
+    .simplified-side-card.side-right .simplified-side-move-info {
+        grid-column: 3;
+    }
+    .simplified-side-card.side-right .simplified-side-move-damage {
+        grid-column: 1;
+    }
+}
 @media (max-width: 900px) {
     .simplified-side-move-row,
     .simplified-side-card.side-right .simplified-side-move-row {
@@ -1288,6 +1473,76 @@ body.layout-simplified .simplified-side-control-label select {
     .simplified-side-card.side-right .simplified-side-meta {
         justify-content: flex-start;
     }
+}
+
+/* Simplified layout: retain the original structure, with a denser quick view. */
+body.layout-simplified .simplified-side-card {
+    position: relative;
+}
+
+body.layout-simplified .simplified-side-header {
+    position: relative;
+    min-height: 52px;
+    margin-bottom: 7px;
+    padding-right: 58px;
+}
+
+body.layout-simplified .simplified-side-card.side-right .simplified-side-header {
+    padding-right: 0;
+    padding-left: 58px;
+}
+
+body.layout-simplified .simplified-side-form-wrap {
+    position: absolute;
+    top: 3px;
+    right: 0;
+    width: 52px;
+    height: 52px;
+    margin: 0;
+}
+
+body.layout-simplified .simplified-side-card.side-right .simplified-side-form-wrap {
+    right: auto;
+    left: 0;
+    margin: 0;
+}
+
+body.layout-simplified .simplified-side-form-sprite {
+    width: 58px;
+    height: 58px;
+}
+
+body.layout-simplified .simplified-side-meta {
+    gap: 5px 8px;
+    margin-bottom: 9px;
+}
+
+/* Base stats and IVs stay in Full Edit; the quick view prioritises battle totals and boosts. */
+body.layout-simplified .simplified-side-stat-head .simplified-side-stat-base,
+body.layout-simplified .simplified-side-stat-head .simplified-side-stat-iv,
+body.layout-simplified .simplified-side-stat-row .simplified-side-stat-base,
+body.layout-simplified .simplified-side-stat-row .simplified-side-stat-iv {
+    display: none;
+}
+
+body.layout-simplified .simplified-side-stat-head,
+body.layout-simplified .simplified-side-stat-row {
+    grid-template-columns: 3.3em minmax(3.1em, auto) auto minmax(3.6em, auto);
+    column-gap: 6px;
+}
+
+body.layout-simplified .simplified-side-card.side-right .simplified-side-stat-head,
+body.layout-simplified .simplified-side-card.side-right .simplified-side-stat-row {
+    grid-template-columns: minmax(3.6em, auto) auto minmax(3.1em, auto) 3.3em;
+}
+
+body.layout-simplified .simplified-side-moves {
+    gap: 2px;
+}
+
+body.layout-simplified .simplified-side-move-row {
+    padding: 4px 0;
+    column-gap: 9px;
 }
 
 /* pokemon info */
@@ -1326,6 +1581,44 @@ body.layout-simplified .simplified-side-control-label select {
 }
 .poke-info .item-ignore-toggle {
     margin: 0;
+}
+.poke-info .info-selectors > div {
+    display: flex;
+    align-items: center;
+}
+.poke-info .info-selectors > div > label:first-child {
+    flex: 0 0 6em;
+}
+.poke-info .info-selectors > div > select:first-of-type {
+    margin-left: 0.25em;
+}
+.poke-info .item-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.poke-info .item-row > label:first-child {
+    flex: 0 0 6em;
+}
+.poke-info .item-row .item {
+    margin-left: 0.25em;
+}
+.poke-info .item-row .item-sprite {
+    position: absolute;
+    left: 2.7em;
+    top: 50%;
+    display: block;
+    width: 24px;
+    height: 24px;
+    margin: 0;
+    transform: translateY(-50%);
+    background-image: url('https://play.pokemonshowdown.com/sprites/itemicons-sheet.png');
+    background-repeat: no-repeat;
+    image-rendering: pixelated;
+    pointer-events: none;
+}
+.poke-info .item-row .item-sprite.is-empty {
+    visibility: hidden;
 }
 .info-group.top > .gen-specific.g9 {
     display: inline-flex;
@@ -1443,6 +1736,10 @@ select.toxic-counter {
     vertical-align: middle;
     white-space: nowrap;
 }
+.poke-info .move-crit-rate-display.crit-rate-unavailable + .move-meta {
+    width: 100%;
+    margin-left: 0;
+}
 .poke-info .ditto-transform-slot {
     display: none;
     margin-top: 0.45em;
@@ -1490,9 +1787,191 @@ select.toxic-counter {
     font-size: 0.8em;
 }
 
+/* Make the three damage-reduction screens identifiable at a glance. */
+.field-info #reflectL:checked + label.btn,
+.field-info #reflectR:checked + label.btn {
+    color: #421520;
+    background: linear-gradient(135deg, #ffd6df, #ef7894);
+    border-color: #bd4562;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 0 0 1px rgba(189, 69, 98, 0.28);
+}
+
+.field-info #lightScreenL:checked + label.btn,
+.field-info #lightScreenR:checked + label.btn {
+    color: #4d3000;
+    background: linear-gradient(135deg, #fff0b8, #f2bb54);
+    border-color: #bd7d1d;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78), 0 0 0 1px rgba(189, 125, 29, 0.28);
+}
+
+.field-info #auroraVeilL:checked + label.btn,
+.field-info #auroraVeilR:checked + label.btn {
+    color: #172a57;
+    background: linear-gradient(135deg, #bff8f2, #b8abff 55%, #f0c9ff);
+    border-color: #6f70cc;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8), 0 0 0 1px rgba(111, 112, 204, 0.3);
+}
+
+.field-info #srL:checked + label.btn,
+.field-info #srR:checked + label.btn {
+    color: #332318;
+    background: linear-gradient(135deg, #ead4b1, #a9754b);
+    border-color: #775033;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62), 0 0 0 1px rgba(119, 80, 51, 0.28);
+}
+
+.field-info #gscSpikesL:checked + label.btn,
+.field-info #gscSpikesR:checked + label.btn,
+.field-info #spikesL1:checked + label.btn,
+.field-info #spikesR1:checked + label.btn {
+    color: #39250e;
+    background: linear-gradient(135deg, #f0dcaa, #c79a50);
+    border-color: #986f2f;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62), 0 0 0 1px rgba(152, 111, 47, 0.28);
+}
+
+.field-info #spikesL2:checked + label.btn,
+.field-info #spikesR2:checked + label.btn {
+    color: #ffffff;
+    background: linear-gradient(135deg, #d39d48, #925d25);
+    border-color: #70431b;
+    box-shadow: inset 0 1px 0 rgba(255, 239, 191, 0.28), 0 0 0 1px rgba(112, 67, 27, 0.34);
+}
+
+.field-info #spikesL3:checked + label.btn,
+.field-info #spikesR3:checked + label.btn {
+    color: #ffffff;
+    background: linear-gradient(135deg, #ae6828, #633617);
+    border-color: #4a2710;
+    box-shadow: inset 0 1px 0 rgba(255, 220, 160, 0.2), 0 0 0 1px rgba(74, 39, 16, 0.38);
+}
+
+.field-info #steelsurgeL:checked + label.btn,
+.field-info #steelsurgeR:checked + label.btn {
+    color: #162b37;
+    background: linear-gradient(135deg, #d7edf4, #7fa9b9);
+    border-color: #537b8b;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 0 0 1px rgba(83, 123, 139, 0.3);
+}
+
+.field-info #magmaStormL:checked + label.btn,
+.field-info #magmaStormR:checked + label.btn {
+    color: #ffffff;
+    background: linear-gradient(135deg, #f29b43, #c84624 56%, #741d1d);
+    border-color: #8e3021;
+    box-shadow: inset 0 1px 0 rgba(255, 231, 189, 0.45), 0 0 0 1px rgba(142, 48, 33, 0.36);
+}
+
+.field-info #leechSeedL:checked + label.btn,
+.field-info #leechSeedR:checked + label.btn {
+    color: #173519;
+    background: linear-gradient(135deg, #d3f0af, #75b65a);
+    border-color: #4e843d;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7), 0 0 0 1px rgba(78, 132, 61, 0.3);
+}
+
+.field-info #tailwindL:checked + label.btn,
+.field-info #tailwindR:checked + label.btn {
+    color: #14334b;
+    background: linear-gradient(135deg, #c9efff, #6ab9df);
+    border-color: #448eb6;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.76), 0 0 0 1px rgba(68, 142, 182, 0.3);
+}
+
+.field-info #magicroom:checked + label.btn {
+    color: #2d1749;
+    background: linear-gradient(135deg, #e4c9ff, #a875d1);
+    border-color: #75479f;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 0 0 1px rgba(117, 71, 159, 0.3);
+}
+
+.field-info #trickroom:checked + label.btn {
+    color: #4b1231;
+    background: linear-gradient(135deg, #ffc4df, #ed6ca9 56%, #c83d7d);
+    border-color: #a92e64;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.68), 0 0 0 1px rgba(169, 46, 100, 0.34);
+}
+
+.field-info #wonderroom:checked + label.btn {
+    color: #123d4b;
+    background: linear-gradient(135deg, #c5f5f2, #79c8cf 55%, #a7a5ef);
+    border-color: #548e9a;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.76), 0 0 0 1px rgba(84, 142, 154, 0.3);
+}
+
+.field-info #gravity:checked + label.btn {
+    color: #ffffff;
+    background: linear-gradient(135deg, #66778e, #343d52);
+    border-color: #252c3d;
+    box-shadow: inset 0 1px 0 rgba(218, 229, 245, 0.28), 0 0 0 1px rgba(37, 44, 61, 0.36);
+}
+
+/* Ally effects and side conditions use distinct, thematic active states. */
+.field-info #helpingHandL:checked + label.btn,
+.field-info #helpingHandR:checked + label.btn,
+.field-info #friendGuardL:checked + label.btn,
+.field-info #friendGuardR:checked + label.btn {
+    color: #263746;
+    background: linear-gradient(135deg, #ffffff, #d9e3eb);
+    border-color: #aabac8;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9), 0 0 0 1px rgba(115, 135, 152, 0.26);
+}
+
+.field-info #batteryL:checked + label.btn,
+.field-info #batteryR:checked + label.btn {
+    color: #4c3900;
+    background: linear-gradient(135deg, #fff9c9, #f2ce45);
+    border-color: #c79c21;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.82), 0 0 0 1px rgba(199, 156, 33, 0.3);
+}
+
+.field-info #foresightL:checked + label.btn,
+.field-info #foresightR:checked + label.btn {
+    color: #352044;
+    background: linear-gradient(135deg, #e7dcf1, #9b76b4);
+    border-color: #74528e;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72), 0 0 0 1px rgba(116, 82, 142, 0.3);
+}
+
+.field-info #flowerGiftL:checked + label.btn,
+.field-info #flowerGiftR:checked + label.btn {
+    color: #493020;
+    background: linear-gradient(135deg, #fff2ad 0%, #ffd0c9 33%, #d6efc3 66%, #ffd8a6 100%);
+    border-color: #c98d6b;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.76), 0 0 0 1px rgba(201, 141, 107, 0.3);
+}
+
+.field-info #switchingL:checked + label.btn,
+.field-info #switchingR:checked + label.btn {
+    color: #ffffff;
+    background: linear-gradient(135deg, #727d89, #30363e);
+    border-color: #22282f;
+    box-shadow: inset 0 1px 0 rgba(225, 231, 237, 0.28), 0 0 0 1px rgba(34, 40, 47, 0.38);
+}
+
+.field-info #groundedL:checked + label.btn,
+.field-info #groundedR:checked + label.btn {
+    color: #39250e;
+    background: linear-gradient(135deg, #f0dcaa, #c79a50);
+    border-color: #986f2f;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.62), 0 0 0 1px rgba(152, 111, 47, 0.28);
+}
+
+.field-info #powerSpotL:checked + label.btn,
+.field-info #powerSpotR:checked + label.btn {
+    color: #412b1a;
+    background: linear-gradient(135deg, #f1d8ad, #bd8755);
+    border-color: #8b6039;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.66), 0 0 0 1px rgba(139, 96, 57, 0.3);
+}
+
 .field-info {
     border-radius: 10px;
     transition: background-color 180ms ease, box-shadow 180ms ease;
+    --field-weather-top: var(--fieldset-color, #F1F4F9);
+    --field-weather-bottom: var(--fieldset-color, #F1F4F9);
+    --field-terrain-top: transparent;
+    --field-terrain-bottom: transparent;
 }
 
 .field-info.field-weather-none {
@@ -1501,42 +1980,69 @@ select.toxic-counter {
 
 .field-info.field-weather-sun {
     background: linear-gradient(180deg, rgba(96, 37, 24, 0.55), rgba(60, 24, 16, 0.62));
+    --field-weather-top: rgba(96, 37, 24, 0.55);
+    --field-weather-bottom: rgba(60, 24, 16, 0.62);
 }
 
 .field-info.field-weather-rain {
     background: linear-gradient(180deg, rgba(18, 45, 92, 0.5), rgba(14, 34, 72, 0.58));
+    --field-weather-top: rgba(18, 45, 92, 0.5);
+    --field-weather-bottom: rgba(14, 34, 72, 0.58);
 }
 
 .field-info.field-weather-sand {
     background: linear-gradient(180deg, rgba(92, 74, 24, 0.5), rgba(64, 52, 18, 0.58));
+    --field-weather-top: rgba(92, 74, 24, 0.5);
+    --field-weather-bottom: rgba(64, 52, 18, 0.58);
 }
 
 .field-info.field-weather-snow {
     background: linear-gradient(180deg, rgba(102, 146, 176, 0.38), rgba(64, 98, 132, 0.48));
+    --field-weather-top: rgba(102, 146, 176, 0.38);
+    --field-weather-bottom: rgba(64, 98, 132, 0.48);
 }
 
 .field-info.field-weather-hail {
     background: linear-gradient(180deg, rgba(196, 212, 226, 0.35), rgba(132, 152, 168, 0.46));
+    --field-weather-top: rgba(196, 212, 226, 0.35);
+    --field-weather-bottom: rgba(132, 152, 168, 0.46);
 }
 
 .field-info.field-weather-fog {
     background: linear-gradient(180deg, rgba(94, 98, 106, 0.42), rgba(66, 70, 78, 0.54));
+    --field-weather-top: rgba(94, 98, 106, 0.42);
+    --field-weather-bottom: rgba(66, 70, 78, 0.54);
 }
 
 .field-info.field-terrain-electric {
     background: linear-gradient(180deg, rgba(125, 106, 16, 0.5), rgba(84, 70, 10, 0.58));
+    --field-terrain-top: rgba(125, 106, 16, 0.68);
+    --field-terrain-bottom: rgba(84, 70, 10, 0.74);
 }
 
 .field-info.field-terrain-grassy {
     background: linear-gradient(180deg, rgba(28, 97, 38, 0.48), rgba(18, 64, 26, 0.58));
+    --field-terrain-top: rgba(28, 97, 38, 0.68);
+    --field-terrain-bottom: rgba(18, 64, 26, 0.76);
 }
 
 .field-info.field-terrain-misty {
     background: linear-gradient(180deg, rgba(96, 80, 108, 0.46), rgba(66, 52, 80, 0.56));
+    --field-terrain-top: rgba(96, 80, 108, 0.66);
+    --field-terrain-bottom: rgba(66, 52, 80, 0.74);
 }
 
 .field-info.field-terrain-psychic {
     background: linear-gradient(180deg, rgba(108, 46, 86, 0.5), rgba(74, 30, 60, 0.6));
+    --field-terrain-top: rgba(108, 46, 86, 0.68);
+    --field-terrain-bottom: rgba(74, 30, 60, 0.76);
+}
+
+/* When weather and terrain coexist, show each as a clearly separated layer. */
+.field-info.field-environment-combined {
+    background:
+        linear-gradient(135deg, transparent 0%, transparent 43%, rgba(255, 255, 255, 0.16) 43.5%, var(--field-terrain-top) 44.5%, var(--field-terrain-bottom) 100%),
+        linear-gradient(180deg, var(--field-weather-top), var(--field-weather-bottom));
 }
 
 table.field {
@@ -1562,19 +2068,39 @@ table.field {
 }
 
 /* select2 overrides */
-.set-selector + .select2-container {
+.poke-info > .select2-container {
     width: 100% !important;
     max-width: 100%;
 }
 
-.set-selector + .select2-container .select2-choice {
+.poke-info > .select2-container .select2-choice {
     width: 100%;
+    height: 40px;
     box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding: 3px 0 3px 8px;
+    line-height: 16px;
+    font-size: 13px;
+    white-space: normal;
 }
 
-.select2-container .select2-choice > .select2-chosen {
-    width: 100%;
-    margin-right: auto;
+.poke-info .select2-container .select2-choice > .select2-chosen {
+    display: block;
+    width: auto;
+    margin-right: 26px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: clip;
+}
+
+.poke-info > .select2-container .select2-choice > .select2-chosen {
+    flex: 1;
+    min-width: 0;
+    min-height: 16px;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    line-height: 16px;
 }
 .small-select.select2-container .select2-choice {
     font-size: 0.9em;
@@ -1586,6 +2112,10 @@ table.field {
 }
 .small-select.select2-dropdown-open .select2-choice .select2-arrow b {
     background-position: -18px -4px;
+}
+
+.ability-item-search-select.select2-container {
+    margin-left: 0.25em;
 }
 
 .ability-item-search-select.select2-container .select2-choice {
@@ -1998,6 +2528,20 @@ table.field {
     min-height: 30px;
 }
 
+.team-right-section,
+.tag-partner-section {
+    margin-top: 8px;
+    padding-top: 6px;
+    border-top: 1px solid #8a8a8a;
+}
+
+.team-right-poke-list,
+.tag-partner-poke-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
 .deadzone:hover{
     background: #722323;
 }
@@ -2029,6 +2573,16 @@ table.field {
 }
 .l-side-button, .r-side-button{
     position: absolute;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 60px;
+    min-width: 60px;
+    height: 22px;
+    padding: 3px 5px;
+    white-space: nowrap;
 }
 .side-pannel{
     display: grid;
@@ -2086,8 +2640,15 @@ nav .nav {
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    gap: 0.6em;
+    flex-wrap: nowrap;
+    gap: 0.25em;
+    min-width: 0;
     margin-bottom: 4px;
+}
+
+.roster-top-controls > .btn {
+    flex: 0 0 auto;
+    font-size: 0.8em;
 }
 
 .roster-top-controls #box-current-team {
@@ -2098,14 +2659,30 @@ nav .nav {
     white-space: nowrap;
 }
 
+.roster-top-controls .roster-sort-button {
+    box-sizing: border-box;
+    width: 7.5em;
+    min-width: 0;
+    margin: 0;
+    padding: 2px 3px;
+    line-height: 1.2;
+    white-space: nowrap;
+}
+
 #search-inline {
-    display: inline-block;
+    display: block;
     margin-left: 0;
-    flex-shrink: 0;
+    flex: 1 1 8em;
+    min-width: 6em;
+    max-width: 100%;
 }
 
 #search {
-    min-width: 14em;
+    box-sizing: border-box;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    font-size: 0.8em;
     padding: 2px 6px;
     border-radius: 4px;
     border: 1px solid #AAAAAA;
@@ -2291,7 +2868,7 @@ body.calc-side-resizing .credits {
 .frags-toolbar {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    align-items: flex-start;
     column-gap: 8px;
     row-gap: 6px;
 }
@@ -2317,6 +2894,10 @@ body.calc-side-resizing .credits {
 
 .calc-side-panel.fullscreen #frags-current-fight-label {
     flex-basis: auto;
+}
+
+.ae-lua-frag-import-button {
+    display: none !important;
 }
 
 .poke-import .ae-lua-frag-import-button {
@@ -3059,3 +3640,9 @@ body.calc-side-resizing .credits {
         margin-top: 8px;
     }
 }
+
+/* Manual Astral Emerald snapshot controls */
+.astral-sync-controls { margin: 6px 0; }
+.frags-toolbar .astral-sync-controls { margin: 0; }
+.astral-sync-status { margin: 4px 0; font-size: 12px; overflow-wrap: anywhere; }
+.astral-sync-status:empty { display: none; }

@@ -1053,7 +1053,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     makesContact: true,
     category: 'Physical',
   },
-  'Roar of Time': {bp: 150, type: 'Dragon', category: 'Special'},
+  'Roar of Time': {bp: 150, type: 'Dragon', category: 'Special', critRatio: 2},
   'Rock Climb': {
     bp: 90,
     type: 'Rock',
@@ -1061,7 +1061,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     category: 'Physical',
   },
   'Seed Flare': {bp: 120, type: 'Grass', category: 'Special'},
-  'Spacial Rend': {bp: 100, type: 'Dragon', category: 'Special', critRatio: 2},
+  'Spacial Rend': {bp: 110, type: 'Dragon', category: 'Special', critRatio: 2},
   'Trump Card': {
     bp: 0,
     type: 'Normal',
@@ -1166,7 +1166,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     category: 'Physical',
   },
   'Iron Cleave': {
-    bp: 70,
+    bp: 80,
     type: 'Steel',
     makesContact: true,
     critRatio: 2,
@@ -1206,7 +1206,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     makesContact: true,
     category: 'Physical',
   },
-  'Stone Edge': {bp: 100, type: 'Rock', category: 'Physical', critRatio: 2},
+  'Stone Edge': {bp: 110, type: 'Rock', category: 'Physical', critRatio: 2},
   'Thunder Fang': {
     bp: 65,
     type: 'Electric',
@@ -1852,7 +1852,7 @@ const XY_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     category: 'Physical',
   },
   'Flying Press': {
-    bp: 80,
+    bp: 100,
     type: 'Fighting',
     makesContact: true,
     category: 'Physical',
@@ -1864,7 +1864,7 @@ const XY_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     category: 'Physical',
   },
   'Hyperspace Hole': {
-    bp: 80,
+    bp: 100,
     type: 'Psychic',
     breaksProtect: true,
     category: 'Special',
@@ -1878,7 +1878,7 @@ const XY_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     secondaries: true,
   },
   'Parabolic Charge': {
-    bp: 75,
+    bp: 70,
     type: 'Electric',
     drain: [1, 2],
     target: 'allAdjacent',
@@ -2333,7 +2333,7 @@ const SM_PATCH: {[name: string]: DeepPartial<MoveData>} = {
   Octazooka: {zp: 120},
   Outrage: {zp: 190},
   Overheat: {zp: 195},
-  'Parabolic Charge': {bp: 75, zp: 120},
+  'Parabolic Charge': {bp: 70, zp: 120},
   Payback: {zp: 100},
   'Pay Day': {zp: 100},
   Peck: {zp: 100},
@@ -3509,7 +3509,7 @@ const SS_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     maxPower: 1,
   },
   'Meteor Assault': {
-    bp: 150,
+    bp: 170,
     type: 'Fighting',
     category: 'Physical',
     zp: 200,
@@ -4422,6 +4422,7 @@ const SV_PATCH: {[name: string]: DeepPartial<MoveData>} = {
     zp: 190,
     maxPower: 140,
     makesContact: true,
+    isPunch: true,
   },
   'Dire Claw': {
     bp: 80,

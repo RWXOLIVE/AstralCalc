@@ -73,6 +73,19 @@ describe('calc', () => {
       });
     });
 
+    inGen(9, ({calculate, Pokemon, Move, Field}) => {
+      test('Magma Storm side effect', () => {
+        const magmaStorm = calculate(
+          Pokemon('Torkoal'),
+          Pokemon('Blastoise'),
+          Move('Tackle'),
+          Field({defenderSide: {magmaStorm: true}})
+        );
+
+        expect(magmaStorm.desc()).toContain('Magma Storm damage');
+      });
+    });
+
     inGens(5, 9, ({gen, calculate, Pokemon, Move}) => {
       test(`Frostbite activates Facade and Guts (gen ${gen})`, () => {
         const defender = Pokemon('Blastoise');
@@ -1079,6 +1092,19 @@ describe('calc', () => {
           const glovedIcePunch = calculate(gloved(), fluffy(), Move('Ice Punch'));
           const nonFluffyIcePunch = calculate(gloved(), regular(), Move('Ice Punch'));
           expect(glovedIcePunch.range()).toEqual(nonFluffyIcePunch.range());
+        });
+
+        test('Aura Guard halves contact-move damage', () => {
+          const auraGuard = () => Pokemon('Mew', {ability: 'Aura Guard'});
+          const regular = () => Pokemon('Mew', {ability: 'Synchronize'});
+
+          const guardedBodySlam = calculate(Pokemon('Mew'), auraGuard(), Move('Body Slam'));
+          const regularBodySlam = calculate(Pokemon('Mew'), regular(), Move('Body Slam'));
+          expect(guardedBodySlam.range()[1]).toBeLessThan(regularBodySlam.range()[0]);
+
+          const guardedRockSlide = calculate(Pokemon('Mew'), auraGuard(), Move('Rock Slide'));
+          const regularRockSlide = calculate(Pokemon('Mew'), regular(), Move('Rock Slide'));
+          expect(guardedRockSlide.range()).toEqual(regularRockSlide.range());
         });
       });
     });

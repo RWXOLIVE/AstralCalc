@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <title>Pok&eacute;mon Damage Calculator</title>
     <link type="text/css" rel="stylesheet" href="./js/vendor/select2/select2.css" />
-    <link type="text/css" rel="stylesheet" href="./css/main.css?" />
+    <link type="text/css" rel="stylesheet" href="./css/main.css?astral-sync-v5" />
     <link type="text/css" rel="stylesheet" href="./css/vendor/bootstrap.css" />
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-26211653-3"></script>
@@ -458,8 +458,9 @@
 								<option value="5">Five allies fainted</option>
 						  </select>
                 </div>
-                    <div class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
+                    <div class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9 item-row">
                         <label for="itemL1">Item</label>
+                        <span class="item-sprite is-empty" id="item-spriteL1" aria-hidden="true"></span>
                         <select class="item terrain-trigger calc-trigger" id="itemL1"></select>
                         <label class="item-ignore-toggle-label" for="ignoreItemL1" title="When checked, this Pokemon is treated as if it has no held item, without clearing the selected item.">
                             <input type="checkbox" class="ignore-item-toggle terrain-trigger calc-trigger" id="ignoreItemL1" />
@@ -1339,8 +1340,9 @@
 								<option value="5">Five allies fainted</option>
 						  </select>
                 </div>
-                    <div class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9">
+                    <div class="gen-specific g2 g3 g4 g5 g6 g7 g8 g9 item-row">
                         <label for="itemR1">Item</label>
+                        <span class="item-sprite is-empty" id="item-spriteR1" aria-hidden="true"></span>
                         <select class="item terrain-trigger calc-trigger" id="itemR1"></select>
                         <label class="item-ignore-toggle-label" for="ignoreItemR1" title="When checked, this Pokemon is treated as if it has no held item, without clearing the selected item.">
                             <input type="checkbox" class="ignore-item-toggle terrain-trigger calc-trigger" id="ignoreItemR1" />
@@ -1574,7 +1576,7 @@
     </script>
     <script type="text/javascript" src="./calc/util.js?"></script>
     <script type="text/javascript" src="./calc/stats.js?"></script>
-    <script type="text/javascript" src="./calc/data/species.js?"></script>
+    <script type="text/javascript" src="./calc/data/species.js?55255a37"></script>
     <script type="text/javascript" src="https://data.pkmn.cc/randbats/js/gen9randombattle.js?"></script>
     <script type="text/javascript" src="https://data.pkmn.cc/randbats/js/gen8randombattle.js?"></script>
     <script type="text/javascript" src="https://data.pkmn.cc/randbats/js/gen7randombattle.js?"></script>
@@ -1586,7 +1588,7 @@
     <script type="text/javascript" src="https://data.pkmn.cc/randbats/js/gen1randombattle.js?"></script>
     <script type="text/javascript" src="./calc/data/types.js?"></script>
     <script type="text/javascript" src="./calc/data/natures.js?"></script>
-    <script type="text/javascript" src="./calc/data/abilities.js?da81383f"></script>
+    <script type="text/javascript" src="./calc/data/abilities.js?8c3bffd0"></script>
     <script type="text/javascript" src="./calc/data/moves.js?"></script>
     <script type="text/javascript" src="./calc/data/items.js?"></script>
     <script type="text/javascript" src="./calc/data/index.js?"></script>
@@ -1595,7 +1597,7 @@
     <script type="text/javascript" src="./calc/field.js?1f4ead1b"></script>
     <script type="text/javascript" src="./calc/items.js?"></script>
     <script type="text/javascript" src="./calc/mechanics/util.js?7e5f1c31"></script>
-    <script type="text/javascript" src="./calc/mechanics/gen789.js?8c98096f"></script>
+    <script type="text/javascript" src="./calc/mechanics/gen789.js?0434f021"></script>
     <script type="text/javascript" src="./calc/mechanics/gen56.js?660f43b8"></script>
     <script type="text/javascript" src="./calc/mechanics/gen4.js?357fdf4e"></script>
     <script type="text/javascript" src="./calc/mechanics/gen3.js?"></script>
@@ -1607,9 +1609,12 @@
     <script type="text/javascript" src="./calc/index.js?"></script>
     <script type="text/javascript" src="./js/spritedata.js?"></script>
     <script type="text/javascript" src="./js/data/move_info_lookup.js?"></script>
-    <script type="text/javascript" src="./js/shared_controls.js?1abd270c"></script>
-    <script type="text/javascript" src="./js/index_randoms_controls.js?"></script>
-    <script type="text/javascript" src="./js/moveset_import.js?aefe0d1f"></script>
+    <script type="text/javascript" src="./js/item_sprites.js?item-sprites-v2"></script>
+    <script src="./js/astral_sync.js?astral-sync-v5"></script>
+    <script type="text/javascript" src="./js/shared_controls.js?astral-sync-v2"></script>
+    <script src="./js/astral_sync_ui.js?astral-sync-v7"></script>
+    <script type="text/javascript" src="./js/index_randoms_controls.js?calcrefresh-root-v2"></script>
+    <script type="text/javascript" src="./js/moveset_import.js?9abe934f"></script>
 </div>
 
 <div class="credits">Created by Honko, maintained by Austin and Kris

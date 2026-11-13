@@ -90,7 +90,7 @@ const RBY: {[name: string]: SpeciesData} = {
   },
   Charizard: {
     types: ['Fire', 'Flying'],
-    bs: {hp: 78, at: 100, df: 76, sp: 100, sl: 100},
+    bs: {hp: 78, at: 90, df: 72, sp: 100, sl: 100},
     weightkg: 90.5,
   },
   Charmander: {
@@ -269,7 +269,7 @@ const RBY: {[name: string]: SpeciesData} = {
   Golduck: {types: ['Water', 'Psychic'], bs: {hp: 80, at: 82, df: 78, sp: 85, sl: 95}, weightkg: 76.6},
   Golem: {
     types: ['Rock', 'Ground'],
-    bs: {hp: 80, at: 110, df: 130, sp: 45, sl: 55},
+    bs: {hp: 100, at: 110, df: 130, sp: 45, sl: 55},
     weightkg: 300,
   },
   Graveler: {
@@ -855,7 +855,7 @@ const GSC_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
   Butterfree: {bs: {sa: 95, sd: 85}},
   Caterpie: {bs: {sa: 20, sd: 20}},
   Chansey: {bs: {sa: 35, sd: 105}, nfe: true},
-  Charizard: {bs: {sa: 100, sd: 81}},
+  Charizard: {bs: {sa: 116, sd: 81}},
   Charmander: {bs: {sa: 60, sd: 50}},
   Charmeleon: {bs: {sa: 80, sd: 65}},
   Clefable: {bs: {sa: 85, sd: 90}},
@@ -1650,7 +1650,7 @@ const ADV_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
   Paras: {abilities: {0: 'Effect Spore'}},
   Parasect: {abilities: {0: 'Effect Spore'}},
   Persian: {abilities: {0: 'Limber'}},
-  Pidgeot: {abilities: {0: 'Keen Eye'}},
+  Pidgeot: {abilities: {0: 'Illuminate'}},
   Pidgeotto: {abilities: {0: 'Keen Eye'}},
   Pidgey: {abilities: {0: 'Keen Eye'}},
   Pikachu: {abilities: {0: 'Static'}},
@@ -1723,7 +1723,7 @@ const ADV_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
   Elekid: {abilities: {0: 'Static'}},
   Entei: {abilities: {0: 'Pressure'}},
   Espeon: {abilities: {0: 'Synchronize'}},
-  Feraligatr: {otherFormes: ['Feraligatr-Mega'], abilities: {0: 'Torrent'}},
+  Feraligatr: {otherFormes: ['Feraligatr-Mega'], abilities: {0: 'Swift Swim'}},
   Flaaffy: {abilities: {0: 'Static'}},
   Forretress: {abilities: {0: 'Sturdy'}},
   Furret: {abilities: {0: 'Run Away'}},
@@ -2171,7 +2171,7 @@ const ADV_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
   },
   Kecleon: {
     types: ['Normal'],
-    bs: {hp: 60, at: 90, df: 70, sa: 60, sd: 120, sp: 40},
+    bs: {hp: 60, at: 90, df: 70, sa: 90, sd: 120, sp: 40},
     weightkg: 22,
     abilities: {0: 'Color Change'},
   },
@@ -3338,7 +3338,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
   },
   Luxray: {
     types: ['Electric'],
-    bs: {hp: 95, at: 120, df: 79, sa: 95, sd: 79, sp: 70},
+    bs: {hp: 110, at: 120, df: 79, sa: 72, sd: 79, sp: 70},
     weightkg: 42,
     abilities: {0: 'Rivalry'},
   },
@@ -3390,7 +3390,7 @@ const DPP_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
     abilities: {0: 'Soundproof'},
   },
   Mismagius: {
-    types: ['Ghost'],
+    types: ['Ghost', 'Psychic'],
     bs: {hp: 55, at: 55, df: 55, sa: 110, sd: 110, sp: 110},
     weightkg: 4.4,
     abilities: {0: 'Levitate'},
@@ -3804,7 +3804,7 @@ const BW_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
   },
   Beheeyem: {
     types: ['Psychic', 'Electric'],
-    bs: {hp: 75, at: 75, df: 75, sa: 125, sd: 95, sp: 40},
+    bs: {hp: 75, at: 75, df: 95, sa: 125, sd: 95, sp: 40},
     weightkg: 34.5,
     abilities: {0: 'Telepathy'},
   },
@@ -3894,7 +3894,7 @@ const BW_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
   },
   Crustle: {
     types: ['Bug', 'Rock'],
-    bs: {hp: 70, at: 105, df: 125, sa: 65, sd: 75, sp: 45},
+    bs: {hp: 85, at: 115, df: 125, sa: 65, sd: 80, sp: 45},
     weightkg: 200,
     abilities: {0: 'Sturdy'},
   },
@@ -4150,7 +4150,7 @@ const BW_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
   },
   Gigalith: {
     types: ['Rock'],
-    bs: {hp: 85, at: 135, df: 130, sa: 60, sd: 80, sp: 25},
+    bs: {hp: 90, at: 135, df: 130, sa: 60, sd: 80, sp: 25},
     weightkg: 260,
     abilities: {0: 'Sturdy'},
   },
@@ -4997,7 +4997,7 @@ const XY_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
   Nidoqueen: {bs: {at: 75}},
   Pidgeot: {bs: {sp: 109}, otherFormes: ['Pidgeot-Mega']},
   Pikachu: {
-    bs: {df: 40, sd: 40},
+    bs: {df: 40, sd: 50},
     otherFormes: [
       'Pikachu-Belle',
       'Pikachu-Cosplay',
@@ -5588,7 +5588,7 @@ const XY_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
     types: ['Normal', 'Fairy'],
     bs: {hp: 103, at: 75, df: 126, sa: 80, sd: 126, sp: 50},
     weightkg: 32,
-    abilities: {0: 'Fairy Aura'},
+    abilities: {0: 'Aura Guard'},
     baseSpecies: 'Audino',
   },
   'Banette-Mega': {
@@ -6496,7 +6496,7 @@ const SM_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
   },
   'Golem-Alola': {
     types: ['Rock', 'Electric'],
-    bs: {hp: 80, at: 120, df: 130, sa: 55, sd: 65, sp: 45},
+    bs: {hp: 100, at: 120, df: 130, sa: 55, sd: 65, sp: 45},
     weightkg: 316,
     abilities: {0: 'Magnet Pull'},
     baseSpecies: 'Golem',
@@ -6651,10 +6651,10 @@ const SM_PATCH: {[name: string]: DeepPartial<SpeciesData>} = {
   },
   Lurantis: {
     types: ['Grass'],
-    bs: {hp: 70, at: 105, df: 90, sa: 80, sd: 90, sp: 45},
+    bs: {hp: 85, at: 115, df: 100, sa: 90, sd: 95, sp: 45},
     weightkg: 18.5,
     otherFormes: ['Lurantis-Totem'],
-    abilities: {0: 'Leaf Guard'},
+    abilities: {0: 'Sharpness'},
   },
   'Lurantis-Totem': {
     types: ['Grass'],

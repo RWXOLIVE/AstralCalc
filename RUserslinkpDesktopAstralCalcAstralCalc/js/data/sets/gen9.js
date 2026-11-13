@@ -2923,7 +2923,7 @@ var SETDEX_SV = {
             "nature": "Timid",
             "setdouble": "True",
             "ivs": {
-                "hp": 31, "at": 0, "df": 31, "sa": 31, "sd": 31, "sp": 31
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Bullet Seed","Population Bomb","Low Kick","Follow Me"]
         },
