@@ -640,6 +640,9 @@ function ensureSimplifiedAbilityItemSearchSelect(targetNode) {
 		dropdownAutoWidth: true,
 		containerCssClass: "simplified-ability-item-search-select",
 		dropdownCssClass: "ability-item-search-dropdown",
+		// Keep proxy control classes on the native select. Copying them onto
+		// Select2's wrapper makes later syncs replace that wrapper with options.
+		adaptContainerCssClass: function () { return null; },
 		matcher: simplifiedSelectSearchMatcher
 	});
 }
@@ -650,6 +653,7 @@ function ensureSimplifiedMoveSearchSelect(targetNode) {
 	if (targetNode.data("select2")) return;
 	targetNode.select2({
 		dropdownAutoWidth: true,
+		adaptContainerCssClass: function () { return null; },
 		matcher: simplifiedSelectSearchMatcher
 	});
 }
@@ -706,7 +710,7 @@ function syncSimplifiedDexLink(sideSelector, card) {
 
 function syncSimplifiedSelectFromSource(sideSelector, sourceSelector, targetNode) {
 	var source = $(sideSelector + " " + sourceSelector).first();
-	var target = $(targetNode);
+	var target = $(targetNode).filter("select");
 	if (!source.length || !target.length) return;
 	var isAbilityItemSearchSelect = isSimplifiedAbilityItemSelect(target);
 	var isMoveSearchSelect = isSimplifiedMoveSearchSelect(target);
@@ -732,10 +736,8 @@ function syncSimplifiedSelectFromSource(sideSelector, sourceSelector, targetNode
 		}
 	}
 	var sourceDisabled = source.prop("disabled");
-	if (isSearchSelect && target.data("select2") && target.data("srcHtml") !== sourceHtml) {
-		target.select2("destroy");
-		target.removeClass("select2-offscreen");
-	}
+	target.data("simplifiedSyncing", true);
+	try {
 	if (target.data("srcHtml") !== sourceHtml) {
 		target.html(sourceHtml);
 		target.data("srcHtml", sourceHtml);
@@ -745,17 +747,15 @@ function syncSimplifiedSelectFromSource(sideSelector, sourceSelector, targetNode
 		target.data("lastValidMove", sourceValue);
 	}
 	target.prop("disabled", sourceDisabled);
-	if (!isSearchSelect) return;
 	if (isAbilityItemSearchSelect) {
 		ensureSimplifiedAbilityItemSearchSelect(target);
 	} else if (isMoveSearchSelect) {
 		ensureSimplifiedMoveSearchSelect(target);
 	}
-	if (!target.data("select2")) return;
-	target.data("simplifiedSyncing", true);
-	try {
+	if (isSearchSelect && target.data("select2")) {
 		target.select2("val", sourceValue, false);
 		target.select2("enable", !sourceDisabled);
+	}
 	} finally {
 		target.removeData("simplifiedSyncing");
 	}
@@ -931,7 +931,9 @@ function renderSimplifiedSideCard(sideSelector, sideIndex, attacker, defender) {
 		}
 		moveRow.find(".simplified-side-move-meta").text(metaText);
 		moveRow.toggleClass("is-meta-hidden", !showMoveMeta || !metaText);
-		moveRow.find(".move-crit-rate-display").toggle(!!showMoveMeta);
+		var canCrit = !!move && move.category !== "Status" && move.name !== "(No Move)";
+		moveRow.find(".simplified-side-move-crit-wrap").toggle(canCrit);
+		moveRow.find(".move-crit-rate-display").toggle(canCrit && !!showMoveMeta);
 		var sourceCritToggle = sourceMoveRow.find(".move-crit").first();
 		var simplifiedCritToggle = moveRow.find(".simplified-side-move-crit-input").first();
 		if (simplifiedCritToggle.length) {
@@ -1230,14 +1232,7 @@ $(document)
 		if (!isSimplifiedLayoutEnabled()) return;
 		var pokeInfo = $(this).closest(".poke-info");
 		if (!pokeInfo.length) return;
-		var formeSelect = pokeInfo.find(".forme").first();
-		if (!formeSelect.length) return;
-		var formeOptions = formeSelect.find("option");
-		if (formeOptions.length <= 1) return;
-		var currentIndex = formeSelect.prop("selectedIndex");
-		if (currentIndex < 0) currentIndex = 0;
-		var nextIndex = (currentIndex + 1) % formeOptions.length;
-		formeSelect.prop("selectedIndex", nextIndex).change();
+		cyclePokemonForm(pokeInfo);
 	});
 
 $(document)
@@ -1366,14 +1361,13 @@ function performCalculations() {
 	syncDisplayedModifiedStats(p2info, p2, false);
 	var turnOrderSpeeds = syncDisplayedTurnOrderSpeeds(p1info, p2info, p1, p2, p1field);
 	updateSpeedClasses(p1info, p2info, p1, p2, p1field, turnOrderSpeeds);
-	renderSideSupplementalDisplays("#p1", p1, p2, p1field);
-	renderSideSupplementalDisplays("#p2", p2, p1, p2field);
 
 	try {
 		damageResults = calculateAllMoves(gen, p1, p1field, p2, p2field);
 	} catch (err) {
 		console.error("Damage calculation failed while updating results.", err);
 		applyMoveResultColors(p1, p2, null);
+		renderSimplifiedSideCards(p1, p2);
 		return;
 	}
 	p1 = damageResults[0][0].attacker;
@@ -1434,6 +1428,12 @@ function performCalculations() {
 	}
 	applyMoveResultColors(p1, p2, damageResults);
 	renderSimplifiedSideCards(p1, p2);
+	try {
+		renderSideSupplementalDisplays("#p1", p1, p2, p1field);
+		renderSideSupplementalDisplays("#p2", p2, p1, p2field);
+	} catch (err) {
+		console.warn("Unable to refresh supplemental move displays.", err);
+	}
 	if ($('.locked-move').length) {
 		bestResult = $('.locked-move');
 	} else {

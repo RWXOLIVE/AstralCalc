@@ -3759,7 +3759,7 @@ var DPP_PATCH = {
     },
     Yanmega: {
         types: ['Bug', 'Dragon'],
-        bs: { hp: 86, at: 76, df: 86, sa: 116, sd: 56, sp: 95 },
+        bs: { hp: 90, at: 46, df: 86, sa: 142, sd: 64, sp: 127 },
         weightkg: 51.5,
         abilities: { 0: 'Speed Boost' }
     }

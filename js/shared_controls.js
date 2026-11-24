@@ -361,6 +361,14 @@ $(".ability").bind("keyup change", function () {
 	updatePokeMoveHitsFromAbilityItem(pokeInfo);
 
 	var ability = pokeInfo.find(".ability").val();
+	if (ability === "Battle Bond" && !window.NO_CALC && !pokeInfo.data("changingForme")) {
+		var selectedSet = parseSetId(pokeInfo.find("input.set-selector").first().val() || "");
+		var formeSelect = pokeInfo.find(".forme");
+		if (selectedSet.species === "Greninja" && formeSelect.val() === "Greninja" &&
+			formeSelect.find('option[value="Greninja-Bond"]').length) {
+			formeSelect.val("Greninja-Bond").change();
+		}
+	}
 	var isProtoQuark = ability === 'Quark Drive' || ability === 'Protosynthesis';
 	var protoQuarkState = pokeInfo.find(".proto-quark-state");
 	var abilityToggle = pokeInfo.find(".abilityToggle");
@@ -767,7 +775,8 @@ function ensureMoveMetaForGroup(moveGroupObj) {
 
 function applyMoveMetaVisibility() {
 	$(".move-meta").toggle(!!moveMetaVisible);
-	$(".move-crit-rate-display").toggle(!!moveMetaVisible);
+	$(".move-crit-rate-display").not(".crit-rate-unavailable").toggle(!!moveMetaVisible);
+	$(".move-crit-rate-display.crit-rate-unavailable").hide();
 }
 
 function setMoveMetaVisibility(enabled) {
@@ -2147,7 +2156,8 @@ function getSelectedFormeNameIfVisible(pokeInfo) {
 	if (!pokeInfo || !pokeInfo.length) return "";
 	var formeSelect = pokeInfo.find(".forme");
 	var formeContainer = formeSelect.parent();
-	if (!(formeSelect.length && formeContainer.length && formeContainer.is(":visible"))) return "";
+	// Simplified mode hides the editor, but its selected form remains active.
+	if (!(formeSelect.length && formeContainer.length && formeContainer.css("display") !== "none")) return "";
 	return String(formeSelect.val() || "").trim();
 }
 
@@ -2172,7 +2182,7 @@ function syncInlinePokeSprite(pokeInfo) {
 	var hasFormes = !!(
 		formeSelect.length &&
 		formeContainer.length &&
-		formeContainer.is(":visible") &&
+		formeContainer.css("display") !== "none" &&
 		formeSelect.find("option").length > 1
 	);
 	inlineSpriteNode.title = hasFormes ? "Click to cycle forms" : "No alternate forms";
@@ -8048,8 +8058,8 @@ function getSelectedSetIdForSide(sideId) {
 	return String(selector.val() || "").trim();
 }
 
-var P2_SET_SELECTOR_TEXT_BUFFER_PX = 10;
-var p2SetSelectorFitTimer = null;
+var SET_SELECTOR_MIN_FONT_PX = 12;
+var setSelectorFitTimer = null;
 
 function getSetSelectorSelect2Container(selector) {
 	var select2Container = selector.next(".select2-container");
@@ -8059,56 +8069,71 @@ function getSetSelectorSelect2Container(selector) {
 	return select2Container;
 }
 
-function fitP2SetSelectorText() {
-	var selector = $("#p2 input.set-selector").first();
-	if (!selector.length) return;
-	var select2Container = getSetSelectorSelect2Container(selector);
-	var choice = select2Container.find(".select2-choice").first();
-	var chosen = choice.find(".select2-chosen").first();
-	if (!choice.length || !chosen.length) return;
+function fitSetSelectorText(sideId) {
+	var selector = $("#" + sideId + " input.set-selector").first();
+	var chosen = getSetSelectorSelect2Container(selector).find(".select2-choice > .select2-chosen").first();
+	if (!chosen.length) return;
 
-	// Start at the normal size again so shorter selections do not stay compact.
-	chosen.css("font-size", "");
+	// Reset both size and wrapping when switching back to a short label.
+	chosen.css({fontSize: "", whiteSpace: "nowrap"});
 	var selectedText = chosen.text();
-	if (!selectedText) return;
-
-	var choiceStyle = window.getComputedStyle(choice[0]);
-	var chosenStyle = window.getComputedStyle(chosen[0]);
-	var arrowWidth = choice.find(".select2-arrow").outerWidth() || 0;
-	var horizontalPadding = (parseFloat(choiceStyle.paddingLeft) || 0) +
-		(parseFloat(choiceStyle.paddingRight) || 0);
-	// Reserve room before the arrow so text is reduced before it can visibly clip.
-	var availableWidth = choice.innerWidth() - horizontalPadding - arrowWidth - P2_SET_SELECTOR_TEXT_BUFFER_PX;
-	if (availableWidth <= 0) return;
-
-	var textMeasure = $("<span>").text(selectedText).css({
-		position: "fixed",
-		left: "-10000px",
-		top: "-10000px",
-		visibility: "hidden",
-		whiteSpace: "nowrap",
-		fontFamily: chosenStyle.fontFamily,
-		fontSize: chosenStyle.fontSize,
-		fontWeight: chosenStyle.fontWeight,
-		fontStyle: chosenStyle.fontStyle,
-		letterSpacing: chosenStyle.letterSpacing
+	var availableWidth = chosen[0].clientWidth - 2;
+	if (!selectedText || availableWidth <= 0) return;
+	// Reserve the same space for every selection at a given panel width.
+	var reservedLines = availableWidth < 280 ? 3 : 2;
+	chosen.parent().css("height", (reservedLines * 16 + 8) + "px");
+	var style = window.getComputedStyle(chosen[0]);
+	var normalSize = Math.max(SET_SELECTOR_MIN_FONT_PX, parseFloat(style.fontSize) || 13);
+	var measure = $("<span>").text(selectedText).css({
+		position: "fixed", left: "-10000px", top: "0", visibility: "hidden",
+		display: "block", width: "auto", whiteSpace: "nowrap",
+		fontFamily: style.fontFamily, fontSize: normalSize + "px",
+		fontWeight: style.fontWeight, fontStyle: style.fontStyle,
+		letterSpacing: style.letterSpacing, lineHeight: style.lineHeight,
+		overflowWrap: "anywhere"
 	}).appendTo("body");
-	var textWidth = textMeasure.outerWidth();
-	textMeasure.remove();
-	if (textWidth <= availableWidth) return;
-
-	var fontSize = parseFloat(chosenStyle.fontSize);
-	if (!fontSize) return;
-	var compactFontSize = Math.max(10, Math.floor((fontSize * availableWidth / textWidth) * 10) / 10);
-	chosen.css("font-size", compactFontSize + "px");
+	var textWidth = measure[0].getBoundingClientRect().width;
+	var singleLineSize = Math.floor(normalSize * availableWidth / Math.max(1, textWidth) * 10) / 10;
+	if (singleLineSize >= SET_SELECTOR_MIN_FONT_PX) {
+		chosen.css("font-size", Math.min(normalSize, singleLineSize) + "px");
+	} else {
+		// Use the reserved lines before reducing text below a readable size.
+		measure.css({width: availableWidth + "px", whiteSpace: "normal"});
+		var wrappedSize = normalSize;
+		var availableHeight = (parseFloat(style.lineHeight) || 16) * reservedLines;
+		while (wrappedSize > SET_SELECTOR_MIN_FONT_PX && measure[0].scrollHeight > availableHeight) {
+			wrappedSize = Math.max(SET_SELECTOR_MIN_FONT_PX, wrappedSize - 0.25);
+			measure.css("font-size", wrappedSize + "px");
+		}
+		chosen.css({fontSize: wrappedSize + "px", whiteSpace: "normal"});
+	}
+	measure.remove();
 }
 
-function scheduleP2SetSelectorTextFit() {
-	if (p2SetSelectorFitTimer !== null) window.clearTimeout(p2SetSelectorFitTimer);
-	p2SetSelectorFitTimer = window.setTimeout(function () {
-		p2SetSelectorFitTimer = null;
-		fitP2SetSelectorText();
+function scheduleSetSelectorTextFit() {
+	if (setSelectorFitTimer !== null) window.clearTimeout(setSelectorFitTimer);
+	setSelectorFitTimer = window.setTimeout(function () {
+		setSelectorFitTimer = null;
+		fitSetSelectorText("p1");
+		fitSetSelectorText("p2");
 	}, 0);
+}
+
+function observeSetSelectorWidths() {
+	if (typeof window.ResizeObserver === "function") {
+		var widths = {};
+		var observer = new window.ResizeObserver(function (entries) {
+			entries.forEach(function (entry) {
+				var id = entry.target.id;
+				if (widths[id] === entry.contentRect.width) return;
+				widths[id] = entry.contentRect.width;
+				scheduleSetSelectorTextFit();
+			});
+		});
+		$("#p1, #p2").each(function () { observer.observe(this); });
+	}
+	if (document.fonts && document.fonts.ready) document.fonts.ready.then(scheduleSetSelectorTextFit);
+	scheduleSetSelectorTextFit();
 }
 
 function isSetIdKnownInSetdex(setId) {
@@ -8136,7 +8161,7 @@ function setSelectedSetIdForSide(sideId, setId) {
 	function syncSetSelectorDisplayText() {
 		var select2Container = getSetSelectorSelect2Container(selector);
 		select2Container.find(".select2-chosen").first().text(formatSetNameForDisplay(normalizedSetId));
-		if (sideId === "p2") scheduleP2SetSelectorTextFit();
+		scheduleSetSelectorTextFit();
 	}
 	var currentSetId = String(selector.val() || "").trim();
 	if (currentSetId === normalizedSetId) {
@@ -10384,6 +10409,25 @@ function getTagPartnerEntriesForBattle(opposingEntries) {
 			));
 		}
 	}
+	var requestedPartnerName = "";
+	for (var requestedIndex = 0; requestedIndex < opposingEntries.length; requestedIndex++) {
+		var requestedSetData = opposingEntries[requestedIndex].setData || {};
+		var requestedPartner = requestedSetData.tagPartner || requestedSetData.TagPartner || "";
+		if (String(requestedPartner).trim()) {
+			requestedPartnerName = String(requestedPartner).trim().toLowerCase();
+			break;
+		}
+	}
+	if (requestedPartnerName) {
+		for (var requestedLabel in entriesByTrainer) {
+			if (!Object.prototype.hasOwnProperty.call(entriesByTrainer, requestedLabel)) continue;
+			var candidateName = String(requestedLabel).replace(/^tag\s+partner\s*/i, "").trim().toLowerCase();
+			if (candidateName !== requestedPartnerName) continue;
+			return entriesByTrainer[requestedLabel].sort(function (left, right) {
+				return left.sortIndex - right.sortIndex;
+			});
+		}
+	}
 
 	var matchingEntries = [];
 	var matchingLastIndex = 0;
@@ -10762,6 +10806,9 @@ $("input.set-selector").change(function () {
 			var topSpriteNode = getTopSpriteNodeForPokeInfo(currentPokeInfo);
 			if (topSpriteNode) setTrainerSpriteImage(topSpriteNode, pokemonName);
 		}
+		if (pokemonName === "Greninja" && abilityObj.val() === "Battle Bond") {
+			formeObj.children("select").val("Greninja-Bond").change();
+		}
 		calcHP(pokeObj);
 		calcStats(pokeObj);
 		refreshRelativeSetLevels();
@@ -10800,7 +10847,7 @@ $("input.set-selector").change(function () {
 		} else if (typeof performCalculations === "function") {
 			performCalculations();
 		}
-		if ($(this).hasClass("opposing")) scheduleP2SetSelectorTextFit();
+		scheduleSetSelectorTextFit();
 	}
 });
 
@@ -10814,13 +10861,11 @@ $(document).on("click", "#transformR", function (ev) {
 	transformDittoFromOpposing("#p2", "#p1");
 });
 
-$(document).on("click", ".poke-inline-sprite", function (ev) {
-	ev.preventDefault();
-	var pokeInfo = $(this).closest(".poke-info");
+function cyclePokemonForm(pokeInfo) {
 	var formeSelect = pokeInfo.find(".forme");
 	if (!formeSelect.length) return;
 	var formeContainer = formeSelect.parent();
-	if (!formeContainer.length || !formeContainer.is(":visible")) return;
+	if (!formeContainer.length || formeContainer.css("display") === "none") return;
 	var formeOptions = formeSelect.find("option");
 	var enabledFormeOptions = formeOptions.filter(function () {
 		return !this.disabled;
@@ -10835,6 +10880,11 @@ $(document).on("click", ".poke-inline-sprite", function (ev) {
 			return;
 		}
 	}
+}
+
+$(document).on("click", ".poke-inline-sprite", function (ev) {
+	ev.preventDefault();
+	cyclePokemonForm($(this).closest(".poke-info"));
 });
 
 function getBattleCritToggleFromTopToggle(topToggleNode) {
@@ -11032,7 +11082,9 @@ $(".forme").change(function () {
 			}
 		}
 	}
+	pokeInfo.data("changingForme", true);
 	abilityObj.change();
+	pokeInfo.removeData("changingForme");
 
 	if (selectedForme.indexOf("-Mega") !== -1 && selectedForme !== "Rayquaza-Mega") {
 		var itemObj = container.find(".item");
@@ -11195,7 +11247,7 @@ function createPokemon(pokeInfo) {
 			abilityOn: abilityOn,
 			protoQuark: protoQuark,
 			item: item,
-			gender: pokeInfo.find(".gender").is(":visible") ? getGender(pokeInfo.find(".gender").val()) : "N",
+			gender: getGender(pokeInfo.find(".gender").val()),
 			nature: pokeInfo.find(".nature").val(),
 			ivs: ivs,
 			evs: evs,
@@ -11233,12 +11285,15 @@ function getMoveDetails(moveInfo, species, ability, item, useMax) {
 	var isCrit = moveInfo.find(".move-crit").prop("checked");
 	var hits = +moveInfo.find(".move-hits").val();
 	var timesUsed = +moveInfo.find(".stat-drops").val();
-	var timesUsedWithMetronome = moveInfo.find(".metronome").is(':visible') ? +moveInfo.find(".metronome").val() : 1;
+	var timesUsedWithMetronome = item === "Metronome" ? +moveInfo.find(".metronome").val() : 1;
 	var overrides = {
 		basePower: +moveInfo.find(".move-bp").val(),
 		type: moveInfo.find(".move-type").val()
 	};
-	if (gen >= 4) overrides.category = moveInfo.find(".move-cat").val();
+	// The category editor only offers Physical/Special; preserve Status moves.
+	if (gen >= 4 && moves[moveName] && moves[moveName].category && moves[moveName].category !== "Status") {
+		overrides.category = moveInfo.find(".move-cat").val();
+	}
 	return new calc.Move(gen, moveName, {
 		ability: ability, item: item, useZ: isZMove, species: species, isCrit: isCrit, hits: hits,
 		timesUsed: timesUsed, timesUsedWithMetronome: timesUsedWithMetronome, overrides: overrides, useMax: useMax
@@ -11431,10 +11486,10 @@ function isResidualDisplayGrounded(pokemon, field, side) {
 
 function getMoveCritRateDisplay(pokemon, opposingPokemon, move, sideId) {
 	if (!move || move.name === "(No Move)") {
-		return {text: "--", title: "No move selected."};
+		return {text: "", title: "No move selected.", visible: false};
 	}
 	if (move.category === "Status") {
-		return {text: "--", title: move.name + " is a status move and cannot crit."};
+		return {text: "", title: move.name + " is a status move and cannot crit.", visible: false};
 	}
 	var passiveDetails = getPassiveCritStageDetails(pokemon);
 	var totalStage = passiveDetails.stage;
@@ -11699,7 +11754,22 @@ function renderSideSupplementalDisplays(sideSelector, pokemon, opposingPokemon, 
 		critTargets = critTargets.add(
 			pokeInfo.find('.simplified-side-move-row[data-move-index="' + moveIndex + '"] .move-crit-rate-display')
 		);
-		critTargets.text(critDisplay.text).attr("title", critDisplay.title);
+		var showCritRate = critDisplay.visible !== false;
+		var canCrit = !!move && move.category !== "Status" && move.name !== "(No Move)";
+		moveRow.find(".crit-btn").toggle(canCrit);
+		var critInput = moveRow.find(".move-crit").first();
+		critInput.prop("disabled", !canCrit);
+		pokeInfo.find('.simplified-side-move-row[data-move-index="' + moveIndex + '"] .simplified-side-move-crit-input').prop("disabled", !canCrit);
+		var topCrit = getTopCritToggleFromBattleToggle(critInput[0]);
+		if (topCrit) {
+			$(topCrit).prop("disabled", !canCrit);
+			$("label[for='" + topCrit.id + "']").toggle(canCrit);
+		}
+		critTargets
+			.text(critDisplay.text)
+			.attr("title", critDisplay.title)
+			.toggleClass("crit-rate-unavailable", !showCritRate)
+			.toggle(showCritRate && !!moveMetaVisible);
 	}
 	var residualChips = pokeInfo.find(".side-residual-chip").not(".trapping-residual-chip");
 	if (!residualChips.length) {
@@ -13124,7 +13194,8 @@ $(document).ready(function () {
 	bindFieldSideControlsToggle();
 	bindTrainerSequence();
 	loadDefaultLists();
-	$(window).off("resize.p2setselector").on("resize.p2setselector", scheduleP2SetSelectorTextFit);
+	observeSetSelectorWidths();
+	$(window).off("resize.setselector").on("resize.setselector", scheduleSetSelectorTextFit);
 	setupFragSheetAutoRefresh();
 	syncSettingsPanelUi();
 	syncFragRoster();

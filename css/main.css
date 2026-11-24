@@ -535,6 +535,7 @@ th {
 }
 .poke-info {
     width: 30em;
+    min-width: 0;
 }
 .field-info, .poke-import {
     text-align: center;
@@ -658,15 +659,57 @@ th {
 
 /* header */
 .move-result-group {
-    min-width: 50em;
-    margin: 1em 0 11.5em;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1em 2em;
+    margin: 1em 0;
 }
 .move-result-subgroup {
-    float: left;
-    width: 50%;
+    min-width: 0;
 }
-.move-result-group .btn {
-    margin-right: 1em;
+.move-result-subgroup > div:not(.result-move-header) {
+    display: grid;
+    grid-template-columns: minmax(0, 10.8em) max-content 3.8em;
+    align-items: center;
+    column-gap: 12px;
+    min-height: 25px;
+}
+.move-result-subgroup .result-move[type="radio"] + label {
+    grid-column: 1;
+    grid-row: 1;
+    box-sizing: border-box;
+    width: 100%;
+    margin: 0;
+    white-space: normal;
+}
+.move-result-subgroup [id^="resultDamage"] {
+    grid-column: 2;
+    grid-row: 1;
+    white-space: nowrap;
+}
+.move-result-subgroup .small-crit-btn {
+    grid-column: 3;
+    grid-row: 1;
+    justify-self: start;
+    margin: 0;
+}
+/* The opposing list mirrors the player list, with Crit before the move. */
+.move-result-subgroup[aria-labelledby="resultHeaderR"] > div:not(.result-move-header) {
+    grid-template-columns: 3.8em minmax(0, 10.8em) max-content;
+}
+.move-result-subgroup[aria-labelledby="resultHeaderR"] .small-crit-btn {
+    grid-column: 1;
+}
+.move-result-subgroup[aria-labelledby="resultHeaderR"] .result-move[type="radio"] + label {
+    grid-column: 2;
+}
+.move-result-subgroup[aria-labelledby="resultHeaderR"] [id^="resultDamage"] {
+    grid-column: 3;
+}
+@media (max-width: 900px) {
+    .move-result-group {
+        grid-template-columns: minmax(0, 1fr);
+    }
 }
 .main-result-group {
     margin: 2em 0 1em;
@@ -730,7 +773,7 @@ body.layout-simplified #p2 > .select2-container {
     margin: 0 0 6px;
 }
 
-body.layout-simplified .simplified-side-card span {
+body.layout-simplified .simplified-side-card span:not(.select2-arrow) {
     width: auto !important;
 }
 
@@ -875,10 +918,10 @@ body.layout-simplified .simplified-side-control-label select {
 }
 
 body.layout-simplified .simplified-ability-item-search-select.select2-container {
-    width: 8.4em !important;
-    min-width: 8.4em;
-    max-width: 11em;
-    font-size: 0.92em;
+    width: 13em !important;
+    min-width: 13em;
+    max-width: 13em;
+    font-size: 12px;
 }
 
 body.layout-simplified .simplified-ability-item-search-select.select2-container .select2-choice {
@@ -1060,7 +1103,7 @@ body.layout-simplified .simplified-side-item-sprite.is-empty {
 
 .simplified-side-stat-value {
     font-size: 1.06em;
-    color: #eef3ff;
+    color: inherit;
     font-weight: bold;
 }
 
@@ -1175,13 +1218,13 @@ body.layout-simplified .simplified-side-item-sprite.is-empty {
 
 .simplified-side-move-row {
     display: grid;
-    grid-template-columns: minmax(8.4em, 1fr) auto minmax(11.6em, 1fr);
+    grid-template-columns: minmax(8.4em, 1fr) 7.2em minmax(11.6em, 1fr);
     align-items: start;
     column-gap: 10px;
 }
 
 .simplified-side-card.side-right .simplified-side-move-row {
-    grid-template-columns: minmax(11.6em, 1fr) auto minmax(8.4em, 1fr);
+    grid-template-columns: minmax(11.6em, 1fr) 7.2em minmax(8.4em, 1fr);
 }
 
 .simplified-side-move-crit-wrap {
@@ -1238,7 +1281,7 @@ body.layout-simplified .simplified-side-item-sprite.is-empty {
     display: inline-block;
     width: auto;
     font-size: 0.78em;
-    color: #d2d9e1;
+    color: inherit;
     line-height: 1.1;
 }
 
@@ -1390,6 +1433,26 @@ body.layout-simplified .simplified-side-item-sprite.is-empty {
     color: rgba(214, 219, 227, 0.55);
 }
 
+@media (min-width: 901px) {
+    .simplified-side-move-info {
+        grid-column: 1;
+        grid-row: 1;
+    }
+    .simplified-side-move-crit-wrap {
+        grid-column: 2;
+        grid-row: 1;
+    }
+    .simplified-side-move-damage {
+        grid-column: 3;
+        grid-row: 1;
+    }
+    .simplified-side-card.side-right .simplified-side-move-info {
+        grid-column: 3;
+    }
+    .simplified-side-card.side-right .simplified-side-move-damage {
+        grid-column: 1;
+    }
+}
 @media (max-width: 900px) {
     .simplified-side-move-row,
     .simplified-side-card.side-right .simplified-side-move-row {
@@ -1672,6 +1735,10 @@ select.toxic-counter {
     margin-left: 0.08em;
     vertical-align: middle;
     white-space: nowrap;
+}
+.poke-info .move-crit-rate-display.crit-rate-unavailable + .move-meta {
+    width: 100%;
+    margin-left: 0;
 }
 .poke-info .ditto-transform-slot {
     display: none;
@@ -2001,19 +2068,39 @@ table.field {
 }
 
 /* select2 overrides */
-.set-selector + .select2-container {
+.poke-info > .select2-container {
     width: 100% !important;
     max-width: 100%;
 }
 
-.set-selector + .select2-container .select2-choice {
+.poke-info > .select2-container .select2-choice {
     width: 100%;
+    height: 40px;
     box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding: 3px 0 3px 8px;
+    line-height: 16px;
+    font-size: 13px;
+    white-space: normal;
 }
 
-.select2-container .select2-choice > .select2-chosen {
-    width: 100%;
-    margin-right: auto;
+.poke-info .select2-container .select2-choice > .select2-chosen {
+    display: block;
+    width: auto;
+    margin-right: 26px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: clip;
+}
+
+.poke-info > .select2-container .select2-choice > .select2-chosen {
+    flex: 1;
+    min-width: 0;
+    min-height: 16px;
+    overflow: visible;
+    overflow-wrap: anywhere;
+    line-height: 16px;
 }
 .small-select.select2-container .select2-choice {
     font-size: 0.9em;
@@ -2486,6 +2573,16 @@ table.field {
 }
 .l-side-button, .r-side-button{
     position: absolute;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 60px;
+    min-width: 60px;
+    height: 22px;
+    padding: 3px 5px;
+    white-space: nowrap;
 }
 .side-pannel{
     display: grid;
@@ -3549,7 +3646,3 @@ body.calc-side-resizing .credits {
 .frags-toolbar .astral-sync-controls { margin: 0; }
 .astral-sync-status { margin: 4px 0; font-size: 12px; overflow-wrap: anywhere; }
 .astral-sync-status:empty { display: none; }
-.astral-sync-collection { max-height: 280px; overflow-y: auto; }
-.astral-sync-collection .btn { margin: 3px 4px 3px 0; }
-.astral-sync-collection details { margin-top: 6px; }
-.astral-sync-collection summary { cursor: pointer; }

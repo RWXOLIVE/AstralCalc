@@ -4,6 +4,10 @@
 	var snapshot = {party: [], pc: [], battle: null};
 	var busy = false;
 	var resetTimer;
+	var connectionTimer;
+	var connectionVersion = 0;
+	var currentLabel = "Sync";
+	var currentStatus = "Not connected to Astral Emerald.";
 	function savedSets() {
 		try {
 			var value = JSON.parse(window.localStorage.getItem("customsets") || "{}");
@@ -95,24 +99,13 @@
 		});
 	}
 	function uiState(label, status) {
+		currentLabel = label;
+		currentStatus = status;
 		document.querySelectorAll(".astral-sync-button").forEach(function (button) {
 			button.textContent = label;
 			button.disabled = busy;
 		});
 		document.querySelectorAll(".astral-sync-status").forEach(function (node) { node.textContent = status; });
-	}
-	function applyHp(entry, side) {
-		var live = entry.set.astralSync;
-		var selected = $("#" + side + " input.set-selector").val();
-		if (selected !== entry.id && !setSelectedSetIdForSide(side, entry.id)) {
-			uiState("Sync", "Could not select this synced Pokemon to apply live HP.");
-			return;
-		}
-		// Scale against Calc's own maximum HP; ROM mechanics can differ.
-		var panel = $("#" + side);
-		var maximum = Number(panel.find(".max-hp").text());
-		var current = Math.round(live.currentHP / live.maxHP * maximum);
-		panel.find(".current-hp").val(current).keyup().change();
 	}
 	function applyRoster(previous, next) {
 		// Other calculator pages can show the Sync control without a Team/Box
@@ -134,64 +127,26 @@
 		})[0] || next.party[0];
 		if (replacement) setSelectedSetIdForSide("p1", replacement.id);
 	}
-	function renderList(holder, list, side) {
-		list.forEach(function (entry) {
-			var row = document.createElement("div");
-			var select = document.createElement("button");
-			select.type = "button";
-			select.className = "btn";
-			select.textContent = "Slot " + entry.slot + ": " + entry.species + " Lv. " + entry.set.level;
-			select.addEventListener("click", function () {
-				if (gen !== 9) { uiState("Sync", "Choose Astral generation 9 to use synced sets."); return; }
-				install();
-				setSelectedSetIdForSide(side, entry.id);
-			});
-			row.appendChild(select);
-			var live = entry.set.astralSync;
-			if (typeof live.currentHP === "number") {
-				var hp = document.createElement("button");
-				hp.type = "button";
-				hp.className = "btn";
-				hp.textContent = "Apply HP " + live.currentHP + "/" + live.maxHP;
-				hp.addEventListener("click", function () { applyHp(entry, side); });
-				row.appendChild(hp);
-			}
-			holder.appendChild(row);
-		});
+	function disconnectedStatus() {
+		return "Not connected to Astral Emerald." + (entries().length ? " Saved party available." : "");
 	}
-	function render() {
-		document.querySelectorAll(".astral-sync-collection").forEach(function (holder) {
-			holder.textContent = "";
-			var side = holder.getAttribute("data-side") || "p1";
-			if (!snapshot.party.length && !snapshot.pc.length) return;
-			var details = document.createElement("details");
-			var detailsSummary = document.createElement("summary");
-			detailsSummary.textContent = "Astral Emerald has been synced!";
-			details.appendChild(detailsSummary);
-			var title = document.createElement("strong");
-			title.textContent = "Synced Party";
-			details.appendChild(title);
-			renderList(details, snapshot.party, side);
-			if (snapshot.pc.length) {
-				var pc = document.createElement("details");
-				var summary = document.createElement("summary");
-				summary.textContent = "Synced PC (" + snapshot.pc.length + ")";
-				pc.appendChild(summary);
-				var boxes = {};
-				snapshot.pc.forEach(function (entry) {
-					if (!boxes[entry.location]) {
-						boxes[entry.location] = document.createElement("div");
-						var heading = document.createElement("strong");
-						heading.textContent = entry.location;
-						boxes[entry.location].appendChild(heading);
-						pc.appendChild(boxes[entry.location]);
-					}
-					renderList(boxes[entry.location], [entry], side);
-				});
-				details.appendChild(pc);
-			}
-			holder.appendChild(details);
-		});
+	function scheduleConnectionCheck() {
+		clearTimeout(connectionTimer);
+		var version = connectionVersion;
+		connectionTimer = setTimeout(function () {
+			if (busy || version !== connectionVersion) return;
+			// /update also checks that the ROM is readable; /ping alone only
+			// proves the Lua service is running. Do not replace the imported party.
+			return AstralSync.fetchSnapshot(window, 1500).then(function () {
+				if (version !== connectionVersion) return;
+				uiState("Sync", "Astral Emerald is connected. Party imported.");
+				scheduleConnectionCheck();
+			}).catch(function () {
+				if (version !== connectionVersion) return;
+				clearTimeout(resetTimer);
+				uiState("Sync", disconnectedStatus());
+			});
+		}, 5000);
 	}
 	function fetchWhenReady(attempts) {
 		return AstralSync.fetchSnapshot(window).catch(function (error) {
@@ -204,6 +159,8 @@
 	function sync() {
 		if (busy) return;
 		clearTimeout(resetTimer);
+		clearTimeout(connectionTimer);
+		connectionVersion++;
 		busy = true;
 		uiState("Connecting...", "Checking Astral Emerald...");
 		console.info("[Astral Sync] Checking " + AstralSync.url);
@@ -220,18 +177,18 @@
 			persistSnapshot();
 			applyRoster(previous, next);
 			refreshSelectedSyncedPokemon(previous, next);
-			render();
 			busy = false;
-			var status = next.party.length || next.pc.length ? "" : "Astral Emerald has been synced!";
+			var status = "Astral Emerald is connected. Party imported.";
 			next.warnings.forEach(function (warning) { console.warn("[Astral Sync] " + warning); });
 			console.info("[Astral Sync] Imported " + next.party.length + " party Pokemon.");
 			uiState("Synced", status);
+			scheduleConnectionCheck();
 			resetTimer = setTimeout(function () { uiState("Sync", status); }, 2200);
 		}).catch(function (error) {
 			busy = false;
 			console.warn("[Astral Sync]", error);
-			uiState("Sync Failed", error.message);
-			resetTimer = setTimeout(function () { uiState("Sync", error.message); }, 2200);
+			uiState("Sync Failed", disconnectedStatus() + " " + error.message);
+			resetTimer = setTimeout(function () { uiState("Sync", disconnectedStatus() + " " + error.message); }, 2200);
 		});
 	}
 	function ensureControls() {
@@ -250,16 +207,13 @@
 			status.className = "astral-sync-status";
 			status.setAttribute("role", "status");
 			group.appendChild(status);
-			var collection = document.createElement("div");
-			collection.className = "astral-sync-collection";
-			var panel = existing.closest(".poke-info");
-			collection.setAttribute("data-side", panel ? panel.id : "p1");
-			group.appendChild(collection);
+
 			existing.parentNode.insertBefore(group, existing.nextSibling);
 		});
-		render();
+		uiState(currentLabel, currentStatus);
 	}
 	restoreSavedSnapshot();
+	currentStatus = disconnectedStatus();
 	window.AstralSyncUI = {ensureControls: ensureControls, install: install, options: options,
 		displayNameForId: displayNameForId,
 		getBattle: function () { return snapshot.battle; }};

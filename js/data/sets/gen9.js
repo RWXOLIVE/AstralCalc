@@ -1414,6 +1414,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Tailwind","Weather Ball","Hurricane","Wide Guard"]
+        },
+        "Team Galactic Commander Saturn & Team Galactic Grunt #6 | Mt Pyre": {
+            "index": "0000001266",
+            "level": 96,
+            "ability": "Drizzle",
+            "item": "Shuca Berry",
+            "nature": "Modest",
+            "setdouble": "True",
+            "setdoubleGroup": "mt-pyre-saturn-grunt-6",
+            "setdoubleSide": 1,
+            "ivs": {"hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31},
+            "moves": ["Tailwind","Hurricane","Weather Ball","Protect"]
         }
     },
     "Rotom-Wash": {
@@ -3470,6 +3482,16 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Belly Drum","Liquidation","Ice Spinner","Head Smash"]
+        },
+        "Team Galactic Grunt #3 | Mt Pyre": {
+            "index": "0000001248",
+            "level": 92,
+            "ability": "Ice Face",
+            "item": "Weakness Policy",
+            "nature": "Naive",
+            "teraType": "Ice",
+            "ivs": {"hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31},
+            "moves": ["Hydro Pump","Drill Run","Head Smash","Icicle Crash"]
         }
     },
     "Sandy Shocks": {
@@ -4058,6 +4080,18 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Bulk Up","Pursuit","Drain Punch","Poison Jab"]
+        },
+        "Team Galactic Commander Saturn & Team Galactic Grunt #6 | Mt Pyre": {
+            "index": "0000001264",
+            "level": 96,
+            "ability": "Dry Skin",
+            "item": "Expert Belt",
+            "nature": "Jolly",
+            "setdouble": "True",
+            "setdoubleGroup": "mt-pyre-saturn-grunt-6",
+            "setdoubleSide": 2,
+            "ivs": {"hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31},
+            "moves": ["Fake Out","Gunk Shot","Dynamic Punch","Sucker Punch"]
         }
     },
     "Chansey": {
@@ -4300,6 +4334,19 @@ var SETDEX_SV = {
     }
     },
     "Miltank": {
+        "Team Galactic Grunt #1 - Double Battle | Mt Pyre": {
+            "index": "0000001237",
+            "level": 96,
+            "ability": "Scrappy",
+            "item": "Leftovers",
+            "nature": "Impish",
+            "teraType": "Normal",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Milk Drink","Body Slam","Body Press","Curse"]
+        },
     "Cool Trainer George | Petalburg Gym": {
             "index": "0000000156",
             "level": 39,
@@ -4350,19 +4397,6 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Grassy Glide","Return","Frustration","Body Press"]
-        },
-        "Team Galactic Grunt #1 | Mt Pyre": {
-            "index": "0000001237",
-            "level": 96,
-            "ability": "Scrappy",
-            "item": "Leftovers",
-            "nature": "Impish",
-            "teraType": "Normal",
-            "setdouble": "True",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Milk Drink","Body Slam","Body Press","Curse"]
         },
     },
     "Arboliva": {
@@ -4476,7 +4510,7 @@ var SETDEX_SV = {
         "ivs": {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
         },
-        "moves": ["Fake Out","Knock Off","Snatch","Will-O-Wisp"]
+        "moves": ["Fake Out","Knock Off","Snatch","Night Shade"]
     }
     },
     "Slither Wing": {
@@ -4635,6 +4669,21 @@ var SETDEX_SV = {
         }
     },
     "Venusaur": {
+    "Team Galactic Grunt #3 & #4 | Mt Pyre": {
+        "index": "0000001254",
+        "level": 95,
+        "ability": "Chlorophyll",
+        "item": "Covert Cloak",
+        "nature": "Bold",
+        "teraType": "Grass",
+        "setdouble": "True",
+        "setdoubleGroup": "mt-pyre-team-galactic-grunts-3-4",
+        "setdoubleSide": 2,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Solar Beam","Sludge Bomb","Earth Power","Growth"]
+    },
     "Ex Champion Red | Petalburg Gym": {
             "index": "0000000166",
             "level": 39,
@@ -5036,6 +5085,19 @@ var SETDEX_SV = {
         }
     },
     "Obstagoon": {
+    "Team Galactic Grunt #2 | Mt Pyre": {
+        "index": "0000001243",
+        "level": 95,
+        "ability": "Guts",
+        "item": "Expert Belt",
+        "nature": "Adamant",
+        "teraType": "Dark",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Knock Off","Sucker Punch","Fire Punch","Obstruct"]
+    },
     "Battle Girl Cyndy | Route 115": {
             "index": "0000000188",
             "level": "-2",
@@ -5062,6 +5124,18 @@ var SETDEX_SV = {
         }
     },
     "Crobat": {
+    "Team Galactic Grunt #5 | Mt Pyre": {
+        "index": "0000001262",
+        "level": 95,
+        "ability": "Inner Focus",
+        "item": "Bright Powder",
+        "nature": "Jolly",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Tailwind","Super Fang","Taunt","Brave Bird"]
+    },
     "Battle Girl Cyndy | Route 115": {
             "index": "0000000189",
             "level": "-2",
@@ -5307,9 +5381,34 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Aurora Veil","Blizzard","Astral Barrage","Aura Sphere"]
+        },
+        "Team Galactic Commanders Jupiter & Mars | Mt Pyre": {
+            "index": "0000001274",
+            "level": 97,
+            "ability": "Refrigerate",
+            "item": "Froslassite",
+            "nature": "Timid",
+            "setdouble": "True",
+            "setdoubleGroup": "mt-pyre-commanders-jupiter-mars",
+            "setdoubleSide": 2,
+            "ivs": {"hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31},
+            "moves": ["Charm","Shadow Ball","Relic Song","Mystical Fire"]
         }
     },
     "Greninja": {
+    "Team Galactic Grunt #2 | Mt Pyre": {
+        "index": "0000001241",
+        "level": 95,
+        "ability": "Battle Bond",
+        "item": "Mystic Water",
+        "nature": "Modest",
+        "teraType": "Water",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Night Daze","Snipe Shot","Water Shuriken","Double Team"]
+    },
     "Ninja Boy Jaiden | Route 115": {
             "index": "0000000198",
             "level": 45,
@@ -5642,6 +5741,19 @@ var SETDEX_SV = {
         }
     },
     "Annihilape": {
+        "Team Galactic Grunt #1 - Double Battle | Mt Pyre": {
+            "index": "0000001234",
+            "level": 95,
+            "ability": "Defiant",
+            "item": "Iapapa Berry",
+            "nature": "Adamant",
+            "teraType": "Fighting",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Role Play","Close Combat","Rage Fist","Drain Punch"]
+        },
     "Battle Girl Helene | Route 115": {
             "index": "0000000208",
             "level": 44,
@@ -5700,19 +5812,6 @@ var SETDEX_SV = {
             },
             "moves": ["Rage Fist","Close Combat","Low Kick","Acrobatics"]
         },
-        "Team Galactic Grunt #1 | Mt Pyre": {
-            "index": "0000001234",
-            "level": 95,
-            "ability": "Defiant",
-            "item": "Iapapa Berry",
-            "nature": "Adamant",
-            "teraType": "Fighting",
-            "setdouble": "True",
-            "ivs": {
-                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-            },
-            "moves": ["Role Play","Close Combat","Rage Fist","Drain Punch"]
-        }
     },
     "Gurdurr": {
     "Battle Girl Helene | Route 115": {
@@ -5841,8 +5940,33 @@ var SETDEX_SV = {
             },
             "moves": ["Body Press","Mountain Gale","Crunch","Fishious Rend"]
         },
+        "Team Galactic Grunt #3 | Mt Pyre": {
+            "index": "0000001250",
+            "level": 94,
+            "ability": "Sturdy",
+            "item": "Bright Powder",
+            "nature": "Jolly",
+            "teraType": "Ice",
+            "ivs": {"hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31},
+            "moves": ["Mountain Gale","Rock Slide","Body Press","Stomping Tantrum"]
+        }
     },
     "Solrock": {
+    "Team Galactic Grunt #3 & #4 | Mt Pyre": {
+        "index": "0000001253",
+        "level": 92,
+        "ability": "Levitate",
+        "item": "Rindo Berry",
+        "nature": "Jolly",
+        "teraType": "Rock",
+        "setdouble": "True",
+        "setdoubleGroup": "mt-pyre-team-galactic-grunts-3-4",
+        "setdoubleSide": 1,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Rock Polish","Rock Slide","Sacred Fire","Solar Blade"]
+    },
     "Psychic Alix | Route 115": {
             "index": "0000000212",
             "level": 45,
@@ -6479,6 +6603,19 @@ var SETDEX_SV = {
     }
     },
     "Magmortar": {
+        "Team Galactic Grunt #1 - Double Battle | Mt Pyre": {
+            "index": "0000001236",
+            "level": 95,
+            "ability": "Flame Body",
+            "item": "Rocky Helmet",
+            "nature": "Bold",
+            "teraType": "Fire",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Follow Me","Energy Ball","Flamethrower","Scorching Sands"]
+        },
     "Sis & Bro Lisa & Ray | Route 107": {
             "index": "0000000232",
             "level": 44,
@@ -6529,19 +6666,6 @@ var SETDEX_SV = {
         },
         "moves": ["Weather Ball","Flamethrower","Scorching Sands","Psychic"]
     },
-        "Team Galactic Grunt #1 | Mt Pyre": {
-        "index": "0000001236",
-        "level": 95,
-        "ability": "Flame Body",
-        "item": "Rocky Helmet",
-        "nature": "Bold",
-        "teraType": "Fire",
-        "setdouble": "True",
-        "ivs": {
-            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-        },
-        "moves": ["Follow Me","Energy Ball","Flamethrower","Scorching Sands"]
-    }
     },
     "Electivire": {
     "Sis & Bro Lisa & Ray | Route 107": {
@@ -7585,6 +7709,16 @@ var SETDEX_SV = {
                 "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
             },
             "moves": ["Wicked Blow","Low Kick","Leaf Blade","Leaf Storm"]
+        },
+        "Team Galactic Grunt #3 | Mt Pyre": {
+            "index": "0000001249",
+            "level": 93,
+            "ability": "Wind Rider",
+            "item": "Bright Powder",
+            "nature": "Lonely",
+            "teraType": "Grass",
+            "ivs": {"hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31},
+            "moves": ["Tailwind","Lash Out","Rock Slide","Substitute"]
         }
     },
     "Centiskorch": {
@@ -7994,7 +8128,19 @@ var SETDEX_SV = {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
         },
         "moves": ["Breaking Swipe","Electro Shot","Flash Cannon","Dragon Pulse"]
-    }
+    },
+        "Team Galactic Commander Saturn & Team Galactic Grunt #6 | Mt Pyre": {
+            "index": "0000001268",
+            "level": 97,
+            "ability": "Stamina",
+            "item": "Maranga Berry",
+            "nature": "Timid",
+            "setdouble": "True",
+            "setdoubleGroup": "mt-pyre-saturn-grunt-6",
+            "setdoubleSide": 1,
+            "ivs": {"hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31},
+            "moves": ["Electro Shot","Flash Cannon","Body Press","Dragon Pulse"]
+        }
     },
     "Hydreigon": {
     "Team Plasma N & Ghetsis | Abandoned Ship": {
@@ -8473,6 +8619,21 @@ var SETDEX_SV = {
         },
     },
     "Kommo-o": {
+    "Team Galactic Grunt #3 & #4 | Mt Pyre": {
+        "index": "0000001252",
+        "level": 93,
+        "ability": "Overcoat",
+        "item": "Focus Band",
+        "nature": "Adamant",
+        "teraType": "Dragon",
+        "setdouble": "True",
+        "setdoubleGroup": "mt-pyre-team-galactic-grunts-3-4",
+        "setdoubleSide": 1,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Body Press","Dragon Rush","Iron Head","Clangorous Soul"]
+    },
     "Guitarist Marcos | Route 103": {
             "index": "0000000314",
             "level": 46,
@@ -8627,6 +8788,19 @@ var SETDEX_SV = {
         }
     },
     "Tyranitar": {
+        "Team Galactic Grunt #1 - Double Battle | Mt Pyre": {
+            "index": "0000001235",
+            "level": 96,
+            "ability": "Intimidate",
+            "item": "Chople Berry",
+            "nature": "Careful",
+            "teraType": "Rock",
+            "setdouble": "True",
+            "ivs": {
+                "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+            },
+            "moves": ["Swords Dance","Rock Slide","Knock Off","Iron Head"]
+        },
     "Guitarist Joseph | Route 110": {
             "index": "0000000320",
             "level": 48,
@@ -8663,19 +8837,6 @@ var SETDEX_SV = {
         },
         "moves": ["Meteor Beam","Flamethrower","Dark Pulse","Flash Cannon"]
     },
-        "Team Galactic Grunt #1 | Mt Pyre": {
-        "index": "0000001235",
-        "level": 96,
-        "ability": "Intimidate",
-        "item": "Chople Berry",
-        "nature": "Careful",
-        "teraType": "Rock",
-        "setdouble": "True",
-        "ivs": {
-            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-        },
-        "moves": ["Swords Dance","Rock Slide","Knock Off","Iron Head"]
-    }
     },
     "Exploud": {
     "Guitarist Joseph | Route 110": {
@@ -9489,6 +9650,18 @@ var SETDEX_SV = {
         }
     },
     "Iron Valiant": {
+    "Team Galactic Grunt #5 | Mt Pyre": {
+        "index": "0000001258",
+        "level": 95,
+        "ability": "Quark Drive",
+        "item": "Covert Cloak",
+        "nature": "Timid",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Aromatic Mist","Moonblast","Thunderbolt","Aura Sphere"]
+    },
     "Leader Elesa | Mauville Gym": {
             "index": "0000000355",
             "level": 50,
@@ -10897,6 +11070,22 @@ var SETDEX_SV = {
         }
     },
     "Torkoal": {
+    "Team Galactic Grunt #3 & #4 | Mt Pyre": {
+        "index": "0000001251",
+        "level": 94,
+        "ability": "Drought",
+        "item": "Quick Claw",
+        "nature": "Rash",
+        "teraType": "Fire",
+        "setdouble": "True",
+        "tagPartner": "Steven",
+        "setdoubleGroup": "mt-pyre-team-galactic-grunts-3-4",
+        "setdoubleSide": 1,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Eruption","Solar Beam","Stealth Rock","Explosion"]
+    },
     "Bryant & Shayla | Route 112": {
             "index": "0000000412",
             "level": 52,
@@ -11519,6 +11708,18 @@ var SETDEX_SV = {
         }
     },
     "Arcanine-Hisui": {
+    "Team Galactic Grunt #5 | Mt Pyre": {
+        "index": "0000001260",
+        "level": 95,
+        "ability": "Rock Head",
+        "item": "Life Orb",
+        "nature": "Adamant",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Head Smash","Flare Blitz","Wild Charge","Protect"]
+    },
     "Rival Lyra | Union Cave": {
             "index": "0000000461",
             "level": 54,
@@ -11650,6 +11851,21 @@ var SETDEX_SV = {
         }
     },
     "Archeops": {
+    "Team Galactic Grunt #3 & #4 | Mt Pyre": {
+        "index": "0000001256",
+        "level": 95,
+        "ability": "Vital Spirit",
+        "item": "Berserk Gene",
+        "nature": "Adamant",
+        "teraType": "Rock",
+        "setdouble": "True",
+        "setdoubleGroup": "mt-pyre-team-galactic-grunts-3-4",
+        "setdoubleSide": 2,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Rock Slide","Dual Wingbeat","Stomping Tantrum","Tailwind"]
+    },
     "Parasol Lady Madeline | Route 113": {
             "index": "0000000478",
             "level": 57,
@@ -14782,8 +14998,18 @@ var SETDEX_SV = {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
         },
         "moves": ["Sleep Powder","Substitute","Giga Drain","Quiver Dance"]
-    }
-},
+    },
+        "Team Galactic Grunt #3 | Mt Pyre": {
+            "index": "0000001247",
+            "level": 93,
+            "ability": "Swarm",
+            "item": "Focus Band",
+            "nature": "Mild",
+            "teraType": "Bug",
+            "ivs": {"hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31},
+            "moves": ["Silver Wind","Sleep Powder","Tailwind","Energy Ball"]
+        }
+    },
 "Oricorio-Pa'u": {
     "Picnicker Ashley | Fortree Gym": {
         "index": "0000000773",
@@ -14981,6 +15207,20 @@ var SETDEX_SV = {
     }
 },
 "Iron Moth": {
+    "Team Galactic Grunt #2 | Mt Pyre": {
+        "index": "0000001239",
+        "level": 94,
+        "ability": "Quark Drive",
+        "item": "Mental Herb",
+        "nature": "Modest",
+        "teraType": "Fire",
+        "setdouble": "True",
+        "tagPartner": "Steven",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Heat Wave","Sludge Bomb","Light Screen","Reflect"]
+    },
     "Lass Darius | Fortress City": {
         "index": "0000000786",
         "level": 75,
@@ -15298,8 +15538,20 @@ var SETDEX_SV = {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
         },
         "moves": ["Psycho Boost","Superpower","Night Daze","Destiny Bond"]
-    }
-},
+    },
+        "Team Galactic Commanders Jupiter & Mars | Mt Pyre": {
+            "index": "0000001271",
+            "level": 97,
+            "ability": "Contrary",
+            "item": "Malamarite",
+            "nature": "Adamant",
+            "setdouble": "True",
+            "setdoubleGroup": "mt-pyre-commanders-jupiter-mars",
+            "setdoubleSide": 1,
+            "ivs": {"hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31},
+            "moves": ["Superpower","Power Trip","Fire Lash","Protect"]
+        }
+    },
 "Marowak-Alola": {
     "Gentleman Walter | Route 121": {
         "index": "0000000832",
@@ -15353,8 +15605,20 @@ var SETDEX_SV = {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 0
         },
         "moves": ["Swords Dance","X-Scissor","Poison Jab","Pursuit"]
-    }
-},
+    },
+        "Team Galactic Commander Saturn & Team Galactic Grunt #6 | Mt Pyre": {
+            "index": "0000001265",
+            "level": 97,
+            "ability": "Tinted Lens",
+            "item": "Scolipite",
+            "nature": "Adamant",
+            "setdouble": "True",
+            "setdoubleGroup": "mt-pyre-saturn-grunt-6",
+            "setdoubleSide": 2,
+            "ivs": {"hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31},
+            "moves": ["Megahorn","Gunk Shot","High Horsepower","Protect"]
+        }
+    },
 "Omastar": {
     "Cool Trainer Marcel | Route 121": {
         "index": "0000000841",
@@ -15845,6 +16109,19 @@ var SETDEX_SV = {
     }
 },
 "Porygon-Z": {
+    "Team Galactic Grunt #1 - Double Battle | Mt Pyre": {
+        "index": "0000001233",
+        "level": 95,
+        "ability": "Adaptability",
+        "item": "Expert Belt",
+        "nature": "Modest",
+        "teraType": "Normal",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Tri Attack","Dark Pulse","Thunderbolt","Psychic"]
+    },
     "Team Aqua Grunt #1 | Seafloor Cavern": {
         "index": "0000000933",
         "Weather": "Fog",
@@ -15858,19 +16135,6 @@ var SETDEX_SV = {
         },
         "moves": ["Weather Ball","Shadow Ball","Psychic","Ice Beam"]
     },
-    "Team Galactic Grunt #1 | Mt Pyre": {
-        "index": "0000001233",
-        "level": 95,
-        "ability": "Adaptability",
-        "item": "Expert Belt",
-        "nature": "Modest",
-        "teraType": "Normal",
-        "setdouble": "True",
-        "ivs": {
-            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
-        },
-        "moves": ["Tri Attack","Dark Pulse","Thunderbolt","Psychic"]
-    }
 },
 "Swanna": {
     "Team Aqua Grunt #1 | Seafloor Cavern": {
@@ -16160,8 +16424,20 @@ var SETDEX_SV = {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
         },
         "moves": ["Leaf Blade","Knock Off","Psycho Cut","Iron Cleave"]
-    }
-},
+    },
+        "Team Galactic Commander Saturn & Team Galactic Grunt #6 | Mt Pyre": {
+            "index": "0000001267",
+            "level": 97,
+            "ability": "Beast Boost",
+            "item": "Life Orb",
+            "nature": "Adamant",
+            "setdouble": "True",
+            "setdoubleGroup": "mt-pyre-saturn-grunt-6",
+            "setdoubleSide": 1,
+            "ivs": {"hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31},
+            "moves": ["Leaf Blade","Sacred Sword","Stone Edge","Night Slash"]
+        }
+    },
 "Palkia": {
     "Team Aqua Admin Shelly | Seafloor Cavern": {
         "index": "0000000989",
@@ -16234,8 +16510,21 @@ var SETDEX_SV = {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
         },
         "moves": ["Psychic","Flamethrower","Dazzling Gleam","Future Sight"]
-    }
-},
+    },
+        "Team Galactic Commander Saturn & Team Galactic Grunt #6 | Mt Pyre": {
+            "index": "0000001263",
+            "level": 97,
+            "ability": "Levitate",
+            "item": "Focus Sash",
+            "nature": "Timid",
+            "setdouble": "True",
+            "setdoubleGroup": "mt-pyre-saturn-grunt-6",
+            "setdoubleSide": 2,
+            "tagPartner": "Steven",
+            "ivs": {"hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31},
+            "moves": ["Gravity","Future Sight","Fire Blast","Dazzling Gleam"]
+        }
+    },
 "Electrode-Hisui": {
     "Team Aqua Grunt #11 | Seafloor Cavern": {
         "index": "0000000995",
@@ -16255,6 +16544,19 @@ var SETDEX_SV = {
     }
 },
 "Magnezone": {
+    "Team Galactic Grunt #5 | Mt Pyre": {
+        "index": "0000001257",
+        "level": 95,
+        "ability": "Magnet Pull",
+        "item": "Air Balloon",
+        "nature": "Modest",
+        "setdouble": "True",
+        "tagPartner": "Steven",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Thunderbolt","Flash Cannon","Body Press","Electroweb"]
+    },
     "Team Aqua Grunt #11 | Seafloor Cavern": {
         "index": "0000000996",
         "Weather": "Rain",
@@ -16301,6 +16603,19 @@ var SETDEX_SV = {
     }
 },
 "Dragapult": {
+    "Team Galactic Grunt #2 | Mt Pyre": {
+        "index": "0000001240",
+        "level": 95,
+        "ability": "Cursed Body",
+        "item": "Colbur Berry",
+        "nature": "Modest",
+        "teraType": "Dragon",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Astral Barrage","Flamethrower","Hypnosis","Destiny Bond"]
+    },
     "Team Aqua Grunt #12 | Seafloor Cavern": {
         "index": "0000000997",
         "Weather": "Rain",
@@ -16857,8 +17172,20 @@ var SETDEX_SV = {
             "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
         },
         "moves": ["Body Slam","Role Play","Zen Headbutt","Drain Punch"]
-    }
-},
+    },
+        "Team Galactic Commanders Jupiter & Mars | Mt Pyre": {
+            "index": "0000001272",
+            "level": 97,
+            "ability": "Levitate",
+            "item": "Covert Cloak",
+            "nature": "Timid",
+            "setdouble": "True",
+            "setdoubleGroup": "mt-pyre-commanders-jupiter-mars",
+            "setdoubleSide": 2,
+            "ivs": {"hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31},
+            "moves": ["Wonder Room","Foul Play","Thunder Wave","Memento"]
+        }
+    },
 "Florges-Orange": {
     "Psychic Kathleen & Macey | Mossdeep Gym": {
         "index": "0000001155",
@@ -17153,10 +17480,55 @@ var SETDEX_SV = {
         "moves": ["Aqua Step","Brave Bird","Ice Spinner","Low Kick"]
     }
 },
-"Magearna": {
+"Xurkitree": {
+    "Team Galactic Grunt #2 | Mt Pyre": {
+        "index": "0000001242",
+        "level": 94,
+        "ability": "Battery",
+        "item": "Focus Sash",
+        "nature": "Hasty",
+        "teraType": "Electric",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Thunderbolt","Follow Me","Energy Ball","Knock Off"]
+    }
+},
+"Vikavolt": {
+    "Team Galactic Grunt #2 | Mt Pyre": {
+        "index": "0000001244",
+        "level": 95,
+        "ability": "Battery",
+        "item": "Iapapa Berry",
+        "nature": "Sassy",
+        "teraType": "Bug",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Silk Trap","Zap Cannon","Signal Beam","Substitute"]
+    }
+},
+"Heliolisk": {
+    "Team Galactic Grunt #3 & #4 | Mt Pyre": {
+        "index": "0000001255",
+        "level": 94,
+        "ability": "Solar Power",
+        "item": "Bright Powder",
+        "nature": "Modest",
+        "teraType": "Electric",
+        "setdouble": "True",
+        "setdoubleGroup": "mt-pyre-team-galactic-grunts-3-4",
+        "setdoubleSide": 2,
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Thunderclap","Focus Blast","Dark Pulse","Hyper Voice"]
+    }
 },
 "Slowbro": {
-    "Team Galactic Grunt #1 | Mt Pyre": {
+    "Team Galactic Grunt #1 - Double Battle | Mt Pyre": {
         "index": "0000001238",
         "level": 96,
         "ability": "Oblivious",
@@ -17170,4 +17542,98 @@ var SETDEX_SV = {
         "moves": ["Slack Off","Scald","Psychic","Foul Play"]
     }
 },
+"Genesect": {
+    "Team Galactic Grunt #5 | Mt Pyre": {
+        "index": "0000001259",
+        "level": 95,
+        "ability": "Download",
+        "item": "Expert Belt",
+        "nature": "Hasty",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Coaching","Bug Buzz","Flamethrower","Ice Beam"]
+    }
+},
+"Celesteela": {
+    "Team Galactic Grunt #5 | Mt Pyre": {
+        "index": "0000001261",
+        "level": 95,
+        "ability": "Beast Boost",
+        "item": "Power Herb",
+        "nature": "Modest",
+        "setdouble": "True",
+        "ivs": {
+            "hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31
+        },
+        "moves": ["Meteor Beam","Flamethrower","Earth Power","Giga Drain"]
+    }
+},
+    "Murkrow": {
+        "Team Galactic Grunt #3 | Mt Pyre": {
+            "index": "0000001245",
+            "level": 91,
+            "ability": "Prankster",
+            "item": "Eviolite",
+            "nature": "Brave",
+            "teraType": "Dark",
+            "ivs": {"hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31},
+            "moves": ["Tailwind","Sucker Punch","Dark Pulse","Mean Look"]
+        }
+    },
+    "Jellicent": {
+        "Team Galactic Grunt #3 | Mt Pyre": {
+            "index": "0000001246",
+            "level": 95,
+            "ability": "Cursed Body",
+            "item": "King's Rock",
+            "nature": "Modest",
+            "teraType": "Water",
+            "ivs": {"hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31},
+            "moves": ["Water Spout","Ominous Wind","Strength Sap","Blizzard"]
+        }
+    },
+    "Mesprit": {
+        "Team Galactic Commanders Jupiter & Mars | Mt Pyre": {
+            "index": "0000001269",
+            "level": 97,
+            "ability": "Levitate",
+            "item": "Focus Sash",
+            "nature": "Timid",
+            "setdouble": "True",
+            "setdoubleGroup": "mt-pyre-commanders-jupiter-mars",
+            "setdoubleSide": 1,
+            "ivs": {"hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31},
+            "moves": ["Future Sight","Flamethrower","Thunderbolt","U-turn"]
+        }
+    },
+    "Skuntank": {
+        "Team Galactic Commanders Jupiter & Mars | Mt Pyre": {
+            "index": "0000001270",
+            "level": 96,
+            "ability": "Aftermath",
+            "item": "Black Glasses",
+            "nature": "Adamant",
+            "setdouble": "True",
+            "setdoubleGroup": "mt-pyre-commanders-jupiter-mars",
+            "setdoubleSide": 1,
+            "ivs": {"hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31},
+            "moves": ["Knock Off","Fire Lash","Gunk Shot","Sucker Punch"]
+        }
+    },
+    "Purugly": {
+        "Team Galactic Commanders Jupiter & Mars | Mt Pyre": {
+            "index": "0000001273",
+            "level": 98,
+            "ability": "Defiant",
+            "item": "Focus Sash",
+            "nature": "Jolly",
+            "setdouble": "True",
+            "setdoubleGroup": "mt-pyre-commanders-jupiter-mars",
+            "setdoubleSide": 2,
+            "ivs": {"hp": 31, "at": 31, "df": 31, "sa": 31, "sd": 31, "sp": 31},
+            "moves": ["Fake Out","Double-Edge","Knock Off","Parting Shot"]
+        }
+    },
 };

@@ -19,6 +19,7 @@
 	var ABILITY_IGNORING_MOVES = {
 		"Moongeist Beam": true,
 		"Photon Geyser": true,
+		"Multi-Attack": true,
 		"Sunsteel Strike": true
 	};
 	var ENTRY_ONLY_ABILITIES = {

@@ -865,6 +865,59 @@ describe('calc', function () {
         describe('Gen 9', function () {
             (0, helper_1.inGen)(9, function (_a) {
                 var calculate = _a.calculate, Pokemon = _a.Pokemon, Move = _a.Move;
+                test('Multi-Attack uses the stronger attacking stat, with Special winning ties', function () {
+                    var e_3, _a;
+                    try {
+                        for (var _b = __values([
+                            { evs: { atk: 252 }, boosts: {}, category: 'Physical' },
+                            { evs: { spa: 252 }, boosts: {}, category: 'Special' },
+                            { evs: {}, boosts: {}, category: 'Special' },
+                            { evs: { spa: 252 }, boosts: { atk: 2 }, category: 'Physical' },
+                            { evs: { atk: 252 }, boosts: { spa: 2 }, category: 'Special' },
+                        ]), _c = _b.next(); !_c.done; _c = _b.next()) {
+                            var scenario = _c.value;
+                            var attacker = Pokemon('Silvally', { evs: scenario.evs, boosts: scenario.boosts });
+                            var defender = Pokemon('Mew');
+                            var result = calculate(attacker, defender, Move('Multi-Attack'));
+                            var reference = calculate(attacker, defender, Move('Tri Attack', {
+                                overrides: { basePower: 120, category: scenario.category }
+                            }));
+                            expect(result.move.category).toBe(scenario.category);
+                            expect(result.range()).toEqual(reference.range());
+                        }
+                    }
+                    catch (e_3_1) { e_3 = { error: e_3_1 }; }
+                    finally {
+                        try {
+                            if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
+                        }
+                        finally { if (e_3) throw e_3.error; }
+                    }
+                });
+                test('Multi-Attack bypasses defender abilities like Photon Geyser', function () {
+                    var e_4, _a;
+                    try {
+                        for (var _b = __values(['Multiscale', 'Battle Armor']), _c = _b.next(); !_c.done; _c = _b.next()) {
+                            var ability = _c.value;
+                            var attacker = Pokemon('Silvally', { evs: { atk: 252 } });
+                            var guarded = calculate(attacker, Pokemon('Mew', { ability: ability }), Move('Multi-Attack', { isCrit: true }));
+                            var plain = calculate(attacker, Pokemon('Mew', { ability: 'Synchronize' }), Move('Multi-Attack', { isCrit: true }));
+                            expect(guarded.range()).toEqual(plain.range());
+                        }
+                    }
+                    catch (e_4_1) { e_4 = { error: e_4_1 }; }
+                    finally {
+                        try {
+                            if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
+                        }
+                        finally { if (e_4) throw e_4.error; }
+                    }
+                });
+                test('Multi-Attack preserves Memory typing while using Special Attack', function () {
+                    var result = calculate(Pokemon('Silvally', { item: 'Electric Memory', evs: { spa: 252 } }), Pokemon('Mew'), Move('Multi-Attack'));
+                    expect(result.move.type).toBe('Electric');
+                    expect(result.move.category).toBe('Special');
+                });
                 test('Supreme Overlord', function () {
                     var kingambit = Pokemon('Kingambit', { level: 100, ability: 'Supreme Overlord', alliesFainted: 0 });
                     var aggron = Pokemon('Aggron', { level: 100 });
