@@ -5958,6 +5958,7 @@ function autoImportAeLuaMegaSets(customsets, layout) {
 	var seenSourceSetIds = {};
 	var zoneNames = ["team", "teamRight", "box", "box2", "boxmega", "trash"];
 	for (var zoneIndex = 0; zoneIndex < zoneNames.length; zoneIndex++) {
+		if (zoneNames[zoneIndex] === "trash") continue;
 		var zoneSetIds = normalizedLayout[zoneNames[zoneIndex]] || [];
 		for (var sourceIndex = 0; sourceIndex < zoneSetIds.length; sourceIndex++) {
 			var sourceSetId = zoneSetIds[sourceIndex];
@@ -5996,12 +5997,33 @@ function autoImportAeLuaMegaSets(customsets, layout) {
 				delete layoutLookup[duplicateSetId];
 			}
 			if (!layoutLookup[megaSetId]) {
-				normalizedLayout.box2.push(megaSetId);
+				normalizedLayout.boxmega.push(megaSetId);
 				layoutLookup[megaSetId] = true;
 				result.addedSetIds.push(megaSetId);
 			}
 		}
 	}
+	// A sync can replace a live set ID. Remove only generated Mega companions
+	// whose original Pokemon is no longer present in the Calc roster.
+	var liveSourceSetIds = {};
+	for (zoneIndex = 0; zoneIndex < zoneNames.length; zoneIndex++) {
+		if (zoneNames[zoneIndex] === "trash") continue;
+		zoneSetIds = normalizedLayout[zoneNames[zoneIndex]] || [];
+		for (sourceIndex = 0; sourceIndex < zoneSetIds.length; sourceIndex++) {
+			liveSourceSetIds[zoneSetIds[sourceIndex]] = true;
+		}
+	}
+	normalizedLayout.boxmega = normalizedLayout.boxmega.filter(function (megaSetId) {
+		var parsedMega = parseSetId(megaSetId);
+		var megaSetData = customsets[parsedMega.species] && customsets[parsedMega.species][parsedMega.label];
+		if (!megaSetData || !megaSetData[AE_LUA_AUTO_MEGA_SET_FLAG]) return true;
+		if (liveSourceSetIds[megaSetData[AE_LUA_AUTO_MEGA_SOURCE_SET_ID_KEY]]) return true;
+		result.removedSetIds.push(megaSetId);
+		delete customsets[parsedMega.species][parsedMega.label];
+		if (!Object.keys(customsets[parsedMega.species]).length) delete customsets[parsedMega.species];
+		result.didChangeCustomsets = true;
+		return false;
+	});
 	return result;
 }
 
