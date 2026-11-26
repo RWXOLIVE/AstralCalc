@@ -206,12 +206,35 @@
 	}
 	function mergeIncompletePc(previous, next) {
 		if (next.pcSupported === false || next.pcComplete || !previous || !Array.isArray(previous.pc)) return next;
+		// An incomplete scan still tells us which slots were checked. Keeping an
+		// older Pokemon from one of those slots resurrects Pokemon moved or
+		// released since the last snapshot.
+		var scanned = integer(next.pcScanned, 0, 420) ? next.pcScanned : 420;
 		var positions = {};
 		previous.pc.forEach(function (entry) {
+			var box = Number(entry.location.replace("PC Box ", ""));
+			if (box >= 1 && box <= 14 && integer(entry.slot, 1, 30) &&
+				(box - 1) * 30 + entry.slot <= scanned) return;
 			positions[entry.location + "|" + entry.slot] = entry;
 		});
 		next.pc.forEach(function (entry) {
 			positions[entry.location + "|" + entry.slot] = entry;
+		});
+		// A Pokemon moved from an unscanned PC slot into the party must not
+		// remain as a second copy while the rest of the PC scan catches up.
+		var liveIds = {};
+		next.party.concat(next.pc).forEach(function (entry) {
+			var mon = entry.set && entry.set.astralSync && entry.set.astralSync.gameData;
+			if (mon && integer(mon.personality, 1, 4294967295) &&
+				integer(mon.otId, 0, 4294967295)) liveIds[mon.personality + "|" + mon.otId] = true;
+		});
+		Object.keys(positions).forEach(function (key) {
+			var entry = positions[key];
+			if (next.pc.indexOf(entry) !== -1) return;
+			var mon = entry.set && entry.set.astralSync && entry.set.astralSync.gameData;
+			if (mon && integer(mon.personality, 1, 4294967295) &&
+				integer(mon.otId, 0, 4294967295) &&
+				liveIds[mon.personality + "|" + mon.otId]) delete positions[key];
 		});
 		next.pc = Object.keys(positions).map(function (key) { return positions[key]; });
 		next.pc.sort(function (left, right) {
